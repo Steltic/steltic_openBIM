@@ -17,10 +17,15 @@ def story_value(record,k):
     for key in ('rows','rod_schedule','post_schedule'):
         row=next((r for r in record.get(key,[]) if r.get('story',r.get('level'))==k),None)
         if row:return dict(record,**row)
-    result=dict(record);txt=record.get('section','');match=re.search(r'\bL'+str(k)+r'\s+([^;]+)',txt)
+    result=dict(record);txt=record.get('section','');match=re.search(r'\b(?:L|s)'+str(k)+r'\s*:?\s+([^;]+)',txt)
     if match:result['section']=match[1]
     rod=re.search(r'\bL'+str(k)+r'\s+'+NUMBER+r'\s*in',record.get('selection',''))
     if rod:result['rod']=rod[1]+' in.'
+    if not rod:
+        hit=re.search(r'rods?(?: by story)?:?\s*((?:'+NUMBER+r' in\.?[, ]*)+)\s*\(story 1 to',record.get('selection',''))
+        if hit:
+            sizes=re.findall(NUMBER+r' in',hit[1])
+            if k<=len(sizes):result['rod']=sizes[k-1]+' in.'
     for check in record.get('checks',[]):
         if check.get('story')!=k and not re.search(r'\bstory '+str(k)+r'\b',check.get('limit_state','')):continue
         if check.get('rod'):result['rod']=check['rod']
@@ -58,10 +63,15 @@ def spaced_segments(lo,hi,widths,margin=None):
     return result
 
 def build(b):
+    if b.key in ('cfs10','cfs18','cfs25','cfs27','cfs28'):
+        from .review_next_cfs_frames import build as frames
+        frames(b);return
     if b.key in ('cfs17','cfs19','cfs26','cfs30'):
         from .review_cfs_frames import build as frames
         frames(b);return
-    cfg=b.cfg;lx,ly=cfg['plan_ft'];base=180 if b.key=='cfs3' else 0
+    from .review_next_cfs_walls import KEYS as next_keys,prepare,locations as next_locations,depth as next_depth,stud as next_stud,floors as next_floors
+    if b.key in next_keys:prepare(b)
+    cfg=b.cfg;lx,ly=cfg['plan_ft'];base=180 if b.key in ('cfs3','cfs4') else 288 if b.key=='cfs9' else 0
     heights=cfg['heights_ft'];levels=[base]
     for h in heights:levels.append(round(levels[-1]+12*h,3))
     b.levels=[(k,'PODIUM TOP' if k==0 and base else ('BASE' if k==0 else ('ROOF BEARING' if k==len(heights) else 'L'+str(k+1)+' FFL')),z) for k,z in enumerate(levels)]
@@ -118,10 +128,12 @@ def build(b):
                 raw=rawwalls[f'wall-{d}-{name}-s{k}'];txt=raw.get('selection','');match=re.search(r'at\s+[xy]\s*=\s*(.*)',txt)
                 locations=[tuple(map(float,m)) for m in re.findall(r'(\d+(?:\.\d+)?)-(\d+(?:\.\d+)?)',match[1])] if match else []
                 if len(locations)!=len(widths):locations=spaced_segments(lo,hi,widths)
+            elif b.key in next_keys:locations=next_locations(b,d,line,k,ranges)
             else:locations=[(0,12),(48,60)] if d=='X' else [(10,22)]
             record=rawwalls.get(f'wall-{d}-{name}-s{k}',{});props=dict(line.get('wall_props') or {});props.update(props.get('by_story',{}).get(str(k),{}))
             floor_depth=14 if b.key=='cfs3' else (14.25 if b.key=='cfs13' else (16.25 if b.key=='cfs14' else 12))
             z0=levels[k-1];zt=levels[k]-(floor_depth if k<len(heights) or b.key=='cfs3' else 0)
+            if b.key in next_keys:floor_depth=next_depth(b,k);zt=levels[k]-floor_depth
             # This line is a geometric physical wall, not its fitted tributary line.
             runs=[]
             for j,(a,dend) in enumerate(locations):
@@ -134,6 +146,7 @@ def build(b):
                 wanted='stud-segments-97-ext' if name in ('XS','XN') else ('stud-segments-97-cor' if name in ('XCS','XCN') else 'stud-demising')
                 rstud=story_value(next((r for r in b.raw['studs'] if r['id']==wanted),ordinary),k)
             elif b.key=='cfs7':rstud=story_value(next((r for r in b.raw['studs'] if r['id']=='stud-cross-segments'),ordinary),k)
+            elif b.key in next_keys:rstud=next_stud(b,d,name,k,props,ordinary)
             studpid=b.profile(section(rstud.get('section')));spacing=float(rstud.get('spacing_in',12 if b.key=='cfs14' else 16));trackpid=b.profile('600T150-'+str(int(round(props.get('t_stud_in',.054)*1000))))
             chordrec=story_value(chords.get(f'chord-{d}-{name}',{}),k);hold=story_value(holds.get(f'hd-{d}-{name}',{}),k)
             if b.key=='cfs14' and ((name in ('S','M','N') and k>=3) or (name in ('C1S','C2S') and k>=2)):
@@ -184,7 +197,10 @@ def build(b):
                 if props.get('sheathing')=='strap' or 'strap' in record.get('sheathing','').lower():
                     txt=record.get('selection','');w=number(re.search(r'(\d+(?:\.\d+)?)\s*(?:in\.)?\s*x\s*(?:0\.|\d+\s*mil)',txt,re.I)[1]) if re.search(r'(\d+(?:\.\d+)?)\s*(?:in\.)?\s*x\s*(?:0\.|\d+\s*mil)',txt,re.I) else 2.5
                     tm=re.search(r'\bx\s*(0\.\d+)\s*in',txt,re.I)
-                    t=float(tm[1]) if tm else .0451
+                    mil=re.search(r'\bx\s*(\d+)\s*mil',txt,re.I)
+                    t=float(tm[1]) if tm else MIL[int(mil[1])] if mil else .0451
+                    # Ex2 selection includes strap area in in2, not a plate thickness.
+                    if b.key=='cfs2':t=MIL[68 if w==8 else 54]
                     strap=b.custom(f'STRAP-{w:g}X{t:g}','flat',dict(width=w,thickness=t),basis='S: source strap schedule')
                     for face in (-1,1):
                         for diagonal,(u,v) in enumerate(((a,dend),(dend,a))):
@@ -208,10 +224,14 @@ def build(b):
                     if h>0:opening(b,f'{name}-{k}-O{j}',axis,left['position_in'],u,z0+sill,width,h,k)
     from .review_supplements import complete_walls
     complete_walls(b,outline,bystory,levels)
-    floors_and_roofs(b,outline,bystory,levels)
+    if b.key in next_keys:next_floors(b,outline,levels)
+    else:floors_and_roofs(b,outline,bystory,levels)
     if b.key=='cfs11':walkways(b,levels)
     if b.key=='cfs29':mezzanine(b,levels)
     if b.key=='cfs3':b.panel('PODIUM-CONTEXT','foundation_context',[[0,0,168],[2592,0,168],[2592,768,168],[0,768,168]],12,0,'A',scope='Podium design by others; source handoff forces retained')
+    if b.key in ('cfs4','cfs9'):
+        b.panel('PODIUM-CONTEXT','foundation_context',[[x*12,y*12,base-12] for x,y in outline],12,0,'A',scope='Source concrete podium / A 12 in slab envelope; design by others')
+        b.note('PODIUM','S: CFS superstructure is supported by a separately designed concrete podium. '+('S: podium top +15 ft.' if b.key=='cfs4' else 'A: two podium levels at +12/+24 ft; source specifies two podium levels without elevations.')+' Source handoff forces and embed requirements remain; slab/support dimensions are A coordination context.')
     b.grids={'x':[(str(i+1),v*12) for i,v in enumerate(sorted({0,lx}|{round(l['pos'],3) for d,l in line_configs if d=='Y'}))],
              'y':[(chr(65+i),v*12) for i,v in enumerate(sorted({0,ly}|{round(cfg.get('line_plan_pos_ft',{}).get(d+'-'+l['name'],l['pos']),3) for d,l in line_configs if d=='X'}))]}
     b.note('WALL-SETOUT','A: source braced-segment lengths, sections, story schedules and rod sizes are retained. The dimensioned physical bay positions replace any tributary-fitted analysis coordinates. Openings occupy the scheduled gaps; ordinary studs and bridging stop at framed openings. Floor/roof datums are reconciled in the model. Type II hold-downs occur only at complete wall ends.')
@@ -271,29 +291,29 @@ def floors_and_roofs(b,outline,bystory,levels):
                     m=b.member(f'JOIST-{k}-{station}-{run}-{j}',pid,'joist',pt(a),pt(d),k,'A',records=[b.record('framing',rec.get('id'))]);b.ends(m,'review_cfs_joist',[b.record('framing',rec.get('id'))],parameters={'spacing':spacing,'floor_depth':b.depth(pid)+.75})
     b.note('DELEGATED-ROOF','A: the pictured roof truss internals, node gussets and supplier floor-joist arrangements are explicit fictional inputs. Use the source sections where scheduled; source delegated reactions, diaphragm conditions and capacity approval requirements remain attached. The drawing is not a supplier certification.')
 
-def simple_truss(b,label,along,station,start,end,base,rise,k,chord,web,panel,flat=False):
+def simple_truss(b,label,along,station,start,end,base,rise,k,chord,web,panel,flat=False,heel=0):
     cp=b.profile(chord);wp=b.profile(web);span=end-start;n=max(2,math.ceil(span/panel));n=n if flat else math.ceil(n/2)*2;step=span/n
     def pt(u,z):return [start+u,station,z] if along==0 else [station,start+u,z]
     nodes=defaultdict(list);ly=[0,1,0] if along==0 else [1,0,0]
     for j in range(n):
         a,d=j*step,(j+1)*step
         for edge in ('B','T'):
-            zz=lambda u:base+(rise if flat else rise*(1-abs(2*u/span-1))) if edge=='T' else base
+            zz=lambda u:base+(rise if flat else heel+rise*(1-abs(2*u/span-1))) if edge=='T' else base
             m=b.member(f'{label}-{edge}{j}',cp,'truss_chord',pt(a,zz(a)),pt(d,zz(d)),k,'A',local_y=ly);nodes[j,edge].append(m);nodes[j+1,edge].append(m)
         first,last=('B','T') if j%2==0 else ('T','B')
-        def znode(u,edge):return base+(rise if flat else rise*(1-abs(2*u/span-1))) if edge=='T' else base
+        def znode(u,edge):return base+(rise if flat else heel+rise*(1-abs(2*u/span-1))) if edge=='T' else base
         aa,dd=pt(a,znode(a,first)),pt(d,znode(d,last))
         if math.dist(aa,dd)>.01:
             m=b.member(f'{label}-W{j}',wp,'truss_web',aa,dd,k,'A',local_y=ly);nodes[j,first].append(m);nodes[j+1,last].append(m)
-    if not flat:
+    if not flat and not heel:
         for j in (0,n):
             nodes[j,'B']+=nodes.pop((j,'T'),[])
-    if flat:
+    if flat or heel:
         for j in (0,n):
-            vertical=b.member(f'{label}-END{j}',wp,'truss_web',pt(j*step,base),pt(j*step,base+rise),k,'A',local_y=ly)
+            vertical=b.member(f'{label}-END{j}',wp,'truss_web',pt(j*step,base),pt(j*step,base+(rise if flat else heel)),k,'A',local_y=ly)
             nodes[j,'B'].append(vertical);nodes[j,'T'].append(vertical)
     for (j,edge),ms in nodes.items():
-        u=j*step;z=base+(rise if flat else rise*(1-abs(2*u/span-1))) if edge=='T' else base
+        u=j*step;z=base+(rise if flat else heel+rise*(1-abs(2*u/span-1))) if edge=='T' else base
         family='review_truss_heel' if j in (0,n) and edge=='B' else 'review_truss_node'
         if len(ms)<2:
             # End vertical completes a flat open-web joist; both chords have a real node.

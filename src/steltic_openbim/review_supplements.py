@@ -17,6 +17,10 @@ def complete_walls(b,outline,bystory,levels):
         if b.key=='cfs14':
             for y in (210,630):
                 if k>1 or y<420:lines[0,y]=levels[k]-16.25
+        if b.key in ('cfs2','cfs4','cfs6','cfs9','cfs12'):
+            from .review_next_cfs_walls import bearing_lines,depth
+            lines={key:levels[k]-depth(b,k) for key in lines}
+            for axis,pos in bearing_lines(b):lines[axis,pos]=levels[k]-depth(b,k)
         for (axis,pos),top in lines.items():
             normal=1-axis;ranges=intersections(poly,axis,pos/12)
             occupied=[(r['start_in']-6,r['end_in']+6) for w in b.walls if w['level']==k and w['direction']==('X' if axis==0 else 'Y') for r in w['runs'] if abs(r['position_in']-pos)<.1]
@@ -69,8 +73,9 @@ def floor_openings(b):
     ishr=b.key.startswith('hr');panels=[p for p in b.panels if p['kind']=='floor'];group={}
     for p in panels:group.setdefault(p['level'],[]).append(p)
     for k,ps in group.items():
+        if b.key=='hr14' and k==0:continue
         if b.key=='hr13' and k==4:continue  # Workshop roof is not an occupied office/mezzanine floor.
-        if not ishr and k==max(group) and b.key!='cfs29':continue
+        if not ishr and k==max(group) and b.key not in ('cfs29','cfs10','cfs18'):continue
         # Choose the two most separated source floor cells / polygon corners with an interior margin.
         candidates=[]
         for panel in ps:
@@ -78,7 +83,7 @@ def floor_openings(b):
             xs=[q[0] for q in poly];ys=[q[1] for q in poly]
             if ishr:
                 if len(poly)!=4 or max(xs)-min(xs)<240 or max(ys)-min(ys)<300:continue
-                candidates.append((min(xs)+60,min(ys)+60,96,216,z))
+                candidates.append((min(xs)+(132 if b.key=='hr30' else 60),min(ys)+60,96,216,z))
             else:
                 for xx in (min(xs)+72,max(xs)-168):
                     for yy in (min(ys)+72,max(ys)-288):

@@ -4,7 +4,7 @@ Drawing and IFC module for Steltic Hub. The first release targets dimensioned en
 
 ## Current status
 
-Stage 6 develops **23 fictional buildings into dimensioned A1 design sets with assembled connection details**: the original three pilots, ten additional HR buildings and ten additional CFS buildings. Each joint variant includes joined members, plates, fasteners, weld/interface callouts, a section and an isometric view. Plans, member marks and connection references link to every occurrence. [Scope, verification and reproduction](docs/stage6/README.md).
+Stage 7 develops **43 fictional buildings into dimensioned A1 design sets with assembled connection details**: the original three pilots, twenty additional HR buildings and twenty additional CFS buildings. Each joint variant includes joined members, plates, fasteners, weld/interface callouts, a section and an isometric view. Plans, member marks and connection references link to every occurrence. [Latest twenty, verification and reproduction](docs/stage7/README.md); [first 23](docs/stage6/README.md).
 
 The shared Hub widget offers this development step only for the registered exact source packages, after explicit fictional-building confirmation. It never supplies fictional answers to ordinary jobs. `steltic-openbim design-test package.json --confirm-fictional --author "Test author" --output drawings` provides the same workflow from the CLI. Regeneration retains answers and revision history; reopening a request returns to provisional drawings. Source values are labelled S; authored fictional fit, layout and delegated geometry are labelled A. This does not rerun engineering or establish fabrication readiness.
 

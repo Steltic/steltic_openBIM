@@ -104,32 +104,49 @@ class DesignSheets(Sheets):
         self.label(q[0]+3,q[1],ref,10,BLUE)
         self.callouts.append(dict(sheet=self.current,reference=ref,at=list(p)))
 
-    def grid_view(self,bounds,axes,scale,origin=(215,280),grid_axes=True):
+    def grid_view(self,bounds,axes,scale,origin=(215,280),grid_axes=True,grids=None):
         u,v=axes;s=72/scale;x,y=origin;(u0,u1),(v0,v1)=bounds
         def tr(p):return x+(p[u]-u0)*s,y+(p[v]-v0)*s
         w,h=(u1-u0)*s,(v1-v0)*s
         self.views.append(dict(sheet=self.current,axes=list(axes),bounds_in=bounds,scale_denominator=scale,points_per_inch=s))
+        bar_offset=145;caption_offset=65
         if grid_axes:
             for axis,horizontal in ((u,True),(v,False)):
                 if axis==2:continue
-                gs=self.m['grids']['xyz'[axis]];gs=[g for g in gs if bounds[0 if horizontal else 1][0]-.1<=g[1]<=bounds[0 if horizontal else 1][1]+.1]
-                for name,pos in gs:
+                gs=(grids or self.m['grids'])['xyz'[axis]];gs=sorted((g for g in gs if bounds[0 if horizontal else 1][0]-.1<=g[1]<=bounds[0 if horizontal else 1][1]+.1),key=lambda g:g[1])
+                lanes=[];last=[]
+                for _,pos in gs:
+                    lane=next((i for i,p in enumerate(last) if (pos-p)*s>=32),len(last))
+                    if lane==len(last):last.append(pos)
+                    else:last[lane]=pos
+                    lanes.append(lane)
+                dim_offset=64+30*max(lanes,default=0)
+                if horizontal:caption_offset=max(caption_offset,65+30*max(lanes,default=0))
+                short=any((b-a)*s<40 for (_,a),(_,b) in zip(gs,gs[1:]))
+                overall_offset=dim_offset+(56 if short else 36)
+                if horizontal:bar_offset=max(bar_offset,overall_offset+45)
+                for (name,pos),lane in zip(gs,lanes):
+                    gap=27+30*lane
                     if horizontal:
-                        xx=x+(pos-u0)*s;self.line((xx,y-25),(xx,y+h+25),LIGHT,.5,[9,3,2,3]);self.bubble(xx,y-27,name);self.bubble(xx,y+h+27,name)
+                        xx=x+(pos-u0)*s;self.line((xx,y-gap),(xx,y+h+gap),LIGHT,.5,[9,3,2,3]);self.bubble(xx,y-gap,name);self.bubble(xx,y+h+gap,name)
                     else:
-                        yy=y+(pos-v0)*s;self.line((x-25,yy),(x+w+25,yy),LIGHT,.5,[9,3,2,3]);self.bubble(x-27,yy,name);self.bubble(x+w+27,yy,name)
+                        yy=y+(pos-v0)*s;self.line((x-gap,yy),(x+w+gap,yy),LIGHT,.5,[9,3,2,3]);self.bubble(x-gap,yy,name);self.bubble(x+w+gap,yy,name)
+                previous_short=False
                 for (n1,a),(n2,b) in zip(gs,gs[1:]):
                     pa=(x+(a-u0)*s,y) if horizontal else (x,y+(a-v0)*s)
                     pb=(x+(b-u0)*s,y) if horizontal else (x,y+(b-v0)*s)
-                    self.dim(pa,pb,-64 if horizontal else 64,value=b-a,ref='Grid '+n1+'-'+n2,size=10)
+                    is_short=(b-a)*s<40
+                    offset=dim_offset+(34 if previous_short else 20) if is_short else dim_offset
+                    previous_short=is_short and not previous_short
+                    self.dim(pa,pb,-offset if horizontal else offset,value=b-a,ref='Grid '+n1+'-'+n2,size=10)
                 if gs:
                     a,b=gs[0][1],gs[-1][1]
                     pa=(x+(a-u0)*s,y) if horizontal else (x,y+(a-v0)*s)
                     pb=(x+(b-u0)*s,y) if horizontal else (x,y+(b-v0)*s)
-                    self.dim(pa,pb,-100 if horizontal else 100,value=b-a,ref='Overall grid dimension',size=12)
-        self.text(x,y+h+65,'Scale 1:'+str(scale)+' at A1 | Workline dimensions',12,GREY)
+                    self.dim(pa,pb,-overall_offset if horizontal else overall_offset,value=b-a,ref='Overall grid dimension',size=12)
+        self.text(x,y+h+caption_offset,'Scale 1:'+str(scale)+' at A1 | Workline dimensions',12,GREY)
         bar=120 if scale<=100 else 240
-        self.line((x,y-145),(x+bar*s,y-145),INK,3);self.text(x,y-165,'0',10);self.text(x+bar*s-15,y-165,feet(bar),10)
+        self.line((x,y-bar_offset),(x+bar*s,y-bar_offset),INK,3);self.text(x,y-bar_offset-20,'0',10);self.text(x+bar*s-15,y-bar_offset-20,feet(bar),10)
         return tr,s
 
     def draw_members(self,members,tr,axes,s,mark_mode='groups'):

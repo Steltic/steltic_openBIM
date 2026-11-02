@@ -48,12 +48,12 @@ def prepare(model,package):
         ms=[members[i] for i in c['member_ids']];family=c['detail_ref']['id']
         story=ms[0].get('level',1) if any(t in family for t in ('chord','hold_down','collector','squash','rim','floor_stack')) or family in ('review_cfs_floor','review_cfs_sill') else 0
         angles=()
-        if family in ('test_roof_truss','review_truss_node','review_truss_heel','review_stmf_node','review_stmf_end','review_portal_joint','review_canopy_knee','review_canopy_brace'):
+        if family in ('test_roof_truss','review_truss_node','review_truss_heel','review_stmf_node','review_stmf_end','review_portal_joint','review_canopy_knee','review_canopy_brace','review_transfer_truss','review_brace_crossing'):
             vectors=[]
             for m in ms:
                 far=max(m['axis'],key=lambda p:sum((p[i]-c['point'][i])**2 for i in range(3)))
                 vector=[far[i]-c['point'][i] for i in range(3)];length=sum(v*v for v in vector)**.5
-                vectors.append(tuple(round(v/length,5) for v in vector))
+                if length>1e-8:vectors.append(tuple(round(v/length,5) for v in vector))
             angles=tuple(sorted(vectors))
         parameters=json.dumps(c.get('parameters',{}),sort_keys=True,separators=(',',':'))
         key=(family,subtype(c,ms),tuple(sorted((m['kind'],m['profile_id']) for m in ms)),tuple(sorted(c.get('design_record_ids',[]))),story,angles,parameters)

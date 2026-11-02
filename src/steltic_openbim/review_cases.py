@@ -6,7 +6,7 @@ from pathlib import Path
 DATA=Path(__file__).with_name('review_data')
 CASES={c['id']:c for c in json.loads((DATA/'cases.json').read_text(encoding='utf-8'))} if (DATA/'cases.json').is_file() else {}
 
-@lru_cache(maxsize=24)
+@lru_cache(maxsize=48)
 def evidence(key):
     if key not in CASES:raise ValueError('Unknown review case '+key)
     with zipfile.ZipFile(DATA/'inputs.zip') as z:
@@ -18,7 +18,7 @@ def catalog():
 
 def scenario(key):
     c=CASES[key]
-    return dict(title=c['source_building'].replace('_',' '),source_sha256=c['source_sha256'],answers={
+    return dict(title=c.get('drawing_title',c['source_building'].replace('_',' ')),source_sha256=c['source_sha256'],answers={
         key.upper()+'-GEOMETRY':'Adopt the source physical grids, member sections and level-specific footprint. Reconstruct analysis-only systems as physical walls/trusses using the source configuration and design schedules. Exact adopted member/plate geometry is retained in the drawing model; additions are marked A.',
         key.upper()+'-OPENINGS':'For this fictional test, retain all located source openings and use the explicitly dimensioned opening schedule for supplementary access/windows/services. Locate supplementary openings clear of source braced segments, preserve irregular footprints, and frame every cut member end.',
         key.upper()+'-CONNECTIONS':'Develop each source connection as an assembled design detail. Retain source grades, counts, plate thicknesses and special conditions; adopt and label A all missing fit, set-out, receiving support and local fastener geometry. Workline dimensions are design dimensions, not fabrication cut lengths.',
@@ -39,4 +39,7 @@ def build_model(package,state):
     floor_openings(b)
     from .review_cfs_complements import apply
     apply(b)
+    if key in ('cfs2','cfs4','cfs6','cfs9','cfs10','cfs12'):
+        from .review_next_cfs_walls import connections
+        connections(b)
     return b.finish()

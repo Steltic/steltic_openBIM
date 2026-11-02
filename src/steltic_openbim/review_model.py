@@ -13,7 +13,7 @@ LIP={125:.188,137:.375,162:.5,200:.625,250:.625,300:.625,350:1}
 class CaseModel:
     def __init__(self,key,package,state,source):
         self.key=key;self.case=CASES[key];self.package=package;self.state=state;self.source=source
-        self.raw=source['calc'];self.config=source['configuration'];self.cfg=self.config.get('cfg',{})
+        self.raw=source['calc'];self.config=copy.deepcopy(source['configuration']);self.cfg=self.config.get('cfg',{})
         self.profiles={};self.members=[];self.panels=[];self.connections=[];self.openings=[];self.notes=[];self.changes=[];self.excluded=[]
         self.levels=[];self.grids={};self.views=[];self.walls=[]
         self.records={r['id']:r for r in package['design_records']};self.used_records=set();self.bounds=None
@@ -34,7 +34,7 @@ class CaseModel:
             d,kind,b,mil=match.groups();code=int(b);mil=int(mil);t=MIL[mil];width={162:1.625,137:1.375}.get(code,code/100)
             depth=int(d)/100+(2*t+.0625 if kind=='T' else 0)
             return self.custom(label,'z' if kind=='Z' else 'channel',dict(d=depth,b=width,t=t,lip=LIP.get(code,.625) if kind in ('S','Z') else 0),basis='S: producer designator geometry; rolled corners omitted',lip_angle_deg=50 if kind=='Z' else 90)
-        match=re.fullmatch(r'(?:HSS|BOX)([\d.]+)X([\d.]+)X([\d./]+)',label)
+        match=re.fullmatch(r'(?:HSS|BOX)([\d./-]+)X([\d./-]+)X([\d./-]+)',label)
         if match:
             d,w,t=map(number,match.groups());return self.custom(label,'rhs',dict(h=d,b=w,t=t*(.93 if label.startswith('HSS') else 1)),basis='S: labelled rectangular section; A500 design wall thickness where applicable')
         match=re.fullmatch(r'BOX([\d.]+)X([\d./]+)',label)
@@ -43,7 +43,9 @@ class CaseModel:
         match=re.fullmatch(r'HSS([\d.]+)X([\d.]+)',label)
         if match:
             d,t=map(float,match.groups());return self.custom(label,'chs',dict(d=d,t=.93*t),basis='S: A500 circular HSS, design wall thickness')
-        match=re.fullmatch(r'L([\d./]+)X([\d./]+)X([\d./]+)',label)
+        match=re.fullmatch(r'ROD([\d./-]+)',label)
+        if match:return self.custom(label,'round',dict(d=number(match[1])),basis='S: source rod diameter')
+        match=re.fullmatch(r'L([\d./-]+)X([\d./-]+)X([\d./-]+)',label)
         if match:
             h,w,t=map(number,match.groups());return self.custom(label,'angle',dict(h=h,b=w,t=t),basis='S: section designation; rolled corner omitted')
         match=re.fullmatch(r'PL([\d./]+)X([\d./]+)',label)
@@ -127,7 +129,7 @@ class CaseModel:
         if not self.grids:
             self.grids={axis:[(str(j+1) if i==0 else chr(65+j),x) for j,x in enumerate(sorted({round(p[i],3) for m in self.members if m['kind']=='column' for p in m['axis']}))] for i,axis in enumerate(('x','y'))}
         assumptions=[dict(id=k,answer=v,basis='A - user-authorized fictional test input') for k,v in scenario(self.key)['answers'].items()]+self.notes
-        return dict(schema='steltic.design_drawing_model',version=1,pilot=self.key,title=self.case['source_building'].replace('_',' '),fictional=True,
+        return dict(schema='steltic.design_drawing_model',version=1,pilot=self.key,title=self.case.get('drawing_title',self.case['source_building'].replace('_',' ')),fictional=True,
             source_sha256=fingerprint(self.package),scenario=copy.deepcopy(self.state['design_scenario']),members=self.members,profiles=list(self.profiles.values()),panels=self.panels,
             materials=[dict(id='source_steel',basis='S',specification='Grades and material requirements in source records'),dict(id='assumed_test_steel',basis='A',specification='Fictional geometry supplement; no new capacity verification')],
             openings=self.openings,connections=self.connections,member_schedule=schedule,details=[],grids=self.grids,levels=self.levels,changes=self.changes,

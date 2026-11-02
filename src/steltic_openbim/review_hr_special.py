@@ -52,16 +52,19 @@ def brace(ctx):
                 yy=tw/2 if sg>0 else -bf/2+.25;label=f'ST{i}{j}'
                 a.box(label,[x-.25,yy,tf],[.5,bf/2-tw/2-.25,bd-2*tf],'A','Source-required stiffener, A thickness/station where unspecified');a.weld('W'+label,[x,yy,tf],[x,yy,bd-tf],['BEAM',label],.25,basis='A')
     else:
-        a.member('COLUMN',cp,[-cd/2,0,0 if kind=='base' else -bd],[-cd/2,0,lz+24])
+        weak=par.get('weak_axis_gusset',False);column_face=p[cp]['dimensions'].get('tw',.375)/2 if weak else cd/2
+        a.member('COLUMN',cp,[-column_face,0,0 if kind=='base' else -bd],[-column_face,0,lz+24],y=[1,0,0] if weak else [0,1,0])
         if kind=='base':
             a.box('BASE',[-cd-4,-bf/2-6,-1.5],[cd+lx+4,bf+12,1.5],'A','A local extract of source column base plate; see separate base detail')
             a.box('CONC',[-cd-8,-bf/2-10,-12],[cd+lx+12,bf+20,10.5],'A','Foundation context',kind='concrete');host='BASE'
         else:a.member('BEAM',bp,[0,0,-bd/2],[lx+24,0,-bd/2]);host='BEAM'
-        vertices=[[0,-t/2,0],[lx,-t/2,0],[max(lx,18),-t/2,lz*.65],[0,-t/2,lz]]
+        clearance=2*t if par.get('beam_only_gusset') else 0
+        vertices=[[clearance,-t/2,0],[lx+clearance,-t/2,0],[max(lx,18)+clearance,-t/2,lz*.65],[clearance,-t/2,lz]]
         a.polygon('GUSSET',vertices,t,basis='A',description=f'Source gusset t={t:g}; A fitted perimeter, source UFM edges')
         weld=ctx.n(NUMBER+r'-in E70 fillets both sides',.375)
-        a.weld('WGC',[0,0,0],[0,0,lz],['COLUMN','GUSSET'],weld,description='Source column-edge weld, both sides')
-        a.weld('WGB',[0,0,0],[lx,0,0],[host,'GUSSET'],weld,description='Source beam/base edge weld, both sides')
+        if not par.get('beam_only_gusset'):a.weld('WGC',[0,0,0],[0,0,lz],['COLUMN','GUSSET'],weld,description='Source column-edge weld, both sides')
+        else:a.notes.append('S: beam-only gusset; no gusset-to-column weld. A 2t clear gap is drawn at the column face. Source free-edge and rotation-clearance requirements remain.')
+        a.weld('WGB',[clearance,0,0],[lx+clearance,0,0],[host,'GUSSET'],weld,description='Source beam/base edge weld, both sides')
     ctx.text=full_text
     angle=math.radians(par.get('brace_angle',45));v=[math.cos(angle),0,(-1 if upper else 1)*math.sin(angle)];start=mul(v,max(8,min(lx,lz)*.55));wl=ctx.n(r'welds? x '+NUMBER+r' in',12);end=add(start,mul(v,wl+24))
     a.member('BRACE',pid,start,end,description='Source brace section / BRB supplier envelope '+pid)
@@ -86,7 +89,10 @@ def brace(ctx):
             rt,rw=number(match[1]),number(match[2]);rl=number(match[3]) if match[3] else 20
             for j,sg in enumerate((-1,1)):
                 yy=sg*(effective(p,pid,'width')/2);origin=add(start,mul(v,wl-rl/2));a.box('REINF'+str(j),add(origin,[0,yy,0]),[rl,rt,rw],'A','Source slot reinforcement dimensions; A fitted/rolled envelope',x=v,y=[0,sg,0]);a.weld('WR'+str(j),add(origin,[0,yy,0]),add(add(origin,mul(v,rl)),[0,yy,0]),['BRACE','REINF'+str(j)],.3125,description='Source reinforcement fillets, two lines each side of reduced section')
-    a.section_at=start[0]+6;a.dim([0,0,0],[lx,0,0],f'{lx:g} in source interface length');a.dim([0,0,0],[0,0,(-1 if upper else 1)*lz],basis='A',offset=40)
+    a.section_at=start[0]+6
+    edge_start=-lx/2 if upper else clearance
+    a.dim([edge_start,0,0],[edge_start+lx,0,0],f'{lx:g} in source interface length')
+    a.dim([0,0,0],[0,0,(-1 if upper else 1)*lz],basis='A',offset=40)
     a.notes.append('Separate source end condition: '+kind+'. Member slot, gusset clearance and free-edge trim follow the attached source record; drawings show the assembled load path. A geometry remains subject to the unchanged design verification requirements.')
     if par.get('upper_end') and kind=='corner':
         from .assembly_scene import bounds

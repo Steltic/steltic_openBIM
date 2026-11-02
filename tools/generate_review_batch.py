@@ -1,4 +1,4 @@
-"""Reproduce the 23 explicitly fictional design review sets without either engine."""
+"""Reproduce the 43 explicitly fictional design review sets without either engine."""
 import argparse,json,zipfile
 from pathlib import Path
 from steltic_openbim.review_cases import CASES,evidence
@@ -17,6 +17,9 @@ def main():
             with zipfile.ZipFile(root/'docs/stage3/pilots.zip') as z:package=json.loads(z.read(key+'/bim_package.json'))
         state=initial_state(package,1);state=adopt_scenario(package,state,dict(revision=1,source_model_sha256=state['source_model_sha256'],confirm_fictional=True,author=args.author))
         dest=args.output/key;report=generate(package,state,dest);write_json(dest/'state.json',state);write_json(dest/'information_requests.json',DrawingStore.questions(state));write_json(dest/'bim_package.json',package)
+        if key in CASES:
+            write_json(dest/'source_calc.json',evidence(key)['calc'])
+            write_json(dest/'source_configuration.json',evidence(key)['configuration'])
         reports[key]=dict(sheets=len(report['sheets']),counts=report['counts'],source_sha256=report['source_model_sha256'],pdf_sha256=report['pdf_sha256'])
         print(key,reports[key],flush=True)
     args.output.mkdir(parents=True,exist_ok=True)

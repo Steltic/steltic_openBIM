@@ -36,7 +36,7 @@
       349
     ],
     "visual_review_status": "reviewed",
-    "method": "All PDF pages rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets. One plan and one complex joint per building inspected at 2600 px. This is sampled visual review, not inspection of every page at full size.",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets during development, with a 2600 px plan and complex-joint sample per building. After corrections, changed joint families and plan layouts were sampled again. This is sampled review, not full-size inspection of every page or structural approval.",
     "reviewed_by": "Codex visual inspection",
     "full_size_samples": {
       "pdf_sha256": "c806d1e09adf28d963ceee6c6e1b4978c8f0b71e28bfcb7a8e5c03cf6af373b2",
@@ -78,7 +78,7 @@
       370
     ],
     "visual_review_status": "reviewed",
-    "method": "All PDF pages rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets. One plan and one complex joint per building inspected at 2600 px. This is sampled visual review, not inspection of every page at full size.",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets during development, with a 2600 px plan and complex-joint sample per building. After corrections, changed joint families and plan layouts were sampled again. This is sampled review, not full-size inspection of every page or structural approval.",
     "reviewed_by": "Codex visual inspection",
     "full_size_samples": {
       "pdf_sha256": "3600c6ac087eb47350a9ad836707cd439825d455b6d91f52352437181347ef53",
@@ -124,7 +124,7 @@
       243
     ],
     "visual_review_status": "reviewed",
-    "method": "All PDF pages rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets. One plan and one complex joint per building inspected at 2600 px. This is sampled visual review, not inspection of every page at full size.",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets during development, with a 2600 px plan and complex-joint sample per building. After corrections, changed joint families and plan layouts were sampled again. This is sampled review, not full-size inspection of every page or structural approval.",
     "reviewed_by": "Codex visual inspection",
     "full_size_samples": {
       "pdf_sha256": "ca246d7ff285945e8bb4f8c8d51cfee1447ac7b61bb2a3a0773cac666853d701",
@@ -163,7 +163,7 @@
       35
     ],
     "visual_review_status": "reviewed",
-    "method": "All PDF pages rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets. One plan and one complex joint per building inspected at 2600 px. This is sampled visual review, not inspection of every page at full size.",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets during development, with a 2600 px plan and complex-joint sample per building. After corrections, changed joint families and plan layouts were sampled again. This is sampled review, not full-size inspection of every page or structural approval.",
     "reviewed_by": "Codex visual inspection",
     "full_size_samples": {
       "pdf_sha256": "e3de6109ee703bc9bdf5a2de11817489b50249830e77fc27251c12a5ae95d50b",
@@ -199,7 +199,7 @@
       48
     ],
     "visual_review_status": "reviewed",
-    "method": "All PDF pages rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets. One plan and one complex joint per building inspected at 2600 px. This is sampled visual review, not inspection of every page at full size.",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets during development, with a 2600 px plan and complex-joint sample per building. After corrections, changed joint families and plan layouts were sampled again. This is sampled review, not full-size inspection of every page or structural approval.",
     "reviewed_by": "Codex visual inspection",
     "full_size_samples": {
       "pdf_sha256": "3fd6f9cd38fe6bc5a721c09226a77bbb58a64d148843e0032d4d8ecbac12663d",
@@ -237,7 +237,7 @@
       45
     ],
     "visual_review_status": "reviewed",
-    "method": "All PDF pages rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets. One plan and one complex joint per building inspected at 2600 px. This is sampled visual review, not inspection of every page at full size.",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets during development, with a 2600 px plan and complex-joint sample per building. After corrections, changed joint families and plan layouts were sampled again. This is sampled review, not full-size inspection of every page or structural approval.",
     "reviewed_by": "Codex visual inspection",
     "full_size_samples": {
       "pdf_sha256": "a9db749f62055e79b93a9e970a102b2b82d537825b0f04b50caae3bc3dfb190f",
@@ -265,7 +265,7 @@
       30
     ],
     "visual_review_status": "reviewed",
-    "method": "All PDF pages rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets. One plan and one complex joint per building inspected at 2600 px. This is sampled visual review, not inspection of every page at full size.",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets during development, with a 2600 px plan and complex-joint sample per building. After corrections, changed joint families and plan layouts were sampled again. This is sampled review, not full-size inspection of every page or structural approval.",
     "reviewed_by": "Codex visual inspection",
     "full_size_samples": {
       "pdf_sha256": "4c3097a2f4fc99d939e55eff34c7e2eadad873eca94001d26a60bcddeff9f3da",
@@ -300,7 +300,7 @@
       50
     ],
     "visual_review_status": "reviewed",
-    "method": "All PDF pages rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets. One plan and one complex joint per building inspected at 2600 px. This is sampled visual review, not inspection of every page at full size.",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets during development, with a 2600 px plan and complex-joint sample per building. After corrections, changed joint families and plan layouts were sampled again. This is sampled review, not full-size inspection of every page or structural approval.",
     "reviewed_by": "Codex visual inspection",
     "full_size_samples": {
       "pdf_sha256": "d620ff2c3186f052932a7ea605422a16c23aa4e0f3b2d614cde1259edc2fbdad",
@@ -340,7 +340,7 @@
       564
     ],
     "visual_review_status": "reviewed",
-    "method": "All PDF pages rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets. One plan and one complex joint per building inspected at 2600 px. This is sampled visual review, not inspection of every page at full size.",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets during development, with a 2600 px plan and complex-joint sample per building. After corrections, changed joint families and plan layouts were sampled again. This is sampled review, not full-size inspection of every page or structural approval.",
     "reviewed_by": "Codex visual inspection",
     "full_size_samples": {
       "pdf_sha256": "199369504d5d54ee41627c04ca181d37d9b403f6bc2d651ad18ca897c6d8a5d5",
@@ -383,7 +383,7 @@
       60
     ],
     "visual_review_status": "reviewed",
-    "method": "All PDF pages rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets. One plan and one complex joint per building inspected at 2600 px. This is sampled visual review, not inspection of every page at full size.",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets during development, with a 2600 px plan and complex-joint sample per building. After corrections, changed joint families and plan layouts were sampled again. This is sampled review, not full-size inspection of every page or structural approval.",
     "reviewed_by": "Codex visual inspection",
     "full_size_samples": {
       "pdf_sha256": "90469c7acffbb7114234f409ed9e867ed73ba08f94bf81a6d7689b2794804976",
@@ -419,7 +419,7 @@
       877
     ],
     "visual_review_status": "reviewed",
-    "method": "All PDF pages rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets. One plan and one complex joint per building inspected at 2600 px. This is sampled visual review, not inspection of every page at full size.",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets during development, with a 2600 px plan and complex-joint sample per building. After corrections, changed joint families and plan layouts were sampled again. This is sampled review, not full-size inspection of every page or structural approval.",
     "reviewed_by": "Codex visual inspection",
     "full_size_samples": {
       "pdf_sha256": "c6ca6759741a0a06c2988341283a4776f5371a026ecd0019296a1840e175ada4",
@@ -475,7 +475,7 @@
       248
     ],
     "visual_review_status": "reviewed",
-    "method": "All PDF pages rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets. One plan and one complex joint per building inspected at 2600 px. This is sampled visual review, not inspection of every page at full size.",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets during development, with a 2600 px plan and complex-joint sample per building. After corrections, changed joint families and plan layouts were sampled again. This is sampled review, not full-size inspection of every page or structural approval.",
     "reviewed_by": "Codex visual inspection",
     "full_size_samples": {
       "pdf_sha256": "8c54b75e01b5d7bd1d194ff36a12f984d95c89c1c1cf9eb057b60b8738996aaf",
@@ -488,7 +488,7 @@
     ]
   },
   "hr10": {
-    "pdf_sha256": "7c589f406f7f2368aeaccafe58753e308bb2b0251846c55be048f6e5a724477e",
+    "pdf_sha256": "22d75fc05644a11ff7b08c6874dca9531ac67bab25906235dbb91c1fe0121137",
     "rendered_pages": 468,
     "selected_pages": [
       9,
@@ -510,20 +510,34 @@
       456
     ],
     "visual_review_status": "reviewed",
-    "method": "All PDF pages rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets. One plan and one complex joint per building inspected at 2600 px. This is sampled visual review, not inspection of every page at full size.",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets during development, with a 2600 px plan and complex-joint sample per building. After corrections, changed joint families and plan layouts were sampled again. This is sampled review, not full-size inspection of every page or structural approval.",
     "reviewed_by": "Codex visual inspection",
     "full_size_samples": {
-      "pdf_sha256": "7c589f406f7f2368aeaccafe58753e308bb2b0251846c55be048f6e5a724477e",
+      "pdf_sha256": "22d75fc05644a11ff7b08c6874dca9531ac67bab25906235dbb91c1fe0121137",
       "plan_page": 10,
       "joint_page": 31,
       "scale_to_px": 2600
     },
+    "supersedes_reviewed_pdf_sha256": "7c589f406f7f2368aeaccafe58753e308bb2b0251846c55be048f6e5a724477e",
+    "correction_samples": {
+      "pdf_sha256": "22d75fc05644a11ff7b08c6874dca9531ac67bab25906235dbb91c1fe0121137",
+      "pages": [
+        294,
+        412,
+        413,
+        414,
+        418
+      ],
+      "scale_to_px": 2600
+    },
     "corrections_verified": [
-      "HR10 embedded column reinforcement now extends upward from bearing plate; HR32 weak-axis continuity plates now fit the column frame; CFS8 plan scale bar now clears footer. Corrected views rerendered and inspected."
+      "HR10 embedded column reinforcement now extends upward from bearing plate; HR32 weak-axis continuity plates now fit the column frame; CFS8 plan scale bar now clears footer. Corrected views rerendered and inspected.",
+      "Apex/link-end source interface dimension follows the actual welded edge.",
+      "CJP splices include source transition components and explicit temporary erection fit; actual shaft-depth dimension replaces an ambiguous offset label."
     ]
   },
   "hr11": {
-    "pdf_sha256": "ebd264ef65a11cf0dfe257b789c5543fac764d7bdba52d3ac6e02fd501adf3cb",
+    "pdf_sha256": "407a39c5cf5027aec4497656fd9a3eccbe0ab2e5821fd8b7f8e34b79d6db6a51",
     "rendered_pages": 239,
     "selected_pages": [
       6,
@@ -546,18 +560,30 @@
       231
     ],
     "visual_review_status": "reviewed",
-    "method": "All PDF pages rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets. One plan and one complex joint per building inspected at 2600 px. This is sampled visual review, not inspection of every page at full size.",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets during development, with a 2600 px plan and complex-joint sample per building. After corrections, changed joint families and plan layouts were sampled again. This is sampled review, not full-size inspection of every page or structural approval.",
     "reviewed_by": "Codex visual inspection",
     "full_size_samples": {
-      "pdf_sha256": "ebd264ef65a11cf0dfe257b789c5543fac764d7bdba52d3ac6e02fd501adf3cb",
+      "pdf_sha256": "407a39c5cf5027aec4497656fd9a3eccbe0ab2e5821fd8b7f8e34b79d6db6a51",
       "plan_page": 7,
       "joint_page": 115,
       "scale_to_px": 2600
     },
-    "corrections_verified": []
+    "supersedes_reviewed_pdf_sha256": "ebd264ef65a11cf0dfe257b789c5543fac764d7bdba52d3ac6e02fd501adf3cb",
+    "correction_samples": {
+      "pdf_sha256": "407a39c5cf5027aec4497656fd9a3eccbe0ab2e5821fd8b7f8e34b79d6db6a51",
+      "pages": [
+        115,
+        214
+      ],
+      "scale_to_px": 2600
+    },
+    "corrections_verified": [
+      "Apex/link-end source interface dimension follows the actual welded edge.",
+      "CJP splices include source transition components and explicit temporary erection fit; actual shaft-depth dimension replaces an ambiguous offset label."
+    ]
   },
   "hr12": {
-    "pdf_sha256": "237d1203937c60fc04fb36d3879430b6baab575cb84802defdc4597fc86bb826",
+    "pdf_sha256": "2677f2cc21736b7784f2aae073d60364df66b929c7819cff409c2689167f51f7",
     "rendered_pages": 271,
     "selected_pages": [
       7,
@@ -579,18 +605,28 @@
       264
     ],
     "visual_review_status": "reviewed",
-    "method": "All PDF pages rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets. One plan and one complex joint per building inspected at 2600 px. This is sampled visual review, not inspection of every page at full size.",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets during development, with a 2600 px plan and complex-joint sample per building. After corrections, changed joint families and plan layouts were sampled again. This is sampled review, not full-size inspection of every page or structural approval.",
     "reviewed_by": "Codex visual inspection",
     "full_size_samples": {
-      "pdf_sha256": "237d1203937c60fc04fb36d3879430b6baab575cb84802defdc4597fc86bb826",
+      "pdf_sha256": "2677f2cc21736b7784f2aae073d60364df66b929c7819cff409c2689167f51f7",
       "plan_page": 8,
       "joint_page": 210,
       "scale_to_px": 2600
     },
-    "corrections_verified": []
+    "supersedes_reviewed_pdf_sha256": "237d1203937c60fc04fb36d3879430b6baab575cb84802defdc4597fc86bb826",
+    "correction_samples": {
+      "pdf_sha256": "2677f2cc21736b7784f2aae073d60364df66b929c7819cff409c2689167f51f7",
+      "pages": [
+        244
+      ],
+      "scale_to_px": 2600
+    },
+    "corrections_verified": [
+      "CJP splices include source transition components and explicit temporary erection fit; actual shaft-depth dimension replaces an ambiguous offset label."
+    ]
   },
   "hr13": {
-    "pdf_sha256": "d3b73e4e52d16fcc4c0589c14330cdb8332fd6ebc0a348e43cffa4f9ffd0f546",
+    "pdf_sha256": "993749e573036c43c4522644de25693db879320438b44ea00798657e122aa853",
     "rendered_pages": 122,
     "selected_pages": [
       5,
@@ -616,15 +652,27 @@
       120
     ],
     "visual_review_status": "reviewed",
-    "method": "All PDF pages rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets. One plan and one complex joint per building inspected at 2600 px. This is sampled visual review, not inspection of every page at full size.",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets during development, with a 2600 px plan and complex-joint sample per building. After corrections, changed joint families and plan layouts were sampled again. This is sampled review, not full-size inspection of every page or structural approval.",
     "reviewed_by": "Codex visual inspection",
     "full_size_samples": {
-      "pdf_sha256": "d3b73e4e52d16fcc4c0589c14330cdb8332fd6ebc0a348e43cffa4f9ffd0f546",
+      "pdf_sha256": "993749e573036c43c4522644de25693db879320438b44ea00798657e122aa853",
       "plan_page": 6,
       "joint_page": 109,
       "scale_to_px": 2600
     },
-    "corrections_verified": []
+    "supersedes_reviewed_pdf_sha256": "d3b73e4e52d16fcc4c0589c14330cdb8332fd6ebc0a348e43cffa4f9ffd0f546",
+    "correction_samples": {
+      "pdf_sha256": "993749e573036c43c4522644de25693db879320438b44ea00798657e122aa853",
+      "pages": [
+        79,
+        102
+      ],
+      "scale_to_px": 2600
+    },
+    "corrections_verified": [
+      "Apex/link-end source interface dimension follows the actual welded edge.",
+      "CJP splices include source transition components and explicit temporary erection fit; actual shaft-depth dimension replaces an ambiguous offset label."
+    ]
   },
   "hr22": {
     "pdf_sha256": "cd0fe8b86c169423b0be28bc7281f0a8d55982766ce40d597a39b61a988d93ee",
@@ -651,7 +699,7 @@
       73
     ],
     "visual_review_status": "reviewed",
-    "method": "All PDF pages rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets. One plan and one complex joint per building inspected at 2600 px. This is sampled visual review, not inspection of every page at full size.",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets during development, with a 2600 px plan and complex-joint sample per building. After corrections, changed joint families and plan layouts were sampled again. This is sampled review, not full-size inspection of every page or structural approval.",
     "reviewed_by": "Codex visual inspection",
     "full_size_samples": {
       "pdf_sha256": "cd0fe8b86c169423b0be28bc7281f0a8d55982766ce40d597a39b61a988d93ee",
@@ -662,7 +710,7 @@
     "corrections_verified": []
   },
   "hr27": {
-    "pdf_sha256": "94bc302adabc896cba3394dd43757883205332d46994f00091e27add8a48fa07",
+    "pdf_sha256": "edc8dee645c98844d314bfd50c0d0b33c7392498d70fc1dc97d8a2969149d830",
     "rendered_pages": 280,
     "selected_pages": [
       7,
@@ -684,18 +732,28 @@
       274
     ],
     "visual_review_status": "reviewed",
-    "method": "All PDF pages rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets. One plan and one complex joint per building inspected at 2600 px. This is sampled visual review, not inspection of every page at full size.",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets during development, with a 2600 px plan and complex-joint sample per building. After corrections, changed joint families and plan layouts were sampled again. This is sampled review, not full-size inspection of every page or structural approval.",
     "reviewed_by": "Codex visual inspection",
     "full_size_samples": {
-      "pdf_sha256": "94bc302adabc896cba3394dd43757883205332d46994f00091e27add8a48fa07",
+      "pdf_sha256": "edc8dee645c98844d314bfd50c0d0b33c7392498d70fc1dc97d8a2969149d830",
       "plan_page": 8,
       "joint_page": 196,
       "scale_to_px": 2600
     },
-    "corrections_verified": []
+    "supersedes_reviewed_pdf_sha256": "94bc302adabc896cba3394dd43757883205332d46994f00091e27add8a48fa07",
+    "correction_samples": {
+      "pdf_sha256": "edc8dee645c98844d314bfd50c0d0b33c7392498d70fc1dc97d8a2969149d830",
+      "pages": [
+        240
+      ],
+      "scale_to_px": 2600
+    },
+    "corrections_verified": [
+      "CJP splices include source transition components and explicit temporary erection fit; actual shaft-depth dimension replaces an ambiguous offset label."
+    ]
   },
   "hr28": {
-    "pdf_sha256": "62bdf5b247edbc7470d9e0c1677c6ba51f81d8242d4bb89e5ff8cdfe6244b639",
+    "pdf_sha256": "ae2f5f9935bf9095f6e6586d244d3ba831de70b4c9d61884d5a7da075379f200",
     "rendered_pages": 202,
     "selected_pages": [
       6,
@@ -717,15 +775,25 @@
       200
     ],
     "visual_review_status": "reviewed",
-    "method": "All PDF pages rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets. One plan and one complex joint per building inspected at 2600 px. This is sampled visual review, not inspection of every page at full size.",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets during development, with a 2600 px plan and complex-joint sample per building. After corrections, changed joint families and plan layouts were sampled again. This is sampled review, not full-size inspection of every page or structural approval.",
     "reviewed_by": "Codex visual inspection",
     "full_size_samples": {
-      "pdf_sha256": "62bdf5b247edbc7470d9e0c1677c6ba51f81d8242d4bb89e5ff8cdfe6244b639",
+      "pdf_sha256": "ae2f5f9935bf9095f6e6586d244d3ba831de70b4c9d61884d5a7da075379f200",
       "plan_page": 7,
       "joint_page": 52,
       "scale_to_px": 2600
     },
-    "corrections_verified": []
+    "supersedes_reviewed_pdf_sha256": "62bdf5b247edbc7470d9e0c1677c6ba51f81d8242d4bb89e5ff8cdfe6244b639",
+    "correction_samples": {
+      "pdf_sha256": "ae2f5f9935bf9095f6e6586d244d3ba831de70b4c9d61884d5a7da075379f200",
+      "pages": [
+        57
+      ],
+      "scale_to_px": 2600
+    },
+    "corrections_verified": [
+      "CJP splices include source transition components and explicit temporary erection fit; actual shaft-depth dimension replaces an ambiguous offset label."
+    ]
   },
   "hr32": {
     "pdf_sha256": "e21f31739d4655bb7e2a87a7edc741dfb3420cc5d89d11c964a83aed32c0205e",
@@ -750,7 +818,7 @@
       43
     ],
     "visual_review_status": "reviewed",
-    "method": "All PDF pages rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets. One plan and one complex joint per building inspected at 2600 px. This is sampled visual review, not inspection of every page at full size.",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets during development, with a 2600 px plan and complex-joint sample per building. After corrections, changed joint families and plan layouts were sampled again. This is sampled review, not full-size inspection of every page or structural approval.",
     "reviewed_by": "Codex visual inspection",
     "full_size_samples": {
       "pdf_sha256": "e21f31739d4655bb7e2a87a7edc741dfb3420cc5d89d11c964a83aed32c0205e",
@@ -790,7 +858,7 @@
       39
     ],
     "visual_review_status": "reviewed",
-    "method": "All PDF pages rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets. One plan and one complex joint per building inspected at 2600 px. This is sampled visual review, not inspection of every page at full size.",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets during development, with a 2600 px plan and complex-joint sample per building. After corrections, changed joint families and plan layouts were sampled again. This is sampled review, not full-size inspection of every page or structural approval.",
     "reviewed_by": "Codex visual inspection",
     "full_size_samples": {
       "pdf_sha256": "ecbb93d02cc83bb4d874dcf384e29a7e0f7cf97656c8c9e462f7c35e745fe279",
@@ -801,7 +869,7 @@
     "corrections_verified": []
   },
   "hr8": {
-    "pdf_sha256": "1048fceeccfa2309d2ebe63101c4a395f6ddc3f51dd299dd4d7f46b102854bdc",
+    "pdf_sha256": "7c59b3d1b335a75be96a6c6c6a745dc2a4f578a83efe99ffa51e0c371939cc7b",
     "rendered_pages": 169,
     "selected_pages": [
       6,
@@ -825,18 +893,30 @@
       165
     ],
     "visual_review_status": "reviewed",
-    "method": "All PDF pages rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets. One plan and one complex joint per building inspected at 2600 px. This is sampled visual review, not inspection of every page at full size.",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets during development, with a 2600 px plan and complex-joint sample per building. After corrections, changed joint families and plan layouts were sampled again. This is sampled review, not full-size inspection of every page or structural approval.",
     "reviewed_by": "Codex visual inspection",
     "full_size_samples": {
-      "pdf_sha256": "1048fceeccfa2309d2ebe63101c4a395f6ddc3f51dd299dd4d7f46b102854bdc",
+      "pdf_sha256": "7c59b3d1b335a75be96a6c6c6a745dc2a4f578a83efe99ffa51e0c371939cc7b",
       "plan_page": 7,
       "joint_page": 135,
       "scale_to_px": 2600
     },
-    "corrections_verified": []
+    "supersedes_reviewed_pdf_sha256": "1048fceeccfa2309d2ebe63101c4a395f6ddc3f51dd299dd4d7f46b102854bdc",
+    "correction_samples": {
+      "pdf_sha256": "7c59b3d1b335a75be96a6c6c6a745dc2a4f578a83efe99ffa51e0c371939cc7b",
+      "pages": [
+        77,
+        150
+      ],
+      "scale_to_px": 2600
+    },
+    "corrections_verified": [
+      "Apex/link-end source interface dimension follows the actual welded edge.",
+      "CJP splices include source transition components and explicit temporary erection fit; actual shaft-depth dimension replaces an ambiguous offset label."
+    ]
   },
   "hr9": {
-    "pdf_sha256": "6b4dc54f6023a1c019dc2064df4189dde3929cd3482c0690dbeead5fe4aab7e6",
+    "pdf_sha256": "84aae1e071a3a3919762883797c6953a779badbf85b5e1b50eee52137bb8e2e4",
     "rendered_pages": 188,
     "selected_pages": [
       6,
@@ -851,21 +931,32 @@
       135,
       136,
       140,
-      141,
       147,
+      152,
       178,
       183,
       185
     ],
     "visual_review_status": "reviewed",
-    "method": "All PDF pages rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets. One plan and one complex joint per building inspected at 2600 px. This is sampled visual review, not inspection of every page at full size.",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and connection families/subtypes inspected on contact sheets during development, with a 2600 px plan and complex-joint sample per building. After corrections, changed joint families and plan layouts were sampled again. This is sampled review, not full-size inspection of every page or structural approval.",
     "reviewed_by": "Codex visual inspection",
     "full_size_samples": {
-      "pdf_sha256": "6b4dc54f6023a1c019dc2064df4189dde3929cd3482c0690dbeead5fe4aab7e6",
+      "pdf_sha256": "84aae1e071a3a3919762883797c6953a779badbf85b5e1b50eee52137bb8e2e4",
       "plan_page": 7,
-      "joint_page": 140,
+      "joint_page": 152,
       "scale_to_px": 2600
     },
-    "corrections_verified": []
+    "supersedes_reviewed_pdf_sha256": "6b4dc54f6023a1c019dc2064df4189dde3929cd3482c0690dbeead5fe4aab7e6",
+    "correction_samples": {
+      "pdf_sha256": "84aae1e071a3a3919762883797c6953a779badbf85b5e1b50eee52137bb8e2e4",
+      "pages": [
+        147,
+        152
+      ],
+      "scale_to_px": 2600
+    },
+    "corrections_verified": [
+      "CJP splices include source transition components and explicit temporary erection fit; actual shaft-depth dimension replaces an ambiguous offset label."
+    ]
   }
 }

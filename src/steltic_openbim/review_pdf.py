@@ -26,17 +26,27 @@ def scale_for(bounds,width=1530,height=1050):
     return max(15,math.ceil(max((bounds[0][1]-bounds[0][0])*72/width,(bounds[1][1]-bounds[1][0])*72/height)/5)*5)
 
 def plan(sh,k,kind):
-    m=sh.m;bounds=[tuple(m['bounds'][i]) for i in (0,1)];scale=scale_for(bounds);tr,s=sh.grid_view(bounds,(0,1),scale,(180,340))
+    m=sh.m;bounds=[tuple(m['bounds'][i]) for i in (0,1)];grids=None
+    if m['pilot'] in ('cfs10','cfs18') and k in (1,2) and kind=='floor':
+        # Enlarge the separated wing and dimension its own worklines and gap.
+        if m['pilot']=='cfs10':
+            bounds=[(1200,2168),(480,960)]
+            grids={'x':[('9',1200),('O1',1208),('O2',2168)],'y':[('OA',480),('OB',720),('C',960)]}
+        else:
+            bounds=[(1800,2400),(0,600)]
+            grids={'x':[('13',1800),('M1',1818),('M2',2382),('17',2400)],'y':[('A',0),('MA',24),('MB',208),('MC',392),('MD',576),('B',600)]}
+    scale=scale_for(bounds);tr,s=sh.grid_view(bounds,(0,1),scale,(180,340),grids=grids)
     level=next((z for n,_,z in m['levels'] if n==k),0);selected=[]
+    bases={c['member_ids'][0] for c in m['connections'] if c['detail_ref']['id']=='review_base'} if m['pilot']=='hr14' else set()
     for member in m['members']:
         a,b=physical_axis(member);z0,z1=min(a[2],b[2]),max(a[2],b[2]);vertical=abs(z1-z0)>2 and math.dist(a[:2],b[:2])<1
-        if kind=='base':use=vertical and abs(z0-m['bounds'][2][0])<36 or member['kind'] in ('bottom_track','ordinary_track') and member['level']==1
+        if kind=='base':use=member['id'] in bases or vertical and abs(z0-m['bounds'][2][0])<36 or member['kind'] in ('bottom_track','ordinary_track') and member['level']==1
         elif kind=='walls':use=member['level']==k and member['kind'] in ('stud','chord','hold_down_rod','bottom_track','top_track','ordinary_track','strap','opening_jamb','opening_header','opening_sill','column','walkway_post')
-        elif kind=='roof':use=(member['level']==k and z1>=level-40) or (member['level']==1 and sh.m['pilot'] in ('cfs17','cfs19','cfs26','cfs30','hr33') and member['kind'] not in ('girt','stud','opening_jamb','opening_header'))
+        elif kind=='roof':use=(member['level']==k and z1>=level-40) or (member['level']==1 and sh.m['pilot'] in ('cfs17','cfs19','cfs25','cfs26','cfs27','cfs28','cfs30','hr33') and member['kind'] not in ('girt','stud','opening_jamb','opening_header'))
         else:use=member['level']==k and (z0>=level-40 or vertical and z1>=level-40)
         if use:selected.append(member)
     for p in m['panels']:
-        if p['kind']=='floor' and p['level']==k:
+        if p['kind'] in ('floor','roof') and p['level']==k:
             vertices=[tr(q) for q in p['vertices']]
             for a,b in zip(vertices,vertices[1:]+vertices[:1]):sh.line(a,b,LIGHT,.7)
     groups=sh.draw_members(selected,tr,(0,1),s);sh.representative_marks(groups,28)
@@ -102,11 +112,13 @@ def generate(package,state,dest):
             queue(f'{prefix}{start+i:03}',title+f' / {i+1}',draw)
     text_pages(blocks,'G',2,'Adopted answers and physical scope')
     queue('S001','Grid and base set-out',lambda:plan(sh,0,'base'))
-    last=max(k for k,_,_ in m['levels']);single=m['pilot'] in ('cfs17','cfs19','cfs26','cfs30','hr33')
+    if m['pilot']=='hr14':queue('S100','B1 auxiliary gravity framing',lambda:plan(sh,0,'floor'))
+    last=max(k for k,_,_ in m['levels']);single=m['pilot'] in ('cfs17','cfs19','cfs25','cfs26','cfs27','cfs28','cfs30','hr33')
     if single:queue('S101','Roof framing and bracing plan',lambda:plan(sh,1,'roof'))
     else:
         for k,label,z in m['levels']:
             if k==0:continue
+            if m['pilot']=='hr31' and k==3:continue # Ridge is a datum; the hall roof is the level-2 framing assembly.
             queue(f'S{100+k:03}',label+' framing plan',lambda k=k:plan(sh,k,'roof' if k==last else 'floor'))
         if m['pilot'].startswith('cfs'):
             for k in range(1,last+1):queue(f'S{130+k:03}',f'Storey {k} wall framing plan',lambda k=k:plan(sh,k,'walls'))
@@ -118,7 +130,7 @@ def generate(package,state,dest):
         along=0 if view['direction']=='X' else 1;cuts.append((1-along,view['station_in'],along,view.get('range_in'),view['title']))
     for wall in m.get('wall_layouts',[]):
         along=0 if wall['direction']=='X' else 1
-        if wall['level']!=1:continue
+        if wall['level']!=1 or not wall['runs']:continue
         station=wall['runs'][0]['position_in'];ran=[min(r['start_in'] for r in wall['runs']),max(r['end_in'] for r in wall['runs'])];cuts.append((1-along,station,along,ran,'Wall '+wall['line']))
     seen=set()
     for normal,station,along,ran,title in cuts:
