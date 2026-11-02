@@ -19,9 +19,21 @@ def main(argv=None):
     answers.add_argument("questions", type=Path)
     answers.add_argument("answers", type=Path, help="JSON list with id, value, accepted=true and accepted_by")
     answers.add_argument("--output", type=Path, required=True)
+    draw = sub.add_parser('draw',help='Generate a provisional coordination drawing set; open information requests do not block it')
+    draw.add_argument('package',type=Path)
+    draw.add_argument('--output',type=Path,required=True)
     args = parser.parse_args(argv)
     try:
         package = json.loads(args.package.read_text(encoding="utf-8-sig"))
+        if args.command=='draw':
+            from .drawing_workflow import initial_state,write_json,DrawingStore
+            from .drawing_pdf import generate
+            state=initial_state(package,1)
+            report=generate(package,state,args.output)
+            write_json(args.output/'state.json',state)
+            write_json(args.output/'information_requests.json',DrawingStore.questions(state))
+            print(json.dumps({'status':state['drawing_status'],'sheets':len(report['sheets']),'pdf':str(args.output/'drawings.pdf')}))
+            return 0
         if args.command != "validate":
             from .review import questions as make_questions, record_answers
             if args.command == "questions": result=make_questions(package)
