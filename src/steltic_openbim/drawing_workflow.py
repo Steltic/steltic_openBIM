@@ -66,6 +66,16 @@ EXTERNAL={'HR-OPENINGS','HR-SEPARATION','CFS16-DOORS','CFS8-OPENINGS','CFS8-ROOF
 
 
 def initial_requests(package):
+    from .review_cases import CASES,scenario
+    key=next((k for k,c in CASES.items() if c['source_sha256']==fingerprint(package)),None)
+    if key:
+        evidence=copy.deepcopy(package.get('review',{}).get('items',[]))
+        return [dict(id=iid,question='Confirm fictional '+iid.rsplit('-',1)[-1].lower()+' inputs',
+            evidence='Consolidated source review findings retained with this request.',source_review_items=evidence,
+            proposal=answer,kind='default',accepted=True,acceptance='provisional_drawing_policy',confirmed=False,
+            status='provisional',assignee='design_agent',entity_ids=[],resolution_mode='information',notes=[],
+            default_reason='Accepted as a drawing proposal; quantitative test inputs require explicit adoption.')
+            for iid,answer in scenario(key)['answers'].items()]
     items=copy.deepcopy(package.get('review',{}).get('items',[]))
     if not items:
         for f in inspect_package(package)['findings']:
@@ -88,6 +98,7 @@ def initial_requests(package):
 
 def initial_features(package,requests):
     """Explicitly authored illustrative geometry, isolated from designed members."""
+    if not any(r['id'] in EXTERNAL for r in requests):return []
     ids={r['id'] for r in requests}; out=[]; b=bounds(package)
     def feature(q,kind,plane,x,y,z,w,h,level):
         out.append(dict(id=f'P{len(out)+1:03}',query_id=q,kind=kind,plane=plane,x_ft=x,y_ft=y,z_ft=z,

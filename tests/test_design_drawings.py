@@ -16,11 +16,13 @@ from steltic_openbim.design_geometry import build_model,interval_in_rectangle
 from steltic_openbim.design_pdf import feet,inches,generate
 from steltic_openbim.drawing_api import router
 
+PILOT_KEYS=('hr22','cfs16','cfs8')
+
 
 @pytest.fixture(scope='module')
 def sources():
     with zipfile.ZipFile(Path(__file__).resolve().parents[1]/'docs/stage3/pilots.zip') as z:
-        return {key:json.loads(z.read(key+'/bim_package.json')) for key in SCENARIOS}
+        return {key:json.loads(z.read(key+'/bim_package.json')) for key in PILOT_KEYS}
 
 
 def body(state,**extra):
@@ -47,7 +49,7 @@ def test_explicit_fictional_adoption_is_source_bound(sources):
     assert s['drawing_status']=='provisional' and all(not r['confirmed'] for r in s['requests'])
 
 
-@pytest.mark.parametrize('key',SCENARIOS)
+@pytest.mark.parametrize('key',PILOT_KEYS)
 def test_all_answers_marks_and_joint_references_are_traceable(sources,adopted,key):
     state,m=adopted[key]
     assert state['drawing_status']=='design_test'
@@ -66,7 +68,7 @@ def test_all_answers_marks_and_joint_references_are_traceable(sources,adopted,ke
     assert fingerprint(sources[key])==SCENARIOS[key]['source_sha256']
 
 
-@pytest.mark.parametrize('key',SCENARIOS)
+@pytest.mark.parametrize('key',PILOT_KEYS)
 def test_secondary_members_are_really_interrupted_at_openings(adopted,key):
     state,m=adopted[key]
     for f in state['features']:
@@ -104,7 +106,7 @@ def test_feet_and_fraction_dimensions_carry_at_twelve_inches():
     assert inches(.875)=='7/8"'
 
 
-@pytest.mark.parametrize('key',SCENARIOS)
+@pytest.mark.parametrize('key',PILOT_KEYS)
 def test_drawings_have_valid_scales_refs_and_all_opening_dimensions(sources,adopted,tmp_path,key):
     state,model=adopted[key];report=generate(sources[key],state,tmp_path/key)
     pdf=PdfReader(tmp_path/key/'drawings.pdf');assert len(pdf.pages)==len(report['sheets'])
@@ -117,7 +119,7 @@ def test_drawings_have_valid_scales_refs_and_all_opening_dimensions(sources,adop
     assert all(c['reference'].split('/')[-1] in sheets for c in report['callouts'])
     assert len([d for d in report['dimensions'] if d['sheet']=='S301'])==len(model['openings'])*5
     assert all(float(p.mediabox.width)>2300 and float(p.mediabox.height)>1600 for p in pdf.pages)
-    stored=json.loads((tmp_path/key/'design_model.json').read_text())
+    stored=json.loads((tmp_path/key/'design_model.json').read_text(encoding='utf-8'))
     assert fingerprint(stored)==report['model_sha256']
     if key=='cfs16':assert '40 No. 12' in '\n'.join(texts) and 'schedules/sched-purlin/row-1' in '\n'.join(texts)
     if key=='cfs8':assert 'screws per bay 58' in '\n'.join(texts) and '1-3/4 in. ASTM A449' in '\n'.join(texts)

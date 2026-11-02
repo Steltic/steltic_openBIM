@@ -226,6 +226,12 @@ def generate(package,state,dest):
     if state.get('design_scenario') and state.get('drawing_status')=='design_test':
         from .design_pdf import generate as design_generate
         return design_generate(package,state,dest)
+    if not package['physical']['members']:
+        from .design_scenarios import available_scenario
+        from .review_cases import CASES
+        if available_scenario(package) in CASES:
+            from .review_provisional import generate as provisional
+            return provisional(package,state,dest)
     dest=Path(dest); dest.mkdir(parents=True,exist_ok=True); sh=Sheets(package,state,dest); ph=package['physical']
     members=ph['members']; levels=sorted({m.get('level',1) for m in members}); requests=state['requests']
     all_features=source_openings(package)+state['features']

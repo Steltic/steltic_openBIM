@@ -24,8 +24,11 @@ def rect(x0,y0,x1,y1): return [[x0,y0],[x1,y0],[x1,y1],[x0,y1]]
 
 def strips(profile,profiles):
     d=profile['dimensions']; family=profile['family']
-    if family=='i':
+    if family in ('i','i_tapered'):
         h,b,tf,tw=[d[k] for k in ['d','bf','tf','tw']]
+        if family=='i_tapered':
+            tip=max(.1,tf-b/24);root=tf+b/24
+            return [[[-b/2,-h/2],[b/2,-h/2],[b/2,-h/2+tip],[tw/2,-h/2+root],[-tw/2,-h/2+root],[-b/2,-h/2+tip]],rect(-tw/2,-h/2+root,tw/2,h/2-root),[[-b/2,h/2],[b/2,h/2],[b/2,h/2-tip],[tw/2,h/2-root],[-tw/2,h/2-root],[-b/2,h/2-tip]]]
         return [rect(-b/2,-h/2,b/2,-h/2+tf),rect(-tw/2,-h/2+tf,tw/2,h/2-tf),rect(-b/2,h/2-tf,b/2,h/2)]
     if family in ('channel','z'):
         h,b,t,lip=[d[k] for k in ['d','b','t','lip']]
@@ -51,6 +54,9 @@ def strips(profile,profiles):
     if family=='rhs':
         h,b,t=d['h'],d['b'],d['t']; return [rect(-b/2,-h/2,b/2,-h/2+t),rect(-b/2,h/2-t,b/2,h/2),rect(-b/2,-h/2+t,-b/2+t,h/2-t),rect(b/2-t,-h/2+t,b/2,h/2-t)]
     if family=='round': return [[[d['d']/2*math.cos(i*math.pi/8),d['d']/2*math.sin(i*math.pi/8)] for i in range(16)]]
+    if family=='chs':
+        outer=d['d']/2;inner=outer-d['t'];n=32
+        return [[[r*math.cos(j*2*math.pi/n),r*math.sin(j*2*math.pi/n)] for r,j in ((outer,i),(outer,i+1),(inner,i+1),(inner,i))] for i in range(n)]
     if family=='box_envelope': return [rect(-d['width']/2,-d['depth']/2,d['width']/2,d['depth']/2)]
     raise ValueError('Unsupported preview profile '+family)
 
@@ -100,7 +106,7 @@ def member_faces(member,profiles,limits=None):
         return poly
     z=cross(d,y)
     for s,t in zip(stations,stations[1:]):
-        coped=cope and min((s+t)/2,extent-(s+t)/2)<cope['length_in']
+        coped=cope and ((0 in cope.get('ends',[0,1]) and (s+t)/2<cope['length_in']) or (1 in cope.get('ends',[0,1]) and extent-(s+t)/2<cope['length_in']))
         for index in range(len(base)):
             if coped and index==2: continue
             rings=[]

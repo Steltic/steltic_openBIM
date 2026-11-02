@@ -97,7 +97,7 @@ def router(store:DrawingStore,source_roots=None):
 
     @r.get('/api/project/{p}/drawings/file/{filename}')
     def file(p:str,filename:str,revision:str=''):
-        if filename not in ('drawings.pdf','drawing_manifest.json','information_requests.json','design_model.json','member_index.json','source_records.json','adopted_answers.json'): raise HTTPException(404)
+        if filename not in ('drawings.pdf','drawing_manifest.json','information_requests.json','design_model.json','member_index.json','source_records.json','adopted_answers.json','connection_assemblies.json'): raise HTTPException(404)
         current=invoke(store.current,p)
         if current is None: raise HTTPException(404)
         directory=current[0]

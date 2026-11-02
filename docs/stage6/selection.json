@@ -1,0 +1,170 @@
+{
+  "additional_buildings": [
+    {
+      "building": "HR-8",
+      "module": "HR",
+      "source_building": "Ex8_EBF_8levels_Lplan",
+      "system": "EBF",
+      "geometry_case": "L plan with eccentric links",
+      "next_action": "Locate link ends and stiffeners without introducing false beam joints."
+    },
+    {
+      "building": "HR-9",
+      "module": "HR",
+      "source_building": "Ex9_SPSW_12levels_Tplan",
+      "system": "SPSW",
+      "geometry_case": "T plan; steel plate walls and penthouse",
+      "next_action": "Replace tension-field analysis strips with physical wall plates and boundary members."
+    },
+    {
+      "building": "HR-10",
+      "module": "HR",
+      "source_building": "Ex10_Dual_SMF_SCBF_16levels_podium",
+      "system": "Dual SMF + SCBF",
+      "geometry_case": "Tower on podium; built-up box columns",
+      "next_action": "Resolve changes in support-face geometry through the podium."
+    },
+    {
+      "building": "HR-11",
+      "module": "HR",
+      "source_building": "Ex11_BRBF_10levels_Uplan",
+      "system": "BRBF",
+      "geometry_case": "U plan with courtyard",
+      "next_action": "Preserve the courtyard and resolve BRB interfaces."
+    },
+    {
+      "building": "HR-12",
+      "module": "HR",
+      "source_building": "Ex12_SMF_14levels_chamfer_setback",
+      "system": "SMF",
+      "geometry_case": "Chamfered plan and setbacks",
+      "next_action": "Retain oblique beam axes and per-level floor boundaries."
+    },
+    {
+      "building": "HR-13",
+      "module": "HR",
+      "source_building": "Ex13_OCBF_4levels_splitlevel",
+      "system": "OCBF",
+      "geometry_case": "Split-level framing",
+      "next_action": "Resolve separate floor datums and bases; do not flatten levels."
+    },
+    {
+      "building": "HR-27",
+      "module": "HR",
+      "source_building": "Ex27_CCPSW_CF_20levels_SpeedCore_composite",
+      "system": "CC-PSW/CF + SMF",
+      "geometry_case": "Composite core walls and coupling beams",
+      "next_action": "Replace wide-column/rigid-zone idealizations with physical core walls."
+    },
+    {
+      "building": "HR-28",
+      "module": "HR",
+      "source_building": "Ex28_STMF_8levels_longspan_trussmoment",
+      "system": "STMF",
+      "geometry_case": "Long-span special truss moment frames",
+      "next_action": "Recover physical truss pieces, protected zones and special-segment joints."
+    },
+    {
+      "building": "HR-32",
+      "module": "HR",
+      "source_building": "Ex32_Vertical_addition_2over3_1968_A36_ASCE41",
+      "system": "Existing + addition",
+      "geometry_case": "Two levels added to an existing three-level frame",
+      "next_action": "Keep existing, new and retrofit parts separate and retain verification requirements."
+    },
+    {
+      "building": "HR-33",
+      "module": "HR",
+      "source_building": "Ex33_Crane_bay_IMF_runway_fatigue_App3",
+      "system": "IMF / OCBF crane bay",
+      "geometry_case": "Runway beams, brackets and off-level attachments",
+      "next_action": "Locate bracket, runway and tie-back interfaces at their actual elevations."
+    },
+    {
+      "building": "CFS-3",
+      "module": "CFS",
+      "source_building": "CFS_Ex3_BearingWall_8levels_podium",
+      "system": "Steel-sheet walls",
+      "geometry_case": "Eight-level wall building on podium",
+      "next_action": "Recover wall bays and define the podium handoff boundary."
+    },
+    {
+      "building": "CFS-7",
+      "module": "CFS",
+      "source_building": "CFS_Ex7_SteelSheet_6levels_Zplan",
+      "system": "Steel-sheet walls",
+      "geometry_case": "Z plan and shared throat",
+      "next_action": "Use physical line coordinates and retain throat/corridor connections."
+    },
+    {
+      "building": "CFS-11",
+      "module": "CFS",
+      "source_building": "CFS_Ex11_Gypsum_3levels_coastal_wind",
+      "system": "Gypsum shear walls",
+      "geometry_case": "L-shaped coastal wall building",
+      "next_action": "Resolve wall segments plus breezeway/truss connections."
+    },
+    {
+      "building": "CFS-13",
+      "module": "CFS",
+      "source_building": "CFS_Ex13_TypeII_perforated_4levels",
+      "system": "Type II WSP walls",
+      "geometry_case": "Perforated walls; notch and upper setback",
+      "next_action": "Recover pier/window layout from Type II tables and resolve vertical opening datums."
+    },
+    {
+      "building": "CFS-14",
+      "module": "CFS",
+      "source_building": "CFS_Ex14_Mixed_3levels_splitlevel",
+      "system": "Strap X + WSP Y",
+      "geometry_case": "Split-level clinic with walkout",
+      "next_action": "Preserve base_story differences and the half-plan first floor."
+    },
+    {
+      "building": "CFS-17",
+      "module": "CFS",
+      "source_building": "CFS_Ex17_Portal_twospan_snow",
+      "system": "CFS portal",
+      "geometry_case": "Unequal two-span frame with HSS valley props",
+      "next_action": "Use the described custom propped topology and valley connections."
+    },
+    {
+      "building": "CFS-19",
+      "module": "CFS",
+      "source_building": "CFS_Ex19_Portal_monorail_fatigue",
+      "system": "CFS portal / monorail",
+      "geometry_case": "Portal building with crane/runway attachments",
+      "next_action": "Recover runway/hanger geometry, connection interfaces and fatigue notes."
+    },
+    {
+      "building": "CFS-26",
+      "module": "CFS",
+      "source_building": "CFS_Ex26_Canopy_open_wind",
+      "system": "Cantilever-column canopy",
+      "geometry_case": "Open canopy with longitudinal load path",
+      "next_action": "Resolve moment bases, roof bracing and pier handoff."
+    },
+    {
+      "building": "CFS-29",
+      "module": "CFS",
+      "source_building": "CFS_Ex29_Mezzanine_freestanding_existing",
+      "system": "Strap-braced mezzanine",
+      "geometry_case": "Freestanding platform in existing warehouse",
+      "next_action": "Recover beams/posts/joists beyond the schematic wall viewer; retain slab handoff."
+    },
+    {
+      "building": "CFS-30",
+      "module": "CFS",
+      "source_building": "CFS_Ex30_ColdStorage_portal",
+      "system": "Propped CFS portal",
+      "geometry_case": "Cold-storage building with thermal movement",
+      "next_action": "Use the HSS ridge props and specified fixed/sliding interfaces."
+    }
+  ],
+  "pilots": [
+    "HR-22",
+    "CFS-16",
+    "CFS-8"
+  ],
+  "total_deliverable_buildings": 23
+}

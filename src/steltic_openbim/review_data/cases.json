@@ -1,0 +1,202 @@
+[
+  {
+    "building": "HR-8",
+    "module": "HR",
+    "source_building": "Ex8_EBF_8levels_Lplan",
+    "system": "EBF",
+    "geometry_case": "L plan with eccentric links",
+    "next_action": "Locate link ends and stiffeners without introducing false beam joints.",
+    "id": "hr8",
+    "source_sha256": "2df0e9d49cf02ebc05161ffb66786c9d0787ec5fba09b18eb0c1caa35f6ec2d2"
+  },
+  {
+    "building": "HR-9",
+    "module": "HR",
+    "source_building": "Ex9_SPSW_12levels_Tplan",
+    "system": "SPSW",
+    "geometry_case": "T plan; steel plate walls and penthouse",
+    "next_action": "Replace tension-field analysis strips with physical wall plates and boundary members.",
+    "id": "hr9",
+    "source_sha256": "f2e86dc97f68ad2df0e92d08301e028da42922770849d8290d3cb89890b8a99f"
+  },
+  {
+    "building": "HR-10",
+    "module": "HR",
+    "source_building": "Ex10_Dual_SMF_SCBF_16levels_podium",
+    "system": "Dual SMF + SCBF",
+    "geometry_case": "Tower on podium; built-up box columns",
+    "next_action": "Resolve changes in support-face geometry through the podium.",
+    "id": "hr10",
+    "source_sha256": "7ec4f2d18703c364b349b58af7fd3dee9381b2b8387fb6ef4bc87f0d5294280f"
+  },
+  {
+    "building": "HR-11",
+    "module": "HR",
+    "source_building": "Ex11_BRBF_10levels_Uplan",
+    "system": "BRBF",
+    "geometry_case": "U plan with courtyard",
+    "next_action": "Preserve the courtyard and resolve BRB interfaces.",
+    "id": "hr11",
+    "source_sha256": "1173b6518d94dfb2b7905f4241aad2c9ee955f0ca9ee6df53e31c0ebc05ce109"
+  },
+  {
+    "building": "HR-12",
+    "module": "HR",
+    "source_building": "Ex12_SMF_14levels_chamfer_setback",
+    "system": "SMF",
+    "geometry_case": "Chamfered plan and setbacks",
+    "next_action": "Retain oblique beam axes and per-level floor boundaries.",
+    "id": "hr12",
+    "source_sha256": "c1f92d8e694c1747d331082b24b925c30426675c6330fe9c920c01f3621e9398"
+  },
+  {
+    "building": "HR-13",
+    "module": "HR",
+    "source_building": "Ex13_OCBF_4levels_splitlevel",
+    "system": "OCBF",
+    "geometry_case": "Split-level framing",
+    "next_action": "Resolve separate floor datums and bases; do not flatten levels.",
+    "id": "hr13",
+    "source_sha256": "8366023505594ba0e2fbfa1478fbeba1f7b82f85ce1631d4dfab3514383a6820"
+  },
+  {
+    "building": "HR-27",
+    "module": "HR",
+    "source_building": "Ex27_CCPSW_CF_20levels_SpeedCore_composite",
+    "system": "CC-PSW/CF + SMF",
+    "geometry_case": "Composite core walls and coupling beams",
+    "next_action": "Replace wide-column/rigid-zone idealizations with physical core walls.",
+    "id": "hr27",
+    "source_sha256": "dbf5553c79fc7a1c34681d0a20d34042504a72a3af8d3e1b8a48a45d27eb1806"
+  },
+  {
+    "building": "HR-28",
+    "module": "HR",
+    "source_building": "Ex28_STMF_8levels_longspan_trussmoment",
+    "system": "STMF",
+    "geometry_case": "Long-span special truss moment frames",
+    "next_action": "Recover physical truss pieces, protected zones and special-segment joints.",
+    "id": "hr28",
+    "source_sha256": "830f647a155280d39313b3964014d2651a459771671d040319bead2e94e95cf5"
+  },
+  {
+    "building": "HR-32",
+    "module": "HR",
+    "source_building": "Ex32_Vertical_addition_2over3_1968_A36_ASCE41",
+    "system": "Existing + addition",
+    "geometry_case": "Two levels added to an existing three-level frame",
+    "next_action": "Keep existing, new and retrofit parts separate and retain verification requirements.",
+    "id": "hr32",
+    "source_sha256": "6347fe5cec8dc54a53c94cfe8bdc6724f25e8ef43ca4d3f692b5c46d4a522b67"
+  },
+  {
+    "building": "HR-33",
+    "module": "HR",
+    "source_building": "Ex33_Crane_bay_IMF_runway_fatigue_App3",
+    "system": "IMF / OCBF crane bay",
+    "geometry_case": "Runway beams, brackets and off-level attachments",
+    "next_action": "Locate bracket, runway and tie-back interfaces at their actual elevations.",
+    "id": "hr33",
+    "source_sha256": "97bf56fb377fac6c03118ab2fb0f20ccb296dc513c54d5108addf2e367c68e3f"
+  },
+  {
+    "building": "CFS-3",
+    "module": "CFS",
+    "source_building": "CFS_Ex3_BearingWall_8levels_podium",
+    "system": "Steel-sheet walls",
+    "geometry_case": "Eight-level wall building on podium",
+    "next_action": "Recover wall bays and define the podium handoff boundary.",
+    "id": "cfs3",
+    "source_sha256": "17db1de5eeecacec63800e12c05423851209935da10a753f4cce61aca9143662"
+  },
+  {
+    "building": "CFS-7",
+    "module": "CFS",
+    "source_building": "CFS_Ex7_SteelSheet_6levels_Zplan",
+    "system": "Steel-sheet walls",
+    "geometry_case": "Z plan and shared throat",
+    "next_action": "Use physical line coordinates and retain throat/corridor connections.",
+    "id": "cfs7",
+    "source_sha256": "93fbda8778667ba87cebbdcb98da7e92d2cd8a7262114084f9d6b2570cfc5671"
+  },
+  {
+    "building": "CFS-11",
+    "module": "CFS",
+    "source_building": "CFS_Ex11_Gypsum_3levels_coastal_wind",
+    "system": "Gypsum shear walls",
+    "geometry_case": "L-shaped coastal wall building",
+    "next_action": "Resolve wall segments plus breezeway/truss connections.",
+    "id": "cfs11",
+    "source_sha256": "9b33fe547cb4c35e3a525a7dce3f49bf01401f3240b7486b864a1db3bcc5cfff"
+  },
+  {
+    "building": "CFS-13",
+    "module": "CFS",
+    "source_building": "CFS_Ex13_TypeII_perforated_4levels",
+    "system": "Type II WSP walls",
+    "geometry_case": "Perforated walls; notch and upper setback",
+    "next_action": "Recover pier/window layout from Type II tables and resolve vertical opening datums.",
+    "id": "cfs13",
+    "source_sha256": "3808a2fc8278b9fda22d12bd48e1626125c94f0ec11f7b6aca535bff02cbacfd"
+  },
+  {
+    "building": "CFS-14",
+    "module": "CFS",
+    "source_building": "CFS_Ex14_Mixed_3levels_splitlevel",
+    "system": "Strap X + WSP Y",
+    "geometry_case": "Split-level clinic with walkout",
+    "next_action": "Preserve base_story differences and the half-plan first floor.",
+    "id": "cfs14",
+    "source_sha256": "d05e6b8d80cbe6fbaa376a4a4de13edabc1f0ffe265422aedc514577d7ed92c1"
+  },
+  {
+    "building": "CFS-17",
+    "module": "CFS",
+    "source_building": "CFS_Ex17_Portal_twospan_snow",
+    "system": "CFS portal",
+    "geometry_case": "Unequal two-span frame with HSS valley props",
+    "next_action": "Use the described custom propped topology and valley connections.",
+    "id": "cfs17",
+    "source_sha256": "89707d018c1471fc8104cfae2e96b6fc5330e4652d0023dcbe7ad3d09a6836cb"
+  },
+  {
+    "building": "CFS-19",
+    "module": "CFS",
+    "source_building": "CFS_Ex19_Portal_monorail_fatigue",
+    "system": "CFS portal / monorail",
+    "geometry_case": "Portal building with crane/runway attachments",
+    "next_action": "Recover runway/hanger geometry, connection interfaces and fatigue notes.",
+    "id": "cfs19",
+    "source_sha256": "cb2dc5ef8daaabb8c5faa0c2ec4abd30f3f2e8f0f4575e82f3548a5a5125ac31"
+  },
+  {
+    "building": "CFS-26",
+    "module": "CFS",
+    "source_building": "CFS_Ex26_Canopy_open_wind",
+    "system": "Cantilever-column canopy",
+    "geometry_case": "Open canopy with longitudinal load path",
+    "next_action": "Resolve moment bases, roof bracing and pier handoff.",
+    "id": "cfs26",
+    "source_sha256": "1860b982ee161fe95d3637d5bc3b72c4bfe725bc1d49b1fca81b0f45b8734912"
+  },
+  {
+    "building": "CFS-29",
+    "module": "CFS",
+    "source_building": "CFS_Ex29_Mezzanine_freestanding_existing",
+    "system": "Strap-braced mezzanine",
+    "geometry_case": "Freestanding platform in existing warehouse",
+    "next_action": "Recover beams/posts/joists beyond the schematic wall viewer; retain slab handoff.",
+    "id": "cfs29",
+    "source_sha256": "bf225fadcd881fe0ece8e34eacee8bc4c178cb69715ac36f102d6e8bcbdadfde"
+  },
+  {
+    "building": "CFS-30",
+    "module": "CFS",
+    "source_building": "CFS_Ex30_ColdStorage_portal",
+    "system": "Propped CFS portal",
+    "geometry_case": "Cold-storage building with thermal movement",
+    "next_action": "Use the HSS ridge props and specified fixed/sliding interfaces.",
+    "id": "cfs30",
+    "source_sha256": "5be99b7c4218377c5507f49cc87757f9eb9640e03d93819e7f7e0bf4c61fbf74"
+  }
+]
