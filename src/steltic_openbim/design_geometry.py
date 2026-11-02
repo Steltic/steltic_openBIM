@@ -30,6 +30,8 @@ def interval_in_rectangle(a,b,lo,hi,axes):
 
 
 def build_model(package,state):
+    from .review_cases import CASES,build_model as build_review
+    if state['design_scenario']['id'] in CASES:return build_review(package,state)
     pilot=state['design_scenario']['id']; spec=SCENARIOS[pilot]
     if available_scenario(package)!=pilot or state['design_scenario']['answers_sha256']!=fingerprint(spec['answers']):
         raise ValueError('Design test inputs do not match their source-bound scenario')
@@ -249,8 +251,10 @@ def build_model(package,state):
             def p(u,v): return [station,start+u,base+v] if plane=='yz' else [start+u,station,base+v]
             nodes=[p(0,0),p(span/4,0),p(span/2,0),p(3*span/4,0),p(span,0),p(span/4,rise/2),p(span/2,rise),p(3*span/4,rise/2)]
             edges=[(0,1),(1,2),(2,3),(3,4),(0,5),(5,6),(6,7),(7,4)]
-            for n,(a,b) in enumerate(edges): new_member(label+'-C'+str(n),nodes[a],nodes[b],shape,kind,4,'CFS8-ROOF-INTERFACE','test_roof_truss')
-            for n,(a,b) in enumerate([(1,5),(1,6),(2,6),(3,6),(3,7)]): new_member(label+'-W'+str(n),nodes[a],nodes[b],web,'truss_web',4,'CFS8-ROOF-INTERFACE','test_roof_truss')
+            out_of_plane=[1,0,0] if plane=='yz' else [0,1,0]
+            web_pack=pair(web,4 if kind=='girder_truss' else 2)
+            for n,(a,b) in enumerate(edges): new_member(label+'-C'+str(n),nodes[a],nodes[b],shape,kind,4,'CFS8-ROOF-INTERFACE','test_roof_truss',local_y=out_of_plane)
+            for n,(a,b) in enumerate([(1,5),(1,6),(2,6),(3,6),(3,7)]): new_member(label+'-W'+str(n),nodes[a],nodes[b],web_pack,'truss_web',4,'CFS8-ROOF-INTERFACE','test_roof_truss',local_y=out_of_plane)
         for x in range(0,1681,24): truss(f'TEST-HEAD-{x}','yz',x,1008,552,468,69)
         for y in range(0,1008,24): truss(f'TEST-STEM-{y}','xz',y,564,552,468,69)
         truss('TEST-GIRDER','xz',1008,564,552,468,69,girder,'girder_truss')

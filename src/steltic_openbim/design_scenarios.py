@@ -1,4 +1,4 @@
-"""Explicit, source-bound answers for the three fictional drawing test buildings.
+"""Explicit, source-bound answers for the registered fictional drawing test buildings.
 
 These are opt-in test inputs, not defaults for real projects or new source jobs.
 Source engineering evidence is preserved and is never promoted to verified design.
@@ -55,12 +55,20 @@ SCENARIOS = {
 }
 
 
+from .review_cases import CASES as REVIEW_CASES, scenario as review_scenario
+SCENARIOS.update({key:review_scenario(key) for key in REVIEW_CASES})
+
+
 def available_scenario(package):
     digest=fingerprint(package)
     return next((key for key,value in SCENARIOS.items() if value['source_sha256']==digest),None)
 
 
 def scenario_features(pilot):
+    if pilot in REVIEW_CASES:
+        # Fully resolved features are constructed together with their real framing.
+        # They are published from design_model.json, never copied from another pilot.
+        return []
     result=[]
     def add(kind,plane,x,y,z,w,h,level,query):
         result.append(dict(id=f'O{len(result)+1:02}',kind=kind,plane=plane,x_ft=x,y_ft=y,z_ft=z,
@@ -92,7 +100,7 @@ def adopt_scenario(package,state,body):
         raise ValueError('Explicitly confirm that this is a fictional test building')
     pilot=available_scenario(package)
     if pilot is None or body.get('pilot',pilot)!=pilot:
-        raise ValueError('These authored answers are bound to one of the three original test packages')
+        raise ValueError('These authored answers are bound to a registered fictional test package')
     author=str(body.get('author','')).strip()
     if not author or len(author)>160: raise ValueError('Provide the author of the adopted test assumptions')
     result=copy.deepcopy(state); scenario=SCENARIOS[pilot]
@@ -108,5 +116,5 @@ def adopt_scenario(package,state,body):
     result['revision']+=1;result['drawing_status']='design_test'
     result['policy']['new_capacity_verification']=False
     result['events'].append(dict(revision=result['revision'],action='adopt_fictional_design_answers',author=author,
-        note='User-authorized assumed answers for the three fictional buildings; source design remains immutable.'))
+        note='User-authorized assumed answers for this registered fictional building; source design remains immutable.'))
     return result

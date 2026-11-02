@@ -1,0 +1,424 @@
+{
+  "buildings": {
+    "cfs11": {
+      "sheets": 356,
+      "counts": {
+        "members": 8636,
+        "connections": 15558,
+        "marks": 142,
+        "detail_families": 19,
+        "detail_variants": 305,
+        "openings": 95
+      },
+      "source_sha256": "9b33fe547cb4c35e3a525a7dce3f49bf01401f3240b7486b864a1db3bcc5cfff",
+      "pdf_sha256": "c806d1e09adf28d963ceee6c6e1b4978c8f0b71e28bfcb7a8e5c03cf6af373b2",
+      "adopted_answers": 4,
+      "source_connection_schedules_retained_without_separate_joint": 0,
+      "source_records": 481,
+      "all_occurrences_mapped": true,
+      "all_details_dimensioned": true
+    },
+    "cfs13": {
+      "sheets": 377,
+      "counts": {
+        "members": 7823,
+        "connections": 13028,
+        "marks": 155,
+        "detail_families": 14,
+        "detail_variants": 326,
+        "openings": 96
+      },
+      "source_sha256": "3808a2fc8278b9fda22d12bd48e1626125c94f0ec11f7b6aca535bff02cbacfd",
+      "pdf_sha256": "3600c6ac087eb47350a9ad836707cd439825d455b6d91f52352437181347ef53",
+      "adopted_answers": 4,
+      "source_connection_schedules_retained_without_separate_joint": 0,
+      "source_records": 448,
+      "all_occurrences_mapped": true,
+      "all_details_dimensioned": true
+    },
+    "cfs14": {
+      "sheets": 248,
+      "counts": {
+        "members": 6912,
+        "connections": 10924,
+        "marks": 95,
+        "detail_families": 18,
+        "detail_variants": 212,
+        "openings": 40
+      },
+      "source_sha256": "d05e6b8d80cbe6fbaa376a4a4de13edabc1f0ffe265422aedc514577d7ed92c1",
+      "pdf_sha256": "ca246d7ff285945e8bb4f8c8d51cfee1447ac7b61bb2a3a0773cac666853d701",
+      "adopted_answers": 4,
+      "source_connection_schedules_retained_without_separate_joint": 0,
+      "source_records": 367,
+      "all_occurrences_mapped": true,
+      "all_details_dimensioned": true
+    },
+    "cfs16": {
+      "sheets": 36,
+      "counts": {
+        "members": 1282,
+        "connections": 2499,
+        "marks": 27,
+        "detail_families": 13,
+        "detail_variants": 22,
+        "openings": 4
+      },
+      "source_sha256": "14b7af0e1a74aa0e5ab8889cc49f593ecefecdd9696bf683197941b03831db6f",
+      "pdf_sha256": "e3de6109ee703bc9bdf5a2de11817489b50249830e77fc27251c12a5ae95d50b",
+      "adopted_answers": 5,
+      "source_connection_schedules_retained_without_separate_joint": 0,
+      "source_records": 149,
+      "all_occurrences_mapped": true,
+      "all_details_dimensioned": true
+    },
+    "cfs17": {
+      "sheets": 49,
+      "counts": {
+        "members": 2076,
+        "connections": 2924,
+        "marks": 29,
+        "detail_families": 9,
+        "detail_variants": 34,
+        "openings": 7
+      },
+      "source_sha256": "89707d018c1471fc8104cfae2e96b6fc5330e4652d0023dcbe7ad3d09a6836cb",
+      "pdf_sha256": "3fd6f9cd38fe6bc5a721c09226a77bbb58a64d148843e0032d4d8ecbac12663d",
+      "adopted_answers": 4,
+      "source_connection_schedules_retained_without_separate_joint": 0,
+      "source_records": 183,
+      "all_occurrences_mapped": true,
+      "all_details_dimensioned": true
+    },
+    "cfs19": {
+      "sheets": 46,
+      "counts": {
+        "members": 454,
+        "connections": 680,
+        "marks": 24,
+        "detail_families": 12,
+        "detail_variants": 31,
+        "openings": 3
+      },
+      "source_sha256": "cb2dc5ef8daaabb8c5faa0c2ec4abd30f3f2e8f0f4575e82f3548a5a5125ac31",
+      "pdf_sha256": "a9db749f62055e79b93a9e970a102b2b82d537825b0f04b50caae3bc3dfb190f",
+      "adopted_answers": 4,
+      "source_connection_schedules_retained_without_separate_joint": 0,
+      "source_records": 208,
+      "all_occurrences_mapped": true,
+      "all_details_dimensioned": true
+    },
+    "cfs26": {
+      "sheets": 30,
+      "counts": {
+        "members": 97,
+        "connections": 186,
+        "marks": 12,
+        "detail_families": 6,
+        "detail_variants": 17,
+        "openings": 0
+      },
+      "source_sha256": "1860b982ee161fe95d3637d5bc3b72c4bfe725bc1d49b1fca81b0f45b8734912",
+      "pdf_sha256": "4c3097a2f4fc99d939e55eff34c7e2eadad873eca94001d26a60bcddeff9f3da",
+      "adopted_answers": 4,
+      "source_connection_schedules_retained_without_separate_joint": 0,
+      "source_records": 212,
+      "all_occurrences_mapped": true,
+      "all_details_dimensioned": true
+    },
+    "cfs29": {
+      "sheets": 51,
+      "counts": {
+        "members": 331,
+        "connections": 646,
+        "marks": 21,
+        "detail_families": 11,
+        "detail_variants": 33,
+        "openings": 0
+      },
+      "source_sha256": "bf225fadcd881fe0ece8e34eacee8bc4c178cb69715ac36f102d6e8bcbdadfde",
+      "pdf_sha256": "d620ff2c3186f052932a7ea605422a16c23aa4e0f3b2d614cde1259edc2fbdad",
+      "adopted_answers": 4,
+      "source_connection_schedules_retained_without_separate_joint": 0,
+      "source_records": 71,
+      "all_occurrences_mapped": true,
+      "all_details_dimensioned": true
+    },
+    "cfs3": {
+      "sheets": 597,
+      "counts": {
+        "members": 76484,
+        "connections": 74328,
+        "marks": 161,
+        "detail_families": 12,
+        "detail_variants": 494,
+        "openings": 742
+      },
+      "source_sha256": "17db1de5eeecacec63800e12c05423851209935da10a753f4cce61aca9143662",
+      "pdf_sha256": "199369504d5d54ee41627c04ca181d37d9b403f6bc2d651ad18ca897c6d8a5d5",
+      "adopted_answers": 4,
+      "source_connection_schedules_retained_without_separate_joint": 0,
+      "source_records": 553,
+      "all_occurrences_mapped": true,
+      "all_details_dimensioned": true
+    },
+    "cfs30": {
+      "sheets": 62,
+      "counts": {
+        "members": 1460,
+        "connections": 2470,
+        "marks": 39,
+        "detail_families": 17,
+        "detail_variants": 46,
+        "openings": 4
+      },
+      "source_sha256": "5be99b7c4218377c5507f49cc87757f9eb9640e03d93819e7f7e0bf4c61fbf74",
+      "pdf_sha256": "90469c7acffbb7114234f409ed9e867ed73ba08f94bf81a6d7689b2794804976",
+      "adopted_answers": 4,
+      "source_connection_schedules_retained_without_separate_joint": 0,
+      "source_records": 253,
+      "all_occurrences_mapped": true,
+      "all_details_dimensioned": true
+    },
+    "cfs7": {
+      "sheets": 939,
+      "counts": {
+        "members": 30372,
+        "connections": 56016,
+        "marks": 261,
+        "detail_families": 9,
+        "detail_variants": 798,
+        "openings": 318
+      },
+      "source_sha256": "93fbda8778667ba87cebbdcb98da7e92d2cd8a7262114084f9d6b2570cfc5671",
+      "pdf_sha256": "c6ca6759741a0a06c2988341283a4776f5371a026ecd0019296a1840e175ada4",
+      "adopted_answers": 4,
+      "source_connection_schedules_retained_without_separate_joint": 0,
+      "source_records": 860,
+      "all_occurrences_mapped": true,
+      "all_details_dimensioned": true
+    },
+    "cfs8": {
+      "sheets": 253,
+      "counts": {
+        "members": 14798,
+        "connections": 30388,
+        "marks": 278,
+        "detail_families": 25,
+        "detail_variants": 216,
+        "openings": 46
+      },
+      "source_sha256": "1c7a843165fc0df5f442aa561ba5707dec1996f4daa5bb91f9f0ec6248337159",
+      "pdf_sha256": "8c54b75e01b5d7bd1d194ff36a12f984d95c89c1c1cf9eb057b60b8738996aaf",
+      "adopted_answers": 7,
+      "source_connection_schedules_retained_without_separate_joint": 0,
+      "source_records": 228,
+      "all_occurrences_mapped": true,
+      "all_details_dimensioned": true
+    },
+    "hr10": {
+      "sheets": 468,
+      "counts": {
+        "members": 2372,
+        "connections": 4251,
+        "marks": 78,
+        "detail_families": 6,
+        "detail_variants": 422,
+        "openings": 32
+      },
+      "source_sha256": "7ec4f2d18703c364b349b58af7fd3dee9381b2b8387fb6ef4bc87f0d5294280f",
+      "pdf_sha256": "7c589f406f7f2368aeaccafe58753e308bb2b0251846c55be048f6e5a724477e",
+      "adopted_answers": 4,
+      "source_connection_schedules_retained_without_separate_joint": 7,
+      "source_records": 181,
+      "all_occurrences_mapped": true,
+      "all_details_dimensioned": true
+    },
+    "hr11": {
+      "sheets": 239,
+      "counts": {
+        "members": 2260,
+        "connections": 3864,
+        "marks": 54,
+        "detail_families": 7,
+        "detail_variants": 207,
+        "openings": 20
+      },
+      "source_sha256": "1173b6518d94dfb2b7905f4241aad2c9ee955f0ca9ee6df53e31c0ebc05ce109",
+      "pdf_sha256": "ebd264ef65a11cf0dfe257b789c5543fac764d7bdba52d3ac6e02fd501adf3cb",
+      "adopted_answers": 4,
+      "source_connection_schedules_retained_without_separate_joint": 2,
+      "source_records": 130,
+      "all_occurrences_mapped": true,
+      "all_details_dimensioned": true
+    },
+    "hr12": {
+      "sheets": 271,
+      "counts": {
+        "members": 1816,
+        "connections": 3140,
+        "marks": 38,
+        "detail_families": 8,
+        "detail_variants": 236,
+        "openings": 28
+      },
+      "source_sha256": "c1f92d8e694c1747d331082b24b925c30426675c6330fe9c920c01f3621e9398",
+      "pdf_sha256": "237d1203937c60fc04fb36d3879430b6baab575cb84802defdc4597fc86bb826",
+      "adopted_answers": 4,
+      "source_connection_schedules_retained_without_separate_joint": 0,
+      "source_records": 138,
+      "all_occurrences_mapped": true,
+      "all_details_dimensioned": true
+    },
+    "hr13": {
+      "sheets": 122,
+      "counts": {
+        "members": 1272,
+        "connections": 1474,
+        "marks": 43,
+        "detail_families": 9,
+        "detail_variants": 101,
+        "openings": 10
+      },
+      "source_sha256": "8366023505594ba0e2fbfa1478fbeba1f7b82f85ce1631d4dfab3514383a6820",
+      "pdf_sha256": "d3b73e4e52d16fcc4c0589c14330cdb8332fd6ebc0a348e43cffa4f9ffd0f546",
+      "adopted_answers": 4,
+      "source_connection_schedules_retained_without_separate_joint": 2,
+      "source_records": 59,
+      "all_occurrences_mapped": true,
+      "all_details_dimensioned": true
+    },
+    "hr22": {
+      "sheets": 74,
+      "counts": {
+        "members": 1189,
+        "connections": 2529,
+        "marks": 29,
+        "detail_families": 7,
+        "detail_variants": 56,
+        "openings": 24
+      },
+      "source_sha256": "f134698729e8d92a782720f6482a21da48e32ce5f4fbf92e12257df27f8c13fc",
+      "pdf_sha256": "cd0fe8b86c169423b0be28bc7281f0a8d55982766ce40d597a39b61a988d93ee",
+      "adopted_answers": 6,
+      "source_connection_schedules_retained_without_separate_joint": 0,
+      "source_records": 53,
+      "all_occurrences_mapped": true,
+      "all_details_dimensioned": true
+    },
+    "hr27": {
+      "sheets": 280,
+      "counts": {
+        "members": 2060,
+        "connections": 3588,
+        "marks": 77,
+        "detail_families": 8,
+        "detail_variants": 229,
+        "openings": 40
+      },
+      "source_sha256": "dbf5553c79fc7a1c34681d0a20d34042504a72a3af8d3e1b8a48a45d27eb1806",
+      "pdf_sha256": "94bc302adabc896cba3394dd43757883205332d46994f00091e27add8a48fa07",
+      "adopted_answers": 4,
+      "source_connection_schedules_retained_without_separate_joint": 0,
+      "source_records": 156,
+      "all_occurrences_mapped": true,
+      "all_details_dimensioned": true
+    },
+    "hr28": {
+      "sheets": 202,
+      "counts": {
+        "members": 3976,
+        "connections": 3080,
+        "marks": 42,
+        "detail_families": 7,
+        "detail_variants": 178,
+        "openings": 16
+      },
+      "source_sha256": "830f647a155280d39313b3964014d2651a459771671d040319bead2e94e95cf5",
+      "pdf_sha256": "62bdf5b247edbc7470d9e0c1677c6ba51f81d8242d4bb89e5ff8cdfe6244b639",
+      "adopted_answers": 4,
+      "source_connection_schedules_retained_without_separate_joint": 2,
+      "source_records": 67,
+      "all_occurrences_mapped": true,
+      "all_details_dimensioned": true
+    },
+    "hr32": {
+      "sheets": 43,
+      "counts": {
+        "members": 461,
+        "connections": 1045,
+        "marks": 18,
+        "detail_families": 7,
+        "detail_variants": 27,
+        "openings": 10
+      },
+      "source_sha256": "6347fe5cec8dc54a53c94cfe8bdc6724f25e8ef43ca4d3f692b5c46d4a522b67",
+      "pdf_sha256": "e21f31739d4655bb7e2a87a7edc741dfb3420cc5d89d11c964a83aed32c0205e",
+      "adopted_answers": 4,
+      "source_connection_schedules_retained_without_separate_joint": 0,
+      "source_records": 28,
+      "all_occurrences_mapped": true,
+      "all_details_dimensioned": true
+    },
+    "hr33": {
+      "sheets": 39,
+      "counts": {
+        "members": 4405,
+        "connections": 3586,
+        "marks": 17,
+        "detail_families": 13,
+        "detail_variants": 28,
+        "openings": 0
+      },
+      "source_sha256": "97bf56fb377fac6c03118ab2fb0f20ccb296dc513c54d5108addf2e367c68e3f",
+      "pdf_sha256": "ecbb93d02cc83bb4d874dcf384e29a7e0f7cf97656c8c9e462f7c35e745fe279",
+      "adopted_answers": 4,
+      "source_connection_schedules_retained_without_separate_joint": 2,
+      "source_records": 22,
+      "all_occurrences_mapped": true,
+      "all_details_dimensioned": true
+    },
+    "hr8": {
+      "sheets": 169,
+      "counts": {
+        "members": 1330,
+        "connections": 2237,
+        "marks": 36,
+        "detail_families": 8,
+        "detail_variants": 144,
+        "openings": 16
+      },
+      "source_sha256": "2df0e9d49cf02ebc05161ffb66786c9d0787ec5fba09b18eb0c1caa35f6ec2d2",
+      "pdf_sha256": "1048fceeccfa2309d2ebe63101c4a395f6ddc3f51dd299dd4d7f46b102854bdc",
+      "adopted_answers": 4,
+      "source_connection_schedules_retained_without_separate_joint": 2,
+      "source_records": 79,
+      "all_occurrences_mapped": true,
+      "all_details_dimensioned": true
+    },
+    "hr9": {
+      "sheets": 188,
+      "counts": {
+        "members": 1600,
+        "connections": 2641,
+        "marks": 54,
+        "detail_families": 8,
+        "detail_variants": 151,
+        "openings": 26
+      },
+      "source_sha256": "f2e86dc97f68ad2df0e92d08301e028da42922770849d8290d3cb89890b8a99f",
+      "pdf_sha256": "6b4dc54f6023a1c019dc2064df4189dde3929cd3482c0690dbeead5fe4aab7e6",
+      "adopted_answers": 4,
+      "source_connection_schedules_retained_without_separate_joint": 5,
+      "source_records": 93,
+      "all_occurrences_mapped": true,
+      "all_details_dimensioned": true
+    }
+  },
+  "total_buildings": 23,
+  "total_sheets": 5139,
+  "gold_files_unchanged": 812,
+  "gold_buildings": 61,
+  "gold_bytes_unchanged": 197184958,
+  "analysis_or_redesign_executed": false
+}

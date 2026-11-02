@@ -22,7 +22,7 @@ def main(argv=None):
     draw = sub.add_parser('draw',help='Generate a provisional coordination drawing set; open information requests do not block it')
     draw.add_argument('package',type=Path)
     draw.add_argument('--output',type=Path,required=True)
-    design=sub.add_parser('design-test',help='Adopt source-bound answers for one of the three fictional pilots and generate dimensioned drawings')
+    design=sub.add_parser('design-test',help='Adopt source-bound answers for a registered fictional review building and generate dimensioned drawings')
     design.add_argument('package',type=Path)
     design.add_argument('--output',type=Path,required=True)
     design.add_argument('--confirm-fictional',action='store_true',required=True)

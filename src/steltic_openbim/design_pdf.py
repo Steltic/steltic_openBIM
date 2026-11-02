@@ -178,7 +178,7 @@ def plan(sh,level,kind='floor'):
         kinds={'column','endwall_post','door_header','opening_jamb','opening_header'} if kind=='base' else {'rafter','purlin','purlin_nested','eave_strut','strap'}
         selected=[a for a in allm if a['kind'] in kinds];axes=(1,0);bounds=((0,3300),(0,720));scale=150;origin=(210,675)
     else:
-        axes=(0,1);bounds=((0,1680),(0,1560));scale=100;origin=(260,260)
+        axes=(0,1);bounds=((0,1680),(0,1560));scale=100;origin=(260,300)
         if kind=='roof':selected=[a for a in allm if 'truss' in a['kind'] or (a['kind']=='top_track' and a['level']==4)]
         elif kind=='base':selected=[a for a in allm if a['level']==1 and a['kind'] in ('bottom_track','chord','hold_down_rod','walkway_post')]
         elif kind=='walls':selected=[a for a in allm if a['level']==level and a['kind'] in ('bottom_track','stud','intersection_stud','chord','opening_jamb','opening_header','strap')]
@@ -216,7 +216,9 @@ def plan(sh,level,kind='floor'):
     y=sh.panel_notes(notes)
     sh.text(sh.W-460,y-12,'CONNECTION CALLOUTS',15,font='Helvetica-Bold');y-=42
     refs=sorted({ref for a in selected for ref in a['connection_refs']})
-    for ref in refs[:24]:
+    for ref in refs:
+        if y<185:
+            sh.text(sh.W-460,y,'Further joint variants: connection index / member index.',10);break
         detail=next(d for d in m['details'] if d['reference']==ref)
         y=sh.wrap(sh.W-460,y,ref+'  '+detail['family'].replace('_',' '),390,11,16)-7
     # Place at least one anchored callout for each family that occurs in the view.
@@ -260,7 +262,7 @@ def section(sh,normal,station,along,title,scale,bounds,origin=(215,340),band=1):
         sh.dim(tr(p),tr(q),70,value=b-a,ref='Level interval')
     sh.panel_notes([title,f'Cut at {"XYZ"[normal]}={feet(station)}. The section shows members in the stated plane; line weights and member marks distinguish repeated framing.',
         'Dimensioned level datums are workpoints/FFLs as named. Steel edges use physical section offsets; dimensions do not imply cut lengths.',
-        'Opening and interface details: S301-S303. Connection families: S501 onward. Source variants are carried in S7xx.',
+        'Opening and interface details: S3xx. Assembled connections: C-series. Source specifications are carried in S7xx.',
         'A members, fastener layouts and new supports are fictional test assumptions. Source design checks are retained separately.'])
     for ref in sorted({r for m in selected for r in m['connection_refs']})[:7]:
         m=next(m for m in selected if ref in m['connection_refs']);a,b=physical_axis(m);clip=clip_axis(a,b,limits)
@@ -363,7 +365,7 @@ def interfaces(sh):
         sh.panel_notes(['Roof workpoint pitch: 1:5. Eaves 20 ft; ridge 26 ft.',
             'Four-channel main section: pair centres 6-3/8 in; within-pair web gaps 3/8 in. Local 3/8 in assembly gaps at knee/apex cuts (A).',
             'Purlin/girt normal workline offset 11 in (A). Lap 24 in (S). Nominal nesting gap 1/8 in (A).',
-            'See bracket details S501 and secondary details S502-S503.'],y=sh.H-210)
+            'See the C-series assembled bracket and secondary details linked by the callouts.'],y=sh.H-210)
     else:
         s=8;ox,oy=330,720
         # Exact platform stack, section through the supported joist end.
@@ -498,7 +500,7 @@ def specifications(package,model):
         for rid in c.get('design_record_ids',[]):refs[rid].add(c['drawing_ref'])
     out=[]
     for r in package['design_records']:
-        if r['id'] not in refs:continue
+        if r['id'] not in refs and not r['id'].startswith('connections/'):continue
         data=r['data']
         if data.get('rows'):
             for i,row in enumerate(data['rows']):
@@ -514,13 +516,24 @@ def specifications(package,model):
                 if fields:out.append(dict(id=r['id']+f'/row-{i+1}',references=sorted(refs[r['id']]),text='; '.join(fields)))
         text=data.get('selection') or data.get('components') or data.get('design_note') or data.get('section') or data.get('type')
         if not text:continue
-        out.append(dict(id=r['id'],references=sorted(refs[r['id']]),text=str(text)))
+        note='' if refs[r['id']] else ' | Retained source schedule: no separately located joint in this drawing model; no extra joint is implied.'
+        out.append(dict(id=r['id'],references=sorted(refs[r['id']]),text=str(text)+note))
     return out
 
 
 def generate(package,state,dest):
     if not all(r['confirmed'] for r in state['requests']):raise ValueError('Design-test sheets require all adopted test answers to remain confirmed')
-    dest=Path(dest);dest.mkdir(parents=True,exist_ok=True);model=build_model(package,state);sh=DesignSheets(package,state,dest,model);jobs=[]
+    from .review_cases import CASES
+    if state['design_scenario']['id'] in CASES:
+        from .review_pdf import generate as generate_review
+        return generate_review(package,state,dest)
+    dest=Path(dest);dest.mkdir(parents=True,exist_ok=True);model=build_model(package,state)
+    from .connection_details import prepare
+    from .assembly_pdf import draw_assembly
+    assemblies=prepare(model,package)
+    refinement=' CFS8 roof webs are paired 600S162-54, four-ply at the girder, to match the actual node gusset planes; this is an explicit A refinement to the roof-interface answer.' if model['pilot']=='cfs8' else ''
+    model['assumptions'].append(dict(id='ASSEMBLED-JOINTS',basis='A - user-authorized fictional test input',answer='Develop the source connections as assembled design details. A labels adopted fitting geometry, bracket returns, clip extents, local fastener set-out and erection fittings.'+refinement+' Exact source variant and occurrence mapping is retained in connection_assemblies.json; no new capacity calculation is implied.'))
+    sh=DesignSheets(package,state,dest,model);jobs=[]
     def queue(number,title,fn,scale='NTS'):jobs.append((number,title,scale,fn))
     # The complete sheet list is available before the cover is painted.
     def cover():
@@ -536,15 +549,19 @@ def generate(package,state,dest):
             'Sections are taken from the drawing model at their named planes. Plans identify section cuts and connection callouts. Read the full source variant schedule with every representative detail.']:
             y=sh.wrap(90,y,note,980,15,23)-30
         sh.text(1250,sh.H-205,'SHEET INDEX',21,font='Helvetica-Bold');yy=sh.H-245
-        for number,title,scale,_ in jobs:
-            sh.text(1250,yy,number,12,font='Helvetica-Bold');sh.text(1350,yy,title,12);yy-=23
-            if yy<165:raise ValueError('Cover index overflow')
+        categories=[('G','General notes / answers / sheet index'),('S0','Grid and foundation set-out'),('S1','Floor, roof and wall plans'),('S2','Building sections and elevations'),('S3','Openings and interfaces'),('C','Assembled connection details and variants'),('S6','Member mark schedules'),('S7','Original source specifications')]
+        for prefix,title in categories:
+            numbers=[n for n,_,_,_ in jobs if n.startswith(prefix)]
+            if not numbers:continue
+            sh.text(1250,yy,numbers[0]+' - '+numbers[-1],12,font='Helvetica-Bold');yy-=25
+            sh.text(1250,yy,title+f' ({len(numbers)} sheets)',12);yy-=42
+        sh.text(1250,yy-20,'Full numbered sheet index follows the answer register.',13)
     queue('G001','Drawing index and design-test basis',cover)
     def assumptions():
         y=sh.H-195
         for i,a in enumerate(model['assumptions']):
-            sh.text(90,y,a['id']+' / A - ADOPTED FICTIONAL TEST ANSWER',16,ASSUMED,font='Helvetica-Bold');y-=30
-            y=sh.wrap(90,y,a['answer'],2140,15,23)-28
+            sh.text(90,y,a['id']+' / A - ADOPTED FICTIONAL TEST ANSWER',14,ASSUMED,font='Helvetica-Bold');y-=26
+            y=sh.wrap(90,y,a['answer'],2140,13,19)-23
         if y<150:raise ValueError('Assumption register overflow')
     queue('G002','Adopted answers and drawing assumptions',assumptions)
     queue('S001','Grid and column-base set-out' if model['pilot']!='cfs8' else 'Grid, ground wall and walkway support set-out',lambda:plan(sh,0,'base'),'1:100 / 1:150')
@@ -570,8 +587,8 @@ def generate(package,state,dest):
     queue('S301','Opening clear sizes and coordinate schedule',lambda:opening_schedule(sh))
     queue('S302','Opening framing enlargements',lambda:opening_detail(sh),'As shown')
     queue('S303','Dimensioned interfaces and datum reconciliation',lambda:interfaces(sh),'As shown')
-    for start in range(0,len(model['details']),4):
-        details=model['details'][start:start+4];queue(details[0]['sheet'],'Connection design details / '+str(start//4+1),lambda details=details:detail_page(sh,details),'As shown')
+    for scene in assemblies:
+        queue(scene['sheet'],scene['title'],lambda scene=scene:draw_assembly(sh,scene),'As shown')
     schedule=model['member_schedule']
     for start in range(0,len(schedule),34):
         chunk=schedule[start:start+34]
@@ -593,25 +610,36 @@ def generate(package,state,dest):
                 x=80+col*1130;y=sh.H-185
                 for r in items:
                     sh.text(x,y,r['id'],13,font='Helvetica-Bold');y-=20
-                    sh.text(x,y,'DETAIL '+', '.join(r['references'])+' | S - source specification',10,BLUE);y-=22
+                    y=sh.wrap(x,y,'DETAIL '+', '.join(r['references'])+' | S - source specification',1035,10,13)-9
                     y=sh.wrap(x,y,r['text'],1035,12,17)-20
                 if y<140:raise ValueError('Source specification overflow')
             sh.text(80,165,'Source variants are reproduced for traceability. G002 and A-labelled detail supplements supersede the specifically resolved missing/conflicting inputs.',12,ASSUMED)
         queue(f'S{701+start//2}','Source connection variants / '+str(start//2+1),draw_specs)
+    # Paginated index is inserted before the drawing sheets, with all detail variants.
+    index_jobs=list(jobs);index_pages=[]
+    for start in range(0,len(index_jobs),84):
+        chunk=index_jobs[start:start+84]
+        def draw_index(chunk=chunk):
+            for i,(number,title,scale,_) in enumerate(chunk):
+                col=i//42;row=i%42;x=80+col*1130;y=sh.H-195-row*31
+                sh.text(x,y,number,12,font='Helvetica-Bold');sh.text(x+100,y,title[:100],11)
+        index_pages.append((f'G{10+start//84:03}','Complete sheet index / '+str(start//84+1),'NTS',draw_index))
+    jobs[2:2]=index_pages
     for number,title,scale,fn in jobs:sh.start(number,title,scale);fn()
     sh.c.save()
     sheet_ids={r['number'] for r in sh.rows}
     for c in sh.callouts:
         if c['reference'].split('/')[-1] not in sheet_ids:raise ValueError('Dangling drawing reference '+c['reference'])
     index={m['id']:{k:m[k] for k in ('mark','kind','profile_id','axis','level','basis','source_member_id','connection_refs')} for m in model['members']}
-    model['detail_parameters']={d['family']:connection_parameters(sh,d['family'],next(c for c in model['connections'] if c['detail_ref']['id']==d['family'])) for d in model['details']}
+    model['detail_parameters']={s['id']:dict(reference=s['reference'],family=s['family'],occurrences=s['occurrence_count'],geometry_sha256=s['geometry_sha256']) for s in assemblies}
+    write_json(dest/'connection_assemblies.json',dict(schema='steltic.connection_assemblies',version=1,source_sha256=fingerprint(package),assemblies=assemblies))
     write_json(dest/'design_model.json',model);write_json(dest/'member_index.json',index);write_json(dest/'source_records.json',package['design_records'])
     write_json(dest/'adopted_answers.json',dict(scenario=state['design_scenario'],answers=model['assumptions'],features=state['features']))
     report=dict(schema='steltic.drawing_manifest',version=2,revision=state['revision'],building_id=package['building_id'],source_model_sha256=fingerprint(package),
         drawing_status=state['drawing_status'],can_generate=True,fictional=True,open_requests=0,sheets=sh.rows,dimensions=sh.dimensions,views=sh.views,member_labels=sh.labels,
-        callouts=sh.callouts,counts=dict(members=len(model['members']),connections=len(model['connections']),marks=len(schedule),detail_families=len(model['details']),openings=len(model['openings'])),
+        callouts=sh.callouts,counts=dict(members=len(model['members']),connections=len(model['connections']),marks=len(schedule),detail_families=len({s['family'] for s in assemblies}),detail_variants=len(assemblies),openings=len(model['openings'])),
         model_sha256=fingerprint(model),pdf_sha256=hashlib.sha256((dest/'drawings.pdf').read_bytes()).hexdigest(),
         decision_state_sha256=fingerprint({k:v for k,v in state.items() if k not in ('sheets','artifacts')}),
-        artifacts=['drawings.pdf','drawing_manifest.json','information_requests.json','design_model.json','member_index.json','source_records.json','adopted_answers.json'])
+        artifacts=['drawings.pdf','drawing_manifest.json','information_requests.json','design_model.json','member_index.json','source_records.json','adopted_answers.json','connection_assemblies.json'])
     write_json(dest/'drawing_manifest.json',report)
     return report
