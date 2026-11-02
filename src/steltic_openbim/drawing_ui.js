@@ -1,0 +1,53 @@
+/* The same question widget is mounted inside Hub's existing Questions step. */
+window.StelticDrawingQueries={async mount(root,project){
+ 'use strict'; const base=`/api/project/${encodeURIComponent(project)}/drawings`; let state=null;
+ function el(tag,attrs={},...kids){const n=document.createElement(tag);for(const [k,v]of Object.entries(attrs)){if(k.startsWith('on'))n[k]=v;else if(k==='class')n.className=v;else n.setAttribute(k,v)}for(const k of kids.flat())if(k!=null)n.append(k.nodeType?k:document.createTextNode(String(k)));return n}
+ async function api(path,opts={}){const r=await fetch(path,opts),j=await r.json();if(!r.ok)throw Error(j.detail||'Request failed');return j}
+ const style=el('style',{},`.obim{font:14px/1.5 'Segoe UI',Arial}.obim .ob-card{border:1px solid #9aa99c55;border-radius:8px;padding:18px;margin:14px 0}.obim button,.obim select,.obim input,.obim textarea{font:inherit;border:1px solid #a6b5a7;border-radius:4px;padding:7px;background:#fff;color:#243e43}.obim button{cursor:pointer;margin:4px}.obim .ob-primary{background:#245653;color:white}.obim .ob-badge{display:inline-block;border:1px solid #d9bd87;color:#94652b;padding:3px 9px;border-radius:14px;margin:5px}.obim .ob-row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}.obim .ob-note{font-size:12px;opacity:.8}.obim textarea{width:100%;min-height:75px}.obim details{border-top:1px solid #9aa99c55;padding:12px 0}.obim summary{cursor:pointer;font-weight:600}.obim table{width:100%;border-collapse:collapse}.obim td,.obim th{padding:4px;text-align:left}.obim td input{width:88px}.obim .ob-table{overflow:auto}.obim .ob-error{color:#b75239}.obim a{color:inherit;text-decoration:underline}.obim label{display:inline-block}.obim .ob-source{width:100%}`);
+ const box=el('div',{class:'obim'}),message=el('div',{'aria-live':'polite'});root.replaceChildren(style,box,message);
+ function error(e){message.className='obim ob-error';message.style.color='#b75239';message.textContent=e.message}
+ async function refresh(){try{state=await api(base);await render()}catch(e){error(e)}}
+ async function save(body,button){button.disabled=true;message.textContent='Regenerating drawings...';try{await api(base+'/answers',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...body,revision:state.revision,source_model_sha256:state.source_model_sha256})});await refresh();message.textContent='Saved. A new drawing revision is available.'}catch(e){error(e)}finally{button.disabled=false}}
+ function requestCard(r){
+   const detail=el('details',{},el('summary',{},r.id+' - '+r.question),el('span',{class:'ob-badge'},r.confirmed?'Quantitatively resolved':'Accepted provisionally - TBD'),
+    el('p',{},(r.confirmed?'Original proposal: ':'Provisional proposal: ')+r.proposal),el('p',{class:'ob-note'},'Basis: '+r.evidence));
+   const who=el('input',{placeholder:'Your name','aria-label':r.id+' reviewer'}),note=el('textarea',{placeholder:'Information, source or drawing reference','aria-label':r.id+' information'});
+   detail.append(el('div',{class:'ob-row'},who),note);
+   if(r.resolution)detail.append(el('p',{},'Confirmed information: '+r.resolution));
+   if(r.notes.length)detail.append(el('p',{class:'ob-note'},'Latest information: '+r.notes[r.notes.length-1].note));
+   if(r.resolution_mode==='opening_layout'){
+     const fs=state.features.filter(f=>f.query_id===r.id).map(f=>({...f})); const rows=[];
+     const table=el('table',{},el('thead',{},el('tr',{},['ID / type','Level','Plane','X ft','Y ft','Base Z ft','Width ft','Height ft','Include'].map(t=>el('th',{},t))))),tbody=el('tbody');table.append(tbody);
+     function addRow(f){const cells={};const include=el('input',{type:'checkbox','aria-label':f.id+' include'});include.checked=true;
+       const level=el('input',{type:'number',min:1,value:f.level,'aria-label':f.id+' level',onchange:()=>f.level=Number(level.value)});
+       const plane=el('select',{'aria-label':f.id+' plane',onchange:()=>f.plane=plane.value},...['xy','xz','yz'].map(v=>el('option',{value:v},v.toUpperCase())));plane.value=f.plane;
+       const tr=el('tr',{},el('td',{},f.id+' / '+f.kind),el('td',{},level),el('td',{},plane));
+       for(const k of ['x_ft','y_ft','z_ft','width_ft','height_ft']){const input=el('input',{type:'number',step:'any','aria-label':f.id+' '+k,placeholder:'TBD'});if(f.confirmed)input.value=f[k];cells[k]=input;tr.append(el('td',{},input))}tr.append(el('td',{},include));tbody.append(tr);rows.push({f,cells,include});}
+     detail.append(el('p',{class:'ob-note'},'Unconfirmed dimensions are hidden on the drawings. Enter confirmed coordinates and sizes below, or load the explicitly provisional values for review. Excluding a proposal removes it from the confirmed layout.'),
+       el('button',{onclick:()=>rows.forEach(({f,cells})=>Object.entries(cells).forEach(([k,input])=>input.value=f[k]??''))},r.confirmed?'Review saved values':'Review proposed values'),el('div',{class:'ob-table'},table),
+       el('button',{onclick:()=>{let id='NEW'+(rows.length+1);while(state.features.some(f=>f.id===id)||rows.some(row=>row.f.id===id))id+='A';addRow({id,kind:'opening',plane:'xz',level:1,confirmed:false})}},'Add opening'));
+     fs.forEach(addRow);
+     const none=el('input',{type:'checkbox','aria-label':r.id+' confirm no openings'});detail.append(el('label',{},none,' Confirm no openings (exclude all rows)'));
+     const resolve=el('button',{class:'ob-primary',onclick:()=>{try{const features=rows.filter(row=>row.include.checked).map(({f,cells})=>{const out={...f};for(const [k,input]of Object.entries(cells)){if(input.value.trim()===''||!Number.isFinite(Number(input.value)))throw Error('Complete every included opening coordinate and size.');out[k]=Number(input.value)}return out});save({id:r.id,action:'resolve_openings',author:who.value,note:note.value,features,confirm_no_openings:none.checked},resolve)}catch(e){error(e)}}},'Resolve locations and update drawings');detail.append(resolve);
+   }else detail.append(el('p',{class:'ob-note'},'Information is recorded without inventing new design values. Your design agent or supplier applies it to the source model; import that revised package to update the drawing geometry.'));
+   const info=el('button',{onclick:()=>save({id:r.id,action:'information',author:who.value,note:note.value},info)},r.confirmed?'Add information':'Add information; keep provisional');detail.append(info);
+   if(r.confirmed){const reopen=el('button',{onclick:()=>save({id:r.id,action:'reopen',author:who.value,note:note.value},reopen)},'Reopen as TBD');detail.append(reopen)}
+   return detail;
+ }
+ async function render(){
+   box.replaceChildren(el('h2',{},'Drawings and information requests'),el('p',{},'Every request has a provisional proposal, accepted for drawings by default. Dashed items and TBD labels identify unconfirmed information; drawings continue while requests remain open.'));
+   if(state.state==='available'){
+     box.append(el('div',{class:'ob-card'},el('div',{class:'ob-row'},el('b',{},'Revision '+state.revision),el('span',{class:'ob-badge'},state.drawing_status+' / '+state.sheets.length+' sheets'),
+       el('a',{href:base+'/file/drawings.pdf?r='+state.revision,target:'_blank'},'Open drawing set'),el('a',{href:base+'/file/information_requests.json',target:'_blank'},'Request register')),
+       el('p',{class:'ob-note'},'Source '+state.building_id+'. Confirmed answers regenerate the set and keep previous revisions. Source-design completeness remains separate.')));
+     const regenerate=el('button',{onclick:async()=>{regenerate.disabled=true;message.textContent='Regenerating drawings...';try{await api(base+'/regenerate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({revision:state.revision,source_model_sha256:state.source_model_sha256})});await refresh();message.textContent='Regenerated. Source and answers retained; previous PDF kept.'}catch(e){error(e)}finally{regenerate.disabled=false}}},'Regenerate drawing set');box.append(regenerate);
+     for(const group of state.questions.groups){const section=el('section',{},el('h3',{},group.group));for(const r of group.items)section.append(requestCard(r));box.append(section)}
+     const h=await api(base+'/history');const hist=el('details',{},el('summary',{},'Drawing revision history'));for(const r of h.revisions)hist.append(el('p',{},el('a',{href:base+'/file/drawings.pdf?revision='+encodeURIComponent(r.directory),target:'_blank'},'Revision '+r.revision+' - '+r.drawing_status)));box.append(hist);
+   }
+   const imports=el('details',{},el('summary',{},state.state==='available'?'Update physical source package':'Choose a completed HR/CFS physical package'));if(state.state!=='available')imports.open=true;
+   const file=el('input',{type:'file',accept:'.json','aria-label':'Physical package JSON'}),upload=el('button',{class:'ob-primary',onclick:async()=>{if(!file.files.length)return;upload.disabled=true;message.textContent='Generating drawing set...';try{const form=new FormData();form.append('file',file.files[0]);if(state.revision)form.append('revision',state.revision);await api(base+'/upload',{method:'POST',body:form});await refresh();message.textContent='Drawing set generated.'}catch(e){error(e)}finally{upload.disabled=false}}},'Import and generate drawings');imports.append(el('p',{class:'ob-note'},'Changing the source starts a new drawing revision with fresh provisional requests; previous answers and PDFs remain in history.'),file,upload);
+   try{const list=(await api('/api/drawings/sources')).sources;if(list.length){const select=el('select',{'aria-label':'HR/CFS completed job'},...list.map((s,i)=>el('option',{value:i},s.module+' / '+s.job)));const load=el('button',{onclick:async()=>{load.disabled=true;message.textContent='Generating drawing set...';try{await api(base+'/import',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...list[Number(select.value)],revision:state.revision})});await refresh();message.textContent='Drawing set generated.'}catch(e){error(e)}finally{load.disabled=false}}},'Use job export');imports.append(el('div',{class:'ob-row'},select,load))}}catch(e){error(e)}
+   box.append(imports);
+ }
+ await refresh();
+}};
