@@ -1,0 +1,35 @@
+{
+  "hr22_hospital": {
+    "key": "hr22",
+    "building_id": "Ex22_SMF_6levels_hospital_RiskCatIV",
+    "source_signature": "41285cd6ee7c09a6f7a8a3a4cc57183bc84858fc67a60593c1ec47bdb665758c",
+    "brief": {
+      "repository": "Steltic/steltic",
+      "path": "test_buildings/Ex22_SMF_6levels_hospital_RiskCatIV.txt",
+      "sha256": "b2e64dca508b1f9d37d7ec10e20841895d81c8b7c1f61cc8a6127255099110b1"
+    },
+    "package_sha256": "1f322013230a9b9409f78b2894789cbbaf7d52ce03c166607bc1ec6a269c54c8"
+  },
+  "cfs16_portal_warehouse": {
+    "key": "cfs16",
+    "building_id": "CFS_Ex16_Portal_singlespan_warehouse",
+    "source_signature": "fcde4f60e46a644624f100ad97e7c6746e9d5969f4bbff196e5bb8a917a05fd6",
+    "brief": {
+      "repository": "Steltic/steltic_cfs",
+      "path": "test_buildings/CFS_Ex16_Portal_singlespan_warehouse.txt",
+      "sha256": "ef0f791b78604d828b8bed7dc5972b4673035e26e764b92b3ce9d352d6e71d9c"
+    },
+    "package_sha256": "c0d57c4b0ead1891ed726a32fa128f927d4fa0a92be7442c5fe95aab909ae0e0"
+  },
+  "cfs8_t_plan_housing": {
+    "key": "cfs8",
+    "building_id": "CFS_Ex8_StrapBraced_4levels_Tplan",
+    "source_signature": "d307985083aefd24a22bd70dbc37ca112c5a06602a2301e6c966dd259920ca40",
+    "brief": {
+      "repository": "Steltic/steltic_cfs",
+      "path": "test_buildings/CFS_Ex8_StrapBraced_4levels_Tplan.txt",
+      "sha256": "5cf52641f09a314b28f9f58a78f44f7f81a8d63b979a95070a7d871094de3464"
+    },
+    "package_sha256": "92a75d95d0eaeaf3ed669fec1884af020786d530ef54a107cd55b4a569e96b72"
+  }
+}
