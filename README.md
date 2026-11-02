@@ -4,6 +4,10 @@ Drawing and IFC module for Steltic Hub. The first release targets dimensioned en
 
 ## Current status
 
+Stage 5 develops the three fictional pilots into **dimensioned A1 design drawings**: grids, framing/member marks, physical sections, opening set-out, connection callouts and source-variant schedules. All 18 requests have explicit user-authorized test answers. Added/changed geometry is labelled A; source engineering evidence remains immutable. [Drawing sets, adopted answers and validation](docs/stage5/README.md).
+
+The shared Hub widget offers this development step only for the three exact source packages, after explicit fictional-building confirmation. It never supplies fictional answers to ordinary jobs. `steltic-openbim design-test package.json --confirm-fictional --author "Test author" --output drawings` provides the same workflow from the CLI. Regeneration retains answers and revision history; reopening a request returns to provisional drawings.
+
 Stage 4 starts the **provisional drawing workflow**: 54 A3 sheets across the HR hospital, CFS warehouse and CFS student housing. All 18 information requests have explicit proposals accepted for drawing by default. Proposed openings and unresolved interfaces appear as dashed symbols with `TBD - resolve query`; their dimensions stay hidden until quantitatively confirmed. [Workflow, example sets and validation](docs/stage4/README.md).
 
 Hub integration mounts the same request widget inside User-designed building's Questions/Drawings flow and the standalone openBIM module. Confirmed opening answers regenerate a revisioned PDF set; notes alone retain TBD status. Source-engineering readiness and existing model/analysis checks stay separate. Structural/supplier decisions update geometry through a revised physical package.

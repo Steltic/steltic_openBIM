@@ -162,7 +162,12 @@ def apply_answer(package,state,body):
             if f['query_id']==iid: f.update(confirmed=False,geometry_role='illustrative_proposal')
     else: raise ValueError('Unknown answer action')
     result['revision']+=1
-    result['drawing_status']='provisional' if any(not r['confirmed'] for r in result['requests']) else 'coordinated'
+    result['drawing_status']='provisional' if any(not r['confirmed'] for r in result['requests']) else ('design_test' if result.get('design_scenario') else 'coordinated')
+    if result.get('design_scenario'):
+        for feature in result['features']:
+            feature['basis']='A - user-authorized fictional test input'
+        if action=='resolve_openings':
+            request['resolution_basis']='user_authorized_fictional_assumption'
     result['events'].append(dict(revision=result['revision'],id=iid,action=action,author=author,note=note,source_model_sha256=state['source_model_sha256']))
     return result
 
@@ -200,7 +205,7 @@ class DrawingStore:
         directory=base/'revisions'/key; directory.mkdir(parents=True)
         write_json(directory/'source.json',package)
         report=generate(package,state,directory)
-        state['sheets']=report['sheets']; state['artifacts']=['drawings.pdf','drawing_manifest.json','information_requests.json']
+        state['sheets']=report['sheets']; state['artifacts']=report.get('artifacts',['drawings.pdf','drawing_manifest.json','information_requests.json'])
         write_json(directory/'state.json',state)
         write_json(directory/'information_requests.json',self.questions(state))
         pointer=base/('current-'+uuid.uuid4().hex+'.tmp'); write_json(pointer,{'directory':key})
@@ -223,6 +228,14 @@ class DrawingStore:
             if current is None: raise ValueError('Import a physical package first')
             directory,state=current; package=json.loads((directory/'source.json').read_text(encoding='utf-8'))
             return self.publish(p,package,apply_answer(package,state,body))
+
+    def fictional_design(self,p,body):
+        from .design_scenarios import adopt_scenario
+        with self.lock(p):
+            current=self.current(p)
+            if current is None: raise ValueError('Import a physical package first')
+            directory,state=current;package=json.loads((directory/'source.json').read_text(encoding='utf-8'))
+            return self.publish(p,package,adopt_scenario(package,state,body))
 
     def regenerate(self,p,body):
         with self.lock(p):

@@ -51,7 +51,9 @@ def router(store:DrawingStore,source_roots=None):
         current=invoke(store.current,p)
         if current is None: return {'state':'none','can_generate':False}
         state=current[1]
-        return dict(state,state='available',questions=store.questions(state))
+        from .design_scenarios import SCENARIOS
+        scenario=next((key for key,value in SCENARIOS.items() if value['source_sha256']==state['source_model_sha256']),None)
+        return dict(state,state='available',questions=store.questions(state),available_test_scenario=scenario)
 
     @r.post('/api/project/{p}/drawings/import')
     async def import_source(p:str,request:Request):
@@ -75,6 +77,11 @@ def router(store:DrawingStore,source_roots=None):
         body=await body_object(request)
         return await run_in_threadpool(invoke,store.answer,p,body)
 
+    @r.post('/api/project/{p}/drawings/fictional-design')
+    async def fictional_design(p:str,request:Request):
+        body=await body_object(request)
+        return await run_in_threadpool(invoke,store.fictional_design,p,body)
+
     @r.get('/api/project/{p}/drawings/history')
     def history(p:str):
         base=invoke(store.project,p); rows=[]
@@ -90,7 +97,7 @@ def router(store:DrawingStore,source_roots=None):
 
     @r.get('/api/project/{p}/drawings/file/{filename}')
     def file(p:str,filename:str,revision:str=''):
-        if filename not in ('drawings.pdf','drawing_manifest.json','information_requests.json'): raise HTTPException(404)
+        if filename not in ('drawings.pdf','drawing_manifest.json','information_requests.json','design_model.json','member_index.json','source_records.json','adopted_answers.json'): raise HTTPException(404)
         current=invoke(store.current,p)
         if current is None: raise HTTPException(404)
         directory=current[0]
@@ -99,6 +106,7 @@ def router(store:DrawingStore,source_roots=None):
             if not re.fullmatch(r'r\d{4,}-[a-f0-9]{12}',revision): raise HTTPException(404)
             directory=store.project(p)/'revisions'/revision
             if not (directory/'state.json').is_file(): raise HTTPException(404)
+        if not (directory/filename).is_file():raise HTTPException(404)
         return FileResponse(directory/filename,media_type='application/pdf' if filename.endswith('.pdf') else 'application/json',headers={'Cache-Control':'no-store'})
 
     @r.get('/openbim-ui.js')
