@@ -1,0 +1,89 @@
+{
+  "pilots": {
+    "hr22": {
+      "title": "HR hospital",
+      "revision": 4,
+      "sheets": 19,
+      "requests": 6,
+      "counts": {
+        "members": 1189,
+        "connections": 2529,
+        "marks": 29,
+        "detail_families": 7,
+        "openings": 24
+      },
+      "pdf_sha256": "830fa0cee18115c59b1a670bcf8dd660fec7a9ba640c23b48b8f80a9db7134c4",
+      "source_model_sha256": "f134698729e8d92a782720f6482a21da48e32ce5f4fbf92e12257df27f8c13fc"
+    },
+    "cfs16": {
+      "title": "CFS warehouse",
+      "revision": 4,
+      "sheets": 17,
+      "requests": 5,
+      "counts": {
+        "members": 1282,
+        "connections": 2499,
+        "marks": 27,
+        "detail_families": 13,
+        "openings": 4
+      },
+      "pdf_sha256": "a34b0eef5ee727948763a0ec26649f40258b90190a44f0aa6372323d82de22df",
+      "source_model_sha256": "14b7af0e1a74aa0e5ab8889cc49f593ecefecdd9696bf683197941b03831db6f"
+    },
+    "cfs8": {
+      "title": "CFS student housing",
+      "revision": 5,
+      "sheets": 40,
+      "requests": 7,
+      "counts": {
+        "members": 14798,
+        "connections": 30365,
+        "marks": 275,
+        "detail_families": 24,
+        "openings": 46
+      },
+      "pdf_sha256": "53ce2e9c3b9fcba485c9d7d82dc7b0ffc77a37db3da9df5a6a6069bbcea80c90",
+      "source_model_sha256": "1c7a843165fc0df5f442aa561ba5707dec1996f4daa5bb91f9f0ec6248337159"
+    }
+  },
+  "sheet_total": 76,
+  "adopted_test_answers": 18,
+  "gold_files_unchanged": 812,
+  "gold_buildings": 61,
+  "gold_bytes_unchanged": 197184958,
+  "source_engineering_readiness_unchanged": true,
+  "analysis_or_redesign_engine_executed": false,
+  "fictional_geometry_supplemented": true,
+  "automated_tests": {
+    "openbim_full_suite_passed": 48,
+    "affected_pdf_acceptance_tests_after_final_variant_printing_change_passed": 3,
+    "hub_userbuilding_regressions_and_drawing_integration_passed": 55,
+    "hub_test_files": [
+      "test_userbuilding.py",
+      "test_userbuilding_drawings.py",
+      "test_userbuilding_text_values.py",
+      "test_userbuilding_opensees.py"
+    ]
+  },
+  "visual_review": {
+    "rendered_pages_reviewed": 76,
+    "method": "All rendered pages reviewed in contact sheets; key plans, physical sections, connection details and all final housing source-variant pages inspected at larger size.",
+    "corrections": [
+      "Bounded physical section cuts",
+      "Warehouse source schedule rows",
+      "Housing story-specific rods and screw counts",
+      "RBS diagram",
+      "Walkway edge section"
+    ]
+  },
+  "browser_check": {
+    "surface": "Hub User-designed building / Drawings and information requests",
+    "result": "Passed: explicit fictional confirmation and author adopt the warehouse scenario, publish 17 sheets, expose answers and model downloads, and label the adopted opening answer A.",
+    "screenshot": "hub-query-preview.png"
+  },
+  "wheel": {
+    "file": "steltic_openbim-0.4.0-py3-none-any.whl",
+    "sha256": "a16ad9caed7ecf993d0ad904566d10ce2e0197d79381f7ea7a097ce1028b032b",
+    "installed_smoke": "Passed: isolated wheel import and CLI produce 40 housing sheets including final story/rod/fastener variants."
+  }
+}

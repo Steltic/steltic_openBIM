@@ -223,6 +223,9 @@ class Sheets:
 
 
 def generate(package,state,dest):
+    if state.get('design_scenario') and state.get('drawing_status')=='design_test':
+        from .design_pdf import generate as design_generate
+        return design_generate(package,state,dest)
     dest=Path(dest); dest.mkdir(parents=True,exist_ok=True); sh=Sheets(package,state,dest); ph=package['physical']
     members=ph['members']; levels=sorted({m.get('level',1) for m in members}); requests=state['requests']
     all_features=source_openings(package)+state['features']

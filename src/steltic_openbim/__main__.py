@@ -22,13 +22,21 @@ def main(argv=None):
     draw = sub.add_parser('draw',help='Generate a provisional coordination drawing set; open information requests do not block it')
     draw.add_argument('package',type=Path)
     draw.add_argument('--output',type=Path,required=True)
+    design=sub.add_parser('design-test',help='Adopt source-bound answers for one of the three fictional pilots and generate dimensioned drawings')
+    design.add_argument('package',type=Path)
+    design.add_argument('--output',type=Path,required=True)
+    design.add_argument('--confirm-fictional',action='store_true',required=True)
+    design.add_argument('--author',required=True)
     args = parser.parse_args(argv)
     try:
         package = json.loads(args.package.read_text(encoding="utf-8-sig"))
-        if args.command=='draw':
+        if args.command in ('draw','design-test'):
             from .drawing_workflow import initial_state,write_json,DrawingStore
             from .drawing_pdf import generate
             state=initial_state(package,1)
+            if args.command=='design-test':
+                from .design_scenarios import adopt_scenario
+                state=adopt_scenario(package,state,dict(revision=state['revision'],source_model_sha256=state['source_model_sha256'],confirm_fictional=args.confirm_fictional,author=args.author))
             report=generate(package,state,args.output)
             write_json(args.output/'state.json',state)
             write_json(args.output/'information_requests.json',DrawingStore.questions(state))
