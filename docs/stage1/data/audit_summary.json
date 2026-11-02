@@ -1,0 +1,53 @@
+{
+  "audit_date": "2026-11-02",
+  "scope": "Dimensioned engineering design drawings and IFC export; fabrication and IFC import deferred.",
+  "buildings": 61,
+  "module_buildings": {
+    "HR": 36,
+    "CFS": 25
+  },
+  "connection_records": 2078,
+  "additional_detail_schedule_records": 2785,
+  "waived_connection_records": 3,
+  "no_splice_note_records": 30,
+  "register_items": 386,
+  "register_categories": {
+    "Extract existing": 142,
+    "Verify source": 1,
+    "Drawing decision": 1,
+    "Resolve mapping": 61,
+    "Verify geometry": 149,
+    "Supplier / delegated": 26,
+    "Supplement required": 2,
+    "Scope decision": 4
+  },
+  "source_files": 812,
+  "repository_inspection_revisions": {
+    "HR": "f880ef4396e620d1a24a355c19e9237b304570d9",
+    "CFS": "2e93c55fcf8ced44a3bbb211f61d48a14b300ad3",
+    "Hub": "601b7dac4bac459290675a1d3d856a2b7641fc9a"
+  },
+  "producer_revision_established": false,
+  "definitions": {
+    "Extract existing": "Information is present but requires normalization or physical interpretation. Not a request for new engineering data.",
+    "Resolve mapping": "Source records need a reviewed association to physical elements, joints, stories or zones.",
+    "Verify geometry": "A required detail parameter was not established by the stated inspection. Check linked sources before treating it as absent.",
+    "Supplement required": "Reviewed evidence identifies additional drawing data or a placement decision that must be supplied.",
+    "Supplier / delegated": "Source scope depends on external engineering or supplier data. Retain its boundary or supply that package.",
+    "Scope decision": "Choose which explicitly excluded/context parts are represented and at what level.",
+    "Verify source": "Provenance or source applicability needs confirmation.",
+    "Drawing decision": "Presentation or drawing conventions need a documented choice."
+  },
+  "limitations": [
+    "This audit assesses source data availability, not structural adequacy or construction readiness.",
+    "No cfg.py, solver, design engine or generated Python model was executed.",
+    "All 61 packages were inventoried; every connections[] row and selected CFS drawing-related tables were indexed. This is not exhaustive numerical reconstruction.",
+    "Script geometry was inspected as syntax and literal calls. No-splice notes retain their other joint references and must not be discarded as whole-record exclusions.",
+    "Geometry word screens show only whether language was found in a record. They are not numerical parsing or proof of sufficiency.",
+    "Referenced schedules and prose can contain additional values. Verify-geometry items are not confirmed package-wide absences.",
+    "Register affected-record lists and evidence locators define scope. Blank affected-record lists mean a building-level requirement.",
+    "Existing consistency PASS results are reported, not recomputed, and do not test drawing geometry.",
+    "Current repository inspection revisions are not claimed to be the revisions that produced the supplied packages.",
+    "Counts are source records, including typical groups and exclusions; additional schedule records can describe the same physical system."
+  ]
+}

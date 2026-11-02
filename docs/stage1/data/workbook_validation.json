@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "workbook": "steltic_openBIM_stage1_audit.xlsx",
+  "sha256": "b8782d1c1b1cc8db6e85de43ed1f443a68e1d8770d03afdf94ee16fef0a81625",
+  "sheets": [
+    "Overview",
+    "Buildings",
+    "Missing data",
+    "Families",
+    "Connections",
+    "CFS assemblies"
+  ],
+  "native_tables": 5,
+  "formula_caches_checked": 18,
+  "building_rows_verified": 61,
+  "register_rows_verified": 386,
+  "record_rows_verified": 4863,
+  "checks": [
+    "ZIP integrity",
+    "Sheet and native table ranges",
+    "No Excel error cells",
+    "Cached totals",
+    "All stable IDs and source locators",
+    "Scope boundaries",
+    "Frozen headers and IDs",
+    "Review status dropdown",
+    "Category highlighting"
+  ],
+  "errors": []
+}

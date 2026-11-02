@@ -1,0 +1,2780 @@
+{
+  "HR-1": {
+    "system": "SCBF",
+    "geometry": "Rectangular multistorey braced frame",
+    "next_action": "Map brace-end gussets, gravity ends and column splice elevations.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-2": {
+    "system": "SMF",
+    "geometry": "Multistorey moment frame",
+    "next_action": "Join each RBS beam to its actual column and joint reinforcement schedule.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-3": {
+    "system": "Braced + moment",
+    "geometry": "Mixed braced / moment framing and bases",
+    "next_action": "Separate braced, moment and gravity joints at shared grids.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-4": {
+    "system": "BRBF",
+    "geometry": "Three-level BRB frame",
+    "next_action": "Resolve BRB casing and supplier end geometry against the designed gussets.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Supplier / delegated",
+        "requirement": "Declared external design interfaces",
+        "available": "The calculation package contains an explicit delegated-design section.",
+        "remaining": "The external scope cannot be reconstructed from design demands alone. Detailed geometry is not established for every delegated item.",
+        "action": "Carry the source interface loads and notes into the design set. Obtain the relevant external package before representing its final geometry.",
+        "evidence": [
+          "json:delegated_design"
+        ],
+        "owner": "Responsible engineer / supplier",
+        "blocks": "Affected interface drawings"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-5": {
+    "system": "SMF",
+    "geometry": "Ten-level moment frame",
+    "next_action": "Map beam/column joint schedules and reinforcement by floor.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-6": {
+    "system": "SCBF",
+    "geometry": "Six-level concentrically braced frame",
+    "next_action": "Map physical brace work points and gusset interfaces.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-7a": {
+    "system": "SMF",
+    "geometry": "Moment frame with tall first storey",
+    "next_action": "Retain the actual base and first-storey elevations and joint groups.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-8": {
+    "system": "EBF",
+    "geometry": "L plan with eccentric links",
+    "next_action": "Locate link ends and stiffeners without introducing false beam joints.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Supplier / delegated",
+        "requirement": "Declared external design interfaces",
+        "available": "The calculation package contains an explicit delegated-design section.",
+        "remaining": "The external scope cannot be reconstructed from design demands alone. Detailed geometry is not established for every delegated item.",
+        "action": "Carry the source interface loads and notes into the design set. Obtain the relevant external package before representing its final geometry.",
+        "evidence": [
+          "json:delegated_design"
+        ],
+        "owner": "Responsible engineer / supplier",
+        "blocks": "Affected interface drawings"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "EBF links and protected regions",
+        "available": "The source contains a building-specific geometry, detailing or scope description.",
+        "remaining": "This information requires an explicit physical representation and drawing assignment; the generic viewer is insufficient as the sole authority.",
+        "action": "Recover actual link lengths, stiffener stations and brace work points. Distinguish a continuous beam work point from a physical connection.",
+        "evidence": [
+          "cfg:link"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-9": {
+    "system": "SPSW",
+    "geometry": "T plan; steel plate walls and penthouse",
+    "next_action": "Replace tension-field analysis strips with physical wall plates and boundary members.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Supplier / delegated",
+        "requirement": "Declared external design interfaces",
+        "available": "The calculation package contains an explicit delegated-design section.",
+        "remaining": "The external scope cannot be reconstructed from design demands alone. Detailed geometry is not established for every delegated item.",
+        "action": "Carry the source interface loads and notes into the design set. Obtain the relevant external package before representing its final geometry.",
+        "evidence": [
+          "json:delegated_design"
+        ],
+        "owner": "Responsible engineer / supplier",
+        "blocks": "Affected interface drawings"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Physical steel plate shear walls",
+        "available": "The source contains a building-specific geometry, detailing or scope description.",
+        "remaining": "This information requires an explicit physical representation and drawing assignment; the generic viewer is insufficient as the sole authority.",
+        "action": "Reconstruct web-plate panels, openings, fishplates and boundary members; analysis tension strips must not become physical diagonal braces.",
+        "evidence": [
+          "json:members"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-10": {
+    "system": "Dual SMF + SCBF",
+    "geometry": "Tower on podium; built-up box columns",
+    "next_action": "Resolve changes in support-face geometry through the podium.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-11": {
+    "system": "BRBF",
+    "geometry": "U plan with courtyard",
+    "next_action": "Preserve the courtyard and resolve BRB interfaces.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Supplier / delegated",
+        "requirement": "Declared external design interfaces",
+        "available": "The calculation package contains an explicit delegated-design section.",
+        "remaining": "The external scope cannot be reconstructed from design demands alone. Detailed geometry is not established for every delegated item.",
+        "action": "Carry the source interface loads and notes into the design set. Obtain the relevant external package before representing its final geometry.",
+        "evidence": [
+          "json:delegated_design"
+        ],
+        "owner": "Responsible engineer / supplier",
+        "blocks": "Affected interface drawings"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-12": {
+    "system": "SMF",
+    "geometry": "Chamfered plan and setbacks",
+    "next_action": "Retain oblique beam axes and per-level floor boundaries.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Oblique framing and chamfer/setback edges",
+        "available": "The source contains a building-specific geometry, detailing or scope description.",
+        "remaining": "This information requires an explicit physical representation and drawing assignment; the generic viewer is insufficient as the sole authority.",
+        "action": "Retain oblique local axes and recover each floor polygon from the actual grid/plan definition.",
+        "evidence": [
+          "cfg:chamfer|setback"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-13": {
+    "system": "OCBF",
+    "geometry": "Split-level framing",
+    "next_action": "Resolve separate floor datums and bases; do not flatten levels.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Supplier / delegated",
+        "requirement": "Declared external design interfaces",
+        "available": "The calculation package contains an explicit delegated-design section.",
+        "remaining": "The external scope cannot be reconstructed from design demands alone. Detailed geometry is not established for every delegated item.",
+        "action": "Carry the source interface loads and notes into the design set. Obtain the relevant external package before representing its final geometry.",
+        "evidence": [
+          "json:delegated_design"
+        ],
+        "owner": "Responsible engineer / supplier",
+        "blocks": "Affected interface drawings"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Split-level floor and base datums",
+        "available": "The source contains a building-specific geometry, detailing or scope description.",
+        "remaining": "This information requires an explicit physical representation and drawing assignment; the generic viewer is insufficient as the sole authority.",
+        "action": "Retain distinct floor levels and base elevations; assign drawing level names explicitly.",
+        "evidence": [
+          "cfg:split|level"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-14": {
+    "system": "EBF",
+    "geometry": "Cruciform plan on hillside",
+    "next_action": "Distinguish foundation elevations from the seismic-base level.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Supplier / delegated",
+        "requirement": "Declared external design interfaces",
+        "available": "The calculation package contains an explicit delegated-design section.",
+        "remaining": "The external scope cannot be reconstructed from design demands alone. Detailed geometry is not established for every delegated item.",
+        "action": "Carry the source interface loads and notes into the design set. Obtain the relevant external package before representing its final geometry.",
+        "evidence": [
+          "json:delegated_design"
+        ],
+        "owner": "Responsible engineer / supplier",
+        "blocks": "Affected interface drawings"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Hillside and seismic-base datums",
+        "available": "The source contains a building-specific geometry, detailing or scope description.",
+        "remaining": "This information requires an explicit physical representation and drawing assignment; the generic viewer is insufficient as the sole authority.",
+        "action": "Retain foundation elevations and the declared seismic base as different concepts.",
+        "evidence": [
+          "cfg:seismic_base_level"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-15": {
+    "system": "Dual SMF + BRBF",
+    "geometry": "Wedding-cake setbacks; box columns",
+    "next_action": "Resolve each setback boundary and changing column/BRB interfaces.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-16": {
+    "system": "IMF",
+    "geometry": "Z-plan school; raised roof zone",
+    "next_action": "Keep raised-roof and library/collector framing distinct.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Raised roof and irregular floor zones",
+        "available": "The source contains a building-specific geometry, detailing or scope description.",
+        "remaining": "This information requires an explicit physical representation and drawing assignment; the generic viewer is insufficient as the sole authority.",
+        "action": "Recover the raised-roof zone and local floor/collector layout from the building definition.",
+        "evidence": [
+          "cfg:roof|library"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-17": {
+    "system": "SCBF",
+    "geometry": "Offset core and roof/penthouse framing",
+    "next_action": "Map collector offsets and upper-level connections.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Supplier / delegated",
+        "requirement": "Declared external design interfaces",
+        "available": "The calculation package contains an explicit delegated-design section.",
+        "remaining": "The external scope cannot be reconstructed from design demands alone. Detailed geometry is not established for every delegated item.",
+        "action": "Carry the source interface loads and notes into the design set. Obtain the relevant external package before representing its final geometry.",
+        "evidence": [
+          "json:delegated_design"
+        ],
+        "owner": "Responsible engineer / supplier",
+        "blocks": "Affected interface drawings"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-18": {
+    "system": "R = 3 frame",
+    "geometry": "Low-seismic multistorey frame",
+    "next_action": "Preserve the specified connection types and non-seismic detail scope.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-19": {
+    "system": "SMF",
+    "geometry": "Tall first storey / podium; plate girders",
+    "next_action": "Extract the PG84X1108 plate-girder geometry and transfer connections.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Plate-girder physical section",
+        "available": "The source contains a building-specific geometry, detailing or scope description.",
+        "remaining": "This information requires an explicit physical representation and drawing assignment; the generic viewer is insufficient as the sole authority.",
+        "action": "Extract flange/web dimensions and local attachment geometry of PG84X1108 from its design and configuration.",
+        "evidence": [
+          "json:members"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-20": {
+    "system": "SCBF",
+    "geometry": "Discontinuous bracing and transfer framing",
+    "next_action": "Map transfer and inclined-member joints from actual coordinates.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Supplier / delegated",
+        "requirement": "Declared external design interfaces",
+        "available": "The calculation package contains an explicit delegated-design section.",
+        "remaining": "The external scope cannot be reconstructed from design demands alone. Detailed geometry is not established for every delegated item.",
+        "action": "Carry the source interface loads and notes into the design set. Obtain the relevant external package before representing its final geometry.",
+        "evidence": [
+          "json:delegated_design"
+        ],
+        "owner": "Responsible engineer / supplier",
+        "blocks": "Affected interface drawings"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Transfer and inclined members",
+        "available": "The source contains a building-specific geometry, detailing or scope description.",
+        "remaining": "This information requires an explicit physical representation and drawing assignment; the generic viewer is insufficient as the sole authority.",
+        "action": "Keep inclined-member orientation, load-transfer connections and interrupted brace lines distinct.",
+        "evidence": [
+          "cfg:transfer|inclined"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-21": {
+    "system": "OCBF",
+    "geometry": "Single-storey big box; flexible diaphragm",
+    "next_action": "Recover diaphragm, collector and secondary-roof layout from the design.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:capacity_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Supplier / delegated",
+        "requirement": "Declared external design interfaces",
+        "available": "The calculation package contains an explicit delegated-design section.",
+        "remaining": "The external scope cannot be reconstructed from design demands alone. Detailed geometry is not established for every delegated item.",
+        "action": "Carry the source interface loads and notes into the design set. Obtain the relevant external package before representing its final geometry.",
+        "evidence": [
+          "json:delegated_design"
+        ],
+        "owner": "Responsible engineer / supplier",
+        "blocks": "Affected interface drawings"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-22": {
+    "system": "SMF",
+    "geometry": "Hospital; perimeter moment and interior gravity frames",
+    "next_action": "Agree the roof shear-plate vertical datum and map mixed end conditions.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Supplement required",
+        "requirement": "Ex22 roof shear-plate vertical datum",
+        "available": "conn-roof-W24X62 gives plate thickness/depth, six bolts, pitch, edges and welds. The supplied brief explicitly records that the prototype centred the plate on the flat web depth.",
+        "remaining": "The plate height relative to top of steel is not specified by that record. The 1.25 in beam gap was derived by the prototype rather than supplied as a named datum.",
+        "action": "Agree and record the plate vertical datum and the interpretation of the beam gap against the support/bolt reference axes. Preserve the existing designed dimensions.",
+        "evidence": [
+          "json:connections/0/components"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Ex22 roof detail elevation / section"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-23": {
+    "system": "Dual SMF + BRBF",
+    "geometry": "Near-fault EOC; box columns",
+    "next_action": "Resolve supplier BRB geometry and support-face details.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-24": {
+    "system": "SMF + SCBF by direction",
+    "geometry": "Different lateral systems in X and Y",
+    "next_action": "Assign connection details by direction and member end, not section alone.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Direction-specific joint classification",
+        "available": "The source contains a building-specific geometry, detailing or scope description.",
+        "remaining": "This information requires an explicit physical representation and drawing assignment; the generic viewer is insufficient as the sole authority.",
+        "action": "Map SMF and SCBF details by physical frame direction and member end.",
+        "evidence": [
+          "json:capacity_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-25": {
+    "system": "SMF",
+    "geometry": "Atrium / diaphragm discontinuity",
+    "next_action": "Use declared openings and collectors rather than inferred viewer slabs.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Atrium and diaphragm openings",
+        "available": "The source contains a building-specific geometry, detailing or scope description.",
+        "remaining": "This information requires an explicit physical representation and drawing assignment; the generic viewer is insufficient as the sole authority.",
+        "action": "Use declared opening polygons and their level applicability; reconcile collectors and opening-edge framing.",
+        "evidence": [
+          "cfg:openings"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-26": {
+    "system": "Dual SMF + SCBF",
+    "geometry": "Slender tower; built-up columns",
+    "next_action": "Preserve column-group profile changes and joint reinforcement.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-27": {
+    "system": "CC-PSW/CF + SMF",
+    "geometry": "Composite core walls and coupling beams",
+    "next_action": "Replace wide-column/rigid-zone idealizations with physical core walls.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Composite core physical geometry",
+        "available": "The source contains a building-specific geometry, detailing or scope description.",
+        "remaining": "This information requires an explicit physical representation and drawing assignment; the generic viewer is insufficient as the sole authority.",
+        "action": "Build wall faces, concrete core, coupling-beam embeds and ties from physical design records; suppress wide-column and rigid-zone analytical stand-ins.",
+        "evidence": [
+          "json:design_model"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-28": {
+    "system": "STMF",
+    "geometry": "Long-span special truss moment frames",
+    "next_action": "Recover physical truss pieces, protected zones and special-segment joints.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "STMF special segments",
+        "available": "The source contains a building-specific geometry, detailing or scope description.",
+        "remaining": "This information requires an explicit physical representation and drawing assignment; the generic viewer is insufficient as the sole authority.",
+        "action": "Map actual chord/web pieces and preserve the explicit restrictions on protected zones, splices and attachments.",
+        "evidence": [
+          "json:drawing_notes"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-29": {
+    "system": "Dual SMF + BRBF",
+    "geometry": "Twenty-level PBSD design",
+    "next_action": "Retain source design status and resolve BRB and box-column geometry.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-30": {
+    "system": "Composite SCBF",
+    "geometry": "Composite floors; studs and camber",
+    "next_action": "Expand stud/camber schedules to beam occurrences and deck directions.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Supplier / delegated",
+        "requirement": "Declared external design interfaces",
+        "available": "The calculation package contains an explicit delegated-design section.",
+        "remaining": "The external scope cannot be reconstructed from design demands alone. Detailed geometry is not established for every delegated item.",
+        "action": "Carry the source interface loads and notes into the design set. Obtain the relevant external package before representing its final geometry.",
+        "evidence": [
+          "json:delegated_design"
+        ],
+        "owner": "Responsible engineer / supplier",
+        "blocks": "Affected interface drawings"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Composite stud and camber schedules",
+        "available": "The source contains a building-specific geometry, detailing or scope description.",
+        "remaining": "This information requires an explicit physical representation and drawing assignment; the generic viewer is insufficient as the sole authority.",
+        "action": "Map stud quantities/layout and camber to each applicable member and deck-rib direction.",
+        "evidence": [
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-31": {
+    "system": "Gable frame, R = 3",
+    "geometry": "Sloping warehouse roof and office",
+    "next_action": "Resolve sloping roof work points, rod ends and office interfaces.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:capacity_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Supplier / delegated",
+        "requirement": "Declared external design interfaces",
+        "available": "The calculation package contains an explicit delegated-design section.",
+        "remaining": "The external scope cannot be reconstructed from design demands alone. Detailed geometry is not established for every delegated item.",
+        "action": "Carry the source interface loads and notes into the design set. Obtain the relevant external package before representing its final geometry.",
+        "evidence": [
+          "json:delegated_design"
+        ],
+        "owner": "Responsible engineer / supplier",
+        "blocks": "Affected interface drawings"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Sloping roof and office interface",
+        "available": "The source contains a building-specific geometry, detailing or scope description.",
+        "remaining": "This information requires an explicit physical representation and drawing assignment; the generic viewer is insufficient as the sole authority.",
+        "action": "Recover actual roof slopes, frame planes and office connection elevations.",
+        "evidence": [
+          "json:gable_frame_analysis"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-32": {
+    "system": "Existing + addition",
+    "geometry": "Two levels added to an existing three-level frame",
+    "next_action": "Keep existing, new and retrofit parts separate and retain verification requirements.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:capacity_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Supplier / delegated",
+        "requirement": "Declared external design interfaces",
+        "available": "The calculation package contains an explicit delegated-design section.",
+        "remaining": "The external scope cannot be reconstructed from design demands alone. Detailed geometry is not established for every delegated item.",
+        "action": "Carry the source interface loads and notes into the design set. Obtain the relevant external package before representing its final geometry.",
+        "evidence": [
+          "json:delegated_design"
+        ],
+        "owner": "Responsible engineer / supplier",
+        "blocks": "Affected interface drawings"
+      },
+      {
+        "category": "Scope decision",
+        "requirement": "Existing/new/retrofit boundaries",
+        "available": "The source contains a building-specific geometry, detailing or scope description.",
+        "remaining": "This information requires an explicit physical representation and drawing assignment; the generic viewer is insufficient as the sole authority.",
+        "action": "Tag each physical part as existing, new or retrofit; retain the stated verification requirements for existing material and connection conditions.",
+        "evidence": [
+          "json:retrofit_scope"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-33": {
+    "system": "IMF / OCBF crane bay",
+    "geometry": "Runway beams, brackets and off-level attachments",
+    "next_action": "Locate bracket, runway and tie-back interfaces at their actual elevations.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:capacity_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Crane attachments off the main levels",
+        "available": "The source contains a building-specific geometry, detailing or scope description.",
+        "remaining": "This information requires an explicit physical representation and drawing assignment; the generic viewer is insufficient as the sole authority.",
+        "action": "Locate runway brackets, top tie-backs and rails from actual work points and record details; do not snap them to roof levels.",
+        "evidence": [
+          "cfg:bracket|runway"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-34a": {
+    "system": "BRBF tower A",
+    "geometry": "Twin-tower package; taller tower",
+    "next_action": "Resolve BRB interfaces and establish federation datum if combining the towers.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Supplier / delegated",
+        "requirement": "Declared external design interfaces",
+        "available": "The calculation package contains an explicit delegated-design section.",
+        "remaining": "The external scope cannot be reconstructed from design demands alone. Detailed geometry is not established for every delegated item.",
+        "action": "Carry the source interface loads and notes into the design set. Obtain the relevant external package before representing its final geometry.",
+        "evidence": [
+          "json:delegated_design"
+        ],
+        "owner": "Responsible engineer / supplier",
+        "blocks": "Affected interface drawings"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Twin-tower federation datum",
+        "available": "Each tower has a separate job and local model geometry; separation requirements are part of the design notes.",
+        "remaining": "A reviewed common origin/rotation and tower-to-tower placement is needed if the two packages are assembled into one IFC/site plan.",
+        "action": "Keep individual tower coordinates intact. Resolve the shared site transform and separation reference points in an openBIM assembly supplement.",
+        "evidence": [
+          "cfg:tower|separat",
+          "json:capacity_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Combined tower/site model only"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-34b": {
+    "system": "BRBF tower B",
+    "geometry": "Twin-tower package; shorter tower",
+    "next_action": "Resolve BRB interfaces and establish federation datum if combining the towers.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:composite_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Supplier / delegated",
+        "requirement": "Declared external design interfaces",
+        "available": "The calculation package contains an explicit delegated-design section.",
+        "remaining": "The external scope cannot be reconstructed from design demands alone. Detailed geometry is not established for every delegated item.",
+        "action": "Carry the source interface loads and notes into the design set. Obtain the relevant external package before representing its final geometry.",
+        "evidence": [
+          "json:delegated_design"
+        ],
+        "owner": "Responsible engineer / supplier",
+        "blocks": "Affected interface drawings"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Twin-tower federation datum",
+        "available": "Each tower has a separate job and local model geometry; separation requirements are part of the design notes.",
+        "remaining": "A reviewed common origin/rotation and tower-to-tower placement is needed if the two packages are assembled into one IFC/site plan.",
+        "action": "Keep individual tower coordinates intact. Resolve the shared site transform and separation reference points in an openBIM assembly supplement.",
+        "evidence": [
+          "cfg:tower|separat",
+          "json:capacity_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Combined tower/site model only"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "HR-35": {
+    "system": "Equipment platform OCBF",
+    "geometry": "Three-tier platform on a host structure",
+    "next_action": "Separate platform steel from equipment and host-slab/interface requirements.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical reference axes and member offsets",
+        "available": "Literal nodes, element connectivity and transformations are available; all exported element tags match viewer and member schedule.",
+        "remaining": "Analysis reference axes must be reconciled with top-of-steel, member cardinal points, support faces, physical end offsets and actual splice locations.",
+        "action": "Preserve the recorded axes. Resolve physical offsets from connection/member notes and document any remaining placement rule in openBIM.",
+        "evidence": [
+          "cfg:custom_build|Auto|Ex",
+          "json:connections"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Secondary framing and floor/roof boundaries",
+        "available": "Member records, configuration and design notes describe framing and floor/roof requirements.",
+        "remaining": "Analysis membership and viewer floor quads do not prove that every infill member, opening, deck edge, stud row or camber note has a physical drawing location.",
+        "action": "Reconcile the stated framing with model membership and create level-specific secondary-framing and slab/opening layouts. Supplement only unresolved set-out.",
+        "evidence": [
+          "cfg:infill|deck|floor|roof",
+          "json:capacity_design"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Supplier / delegated",
+        "requirement": "Declared external design interfaces",
+        "available": "The calculation package contains an explicit delegated-design section.",
+        "remaining": "The external scope cannot be reconstructed from design demands alone. Detailed geometry is not established for every delegated item.",
+        "action": "Carry the source interface loads and notes into the design set. Obtain the relevant external package before representing its final geometry.",
+        "evidence": [
+          "json:delegated_design"
+        ],
+        "owner": "Responsible engineer / supplier",
+        "blocks": "Affected interface drawings"
+      },
+      {
+        "category": "Scope decision",
+        "requirement": "Host structure and equipment interface",
+        "available": "The source contains a building-specific geometry, detailing or scope description.",
+        "remaining": "This information requires an explicit physical representation and drawing assignment; the generic viewer is insufficient as the sole authority.",
+        "action": "Carry host interface forces, host-slab geometry requirements and equipment attachment scope; obtain external details for any final host/equipment geometry.",
+        "evidence": [
+          "json:host_interface"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Recorded model; physical offsets need review",
+    "profiles": "Catalogue/custom profile and grade mapping",
+    "secondary": "Recover declared infill, deck and interfaces"
+  },
+  "CFS-1": {
+    "system": "WSP shear walls",
+    "geometry": "Four-level wall building",
+    "next_action": "Confirm exact wall-segment and opening set-out; resolve clip outlines.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical wall-segment and opening positions",
+        "available": "Configuration defines line positions and segment lengths; wall schedules provide selected assemblies.",
+        "remaining": "Viewer segments are evenly distributed. A reviewed complete list of segment starts/ends and openings by line/story is not established by the viewer.",
+        "action": "Recover physical set-out from configuration, line-layout and architectural notes first. Record unresolved start/end and opening coordinates in an openBIM supplement; do not assume equal gaps.",
+        "evidence": [
+          "viewer",
+          "cfg:lines_x|LINES|WallLine|plan_ft"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Story-specific CFS assemblies and secondary framing",
+        "available": "Wall, stud/chord, hold-down, collector and framing records contain selected sections and attachment notes.",
+        "remaining": "The viewer uses generic/truncated track, chord and panel labels; some analysis segments represent multiple physical bays.",
+        "action": "Resolve each story/line/zone to its real profile, plies, orientation and grade. Expand real studs, joists, bridging and straps only from the documented framing layout.",
+        "evidence": [
+          "json:wall_lines",
+          "json:studs",
+          "json:framing"
+        ],
+        "owner": "openBIM developer",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Supplement required",
+        "requirement": "Roof/header clip drawing geometry",
+        "available": "conn-roof-uplift specifies a 54-mil clip and two No.10 screws to each side; conn-header-jamb specifies six No.12 screws per end.",
+        "remaining": "Those selections do not specify clip leg dimensions and full screw-pattern coordinates. No standard-detail identifier is given in those selections.",
+        "action": "Provide a reviewed dimensioned clip detail or explicit leg dimensions, screw arrangement and edge distances, after checking any project standard detail.",
+        "evidence": [
+          "json:connections/0",
+          "json:connections/1"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Roof/header connection detail sheets"
+      }
+    ],
+    "geometry_status": "Schematic wall viewer; source layout review",
+    "profiles": "Resolve story/zone sections, plies and handedness",
+    "secondary": "Read wall/stud/anchorage and framing schedules"
+  },
+  "CFS-2": {
+    "system": "Strap-braced walls",
+    "geometry": "Hotel; continuous multi-bay wall idealizations",
+    "next_action": "Expand real braced bays from the aggregate analysis segments.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical wall-segment and opening positions",
+        "available": "Configuration defines line positions and segment lengths; wall schedules provide selected assemblies.",
+        "remaining": "Viewer segments are evenly distributed. A reviewed complete list of segment starts/ends and openings by line/story is not established by the viewer.",
+        "action": "Recover physical set-out from configuration, line-layout and architectural notes first. Record unresolved start/end and opening coordinates in an openBIM supplement; do not assume equal gaps.",
+        "evidence": [
+          "viewer",
+          "cfg:lines_x|LINES|WallLine|plan_ft",
+          "json:braced_wall_layout"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Story-specific CFS assemblies and secondary framing",
+        "available": "Wall, stud/chord, hold-down, collector and framing records contain selected sections and attachment notes.",
+        "remaining": "The viewer uses generic/truncated track, chord and panel labels; some analysis segments represent multiple physical bays.",
+        "action": "Resolve each story/line/zone to its real profile, plies, orientation and grade. Expand real studs, joists, bridging and straps only from the documented framing layout.",
+        "evidence": [
+          "json:wall_lines",
+          "json:studs",
+          "json:framing"
+        ],
+        "owner": "openBIM developer",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Real bays behind grouped wall analysis",
+        "available": "The source records wall/bay lengths and selected line/story schedules.",
+        "remaining": "An aggregate wall segment or repeated schematic diagonal is not a complete set of physical bay members and connection occurrences.",
+        "action": "Expand the documented bay and framing pattern, then associate each end post, track, strap/sheet edge and rod with the relevant line/story record.",
+        "evidence": [
+          "cfg:segment|bays|LINES",
+          "json:braced_wall_layout"
+        ],
+        "owner": "openBIM developer",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Schematic wall viewer; source layout review",
+    "profiles": "Resolve story/zone sections, plies and handedness",
+    "secondary": "Read wall/stud/anchorage and framing schedules"
+  },
+  "CFS-3": {
+    "system": "Steel-sheet walls",
+    "geometry": "Eight-level wall building on podium",
+    "next_action": "Recover wall bays and define the podium handoff boundary.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical wall-segment and opening positions",
+        "available": "Configuration defines line positions and segment lengths; wall schedules provide selected assemblies.",
+        "remaining": "Viewer segments are evenly distributed. A reviewed complete list of segment starts/ends and openings by line/story is not established by the viewer.",
+        "action": "Recover physical set-out from configuration, line-layout and architectural notes first. Record unresolved start/end and opening coordinates in an openBIM supplement; do not assume equal gaps.",
+        "evidence": [
+          "viewer",
+          "cfg:lines_x|LINES|WallLine|plan_ft",
+          "json:braced_wall_layout"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Story-specific CFS assemblies and secondary framing",
+        "available": "Wall, stud/chord, hold-down, collector and framing records contain selected sections and attachment notes.",
+        "remaining": "The viewer uses generic/truncated track, chord and panel labels; some analysis segments represent multiple physical bays.",
+        "action": "Resolve each story/line/zone to its real profile, plies, orientation and grade. Expand real studs, joists, bridging and straps only from the documented framing layout.",
+        "evidence": [
+          "json:wall_lines",
+          "json:studs",
+          "json:framing"
+        ],
+        "owner": "openBIM developer",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Real bays behind grouped wall analysis",
+        "available": "The source records wall/bay lengths and selected line/story schedules.",
+        "remaining": "An aggregate wall segment or repeated schematic diagonal is not a complete set of physical bay members and connection occurrences.",
+        "action": "Expand the documented bay and framing pattern, then associate each end post, track, strap/sheet edge and rod with the relevant line/story record.",
+        "evidence": [
+          "cfg:segment|bays|LINES",
+          "json:braced_wall_layout"
+        ],
+        "owner": "openBIM developer",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Supplier / delegated",
+        "requirement": "Podium / lower-building geometry and interface",
+        "available": "A podium handoff specifies reactions and coordination requirements.",
+        "remaining": "The complete lower-building member/slab/connection design is not established by the CFS handoff alone.",
+        "action": "Obtain the podium design package for full lower-building drawings, or explicitly limit this package to the CFS scope and documented interface. Resolve the common vertical datum.",
+        "evidence": [
+          "json:podium_handoff"
+        ],
+        "owner": "Podium engineer",
+        "blocks": "Complete lower-building drawings / combined IFC"
+      }
+    ],
+    "geometry_status": "Schematic wall viewer; source layout review",
+    "profiles": "Resolve story/zone sections, plies and handedness",
+    "secondary": "Read wall/stud/anchorage and framing schedules"
+  },
+  "CFS-4": {
+    "system": "Steel-sheet walls",
+    "geometry": "Five CFS levels on podium",
+    "next_action": "Resolve physical wall positions and podium anchorage interface.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical wall-segment and opening positions",
+        "available": "Configuration defines line positions and segment lengths; wall schedules provide selected assemblies.",
+        "remaining": "Viewer segments are evenly distributed. A reviewed complete list of segment starts/ends and openings by line/story is not established by the viewer.",
+        "action": "Recover physical set-out from configuration, line-layout and architectural notes first. Record unresolved start/end and opening coordinates in an openBIM supplement; do not assume equal gaps.",
+        "evidence": [
+          "viewer",
+          "cfg:lines_x|LINES|WallLine|plan_ft"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Story-specific CFS assemblies and secondary framing",
+        "available": "Wall, stud/chord, hold-down, collector and framing records contain selected sections and attachment notes.",
+        "remaining": "The viewer uses generic/truncated track, chord and panel labels; some analysis segments represent multiple physical bays.",
+        "action": "Resolve each story/line/zone to its real profile, plies, orientation and grade. Expand real studs, joists, bridging and straps only from the documented framing layout.",
+        "evidence": [
+          "json:wall_lines",
+          "json:studs",
+          "json:framing"
+        ],
+        "owner": "openBIM developer",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Supplier / delegated",
+        "requirement": "Podium / lower-building geometry and interface",
+        "available": "A podium handoff specifies reactions and coordination requirements.",
+        "remaining": "The complete lower-building member/slab/connection design is not established by the CFS handoff alone.",
+        "action": "Obtain the podium design package for full lower-building drawings, or explicitly limit this package to the CFS scope and documented interface. Resolve the common vertical datum.",
+        "evidence": [
+          "json:podium_handoff"
+        ],
+        "owner": "Podium engineer",
+        "blocks": "Complete lower-building drawings / combined IFC"
+      }
+    ],
+    "geometry_status": "Schematic wall viewer; source layout review",
+    "profiles": "Resolve story/zone sections, plies and handedness",
+    "secondary": "Read wall/stud/anchorage and framing schedules"
+  },
+  "CFS-5": {
+    "system": "Strap-braced walls",
+    "geometry": "Six-level braced wall building",
+    "next_action": "Expand grouped braced walls and resolve actual bay positions.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical wall-segment and opening positions",
+        "available": "Configuration defines line positions and segment lengths; wall schedules provide selected assemblies.",
+        "remaining": "Viewer segments are evenly distributed. A reviewed complete list of segment starts/ends and openings by line/story is not established by the viewer.",
+        "action": "Recover physical set-out from configuration, line-layout and architectural notes first. Record unresolved start/end and opening coordinates in an openBIM supplement; do not assume equal gaps.",
+        "evidence": [
+          "viewer",
+          "cfg:lines_x|LINES|WallLine|plan_ft",
+          "json:braced_wall_layout"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Story-specific CFS assemblies and secondary framing",
+        "available": "Wall, stud/chord, hold-down, collector and framing records contain selected sections and attachment notes.",
+        "remaining": "The viewer uses generic/truncated track, chord and panel labels; some analysis segments represent multiple physical bays.",
+        "action": "Resolve each story/line/zone to its real profile, plies, orientation and grade. Expand real studs, joists, bridging and straps only from the documented framing layout.",
+        "evidence": [
+          "json:wall_lines",
+          "json:studs",
+          "json:framing"
+        ],
+        "owner": "openBIM developer",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Real bays behind grouped wall analysis",
+        "available": "The source records wall/bay lengths and selected line/story schedules.",
+        "remaining": "An aggregate wall segment or repeated schematic diagonal is not a complete set of physical bay members and connection occurrences.",
+        "action": "Expand the documented bay and framing pattern, then associate each end post, track, strap/sheet edge and rod with the relevant line/story record.",
+        "evidence": [
+          "cfg:segment|bays|LINES",
+          "json:braced_wall_layout"
+        ],
+        "owner": "openBIM developer",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Schematic wall viewer; source layout review",
+    "profiles": "Resolve story/zone sections, plies and handedness",
+    "secondary": "Read wall/stud/anchorage and framing schedules"
+  },
+  "CFS-6": {
+    "system": "WSP shear walls",
+    "geometry": "L plan with two wings",
+    "next_action": "Use the physical outline and line positions; resolve segment starts by wing.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical wall-segment and opening positions",
+        "available": "Configuration defines line positions and segment lengths; wall schedules provide selected assemblies.",
+        "remaining": "Viewer segments are evenly distributed. A reviewed complete list of segment starts/ends and openings by line/story is not established by the viewer.",
+        "action": "Recover physical set-out from configuration, line-layout and architectural notes first. Record unresolved start/end and opening coordinates in an openBIM supplement; do not assume equal gaps.",
+        "evidence": [
+          "viewer",
+          "cfg:lines_x|LINES|WallLine|plan_ft"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Story-specific CFS assemblies and secondary framing",
+        "available": "Wall, stud/chord, hold-down, collector and framing records contain selected sections and attachment notes.",
+        "remaining": "The viewer uses generic/truncated track, chord and panel labels; some analysis segments represent multiple physical bays.",
+        "action": "Resolve each story/line/zone to its real profile, plies, orientation and grade. Expand real studs, joists, bridging and straps only from the documented framing layout.",
+        "evidence": [
+          "json:wall_lines",
+          "json:studs",
+          "json:framing"
+        ],
+        "owner": "openBIM developer",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Schematic wall viewer; source layout review",
+    "profiles": "Resolve story/zone sections, plies and handedness",
+    "secondary": "Read wall/stud/anchorage and framing schedules"
+  },
+  "CFS-7": {
+    "system": "Steel-sheet walls",
+    "geometry": "Z plan and shared throat",
+    "next_action": "Use physical line coordinates and retain throat/corridor connections.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical wall-segment and opening positions",
+        "available": "Configuration defines line positions and segment lengths; wall schedules provide selected assemblies.",
+        "remaining": "Viewer segments are evenly distributed. A reviewed complete list of segment starts/ends and openings by line/story is not established by the viewer.",
+        "action": "Recover physical set-out from configuration, line-layout and architectural notes first. Record unresolved start/end and opening coordinates in an openBIM supplement; do not assume equal gaps.",
+        "evidence": [
+          "viewer",
+          "cfg:lines_x|LINES|WallLine|plan_ft",
+          "json:braced_wall_layout"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Story-specific CFS assemblies and secondary framing",
+        "available": "Wall, stud/chord, hold-down, collector and framing records contain selected sections and attachment notes.",
+        "remaining": "The viewer uses generic/truncated track, chord and panel labels; some analysis segments represent multiple physical bays.",
+        "action": "Resolve each story/line/zone to its real profile, plies, orientation and grade. Expand real studs, joists, bridging and straps only from the documented framing layout.",
+        "evidence": [
+          "json:wall_lines",
+          "json:studs",
+          "json:framing"
+        ],
+        "owner": "openBIM developer",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Real bays behind grouped wall analysis",
+        "available": "The source records wall/bay lengths and selected line/story schedules.",
+        "remaining": "An aggregate wall segment or repeated schematic diagonal is not a complete set of physical bay members and connection occurrences.",
+        "action": "Expand the documented bay and framing pattern, then associate each end post, track, strap/sheet edge and rod with the relevant line/story record.",
+        "evidence": [
+          "cfg:segment|bays|LINES",
+          "json:braced_wall_layout"
+        ],
+        "owner": "openBIM developer",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Schematic wall viewer; source layout review",
+    "profiles": "Resolve story/zone sections, plies and handedness",
+    "secondary": "Read wall/stud/anchorage and framing schedules"
+  },
+  "CFS-8": {
+    "system": "Strap-braced walls",
+    "geometry": "T plan with explicit braced-bay ranges",
+    "next_action": "Extract braced_bay_layout ranges; do not replace them with equal spacing.",
+    "issues": [
+      {
+        "category": "Extract existing",
+        "requirement": "Explicit braced-bay coordinates",
+        "available": "braced_bay_layout supplies line extents and start/end ranges for all seven listed lines.",
+        "remaining": "These ranges have not been normalized to physical bay instances and linked to story schedules.",
+        "action": "Use the actual ranges and physical plan positions. Expand each bay and assign the story-specific strap/chord/hold-down details.",
+        "evidence": [
+          "viewer",
+          "cfg:lines_x|LINES|WallLine|plan_ft",
+          "json:braced_bay_layout"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Story-specific CFS assemblies and secondary framing",
+        "available": "Wall, stud/chord, hold-down, collector and framing records contain selected sections and attachment notes.",
+        "remaining": "The viewer uses generic/truncated track, chord and panel labels; some analysis segments represent multiple physical bays.",
+        "action": "Resolve each story/line/zone to its real profile, plies, orientation and grade. Expand real studs, joists, bridging and straps only from the documented framing layout.",
+        "evidence": [
+          "json:wall_lines",
+          "json:studs",
+          "json:framing"
+        ],
+        "owner": "openBIM developer",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Explicit bay ranges; normalize by story",
+    "profiles": "Resolve story/zone sections, plies and handedness",
+    "secondary": "Read wall/stud/anchorage and framing schedules"
+  },
+  "CFS-9": {
+    "system": "WSP shear walls",
+    "geometry": "U plan; five CFS levels over two-level podium",
+    "next_action": "Transform CFS levels to the podium datum and define the lower-building scope.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical wall-segment and opening positions",
+        "available": "Configuration defines line positions and segment lengths; wall schedules provide selected assemblies.",
+        "remaining": "Viewer segments are evenly distributed. A reviewed complete list of segment starts/ends and openings by line/story is not established by the viewer.",
+        "action": "Recover physical set-out from configuration, line-layout and architectural notes first. Record unresolved start/end and opening coordinates in an openBIM supplement; do not assume equal gaps.",
+        "evidence": [
+          "viewer",
+          "cfg:lines_x|LINES|WallLine|plan_ft"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Story-specific CFS assemblies and secondary framing",
+        "available": "Wall, stud/chord, hold-down, collector and framing records contain selected sections and attachment notes.",
+        "remaining": "The viewer uses generic/truncated track, chord and panel labels; some analysis segments represent multiple physical bays.",
+        "action": "Resolve each story/line/zone to its real profile, plies, orientation and grade. Expand real studs, joists, bridging and straps only from the documented framing layout.",
+        "evidence": [
+          "json:wall_lines",
+          "json:studs",
+          "json:framing"
+        ],
+        "owner": "openBIM developer",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Supplier / delegated",
+        "requirement": "Podium / lower-building geometry and interface",
+        "available": "A podium handoff specifies reactions and coordination requirements.",
+        "remaining": "The complete lower-building member/slab/connection design is not established by the CFS handoff alone.",
+        "action": "Obtain the podium design package for full lower-building drawings, or explicitly limit this package to the CFS scope and documented interface. Resolve the common vertical datum.",
+        "evidence": [
+          "json:podium_handoff"
+        ],
+        "owner": "Podium engineer",
+        "blocks": "Complete lower-building drawings / combined IFC"
+      }
+    ],
+    "geometry_status": "Schematic wall viewer; source layout review",
+    "profiles": "Resolve story/zone sections, plies and handedness",
+    "secondary": "Read wall/stud/anchorage and framing schedules"
+  },
+  "CFS-10": {
+    "system": "SBMF portal + office",
+    "geometry": "High bay and separate low office block",
+    "next_action": "Include the office block and seismic separation, not only portal replication.",
+    "issues": [
+      {
+        "category": "Extract existing",
+        "requirement": "Portal and longitudinal physical layout",
+        "available": "Configuration gives frame geometry/count/spacing, and package schedules describe secondary members and attachments.",
+        "remaining": "No standalone model_opensees.py is included in these supplied CFS packages. Viewer geometry alone does not establish all joint, zone, ply or secondary-member detail.",
+        "action": "Interpret source configuration in a controlled, versioned CFS environment if necessary. Reconcile frame replication, custom props, C&C zones, member handedness and bracing schedules.",
+        "evidence": [
+          "cfg:n_frames|span_ft",
+          "json:members",
+          "json:schedules"
+        ],
+        "owner": "openBIM developer",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Office block and separation",
+        "available": "The package/configuration contains specific geometry, component-scope or interface notes.",
+        "remaining": "The physical drawing set must carry this scope and resolve any incomplete placement/interface data.",
+        "action": "Recover the separate office frame, floor levels and seismic joint, including office.py as an input dependency.",
+        "evidence": [
+          "json:office_block"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Portal config + schedules; topology review",
+    "profiles": "Resolve story/zone sections, plies and handedness",
+    "secondary": "Read purlin/girt/bracing and interface schedules"
+  },
+  "CFS-11": {
+    "system": "Gypsum shear walls",
+    "geometry": "L-shaped coastal wall building",
+    "next_action": "Resolve wall segments plus breezeway/truss connections.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical wall-segment and opening positions",
+        "available": "Configuration defines line positions and segment lengths; wall schedules provide selected assemblies.",
+        "remaining": "Viewer segments are evenly distributed. A reviewed complete list of segment starts/ends and openings by line/story is not established by the viewer.",
+        "action": "Recover physical set-out from configuration, line-layout and architectural notes first. Record unresolved start/end and opening coordinates in an openBIM supplement; do not assume equal gaps.",
+        "evidence": [
+          "viewer",
+          "cfg:lines_x|LINES|WallLine|plan_ft"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Story-specific CFS assemblies and secondary framing",
+        "available": "Wall, stud/chord, hold-down, collector and framing records contain selected sections and attachment notes.",
+        "remaining": "The viewer uses generic/truncated track, chord and panel labels; some analysis segments represent multiple physical bays.",
+        "action": "Resolve each story/line/zone to its real profile, plies, orientation and grade. Expand real studs, joists, bridging and straps only from the documented framing layout.",
+        "evidence": [
+          "json:wall_lines",
+          "json:studs",
+          "json:framing"
+        ],
+        "owner": "openBIM developer",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Schematic wall viewer; source layout review",
+    "profiles": "Resolve story/zone sections, plies and handedness",
+    "secondary": "Read wall/stud/anchorage and framing schedules"
+  },
+  "CFS-12": {
+    "system": "Steel-sheet walls",
+    "geometry": "Cross plan with openings",
+    "next_action": "Map real wall lines and opening layouts in each arm.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical wall-segment and opening positions",
+        "available": "Configuration defines line positions and segment lengths; wall schedules provide selected assemblies.",
+        "remaining": "Viewer segments are evenly distributed. A reviewed complete list of segment starts/ends and openings by line/story is not established by the viewer.",
+        "action": "Recover physical set-out from configuration, line-layout and architectural notes first. Record unresolved start/end and opening coordinates in an openBIM supplement; do not assume equal gaps.",
+        "evidence": [
+          "viewer",
+          "cfg:lines_x|LINES|WallLine|plan_ft",
+          "json:braced_wall_layout"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Story-specific CFS assemblies and secondary framing",
+        "available": "Wall, stud/chord, hold-down, collector and framing records contain selected sections and attachment notes.",
+        "remaining": "The viewer uses generic/truncated track, chord and panel labels; some analysis segments represent multiple physical bays.",
+        "action": "Resolve each story/line/zone to its real profile, plies, orientation and grade. Expand real studs, joists, bridging and straps only from the documented framing layout.",
+        "evidence": [
+          "json:wall_lines",
+          "json:studs",
+          "json:framing"
+        ],
+        "owner": "openBIM developer",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Real bays behind grouped wall analysis",
+        "available": "The source records wall/bay lengths and selected line/story schedules.",
+        "remaining": "An aggregate wall segment or repeated schematic diagonal is not a complete set of physical bay members and connection occurrences.",
+        "action": "Expand the documented bay and framing pattern, then associate each end post, track, strap/sheet edge and rod with the relevant line/story record.",
+        "evidence": [
+          "cfg:segment|bays|LINES",
+          "json:braced_wall_layout"
+        ],
+        "owner": "openBIM developer",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Schematic wall viewer; source layout review",
+    "profiles": "Resolve story/zone sections, plies and handedness",
+    "secondary": "Read wall/stud/anchorage and framing schedules"
+  },
+  "CFS-13": {
+    "system": "Type II WSP walls",
+    "geometry": "Perforated walls; notch and upper setback",
+    "next_action": "Recover pier/window layout from Type II tables and resolve vertical opening datums.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Perforated-wall openings and pier set-out",
+        "available": "Type II tables give pier/window layout strings by line and story; configuration supplies notch and upper setback.",
+        "remaining": "Exact opening sill/head datums and consistent wall-start references are not established by the layout strings alone.",
+        "action": "Recover pier/window geometry from all Type II and header notes; confirm only unresolved vertical or start datums.",
+        "evidence": [
+          "viewer",
+          "cfg:lines_x|LINES|WallLine|plan_ft",
+          "json:type_ii_Ca_table"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Story-specific CFS assemblies and secondary framing",
+        "available": "Wall, stud/chord, hold-down, collector and framing records contain selected sections and attachment notes.",
+        "remaining": "The viewer uses generic/truncated track, chord and panel labels; some analysis segments represent multiple physical bays.",
+        "action": "Resolve each story/line/zone to its real profile, plies, orientation and grade. Expand real studs, joists, bridging and straps only from the documented framing layout.",
+        "evidence": [
+          "json:wall_lines",
+          "json:studs",
+          "json:framing"
+        ],
+        "owner": "openBIM developer",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Pier/window layouts present; datum review",
+    "profiles": "Resolve story/zone sections, plies and handedness",
+    "secondary": "Read wall/stud/anchorage and framing schedules"
+  },
+  "CFS-14": {
+    "system": "Strap X + WSP Y",
+    "geometry": "Split-level clinic with walkout",
+    "next_action": "Preserve base_story differences and the half-plan first floor.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical wall-segment and opening positions",
+        "available": "Configuration defines line positions and segment lengths; wall schedules provide selected assemblies.",
+        "remaining": "Viewer segments are evenly distributed. A reviewed complete list of segment starts/ends and openings by line/story is not established by the viewer.",
+        "action": "Recover physical set-out from configuration, line-layout and architectural notes first. Record unresolved start/end and opening coordinates in an openBIM supplement; do not assume equal gaps.",
+        "evidence": [
+          "viewer",
+          "cfg:lines_x|LINES|WallLine|plan_ft"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Story-specific CFS assemblies and secondary framing",
+        "available": "Wall, stud/chord, hold-down, collector and framing records contain selected sections and attachment notes.",
+        "remaining": "The viewer uses generic/truncated track, chord and panel labels; some analysis segments represent multiple physical bays.",
+        "action": "Resolve each story/line/zone to its real profile, plies, orientation and grade. Expand real studs, joists, bridging and straps only from the documented framing layout.",
+        "evidence": [
+          "json:wall_lines",
+          "json:studs",
+          "json:framing"
+        ],
+        "owner": "openBIM developer",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Walkout bases and partial floor plate",
+        "available": "The package/configuration contains specific geometry, component-scope or interface notes.",
+        "remaining": "The physical drawing set must carry this scope and resolve any incomplete placement/interface data.",
+        "action": "Preserve base_story=2 for north-half walls and the partial Level 1 floor; use physical positions rather than a full rectangle at every level.",
+        "evidence": [
+          "cfg:base_story|plan_outline_by_story|step"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Schematic wall viewer; source layout review",
+    "profiles": "Resolve story/zone sections, plies and handedness",
+    "secondary": "Read wall/stud/anchorage and framing schedules"
+  },
+  "CFS-15": {
+    "system": "WSP shear walls",
+    "geometry": "Stepped bar with separate roof levels",
+    "next_action": "Map step-wall starts, roof transfer and terrace connections.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical wall-segment and opening positions",
+        "available": "Configuration defines line positions and segment lengths; wall schedules provide selected assemblies.",
+        "remaining": "Viewer segments are evenly distributed. A reviewed complete list of segment starts/ends and openings by line/story is not established by the viewer.",
+        "action": "Recover physical set-out from configuration, line-layout and architectural notes first. Record unresolved start/end and opening coordinates in an openBIM supplement; do not assume equal gaps.",
+        "evidence": [
+          "viewer",
+          "cfg:lines_x|LINES|WallLine|plan_ft"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Story-specific CFS assemblies and secondary framing",
+        "available": "Wall, stud/chord, hold-down, collector and framing records contain selected sections and attachment notes.",
+        "remaining": "The viewer uses generic/truncated track, chord and panel labels; some analysis segments represent multiple physical bays.",
+        "action": "Resolve each story/line/zone to its real profile, plies, orientation and grade. Expand real studs, joists, bridging and straps only from the documented framing layout.",
+        "evidence": [
+          "json:wall_lines",
+          "json:studs",
+          "json:framing"
+        ],
+        "owner": "openBIM developer",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Stepped roofs and terrace interfaces",
+        "available": "The package/configuration contains specific geometry, component-scope or interface notes.",
+        "remaining": "The physical drawing set must carry this scope and resolve any incomplete placement/interface data.",
+        "action": "Apply per-story outlines and roof levels; map step-line collectors, roof-to-wall transfer and terrace attachments.",
+        "evidence": [
+          "cfg:base_story|plan_outline_by_story|step"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Schematic wall viewer; source layout review",
+    "profiles": "Resolve story/zone sections, plies and handedness",
+    "secondary": "Read wall/stud/anchorage and framing schedules"
+  },
+  "CFS-16": {
+    "system": "CFS portal",
+    "geometry": "Single-span warehouse; 23 frames",
+    "next_action": "Recover portal, purlin/girt zones and gusset layout from source configuration.",
+    "issues": [
+      {
+        "category": "Extract existing",
+        "requirement": "Portal and longitudinal physical layout",
+        "available": "Configuration gives frame geometry/count/spacing, and package schedules describe secondary members and attachments.",
+        "remaining": "No standalone model_opensees.py is included in these supplied CFS packages. Viewer geometry alone does not establish all joint, zone, ply or secondary-member detail.",
+        "action": "Interpret source configuration in a controlled, versioned CFS environment if necessary. Reconcile frame replication, custom props, C&C zones, member handedness and bracing schedules.",
+        "evidence": [
+          "cfg:n_frames|span_ft",
+          "json:members",
+          "json:schedules"
+        ],
+        "owner": "openBIM developer",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Portal config + schedules; topology review",
+    "profiles": "Resolve story/zone sections, plies and handedness",
+    "secondary": "Read purlin/girt/bracing and interface schedules"
+  },
+  "CFS-17": {
+    "system": "CFS portal",
+    "geometry": "Unequal two-span frame with HSS valley props",
+    "next_action": "Use the described custom propped topology and valley connections.",
+    "issues": [
+      {
+        "category": "Extract existing",
+        "requirement": "Portal and longitudinal physical layout",
+        "available": "Configuration gives frame geometry/count/spacing, and package schedules describe secondary members and attachments.",
+        "remaining": "No standalone model_opensees.py is included in these supplied CFS packages. Viewer geometry alone does not establish all joint, zone, ply or secondary-member detail.",
+        "action": "Interpret source configuration in a controlled, versioned CFS environment if necessary. Reconcile frame replication, custom props, C&C zones, member handedness and bracing schedules.",
+        "evidence": [
+          "cfg:n_frames|span_ft",
+          "json:members",
+          "json:schedules"
+        ],
+        "owner": "openBIM developer",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Custom valley props",
+        "available": "The package/configuration contains specific geometry, component-scope or interface notes.",
+        "remaining": "The physical drawing set must carry this scope and resolve any incomplete placement/interface data.",
+        "action": "Retain the HSS valley props and continuous rafters; reconcile the valley connection and base schedules.",
+        "evidence": [
+          "json:design_model"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Portal config + schedules; topology review",
+    "profiles": "Resolve story/zone sections, plies and handedness",
+    "secondary": "Read purlin/girt/bracing and interface schedules"
+  },
+  "CFS-18": {
+    "system": "SBMF portal + mezzanine",
+    "geometry": "Portal hall and independent mezzanine block",
+    "next_action": "Include the mezzanine model, sidewall bracing and separation requirements.",
+    "issues": [
+      {
+        "category": "Extract existing",
+        "requirement": "Portal and longitudinal physical layout",
+        "available": "Configuration gives frame geometry/count/spacing, and package schedules describe secondary members and attachments.",
+        "remaining": "No standalone model_opensees.py is included in these supplied CFS packages. Viewer geometry alone does not establish all joint, zone, ply or secondary-member detail.",
+        "action": "Interpret source configuration in a controlled, versioned CFS environment if necessary. Reconcile frame replication, custom props, C&C zones, member handedness and bracing schedules.",
+        "evidence": [
+          "cfg:n_frames|span_ft",
+          "json:members",
+          "json:schedules"
+        ],
+        "owner": "openBIM developer",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Separate mezzanine structure",
+        "available": "The package/configuration contains specific geometry, component-scope or interface notes.",
+        "remaining": "The physical drawing set must carry this scope and resolve any incomplete placement/interface data.",
+        "action": "Read mezz.py and the mezzanine block, bases and framing records; preserve the separate system, levels and separation interface.",
+        "evidence": [
+          "json:mezzanine_block"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Portal config + schedules; topology review",
+    "profiles": "Resolve story/zone sections, plies and handedness",
+    "secondary": "Read purlin/girt/bracing and interface schedules"
+  },
+  "CFS-19": {
+    "system": "CFS portal / monorail",
+    "geometry": "Portal building with crane/runway attachments",
+    "next_action": "Recover runway/hanger geometry, connection interfaces and fatigue notes.",
+    "issues": [
+      {
+        "category": "Extract existing",
+        "requirement": "Portal and longitudinal physical layout",
+        "available": "Configuration gives frame geometry/count/spacing, and package schedules describe secondary members and attachments.",
+        "remaining": "No standalone model_opensees.py is included in these supplied CFS packages. Viewer geometry alone does not establish all joint, zone, ply or secondary-member detail.",
+        "action": "Interpret source configuration in a controlled, versioned CFS environment if necessary. Reconcile frame replication, custom props, C&C zones, member handedness and bracing schedules.",
+        "evidence": [
+          "cfg:n_frames|span_ft",
+          "json:members",
+          "json:schedules"
+        ],
+        "owner": "openBIM developer",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Monorail and fatigue-sensitive attachments",
+        "available": "The package/configuration contains specific geometry, component-scope or interface notes.",
+        "remaining": "The physical drawing set must carry this scope and resolve any incomplete placement/interface data.",
+        "action": "Recover runway/hanger and support interfaces, matching the fatigue/detail notes without inventing supplier equipment geometry.",
+        "evidence": [
+          "json:crane"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Portal config + schedules; topology review",
+    "profiles": "Resolve story/zone sections, plies and handedness",
+    "secondary": "Read purlin/girt/bracing and interface schedules"
+  },
+  "CFS-25": {
+    "system": "Component retrofit",
+    "geometry": "New purlins/girts on existing shell",
+    "next_action": "Draw new component work; preserve excluded existing knee/ridge/base scope.",
+    "issues": [
+      {
+        "category": "Extract existing",
+        "requirement": "Portal and longitudinal physical layout",
+        "available": "Configuration gives frame geometry/count/spacing, and package schedules describe secondary members and attachments.",
+        "remaining": "No standalone model_opensees.py is included in these supplied CFS packages. Viewer geometry alone does not establish all joint, zone, ply or secondary-member detail.",
+        "action": "Interpret source configuration in a controlled, versioned CFS environment if necessary. Reconcile frame replication, custom props, C&C zones, member handedness and bracing schedules.",
+        "evidence": [
+          "cfg:n_frames|span_ft",
+          "json:members",
+          "json:schedules"
+        ],
+        "owner": "openBIM developer",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Scope decision",
+        "requirement": "Existing shell excluded from component design",
+        "available": "The package/configuration contains specific geometry, component-scope or interface notes.",
+        "remaining": "The physical drawing set must carry this scope and resolve any incomplete placement/interface data.",
+        "action": "Retain the explicit knee/ridge/base exclusions. Obtain existing-frame geometry only if a complete existing-shell model is requested.",
+        "evidence": [
+          "json:existing_structure_interface"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Portal config + schedules; topology review",
+    "profiles": "Resolve story/zone sections, plies and handedness",
+    "secondary": "Read purlin/girt/bracing and interface schedules"
+  },
+  "CFS-26": {
+    "system": "Cantilever-column canopy",
+    "geometry": "Open canopy with longitudinal load path",
+    "next_action": "Resolve moment bases, roof bracing and pier handoff.",
+    "issues": [
+      {
+        "category": "Extract existing",
+        "requirement": "Portal and longitudinal physical layout",
+        "available": "Configuration gives frame geometry/count/spacing, and package schedules describe secondary members and attachments.",
+        "remaining": "No standalone model_opensees.py is included in these supplied CFS packages. Viewer geometry alone does not establish all joint, zone, ply or secondary-member detail.",
+        "action": "Interpret source configuration in a controlled, versioned CFS environment if necessary. Reconcile frame replication, custom props, C&C zones, member handedness and bracing schedules.",
+        "evidence": [
+          "cfg:n_frames|span_ft",
+          "json:members",
+          "json:schedules"
+        ],
+        "owner": "openBIM developer",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Supplier / delegated",
+        "requirement": "Pier/foundation handoff",
+        "available": "The package/configuration contains specific geometry, component-scope or interface notes.",
+        "remaining": "The physical drawing set must carry this scope and resolve any incomplete placement/interface data.",
+        "action": "Retain the foundation force handoff. Obtain pier geometry/details if they are to appear as final designed objects.",
+        "evidence": [
+          "json:pier_handoff"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Portal config + schedules; topology review",
+    "profiles": "Resolve story/zone sections, plies and handedness",
+    "secondary": "Read purlin/girt/bracing and interface schedules"
+  },
+  "CFS-27": {
+    "system": "Single-channel portal",
+    "geometry": "Portal with torsional restraint",
+    "next_action": "Preserve channel handedness, eccentric interfaces and torsion bracing.",
+    "issues": [
+      {
+        "category": "Extract existing",
+        "requirement": "Portal and longitudinal physical layout",
+        "available": "Configuration gives frame geometry/count/spacing, and package schedules describe secondary members and attachments.",
+        "remaining": "No standalone model_opensees.py is included in these supplied CFS packages. Viewer geometry alone does not establish all joint, zone, ply or secondary-member detail.",
+        "action": "Interpret source configuration in a controlled, versioned CFS environment if necessary. Reconcile frame replication, custom props, C&C zones, member handedness and bracing schedules.",
+        "evidence": [
+          "cfg:n_frames|span_ft",
+          "json:members",
+          "json:schedules"
+        ],
+        "owner": "openBIM developer",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Single-channel handedness and restraint",
+        "available": "The package/configuration contains specific geometry, component-scope or interface notes.",
+        "remaining": "The physical drawing set must carry this scope and resolve any incomplete placement/interface data.",
+        "action": "Preserve channel orientation, eccentric attachment faces, bridging and torsional restraint in the physical model.",
+        "evidence": [
+          "json:torsion_companion"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Portal config + schedules; topology review",
+    "profiles": "Resolve story/zone sections, plies and handedness",
+    "secondary": "Read purlin/girt/bracing and interface schedules"
+  },
+  "CFS-28": {
+    "system": "CFS portal",
+    "geometry": "Partially enclosed agricultural building",
+    "next_action": "Map end-wall openings, C&C zones and attachments.",
+    "issues": [
+      {
+        "category": "Extract existing",
+        "requirement": "Portal and longitudinal physical layout",
+        "available": "Configuration gives frame geometry/count/spacing, and package schedules describe secondary members and attachments.",
+        "remaining": "No standalone model_opensees.py is included in these supplied CFS packages. Viewer geometry alone does not establish all joint, zone, ply or secondary-member detail.",
+        "action": "Interpret source configuration in a controlled, versioned CFS environment if necessary. Reconcile frame replication, custom props, C&C zones, member handedness and bracing schedules.",
+        "evidence": [
+          "cfg:n_frames|span_ft",
+          "json:members",
+          "json:schedules"
+        ],
+        "owner": "openBIM developer",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Openings and end-wall attachment zones",
+        "available": "The package/configuration contains specific geometry, component-scope or interface notes.",
+        "remaining": "The physical drawing set must carry this scope and resolve any incomplete placement/interface data.",
+        "action": "Recover openings and zone extents from enclosure/end-wall notes; verify start and height datums before placing end-wall members.",
+        "evidence": [
+          "json:enclosure_worksheet"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Portal config + schedules; topology review",
+    "profiles": "Resolve story/zone sections, plies and handedness",
+    "secondary": "Read purlin/girt/bracing and interface schedules"
+  },
+  "CFS-29": {
+    "system": "Strap-braced mezzanine",
+    "geometry": "Freestanding platform in existing warehouse",
+    "next_action": "Recover beams/posts/joists beyond the schematic wall viewer; retain slab handoff.",
+    "issues": [
+      {
+        "category": "Verify geometry",
+        "requirement": "Physical wall-segment and opening positions",
+        "available": "Configuration defines line positions and segment lengths; wall schedules provide selected assemblies.",
+        "remaining": "Viewer segments are evenly distributed. A reviewed complete list of segment starts/ends and openings by line/story is not established by the viewer.",
+        "action": "Recover physical set-out from configuration, line-layout and architectural notes first. Record unresolved start/end and opening coordinates in an openBIM supplement; do not assume equal gaps.",
+        "evidence": [
+          "viewer",
+          "cfg:lines_x|LINES|WallLine|plan_ft"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Extract existing",
+        "requirement": "Story-specific CFS assemblies and secondary framing",
+        "available": "Wall, stud/chord, hold-down, collector and framing records contain selected sections and attachment notes.",
+        "remaining": "The viewer uses generic/truncated track, chord and panel labels; some analysis segments represent multiple physical bays.",
+        "action": "Resolve each story/line/zone to its real profile, plies, orientation and grade. Expand real studs, joists, bridging and straps only from the documented framing layout.",
+        "evidence": [
+          "json:wall_lines",
+          "json:studs",
+          "json:framing"
+        ],
+        "owner": "openBIM developer",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Scope decision",
+        "requirement": "Existing slab and host clearance",
+        "available": "The package/configuration contains specific geometry, component-scope or interface notes.",
+        "remaining": "The physical drawing set must carry this scope and resolve any incomplete placement/interface data.",
+        "action": "Retain slab verification and anchorage interface requirements, and resolve the platform placement relative to the existing warehouse.",
+        "evidence": [
+          "json:slab_handoff"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Schematic wall viewer; source layout review",
+    "profiles": "Resolve story/zone sections, plies and handedness",
+    "secondary": "Read wall/stud/anchorage and framing schedules"
+  },
+  "CFS-30": {
+    "system": "Propped CFS portal",
+    "geometry": "Cold-storage building with thermal movement",
+    "next_action": "Use the HSS ridge props and specified fixed/sliding interfaces.",
+    "issues": [
+      {
+        "category": "Extract existing",
+        "requirement": "Portal and longitudinal physical layout",
+        "available": "Configuration gives frame geometry/count/spacing, and package schedules describe secondary members and attachments.",
+        "remaining": "No standalone model_opensees.py is included in these supplied CFS packages. Viewer geometry alone does not establish all joint, zone, ply or secondary-member detail.",
+        "action": "Interpret source configuration in a controlled, versioned CFS environment if necessary. Reconcile frame replication, custom props, C&C zones, member handedness and bracing schedules.",
+        "evidence": [
+          "cfg:n_frames|span_ft",
+          "json:members",
+          "json:schedules"
+        ],
+        "owner": "openBIM developer",
+        "blocks": "Plans / elevations / IFC"
+      },
+      {
+        "category": "Verify geometry",
+        "requirement": "Thermal movement and ridge props",
+        "available": "The package/configuration contains specific geometry, component-scope or interface notes.",
+        "remaining": "The physical drawing set must carry this scope and resolve any incomplete placement/interface data.",
+        "action": "Preserve fixed/sliding interfaces and the HSS ridge-prop topology; carry thermal movement into connection callouts.",
+        "evidence": [
+          "json:thermal_movement"
+        ],
+        "owner": "Drawing lead",
+        "blocks": "Plans / elevations / IFC"
+      }
+    ],
+    "geometry_status": "Portal config + schedules; topology review",
+    "profiles": "Resolve story/zone sections, plies and handedness",
+    "secondary": "Read purlin/girt/bracing and interface schedules"
+  }
+}

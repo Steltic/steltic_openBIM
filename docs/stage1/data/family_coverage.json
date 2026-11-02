@@ -1,0 +1,992 @@
+[
+  {
+    "module": "CFS",
+    "table": "anchorage",
+    "family": "Anchorage",
+    "records": 234,
+    "building_count": 24,
+    "buildings": [
+      "CFS-1",
+      "CFS-10",
+      "CFS-11",
+      "CFS-12",
+      "CFS-13",
+      "CFS-14",
+      "CFS-15",
+      "CFS-16",
+      "CFS-17",
+      "CFS-18",
+      "CFS-19",
+      "CFS-2",
+      "CFS-26",
+      "CFS-27",
+      "CFS-28",
+      "CFS-29",
+      "CFS-3",
+      "CFS-30",
+      "CFS-4",
+      "CFS-5",
+      "CFS-6",
+      "CFS-7",
+      "CFS-8",
+      "CFS-9"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "anchorage",
+    "family": "Excluded by source",
+    "records": 1,
+    "building_count": 1,
+    "buildings": [
+      "CFS-25"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "bases",
+    "family": "Base / hold-down",
+    "records": 8,
+    "building_count": 2,
+    "buildings": [
+      "CFS-10",
+      "CFS-18"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "braced_bay_layout",
+    "family": "Braced bay layout",
+    "records": 7,
+    "building_count": 1,
+    "buildings": [
+      "CFS-8"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "braced_wall_layout",
+    "family": "Braced wall layout",
+    "records": 22,
+    "building_count": 5,
+    "buildings": [
+      "CFS-12",
+      "CFS-2",
+      "CFS-3",
+      "CFS-5",
+      "CFS-7"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "chords",
+    "family": "Built-up chord",
+    "records": 6,
+    "building_count": 2,
+    "buildings": [
+      "CFS-10",
+      "CFS-18"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "collectors",
+    "family": "Collector / splice",
+    "records": 121,
+    "building_count": 15,
+    "buildings": [
+      "CFS-1",
+      "CFS-11",
+      "CFS-12",
+      "CFS-13",
+      "CFS-14",
+      "CFS-15",
+      "CFS-2",
+      "CFS-29",
+      "CFS-3",
+      "CFS-4",
+      "CFS-5",
+      "CFS-6",
+      "CFS-7",
+      "CFS-8",
+      "CFS-9"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "connections",
+    "family": "Base / anchor / foundation",
+    "records": 4,
+    "building_count": 2,
+    "buildings": [
+      "CFS-11",
+      "CFS-29"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "connections",
+    "family": "Bearing / cap / squash",
+    "records": 6,
+    "building_count": 6,
+    "buildings": [
+      "CFS-12",
+      "CFS-2",
+      "CFS-3",
+      "CFS-5",
+      "CFS-7",
+      "CFS-8"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "connections",
+    "family": "Brace / gusset / strap",
+    "records": 54,
+    "building_count": 5,
+    "buildings": [
+      "CFS-14",
+      "CFS-2",
+      "CFS-29",
+      "CFS-5",
+      "CFS-8"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "connections",
+    "family": "Built-up / stud / track",
+    "records": 12,
+    "building_count": 12,
+    "buildings": [
+      "CFS-1",
+      "CFS-11",
+      "CFS-12",
+      "CFS-13",
+      "CFS-14",
+      "CFS-15",
+      "CFS-2",
+      "CFS-3",
+      "CFS-5",
+      "CFS-6",
+      "CFS-7",
+      "CFS-8"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "connections",
+    "family": "Equipment / attachment",
+    "records": 1,
+    "building_count": 1,
+    "buildings": [
+      "CFS-29"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "connections",
+    "family": "Excluded by source",
+    "records": 2,
+    "building_count": 1,
+    "buildings": [
+      "CFS-25"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "connections",
+    "family": "Floor / diaphragm transfer",
+    "records": 86,
+    "building_count": 12,
+    "buildings": [
+      "CFS-11",
+      "CFS-12",
+      "CFS-13",
+      "CFS-14",
+      "CFS-15",
+      "CFS-29",
+      "CFS-3",
+      "CFS-4",
+      "CFS-5",
+      "CFS-7",
+      "CFS-8",
+      "CFS-9"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "connections",
+    "family": "Header / girder / post",
+    "records": 11,
+    "building_count": 8,
+    "buildings": [
+      "CFS-1",
+      "CFS-10",
+      "CFS-11",
+      "CFS-13",
+      "CFS-14",
+      "CFS-15",
+      "CFS-29",
+      "CFS-6"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "connections",
+    "family": "Hold-down / rod",
+    "records": 106,
+    "building_count": 9,
+    "buildings": [
+      "CFS-11",
+      "CFS-12",
+      "CFS-2",
+      "CFS-3",
+      "CFS-4",
+      "CFS-5",
+      "CFS-7",
+      "CFS-8",
+      "CFS-9"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "connections",
+    "family": "Ledger / walkway / attachment",
+    "records": 4,
+    "building_count": 4,
+    "buildings": [
+      "CFS-11",
+      "CFS-15",
+      "CFS-29",
+      "CFS-8"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "connections",
+    "family": "Member restraint / bracing",
+    "records": 1,
+    "building_count": 1,
+    "buildings": [
+      "CFS-10"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "connections",
+    "family": "Portal knee / ridge / valley",
+    "records": 17,
+    "building_count": 9,
+    "buildings": [
+      "CFS-10",
+      "CFS-16",
+      "CFS-17",
+      "CFS-18",
+      "CFS-19",
+      "CFS-26",
+      "CFS-27",
+      "CFS-28",
+      "CFS-30"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "connections",
+    "family": "Splice",
+    "records": 1,
+    "building_count": 1,
+    "buildings": [
+      "CFS-14"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "connections",
+    "family": "Uplift / clip",
+    "records": 27,
+    "building_count": 14,
+    "buildings": [
+      "CFS-1",
+      "CFS-10",
+      "CFS-11",
+      "CFS-12",
+      "CFS-13",
+      "CFS-14",
+      "CFS-15",
+      "CFS-2",
+      "CFS-29",
+      "CFS-3",
+      "CFS-6",
+      "CFS-7",
+      "CFS-8",
+      "CFS-9"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "diaphragms",
+    "family": "Diaphragm transfer",
+    "records": 161,
+    "building_count": 17,
+    "buildings": [
+      "CFS-1",
+      "CFS-10",
+      "CFS-11",
+      "CFS-12",
+      "CFS-13",
+      "CFS-14",
+      "CFS-15",
+      "CFS-18",
+      "CFS-2",
+      "CFS-29",
+      "CFS-3",
+      "CFS-4",
+      "CFS-5",
+      "CFS-6",
+      "CFS-7",
+      "CFS-8",
+      "CFS-9"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "frames",
+    "family": "Frame assembly",
+    "records": 1,
+    "building_count": 1,
+    "buildings": [
+      "CFS-10"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "framing",
+    "family": "Framing / bearing detail",
+    "records": 129,
+    "building_count": 17,
+    "buildings": [
+      "CFS-1",
+      "CFS-10",
+      "CFS-11",
+      "CFS-12",
+      "CFS-13",
+      "CFS-14",
+      "CFS-15",
+      "CFS-18",
+      "CFS-2",
+      "CFS-29",
+      "CFS-3",
+      "CFS-4",
+      "CFS-5",
+      "CFS-6",
+      "CFS-7",
+      "CFS-8",
+      "CFS-9"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "gravity_framing",
+    "family": "Gravity framing detail",
+    "records": 27,
+    "building_count": 9,
+    "buildings": [
+      "CFS-12",
+      "CFS-2",
+      "CFS-29",
+      "CFS-3",
+      "CFS-4",
+      "CFS-5",
+      "CFS-7",
+      "CFS-8",
+      "CFS-9"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "headers",
+    "family": "Header / jamb",
+    "records": 3,
+    "building_count": 2,
+    "buildings": [
+      "CFS-10",
+      "CFS-18"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "holddowns",
+    "family": "Hold-down / rod",
+    "records": 230,
+    "building_count": 15,
+    "buildings": [
+      "CFS-1",
+      "CFS-11",
+      "CFS-12",
+      "CFS-13",
+      "CFS-14",
+      "CFS-15",
+      "CFS-2",
+      "CFS-29",
+      "CFS-3",
+      "CFS-4",
+      "CFS-5",
+      "CFS-6",
+      "CFS-7",
+      "CFS-8",
+      "CFS-9"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "joists",
+    "family": "Joist / bearing",
+    "records": 4,
+    "building_count": 2,
+    "buildings": [
+      "CFS-10",
+      "CFS-18"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "materials",
+    "family": "Material specification",
+    "records": 211,
+    "building_count": 23,
+    "buildings": [
+      "CFS-1",
+      "CFS-11",
+      "CFS-12",
+      "CFS-13",
+      "CFS-14",
+      "CFS-15",
+      "CFS-16",
+      "CFS-17",
+      "CFS-19",
+      "CFS-2",
+      "CFS-25",
+      "CFS-26",
+      "CFS-27",
+      "CFS-28",
+      "CFS-29",
+      "CFS-3",
+      "CFS-30",
+      "CFS-4",
+      "CFS-5",
+      "CFS-6",
+      "CFS-7",
+      "CFS-8",
+      "CFS-9"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "schedules",
+    "family": "Excluded by source",
+    "records": 1,
+    "building_count": 1,
+    "buildings": [
+      "CFS-25"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "schedules",
+    "family": "Secondary framing schedule",
+    "records": 42,
+    "building_count": 10,
+    "buildings": [
+      "CFS-10",
+      "CFS-16",
+      "CFS-17",
+      "CFS-18",
+      "CFS-19",
+      "CFS-25",
+      "CFS-26",
+      "CFS-27",
+      "CFS-28",
+      "CFS-30"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "segment_framing",
+    "family": "Wall segment framing",
+    "records": 62,
+    "building_count": 3,
+    "buildings": [
+      "CFS-12",
+      "CFS-3",
+      "CFS-7"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "studs",
+    "family": "Stud / chord / bridging",
+    "records": 365,
+    "building_count": 15,
+    "buildings": [
+      "CFS-1",
+      "CFS-11",
+      "CFS-12",
+      "CFS-13",
+      "CFS-14",
+      "CFS-15",
+      "CFS-2",
+      "CFS-29",
+      "CFS-3",
+      "CFS-4",
+      "CFS-5",
+      "CFS-6",
+      "CFS-7",
+      "CFS-8",
+      "CFS-9"
+    ]
+  },
+  {
+    "module": "CFS",
+    "table": "wall_lines",
+    "family": "Wall assembly",
+    "records": 1150,
+    "building_count": 15,
+    "buildings": [
+      "CFS-1",
+      "CFS-11",
+      "CFS-12",
+      "CFS-13",
+      "CFS-14",
+      "CFS-15",
+      "CFS-2",
+      "CFS-29",
+      "CFS-3",
+      "CFS-4",
+      "CFS-5",
+      "CFS-6",
+      "CFS-7",
+      "CFS-8",
+      "CFS-9"
+    ]
+  },
+  {
+    "module": "HR",
+    "table": "connections",
+    "family": "BRB end / gusset",
+    "records": 129,
+    "building_count": 7,
+    "buildings": [
+      "HR-11",
+      "HR-15",
+      "HR-23",
+      "HR-29",
+      "HR-34a",
+      "HR-34b",
+      "HR-4"
+    ]
+  },
+  {
+    "module": "HR",
+    "table": "connections",
+    "family": "Base / anchor / foundation",
+    "records": 149,
+    "building_count": 35,
+    "buildings": [
+      "HR-1",
+      "HR-10",
+      "HR-11",
+      "HR-12",
+      "HR-13",
+      "HR-14",
+      "HR-15",
+      "HR-16",
+      "HR-17",
+      "HR-18",
+      "HR-19",
+      "HR-2",
+      "HR-20",
+      "HR-21",
+      "HR-22",
+      "HR-23",
+      "HR-24",
+      "HR-25",
+      "HR-26",
+      "HR-27",
+      "HR-28",
+      "HR-29",
+      "HR-3",
+      "HR-30",
+      "HR-31",
+      "HR-32",
+      "HR-34a",
+      "HR-34b",
+      "HR-35",
+      "HR-4",
+      "HR-5",
+      "HR-6",
+      "HR-7a",
+      "HR-8",
+      "HR-9"
+    ]
+  },
+  {
+    "module": "HR",
+    "table": "connections",
+    "family": "Bearing / cap / squash",
+    "records": 4,
+    "building_count": 2,
+    "buildings": [
+      "HR-21",
+      "HR-31"
+    ]
+  },
+  {
+    "module": "HR",
+    "table": "connections",
+    "family": "Brace / gusset / strap",
+    "records": 187,
+    "building_count": 19,
+    "buildings": [
+      "HR-1",
+      "HR-10",
+      "HR-13",
+      "HR-14",
+      "HR-15",
+      "HR-17",
+      "HR-18",
+      "HR-20",
+      "HR-21",
+      "HR-23",
+      "HR-24",
+      "HR-26",
+      "HR-29",
+      "HR-3",
+      "HR-30",
+      "HR-31",
+      "HR-35",
+      "HR-6",
+      "HR-8"
+    ]
+  },
+  {
+    "module": "HR",
+    "table": "connections",
+    "family": "Braced-bay beam joint",
+    "records": 1,
+    "building_count": 1,
+    "buildings": [
+      "HR-24"
+    ]
+  },
+  {
+    "module": "HR",
+    "table": "connections",
+    "family": "Crane / runway / bracket",
+    "records": 5,
+    "building_count": 1,
+    "buildings": [
+      "HR-33"
+    ]
+  },
+  {
+    "module": "HR",
+    "table": "connections",
+    "family": "End plate",
+    "records": 1,
+    "building_count": 1,
+    "buildings": [
+      "HR-31"
+    ]
+  },
+  {
+    "module": "HR",
+    "table": "connections",
+    "family": "Equipment / attachment",
+    "records": 3,
+    "building_count": 2,
+    "buildings": [
+      "HR-26",
+      "HR-35"
+    ]
+  },
+  {
+    "module": "HR",
+    "table": "connections",
+    "family": "Excluded by source",
+    "records": 1,
+    "building_count": 1,
+    "buildings": [
+      "HR-32"
+    ]
+  },
+  {
+    "module": "HR",
+    "table": "connections",
+    "family": "Floor / diaphragm transfer",
+    "records": 41,
+    "building_count": 20,
+    "buildings": [
+      "HR-10",
+      "HR-11",
+      "HR-12",
+      "HR-14",
+      "HR-15",
+      "HR-16",
+      "HR-17",
+      "HR-19",
+      "HR-2",
+      "HR-20",
+      "HR-22",
+      "HR-23",
+      "HR-26",
+      "HR-30",
+      "HR-31",
+      "HR-34a",
+      "HR-34b",
+      "HR-5",
+      "HR-7a",
+      "HR-8"
+    ]
+  },
+  {
+    "module": "HR",
+    "table": "connections",
+    "family": "Joint reinforcement",
+    "records": 276,
+    "building_count": 28,
+    "buildings": [
+      "HR-1",
+      "HR-10",
+      "HR-12",
+      "HR-13",
+      "HR-15",
+      "HR-16",
+      "HR-17",
+      "HR-19",
+      "HR-2",
+      "HR-20",
+      "HR-21",
+      "HR-22",
+      "HR-23",
+      "HR-24",
+      "HR-25",
+      "HR-26",
+      "HR-27",
+      "HR-28",
+      "HR-29",
+      "HR-3",
+      "HR-30",
+      "HR-31",
+      "HR-33",
+      "HR-35",
+      "HR-5",
+      "HR-6",
+      "HR-7a",
+      "HR-9"
+    ]
+  },
+  {
+    "module": "HR",
+    "table": "connections",
+    "family": "Knife / pin / clevis",
+    "records": 29,
+    "building_count": 4,
+    "buildings": [
+      "HR-17",
+      "HR-20",
+      "HR-31",
+      "HR-6"
+    ]
+  },
+  {
+    "module": "HR",
+    "table": "connections",
+    "family": "Movement / separation joint",
+    "records": 2,
+    "building_count": 2,
+    "buildings": [
+      "HR-34a",
+      "HR-34b"
+    ]
+  },
+  {
+    "module": "HR",
+    "table": "connections",
+    "family": "No-splice design note",
+    "records": 30,
+    "building_count": 15,
+    "buildings": [
+      "HR-10",
+      "HR-11",
+      "HR-14",
+      "HR-16",
+      "HR-19",
+      "HR-24",
+      "HR-25",
+      "HR-28",
+      "HR-3",
+      "HR-33",
+      "HR-34a",
+      "HR-34b",
+      "HR-4",
+      "HR-8",
+      "HR-9"
+    ]
+  },
+  {
+    "module": "HR",
+    "table": "connections",
+    "family": "RBS moment connection",
+    "records": 112,
+    "building_count": 17,
+    "buildings": [
+      "HR-10",
+      "HR-12",
+      "HR-15",
+      "HR-16",
+      "HR-19",
+      "HR-2",
+      "HR-22",
+      "HR-23",
+      "HR-24",
+      "HR-25",
+      "HR-26",
+      "HR-27",
+      "HR-29",
+      "HR-33",
+      "HR-5",
+      "HR-7a",
+      "HR-9"
+    ]
+  },
+  {
+    "module": "HR",
+    "table": "connections",
+    "family": "Shear plate / angle",
+    "records": 332,
+    "building_count": 35,
+    "buildings": [
+      "HR-1",
+      "HR-10",
+      "HR-11",
+      "HR-12",
+      "HR-13",
+      "HR-14",
+      "HR-15",
+      "HR-16",
+      "HR-17",
+      "HR-18",
+      "HR-19",
+      "HR-2",
+      "HR-20",
+      "HR-21",
+      "HR-22",
+      "HR-23",
+      "HR-24",
+      "HR-25",
+      "HR-26",
+      "HR-27",
+      "HR-28",
+      "HR-29",
+      "HR-3",
+      "HR-30",
+      "HR-31",
+      "HR-32",
+      "HR-34a",
+      "HR-34b",
+      "HR-35",
+      "HR-4",
+      "HR-5",
+      "HR-6",
+      "HR-7a",
+      "HR-8",
+      "HR-9"
+    ]
+  },
+  {
+    "module": "HR",
+    "table": "connections",
+    "family": "Splice",
+    "records": 410,
+    "building_count": 33,
+    "buildings": [
+      "HR-1",
+      "HR-10",
+      "HR-11",
+      "HR-12",
+      "HR-13",
+      "HR-14",
+      "HR-15",
+      "HR-16",
+      "HR-17",
+      "HR-18",
+      "HR-19",
+      "HR-2",
+      "HR-20",
+      "HR-21",
+      "HR-22",
+      "HR-23",
+      "HR-24",
+      "HR-25",
+      "HR-26",
+      "HR-27",
+      "HR-28",
+      "HR-29",
+      "HR-3",
+      "HR-30",
+      "HR-32",
+      "HR-34a",
+      "HR-34b",
+      "HR-4",
+      "HR-5",
+      "HR-6",
+      "HR-7a",
+      "HR-8",
+      "HR-9"
+    ]
+  },
+  {
+    "module": "HR",
+    "table": "connections",
+    "family": "Truss joint",
+    "records": 11,
+    "building_count": 3,
+    "buildings": [
+      "HR-20",
+      "HR-28",
+      "HR-35"
+    ]
+  },
+  {
+    "module": "HR",
+    "table": "connections",
+    "family": "Uplift / clip",
+    "records": 1,
+    "building_count": 1,
+    "buildings": [
+      "HR-33"
+    ]
+  },
+  {
+    "module": "HR",
+    "table": "connections",
+    "family": "Wall / embed / tie",
+    "records": 16,
+    "building_count": 2,
+    "buildings": [
+      "HR-27",
+      "HR-9"
+    ]
+  },
+  {
+    "module": "HR",
+    "table": "connections",
+    "family": "Welded moment joint",
+    "records": 6,
+    "building_count": 1,
+    "buildings": [
+      "HR-3"
+    ]
+  }
+]

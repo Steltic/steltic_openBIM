@@ -1,0 +1,7 @@
+work/
+outputs/
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+*.xlsx.inspect.ndjson

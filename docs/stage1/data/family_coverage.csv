@@ -1,0 +1,56 @@
+﻿module,table,family,records,building_count,buildings
+CFS,anchorage,Anchorage,234,24,CFS-1; CFS-10; CFS-11; CFS-12; CFS-13; CFS-14; CFS-15; CFS-16; CFS-17; CFS-18; CFS-19; CFS-2; CFS-26; CFS-27; CFS-28; CFS-29; CFS-3; CFS-30; CFS-4; CFS-5; CFS-6; CFS-7; CFS-8; CFS-9
+CFS,anchorage,Excluded by source,1,1,CFS-25
+CFS,bases,Base / hold-down,8,2,CFS-10; CFS-18
+CFS,braced_bay_layout,Braced bay layout,7,1,CFS-8
+CFS,braced_wall_layout,Braced wall layout,22,5,CFS-12; CFS-2; CFS-3; CFS-5; CFS-7
+CFS,chords,Built-up chord,6,2,CFS-10; CFS-18
+CFS,collectors,Collector / splice,121,15,CFS-1; CFS-11; CFS-12; CFS-13; CFS-14; CFS-15; CFS-2; CFS-29; CFS-3; CFS-4; CFS-5; CFS-6; CFS-7; CFS-8; CFS-9
+CFS,connections,Base / anchor / foundation,4,2,CFS-11; CFS-29
+CFS,connections,Bearing / cap / squash,6,6,CFS-12; CFS-2; CFS-3; CFS-5; CFS-7; CFS-8
+CFS,connections,Brace / gusset / strap,54,5,CFS-14; CFS-2; CFS-29; CFS-5; CFS-8
+CFS,connections,Built-up / stud / track,12,12,CFS-1; CFS-11; CFS-12; CFS-13; CFS-14; CFS-15; CFS-2; CFS-3; CFS-5; CFS-6; CFS-7; CFS-8
+CFS,connections,Equipment / attachment,1,1,CFS-29
+CFS,connections,Excluded by source,2,1,CFS-25
+CFS,connections,Floor / diaphragm transfer,86,12,CFS-11; CFS-12; CFS-13; CFS-14; CFS-15; CFS-29; CFS-3; CFS-4; CFS-5; CFS-7; CFS-8; CFS-9
+CFS,connections,Header / girder / post,11,8,CFS-1; CFS-10; CFS-11; CFS-13; CFS-14; CFS-15; CFS-29; CFS-6
+CFS,connections,Hold-down / rod,106,9,CFS-11; CFS-12; CFS-2; CFS-3; CFS-4; CFS-5; CFS-7; CFS-8; CFS-9
+CFS,connections,Ledger / walkway / attachment,4,4,CFS-11; CFS-15; CFS-29; CFS-8
+CFS,connections,Member restraint / bracing,1,1,CFS-10
+CFS,connections,Portal knee / ridge / valley,17,9,CFS-10; CFS-16; CFS-17; CFS-18; CFS-19; CFS-26; CFS-27; CFS-28; CFS-30
+CFS,connections,Splice,1,1,CFS-14
+CFS,connections,Uplift / clip,27,14,CFS-1; CFS-10; CFS-11; CFS-12; CFS-13; CFS-14; CFS-15; CFS-2; CFS-29; CFS-3; CFS-6; CFS-7; CFS-8; CFS-9
+CFS,diaphragms,Diaphragm transfer,161,17,CFS-1; CFS-10; CFS-11; CFS-12; CFS-13; CFS-14; CFS-15; CFS-18; CFS-2; CFS-29; CFS-3; CFS-4; CFS-5; CFS-6; CFS-7; CFS-8; CFS-9
+CFS,frames,Frame assembly,1,1,CFS-10
+CFS,framing,Framing / bearing detail,129,17,CFS-1; CFS-10; CFS-11; CFS-12; CFS-13; CFS-14; CFS-15; CFS-18; CFS-2; CFS-29; CFS-3; CFS-4; CFS-5; CFS-6; CFS-7; CFS-8; CFS-9
+CFS,gravity_framing,Gravity framing detail,27,9,CFS-12; CFS-2; CFS-29; CFS-3; CFS-4; CFS-5; CFS-7; CFS-8; CFS-9
+CFS,headers,Header / jamb,3,2,CFS-10; CFS-18
+CFS,holddowns,Hold-down / rod,230,15,CFS-1; CFS-11; CFS-12; CFS-13; CFS-14; CFS-15; CFS-2; CFS-29; CFS-3; CFS-4; CFS-5; CFS-6; CFS-7; CFS-8; CFS-9
+CFS,joists,Joist / bearing,4,2,CFS-10; CFS-18
+CFS,materials,Material specification,211,23,CFS-1; CFS-11; CFS-12; CFS-13; CFS-14; CFS-15; CFS-16; CFS-17; CFS-19; CFS-2; CFS-25; CFS-26; CFS-27; CFS-28; CFS-29; CFS-3; CFS-30; CFS-4; CFS-5; CFS-6; CFS-7; CFS-8; CFS-9
+CFS,schedules,Excluded by source,1,1,CFS-25
+CFS,schedules,Secondary framing schedule,42,10,CFS-10; CFS-16; CFS-17; CFS-18; CFS-19; CFS-25; CFS-26; CFS-27; CFS-28; CFS-30
+CFS,segment_framing,Wall segment framing,62,3,CFS-12; CFS-3; CFS-7
+CFS,studs,Stud / chord / bridging,365,15,CFS-1; CFS-11; CFS-12; CFS-13; CFS-14; CFS-15; CFS-2; CFS-29; CFS-3; CFS-4; CFS-5; CFS-6; CFS-7; CFS-8; CFS-9
+CFS,wall_lines,Wall assembly,1150,15,CFS-1; CFS-11; CFS-12; CFS-13; CFS-14; CFS-15; CFS-2; CFS-29; CFS-3; CFS-4; CFS-5; CFS-6; CFS-7; CFS-8; CFS-9
+HR,connections,BRB end / gusset,129,7,HR-11; HR-15; HR-23; HR-29; HR-34a; HR-34b; HR-4
+HR,connections,Base / anchor / foundation,149,35,HR-1; HR-10; HR-11; HR-12; HR-13; HR-14; HR-15; HR-16; HR-17; HR-18; HR-19; HR-2; HR-20; HR-21; HR-22; HR-23; HR-24; HR-25; HR-26; HR-27; HR-28; HR-29; HR-3; HR-30; HR-31; HR-32; HR-34a; HR-34b; HR-35; HR-4; HR-5; HR-6; HR-7a; HR-8; HR-9
+HR,connections,Bearing / cap / squash,4,2,HR-21; HR-31
+HR,connections,Brace / gusset / strap,187,19,HR-1; HR-10; HR-13; HR-14; HR-15; HR-17; HR-18; HR-20; HR-21; HR-23; HR-24; HR-26; HR-29; HR-3; HR-30; HR-31; HR-35; HR-6; HR-8
+HR,connections,Braced-bay beam joint,1,1,HR-24
+HR,connections,Crane / runway / bracket,5,1,HR-33
+HR,connections,End plate,1,1,HR-31
+HR,connections,Equipment / attachment,3,2,HR-26; HR-35
+HR,connections,Excluded by source,1,1,HR-32
+HR,connections,Floor / diaphragm transfer,41,20,HR-10; HR-11; HR-12; HR-14; HR-15; HR-16; HR-17; HR-19; HR-2; HR-20; HR-22; HR-23; HR-26; HR-30; HR-31; HR-34a; HR-34b; HR-5; HR-7a; HR-8
+HR,connections,Joint reinforcement,276,28,HR-1; HR-10; HR-12; HR-13; HR-15; HR-16; HR-17; HR-19; HR-2; HR-20; HR-21; HR-22; HR-23; HR-24; HR-25; HR-26; HR-27; HR-28; HR-29; HR-3; HR-30; HR-31; HR-33; HR-35; HR-5; HR-6; HR-7a; HR-9
+HR,connections,Knife / pin / clevis,29,4,HR-17; HR-20; HR-31; HR-6
+HR,connections,Movement / separation joint,2,2,HR-34a; HR-34b
+HR,connections,No-splice design note,30,15,HR-10; HR-11; HR-14; HR-16; HR-19; HR-24; HR-25; HR-28; HR-3; HR-33; HR-34a; HR-34b; HR-4; HR-8; HR-9
+HR,connections,RBS moment connection,112,17,HR-10; HR-12; HR-15; HR-16; HR-19; HR-2; HR-22; HR-23; HR-24; HR-25; HR-26; HR-27; HR-29; HR-33; HR-5; HR-7a; HR-9
+HR,connections,Shear plate / angle,332,35,HR-1; HR-10; HR-11; HR-12; HR-13; HR-14; HR-15; HR-16; HR-17; HR-18; HR-19; HR-2; HR-20; HR-21; HR-22; HR-23; HR-24; HR-25; HR-26; HR-27; HR-28; HR-29; HR-3; HR-30; HR-31; HR-32; HR-34a; HR-34b; HR-35; HR-4; HR-5; HR-6; HR-7a; HR-8; HR-9
+HR,connections,Splice,410,33,HR-1; HR-10; HR-11; HR-12; HR-13; HR-14; HR-15; HR-16; HR-17; HR-18; HR-19; HR-2; HR-20; HR-21; HR-22; HR-23; HR-24; HR-25; HR-26; HR-27; HR-28; HR-29; HR-3; HR-30; HR-32; HR-34a; HR-34b; HR-4; HR-5; HR-6; HR-7a; HR-8; HR-9
+HR,connections,Truss joint,11,3,HR-20; HR-28; HR-35
+HR,connections,Uplift / clip,1,1,HR-33
+HR,connections,Wall / embed / tie,16,2,HR-27; HR-9
+HR,connections,Welded moment joint,6,1,HR-3

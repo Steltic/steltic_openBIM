@@ -1,0 +1,43 @@
+{
+  "audit_date": "2026-11-02",
+  "status": "PASS",
+  "buildings": 61,
+  "module_buildings": {
+    "HR": 36,
+    "CFS": 25
+  },
+  "connection_records_verified": 2078,
+  "supporting_records_verified": 2785,
+  "record_fingerprints_verified": 4863,
+  "register_items": 386,
+  "register_category_counts": {
+    "Extract existing": 142,
+    "Verify source": 1,
+    "Drawing decision": 1,
+    "Resolve mapping": 61,
+    "Verify geometry": 149,
+    "Supplier / delegated": 26,
+    "Supplement required": 2,
+    "Scope decision": 4
+  },
+  "source_files_compared": 812,
+  "source_bytes_compared": 197184958,
+  "source_files_unchanged": true,
+  "hr_analysis_elements_reconciled": 27683,
+  "inspection_repositories": {
+    "HR": {
+      "head": "f880ef4396e620d1a24a355c19e9237b304570d9",
+      "working_tree_clean": true
+    },
+    "CFS": {
+      "head": "2e93c55fcf8ced44a3bbb211f61d48a14b300ad3",
+      "working_tree_clean": true
+    },
+    "Hub": {
+      "head": "601b7dac4bac459290675a1d3d856a2b7641fc9a",
+      "working_tree_clean": true
+    }
+  },
+  "limits": "Inventory, source fingerprints and evidence references only. No structural or drawing geometry validation; job code and design engines were not run.",
+  "errors": []
+}

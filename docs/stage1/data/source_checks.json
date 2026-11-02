@@ -1,0 +1,3076 @@
+[
+  {
+    "building": "HR-1",
+    "source_consistency": {
+      "name": "Ex1_SCBF_5levels",
+      "time": "2026-10-31T05:48:53",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "120834af13079f909fd618f8c777b2e879d619e0c5be17b841db32f710613622",
+      "cfg_sha256": "b34c1307ddd1d32a945c25a881ac1e8eab631a5c3edd0e7c6c05c9288a7cf466"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 169,
+      "model_elements": 370,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "HSS10.000X0.625",
+      "HSS5X5X1/2",
+      "HSS7X7X5/8",
+      "W14X159",
+      "W14X211",
+      "W14X283",
+      "W14X48",
+      "W14X61",
+      "W24X55",
+      "W33X201",
+      "W40X277",
+      "W40X324"
+    ],
+    "top_level_record_counts": {
+      "members": 19,
+      "connections": 24
+    }
+  },
+  {
+    "building": "HR-2",
+    "source_consistency": {
+      "name": "Ex2_SMF_9levels",
+      "time": "2026-10-31T05:52:42",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "cd3abf5b7d36af64e959396206737626c91c01f0951f341bba7182f9eacdb12c",
+      "cfg_sha256": "7107a43388781d4f30c2ec63fe0c0fe8cd5cef889cad64daf86c1f128174c0e7"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 369,
+      "model_elements": 864,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "W14X132",
+      "W14X257",
+      "W14X398",
+      "W14X455",
+      "W14X500",
+      "W14X550",
+      "W24X55",
+      "W30X132",
+      "W36X194",
+      "W36X210"
+    ],
+    "top_level_record_counts": {
+      "members": 18,
+      "connections": 39
+    }
+  },
+  {
+    "building": "HR-3",
+    "source_consistency": {
+      "name": "Ex3_BracedMoment_7levels",
+      "time": "2026-10-31T05:54:25",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "d2199b441f76a34e5b51c69f2458bdb8faf2d78fb36d7644e63627855009c6c3",
+      "cfg_sha256": "44e17cade86a86f46ef0ab363f73f574f00058e0ea62c222a3eed6af4dcbf5bb"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 287,
+      "model_elements": 679,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "HSS7X7X1/2",
+      "HSS8X8X1/2",
+      "HSS8X8X3/8",
+      "HSS9X9X1/2",
+      "W14X109",
+      "W14X145",
+      "W14X211",
+      "W14X233",
+      "W14X311",
+      "W14X61",
+      "W18X35",
+      "W21X62",
+      "W21X68",
+      "W24X55",
+      "W24X62",
+      "W24X68",
+      "W27X84",
+      "W33X130",
+      "W33X169"
+    ],
+    "top_level_record_counts": {
+      "members": 28,
+      "connections": 37
+    }
+  },
+  {
+    "building": "HR-4",
+    "source_consistency": {
+      "name": "Ex4_BRBF_3levels",
+      "time": "2026-10-31T05:54:32",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "3eabdda619d17b10cc7d8cef2b85157e33f59b74a3d72b8fdf122ba0e24cbedc",
+      "cfg_sha256": "6232bd3aa9933825a7f3282ca3abb739bb5a11b53322ed81156082f337bc51f3"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 155,
+      "model_elements": 315,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "BRB13.5",
+      "BRB18.0",
+      "BRB7.0",
+      "W12X120",
+      "W12X170",
+      "W12X96",
+      "W14X74",
+      "W14X90",
+      "W24X131",
+      "W24X55",
+      "W24X68",
+      "W24X84",
+      "W27X94"
+    ],
+    "top_level_record_counts": {
+      "members": 20,
+      "connections": 23
+    }
+  },
+  {
+    "building": "HR-5",
+    "source_consistency": {
+      "name": "Ex5_SMF_10levels",
+      "time": "2026-10-31T05:55:11",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "a5e18a77ab4c1a203c520cc3f0acd97c1745804abf5f833f42f2964bae434677",
+      "cfg_sha256": "3b2f3c5ecdc93fa0347e2c034b0d67dbcd6d784fcb38f83cdd2d1379b3c568fb"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 406,
+      "model_elements": 960,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "W14X120",
+      "W24X131",
+      "W24X207",
+      "W24X229",
+      "W24X250",
+      "W24X335",
+      "W24X55",
+      "W30X116",
+      "W36X150",
+      "W36X170"
+    ],
+    "top_level_record_counts": {
+      "members": 18,
+      "connections": 40
+    }
+  },
+  {
+    "building": "HR-6",
+    "source_consistency": {
+      "name": "Ex6_SCBF_6levels",
+      "time": "2026-10-31T05:54:58",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "77dd079d5e0082f70f92aed2ffd7dd2463b37acc57fc5b6e393e775eaf3349b3",
+      "cfg_sha256": "78ef82795b00f85f6e8d4f105472f05fdf8ea90c2af758c6260041700c42a619"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 240,
+      "model_elements": 594,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "HSS5X5X1/2",
+      "HSS6X6X1/2",
+      "HSS7X7X1/2",
+      "W14X159",
+      "W14X193",
+      "W14X74",
+      "W14X82",
+      "W21X73",
+      "W21X83",
+      "W24X68",
+      "W24X94"
+    ],
+    "top_level_record_counts": {
+      "members": 21,
+      "connections": 30
+    }
+  },
+  {
+    "building": "HR-7a",
+    "source_consistency": {
+      "name": "Ex7a_SMF_7levels",
+      "time": "2026-10-31T05:55:26",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "62cb50078d7d94520cda538d4a9849bb22b8eca41308a71c9e751ee3714e6aab",
+      "cfg_sha256": "67b567a381aed601a0d8512fd1ddf2137e2f6b4adc98f7fa32d60508b64a6067"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 391,
+      "model_elements": 910,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "W14X90",
+      "W21X101",
+      "W21X111",
+      "W21X57",
+      "W21X68",
+      "W21X83",
+      "W21X93",
+      "W24X131",
+      "W24X162",
+      "W24X207",
+      "W24X279",
+      "W24X306"
+    ],
+    "top_level_record_counts": {
+      "members": 16,
+      "connections": 39
+    }
+  },
+  {
+    "building": "HR-8",
+    "source_consistency": {
+      "name": "Ex8_EBF_8levels_Lplan",
+      "time": "2026-10-31T05:55:56",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "c63039d7fff06c2a8f724b3b6af8817eea5361642e5c0976c8e0864635bf10c8",
+      "cfg_sha256": "eab07b313f20f3e33581141614132201149019ff8253ee819b31a62acc231c39"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 423,
+      "model_elements": 906,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "HSS10X10X5/8",
+      "HSS12X12X3/4",
+      "HSS9X9X5/8",
+      "W14X132",
+      "W14X193",
+      "W14X233",
+      "W14X257",
+      "W14X283",
+      "W14X311",
+      "W14X398",
+      "W14X53",
+      "W14X74",
+      "W14X99",
+      "W16X77",
+      "W16X89",
+      "W21X122",
+      "W21X50",
+      "W21X68",
+      "W24X104",
+      "W24X62",
+      "W24X68"
+    ],
+    "top_level_record_counts": {
+      "members": 28,
+      "connections": 51
+    }
+  },
+  {
+    "building": "HR-9",
+    "source_consistency": {
+      "name": "Ex9_SPSW_12levels_Tplan",
+      "time": "2026-10-31T05:56:41",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "cabe8976dda9ab43b22b60cf805440912f6ff19e44211be171a03a654e5dd37e",
+      "cfg_sha256": "852a80efbe8be7725e569e7f6e74496d5b0575c89c64cd4082ddf948b98eb69d"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 469,
+      "model_elements": 1307,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "BOX28X28X2.5",
+      "BOX28X28X3",
+      "BOX28X28X3.5",
+      "BOX32X32X2.5",
+      "BOX34X34X2.5",
+      "BOX34X34X3",
+      "BOX38X38X4",
+      "W14X109",
+      "W14X120",
+      "W14X132",
+      "W14X159",
+      "W14X176",
+      "W14X193",
+      "W14X211",
+      "W14X283",
+      "W14X311",
+      "W14X342",
+      "W14X398",
+      "W14X455",
+      "W14X48",
+      "W14X500",
+      "W14X550",
+      "W14X605",
+      "W14X61",
+      "W14X665",
+      "W14X730",
+      "W14X74",
+      "W14X90",
+      "W14X99",
+      "W16X31",
+      "W24X146",
+      "W24X55",
+      "W24X68",
+      "WEB3/16",
+      "WEB3/16P"
+    ],
+    "top_level_record_counts": {
+      "members": 46,
+      "connections": 47
+    }
+  },
+  {
+    "building": "HR-10",
+    "source_consistency": {
+      "name": "Ex10_Dual_SMF_SCBF_16levels_podium",
+      "time": "2026-10-31T05:45:29",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "60cdf371c32d8a6545db024ddb6e4647d8f8d484bb413f632c142b4e308ca274",
+      "cfg_sha256": "4bf91f74bf364255ad7e4d86ec2ba3f54a903798f5e3633f4c99d59f923812d7"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 614,
+      "model_elements": 1544,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "BOX14X1",
+      "BOX14X1.25",
+      "BOX20X1.75",
+      "BOX22X2",
+      "BOX24X2",
+      "BOX24X2.5",
+      "BOX24X4",
+      "BOX28X2.5",
+      "BOX30X4",
+      "HSS10.750X0.500",
+      "HSS10.750X0.625",
+      "HSS11.750X0.500",
+      "HSS11.750X0.625",
+      "HSS12.750X0.625",
+      "HSS14.000X0.750",
+      "HSS6.000X0.500",
+      "HSS6.625X0.500",
+      "HSS7.500X0.500",
+      "HSS8.625X0.500",
+      "HSS9.625X0.500",
+      "W14X109",
+      "W14X120",
+      "W14X145",
+      "W14X159",
+      "W14X176",
+      "W14X193",
+      "W14X211",
+      "W14X233",
+      "W14X257",
+      "W14X283",
+      "W14X311",
+      "W14X342",
+      "W14X370",
+      "W14X398",
+      "W14X426",
+      "W14X53",
+      "W14X550",
+      "W14X665",
+      "W14X68",
+      "W14X730",
+      "W14X90",
+      "W18X35",
+      "W21X44",
+      "W21X50",
+      "W21X83",
+      "W24X103",
+      "W24X55",
+      "W24X76",
+      "W24X94",
+      "W27X102",
+      "W27X84",
+      "W27X94",
+      "W30X116",
+      "W30X124",
+      "W30X191",
+      "W33X141"
+    ],
+    "top_level_record_counts": {
+      "members": 79,
+      "connections": 102
+    }
+  },
+  {
+    "building": "HR-11",
+    "source_consistency": {
+      "name": "Ex11_BRBF_10levels_Uplan",
+      "time": "2026-10-31T05:48:23",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "41e11c712cb8903995385f69e3bbc9bc99af1b726ddd08d1f1c31af2b3571f40",
+      "cfg_sha256": "237ae4f469b64db947796be2690cc22e0015af0572be78ceab8c21e9fba1292b"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 636,
+      "model_elements": 1534,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "BRB10",
+      "BRB10.75",
+      "BRB11.25",
+      "BRB12",
+      "BRB12.75",
+      "BRB14",
+      "BRB15",
+      "BRB16.75",
+      "BRB18",
+      "BRB18.75",
+      "BRB19.5",
+      "BRB5.75",
+      "BRB7.25",
+      "BRB7.75",
+      "BRB8.25",
+      "BRB8.75",
+      "BRB9.25",
+      "BRB9.75",
+      "W14X120",
+      "W14X145",
+      "W14X159",
+      "W14X193",
+      "W14X257",
+      "W14X311",
+      "W14X342",
+      "W14X455",
+      "W14X48",
+      "W14X68",
+      "W14X90",
+      "W21X68",
+      "W21X83",
+      "W24X104",
+      "W24X117",
+      "W24X131",
+      "W24X146",
+      "W24X55",
+      "W24X62",
+      "W24X76",
+      "W24X94"
+    ],
+    "top_level_record_counts": {
+      "members": 50,
+      "connections": 80
+    }
+  },
+  {
+    "building": "HR-12",
+    "source_consistency": {
+      "name": "Ex12_SMF_14levels_chamfer_setback",
+      "time": "2026-10-31T05:44:44",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "b1981b4ebd9ce284097125b05119d42ef8127a6043b9b9077b137cb8f5c1629b",
+      "cfg_sha256": "620611cd7320f1abf779b119f0745b44183682e348cd1cf0d239363600cf205d"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 463,
+      "model_elements": 1064,
+      "transforms": 4,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "W14X109",
+      "W14X132",
+      "W14X176",
+      "W14X426",
+      "W14X455",
+      "W14X48",
+      "W14X550",
+      "W14X605",
+      "W14X61",
+      "W14X665",
+      "W14X730",
+      "W14X82",
+      "W14X90",
+      "W24X62",
+      "W27X129",
+      "W30X99",
+      "W33X141",
+      "W36X194",
+      "W36X210",
+      "W36X231",
+      "W36X256",
+      "W36X302"
+    ],
+    "top_level_record_counts": {
+      "members": 35,
+      "connections": 103
+    }
+  },
+  {
+    "building": "HR-13",
+    "source_consistency": {
+      "name": "Ex13_OCBF_4levels_splitlevel",
+      "time": "2026-10-31T05:45:11",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "0261f07441d5a11e6002f48ea4ea14834ff5a51c72075ad3cfc1232f95dd31ff",
+      "cfg_sha256": "98487f23e990d9776482381b42e53fb7d2c328c2916560c6141eea14f6fd2882"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 173,
+      "model_elements": 342,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "HSS6X6X3/8",
+      "HSS7X7X1/2",
+      "W12X40",
+      "W12X53",
+      "W14X48",
+      "W14X61",
+      "W14X68",
+      "W14X90",
+      "W16X31",
+      "W18X35",
+      "W21X44",
+      "W21X62",
+      "W21X68",
+      "W24X103",
+      "W24X76",
+      "W24X94"
+    ],
+    "top_level_record_counts": {
+      "members": 25,
+      "connections": 34
+    }
+  },
+  {
+    "building": "HR-14",
+    "source_consistency": {
+      "name": "Ex14_EBF_11levels_cruciform_hillside",
+      "time": "2026-10-31T05:47:09",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "63000d7bde8f176842803742a47cdfc0493281349bc972f5f190c46d276e12c8",
+      "cfg_sha256": "a7e68e8d0aa07631246b5779a48b147f29811182ba8b9d333110dfbec0c3a9f8"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 604,
+      "model_elements": 1328,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "HSS10X10X5/8",
+      "HSS8X8X1/2",
+      "HSS8X8X5/8",
+      "HSS9X9X5/8",
+      "W14X109",
+      "W14X132",
+      "W14X159",
+      "W14X176",
+      "W14X193",
+      "W14X233",
+      "W14X283",
+      "W14X398",
+      "W14X426",
+      "W14X53",
+      "W14X665",
+      "W14X68",
+      "W14X90",
+      "W16X100",
+      "W16X67",
+      "W18X40",
+      "W21X44",
+      "W21X50",
+      "W21X62",
+      "W24X62"
+    ],
+    "top_level_record_counts": {
+      "members": 31,
+      "connections": 52
+    }
+  },
+  {
+    "building": "HR-15",
+    "source_consistency": {
+      "name": "Ex15_Dual_SMF_BRBF_20levels_weddingcake",
+      "time": "2026-10-31T05:48:15",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "fc78eec08d07194d5720cdcece6fff0a97120e0d5587e2b53b610e74f98f8765",
+      "cfg_sha256": "ceaf45b7d813e8eb1df3550a12d74c05e7ec332e40791f97e3f14d0d59f945b8"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 768,
+      "model_elements": 1890,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "BOX16X1.25",
+      "BOX18X1.5",
+      "BOX24X2",
+      "BOX24X4",
+      "BOX26X2.5",
+      "BOX26X4",
+      "BOX30X4",
+      "BOX32X4",
+      "BOX34X4",
+      "BOX38X4",
+      "BOX44X4",
+      "BOX50X4",
+      "BOX58X4",
+      "BRB10.0",
+      "BRB12.0",
+      "BRB16.0",
+      "BRB20.0",
+      "BRB24.0",
+      "BRB26.0",
+      "BRB33.0",
+      "BRB6.0",
+      "W14X120",
+      "W14X145",
+      "W14X159",
+      "W14X176",
+      "W14X193",
+      "W14X211",
+      "W14X233",
+      "W14X257",
+      "W14X283",
+      "W14X311",
+      "W14X342",
+      "W14X370",
+      "W14X398",
+      "W14X426",
+      "W14X455",
+      "W14X48",
+      "W14X500",
+      "W14X53",
+      "W14X550",
+      "W14X605",
+      "W14X68",
+      "W14X82",
+      "W14X873",
+      "W14X99",
+      "W18X35",
+      "W24X103",
+      "W24X68",
+      "W24X76",
+      "W24X94",
+      "W27X102",
+      "W27X129",
+      "W27X161",
+      "W27X94",
+      "W30X124",
+      "W30X173",
+      "W33X141",
+      "W33X201",
+      "W33X241"
+    ],
+    "top_level_record_counts": {
+      "members": 74,
+      "connections": 103
+    }
+  },
+  {
+    "building": "HR-16",
+    "source_consistency": {
+      "name": "Ex16_IMF_3levels_Zplan_school",
+      "time": "2026-10-31T05:47:29",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "853fce56657bb2b32f1135dc254fa37eb77ea22a5df689da42a0b55c7cb607e0",
+      "cfg_sha256": "ff98bfcea4b53dd8818a3f86bcd09d0b6bbaff73723aaaf9b1ba16df4ff8f04e"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 91,
+      "model_elements": 143,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "W12X40",
+      "W12X53",
+      "W14X159",
+      "W14X176",
+      "W14X176B",
+      "W14X193",
+      "W14X193B",
+      "W14X22",
+      "W16X26",
+      "W16X36",
+      "W18X40",
+      "W18X46",
+      "W21X44",
+      "W21X48",
+      "W21X57",
+      "W21X68",
+      "W24X62",
+      "W24X68",
+      "W24X76",
+      "W27X94",
+      "W30X99"
+    ],
+    "top_level_record_counts": {
+      "members": 26,
+      "connections": 42
+    }
+  },
+  {
+    "building": "HR-17",
+    "source_consistency": {
+      "name": "Ex17_SCBF_9levels_offset_core",
+      "time": "2026-10-31T05:48:27",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "8ecf5338f5d2f47bffbbc6460c64fd574252db2d6133e50a5de8da942e0608d5",
+      "cfg_sha256": "46257ad3e0a0981b3bb2f6ba4fe85c340d85d5199d2916a81dc8887527015cad"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 381,
+      "model_elements": 952,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "HSS10.000X0.625",
+      "HSS10.750X0.625",
+      "HSS5.563X0.375",
+      "HSS6.625X0.500",
+      "HSS8.625X0.375",
+      "HSS8.625X0.500",
+      "HSS9.625X0.625",
+      "W14X109",
+      "W14X132",
+      "W14X176",
+      "W14X211",
+      "W14X257",
+      "W14X283",
+      "W14X398",
+      "W14X48",
+      "W14X53",
+      "W14X605",
+      "W14X808",
+      "W14X82",
+      "W21X73",
+      "W21X83",
+      "W24X103",
+      "W24X55",
+      "W24X84",
+      "W24X94",
+      "W27X114",
+      "W27X129",
+      "W27X84",
+      "W30X148",
+      "W33X221"
+    ],
+    "top_level_record_counts": {
+      "members": 37,
+      "connections": 63
+    }
+  },
+  {
+    "building": "HR-18",
+    "source_consistency": {
+      "name": "Ex18_R3_NotDetailed_8levels_lowseismic",
+      "time": "2026-10-31T05:48:53",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "bc86be26a153166bbe329a18465c69fdd6fb67bd1fcb6b708858b9bb0d3138c8",
+      "cfg_sha256": "82ee0264ee941499458a9163be27799475d528b5e4ed53726edaab50c08d7782"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 278,
+      "model_elements": 696,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "HSS5X5X3/8",
+      "HSS5X5X5/16",
+      "HSS6X6X3/8",
+      "HSS7X7X1/2",
+      "W14X109",
+      "W14X145",
+      "W14X48",
+      "W14X53",
+      "W14X61",
+      "W14X74",
+      "W14X90",
+      "W21X50",
+      "W24X55"
+    ],
+    "top_level_record_counts": {
+      "members": 20,
+      "connections": 28
+    }
+  },
+  {
+    "building": "HR-19",
+    "source_consistency": {
+      "name": "Ex19_SMF_11levels_softstory_podium",
+      "time": "2026-10-31T05:49:11",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "22e836248a5d05fae3a487560b906caeb27d47816318ae32fd1f52e3656089d9",
+      "cfg_sha256": "4168ffa3e8967e3ce65a19d3cdcb1ab4b4b032cf8524a61297434a5e0f2f0e71"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 249,
+      "model_elements": 559,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "PG84X1108",
+      "W14X120",
+      "W14X145",
+      "W14X176",
+      "W14X211",
+      "W14X61",
+      "W14X90",
+      "W24X131",
+      "W24X162",
+      "W24X207",
+      "W24X229",
+      "W24X250",
+      "W24X279",
+      "W24X306",
+      "W24X335",
+      "W24X55",
+      "W24X62",
+      "W27X102",
+      "W30X108",
+      "W30X116",
+      "W30X124",
+      "W30X132",
+      "W33X152",
+      "W33X169",
+      "W36X170",
+      "W36X194",
+      "W36X231",
+      "W36X395",
+      "W36X487",
+      "W36X925"
+    ],
+    "top_level_record_counts": {
+      "members": 37,
+      "connections": 84
+    }
+  },
+  {
+    "building": "HR-20",
+    "source_consistency": {
+      "name": "Ex20_SCBF_12levels_transfer_discontinuous",
+      "time": "2026-10-31T05:50:00",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "4c4ee43a4a9491c4c2e032f685c486bb4cfb7d69319f2f88bac2d6e04540ce30",
+      "cfg_sha256": "61c6844eb857d56ad2385c8152db6a679b2d4573ae7fe0eff6e55df78fb65d88"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 431,
+      "model_elements": 1096,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "HSS10.750X0.625",
+      "HSS12.750X0.625",
+      "HSS12.750X0.750",
+      "HSS6X6X1/2",
+      "HSS6X6X5/8",
+      "HSS7X7X1/2",
+      "HSS7X7X5/8",
+      "HSS8X8X5/8",
+      "HSS9.625X0.625",
+      "W14X120",
+      "W14X145",
+      "W14X159",
+      "W14X176",
+      "W14X193",
+      "W14X283",
+      "W14X398",
+      "W14X455",
+      "W14X48",
+      "W14X550",
+      "W14X605",
+      "W14X665",
+      "W14X68",
+      "W14X808",
+      "W14X873",
+      "W14X90",
+      "W21X122",
+      "W21X132",
+      "W21X147",
+      "W21X93",
+      "W24X103",
+      "W24X131",
+      "W24X176",
+      "W24X55",
+      "W24X62",
+      "W24X68"
+    ],
+    "top_level_record_counts": {
+      "members": 48,
+      "connections": 65
+    }
+  },
+  {
+    "building": "HR-21",
+    "source_consistency": {
+      "name": "Ex21_OCBF_1story_bigbox_flexiblediaphragm",
+      "time": "2026-10-31T05:49:07",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "ee042885797b4f5464563221dc0047e2b34ce02bf4cf7c92516464b1c290c423",
+      "cfg_sha256": "ecdac71455bebe677e20d2128df4f9145951acb160febd67ba60c7af815b286e"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 71,
+      "model_elements": 109,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "HSS7X7X1/2",
+      "W14X90",
+      "W21X44",
+      "W21X55",
+      "W27X94",
+      "W33X130"
+    ],
+    "top_level_record_counts": {
+      "members": 9,
+      "connections": 16
+    }
+  },
+  {
+    "building": "HR-22",
+    "source_consistency": {
+      "name": "Ex22_SMF_6levels_hospital_RiskCatIV",
+      "time": "2026-10-31T05:49:44",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "46c6d77d0f1a28b6e15fb1f7575c06e747d0a3f9a6b06598a997798fa42456e4",
+      "cfg_sha256": "1f7d70bca4044c0f6a7839fd1c31d4d1b251fbf61c1ec2d54e8a9da12e4412d4"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 251,
+      "model_elements": 558,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "W14X120",
+      "W14X61",
+      "W14X90",
+      "W24X62",
+      "W30X132",
+      "W33X130",
+      "W36X194",
+      "W36X231",
+      "W36X256",
+      "W36X302",
+      "W36X361",
+      "W36X395"
+    ],
+    "top_level_record_counts": {
+      "members": 20,
+      "connections": 33
+    }
+  },
+  {
+    "building": "HR-23",
+    "source_consistency": {
+      "name": "Ex23_Dual_SMF_BRBF_9levels_SDCF_nearfault_EOC",
+      "time": "2026-10-31T05:50:04",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "4ceaed3f30259130c31432f14e05a8c6c19498ce13267a7fd68a3ef50a75b439",
+      "cfg_sha256": "94197a2b2495ec3ccfd3bca9e8af7c0a3de42d6c6d369736e19ff0e26f47a225"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 329,
+      "model_elements": 803,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "BOX16X1.25",
+      "BOX20X2",
+      "BOX24X4",
+      "BOX34X4",
+      "BOX38X4",
+      "BOX58X4",
+      "BRB12.0",
+      "BRB29.0",
+      "BRB43.0",
+      "BRB54.0",
+      "BRB70.0",
+      "W14X109",
+      "W14X132",
+      "W14X159",
+      "W14X233",
+      "W14X283",
+      "W14X342",
+      "W14X455",
+      "W14X48",
+      "W14X500",
+      "W14X550",
+      "W14X605",
+      "W14X61",
+      "W14X82",
+      "W18X60",
+      "W24X103",
+      "W24X131",
+      "W24X146",
+      "W24X176",
+      "W24X68",
+      "W24X84",
+      "W27X146",
+      "W27X161",
+      "W27X178",
+      "W30X132",
+      "W33X169",
+      "W36X182"
+    ],
+    "top_level_record_counts": {
+      "members": 48,
+      "connections": 61
+    }
+  },
+  {
+    "building": "HR-24",
+    "source_consistency": {
+      "name": "Ex24_Mixed_SMF_NS_SCBF_EW_10levels_bidirectional",
+      "time": "2026-10-31T05:50:34",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "5bb253939a79dcb9b2e4260271a3f005f69dc6e93eb53dac63bb2bbd508ee515",
+      "cfg_sha256": "6c09ac23e6d52bc118f6180bcfd396466c8f1f1b28d8ad12a1b4a2fdbec10dbb"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 333,
+      "model_elements": 805,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "HSS6X6X1/2",
+      "HSS7X7X1/2",
+      "HSS8X8X5/8",
+      "HSS9X9X5/8",
+      "W14X120",
+      "W14X145",
+      "W14X176",
+      "W14X193",
+      "W14X211",
+      "W14X257",
+      "W14X342",
+      "W14X370",
+      "W14X455",
+      "W14X48",
+      "W14X500",
+      "W14X665",
+      "W14X68",
+      "W14X730",
+      "W14X99",
+      "W18X35",
+      "W21X122",
+      "W21X62",
+      "W24X103",
+      "W24X131",
+      "W24X176",
+      "W24X207",
+      "W24X250",
+      "W24X279",
+      "W24X55",
+      "W24X62",
+      "W24X76",
+      "W27X102",
+      "W27X94",
+      "W30X116",
+      "W30X124"
+    ],
+    "top_level_record_counts": {
+      "members": 40,
+      "connections": 53
+    }
+  },
+  {
+    "building": "HR-25",
+    "source_consistency": {
+      "name": "Ex25_SMF_12levels_atrium_diaphragmdiscontinuity",
+      "time": "2026-10-31T05:51:47",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "799116e66d1997aaf24d61c30da299e42c40f93a097667050c7f15953f4b1ffc",
+      "cfg_sha256": "f1e605d2e5c5c80a9945a1b459ec0821a3a0e5ab371b31b03f36b40d909bb04c"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 460,
+      "model_elements": 1085,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "W14X120",
+      "W14X145",
+      "W14X176",
+      "W14X211",
+      "W14X233",
+      "W14X257",
+      "W14X283",
+      "W14X311",
+      "W14X342",
+      "W14X370",
+      "W14X426",
+      "W14X455",
+      "W14X48",
+      "W14X68",
+      "W14X90",
+      "W14X99",
+      "W18X35",
+      "W18X50",
+      "W24X55",
+      "W24X62",
+      "W24X68",
+      "W24X84",
+      "W27X102",
+      "W27X114",
+      "W27X129",
+      "W30X132",
+      "W36X925"
+    ],
+    "top_level_record_counts": {
+      "members": 42,
+      "connections": 51
+    }
+  },
+  {
+    "building": "HR-26",
+    "source_consistency": {
+      "name": "Ex26_Dual_SMF_SCBF_18levels_slender_windgoverned",
+      "time": "2026-10-31T05:50:56",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "4045efd98977d0ac23e81ba191d6403e87578f129c880e73f95349a1d3e4420c",
+      "cfg_sha256": "5ce84dff4d02694a2e38cf6abb4f25956e1b4a407f369d5116cbc4ea5df0b74b"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 282,
+      "model_elements": 702,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "BOX14X1",
+      "BOX16X1.25",
+      "BOX18X1.5",
+      "BOX22X1.75",
+      "BOX24X2",
+      "BOX24X2.5",
+      "BOX28X2.5",
+      "BOX28X4",
+      "HSS5X5X1/2",
+      "HSS5X5X3/8",
+      "HSS6X6X1/2",
+      "HSS7X7X1/2",
+      "HSS7X7X5/8",
+      "HSS8X8X5/8",
+      "W14X176",
+      "W14X211",
+      "W14X233",
+      "W14X283",
+      "W21X44",
+      "W21X62",
+      "W21X73",
+      "W21X83",
+      "W24X62",
+      "W24X68",
+      "W24X76",
+      "W27X94",
+      "W30X191"
+    ],
+    "top_level_record_counts": {
+      "members": 37,
+      "connections": 47
+    }
+  },
+  {
+    "building": "HR-27",
+    "source_consistency": {
+      "name": "Ex27_CCPSW_CF_20levels_SpeedCore_composite",
+      "time": "2026-10-31T05:53:01",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "4141ef57616d0b5bac5c8dcd942e07184c5ecab22c37e9b1550173e94b99bd38",
+      "cfg_sha256": "406276513ec8c5006d175dff6598f7014c2178ae5280fc51ade9fc5e55911641"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 827,
+      "model_elements": 1620,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "CB18X24-F1-1/8-W5/8",
+      "CB18X24-F1/2-W7/16",
+      "CB18X24-F3/4-W1/2",
+      "CB18X24-F3/8-W7/16",
+      "CW10.5X18-PL1/2",
+      "CW10.5X18-PL13/16",
+      "CW10.5X18-PL3/8",
+      "CW10.5X18-PL5/8",
+      "CW10.5X18-PL7/16",
+      "CW10.5X18-PL9/16",
+      "CW21X18-PL1/2",
+      "CW21X18-PL3/8",
+      "CW21X18-PL5/8",
+      "CW21X18-PL7/16",
+      "CW30X18-PL1/2",
+      "CW30X18-PL13/16",
+      "CW30X18-PL3/8",
+      "CW30X18-PL7/16",
+      "CW30X18-PL9/16",
+      "RZ-WALL",
+      "W14X120",
+      "W14X145",
+      "W14X159",
+      "W14X176",
+      "W14X193",
+      "W14X211",
+      "W14X233",
+      "W14X257",
+      "W14X283",
+      "W14X311",
+      "W14X342",
+      "W14X426",
+      "W14X48",
+      "W14X61",
+      "W14X82",
+      "W14X99",
+      "W18X35",
+      "W18X50",
+      "W21X50",
+      "W24X55",
+      "W24X62",
+      "W24X68",
+      "W24X76",
+      "W24X84",
+      "W27X94",
+      "W30X116",
+      "W30X124"
+    ],
+    "top_level_record_counts": {
+      "members": 61,
+      "connections": 95
+    }
+  },
+  {
+    "building": "HR-28",
+    "source_consistency": {
+      "name": "Ex28_STMF_8levels_longspan_trussmoment",
+      "time": "2026-10-31T05:51:20",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "549f5840661ec05cdc69584c712451b975b5020a73e0c9fd245ba37c0357c1b4",
+      "cfg_sha256": "28fbffab533862e11a930132a8839e938eff1824dab2d62c12b4ac4f2a966d53"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 116,
+      "model_elements": 232,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "W14X176",
+      "W14X257",
+      "W14X342",
+      "W14X426",
+      "W14X500",
+      "W27X84",
+      "W36X330",
+      "W36X395",
+      "W36X487",
+      "W36X529",
+      "W36X652",
+      "W40X249",
+      "W40X331",
+      "W44X230",
+      "W44X408"
+    ],
+    "top_level_record_counts": {
+      "members": 35,
+      "connections": 32,
+      "drawing_notes": 5
+    }
+  },
+  {
+    "building": "HR-29",
+    "source_consistency": {
+      "name": "Ex29_Dual_SMF_BRBF_20levels_264ft_NLRHA_PBSD",
+      "time": "2026-10-31T05:53:09",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "ae08476a672bebd3b256ecefec36ff05176deec7b08723ecc212020e99e60fdd",
+      "cfg_sha256": "266b960a5e3fdfa9cac5f55007c92d7d73aeb4e66c6916321c2312fc479d86e7"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 585,
+      "model_elements": 1500,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "BOX24X4",
+      "BOX26X4",
+      "BOX34X4",
+      "BRB10.0",
+      "BRB11.0",
+      "BRB11.5",
+      "BRB12.5",
+      "BRB13.0",
+      "BRB14.0",
+      "BRB14.5",
+      "BRB15.0",
+      "BRB15.5",
+      "BRB16.0",
+      "BRB17.0",
+      "BRB18.0",
+      "BRB18.5",
+      "BRB19.0",
+      "BRB20.0",
+      "BRB21.0",
+      "BRB6.0",
+      "BRB7.0",
+      "BRB8.0",
+      "BRB9.0",
+      "W14X120",
+      "W14X145",
+      "W14X159",
+      "W14X176",
+      "W14X193",
+      "W14X211",
+      "W14X257",
+      "W14X283",
+      "W14X311",
+      "W14X342",
+      "W14X398",
+      "W14X426",
+      "W14X455",
+      "W14X48",
+      "W14X550",
+      "W14X61",
+      "W14X730",
+      "W14X82",
+      "W14X873",
+      "W14X99",
+      "W16X31",
+      "W18X50",
+      "W21X50",
+      "W24X76",
+      "W24X84",
+      "W24X94",
+      "W27X102",
+      "W30X124",
+      "W33X141"
+    ],
+    "top_level_record_counts": {
+      "members": 63,
+      "connections": 77
+    }
+  },
+  {
+    "building": "HR-30",
+    "source_consistency": {
+      "name": "Ex30_Composite_SCBF_6levels_studs_camber",
+      "time": "2026-10-31T05:53:09",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "d0f29d7c523b4caef3ceebc1c2ac9332093f2579f580e118e457fc55e0be2fa6",
+      "cfg_sha256": "4c95f92669dbce65b9415ce8fce864901f9a90c5733a3d4bfc2a46ddf7248560"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 174,
+      "model_elements": 420,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "HSS3-1/2X3-1/2X5/16",
+      "HSS4-1/2X4-1/2X3/8",
+      "HSS4-1/2X4-1/2X5/16",
+      "HSS4X4X5/16",
+      "HSS5X5X3/8",
+      "W14X159",
+      "W14X48",
+      "W14X61",
+      "W14X68",
+      "W14X74",
+      "W14X90",
+      "W21X44",
+      "W21X55",
+      "W21X68",
+      "W24X55",
+      "W24X62"
+    ],
+    "top_level_record_counts": {
+      "members": 26,
+      "connections": 35
+    }
+  },
+  {
+    "building": "HR-31",
+    "source_consistency": {
+      "name": "Ex31_Gable_warehouse_R3_unbalanced_snow_ponding",
+      "time": "2026-10-31T05:53:16",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "7fe5d61dd842b1f92f0a5c9c4356409ad0f83c03cdf0d42c9e1779d61e879b03",
+      "cfg_sha256": "4542bc494eaf6cc75ecbaa1636d4cb878d6eee604947d78dafd289977fd2e3b8"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 55,
+      "model_elements": 71,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "ROD1",
+      "W12X26",
+      "W16X31",
+      "W24X84",
+      "W27X94",
+      "W8X31"
+    ],
+    "top_level_record_counts": {
+      "members": 8,
+      "connections": 12
+    }
+  },
+  {
+    "building": "HR-32",
+    "source_consistency": {
+      "name": "Ex32_Vertical_addition_2over3_1968_A36_ASCE41",
+      "time": "2026-10-31T05:53:28",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "e77a561921c8a7735f9de7d96c3d44073d98eedaffab5ea313dbc4e42217bce4",
+      "cfg_sha256": "e24e93a04c24229123419c50a0f86e7bb03f1f8fb98b448fc54d16e5eaaf4249"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 125,
+      "model_elements": 255,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "W14X109",
+      "W14X68",
+      "W14X90",
+      "W18X40",
+      "W24X62",
+      "W24X76"
+    ],
+    "top_level_record_counts": {
+      "members": 10,
+      "connections": 11,
+      "retrofit_scope": 7
+    }
+  },
+  {
+    "building": "HR-33",
+    "source_consistency": {
+      "name": "Ex33_Crane_bay_IMF_runway_fatigue_App3",
+      "time": "2026-10-31T05:53:26",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "7f853daa9290e4d52cac855307e58f969f39affaf9686ea007aae7d3b3070de8",
+      "cfg_sha256": "a9f9b1a403b2f81ba8013a9e112551b671b566642435ac15c2b31ca04a80ff11"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 67,
+      "model_elements": 95,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "HSS4X4X1/4",
+      "W12X26",
+      "W12X40",
+      "W24X117",
+      "W30X99"
+    ],
+    "top_level_record_counts": {
+      "members": 9,
+      "connections": 13
+    }
+  },
+  {
+    "building": "HR-34a",
+    "source_consistency": {
+      "name": "Ex34a_Twin_towers_BRBF_12story_tower",
+      "time": "2026-10-31T05:54:10",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "8ac46bf8cbd42a95296a47663885825ce4b6bc614cb59cf3b29862eb1da32ba4",
+      "cfg_sha256": "4f1b5ba9d7ea15e4eafd8838f52938be49489741199dfd11ca261e63f3bb846c"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 310,
+      "model_elements": 728,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "BRB2.75",
+      "BRB4",
+      "BRB5",
+      "BRB6",
+      "BRB7.25",
+      "BRB8.5",
+      "W14X120",
+      "W14X132",
+      "W14X176",
+      "W14X193",
+      "W14X283",
+      "W14X398",
+      "W14X48",
+      "W14X53",
+      "W14X61",
+      "W14X68",
+      "W14X90",
+      "W14X99",
+      "W21X44",
+      "W21X50",
+      "W21X93",
+      "W24X103",
+      "W24X131",
+      "W24X55",
+      "W24X68",
+      "W24X76",
+      "W24X84",
+      "W24X94"
+    ],
+    "top_level_record_counts": {
+      "members": 39,
+      "connections": 58
+    }
+  },
+  {
+    "building": "HR-34b",
+    "source_consistency": {
+      "name": "Ex34b_Twin_towers_BRBF_8story_tower",
+      "time": "2026-10-31T05:54:08",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "8fc2a5a726044a23b1181880d56b60b514784ba990810465bc506822ed1047c5",
+      "cfg_sha256": "cebfd98a531110e592700d005d4d2c9653a593cdddbc63fccbcddc9c71f9dd3f"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 240,
+      "model_elements": 542,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "BRB2.25",
+      "BRB3.75",
+      "BRB4.5",
+      "BRB5",
+      "BRB6.25",
+      "W14X132",
+      "W14X176",
+      "W14X257",
+      "W14X48",
+      "W14X53",
+      "W14X61",
+      "W14X68",
+      "W14X82",
+      "W14X90",
+      "W21X44",
+      "W21X50",
+      "W21X93",
+      "W24X103",
+      "W24X55",
+      "W24X76",
+      "W24X84",
+      "W24X94",
+      "W27X84",
+      "W27X94"
+    ],
+    "top_level_record_counts": {
+      "members": 38,
+      "connections": 45
+    }
+  },
+  {
+    "building": "HR-35",
+    "source_consistency": {
+      "name": "Ex35_Ch15_equipment_platform_3tier_OCBF",
+      "time": "2026-10-31T05:53:41",
+      "result": "PASS",
+      "n_issues": 0,
+      "issues": [],
+      "calc_package_sha256": "7578393ba9e159671138851472a265c48625f9aa7e0dcabcc778b040e2d6d1ef",
+      "cfg_sha256": "7e6536d3a35b79e1f2ab5229d381ae53ab6daf9f85b30c5a430f884f7d6618ad"
+    },
+    "file_hash_checks": [
+      true,
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": 51,
+      "model_elements": 105,
+      "transforms": 3,
+      "tag_check": "MATCH"
+    },
+    "sections": [
+      "HSS4-1/2X4-1/2X5/16",
+      "HSS5X5X3/8",
+      "HSS6X6X3/8",
+      "W10X39",
+      "W16X40"
+    ],
+    "top_level_record_counts": {
+      "members": 14,
+      "connections": 21
+    }
+  },
+  {
+    "building": "CFS-1",
+    "source_consistency": {
+      "package": "calc_package_cfs.json",
+      "package_sha1": "3bb60ed5eec4b9f2cb661a0443f8fdd909efa8ef",
+      "package_mtime": 1793426199.177209,
+      "checked_at": 1793426199.632744,
+      "n_issues": 0,
+      "issues": [],
+      "result": "PASS"
+    },
+    "file_hash_checks": [
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": null,
+      "model_elements": null,
+      "transforms": null,
+      "tag_check": "NOT APPLICABLE"
+    },
+    "sections": [
+      "7/16 in. OSB rated sheathi",
+      "L4 2 x 600S162-54",
+      "track"
+    ],
+    "top_level_record_counts": {
+      "combos": 22,
+      "wall_lines": 40,
+      "holddowns": 10,
+      "anchorage": 10,
+      "studs": 22,
+      "collectors": 4,
+      "drift_table": 40,
+      "preflight_warnings": 1,
+      "drift_flags": 16,
+      "finish_strength_bound": 10,
+      "drift_forces_computed_period": 2,
+      "framing": 10,
+      "diaphragms": 2,
+      "connections": 3,
+      "rho_check_table": 6,
+      "expected_strength_with_finish": 4,
+      "capacity_design_chain": 40,
+      "materials": 7,
+      "line_true_mass": 16,
+      "design_basis_notes": 7,
+      "sample_calcs": 4,
+      "design_changes_from_the_project_brief": 6
+    }
+  },
+  {
+    "building": "CFS-2",
+    "source_consistency": {
+      "package": "calc_package_cfs.json",
+      "package_sha1": "ca3e3a05a02836e9cdb6b025d9d38366c23512be",
+      "package_mtime": 1793426226.3892105,
+      "checked_at": 1793426226.849151,
+      "n_issues": 0,
+      "issues": [],
+      "result": "PASS"
+    },
+    "file_hash_checks": [
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": null,
+      "model_elements": null,
+      "transforms": null,
+      "tag_check": "NOT APPLICABLE"
+    },
+    "sections": [
+      "4 x 600S200-97 back-to-bac",
+      "none (strap-braced bay; gy",
+      "track"
+    ],
+    "top_level_record_counts": {
+      "combos": 22,
+      "wall_lines": 66,
+      "holddowns": 11,
+      "anchorage": 11,
+      "studs": 22,
+      "collectors": 6,
+      "drift_table": 66,
+      "preflight_warnings": 0,
+      "model_vs_tributary_flags": 47,
+      "framing": 4,
+      "gravity_framing": 3,
+      "connections": 29,
+      "diaphragms": 12,
+      "expected_strength_chain": 66,
+      "materials": 7,
+      "braced_wall_layout": 4,
+      "criteria_deviations": 9,
+      "story_regularity": 10,
+      "torsion_check": 12,
+      "redundancy_check": 10,
+      "roof_story_envelope": 11,
+      "sample_calcs": 5
+    }
+  },
+  {
+    "building": "CFS-3",
+    "source_consistency": {
+      "package": "calc_package_cfs.json",
+      "package_sha1": "5b2b3ab9c1b4020acd181bf2229ec91459725928",
+      "package_mtime": 1793426228.8710454,
+      "checked_at": 1793426229.3141205,
+      "n_issues": 0,
+      "issues": [],
+      "result": "PASS"
+    },
+    "file_hash_checks": [
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": null,
+      "model_elements": null,
+      "transforms": null,
+      "tag_check": "NOT APPLICABLE"
+    },
+    "sections": [
+      "0.027 in. steel sheet both",
+      "0.027 in. steel sheet one ",
+      "0.030 in. steel sheet one ",
+      "0.033 in. steel sheet both",
+      "0.033 in. steel sheet one ",
+      "4 x 600S200-97 boxed at st",
+      "track"
+    ],
+    "top_level_record_counts": {
+      "combos": 22,
+      "wall_lines": 104,
+      "holddowns": 13,
+      "anchorage": 13,
+      "studs": 19,
+      "collectors": 2,
+      "drift_table": 104,
+      "preflight_warnings": 0,
+      "model_vs_tributary_flags": 69,
+      "gravity_framing": 1,
+      "connections": 29,
+      "diaphragms": 16,
+      "expected_strength_chain": 104,
+      "materials": 7,
+      "braced_wall_layout": 5,
+      "criteria_deviations": 6,
+      "story_regularity": 14,
+      "podium_handoff": 13,
+      "torsion_check": 16,
+      "roof_story_envelope": 13,
+      "wind_drift_service": 13,
+      "governing_map": 13,
+      "live_load_reduction": 8,
+      "segment_framing": 13,
+      "sample_calcs": 4,
+      "framing": 1
+    }
+  },
+  {
+    "building": "CFS-4",
+    "source_consistency": {
+      "package": "calc_package_cfs.json",
+      "package_sha1": "445b37fc31015740450ef97c8c1d7889d394ee17",
+      "package_mtime": 1793426235.165211,
+      "checked_at": 1793426235.4359393,
+      "n_issues": 0,
+      "issues": [],
+      "result": "PASS"
+    },
+    "file_hash_checks": [
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": null,
+      "model_elements": null,
+      "transforms": null,
+      "tag_check": "NOT APPLICABLE"
+    },
+    "sections": [
+      "0.027 in. steel sheet",
+      "0.030 in. steel sheet",
+      "0.033 in. steel sheet",
+      "s1: 4 x 600S200-97",
+      "track"
+    ],
+    "top_level_record_counts": {
+      "combos": 22,
+      "wall_lines": 40,
+      "holddowns": 10,
+      "anchorage": 10,
+      "studs": 11,
+      "collectors": 10,
+      "drift_table": 40,
+      "preflight_warnings": 0,
+      "model_vs_tributary_flags": 26,
+      "drift_flags": 18,
+      "gravity_framing": 1,
+      "connections": 11,
+      "diaphragms": 1,
+      "criteria_deviations": 4,
+      "materials": 10,
+      "sample_calcs": 4,
+      "framing": 1
+    }
+  },
+  {
+    "building": "CFS-5",
+    "source_consistency": {
+      "package": "calc_package_cfs.json",
+      "package_sha1": "0c9008f2396422e32d0330355cdfd3c1490ef1a3",
+      "package_mtime": 1793426237.6332111,
+      "checked_at": 1793426238.1450484,
+      "n_issues": 0,
+      "issues": [],
+      "result": "PASS"
+    },
+    "file_hash_checks": [
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": null,
+      "model_elements": null,
+      "transforms": null,
+      "tag_check": "NOT APPLICABLE"
+    },
+    "sections": [
+      "8 x 600S200-97 back-to-bac",
+      "none (strap-braced bay; gy",
+      "track"
+    ],
+    "top_level_record_counts": {
+      "combos": 22,
+      "wall_lines": 66,
+      "holddowns": 11,
+      "anchorage": 11,
+      "studs": 23,
+      "collectors": 6,
+      "drift_table": 66,
+      "preflight_warnings": 0,
+      "framing": 5,
+      "gravity_framing": 4,
+      "connections": 32,
+      "diaphragms": 24,
+      "expected_strength_chain": 66,
+      "materials": 7,
+      "braced_wall_layout": 4,
+      "criteria_deviations": 8,
+      "story_regularity": 10,
+      "redundancy_check": 10,
+      "sample_calcs": 5
+    }
+  },
+  {
+    "building": "CFS-6",
+    "source_consistency": {
+      "package": "calc_package_cfs.json",
+      "package_sha1": "bef28e9661a294c196b1afa038293452ea694428",
+      "package_mtime": 1793426242.9652114,
+      "checked_at": 1793426243.621889,
+      "n_issues": 0,
+      "issues": [],
+      "result": "PASS"
+    },
+    "file_hash_checks": [
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": null,
+      "model_elements": null,
+      "transforms": null,
+      "tag_check": "NOT APPLICABLE"
+    },
+    "sections": [
+      "7/16 in. OSB rated sheathi",
+      "L5 2 x 600S162-54",
+      "track"
+    ],
+    "top_level_record_counts": {
+      "combos": 22,
+      "wall_lines": 85,
+      "holddowns": 17,
+      "anchorage": 17,
+      "studs": 33,
+      "collectors": 7,
+      "drift_table": 85,
+      "preflight_warnings": 1,
+      "drift_flags": 62,
+      "model_vs_tributary_flags": 50,
+      "finish_strength_bound": 17,
+      "drift_forces_computed_period": 2,
+      "framing": 10,
+      "diaphragms": 4,
+      "connections": 4,
+      "rho_check_table": 8,
+      "expected_strength_with_finish": 17,
+      "capacity_design_chain": 85,
+      "materials": 8,
+      "line_true_mass": 30,
+      "design_basis_notes": 8,
+      "sample_calcs": 4,
+      "design_changes_from_the_project_brief": 8
+    }
+  },
+  {
+    "building": "CFS-7",
+    "source_consistency": {
+      "package": "calc_package_cfs.json",
+      "package_sha1": "eecf7df3c913b0c95f795d765b904b0d26627c68",
+      "package_mtime": 1793426243.1652114,
+      "checked_at": 1793426243.996773,
+      "n_issues": 0,
+      "issues": [],
+      "result": "PASS"
+    },
+    "file_hash_checks": [
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": null,
+      "model_elements": null,
+      "transforms": null,
+      "tag_check": "NOT APPLICABLE"
+    },
+    "sections": [
+      "0.027 in. steel sheet both",
+      "0.027 in. steel sheet one ",
+      "0.030 in. steel sheet both",
+      "0.030 in. steel sheet one ",
+      "0.033 in. steel sheet both",
+      "0.033 in. steel sheet one ",
+      "6 x 600S200-97 boxed at st",
+      "track"
+    ],
+    "top_level_record_counts": {
+      "combos": 22,
+      "wall_lines": 186,
+      "holddowns": 31,
+      "anchorage": 31,
+      "studs": 36,
+      "collectors": 5,
+      "drift_table": 186,
+      "preflight_warnings": 0,
+      "model_vs_tributary_flags": 174,
+      "framing": 6,
+      "gravity_framing": 5,
+      "connections": 66,
+      "diaphragms": 18,
+      "expected_strength_chain": 186,
+      "materials": 7,
+      "braced_wall_layout": 5,
+      "criteria_deviations": 7,
+      "story_regularity": 10,
+      "window_pier_study": 4,
+      "segment_framing": 31,
+      "mechanical_zone_check": 4,
+      "redundancy_check": 10,
+      "sample_calcs": 4
+    }
+  },
+  {
+    "building": "CFS-8",
+    "source_consistency": {
+      "package": "calc_package_cfs.json",
+      "package_sha1": "a5a48231dd1adf628c713ed5477f56900c5ae4f2",
+      "package_mtime": 1793426243.5292115,
+      "checked_at": 1793426245.827169,
+      "n_issues": 0,
+      "issues": [],
+      "result": "PASS"
+    },
+    "file_hash_checks": [
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": null,
+      "model_elements": null,
+      "transforms": null,
+      "tag_check": "NOT APPLICABLE"
+    },
+    "sections": [
+      "4 x 600S200-97 back-to-bac",
+      "none (strap-braced bay; gy",
+      "track"
+    ],
+    "top_level_record_counts": {
+      "combos": 22,
+      "wall_lines": 28,
+      "holddowns": 7,
+      "anchorage": 7,
+      "studs": 11,
+      "collectors": 10,
+      "drift_table": 28,
+      "preflight_warnings": 0,
+      "framing": 4,
+      "gravity_framing": 3,
+      "connections": 27,
+      "diaphragms": 16,
+      "expected_strength_chain": 28,
+      "materials": 7,
+      "line_fit": 7,
+      "criteria_deviations": 5,
+      "story_regularity": 6,
+      "braced_bay_layout": 7,
+      "sample_calcs": 5
+    }
+  },
+  {
+    "building": "CFS-9",
+    "source_consistency": {
+      "package": "calc_package_cfs.json",
+      "package_sha1": "329d4754a8fe8e5435e585b67610510d05f244cf",
+      "package_mtime": 1793426252.313212,
+      "checked_at": 1793426252.7728004,
+      "n_issues": 0,
+      "issues": [],
+      "result": "PASS"
+    },
+    "file_hash_checks": [
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": null,
+      "model_elements": null,
+      "transforms": null,
+      "tag_check": "NOT APPLICABLE"
+    },
+    "sections": [
+      "7/16 in. OSB (24/16 span r",
+      "s1: 4 x 600S250-118",
+      "track"
+    ],
+    "top_level_record_counts": {
+      "combos": 22,
+      "wall_lines": 95,
+      "holddowns": 19,
+      "anchorage": 19,
+      "studs": 20,
+      "collectors": 21,
+      "drift_table": 95,
+      "preflight_warnings": 0,
+      "gravity_framing": 4,
+      "diaphragms": 1,
+      "connections": 14,
+      "departures_from_requested_criteria": 3,
+      "materials": 10,
+      "sample_calcs": 4,
+      "framing": 4
+    }
+  },
+  {
+    "building": "CFS-10",
+    "source_consistency": {
+      "package": "calc_package_cfs.json",
+      "package_sha1": "783c142d9de670b6a71a57b95483c7d637ced3fc",
+      "package_mtime": 1793426136.546917,
+      "checked_at": 1793426136.7447338,
+      "n_issues": 0,
+      "issues": [],
+      "result": "PASS"
+    },
+    "file_hash_checks": [
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": null,
+      "model_elements": null,
+      "transforms": null,
+      "tag_check": "NOT APPLICABLE"
+    },
+    "sections": [
+      "2 x 1800S350-118 back-to-bac",
+      "HSS12x12x3/4, ASTM A500 Gr C",
+      "X-strap",
+      "girt",
+      "purlin"
+    ],
+    "top_level_record_counts": {
+      "combos": 94,
+      "members": 2,
+      "connections": 5,
+      "anchorage": 1,
+      "schedules": 3,
+      "drift_table": 4,
+      "preflight_warnings": 0,
+      "notes": 1,
+      "frames": 1,
+      "chords": 3,
+      "bases": 4,
+      "framing": 13,
+      "headers": 2,
+      "diaphragms": 3,
+      "joists": 2,
+      "departures_from_requested_criteria": 5,
+      "sample_calcs": 4
+    }
+  },
+  {
+    "building": "CFS-11",
+    "source_consistency": {
+      "package": "calc_package_cfs.json",
+      "package_sha1": "2feb13a64818aa7bed17b8ad33e7002d6541b73c",
+      "package_mtime": 1793426144.3612056,
+      "checked_at": 1793426144.8841798,
+      "n_issues": 0,
+      "issues": [],
+      "result": "PASS"
+    },
+    "file_hash_checks": [
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": null,
+      "model_elements": null,
+      "transforms": null,
+      "tag_check": "NOT APPLICABLE"
+    },
+    "sections": [
+      "1/2 in. gypsum board (ASTM",
+      "7/16 in. OSB rated sheathi",
+      "L3 2 x 600S162-54",
+      "track"
+    ],
+    "top_level_record_counts": {
+      "combos": 22,
+      "wall_lines": 58,
+      "holddowns": 20,
+      "anchorage": 20,
+      "studs": 28,
+      "collectors": 4,
+      "drift_table": 58,
+      "preflight_warnings": 2,
+      "model_vs_tributary_flags": 37,
+      "finish_strength_bound": 0,
+      "sheathing_upgrade_map": 58,
+      "wind_service_drift": 58,
+      "framing": 16,
+      "diaphragms": 3,
+      "breezeway_transfers": 2,
+      "connections": 14,
+      "vertical_irregularity_check": 2,
+      "expected_strength_with_finish": 17,
+      "capacity_design_chain": 58,
+      "materials": 10,
+      "line_true_mass": 18,
+      "design_basis_notes": 7,
+      "sample_calcs": 4,
+      "design_changes_from_the_project_brief": 11
+    }
+  },
+  {
+    "building": "CFS-12",
+    "source_consistency": {
+      "package": "calc_package_cfs.json",
+      "package_sha1": "27d9c5641536cf5ccdeaf813abe126c34818fad1",
+      "package_mtime": 1793426153.0572062,
+      "checked_at": 1793426153.6782227,
+      "n_issues": 0,
+      "issues": [],
+      "result": "PASS"
+    },
+    "file_hash_checks": [
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": null,
+      "model_elements": null,
+      "transforms": null,
+      "tag_check": "NOT APPLICABLE"
+    },
+    "sections": [
+      "0.027 in. steel sheet both",
+      "0.027 in. steel sheet one ",
+      "0.030 in. steel sheet both",
+      "0.030 in. steel sheet one ",
+      "0.033 in. steel sheet both",
+      "0.033 in. steel sheet one ",
+      "2 x 600S162-68 boxed at st",
+      "track"
+    ],
+    "top_level_record_counts": {
+      "combos": 22,
+      "wall_lines": 144,
+      "holddowns": 18,
+      "anchorage": 18,
+      "studs": 23,
+      "collectors": 3,
+      "drift_table": 144,
+      "preflight_warnings": 0,
+      "model_vs_tributary_flags": 128,
+      "framing": 4,
+      "gravity_framing": 3,
+      "connections": 40,
+      "diaphragms": 32,
+      "expected_strength_chain": 144,
+      "materials": 7,
+      "braced_wall_layout": 4,
+      "criteria_deviations": 8,
+      "story_regularity": 14,
+      "wind_drift_service": 18,
+      "governing_map": 18,
+      "live_load_reduction": 8,
+      "segment_framing": 18,
+      "collector_wind_case": 3,
+      "rigid_diaphragm_sensitivity": 18,
+      "overturning_stability": 2,
+      "sample_calcs": 5,
+      "wind_pressures_by_level": 16,
+      "wind_level_forces": 16
+    }
+  },
+  {
+    "building": "CFS-13",
+    "source_consistency": {
+      "package": "calc_package_cfs.json",
+      "package_sha1": "d58f6f1258795d5188d78c993a5652beaea50392",
+      "package_mtime": 1793426164.1052067,
+      "checked_at": 1793426164.8600514,
+      "n_issues": 0,
+      "issues": [],
+      "result": "PASS"
+    },
+    "file_hash_checks": [
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": null,
+      "model_elements": null,
+      "transforms": null,
+      "tag_check": "NOT APPLICABLE"
+    },
+    "sections": [
+      "7/16 in. OSB rated sheathi",
+      "L4 2 x 600S162-43",
+      "track"
+    ],
+    "top_level_record_counts": {
+      "combos": 22,
+      "wall_lines": 60,
+      "holddowns": 16,
+      "anchorage": 16,
+      "studs": 32,
+      "collectors": 16,
+      "drift_table": 60,
+      "preflight_warnings": 0,
+      "model_vs_tributary_flags": 52,
+      "finish_strength_bound": 16,
+      "type_ii_Ca_table": 22,
+      "type_ii_limitations": 6,
+      "connections": 11,
+      "framing": 12,
+      "diaphragms": 5,
+      "diaphragm_levels_summary": 16,
+      "rho_check_table": 6,
+      "vertical_irregularity_check": 6,
+      "expected_strength_with_finish": 16,
+      "materials": 9,
+      "capacity_design_chain": 60,
+      "line_true_mass": 27,
+      "design_basis_notes": 8,
+      "sample_calcs": 6,
+      "design_changes_from_the_project_brief": 8
+    }
+  },
+  {
+    "building": "CFS-14",
+    "source_consistency": {
+      "package": "calc_package_cfs.json",
+      "package_sha1": "e28568e12aca4d2f5a5774f6e98a517e30d3cbda",
+      "package_mtime": 1793426164.5292068,
+      "checked_at": 1793426165.1427164,
+      "n_issues": 0,
+      "issues": [],
+      "result": "PASS"
+    },
+    "file_hash_checks": [
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": null,
+      "model_elements": null,
+      "transforms": null,
+      "tag_check": "NOT APPLICABLE"
+    },
+    "sections": [
+      "7/16 in. OSB rated sheathi",
+      "L4 2 x 600S162-43",
+      "none -- flat-strap X-braci",
+      "track"
+    ],
+    "top_level_record_counts": {
+      "combos": 24,
+      "wall_lines": 39,
+      "holddowns": 16,
+      "anchorage": 11,
+      "studs": 30,
+      "collectors": 7,
+      "drift_table": 39,
+      "preflight_warnings": 0,
+      "finish_strength_bound": 17,
+      "corner_chords": 6,
+      "framing": 10,
+      "diaphragms": 8,
+      "connections": 12,
+      "foundation_demands": 17,
+      "foundation_gravity_line_loads": 7,
+      "rho_check_table": 6,
+      "vertical_irregularity_check": 6,
+      "expected_strength_with_finish": 8,
+      "capacity_design_chain": 39,
+      "strap_capacity_chain": 11,
+      "capacity_design_by_direction": 2,
+      "materials": 14,
+      "design_basis_notes": 10,
+      "line_true_mass": 21,
+      "sample_calcs": 7,
+      "design_changes_from_the_project_brief": 10
+    }
+  },
+  {
+    "building": "CFS-15",
+    "source_consistency": {
+      "package": "calc_package_cfs.json",
+      "package_sha1": "8dccee505e320c1425ee6f63405aa8b5b4e3c969",
+      "package_mtime": 1793426177.0772076,
+      "checked_at": 1793426178.1367106,
+      "n_issues": 0,
+      "issues": [],
+      "result": "PASS"
+    },
+    "file_hash_checks": [
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": null,
+      "model_elements": null,
+      "transforms": null,
+      "tag_check": "NOT APPLICABLE"
+    },
+    "sections": [
+      "7/16 in. OSB rated sheathi",
+      "L6 2 x 600S162-43",
+      "track"
+    ],
+    "top_level_record_counts": {
+      "combos": 22,
+      "wall_lines": 134,
+      "holddowns": 26,
+      "anchorage": 26,
+      "studs": 49,
+      "collectors": 15,
+      "drift_table": 134,
+      "preflight_warnings": 0,
+      "finish_strength_bound": 26,
+      "drift_by_block": 6,
+      "framing": 13,
+      "diaphragms": 12,
+      "step_line_collection": 6,
+      "connections": 10,
+      "foundation_demands": 26,
+      "foundation_gravity_line_loads": 11,
+      "movement_joint_temperature_range": 4,
+      "movement_joint_assessment": 4,
+      "line_demand_envelope_NS": 32,
+      "line_demand_split_EW": 16,
+      "line_mass_ratio_EW": 6,
+      "rho_check_table": 10,
+      "vertical_irregularity_check": 10,
+      "expected_strength_with_finish": 26,
+      "capacity_design_chain": 134,
+      "expected_strength_into_collectors": 9,
+      "materials": 10,
+      "design_basis_notes": 8,
+      "sample_calcs": 7,
+      "design_changes_from_the_project_brief": 11
+    }
+  },
+  {
+    "building": "CFS-16",
+    "source_consistency": {
+      "package": "calc_package_cfs.json",
+      "package_sha1": "6ef4f86d8363740622f6e3ac39fe0317dfee8dee",
+      "package_mtime": 1793426178.0338252,
+      "checked_at": 1793426178.2692404,
+      "n_issues": 0,
+      "issues": [],
+      "result": "PASS"
+    },
+    "file_hash_checks": [
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": null,
+      "model_elements": null,
+      "transforms": null,
+      "tag_check": "NOT APPLICABLE"
+    },
+    "sections": [
+      "4x1400S300-118",
+      "X-strap",
+      "girt",
+      "purlin",
+      "roof X-strap"
+    ],
+    "top_level_record_counts": {
+      "combos": 94,
+      "members": 2,
+      "connections": 2,
+      "anchorage": 1,
+      "schedules": 4,
+      "drift_table": 5,
+      "preflight_warnings": 0,
+      "notes": 1,
+      "materials": 9,
+      "load_basis": 7,
+      "cc_wind_pressures": 5,
+      "purlin_girt_I621_conditions": 16,
+      "sample_calcs": 4
+    }
+  },
+  {
+    "building": "CFS-17",
+    "source_consistency": {
+      "package": "calc_package_cfs.json",
+      "package_sha1": "da9b7bab6f11e2b8530423bad791bbac98060934",
+      "package_mtime": 1793426191.34758,
+      "checked_at": 1793426191.6134837,
+      "n_issues": 0,
+      "issues": [],
+      "result": "PASS"
+    },
+    "file_hash_checks": [
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": null,
+      "model_elements": null,
+      "transforms": null,
+      "tag_check": "NOT APPLICABLE"
+    },
+    "sections": [
+      "6x1400S300-118",
+      "6x1400S300-97",
+      "X-strap",
+      "girt",
+      "purlin",
+      "roof X-strap"
+    ],
+    "top_level_record_counts": {
+      "combos": 116,
+      "members": 3,
+      "connections": 3,
+      "anchorage": 1,
+      "schedules": 4,
+      "drift_table": 5,
+      "preflight_warnings": 0,
+      "notes": 2,
+      "snow_case_table": 6,
+      "base_reactions_by_snow_case": 6,
+      "materials": 10,
+      "load_basis": 8,
+      "cc_wind_pressures": 3,
+      "purlin_girt_I621_conditions": 16,
+      "sample_calcs": 2
+    }
+  },
+  {
+    "building": "CFS-18",
+    "source_consistency": {
+      "package": "calc_package_cfs.json",
+      "package_sha1": "bc93327fc647a0d16af04eacbc90875616145d16",
+      "package_mtime": 1793426191.426722,
+      "checked_at": 1793426191.6084168,
+      "n_issues": 0,
+      "issues": [],
+      "result": "PASS"
+    },
+    "file_hash_checks": [
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": null,
+      "model_elements": null,
+      "transforms": null,
+      "tag_check": "NOT APPLICABLE"
+    },
+    "sections": [
+      "2 x 1600S350-118 back-to-bac",
+      "HSS10x10x3/8, ASTM A500 Gr C",
+      "X-strap",
+      "girt",
+      "purlin"
+    ],
+    "top_level_record_counts": {
+      "combos": 94,
+      "members": 2,
+      "connections": 1,
+      "anchorage": 1,
+      "schedules": 3,
+      "drift_table": 5,
+      "preflight_warnings": 0,
+      "notes": 1,
+      "headers": 1,
+      "framing": 13,
+      "diaphragms": 3,
+      "chords": 3,
+      "bases": 4,
+      "joists": 2,
+      "departures_from_requested_criteria": 5,
+      "sample_calcs": 3
+    }
+  },
+  {
+    "building": "CFS-19",
+    "source_consistency": {
+      "package": "calc_package_cfs.json",
+      "package_sha1": "e1937acc0a9fa3dcd26e335f166d184b60d95bcc",
+      "package_mtime": 1793426201.733209,
+      "checked_at": 1793426201.9619203,
+      "n_issues": 0,
+      "issues": [],
+      "result": "PASS"
+    },
+    "file_hash_checks": [
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": null,
+      "model_elements": null,
+      "transforms": null,
+      "tag_check": "NOT APPLICABLE"
+    },
+    "sections": [
+      "6x1400S300-118",
+      "6x1400S300-97",
+      "X-strap",
+      "girt",
+      "purlin",
+      "roof X-strap"
+    ],
+    "top_level_record_counts": {
+      "combos": 132,
+      "members": 2,
+      "connections": 2,
+      "anchorage": 1,
+      "schedules": 5,
+      "drift_table": 6,
+      "preflight_warnings": 0,
+      "notes": 2,
+      "fatigue_check": 12,
+      "runway_reactions": 2,
+      "materials": 13,
+      "load_basis": 7,
+      "cc_wind_pressures": 5,
+      "purlin_girt_I621_conditions": 16,
+      "sample_calcs": 3,
+      "foundation_forces_by_base": 2
+    }
+  },
+  {
+    "building": "CFS-25",
+    "source_consistency": {
+      "package": "calc_package_cfs.json",
+      "package_sha1": "0055b7a11e3a7f6ee6f4cbb5bb060bc30f594c77",
+      "package_mtime": 1793426211.5492096,
+      "checked_at": 1793426211.777071,
+      "n_issues": 0,
+      "issues": [],
+      "result": "PASS"
+    },
+    "file_hash_checks": [
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": null,
+      "model_elements": null,
+      "transforms": null,
+      "tag_check": "NOT APPLICABLE"
+    },
+    "sections": [
+      "X-strap",
+      "existing tapered rigid frame",
+      "girt",
+      "purlin"
+    ],
+    "top_level_record_counts": {
+      "combos": 7,
+      "members": 2,
+      "connections": 2,
+      "anchorage": 1,
+      "schedules": 5,
+      "drift_table": 2,
+      "preflight_warnings": 0,
+      "notes": 2,
+      "codes_extra": 1,
+      "load_basis": 6,
+      "cc_wind_pressures": 6,
+      "materials": 6,
+      "sample_calcs": 2
+    }
+  },
+  {
+    "building": "CFS-26",
+    "source_consistency": {
+      "package": "calc_package_cfs.json",
+      "package_sha1": "2d66022337eacd6758e8b9e32daf99da648d6838",
+      "package_mtime": 1793426214.5012097,
+      "checked_at": 1793426214.7301245,
+      "n_issues": 0,
+      "issues": [],
+      "result": "PASS"
+    },
+    "file_hash_checks": [
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": null,
+      "model_elements": null,
+      "transforms": null,
+      "tag_check": "NOT APPLICABLE"
+    },
+    "sections": [
+      "2 x 1400S250-97 back-to-back",
+      "2 x 1400S350-118 toe-to-toe ",
+      "purlin",
+      "roof X-strap"
+    ],
+    "top_level_record_counts": {
+      "combos": 123,
+      "members": 3,
+      "connections": 2,
+      "anchorage": 1,
+      "schedules": 5,
+      "drift_table": 6,
+      "preflight_warnings": 0,
+      "notes": 8,
+      "wind_case_table": 12,
+      "minimum_wind_check": 2,
+      "cc_zone_table": 9,
+      "column_biaxial_checks": 24,
+      "pier_handoff": 6,
+      "cantilever_column_checks": 2,
+      "departures_from_the_project_criteria": 2,
+      "materials": 10,
+      "sample_calcs": 5
+    }
+  },
+  {
+    "building": "CFS-27",
+    "source_consistency": {
+      "package": "calc_package_cfs.json",
+      "package_sha1": "c20763951be52b202daab8e192f8dc263101c829",
+      "package_mtime": 1793426219.2686827,
+      "checked_at": 1793426219.4626474,
+      "n_issues": 0,
+      "issues": [],
+      "result": "PASS"
+    },
+    "file_hash_checks": [
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": null,
+      "model_elements": null,
+      "transforms": null,
+      "tag_check": "NOT APPLICABLE"
+    },
+    "sections": [
+      "1400S300-118",
+      "1400S300-97",
+      "X-strap",
+      "girt",
+      "purlin",
+      "roof X-strap"
+    ],
+    "top_level_record_counts": {
+      "combos": 94,
+      "members": 2,
+      "connections": 2,
+      "anchorage": 1,
+      "schedules": 5,
+      "drift_table": 6,
+      "preflight_warnings": 0,
+      "notes": 2,
+      "torsion_companion": 3,
+      "MWFRS wind cases (as analysed)": 10,
+      "materials": 11,
+      "load_basis": 7,
+      "cc_wind_pressures": 5,
+      "cladding_wind_pressures": 5,
+      "purlin_girt_I621_conditions": 16,
+      "sample_calcs": 3,
+      "foundation_forces_by_base": 3
+    }
+  },
+  {
+    "building": "CFS-28",
+    "source_consistency": {
+      "package": "calc_package_cfs.json",
+      "package_sha1": "5eb64c74ce08fc36d7c21945b0f420bc6d73839c",
+      "package_mtime": 1793426221.5315473,
+      "checked_at": 1793426221.7811368,
+      "n_issues": 0,
+      "issues": [],
+      "result": "PASS"
+    },
+    "file_hash_checks": [
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": null,
+      "model_elements": null,
+      "transforms": null,
+      "tag_check": "NOT APPLICABLE"
+    },
+    "sections": [
+      "6x1400S300-118",
+      "6x1400S300-97",
+      "X-strap",
+      "girt",
+      "header X-strap",
+      "header strut",
+      "purlin",
+      "roof X-strap"
+    ],
+    "top_level_record_counts": {
+      "combos": 126,
+      "members": 3,
+      "connections": 2,
+      "anchorage": 1,
+      "schedules": 4,
+      "drift_table": 5,
+      "preflight_warnings": 0,
+      "notes": 3,
+      "enclosure_worksheet": 3,
+      "materials": 12,
+      "load_basis": 7,
+      "cc_wind_pressures": 5,
+      "purlin_girt_I621_conditions": 16,
+      "sample_calcs": 3
+    }
+  },
+  {
+    "building": "CFS-29",
+    "source_consistency": {
+      "package": "calc_package_cfs.json",
+      "package_sha1": "096109b86bb53d577cdfacb461eb99cb9925ea29",
+      "package_mtime": 1793426221.2501895,
+      "checked_at": 1793426221.4120955,
+      "n_issues": 0,
+      "issues": [],
+      "result": "PASS"
+    },
+    "file_hash_checks": [
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": null,
+      "model_elements": null,
+      "transforms": null,
+      "tag_check": "NOT APPLICABLE"
+    },
+    "sections": [
+      "boxed 2 x 600S250-97 (50 k",
+      "none (flat-strap X-bracing",
+      "track"
+    ],
+    "top_level_record_counts": {
+      "combos": 13,
+      "wall_lines": 5,
+      "holddowns": 5,
+      "anchorage": 5,
+      "studs": 6,
+      "collectors": 5,
+      "drift_table": 5,
+      "preflight_warnings": 1,
+      "gravity_framing": 3,
+      "connections": 7,
+      "diaphragms": 1,
+      "materials": 9,
+      "sample_calcs": 4,
+      "framing": 3
+    }
+  },
+  {
+    "building": "CFS-30",
+    "source_consistency": {
+      "package": "calc_package_cfs.json",
+      "package_sha1": "680fa299c3a24a7e64b6b5be56b5de28d4b18770",
+      "package_mtime": 1793426234.1350615,
+      "checked_at": 1793426234.396576,
+      "n_issues": 0,
+      "issues": [],
+      "result": "PASS"
+    },
+    "file_hash_checks": [
+      true
+    ],
+    "model_stats": {
+      "literal_nodes": null,
+      "model_elements": null,
+      "transforms": null,
+      "tag_check": "NOT APPLICABLE"
+    },
+    "sections": [
+      "6x1400S300-118",
+      "6x1400S300-97",
+      "X-strap",
+      "girt",
+      "purlin",
+      "roof X-strap"
+    ],
+    "top_level_record_counts": {
+      "combos": 195,
+      "members": 3,
+      "connections": 2,
+      "anchorage": 1,
+      "schedules": 5,
+      "drift_table": 6,
+      "preflight_warnings": 0,
+      "notes": 1,
+      "materials": 11,
+      "load_basis": 10,
+      "cc_wind_pressures": 2,
+      "cladding_wind_pressures": 6,
+      "sample_calcs": 4,
+      "foundation_forces_by_base": 8
+    }
+  }
+]

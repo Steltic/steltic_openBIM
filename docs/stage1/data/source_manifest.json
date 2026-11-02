@@ -1,0 +1,5686 @@
+[
+  {
+    "module": "HR",
+    "building": "Ex1_SCBF_5levels",
+    "file": "activity_log.jsonl",
+    "bytes": 18405,
+    "sha256": "d4b2a08e5f234b246c54b84d8545937a37a9e148185d6a0a880d42f2bffb148f"
+  },
+  {
+    "module": "HR",
+    "building": "Ex1_SCBF_5levels",
+    "file": "cfg.py",
+    "bytes": 9936,
+    "sha256": "b34c1307ddd1d32a945c25a881ac1e8eab631a5c3edd0e7c6c05c9288a7cf466"
+  },
+  {
+    "module": "HR",
+    "building": "Ex1_SCBF_5levels",
+    "file": "design/_demand_cache.json",
+    "bytes": 186757,
+    "sha256": "343439ae22c21598a5d2a453c3a757f07554769418f285580a3abe86ccb1946e"
+  },
+  {
+    "module": "HR",
+    "building": "Ex1_SCBF_5levels",
+    "file": "design/calc_package.json",
+    "bytes": 283331,
+    "sha256": "120834af13079f909fd618f8c777b2e879d619e0c5be17b841db32f710613622"
+  },
+  {
+    "module": "HR",
+    "building": "Ex1_SCBF_5levels",
+    "file": "design/calc_package.json.seed",
+    "bytes": 44662,
+    "sha256": "ea0abc8618de82ca44f22fdbbb9c919f3ced224a5f713f7da1e52d34a2da6660"
+  },
+  {
+    "module": "HR",
+    "building": "Ex1_SCBF_5levels",
+    "file": "design/connection_demands.csv",
+    "bytes": 57890,
+    "sha256": "392d9785a523099bcf0671442c8ad781aaf39709ab7e6c6fcfbb8b80bd17d17d"
+  },
+  {
+    "module": "HR",
+    "building": "Ex1_SCBF_5levels",
+    "file": "design/consistency_result.json",
+    "bytes": 288,
+    "sha256": "03d3dfc5e2bff68fee731f7fa14ed4bd8fa95b97e59811cd7e45c70da15b4ac9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex1_SCBF_5levels",
+    "file": "design/design_report.md",
+    "bytes": 1168,
+    "sha256": "81c43e32676caf35dba9e233ce8d32ed064855d8de1677296b93e0a4eb047277"
+  },
+  {
+    "module": "HR",
+    "building": "Ex1_SCBF_5levels",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex1_SCBF_5levels",
+    "file": "design/member_demands.md",
+    "bytes": 8186,
+    "sha256": "34bf52e19837ba7d10e36df4c782593d0391f0e032ae1f61a0e512cf0862992d"
+  },
+  {
+    "module": "HR",
+    "building": "Ex1_SCBF_5levels",
+    "file": "design/member_schedule.csv",
+    "bytes": 64273,
+    "sha256": "8bd038f540535dc43fa04e5f04d65b84e3041a135e631c0b8d3cd914341a377f"
+  },
+  {
+    "module": "HR",
+    "building": "Ex1_SCBF_5levels",
+    "file": "design/pipeline_results.json",
+    "bytes": 2582,
+    "sha256": "b5f7b003fdede4a5c5d7d8589f697c156cbd74f2a97e111f3476c9f649c9c3bc"
+  },
+  {
+    "module": "HR",
+    "building": "Ex1_SCBF_5levels",
+    "file": "model_opensees.py",
+    "bytes": 47842,
+    "sha256": "ad83bb75ef8249e02c398759cbb6a90c744e800a223e83c44f98c844422c29c0"
+  },
+  {
+    "module": "HR",
+    "building": "Ex1_SCBF_5levels",
+    "file": "model_static.py",
+    "bytes": 212734,
+    "sha256": "85adbcbbee0e79a088d60f658682899c09437b949578ce2abe5eec33f5b2f101"
+  },
+  {
+    "module": "HR",
+    "building": "Ex1_SCBF_5levels",
+    "file": "qa_annex.html",
+    "bytes": 14734,
+    "sha256": "4be622f9305f4506b141e07c5b5dc73f8c64e5eaf3a9dfc809dae9a17fafd4b7"
+  },
+  {
+    "module": "HR",
+    "building": "Ex1_SCBF_5levels",
+    "file": "report.html",
+    "bytes": 403509,
+    "sha256": "72caa7a0daa484f8bbdd62090158a9797440d9a93214be7654995523bc07206c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex1_SCBF_5levels",
+    "file": "viewer_3d.html",
+    "bytes": 771027,
+    "sha256": "7641fb4034b1a81f7c3ecf48cc219306684cb470e29e42cd429747596c399b63"
+  },
+  {
+    "module": "HR",
+    "building": "Ex2_SMF_9levels",
+    "file": "activity_log.jsonl",
+    "bytes": 24878,
+    "sha256": "6c892a62367ee4f8d38237cb02baf6cb2c9009e1b2c72b4172506177ad5e224c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex2_SMF_9levels",
+    "file": "cfg.py",
+    "bytes": 16438,
+    "sha256": "7107a43388781d4f30c2ec63fe0c0fe8cd5cef889cad64daf86c1f128174c0e7"
+  },
+  {
+    "module": "HR",
+    "building": "Ex2_SMF_9levels",
+    "file": "design/_demand_cache.json",
+    "bytes": 434481,
+    "sha256": "520e08bf1d5e2eed823ae2e229f660f3f03df7611b9101f9c83bdce642a5a93f"
+  },
+  {
+    "module": "HR",
+    "building": "Ex2_SMF_9levels",
+    "file": "design/calc_package.demands.json",
+    "bytes": 43799,
+    "sha256": "d2bb7551660ff67c146be9c37565d792f8973bb83b4440e3cddfdba171f22b97"
+  },
+  {
+    "module": "HR",
+    "building": "Ex2_SMF_9levels",
+    "file": "design/calc_package.json",
+    "bytes": 302540,
+    "sha256": "cd3abf5b7d36af64e959396206737626c91c01f0951f341bba7182f9eacdb12c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex2_SMF_9levels",
+    "file": "design/connection_demands.csv",
+    "bytes": 131500,
+    "sha256": "db0ae669c98dc53a3754cf30a1084b38b73e19a45798be8eb8b935fa0758a0bd"
+  },
+  {
+    "module": "HR",
+    "building": "Ex2_SMF_9levels",
+    "file": "design/consistency_result.json",
+    "bytes": 287,
+    "sha256": "2be62d5734988bbc93aeb7ab1d1ea2fe94ef1cb75540788482558099ed2c7561"
+  },
+  {
+    "module": "HR",
+    "building": "Ex2_SMF_9levels",
+    "file": "design/design_report.md",
+    "bytes": 676,
+    "sha256": "25c268929443de6ace7dadb201770f5d91177098d1b4d8b77ebef254e0a9d815"
+  },
+  {
+    "module": "HR",
+    "building": "Ex2_SMF_9levels",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex2_SMF_9levels",
+    "file": "design/member_demands.md",
+    "bytes": 8019,
+    "sha256": "773e30fcc8d67702dffc41ce80b14fef31f6f2003bcb37460006185116d5d2c6"
+  },
+  {
+    "module": "HR",
+    "building": "Ex2_SMF_9levels",
+    "file": "design/member_schedule.csv",
+    "bytes": 143872,
+    "sha256": "18f68938f9fced0a8f754adb197234372f169faa838477c75dd2a46313efbd22"
+  },
+  {
+    "module": "HR",
+    "building": "Ex2_SMF_9levels",
+    "file": "design/pipeline_results.json",
+    "bytes": 2796,
+    "sha256": "58fc9ae5c0f16893eedd374e7698b32897dfd931ac9148a2f83105c67eadf92f"
+  },
+  {
+    "module": "HR",
+    "building": "Ex2_SMF_9levels",
+    "file": "model_opensees.py",
+    "bytes": 112901,
+    "sha256": "f02b0010291b342bd4ab977870f9dc58ea020e8a040a0b073fe18e133f548b56"
+  },
+  {
+    "module": "HR",
+    "building": "Ex2_SMF_9levels",
+    "file": "model_static.py",
+    "bytes": 537935,
+    "sha256": "2e3a5184a52a6650f7cdecdba78e5000fe65a888f15fa53b78fbffbbd74b1ee3"
+  },
+  {
+    "module": "HR",
+    "building": "Ex2_SMF_9levels",
+    "file": "qa_annex.html",
+    "bytes": 18378,
+    "sha256": "1a364a6f76e9e942b8e8eb519fbb999c46cdaaca44a3bd7b6d2d5b2e8cbbe20e"
+  },
+  {
+    "module": "HR",
+    "building": "Ex2_SMF_9levels",
+    "file": "report.html",
+    "bytes": 448796,
+    "sha256": "b0eae1d112218d54c86a4890173b4d6a3f7b0093919bd214455149f18d1f5193"
+  },
+  {
+    "module": "HR",
+    "building": "Ex2_SMF_9levels",
+    "file": "viewer_3d.html",
+    "bytes": 976994,
+    "sha256": "c70ba56fd43ca9535923fe2a1b04c061ed8ff1b9be0a77966be086cc658e6bc2"
+  },
+  {
+    "module": "HR",
+    "building": "Ex3_BracedMoment_7levels",
+    "file": "activity_log.jsonl",
+    "bytes": 14430,
+    "sha256": "dffd3f71220056402664fa3992fe29cc9522a967f499462caa762d0ba89278ec"
+  },
+  {
+    "module": "HR",
+    "building": "Ex3_BracedMoment_7levels",
+    "file": "cfg.py",
+    "bytes": 16557,
+    "sha256": "44e17cade86a86f46ef0ab363f73f574f00058e0ea62c222a3eed6af4dcbf5bb"
+  },
+  {
+    "module": "HR",
+    "building": "Ex3_BracedMoment_7levels",
+    "file": "design/_demand_cache.json",
+    "bytes": 238972,
+    "sha256": "01bf4e77bd7edb2393c68f95788f1ea48f6a5a118e5b98751bc34f9ab07471f5"
+  },
+  {
+    "module": "HR",
+    "building": "Ex3_BracedMoment_7levels",
+    "file": "design/calc_package.json",
+    "bytes": 288790,
+    "sha256": "d2199b441f76a34e5b51c69f2458bdb8faf2d78fb36d7644e63627855009c6c3"
+  },
+  {
+    "module": "HR",
+    "building": "Ex3_BracedMoment_7levels",
+    "file": "design/calc_package.seed.json",
+    "bytes": 57239,
+    "sha256": "59e3ad567d07d62db487fb569b254a44e30213633054e12c5bcb504d47dc642d"
+  },
+  {
+    "module": "HR",
+    "building": "Ex3_BracedMoment_7levels",
+    "file": "design/connection_demands.csv",
+    "bytes": 92653,
+    "sha256": "f8851da2df142ceb1794f43a5888a81c7d3dde0c7987f53202056509ae9eede5"
+  },
+  {
+    "module": "HR",
+    "building": "Ex3_BracedMoment_7levels",
+    "file": "design/consistency_result.json",
+    "bytes": 296,
+    "sha256": "f5f5a48013216627c73fabccf96b75366d84c7130e4e116e91bee1dc1d3e2012"
+  },
+  {
+    "module": "HR",
+    "building": "Ex3_BracedMoment_7levels",
+    "file": "design/design_report.md",
+    "bytes": 784,
+    "sha256": "251c4c0c437e3dcf73740f4d411c0d66fb351a015fc502e9d94bdce8c8216b63"
+  },
+  {
+    "module": "HR",
+    "building": "Ex3_BracedMoment_7levels",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex3_BracedMoment_7levels",
+    "file": "design/member_demands.md",
+    "bytes": 9314,
+    "sha256": "86ac2007f35f002bef0e0ee7ed3759f35c1a57b0c059a91de0c46214575db044"
+  },
+  {
+    "module": "HR",
+    "building": "Ex3_BracedMoment_7levels",
+    "file": "design/member_schedule.csv",
+    "bytes": 76020,
+    "sha256": "ea1fc491cc864e60260712b72a59112d7ca57e2ad651e19179c23ecf76057154"
+  },
+  {
+    "module": "HR",
+    "building": "Ex3_BracedMoment_7levels",
+    "file": "design/pipeline_results.json",
+    "bytes": 2934,
+    "sha256": "0b2ece4c2a37434e3c6848e83cf32935400c92e93581cfb9d66b7f45e7b510e9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex3_BracedMoment_7levels",
+    "file": "design/results_extra.json",
+    "bytes": 1372,
+    "sha256": "9af1950001998593e65538f7893c64bb3860f9e538ac55f9cac11cbc9f8d3162"
+  },
+  {
+    "module": "HR",
+    "building": "Ex3_BracedMoment_7levels",
+    "file": "model_opensees.py",
+    "bytes": 88512,
+    "sha256": "13c14150f860f95c2c249c2e71df2638ebd3c1c6357f0a49f4339cd8b8b04d05"
+  },
+  {
+    "module": "HR",
+    "building": "Ex3_BracedMoment_7levels",
+    "file": "model_static.py",
+    "bytes": 420002,
+    "sha256": "0b848a9c969398e994c3103e164c30394c9193ceeaf33e4df712276db248b20a"
+  },
+  {
+    "module": "HR",
+    "building": "Ex3_BracedMoment_7levels",
+    "file": "qa_annex.html",
+    "bytes": 12382,
+    "sha256": "88ba5db62c95e465b0e1b9c03f0645df34f4417e9e4402ccd4bfe40455f2834b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex3_BracedMoment_7levels",
+    "file": "report.html",
+    "bytes": 435660,
+    "sha256": "99b52b1143fefc9b3ef17a0cb6d02f1717a5883e5b829c86f29642b10501d920"
+  },
+  {
+    "module": "HR",
+    "building": "Ex3_BracedMoment_7levels",
+    "file": "viewer_3d.html",
+    "bytes": 899334,
+    "sha256": "b7ae24d811796c69d1dd8b20bada3b31a68786af13324cdfeafa7bfbb2eb88a7"
+  },
+  {
+    "module": "HR",
+    "building": "Ex4_BRBF_3levels",
+    "file": "activity_log.jsonl",
+    "bytes": 19105,
+    "sha256": "2dd523fa4006a58a25a0d9983877753a57af991eaa0f07f9c4195e7c13c86401"
+  },
+  {
+    "module": "HR",
+    "building": "Ex4_BRBF_3levels",
+    "file": "cfg.py",
+    "bytes": 9843,
+    "sha256": "6232bd3aa9933825a7f3282ca3abb739bb5a11b53322ed81156082f337bc51f3"
+  },
+  {
+    "module": "HR",
+    "building": "Ex4_BRBF_3levels",
+    "file": "design/_demand_cache.json",
+    "bytes": 146197,
+    "sha256": "038b251529efb0fcb3423f799328b2b02a6965cad6c136421540ac73242fcf00"
+  },
+  {
+    "module": "HR",
+    "building": "Ex4_BRBF_3levels",
+    "file": "design/calc_package.demands.json",
+    "bytes": 47404,
+    "sha256": "e0c91c3f6a7ed5573582f604f2da9ee0247481f5c2f0a905952e14c784571c62"
+  },
+  {
+    "module": "HR",
+    "building": "Ex4_BRBF_3levels",
+    "file": "design/calc_package.json",
+    "bytes": 431644,
+    "sha256": "3eabdda619d17b10cc7d8cef2b85157e33f59b74a3d72b8fdf122ba0e24cbedc"
+  },
+  {
+    "module": "HR",
+    "building": "Ex4_BRBF_3levels",
+    "file": "design/connection_demands.csv",
+    "bytes": 53768,
+    "sha256": "5b2db7c4a1307f22ae6b29cf3fba304094d6b10e13edf7dd98d894f8e7d0deeb"
+  },
+  {
+    "module": "HR",
+    "building": "Ex4_BRBF_3levels",
+    "file": "design/consistency_result.json",
+    "bytes": 288,
+    "sha256": "f8e252ec5f84681749bce72189be5958829903d6025f5fd66e12777f97135388"
+  },
+  {
+    "module": "HR",
+    "building": "Ex4_BRBF_3levels",
+    "file": "design/design_report.md",
+    "bytes": 1163,
+    "sha256": "0bf8f78c22745088e74203d295b85b386d769e27261be7df0f429522445113aa"
+  },
+  {
+    "module": "HR",
+    "building": "Ex4_BRBF_3levels",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex4_BRBF_3levels",
+    "file": "design/member_demands.md",
+    "bytes": 8674,
+    "sha256": "c7dd4c4799255d21b8358aa39ecf4144d14983898e8da49f0754cba1d6558c6b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex4_BRBF_3levels",
+    "file": "design/member_schedule.csv",
+    "bytes": 51099,
+    "sha256": "f24c7ac4930c7c01854db875935ca100f6face45c10143fb2135787e171fcd53"
+  },
+  {
+    "module": "HR",
+    "building": "Ex4_BRBF_3levels",
+    "file": "design/pipeline_results.json",
+    "bytes": 2293,
+    "sha256": "31216dadeb873ce3502d32a246dca4d67e3640272fa173283178f1011bf0cc8f"
+  },
+  {
+    "module": "HR",
+    "building": "Ex4_BRBF_3levels",
+    "file": "design/separation.json",
+    "bytes": 225,
+    "sha256": "24cb7189bfb7a440ec464ebf32573dde44f594b747b0447a25167f3efca62cbb"
+  },
+  {
+    "module": "HR",
+    "building": "Ex4_BRBF_3levels",
+    "file": "model_opensees.py",
+    "bytes": 41894,
+    "sha256": "4f0411b2f2ff2a51f2bd8dbd13bdd0dfcfcd01088cc0ac01680016ca341786af"
+  },
+  {
+    "module": "HR",
+    "building": "Ex4_BRBF_3levels",
+    "file": "model_static.py",
+    "bytes": 192375,
+    "sha256": "86b4daafa158370b2d6b8e17c39c4e2f82923e57fd4b83a4055940e7668fc01a"
+  },
+  {
+    "module": "HR",
+    "building": "Ex4_BRBF_3levels",
+    "file": "qa_annex.html",
+    "bytes": 15070,
+    "sha256": "db97b883d7cba7441be48a131d3f8aadce50323d684583e1b73b6056499634b1"
+  },
+  {
+    "module": "HR",
+    "building": "Ex4_BRBF_3levels",
+    "file": "report.html",
+    "bytes": 550291,
+    "sha256": "5313d4a97b173a2842eb70b9023ea20978dbe46e591966de1ee43e79a053fda2"
+  },
+  {
+    "module": "HR",
+    "building": "Ex4_BRBF_3levels",
+    "file": "viewer_3d.html",
+    "bytes": 750359,
+    "sha256": "9556e2bd8c5fa5848712df115d41dfdcd88f9cdb418ec0eb9d29b972582234ad"
+  },
+  {
+    "module": "HR",
+    "building": "Ex5_SMF_10levels",
+    "file": "activity_log.jsonl",
+    "bytes": 24883,
+    "sha256": "e425ec91ea59eebc792f260619276e785eed585c87345545e9e59e4f37eecf65"
+  },
+  {
+    "module": "HR",
+    "building": "Ex5_SMF_10levels",
+    "file": "cfg.py",
+    "bytes": 15088,
+    "sha256": "3b2f3c5ecdc93fa0347e2c034b0d67dbcd6d784fcb38f83cdd2d1379b3c568fb"
+  },
+  {
+    "module": "HR",
+    "building": "Ex5_SMF_10levels",
+    "file": "design/_demand_cache.json",
+    "bytes": 480574,
+    "sha256": "9385affb7cdee75d76af5d9f93438a0609485e88d797555ee0ccde65d2d3807e"
+  },
+  {
+    "module": "HR",
+    "building": "Ex5_SMF_10levels",
+    "file": "design/calc_package.demands.json",
+    "bytes": 43153,
+    "sha256": "7bfc8b90d1873f87957880459d22d8cb6c8cc472a3358147110fe0dc1722916e"
+  },
+  {
+    "module": "HR",
+    "building": "Ex5_SMF_10levels",
+    "file": "design/calc_package.json",
+    "bytes": 327417,
+    "sha256": "a5e18a77ab4c1a203c520cc3f0acd97c1745804abf5f833f42f2964bae434677"
+  },
+  {
+    "module": "HR",
+    "building": "Ex5_SMF_10levels",
+    "file": "design/connection_demands.csv",
+    "bytes": 144990,
+    "sha256": "2466441932c0e0cb153ee908f8028350d1f82d78a1e7ee80c9869e596450ab4b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex5_SMF_10levels",
+    "file": "design/consistency_result.json",
+    "bytes": 288,
+    "sha256": "e74450786856b7663039928286db4ab9c5f7724ddf2eabbdcb78bce0c3319a50"
+  },
+  {
+    "module": "HR",
+    "building": "Ex5_SMF_10levels",
+    "file": "design/design_report.md",
+    "bytes": 679,
+    "sha256": "7d2f8083a13b7fee0c34a353c6245f4c3b5559bb74a2b03b7b518206ca4cdfac"
+  },
+  {
+    "module": "HR",
+    "building": "Ex5_SMF_10levels",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex5_SMF_10levels",
+    "file": "design/member_demands.md",
+    "bytes": 8045,
+    "sha256": "f4b23b5bd17647a15773c182a8400d02110a2039065c0ee2041fe65ec330025d"
+  },
+  {
+    "module": "HR",
+    "building": "Ex5_SMF_10levels",
+    "file": "design/member_schedule.csv",
+    "bytes": 159429,
+    "sha256": "898b6d85d203294ea0f2f6c9c7d0fb1264a968533369092bf25376747c7f1da3"
+  },
+  {
+    "module": "HR",
+    "building": "Ex5_SMF_10levels",
+    "file": "design/pipeline_results.json",
+    "bytes": 2853,
+    "sha256": "da964336171b94e70577dd8670d1ec2765abe4866e0f8246f26934c6519433a9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex5_SMF_10levels",
+    "file": "model_opensees.py",
+    "bytes": 125088,
+    "sha256": "52fdf26210a0b9b33b977a782a895d31fc115eba647f9b44d2bc4f05b51a133a"
+  },
+  {
+    "module": "HR",
+    "building": "Ex5_SMF_10levels",
+    "file": "model_static.py",
+    "bytes": 596749,
+    "sha256": "9e1cddc0f65035b7358b864d271e832e5c6dcd68024b6d54e423be32908e9878"
+  },
+  {
+    "module": "HR",
+    "building": "Ex5_SMF_10levels",
+    "file": "qa_annex.html",
+    "bytes": 18380,
+    "sha256": "3d53ddb555a39b35321b500c8ccb16c809f3d28255d2516105682e6062aa24c8"
+  },
+  {
+    "module": "HR",
+    "building": "Ex5_SMF_10levels",
+    "file": "report.html",
+    "bytes": 469225,
+    "sha256": "280dcea4c7cdee8b4e2b21486223eb7f0e07f93abb2c4ca3ffd8673c1459cb6f"
+  },
+  {
+    "module": "HR",
+    "building": "Ex5_SMF_10levels",
+    "file": "viewer_3d.html",
+    "bytes": 1014721,
+    "sha256": "658b194ae6b8ad7ce01723407a901c46cdd6d8ec3235f54980bba4369745858a"
+  },
+  {
+    "module": "HR",
+    "building": "Ex6_SCBF_6levels",
+    "file": "activity_log.jsonl",
+    "bytes": 18786,
+    "sha256": "20d73b3efcc506f9c6fe46785495a5bb5873c807c12855373408c26496bc3fc7"
+  },
+  {
+    "module": "HR",
+    "building": "Ex6_SCBF_6levels",
+    "file": "cfg.py",
+    "bytes": 11421,
+    "sha256": "78ef82795b00f85f6e8d4f105472f05fdf8ea90c2af758c6260041700c42a619"
+  },
+  {
+    "module": "HR",
+    "building": "Ex6_SCBF_6levels",
+    "file": "design/_demand_cache.json",
+    "bytes": 285456,
+    "sha256": "28034c2456246599597946099f33c51fc56c6329bdc69d558a590d4704cb3024"
+  },
+  {
+    "module": "HR",
+    "building": "Ex6_SCBF_6levels",
+    "file": "design/calc_package.json",
+    "bytes": 401135,
+    "sha256": "77dd079d5e0082f70f92aed2ffd7dd2463b37acc57fc5b6e393e775eaf3349b3"
+  },
+  {
+    "module": "HR",
+    "building": "Ex6_SCBF_6levels",
+    "file": "design/calc_package.json.seed",
+    "bytes": 48961,
+    "sha256": "49034e7559ba8208a79e8a748c70018c4c9715e5910b84b06bb5597d6e35e0fa"
+  },
+  {
+    "module": "HR",
+    "building": "Ex6_SCBF_6levels",
+    "file": "design/connection_demands.csv",
+    "bytes": 93422,
+    "sha256": "5ce56cf9100a34bbeffb8b2b1c2fc16155a75ea3f2131bb02c6f757137a38f3b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex6_SCBF_6levels",
+    "file": "design/consistency_result.json",
+    "bytes": 288,
+    "sha256": "3f73c97b7cee9647e2bfd2a3a14880a8595c385c4749f5e50cbd0caae4a8a3c5"
+  },
+  {
+    "module": "HR",
+    "building": "Ex6_SCBF_6levels",
+    "file": "design/design_report.md",
+    "bytes": 1376,
+    "sha256": "34a9615e3eb8e32bf6e1cc41f3b0d16fa053a553f90c6dfa9a8e7770fb90736c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex6_SCBF_6levels",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex6_SCBF_6levels",
+    "file": "design/member_demands.md",
+    "bytes": 9193,
+    "sha256": "eff448ddcffc8eded165828061c7324aca392722b68830f96ec03c2ad45dff17"
+  },
+  {
+    "module": "HR",
+    "building": "Ex6_SCBF_6levels",
+    "file": "design/member_schedule.csv",
+    "bytes": 98582,
+    "sha256": "6d67de1e1df03e6f9961d1b2838c782d057a6c64ad552afb62069fc9cfea20b8"
+  },
+  {
+    "module": "HR",
+    "building": "Ex6_SCBF_6levels",
+    "file": "design/pipeline_results.json",
+    "bytes": 2581,
+    "sha256": "eecbf99eb69a524007e9bee14bd10b4b19ee2acbbc50c714327f2be72fb1e1de"
+  },
+  {
+    "module": "HR",
+    "building": "Ex6_SCBF_6levels",
+    "file": "model_opensees.py",
+    "bytes": 73162,
+    "sha256": "4f9d1d19d69792d50d7208f7a99e6a818044d3153f7e7aa178c91928c975be4c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex6_SCBF_6levels",
+    "file": "model_static.py",
+    "bytes": 325403,
+    "sha256": "74d14b666e838e15f1f44b2d33be43b3ce140caaf5cec23a6e4a89ca235041e3"
+  },
+  {
+    "module": "HR",
+    "building": "Ex6_SCBF_6levels",
+    "file": "qa_annex.html",
+    "bytes": 14924,
+    "sha256": "c333caf6368a8414657a53f4927aa2132a013ee644d8ded314bcdf44ce8cd385"
+  },
+  {
+    "module": "HR",
+    "building": "Ex6_SCBF_6levels",
+    "file": "report.html",
+    "bytes": 510616,
+    "sha256": "5307001034044894f039b8cdf0daa609986695a0e5fbdc0968f4a7a0904e1e1b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex6_SCBF_6levels",
+    "file": "viewer_3d.html",
+    "bytes": 845345,
+    "sha256": "41e00d62be6fa3da71d1ca92715802d21a3c441503e3e071f8a8a2524efac985"
+  },
+  {
+    "module": "HR",
+    "building": "Ex7a_SMF_7levels",
+    "file": "activity_log.jsonl",
+    "bytes": 24883,
+    "sha256": "e4e45826b5fdd59b88d4300c9aca704a720dd8bab8872ac490a6e4ab0ce3e43d"
+  },
+  {
+    "module": "HR",
+    "building": "Ex7a_SMF_7levels",
+    "file": "cfg.py",
+    "bytes": 14951,
+    "sha256": "67b567a381aed601a0d8512fd1ddf2137e2f6b4adc98f7fa32d60508b64a6067"
+  },
+  {
+    "module": "HR",
+    "building": "Ex7a_SMF_7levels",
+    "file": "design/_demand_cache.json",
+    "bytes": 457511,
+    "sha256": "394d4733b89bf628ffb7812a5c4a9d84b3c2afd372fe6e2fe094db0d1f4e1ef3"
+  },
+  {
+    "module": "HR",
+    "building": "Ex7a_SMF_7levels",
+    "file": "design/calc_package.demands.json",
+    "bytes": 48017,
+    "sha256": "75f1fe1cc56d33a21f0645d611af64f40d01eb8a011a7688af629f5ebb8e6132"
+  },
+  {
+    "module": "HR",
+    "building": "Ex7a_SMF_7levels",
+    "file": "design/calc_package.json",
+    "bytes": 317912,
+    "sha256": "62cb50078d7d94520cda538d4a9849bb22b8eca41308a71c9e751ee3714e6aab"
+  },
+  {
+    "module": "HR",
+    "building": "Ex7a_SMF_7levels",
+    "file": "design/connection_demands.csv",
+    "bytes": 139263,
+    "sha256": "f8bc922a123353837c5183e0b3452885c29d182396af0af716eb2f43206d5944"
+  },
+  {
+    "module": "HR",
+    "building": "Ex7a_SMF_7levels",
+    "file": "design/consistency_result.json",
+    "bytes": 288,
+    "sha256": "8acd7d7da61bf3cc7401dc64a2ac0fdfe4d320d3d058ebce9f4b07e022865510"
+  },
+  {
+    "module": "HR",
+    "building": "Ex7a_SMF_7levels",
+    "file": "design/design_report.md",
+    "bytes": 1125,
+    "sha256": "86fb5b7e3d247dcec05e842713b812a6fdbc7758928d56a188a760cd51655e38"
+  },
+  {
+    "module": "HR",
+    "building": "Ex7a_SMF_7levels",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex7a_SMF_7levels",
+    "file": "design/member_demands.md",
+    "bytes": 9141,
+    "sha256": "ce090d586504f1cab960de3a9d47437aef4cf6bd5c31a3a49ac877ccb97b1b5e"
+  },
+  {
+    "module": "HR",
+    "building": "Ex7a_SMF_7levels",
+    "file": "design/member_schedule.csv",
+    "bytes": 149933,
+    "sha256": "b86a55ba118a295a16906d084e717f6f68a7e18daf41b4d6a057e0a623e0a2bb"
+  },
+  {
+    "module": "HR",
+    "building": "Ex7a_SMF_7levels",
+    "file": "design/pipeline_results.json",
+    "bytes": 2830,
+    "sha256": "116d61995c2faff6ce5d6d136429308627db7d6548ff7b339aa14b71fbd3cbf9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex7a_SMF_7levels",
+    "file": "model_opensees.py",
+    "bytes": 119639,
+    "sha256": "4a18cb16e5120afd79d1162123e00ed9193ad5dd24ff5d85bc2c1c545595ed7a"
+  },
+  {
+    "module": "HR",
+    "building": "Ex7a_SMF_7levels",
+    "file": "model_static.py",
+    "bytes": 576274,
+    "sha256": "a3034d79d510912791d29d56e3ae7829410051149e74eaa9d65ae794e4d2ea21"
+  },
+  {
+    "module": "HR",
+    "building": "Ex7a_SMF_7levels",
+    "file": "qa_annex.html",
+    "bytes": 18378,
+    "sha256": "28753587e6a0ec68d1521db201b394c861aa3c1930fe20ead97447f1718eec1d"
+  },
+  {
+    "module": "HR",
+    "building": "Ex7a_SMF_7levels",
+    "file": "report.html",
+    "bytes": 454569,
+    "sha256": "48ba80b274f2378a536edfe52c5a80a9aedb1132a2a2e69da5c8d1f9db50181c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex7a_SMF_7levels",
+    "file": "viewer_3d.html",
+    "bytes": 994414,
+    "sha256": "fa729adb7170f7d0a65d35a0f516a63ee6dc4b1c573ed000891a1a42cbe65f40"
+  },
+  {
+    "module": "HR",
+    "building": "Ex8_EBF_8levels_Lplan",
+    "file": "activity_log.jsonl",
+    "bytes": 20218,
+    "sha256": "21407c11f769a6c5b5115b02050d542f7dc4f96fd336833a5f177e4fef3818c9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex8_EBF_8levels_Lplan",
+    "file": "cfg.py",
+    "bytes": 9905,
+    "sha256": "eab07b313f20f3e33581141614132201149019ff8253ee819b31a62acc231c39"
+  },
+  {
+    "module": "HR",
+    "building": "Ex8_EBF_8levels_Lplan",
+    "file": "design/_demand_cache.json",
+    "bytes": 463350,
+    "sha256": "dff866f37a789aa378e2439168a3d9c091f254ba3348b3ea183043faba94e25f"
+  },
+  {
+    "module": "HR",
+    "building": "Ex8_EBF_8levels_Lplan",
+    "file": "design/calc_package.demands.json",
+    "bytes": 74999,
+    "sha256": "389b4de3fabc39c3c8679e276a2d8091592c202c201c2a5db39bcb11376bbeb4"
+  },
+  {
+    "module": "HR",
+    "building": "Ex8_EBF_8levels_Lplan",
+    "file": "design/calc_package.json",
+    "bytes": 760048,
+    "sha256": "c63039d7fff06c2a8f724b3b6af8817eea5361642e5c0976c8e0864635bf10c8"
+  },
+  {
+    "module": "HR",
+    "building": "Ex8_EBF_8levels_Lplan",
+    "file": "design/connection_demands.csv",
+    "bytes": 140695,
+    "sha256": "947f555886e013143788b9e90cb4b7cf04a21abc56544f2693d73fae3b99cab0"
+  },
+  {
+    "module": "HR",
+    "building": "Ex8_EBF_8levels_Lplan",
+    "file": "design/consistency_result.json",
+    "bytes": 293,
+    "sha256": "f0b3123c58c7792e44c86bf1d985a945860098d6bb5d0b72c26c003d6ad86547"
+  },
+  {
+    "module": "HR",
+    "building": "Ex8_EBF_8levels_Lplan",
+    "file": "design/design_report.md",
+    "bytes": 1252,
+    "sha256": "594710d6369715063a629a407757e5aa0e9730f00fc8513f87f6ef53078d01d9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex8_EBF_8levels_Lplan",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex8_EBF_8levels_Lplan",
+    "file": "design/member_demands.md",
+    "bytes": 12940,
+    "sha256": "6a72f41d4c91985eeca4576390757845c3c95831fdb20aaa8001ba8cc3982029"
+  },
+  {
+    "module": "HR",
+    "building": "Ex8_EBF_8levels_Lplan",
+    "file": "design/member_schedule.csv",
+    "bytes": 175466,
+    "sha256": "b0674d8b5318a39388d24a4c709cd0b20db8e1ad0a5fa138eda13ad59d16eb33"
+  },
+  {
+    "module": "HR",
+    "building": "Ex8_EBF_8levels_Lplan",
+    "file": "design/pipeline_results.json",
+    "bytes": 3194,
+    "sha256": "8c1ebb1471bdd7f3e518b5e4171e35ab35ec970bd92e66a7b5f825963652e9df"
+  },
+  {
+    "module": "HR",
+    "building": "Ex8_EBF_8levels_Lplan",
+    "file": "design/separation.json",
+    "bytes": 226,
+    "sha256": "be17c91f6c724433d0c0a7177b98711fbaffce5bf4ab8eeb354329e48b507ae3"
+  },
+  {
+    "module": "HR",
+    "building": "Ex8_EBF_8levels_Lplan",
+    "file": "model_opensees.py",
+    "bytes": 116847,
+    "sha256": "756f016c1e0ee791654b74b69cf0d814f8b0a625e8cfdfd906e6efa2b418edac"
+  },
+  {
+    "module": "HR",
+    "building": "Ex8_EBF_8levels_Lplan",
+    "file": "model_static.py",
+    "bytes": 559045,
+    "sha256": "912c59c49ff8c463d97953dc5a6c5ccfbf6cb3d31865165d6e415c207b12b57d"
+  },
+  {
+    "module": "HR",
+    "building": "Ex8_EBF_8levels_Lplan",
+    "file": "qa_annex.html",
+    "bytes": 15804,
+    "sha256": "e4c908c0f988486f7bb975b60f052305db470b035bccc3c06a8cc48da37ed013"
+  },
+  {
+    "module": "HR",
+    "building": "Ex8_EBF_8levels_Lplan",
+    "file": "report.html",
+    "bytes": 924449,
+    "sha256": "682cbf656f0753fbe03e6581cf4a610e0d0801d7f976603703c128a9801875ee"
+  },
+  {
+    "module": "HR",
+    "building": "Ex8_EBF_8levels_Lplan",
+    "file": "viewer_3d.html",
+    "bytes": 995486,
+    "sha256": "0297b6d2ae2076e67253f5dfab1a5d6b6ae1628a0fa0306f8b97a928027aaa5b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex9_SPSW_12levels_Tplan",
+    "file": "activity_log.jsonl",
+    "bytes": 22168,
+    "sha256": "dc4f5ce5d84a6dd7514da829a136113aabee6cda7f38334c1aaac3f33222c5a8"
+  },
+  {
+    "module": "HR",
+    "building": "Ex9_SPSW_12levels_Tplan",
+    "file": "cfg.py",
+    "bytes": 32386,
+    "sha256": "852a80efbe8be7725e569e7f6e74496d5b0575c89c64cd4082ddf948b98eb69d"
+  },
+  {
+    "module": "HR",
+    "building": "Ex9_SPSW_12levels_Tplan",
+    "file": "design/_demand_cache.json",
+    "bytes": 603311,
+    "sha256": "1c3dc36c78a7d5e39dc216a9e897f1bd7c93dd7e00ce817266ac9ad59494e89d"
+  },
+  {
+    "module": "HR",
+    "building": "Ex9_SPSW_12levels_Tplan",
+    "file": "design/calc_package.demands.json",
+    "bytes": 94617,
+    "sha256": "fce725a09345bea9d445e4e4f3d4133b968c6eac830987798d60c18fef42ba4f"
+  },
+  {
+    "module": "HR",
+    "building": "Ex9_SPSW_12levels_Tplan",
+    "file": "design/calc_package.json",
+    "bytes": 521969,
+    "sha256": "cabe8976dda9ab43b22b60cf805440912f6ff19e44211be171a03a654e5dd37e"
+  },
+  {
+    "module": "HR",
+    "building": "Ex9_SPSW_12levels_Tplan",
+    "file": "design/connection_demands.csv",
+    "bytes": 174240,
+    "sha256": "eac61fdc76dbb7c025abf8105ffb3a30926bbb8a395de04eb62170322529411b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex9_SPSW_12levels_Tplan",
+    "file": "design/consistency_result.json",
+    "bytes": 295,
+    "sha256": "e5f8a9831b55cf6c1fc04a3f0f71d7822b342da2c51e93eb65eb75592c923c9a"
+  },
+  {
+    "module": "HR",
+    "building": "Ex9_SPSW_12levels_Tplan",
+    "file": "design/design_report.md",
+    "bytes": 620,
+    "sha256": "9b2d76a2829638b0fc753ba90ab71e730cd1c99106ba27b98326370866eef8d1"
+  },
+  {
+    "module": "HR",
+    "building": "Ex9_SPSW_12levels_Tplan",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex9_SPSW_12levels_Tplan",
+    "file": "design/member_demands.md",
+    "bytes": 15296,
+    "sha256": "2799af76b10370897e91eb597849bc0ffa0d34eceeaaf42a84657b54630467cf"
+  },
+  {
+    "module": "HR",
+    "building": "Ex9_SPSW_12levels_Tplan",
+    "file": "design/member_schedule.csv",
+    "bytes": 242549,
+    "sha256": "803a1457a4f4098c278c49fd25cc1313efb89ea7ca42d3512da37c69f997edac"
+  },
+  {
+    "module": "HR",
+    "building": "Ex9_SPSW_12levels_Tplan",
+    "file": "design/pipeline_results.json",
+    "bytes": 3312,
+    "sha256": "d6032b37ee297639654da5356d7e40eaf837e958482e0144db94398fb4e7b69b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex9_SPSW_12levels_Tplan",
+    "file": "model_opensees.py",
+    "bytes": 156623,
+    "sha256": "94a731cc251414e1488fd09ff82844543d34694d79e196c367b0dba86e0abcd3"
+  },
+  {
+    "module": "HR",
+    "building": "Ex9_SPSW_12levels_Tplan",
+    "file": "model_static.py",
+    "bytes": 646921,
+    "sha256": "84c44513fe8c2212447f24cf91f312fbd6afa57c36de19a4df12deec2799814e"
+  },
+  {
+    "module": "HR",
+    "building": "Ex9_SPSW_12levels_Tplan",
+    "file": "qa_annex.html",
+    "bytes": 16739,
+    "sha256": "2fa3def7ded967509779231b2ef8a84df706f9e93e324a0a1c609bccb69b0bec"
+  },
+  {
+    "module": "HR",
+    "building": "Ex9_SPSW_12levels_Tplan",
+    "file": "report.html",
+    "bytes": 776630,
+    "sha256": "f9219fb612b3ba7b2afc425938640175be6366ff9206bf598e8a600084524d1c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex9_SPSW_12levels_Tplan",
+    "file": "viewer_3d.html",
+    "bytes": 1098758,
+    "sha256": "1aef62898de144b4465a551076684a4de73edad6fd062b13ff737c6e508c6777"
+  },
+  {
+    "module": "HR",
+    "building": "Ex10_Dual_SMF_SCBF_16levels_podium",
+    "file": "activity_log.jsonl",
+    "bytes": 16946,
+    "sha256": "6981c2249ded21a02fd3404483e910cbddf0c8e8bbbf7c58af242e3abf4517db"
+  },
+  {
+    "module": "HR",
+    "building": "Ex10_Dual_SMF_SCBF_16levels_podium",
+    "file": "cfg.py",
+    "bytes": 16957,
+    "sha256": "4bf91f74bf364255ad7e4d86ec2ba3f54a903798f5e3633f4c99d59f923812d7"
+  },
+  {
+    "module": "HR",
+    "building": "Ex10_Dual_SMF_SCBF_16levels_podium",
+    "file": "design/_demand_cache.json",
+    "bytes": 750276,
+    "sha256": "5bdeb2d30f844ad6e02bc5b97d88ee7605af9291bc8c0a7cdbdde14341bf479e"
+  },
+  {
+    "module": "HR",
+    "building": "Ex10_Dual_SMF_SCBF_16levels_podium",
+    "file": "design/calc_package.json",
+    "bytes": 1483427,
+    "sha256": "60cdf371c32d8a6545db024ddb6e4647d8f8d484bb413f632c142b4e308ca274"
+  },
+  {
+    "module": "HR",
+    "building": "Ex10_Dual_SMF_SCBF_16levels_podium",
+    "file": "design/connection_demands.csv",
+    "bytes": 230392,
+    "sha256": "570561515f799e83fc7e2ec9c1d99bb08cef55ece78b4eacc0ee5eff7989d21b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex10_Dual_SMF_SCBF_16levels_podium",
+    "file": "design/consistency_result.json",
+    "bytes": 306,
+    "sha256": "590f902bbf0755fb1c81079caf7fd9e03490b6d325fbccd03888f21fc70d60dd"
+  },
+  {
+    "module": "HR",
+    "building": "Ex10_Dual_SMF_SCBF_16levels_podium",
+    "file": "design/design_report.md",
+    "bytes": 1333,
+    "sha256": "4a1f134c380ba44f1591e6465bcec7a174ffbae1764847a628a222df4897fadf"
+  },
+  {
+    "module": "HR",
+    "building": "Ex10_Dual_SMF_SCBF_16levels_podium",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex10_Dual_SMF_SCBF_16levels_podium",
+    "file": "design/member_demands.md",
+    "bytes": 20497,
+    "sha256": "d9cc5af10dfa068f6aa00e759e3129c162f1a7e954ab0abbd7804041e595d62e"
+  },
+  {
+    "module": "HR",
+    "building": "Ex10_Dual_SMF_SCBF_16levels_podium",
+    "file": "design/member_schedule.csv",
+    "bytes": 286266,
+    "sha256": "3fa2e74f03274524435f014ff6c171b2bb25f81ed9c39a51ab650bb51e5ade98"
+  },
+  {
+    "module": "HR",
+    "building": "Ex10_Dual_SMF_SCBF_16levels_podium",
+    "file": "design/pipeline_results.json",
+    "bytes": 130100,
+    "sha256": "40799f828260e1e2684a9f4f070aeee9b8de5328fa3c6c93d6541e3fbd4f6f0b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex10_Dual_SMF_SCBF_16levels_podium",
+    "file": "fill_cfg.json",
+    "bytes": 1393,
+    "sha256": "945d4f593763c7456e6b43aecf70b6f2bf33f87458bc8f9fe10935e60da2f617"
+  },
+  {
+    "module": "HR",
+    "building": "Ex10_Dual_SMF_SCBF_16levels_podium",
+    "file": "model_opensees.py",
+    "bytes": 194163,
+    "sha256": "324581941a4513957ded467ec162085aa0694f938b0c3e4c4c508d75c818fbe8"
+  },
+  {
+    "module": "HR",
+    "building": "Ex10_Dual_SMF_SCBF_16levels_podium",
+    "file": "model_static.py",
+    "bytes": 880037,
+    "sha256": "cd2bc9d49613d1bac1cd2b8de33ab5712add39865029de85a3dba5dbc8babf16"
+  },
+  {
+    "module": "HR",
+    "building": "Ex10_Dual_SMF_SCBF_16levels_podium",
+    "file": "qa_annex.html",
+    "bytes": 13672,
+    "sha256": "6fe0f50c771d2ebb36ffb13973f389b8368be6fdf90bc194294e997ec364ce28"
+  },
+  {
+    "module": "HR",
+    "building": "Ex10_Dual_SMF_SCBF_16levels_podium",
+    "file": "report.html",
+    "bytes": 1742733,
+    "sha256": "5400028aecd76160edd83233a8fafd552d8cf14eda2d5d910c98684772238b1e"
+  },
+  {
+    "module": "HR",
+    "building": "Ex10_Dual_SMF_SCBF_16levels_podium",
+    "file": "story_strength.json",
+    "bytes": 270,
+    "sha256": "7aae8d214791235fd727941d0ca09ad668e9ec309cfb7ab6e657b87282049276"
+  },
+  {
+    "module": "HR",
+    "building": "Ex10_Dual_SMF_SCBF_16levels_podium",
+    "file": "viewer_3d.html",
+    "bytes": 1238971,
+    "sha256": "6c60f86b7eab41e381d00d6484a710702804a626027fd1ecb73d0fa218b122c5"
+  },
+  {
+    "module": "HR",
+    "building": "Ex11_BRBF_10levels_Uplan",
+    "file": "activity_log.jsonl",
+    "bytes": 20390,
+    "sha256": "c0296c81b4a9bba7bdfcc4af5c4184306f13cd1152dca3e88df45466614643dc"
+  },
+  {
+    "module": "HR",
+    "building": "Ex11_BRBF_10levels_Uplan",
+    "file": "cfg.py",
+    "bytes": 12003,
+    "sha256": "237ae4f469b64db947796be2690cc22e0015af0572be78ceab8c21e9fba1292b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex11_BRBF_10levels_Uplan",
+    "file": "design/_demand_cache.json",
+    "bytes": 739889,
+    "sha256": "8e3a96a42c8eded1e74094d9b4953768b028687b2c4c0ca5793a8f701df62da7"
+  },
+  {
+    "module": "HR",
+    "building": "Ex11_BRBF_10levels_Uplan",
+    "file": "design/calc_package.demands.json",
+    "bytes": 112921,
+    "sha256": "7b6b7fab050318fbfc41aca93d75c23f25faced7617befbe35fbac869eb3bde0"
+  },
+  {
+    "module": "HR",
+    "building": "Ex11_BRBF_10levels_Uplan",
+    "file": "design/calc_package.json",
+    "bytes": 1456212,
+    "sha256": "41e11c712cb8903995385f69e3bbc9bc99af1b726ddd08d1f1c31af2b3571f40"
+  },
+  {
+    "module": "HR",
+    "building": "Ex11_BRBF_10levels_Uplan",
+    "file": "design/connection_demands.csv",
+    "bytes": 235203,
+    "sha256": "ae525080caaaffcf52d827588613d473f2bea486a13b739990818220ca4ee929"
+  },
+  {
+    "module": "HR",
+    "building": "Ex11_BRBF_10levels_Uplan",
+    "file": "design/consistency_result.json",
+    "bytes": 296,
+    "sha256": "0e2eb54516739e7be7d90bb4b9959531acfeec67fcd5a16f4f66ccea40620435"
+  },
+  {
+    "module": "HR",
+    "building": "Ex11_BRBF_10levels_Uplan",
+    "file": "design/design_report.md",
+    "bytes": 1306,
+    "sha256": "5ed4ca22d04c56585ec6334749eee5492036022ed1f8b86961c9facc35903399"
+  },
+  {
+    "module": "HR",
+    "building": "Ex11_BRBF_10levels_Uplan",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex11_BRBF_10levels_Uplan",
+    "file": "design/member_demands.md",
+    "bytes": 15833,
+    "sha256": "903c4fafaeb448ddf64065987f46e5945bee8674f75d290489d21a812abda3da"
+  },
+  {
+    "module": "HR",
+    "building": "Ex11_BRBF_10levels_Uplan",
+    "file": "design/member_schedule.csv",
+    "bytes": 261129,
+    "sha256": "da9e079413747531fac90dd5fce90aadc6c32dd0ff04812a1e73c56e01ac3445"
+  },
+  {
+    "module": "HR",
+    "building": "Ex11_BRBF_10levels_Uplan",
+    "file": "design/pipeline_results.json",
+    "bytes": 3238,
+    "sha256": "8c4661bfae1c82dbba7f4088d787abc72005ee20c888bbbacd144de262d09344"
+  },
+  {
+    "module": "HR",
+    "building": "Ex11_BRBF_10levels_Uplan",
+    "file": "design/separation.json",
+    "bytes": 227,
+    "sha256": "1caa77c42d57dd86d38f7b8ab3fdd20da281f656ba8bf5e23e177f5c38ae7da0"
+  },
+  {
+    "module": "HR",
+    "building": "Ex11_BRBF_10levels_Uplan",
+    "file": "model_opensees.py",
+    "bytes": 194740,
+    "sha256": "6d08f1529db5023791914628e9c24453a1a51689d0fa1c3376664a00ed43b307"
+  },
+  {
+    "module": "HR",
+    "building": "Ex11_BRBF_10levels_Uplan",
+    "file": "model_static.py",
+    "bytes": 921562,
+    "sha256": "f8334e5033a157319697b28009e245ebc51fc9f255f691f31dc0a7cccbb5eda1"
+  },
+  {
+    "module": "HR",
+    "building": "Ex11_BRBF_10levels_Uplan",
+    "file": "qa_annex.html",
+    "bytes": 15850,
+    "sha256": "f7f540a309869d7220714fe3237d8f67841f40661ca26a282fa9501cd422c79a"
+  },
+  {
+    "module": "HR",
+    "building": "Ex11_BRBF_10levels_Uplan",
+    "file": "report.html",
+    "bytes": 1596912,
+    "sha256": "edd86ca845be6b9a2d89addf8193db4c6aa8b3b7360bf66baad6b96d358f743b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex11_BRBF_10levels_Uplan",
+    "file": "viewer_3d.html",
+    "bytes": 1217090,
+    "sha256": "bfdda7b8a9dc9771942f106a7fca94f8bc9b42e45816e981568b0ac7a76b8bba"
+  },
+  {
+    "module": "HR",
+    "building": "Ex12_SMF_14levels_chamfer_setback",
+    "file": "activity_log.jsonl",
+    "bytes": 24968,
+    "sha256": "97b9805f2646a01c2036ff03c092927d379474cc3c027c7888b27929ab74fd07"
+  },
+  {
+    "module": "HR",
+    "building": "Ex12_SMF_14levels_chamfer_setback",
+    "file": "cfg.py",
+    "bytes": 25659,
+    "sha256": "620611cd7320f1abf779b119f0745b44183682e348cd1cf0d239363600cf205d"
+  },
+  {
+    "module": "HR",
+    "building": "Ex12_SMF_14levels_chamfer_setback",
+    "file": "design/_demand_cache.json",
+    "bytes": 533040,
+    "sha256": "d5104be1060f6bf702a5bdbd546e60eea390fd45de854901f194e2110ac4f2a9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex12_SMF_14levels_chamfer_setback",
+    "file": "design/calc_package.demands.json",
+    "bytes": 65617,
+    "sha256": "35ee6405e41f13deb8c124d592f0fbf80c265a0158bb1f85043291b41921b1f8"
+  },
+  {
+    "module": "HR",
+    "building": "Ex12_SMF_14levels_chamfer_setback",
+    "file": "design/calc_package.json",
+    "bytes": 691430,
+    "sha256": "b1981b4ebd9ce284097125b05119d42ef8127a6043b9b9077b137cb8f5c1629b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex12_SMF_14levels_chamfer_setback",
+    "file": "design/connection_demands.csv",
+    "bytes": 157360,
+    "sha256": "666dc8f40808d4f74c0bc740eea1cfaceb385cc03ebe874bee4e1129fe07a02c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex12_SMF_14levels_chamfer_setback",
+    "file": "design/consistency_result.json",
+    "bytes": 305,
+    "sha256": "a23e5466b5f023d06fe80fc33faa7435385109ddbd6673151f144f3175b39a55"
+  },
+  {
+    "module": "HR",
+    "building": "Ex12_SMF_14levels_chamfer_setback",
+    "file": "design/design_report.md",
+    "bytes": 798,
+    "sha256": "582a8230c3746dac7438c200724425410317bac8999a6088b5cf08cc7b2ca973"
+  },
+  {
+    "module": "HR",
+    "building": "Ex12_SMF_14levels_chamfer_setback",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex12_SMF_14levels_chamfer_setback",
+    "file": "design/member_demands.md",
+    "bytes": 9877,
+    "sha256": "5595be4d9972e7378a7a228d44b61f939bad082289d6d86ef1d21bff79a9e6c7"
+  },
+  {
+    "module": "HR",
+    "building": "Ex12_SMF_14levels_chamfer_setback",
+    "file": "design/member_schedule.csv",
+    "bytes": 182158,
+    "sha256": "b4d942ea8801961c34d04fe734e9a40cce9b84b96a29f09f0bf6eba82dc12d10"
+  },
+  {
+    "module": "HR",
+    "building": "Ex12_SMF_14levels_chamfer_setback",
+    "file": "design/pipeline_results.json",
+    "bytes": 3569,
+    "sha256": "8968a2f0593e53e946598717b34f8335f01b03055b89bed189be5a65486087b4"
+  },
+  {
+    "module": "HR",
+    "building": "Ex12_SMF_14levels_chamfer_setback",
+    "file": "model_opensees.py",
+    "bytes": 143256,
+    "sha256": "0a682f7a4bcc987aaa439c5459555c46f87797386fa10a06f13590574c5e429c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex12_SMF_14levels_chamfer_setback",
+    "file": "model_static.py",
+    "bytes": 692913,
+    "sha256": "fde0c880883abecd29ce306603563b89b36e4e9f5dde0a14e337fb69fbf6fad7"
+  },
+  {
+    "module": "HR",
+    "building": "Ex12_SMF_14levels_chamfer_setback",
+    "file": "qa_annex.html",
+    "bytes": 18414,
+    "sha256": "44930ae8aceba60ae88a8ffb3056b7f6658424e5f51d25fe37b95cfae0c6b5dd"
+  },
+  {
+    "module": "HR",
+    "building": "Ex12_SMF_14levels_chamfer_setback",
+    "file": "report.html",
+    "bytes": 916471,
+    "sha256": "c7adafc4696a4a3f7919b6927526ff51d1d3ef9295f1896bd36fc6e8e5586135"
+  },
+  {
+    "module": "HR",
+    "building": "Ex12_SMF_14levels_chamfer_setback",
+    "file": "viewer_3d.html",
+    "bytes": 1064455,
+    "sha256": "c6514cbfd91ed4f2294c5269c35171d59e2dcca3a942236313a39e711f7c4681"
+  },
+  {
+    "module": "HR",
+    "building": "Ex13_OCBF_4levels_splitlevel",
+    "file": "activity_log.jsonl",
+    "bytes": 17140,
+    "sha256": "a59f91673f8cc7bc39d839aa6e3c67a5f23c6ee3be4501d9da39ffebaf7c264f"
+  },
+  {
+    "module": "HR",
+    "building": "Ex13_OCBF_4levels_splitlevel",
+    "file": "cfg.py",
+    "bytes": 14752,
+    "sha256": "98487f23e990d9776482381b42e53fb7d2c328c2916560c6141eea14f6fd2882"
+  },
+  {
+    "module": "HR",
+    "building": "Ex13_OCBF_4levels_splitlevel",
+    "file": "design/_demand_cache.json",
+    "bytes": 174578,
+    "sha256": "bbae40aae20c6a2c4e50fbc69b3cf251b18dc30c7d77e5e6496dcb87fb28a7d9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex13_OCBF_4levels_splitlevel",
+    "file": "design/calc_package.json",
+    "bytes": 346089,
+    "sha256": "0261f07441d5a11e6002f48ea4ea14834ff5a51c72075ad3cfc1232f95dd31ff"
+  },
+  {
+    "module": "HR",
+    "building": "Ex13_OCBF_4levels_splitlevel",
+    "file": "design/calc_package.json.seed",
+    "bytes": 59723,
+    "sha256": "0e467e068acc25c4b6a1217c47327d0ada5ab9bd257b230734080b5c99508386"
+  },
+  {
+    "module": "HR",
+    "building": "Ex13_OCBF_4levels_splitlevel",
+    "file": "design/connection_demands.csv",
+    "bytes": 57468,
+    "sha256": "8131a66db16691b3ef0ccef71d6288e390f126f3e36d1754e6046bf8ee2aa0b2"
+  },
+  {
+    "module": "HR",
+    "building": "Ex13_OCBF_4levels_splitlevel",
+    "file": "design/consistency_result.json",
+    "bytes": 300,
+    "sha256": "9b4bc4ea1e818abd090a850972d11f16c7ed0b934f1943e5d1a8e112c5432f00"
+  },
+  {
+    "module": "HR",
+    "building": "Ex13_OCBF_4levels_splitlevel",
+    "file": "design/design_report.md",
+    "bytes": 627,
+    "sha256": "4f21ab6982111ba4e4613ac0d31a60838a3ba961fa6ff2b1251dd50cbb96b1a0"
+  },
+  {
+    "module": "HR",
+    "building": "Ex13_OCBF_4levels_splitlevel",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex13_OCBF_4levels_splitlevel",
+    "file": "design/member_demands.md",
+    "bytes": 9796,
+    "sha256": "f77365aae7c8786ac099095eaaa0d7a111d630dffc85668a34ce3ce09380a451"
+  },
+  {
+    "module": "HR",
+    "building": "Ex13_OCBF_4levels_splitlevel",
+    "file": "design/member_schedule.csv",
+    "bytes": 61444,
+    "sha256": "0c621410ed1a3192a4dfd415a0e5c69016dde9433cad7d9efcf3eb3bead121ce"
+  },
+  {
+    "module": "HR",
+    "building": "Ex13_OCBF_4levels_splitlevel",
+    "file": "design/pipeline_results.json",
+    "bytes": 3174,
+    "sha256": "7416ed65e7641e9a8a04070775c7fa44572223dbf7d08fa7b26eb12c879ee991"
+  },
+  {
+    "module": "HR",
+    "building": "Ex13_OCBF_4levels_splitlevel",
+    "file": "model_opensees.py",
+    "bytes": 45586,
+    "sha256": "b676d61d59981c7bf8903d87fc947e6cbd0f52c41293bf504745253fcd41fd03"
+  },
+  {
+    "module": "HR",
+    "building": "Ex13_OCBF_4levels_splitlevel",
+    "file": "model_static.py",
+    "bytes": 200130,
+    "sha256": "321bf1ba8768efdfe4101bf95aeb881ed8b57264afa5025f68fae4136e67870f"
+  },
+  {
+    "module": "HR",
+    "building": "Ex13_OCBF_4levels_splitlevel",
+    "file": "qa_annex.html",
+    "bytes": 13969,
+    "sha256": "c9598529d8f56e2d29071651c16ac8ed79c7fb3ace9385c8d226c65a1b6810c8"
+  },
+  {
+    "module": "HR",
+    "building": "Ex13_OCBF_4levels_splitlevel",
+    "file": "report.html",
+    "bytes": 499759,
+    "sha256": "d3c27fae4ff4f991087b7efb90d33848070080235304c796eb5d9e64ebe7c1a1"
+  },
+  {
+    "module": "HR",
+    "building": "Ex13_OCBF_4levels_splitlevel",
+    "file": "viewer_3d.html",
+    "bytes": 762534,
+    "sha256": "8452bfd723392d25124b19837c737ad15649ff578b8cff4d7721aa80e6555106"
+  },
+  {
+    "module": "HR",
+    "building": "Ex14_EBF_11levels_cruciform_hillside",
+    "file": "activity_log.jsonl",
+    "bytes": 19715,
+    "sha256": "48f2af75a585d50d6623dc4ad793a8a831e7e33f62c13a621ec89dc0ad5c4668"
+  },
+  {
+    "module": "HR",
+    "building": "Ex14_EBF_11levels_cruciform_hillside",
+    "file": "cfg.py",
+    "bytes": 12422,
+    "sha256": "a7e68e8d0aa07631246b5779a48b147f29811182ba8b9d333110dfbec0c3a9f8"
+  },
+  {
+    "module": "HR",
+    "building": "Ex14_EBF_11levels_cruciform_hillside",
+    "file": "design/_demand_cache.json",
+    "bytes": 667962,
+    "sha256": "7150b2387a9493ad34603869650a5d0d40364f7f292d9c2cbc6931f4ac8b3f5f"
+  },
+  {
+    "module": "HR",
+    "building": "Ex14_EBF_11levels_cruciform_hillside",
+    "file": "design/calc_package.demands.json",
+    "bytes": 75194,
+    "sha256": "44ed95a3b2b997e8cdc70505fbb764a834e032d8f6edb312a9f214f587bf6856"
+  },
+  {
+    "module": "HR",
+    "building": "Ex14_EBF_11levels_cruciform_hillside",
+    "file": "design/calc_package.json",
+    "bytes": 773426,
+    "sha256": "63000d7bde8f176842803742a47cdfc0493281349bc972f5f190c46d276e12c8"
+  },
+  {
+    "module": "HR",
+    "building": "Ex14_EBF_11levels_cruciform_hillside",
+    "file": "design/connection_demands.csv",
+    "bytes": 193300,
+    "sha256": "89602393674cdef9e024591de06071f36654ad7e97089404736977539086ff05"
+  },
+  {
+    "module": "HR",
+    "building": "Ex14_EBF_11levels_cruciform_hillside",
+    "file": "design/consistency_result.json",
+    "bytes": 308,
+    "sha256": "060be61eae5af9857a8fdb0fe60b1de0409b2bf51b87af421000496594763fa5"
+  },
+  {
+    "module": "HR",
+    "building": "Ex14_EBF_11levels_cruciform_hillside",
+    "file": "design/design_report.md",
+    "bytes": 1291,
+    "sha256": "cdf1dc7b94cb65abaa74c5a256ce7b448da78d6690fa2f5ed449ba63267999a4"
+  },
+  {
+    "module": "HR",
+    "building": "Ex14_EBF_11levels_cruciform_hillside",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex14_EBF_11levels_cruciform_hillside",
+    "file": "design/member_demands.md",
+    "bytes": 12484,
+    "sha256": "ead1b27e569d3a4d13cb5de470cf00f976caecb6b400ebb0b9e2eb28d675d680"
+  },
+  {
+    "module": "HR",
+    "building": "Ex14_EBF_11levels_cruciform_hillside",
+    "file": "design/member_schedule.csv",
+    "bytes": 263216,
+    "sha256": "61be4dcddc471362d29c25f5b9ffeb9c42eeafa3c040df8ad24047837b96debb"
+  },
+  {
+    "module": "HR",
+    "building": "Ex14_EBF_11levels_cruciform_hillside",
+    "file": "design/pipeline_results.json",
+    "bytes": 3277,
+    "sha256": "0aa0f87543ce0b21df572b938e5dd5e34d07640d9ecb19019f28bad15eb4af2c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex14_EBF_11levels_cruciform_hillside",
+    "file": "design/separation.json",
+    "bytes": 228,
+    "sha256": "78e7706b6e77126dd0245d4918933478c985f8c0e9a4d71d2d6eecb4de99ef0d"
+  },
+  {
+    "module": "HR",
+    "building": "Ex14_EBF_11levels_cruciform_hillside",
+    "file": "model_opensees.py",
+    "bytes": 168100,
+    "sha256": "b052cc98d3569a40679ddb6431faed5b2a47b98fc22e31d59352715cfd3c483a"
+  },
+  {
+    "module": "HR",
+    "building": "Ex14_EBF_11levels_cruciform_hillside",
+    "file": "model_static.py",
+    "bytes": 793921,
+    "sha256": "34a24020f5e33839144a485af2360a16370b8cde11cfa9e1ef4eadcd68c3e731"
+  },
+  {
+    "module": "HR",
+    "building": "Ex14_EBF_11levels_cruciform_hillside",
+    "file": "qa_annex.html",
+    "bytes": 15527,
+    "sha256": "10ebd566bc5bf97974a3722697958951fc717c3de16e7e9c028b6bb69d9a0cd2"
+  },
+  {
+    "module": "HR",
+    "building": "Ex14_EBF_11levels_cruciform_hillside",
+    "file": "report.html",
+    "bytes": 956819,
+    "sha256": "fe199bc7ea3459484415b60f41d37ebcd1b8f8c0ddbdee00077f0d8e7331375a"
+  },
+  {
+    "module": "HR",
+    "building": "Ex14_EBF_11levels_cruciform_hillside",
+    "file": "viewer_3d.html",
+    "bytes": 1170482,
+    "sha256": "147a4b19ba52f936fc9a38e9d07dd40a877cce5eeda5af8d0908d14bee134070"
+  },
+  {
+    "module": "HR",
+    "building": "Ex15_Dual_SMF_BRBF_20levels_weddingcake",
+    "file": "activity_log.jsonl",
+    "bytes": 18235,
+    "sha256": "57d7bbbc4905c943732be6e8cfe9aa48302e444e504c8b3db3822e51952a2d50"
+  },
+  {
+    "module": "HR",
+    "building": "Ex15_Dual_SMF_BRBF_20levels_weddingcake",
+    "file": "cfg.py",
+    "bytes": 16702,
+    "sha256": "ceaf45b7d813e8eb1df3550a12d74c05e7ec332e40791f97e3f14d0d59f945b8"
+  },
+  {
+    "module": "HR",
+    "building": "Ex15_Dual_SMF_BRBF_20levels_weddingcake",
+    "file": "design/_demand_cache.json",
+    "bytes": 940357,
+    "sha256": "51aa8999b1631d9866445686857ba00d0993d1a4ce722ed214dcddfede9567b2"
+  },
+  {
+    "module": "HR",
+    "building": "Ex15_Dual_SMF_BRBF_20levels_weddingcake",
+    "file": "design/calc_package.json",
+    "bytes": 1325185,
+    "sha256": "fc78eec08d07194d5720cdcece6fff0a97120e0d5587e2b53b610e74f98f8765"
+  },
+  {
+    "module": "HR",
+    "building": "Ex15_Dual_SMF_BRBF_20levels_weddingcake",
+    "file": "design/connection_demands.csv",
+    "bytes": 272040,
+    "sha256": "8f3949d0b8755695060b2254233da736ba683a49fcf69a48185eb564fe2564e5"
+  },
+  {
+    "module": "HR",
+    "building": "Ex15_Dual_SMF_BRBF_20levels_weddingcake",
+    "file": "design/consistency_result.json",
+    "bytes": 311,
+    "sha256": "0b9571ea61114248c5d3ee82fd12ca7daa025a5834655ed8bb3d72f14556e15c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex15_Dual_SMF_BRBF_20levels_weddingcake",
+    "file": "design/design_report.md",
+    "bytes": 1300,
+    "sha256": "f90d1e38f6c2d0da5ab4c9e940ee755eed0999253ec7822f792e7085dbd2fea5"
+  },
+  {
+    "module": "HR",
+    "building": "Ex15_Dual_SMF_BRBF_20levels_weddingcake",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex15_Dual_SMF_BRBF_20levels_weddingcake",
+    "file": "design/member_demands.md",
+    "bytes": 18877,
+    "sha256": "2d72e8b88b86fa0ddef21ab41ec1d4173f6f555f228c295b88416e4fbe94758e"
+  },
+  {
+    "module": "HR",
+    "building": "Ex15_Dual_SMF_BRBF_20levels_weddingcake",
+    "file": "design/member_schedule.csv",
+    "bytes": 358658,
+    "sha256": "360358c7f179382a7921d249711380347f85f0c09ea799b5438569d839fe1536"
+  },
+  {
+    "module": "HR",
+    "building": "Ex15_Dual_SMF_BRBF_20levels_weddingcake",
+    "file": "design/pipeline_results.json",
+    "bytes": 166260,
+    "sha256": "e9e010c0750d9ffa7aee5201c640b280f5adac6e6d27801ce70d9b2af3868495"
+  },
+  {
+    "module": "HR",
+    "building": "Ex15_Dual_SMF_BRBF_20levels_weddingcake",
+    "file": "fill_cfg.json",
+    "bytes": 1569,
+    "sha256": "cc11a5c144e2a7e1ecaedbe77e79388d0fb0890261401093eab05a506c2bbe44"
+  },
+  {
+    "module": "HR",
+    "building": "Ex15_Dual_SMF_BRBF_20levels_weddingcake",
+    "file": "model_opensees.py",
+    "bytes": 243594,
+    "sha256": "08d9201045af3aaa7ca41ccc60e3050c096fb20c012dc246c9a22fe82f90938f"
+  },
+  {
+    "module": "HR",
+    "building": "Ex15_Dual_SMF_BRBF_20levels_weddingcake",
+    "file": "model_static.py",
+    "bytes": 1126701,
+    "sha256": "80e7801c3daa7a61b21b976df0eafccd3d17f8ed2ad5461de621fbc2388fbbe7"
+  },
+  {
+    "module": "HR",
+    "building": "Ex15_Dual_SMF_BRBF_20levels_weddingcake",
+    "file": "qa_annex.html",
+    "bytes": 14444,
+    "sha256": "0a438466500f68c53fd762624fb28677c8ad961b13d55e8d919751914f25560c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex15_Dual_SMF_BRBF_20levels_weddingcake",
+    "file": "report.html",
+    "bytes": 1619206,
+    "sha256": "5dc4ea4d54703181ce04c52774e015eef12b0fee508a5d31c870e0581360bd15"
+  },
+  {
+    "module": "HR",
+    "building": "Ex15_Dual_SMF_BRBF_20levels_weddingcake",
+    "file": "story_strength.json",
+    "bytes": 335,
+    "sha256": "f8d7206a3d18cef9d82cc57a3a1f0ef4f23e03531411f1deede54af8fa63a471"
+  },
+  {
+    "module": "HR",
+    "building": "Ex15_Dual_SMF_BRBF_20levels_weddingcake",
+    "file": "viewer_3d.html",
+    "bytes": 1397008,
+    "sha256": "28aa394e4075e867d93c50d20bce221c2f01f6c7a9d437476d822882e2c4acd4"
+  },
+  {
+    "module": "HR",
+    "building": "Ex16_IMF_3levels_Zplan_school",
+    "file": "activity_log.jsonl",
+    "bytes": 18667,
+    "sha256": "a0bcfcf0f54b0b36a69f9cafed75030981a7ca371a66099a76b9dcb6f55f896b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex16_IMF_3levels_Zplan_school",
+    "file": "cfg.py",
+    "bytes": 26137,
+    "sha256": "ff98bfcea4b53dd8818a3f86bcd09d0b6bbaff73723aaaf9b1ba16df4ff8f04e"
+  },
+  {
+    "module": "HR",
+    "building": "Ex16_IMF_3levels_Zplan_school",
+    "file": "design/_demand_cache.json",
+    "bytes": 75759,
+    "sha256": "17f26b126777df5d8f3faeb04461439f970d7cfcc05d3e31de085fb9b0765d64"
+  },
+  {
+    "module": "HR",
+    "building": "Ex16_IMF_3levels_Zplan_school",
+    "file": "design/calc_package.json",
+    "bytes": 360520,
+    "sha256": "853fce56657bb2b32f1135dc254fa37eb77ea22a5df689da42a0b55c7cb607e0"
+  },
+  {
+    "module": "HR",
+    "building": "Ex16_IMF_3levels_Zplan_school",
+    "file": "design/calc_package.seed.json",
+    "bytes": 59711,
+    "sha256": "65952a5a60d8164eb6f1169fc25e63a159dcc02457952efb6b32851c7225700d"
+  },
+  {
+    "module": "HR",
+    "building": "Ex16_IMF_3levels_Zplan_school",
+    "file": "design/connection_demands.csv",
+    "bytes": 25332,
+    "sha256": "64c7fd81e0c2106e56704aaedc8f0860872c13fa6dd10e69c306394c30354241"
+  },
+  {
+    "module": "HR",
+    "building": "Ex16_IMF_3levels_Zplan_school",
+    "file": "design/consistency_result.json",
+    "bytes": 301,
+    "sha256": "45c32e3264980d0d45dd43685b6c9ca572adb5c1a79e83db7a22670f6ff0439e"
+  },
+  {
+    "module": "HR",
+    "building": "Ex16_IMF_3levels_Zplan_school",
+    "file": "design/design_report.md",
+    "bytes": 765,
+    "sha256": "3afffd4e8bde96ef5e3ecbe6bda0bcb56c2a3760ee2d53d2db7181f869c98151"
+  },
+  {
+    "module": "HR",
+    "building": "Ex16_IMF_3levels_Zplan_school",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex16_IMF_3levels_Zplan_school",
+    "file": "design/member_demands.md",
+    "bytes": 7694,
+    "sha256": "0a1e7a37e8b30b92994134ec47fc612d227165954905577726517e4c8848bdaf"
+  },
+  {
+    "module": "HR",
+    "building": "Ex16_IMF_3levels_Zplan_school",
+    "file": "design/member_schedule.csv",
+    "bytes": 22952,
+    "sha256": "be9ed2e343d4663d44ccdb997d345dba36df22cc064d7d1af8616b8777342da7"
+  },
+  {
+    "module": "HR",
+    "building": "Ex16_IMF_3levels_Zplan_school",
+    "file": "design/pipeline_results.json",
+    "bytes": 3380,
+    "sha256": "b251920460048082124d07b5cf18766d3877bff24ad987cc61d6f29d53c8a073"
+  },
+  {
+    "module": "HR",
+    "building": "Ex16_IMF_3levels_Zplan_school",
+    "file": "design/results_extra.json",
+    "bytes": 1526,
+    "sha256": "b7996572bb394687ae2eb1d425c4c665b6aa6c6e6fbb7f40656d893504755758"
+  },
+  {
+    "module": "HR",
+    "building": "Ex16_IMF_3levels_Zplan_school",
+    "file": "model_opensees.py",
+    "bytes": 22247,
+    "sha256": "9098fe87929bb9f0b6170b1a2229f37c81e10cd72482156f1db90999c86d8ff5"
+  },
+  {
+    "module": "HR",
+    "building": "Ex16_IMF_3levels_Zplan_school",
+    "file": "model_static.py",
+    "bytes": 91364,
+    "sha256": "383a4925da6378c312a62013cbd0963e1a5d3ccb6dcfbe9fad575353e3788ad2"
+  },
+  {
+    "module": "HR",
+    "building": "Ex16_IMF_3levels_Zplan_school",
+    "file": "qa_annex.html",
+    "bytes": 14766,
+    "sha256": "8cc9db3a4b1aa5294849439e1d6735faa25f93a3a0ae55207bde9f07c67907b7"
+  },
+  {
+    "module": "HR",
+    "building": "Ex16_IMF_3levels_Zplan_school",
+    "file": "report.html",
+    "bytes": 520010,
+    "sha256": "6678df17eefa5d4fa836c4ce42f4c902c72ae8434572e31a6a66b2c109b18f21"
+  },
+  {
+    "module": "HR",
+    "building": "Ex16_IMF_3levels_Zplan_school",
+    "file": "viewer_3d.html",
+    "bytes": 689943,
+    "sha256": "e9c2ae86033287490c14de0678d416ca415c1d1584149af7240419be14d31ade"
+  },
+  {
+    "module": "HR",
+    "building": "Ex17_SCBF_9levels_offset_core",
+    "file": "activity_log.jsonl",
+    "bytes": 19626,
+    "sha256": "c64cd7ebf97af1316fd82f9c096a72f96c430195c3f5bbf1ad1788065e8ad377"
+  },
+  {
+    "module": "HR",
+    "building": "Ex17_SCBF_9levels_offset_core",
+    "file": "cfg.py",
+    "bytes": 13183,
+    "sha256": "46257ad3e0a0981b3bb2f6ba4fe85c340d85d5199d2916a81dc8887527015cad"
+  },
+  {
+    "module": "HR",
+    "building": "Ex17_SCBF_9levels_offset_core",
+    "file": "design/_demand_cache.json",
+    "bytes": 454047,
+    "sha256": "39daef18c637d21cebb9cf5945bec6c0e5e0bc238def4b5aaf55668be9a84ea0"
+  },
+  {
+    "module": "HR",
+    "building": "Ex17_SCBF_9levels_offset_core",
+    "file": "design/calc_package.json",
+    "bytes": 983479,
+    "sha256": "8ecf5338f5d2f47bffbbc6460c64fd574252db2d6133e50a5de8da942e0608d5"
+  },
+  {
+    "module": "HR",
+    "building": "Ex17_SCBF_9levels_offset_core",
+    "file": "design/calc_package.json.seed",
+    "bytes": 84385,
+    "sha256": "58dc72cd6a069ed7cda9fadf748194db9c3bf383e754b2851e06a3be90ee5a60"
+  },
+  {
+    "module": "HR",
+    "building": "Ex17_SCBF_9levels_offset_core",
+    "file": "design/connection_demands.csv",
+    "bytes": 139776,
+    "sha256": "f22c5bc5465abb804c94138da3544f773fc1ed096f3148cc75f05ebf9fa1140c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex17_SCBF_9levels_offset_core",
+    "file": "design/consistency_result.json",
+    "bytes": 301,
+    "sha256": "b8116d2cf54cc8758d9eb505f090e8e78646ce62ed6ab8ea3428e9f1d3bb4898"
+  },
+  {
+    "module": "HR",
+    "building": "Ex17_SCBF_9levels_offset_core",
+    "file": "design/design_report.md",
+    "bytes": 1201,
+    "sha256": "e743f3b232118610dc28a13cd714151feae8170d41fc1d706e8b11bfddce2ce8"
+  },
+  {
+    "module": "HR",
+    "building": "Ex17_SCBF_9levels_offset_core",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex17_SCBF_9levels_offset_core",
+    "file": "design/member_demands.md",
+    "bytes": 12469,
+    "sha256": "8158f645d4a9d98a3d647f971bbaeaecabd9aae3ce0339217e86ab94558061d9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex17_SCBF_9levels_offset_core",
+    "file": "design/member_schedule.csv",
+    "bytes": 165572,
+    "sha256": "914589ac922ecec36a0c7b56ba36c44f1b0e466f65a1eb3e4a94e3fd433b98c2"
+  },
+  {
+    "module": "HR",
+    "building": "Ex17_SCBF_9levels_offset_core",
+    "file": "design/pipeline_results.json",
+    "bytes": 3254,
+    "sha256": "bb5fa4e67ffca7ef425df8269c2c767aad784fd0e67c51d833115bc14aa4101e"
+  },
+  {
+    "module": "HR",
+    "building": "Ex17_SCBF_9levels_offset_core",
+    "file": "model_opensees.py",
+    "bytes": 117490,
+    "sha256": "0a24cd0d6dd4ebe4ae02683b4efc7189fb6606726ac5bffbae40e2d5dc11830f"
+  },
+  {
+    "module": "HR",
+    "building": "Ex17_SCBF_9levels_offset_core",
+    "file": "model_static.py",
+    "bytes": 538345,
+    "sha256": "7dc2899eda5aea4fd2586da40aed0fabb0db7c09cd6d8c7f405f3b15cec4c92f"
+  },
+  {
+    "module": "HR",
+    "building": "Ex17_SCBF_9levels_offset_core",
+    "file": "qa_annex.html",
+    "bytes": 15438,
+    "sha256": "26da33d0b37c5ed3bd03926619e8f898b769dd85ca42957c6f592d663c9a1cc2"
+  },
+  {
+    "module": "HR",
+    "building": "Ex17_SCBF_9levels_offset_core",
+    "file": "report.html",
+    "bytes": 1135502,
+    "sha256": "e8aca2a7c2d68cc41b13b7e1be5687d7a93f0cabdaab85a0c480fb46fa020f6e"
+  },
+  {
+    "module": "HR",
+    "building": "Ex17_SCBF_9levels_offset_core",
+    "file": "viewer_3d.html",
+    "bytes": 990025,
+    "sha256": "3424d918c1e35ffff54e6be1c05939b896425a6dc9a387349cbc02d296b5894e"
+  },
+  {
+    "module": "HR",
+    "building": "Ex18_R3_NotDetailed_8levels_lowseismic",
+    "file": "activity_log.jsonl",
+    "bytes": 13089,
+    "sha256": "1dce244c47fdff36639ff3fb177fe386978b841b2859b407396bef9f87ad31b8"
+  },
+  {
+    "module": "HR",
+    "building": "Ex18_R3_NotDetailed_8levels_lowseismic",
+    "file": "cfg.py",
+    "bytes": 16513,
+    "sha256": "82ee0264ee941499458a9163be27799475d528b5e4ed53726edaab50c08d7782"
+  },
+  {
+    "module": "HR",
+    "building": "Ex18_R3_NotDetailed_8levels_lowseismic",
+    "file": "design/_demand_cache.json",
+    "bytes": 236123,
+    "sha256": "be4a59080162e69c6e6ee7bae889676871f7accb335294af481dbd086acd2a0e"
+  },
+  {
+    "module": "HR",
+    "building": "Ex18_R3_NotDetailed_8levels_lowseismic",
+    "file": "design/calc_package.json",
+    "bytes": 209901,
+    "sha256": "bc86be26a153166bbe329a18465c69fdd6fb67bd1fcb6b708858b9bb0d3138c8"
+  },
+  {
+    "module": "HR",
+    "building": "Ex18_R3_NotDetailed_8levels_lowseismic",
+    "file": "design/connection_demands.csv",
+    "bytes": 92745,
+    "sha256": "5bb95e2dacf256de0338ba67b28831bf5d607e1ee06b3ec5ca05c040cc18fe2d"
+  },
+  {
+    "module": "HR",
+    "building": "Ex18_R3_NotDetailed_8levels_lowseismic",
+    "file": "design/consistency_result.json",
+    "bytes": 310,
+    "sha256": "57bc6deeb3d3a872ad5f3ced26fd14b5729c5f28eb4109ead48af28e241ac281"
+  },
+  {
+    "module": "HR",
+    "building": "Ex18_R3_NotDetailed_8levels_lowseismic",
+    "file": "design/design_report.md",
+    "bytes": 756,
+    "sha256": "80ca4c46cfbbc0787141a9033f77f5fb252a9b7d4f3f6c612c57ec6b762af1ca"
+  },
+  {
+    "module": "HR",
+    "building": "Ex18_R3_NotDetailed_8levels_lowseismic",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex18_R3_NotDetailed_8levels_lowseismic",
+    "file": "design/member_demands.md",
+    "bytes": 6691,
+    "sha256": "d40d10a05834cefc767cd633e25756e7828bdf61150d09a945a274eacb5692c6"
+  },
+  {
+    "module": "HR",
+    "building": "Ex18_R3_NotDetailed_8levels_lowseismic",
+    "file": "design/member_schedule.csv",
+    "bytes": 72917,
+    "sha256": "d8c4619088e39b2103886bf13a2dc989f8866bd5814ebdbbc395f92723fd78ab"
+  },
+  {
+    "module": "HR",
+    "building": "Ex18_R3_NotDetailed_8levels_lowseismic",
+    "file": "design/pipeline_results.json",
+    "bytes": 2649,
+    "sha256": "22fbadd7bf90704d8b9d3e2d0e4258daefd841b1d5e695aec410b4585c5d732b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex18_R3_NotDetailed_8levels_lowseismic",
+    "file": "model_opensees.py",
+    "bytes": 87858,
+    "sha256": "1357b08d6cee5569381faf14eb518ea0dd76f256bcd8526b937abee763c2fc0e"
+  },
+  {
+    "module": "HR",
+    "building": "Ex18_R3_NotDetailed_8levels_lowseismic",
+    "file": "model_static.py",
+    "bytes": 397537,
+    "sha256": "3dae743f3f5031f46ce1d73050e00770f7c4495796274744c574e0cc278b7d9c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex18_R3_NotDetailed_8levels_lowseismic",
+    "file": "qa_annex.html",
+    "bytes": 11712,
+    "sha256": "f7af6ef0c6ff02748286f3fd3acc8283eb39c8ecf4a7b41620e1bb0566e42504"
+  },
+  {
+    "module": "HR",
+    "building": "Ex18_R3_NotDetailed_8levels_lowseismic",
+    "file": "report.html",
+    "bytes": 346679,
+    "sha256": "af95b86ba7bd374f0103f14f54c2bbd55a09fcebb053b47a326c8295943426d4"
+  },
+  {
+    "module": "HR",
+    "building": "Ex18_R3_NotDetailed_8levels_lowseismic",
+    "file": "viewer_3d.html",
+    "bytes": 889899,
+    "sha256": "aac6b1f40d8c758c1d9de833e8937776bb31ac2134ba7b42338473edc8fea322"
+  },
+  {
+    "module": "HR",
+    "building": "Ex19_SMF_11levels_softstory_podium",
+    "file": "activity_log.jsonl",
+    "bytes": 24973,
+    "sha256": "e835f5b8eaf3d1b2f57ba4fb04fb8a15c3ed66be779ca23625a1d258b405f759"
+  },
+  {
+    "module": "HR",
+    "building": "Ex19_SMF_11levels_softstory_podium",
+    "file": "cfg.py",
+    "bytes": 22745,
+    "sha256": "4168ffa3e8967e3ce65a19d3cdcb1ab4b4b032cf8524a61297434a5e0f2f0e71"
+  },
+  {
+    "module": "HR",
+    "building": "Ex19_SMF_11levels_softstory_podium",
+    "file": "cfg_w36x925_backup.txt",
+    "bytes": 11680,
+    "sha256": "fb0565582a81647b835ec962950fb510b9e84ac43e464142d240cf987c6d42aa"
+  },
+  {
+    "module": "HR",
+    "building": "Ex19_SMF_11levels_softstory_podium",
+    "file": "design/_demand_cache.json",
+    "bytes": 278321,
+    "sha256": "113271833c925e9b5d46a5a2f2b639049c82baa4d0f8f9c5932d957c2e69a843"
+  },
+  {
+    "module": "HR",
+    "building": "Ex19_SMF_11levels_softstory_podium",
+    "file": "design/calc_package.demands.json",
+    "bytes": 67401,
+    "sha256": "282f7884f4c03054b789d73b84b240ab36a4fcc72843732561f7c7f8c523d404"
+  },
+  {
+    "module": "HR",
+    "building": "Ex19_SMF_11levels_softstory_podium",
+    "file": "design/calc_package.json",
+    "bytes": 646695,
+    "sha256": "22e836248a5d05fae3a487560b906caeb27d47816318ae32fd1f52e3656089d9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex19_SMF_11levels_softstory_podium",
+    "file": "design/connection_demands.csv",
+    "bytes": 79522,
+    "sha256": "ae256ee4d64892e3f9378b2a7ae7b6102381a4c967e9014941ab9f3d8b83c992"
+  },
+  {
+    "module": "HR",
+    "building": "Ex19_SMF_11levels_softstory_podium",
+    "file": "design/consistency_result.json",
+    "bytes": 306,
+    "sha256": "e8f1618de25c3e91970d008c6864ea69eb8e7eca5b88eb9a874760a0f9560788"
+  },
+  {
+    "module": "HR",
+    "building": "Ex19_SMF_11levels_softstory_podium",
+    "file": "design/design_report.md",
+    "bytes": 1531,
+    "sha256": "bbcb4a4fe32c1a152078e801c81cae812035bc21a6c4fd173f2aa1213a0145d3"
+  },
+  {
+    "module": "HR",
+    "building": "Ex19_SMF_11levels_softstory_podium",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex19_SMF_11levels_softstory_podium",
+    "file": "design/member_demands.md",
+    "bytes": 8493,
+    "sha256": "64902bd7d4ed28777efd97ef1931dff7348b9cbe518fe2e9dbd116abc30fd1b7"
+  },
+  {
+    "module": "HR",
+    "building": "Ex19_SMF_11levels_softstory_podium",
+    "file": "design/member_schedule.csv",
+    "bytes": 95170,
+    "sha256": "f579e138878e16fd4d52031ab13c4c80c30e337d3d7311468d43eefe487a3da9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex19_SMF_11levels_softstory_podium",
+    "file": "design/pipeline_results.json",
+    "bytes": 3169,
+    "sha256": "02a67b68a08a8e267f071eb323669b1c269ef30c3130681118ae49e0e4448c43"
+  },
+  {
+    "module": "HR",
+    "building": "Ex19_SMF_11levels_softstory_podium",
+    "file": "model_opensees.py",
+    "bytes": 75421,
+    "sha256": "5109dc8a31a894020964b18e17e74fb410bab47bbd8260e640f9ebc3c8bebf88"
+  },
+  {
+    "module": "HR",
+    "building": "Ex19_SMF_11levels_softstory_podium",
+    "file": "model_static.py",
+    "bytes": 344805,
+    "sha256": "1ebffcc97e0d116ee40552f05f01e029bd6746997aefc565e42ec042f404b4fd"
+  },
+  {
+    "module": "HR",
+    "building": "Ex19_SMF_11levels_softstory_podium",
+    "file": "qa_annex.html",
+    "bytes": 18418,
+    "sha256": "475b23b3432d382838f5bdfdf625e455af90491fe207ba520fcb903e858d903e"
+  },
+  {
+    "module": "HR",
+    "building": "Ex19_SMF_11levels_softstory_podium",
+    "file": "report.html",
+    "bytes": 866702,
+    "sha256": "9fe7d772b8891f37581e8b57d4aa22f5a7eecf592bdc1e1896cd391953c96e44"
+  },
+  {
+    "module": "HR",
+    "building": "Ex19_SMF_11levels_softstory_podium",
+    "file": "viewer_3d.html",
+    "bytes": 858323,
+    "sha256": "8e91ab547b0b69fb5022906dd423f04e7aab401a75319ea7b4c2eeec2a65aa7a"
+  },
+  {
+    "module": "HR",
+    "building": "Ex20_SCBF_12levels_transfer_discontinuous",
+    "file": "activity_log.jsonl",
+    "bytes": 19291,
+    "sha256": "f11eebe13a2c85af84d25d32cae4c37b14f04fec37f5ca100db843e839ea8146"
+  },
+  {
+    "module": "HR",
+    "building": "Ex20_SCBF_12levels_transfer_discontinuous",
+    "file": "cfg.py",
+    "bytes": 20331,
+    "sha256": "61c6844eb857d56ad2385c8152db6a679b2d4573ae7fe0eff6e55df78fb65d88"
+  },
+  {
+    "module": "HR",
+    "building": "Ex20_SCBF_12levels_transfer_discontinuous",
+    "file": "design/_demand_cache.json",
+    "bytes": 529341,
+    "sha256": "cf0e1c9df67fa3be59d3214106213c5d831fc23c98605cf541712204cd9555ca"
+  },
+  {
+    "module": "HR",
+    "building": "Ex20_SCBF_12levels_transfer_discontinuous",
+    "file": "design/calc_package.json",
+    "bytes": 806097,
+    "sha256": "4c4ee43a4a9491c4c2e032f685c486bb4cfb7d69319f2f88bac2d6e04540ce30"
+  },
+  {
+    "module": "HR",
+    "building": "Ex20_SCBF_12levels_transfer_discontinuous",
+    "file": "design/calc_package.json.seed",
+    "bytes": 101320,
+    "sha256": "51668ba0dac08200505ea54e44a719c468f00386561daa7868147d06021f0cbf"
+  },
+  {
+    "module": "HR",
+    "building": "Ex20_SCBF_12levels_transfer_discontinuous",
+    "file": "design/connection_demands.csv",
+    "bytes": 168496,
+    "sha256": "927e354847d5f94270b557af0a3cd0271bbbd1218c19b54c0baea02962eb5b00"
+  },
+  {
+    "module": "HR",
+    "building": "Ex20_SCBF_12levels_transfer_discontinuous",
+    "file": "design/consistency_result.json",
+    "bytes": 313,
+    "sha256": "79e6b3d46c0dfbfdb20c0b30c711eb47d9e5bec45179d21164a1eecc6fd5ce0a"
+  },
+  {
+    "module": "HR",
+    "building": "Ex20_SCBF_12levels_transfer_discontinuous",
+    "file": "design/design_report.md",
+    "bytes": 2362,
+    "sha256": "32e3510c5de1207cd700efd85e909dbf483231abe2618c6c4a9602f9732e6140"
+  },
+  {
+    "module": "HR",
+    "building": "Ex20_SCBF_12levels_transfer_discontinuous",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex20_SCBF_12levels_transfer_discontinuous",
+    "file": "design/member_demands.md",
+    "bytes": 13125,
+    "sha256": "3e860c687f755da459a2d99912db49a77278e20f57f61d56b4e7bb4397ecedaf"
+  },
+  {
+    "module": "HR",
+    "building": "Ex20_SCBF_12levels_transfer_discontinuous",
+    "file": "design/member_schedule.csv",
+    "bytes": 183018,
+    "sha256": "55541a779055a4d37e6d1e3aaee3ef09a44467f169b1de11ed4825a9c89d301a"
+  },
+  {
+    "module": "HR",
+    "building": "Ex20_SCBF_12levels_transfer_discontinuous",
+    "file": "design/pipeline_results.json",
+    "bytes": 3249,
+    "sha256": "8c54cae36ec5de165aaf05a0870a9cfa28c594acbd0bc1ded19931a274ec5d9c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex20_SCBF_12levels_transfer_discontinuous",
+    "file": "model_opensees.py",
+    "bytes": 137672,
+    "sha256": "34730da44484513eae8c53fb99a14a44cb9605255a70ac41bacf742a4b970d2e"
+  },
+  {
+    "module": "HR",
+    "building": "Ex20_SCBF_12levels_transfer_discontinuous",
+    "file": "model_static.py",
+    "bytes": 625145,
+    "sha256": "cf4b7adcd3bc5ad37eb24f5948a3986733a35a943621933ebf30dff90d470cac"
+  },
+  {
+    "module": "HR",
+    "building": "Ex20_SCBF_12levels_transfer_discontinuous",
+    "file": "qa_annex.html",
+    "bytes": 15259,
+    "sha256": "53d2e927a976e1badb996075ef31160ba09329be5a17c4861c20789475d2f0bf"
+  },
+  {
+    "module": "HR",
+    "building": "Ex20_SCBF_12levels_transfer_discontinuous",
+    "file": "report.html",
+    "bytes": 1016010,
+    "sha256": "986b915423a3dc64b23aad19c4cdc3b9730970894196ef78f292788f7e2c652f"
+  },
+  {
+    "module": "HR",
+    "building": "Ex20_SCBF_12levels_transfer_discontinuous",
+    "file": "viewer_3d.html",
+    "bytes": 1042922,
+    "sha256": "9c7022b43ecaeac37724813b5a4d797a03f77fd36c7aa6ae75829a6c09a49ea1"
+  },
+  {
+    "module": "HR",
+    "building": "Ex21_OCBF_1story_bigbox_flexiblediaphragm",
+    "file": "activity_log.jsonl",
+    "bytes": 15998,
+    "sha256": "2d2f150de595a55df831cf902552783839056f877651241a29a86b567be1d76a"
+  },
+  {
+    "module": "HR",
+    "building": "Ex21_OCBF_1story_bigbox_flexiblediaphragm",
+    "file": "cfg.py",
+    "bytes": 9943,
+    "sha256": "ecdac71455bebe677e20d2128df4f9145951acb160febd67ba60c7af815b286e"
+  },
+  {
+    "module": "HR",
+    "building": "Ex21_OCBF_1story_bigbox_flexiblediaphragm",
+    "file": "design/_demand_cache.json",
+    "bytes": 46669,
+    "sha256": "5e556ae452ea682ec4abb6c419f9de3202d2de4ac3fe72f7c217a8787bf60208"
+  },
+  {
+    "module": "HR",
+    "building": "Ex21_OCBF_1story_bigbox_flexiblediaphragm",
+    "file": "design/calc_package.json",
+    "bytes": 166502,
+    "sha256": "ee042885797b4f5464563221dc0047e2b34ce02bf4cf7c92516464b1c290c423"
+  },
+  {
+    "module": "HR",
+    "building": "Ex21_OCBF_1story_bigbox_flexiblediaphragm",
+    "file": "design/calc_package.json.seed",
+    "bytes": 31855,
+    "sha256": "8517765be9b2b690d20d926f0e0b5bda75ba12bc8306bb878b68a437b53f2162"
+  },
+  {
+    "module": "HR",
+    "building": "Ex21_OCBF_1story_bigbox_flexiblediaphragm",
+    "file": "design/connection_demands.csv",
+    "bytes": 26100,
+    "sha256": "c1ef94b6bafed15180556e05ac67725cfff6e25827b72c20c2ec4cd7b00560d2"
+  },
+  {
+    "module": "HR",
+    "building": "Ex21_OCBF_1story_bigbox_flexiblediaphragm",
+    "file": "design/consistency_result.json",
+    "bytes": 313,
+    "sha256": "f4558e6c5664ad394ae2354b98fe4b0280be94d2e1b37022cda8f9059981b842"
+  },
+  {
+    "module": "HR",
+    "building": "Ex21_OCBF_1story_bigbox_flexiblediaphragm",
+    "file": "design/design_report.md",
+    "bytes": 648,
+    "sha256": "4d07854ab5f9e19be4683856fcfcc7481d8c574da95025248a97bdbacc8b8c6e"
+  },
+  {
+    "module": "HR",
+    "building": "Ex21_OCBF_1story_bigbox_flexiblediaphragm",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex21_OCBF_1story_bigbox_flexiblediaphragm",
+    "file": "design/member_demands.md",
+    "bytes": 6668,
+    "sha256": "28f6bd881fe8fa07b953d4da4b5c977a64efce5bf50696bfa1b6d0c2209a5333"
+  },
+  {
+    "module": "HR",
+    "building": "Ex21_OCBF_1story_bigbox_flexiblediaphragm",
+    "file": "design/member_schedule.csv",
+    "bytes": 13445,
+    "sha256": "31e4c3b5a36c2559cd0c8bc0e3df27b1c0db0562062c1bf1f7fc6990597eafe1"
+  },
+  {
+    "module": "HR",
+    "building": "Ex21_OCBF_1story_bigbox_flexiblediaphragm",
+    "file": "design/pipeline_results.json",
+    "bytes": 2214,
+    "sha256": "be8fbb39e1c431aa161f1dc62733fbb30a6b6f85e7c4139bf8322fd95ebdc022"
+  },
+  {
+    "module": "HR",
+    "building": "Ex21_OCBF_1story_bigbox_flexiblediaphragm",
+    "file": "model_opensees.py",
+    "bytes": 15524,
+    "sha256": "b99e0303780f0df0f6bb767b216104832f307445deecd78903dfaba09fa65297"
+  },
+  {
+    "module": "HR",
+    "building": "Ex21_OCBF_1story_bigbox_flexiblediaphragm",
+    "file": "model_static.py",
+    "bytes": 61358,
+    "sha256": "49865c305312e18620c8131b5522b21df43e9dfb763a0818fa8d686013fc1e6d"
+  },
+  {
+    "module": "HR",
+    "building": "Ex21_OCBF_1story_bigbox_flexiblediaphragm",
+    "file": "qa_annex.html",
+    "bytes": 13311,
+    "sha256": "ccf52f124f1b7a5951950880c0cde85984a9802c55cc6bfe4b3ec24103db177f"
+  },
+  {
+    "module": "HR",
+    "building": "Ex21_OCBF_1story_bigbox_flexiblediaphragm",
+    "file": "report.html",
+    "bytes": 260898,
+    "sha256": "9bf0c0908edc032cc0b35031d33a7444cae6997b640a04714e9416c39d0aadde"
+  },
+  {
+    "module": "HR",
+    "building": "Ex21_OCBF_1story_bigbox_flexiblediaphragm",
+    "file": "viewer_3d.html",
+    "bytes": 665539,
+    "sha256": "c158d23d949e75f90b5d4b09df272d025125a28b463d3c65070d82c5491203dd"
+  },
+  {
+    "module": "HR",
+    "building": "Ex22_SMF_6levels_hospital_RiskCatIV",
+    "file": "activity_log.jsonl",
+    "bytes": 24978,
+    "sha256": "538629ce1f917780a0addadd126288c144ed994b896908aeaf9ba273f947abfa"
+  },
+  {
+    "module": "HR",
+    "building": "Ex22_SMF_6levels_hospital_RiskCatIV",
+    "file": "cfg.py",
+    "bytes": 16178,
+    "sha256": "1f7d70bca4044c0f6a7839fd1c31d4d1b251fbf61c1ec2d54e8a9da12e4412d4"
+  },
+  {
+    "module": "HR",
+    "building": "Ex22_SMF_6levels_hospital_RiskCatIV",
+    "file": "design/_demand_cache.json",
+    "bytes": 282295,
+    "sha256": "4df313022f8905b4632d4ca8cdc963efcf347d069569137307ff1ce3b25e62d5"
+  },
+  {
+    "module": "HR",
+    "building": "Ex22_SMF_6levels_hospital_RiskCatIV",
+    "file": "design/calc_package.demands.json",
+    "bytes": 46113,
+    "sha256": "f944ce3ee3787aed7b2510ea5ab982edcfe67be9e2aeac83c2c0fc776ec883bb"
+  },
+  {
+    "module": "HR",
+    "building": "Ex22_SMF_6levels_hospital_RiskCatIV",
+    "file": "design/calc_package.json",
+    "bytes": 299614,
+    "sha256": "46c6d77d0f1a28b6e15fb1f7575c06e747d0a3f9a6b06598a997798fa42456e4"
+  },
+  {
+    "module": "HR",
+    "building": "Ex22_SMF_6levels_hospital_RiskCatIV",
+    "file": "design/connection_demands.csv",
+    "bytes": 87853,
+    "sha256": "23affb7a96a1cee19ed0e55890b6c9b82f3e75dc62c17c2f5464a0cd92d84ca0"
+  },
+  {
+    "module": "HR",
+    "building": "Ex22_SMF_6levels_hospital_RiskCatIV",
+    "file": "design/consistency_result.json",
+    "bytes": 307,
+    "sha256": "275c2dd88acb1c2b5717d885abd1ba7ef22027cc205e4863575ea4fe07a9ae92"
+  },
+  {
+    "module": "HR",
+    "building": "Ex22_SMF_6levels_hospital_RiskCatIV",
+    "file": "design/design_report.md",
+    "bytes": 722,
+    "sha256": "6e92f2c16f64e10c732598c44e1a13c5ec44df1a311712bd6dabce832accb083"
+  },
+  {
+    "module": "HR",
+    "building": "Ex22_SMF_6levels_hospital_RiskCatIV",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex22_SMF_6levels_hospital_RiskCatIV",
+    "file": "design/member_demands.md",
+    "bytes": 8174,
+    "sha256": "ac0e11a57333bec48add3b922044335276e9053a8860da0863f6b65f2b5ea38f"
+  },
+  {
+    "module": "HR",
+    "building": "Ex22_SMF_6levels_hospital_RiskCatIV",
+    "file": "design/member_schedule.csv",
+    "bytes": 93640,
+    "sha256": "ad2d638ed99171d09920eadcde1b281fd6cdf1ac4b7e555fde03e10d6d8c0525"
+  },
+  {
+    "module": "HR",
+    "building": "Ex22_SMF_6levels_hospital_RiskCatIV",
+    "file": "design/pipeline_results.json",
+    "bytes": 3066,
+    "sha256": "96e248683ec39f6a447e4d3812081a766a6925518115a182bccd08f2231d3c03"
+  },
+  {
+    "module": "HR",
+    "building": "Ex22_SMF_6levels_hospital_RiskCatIV",
+    "file": "model_opensees.py",
+    "bytes": 73714,
+    "sha256": "9c8c8f68916577e0d28b81969b8028a1bcc4e7ff6181fc2cb80f83fcb720aebe"
+  },
+  {
+    "module": "HR",
+    "building": "Ex22_SMF_6levels_hospital_RiskCatIV",
+    "file": "model_static.py",
+    "bytes": 346877,
+    "sha256": "6459b4fbf5ae639e15cd79049ddc9b9157f4d6a3002b0c5c6d735854a7d2f568"
+  },
+  {
+    "module": "HR",
+    "building": "Ex22_SMF_6levels_hospital_RiskCatIV",
+    "file": "qa_annex.html",
+    "bytes": 18422,
+    "sha256": "f48aaa3e2b9c82ae6456cc0ceda7dc030e0e8fdf3e280944d5cf2bd5ad7bf54b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex22_SMF_6levels_hospital_RiskCatIV",
+    "file": "report.html",
+    "bytes": 448966,
+    "sha256": "a6b5b35a9e8e93e04c0ce513b3e30480f8b47c0f1f97aab978d93663e7e00452"
+  },
+  {
+    "module": "HR",
+    "building": "Ex22_SMF_6levels_hospital_RiskCatIV",
+    "file": "viewer_3d.html",
+    "bytes": 853686,
+    "sha256": "56c4ef42f2efdb66ded738c7f7ea922da971a91f15c2d23c8124b1fc9b55c95c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex23_Dual_SMF_BRBF_9levels_SDCF_nearfault_EOC",
+    "file": "activity_log.jsonl",
+    "bytes": 18265,
+    "sha256": "dc681febad0e33f733e1fc5210be6e5c5f310677b23916b16c5d6d39fe02b66d"
+  },
+  {
+    "module": "HR",
+    "building": "Ex23_Dual_SMF_BRBF_9levels_SDCF_nearfault_EOC",
+    "file": "cfg.py",
+    "bytes": 15296,
+    "sha256": "94197a2b2495ec3ccfd3bca9e8af7c0a3de42d6c6d369736e19ff0e26f47a225"
+  },
+  {
+    "module": "HR",
+    "building": "Ex23_Dual_SMF_BRBF_9levels_SDCF_nearfault_EOC",
+    "file": "design/_demand_cache.json",
+    "bytes": 391641,
+    "sha256": "db4e83674bb12172fe67d2bf60e0c08483cc9176f7f9757e312aada74cefb890"
+  },
+  {
+    "module": "HR",
+    "building": "Ex23_Dual_SMF_BRBF_9levels_SDCF_nearfault_EOC",
+    "file": "design/calc_package.json",
+    "bytes": 843412,
+    "sha256": "4ceaed3f30259130c31432f14e05a8c6c19498ce13267a7fd68a3ef50a75b439"
+  },
+  {
+    "module": "HR",
+    "building": "Ex23_Dual_SMF_BRBF_9levels_SDCF_nearfault_EOC",
+    "file": "design/connection_demands.csv",
+    "bytes": 113038,
+    "sha256": "e3298d816e1e3927597c0365be23434f7f38b58960f648f9c441e77c4651d2ee"
+  },
+  {
+    "module": "HR",
+    "building": "Ex23_Dual_SMF_BRBF_9levels_SDCF_nearfault_EOC",
+    "file": "design/consistency_result.json",
+    "bytes": 317,
+    "sha256": "2a4d981ae3446938a1800541027c7aabb016c7917a0a8ce936acae672bb9103e"
+  },
+  {
+    "module": "HR",
+    "building": "Ex23_Dual_SMF_BRBF_9levels_SDCF_nearfault_EOC",
+    "file": "design/design_report.md",
+    "bytes": 1318,
+    "sha256": "7bdc7112309bce00c5304247060696ea46d1bc8eeb81ccafb6df32693c35ffab"
+  },
+  {
+    "module": "HR",
+    "building": "Ex23_Dual_SMF_BRBF_9levels_SDCF_nearfault_EOC",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex23_Dual_SMF_BRBF_9levels_SDCF_nearfault_EOC",
+    "file": "design/member_demands.md",
+    "bytes": 12725,
+    "sha256": "673248f1c4164525b82edd3c2c0ac029c00800850cc95a427e191b3d77532d6c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex23_Dual_SMF_BRBF_9levels_SDCF_nearfault_EOC",
+    "file": "design/member_schedule.csv",
+    "bytes": 142691,
+    "sha256": "029328b73f0aa9bef5275c0ba513d38dcebabcf04c0779c392056cbf966a42a0"
+  },
+  {
+    "module": "HR",
+    "building": "Ex23_Dual_SMF_BRBF_9levels_SDCF_nearfault_EOC",
+    "file": "design/pipeline_results.json",
+    "bytes": 72325,
+    "sha256": "682038b6403410ae9e51daf7328eb9f5a72f00c6f1cab43a06f086a1750ca4ab"
+  },
+  {
+    "module": "HR",
+    "building": "Ex23_Dual_SMF_BRBF_9levels_SDCF_nearfault_EOC",
+    "file": "fill_cfg.json",
+    "bytes": 1393,
+    "sha256": "8e6e4e75565631ce5724c749e42130b147b19ffb62462c8e94e8382e708c1bfd"
+  },
+  {
+    "module": "HR",
+    "building": "Ex23_Dual_SMF_BRBF_9levels_SDCF_nearfault_EOC",
+    "file": "model_opensees.py",
+    "bytes": 101734,
+    "sha256": "87990c4aefbc824e118ba7a7909767252bcbd18c972af812f36c657131dc3f15"
+  },
+  {
+    "module": "HR",
+    "building": "Ex23_Dual_SMF_BRBF_9levels_SDCF_nearfault_EOC",
+    "file": "model_static.py",
+    "bytes": 465757,
+    "sha256": "66a5e2578c60d4d9c92954a492b4210af83e388062c42d1ed6635d1d79373b15"
+  },
+  {
+    "module": "HR",
+    "building": "Ex23_Dual_SMF_BRBF_9levels_SDCF_nearfault_EOC",
+    "file": "qa_annex.html",
+    "bytes": 14456,
+    "sha256": "5815ea45cd18b4dbd16066ec65715418a16adac97339be0522fd1cc55d3c602b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex23_Dual_SMF_BRBF_9levels_SDCF_nearfault_EOC",
+    "file": "report.html",
+    "bytes": 1056185,
+    "sha256": "f456e8c43fc01ea84a72330076402f52afbfba9e4137c0c59c6d71ca77419ce7"
+  },
+  {
+    "module": "HR",
+    "building": "Ex23_Dual_SMF_BRBF_9levels_SDCF_nearfault_EOC",
+    "file": "story_strength.json",
+    "bytes": 168,
+    "sha256": "5c85efb9b201c5d5a739024a989b525da02ff0895e569adc51e1792ab5b568d9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex23_Dual_SMF_BRBF_9levels_SDCF_nearfault_EOC",
+    "file": "viewer_3d.html",
+    "bytes": 942557,
+    "sha256": "e1fc2b6744df44944aabcf58d66a588df96d5dbdd46c141af64634837f1979a4"
+  },
+  {
+    "module": "HR",
+    "building": "Ex24_Mixed_SMF_NS_SCBF_EW_10levels_bidirectional",
+    "file": "activity_log.jsonl",
+    "bytes": 19503,
+    "sha256": "fd3f4918fdd38fb0918a70f31dea8685a35abf651c1c4b4053521cc6cb2107d1"
+  },
+  {
+    "module": "HR",
+    "building": "Ex24_Mixed_SMF_NS_SCBF_EW_10levels_bidirectional",
+    "file": "cfg.py",
+    "bytes": 16067,
+    "sha256": "6c09ac23e6d52bc118f6180bcfd396466c8f1f1b28d8ad12a1b4a2fdbec10dbb"
+  },
+  {
+    "module": "HR",
+    "building": "Ex24_Mixed_SMF_NS_SCBF_EW_10levels_bidirectional",
+    "file": "design/_demand_cache.json",
+    "bytes": 391843,
+    "sha256": "6bfe9766f6c76b5c13a698b4410b94687ea36f22c511fdcd734ea0719a45d21f"
+  },
+  {
+    "module": "HR",
+    "building": "Ex24_Mixed_SMF_NS_SCBF_EW_10levels_bidirectional",
+    "file": "design/calc_package.json",
+    "bytes": 494896,
+    "sha256": "5bb253939a79dcb9b2e4260271a3f005f69dc6e93eb53dac63bb2bbd508ee515"
+  },
+  {
+    "module": "HR",
+    "building": "Ex24_Mixed_SMF_NS_SCBF_EW_10levels_bidirectional",
+    "file": "design/calc_package.seed.json",
+    "bytes": 91148,
+    "sha256": "d3d5aa24a79799f268b53c956c16e31973051a2adfd59d869aef0559c598b580"
+  },
+  {
+    "module": "HR",
+    "building": "Ex24_Mixed_SMF_NS_SCBF_EW_10levels_bidirectional",
+    "file": "design/connection_demands.csv",
+    "bytes": 114466,
+    "sha256": "3821f846f97d58a267d1c888b04d069af87a1d77eae7145117cb8819ed8123b5"
+  },
+  {
+    "module": "HR",
+    "building": "Ex24_Mixed_SMF_NS_SCBF_EW_10levels_bidirectional",
+    "file": "design/consistency_result.json",
+    "bytes": 320,
+    "sha256": "9fd3bf8556c467a1a9bd722e64d6d19d99674af6dd4a88331aad351168cbb9ca"
+  },
+  {
+    "module": "HR",
+    "building": "Ex24_Mixed_SMF_NS_SCBF_EW_10levels_bidirectional",
+    "file": "design/design_report.md",
+    "bytes": 1283,
+    "sha256": "9bfd6da56e31684834ceae51d29e362c98b5b0867be69133654da2621f34c059"
+  },
+  {
+    "module": "HR",
+    "building": "Ex24_Mixed_SMF_NS_SCBF_EW_10levels_bidirectional",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex24_Mixed_SMF_NS_SCBF_EW_10levels_bidirectional",
+    "file": "design/member_demands.md",
+    "bytes": 12171,
+    "sha256": "9811f073b92d8ab2e57f439cdaf241d9622c5ad01f39ad734e7dddb7e3443097"
+  },
+  {
+    "module": "HR",
+    "building": "Ex24_Mixed_SMF_NS_SCBF_EW_10levels_bidirectional",
+    "file": "design/member_schedule.csv",
+    "bytes": 137507,
+    "sha256": "cfaf2071a4e8963ab3b08428b16d3452549bebb41df9e98e6c8eb7a44a793f72"
+  },
+  {
+    "module": "HR",
+    "building": "Ex24_Mixed_SMF_NS_SCBF_EW_10levels_bidirectional",
+    "file": "design/pipeline_results.json",
+    "bytes": 3200,
+    "sha256": "2248bce1d824e00c87ea22baea9707d7c964970dc854729af2def19747733fca"
+  },
+  {
+    "module": "HR",
+    "building": "Ex24_Mixed_SMF_NS_SCBF_EW_10levels_bidirectional",
+    "file": "design/results_extra.json",
+    "bytes": 1113,
+    "sha256": "fec4ea8f4635bbbf64dce1e8e87bc7308bcc7cf7d2a5d5c24d789e55483ecd99"
+  },
+  {
+    "module": "HR",
+    "building": "Ex24_Mixed_SMF_NS_SCBF_EW_10levels_bidirectional",
+    "file": "model_opensees.py",
+    "bytes": 101770,
+    "sha256": "e71c497ee50cd798ed114c06d5582a073807ec120161d445fa5e2a90b9f7a102"
+  },
+  {
+    "module": "HR",
+    "building": "Ex24_Mixed_SMF_NS_SCBF_EW_10levels_bidirectional",
+    "file": "model_static.py",
+    "bytes": 467487,
+    "sha256": "266fd78f760925b6ed48b82d29d648d9c67dfb6a52acf480fa8013b3b20c8f3d"
+  },
+  {
+    "module": "HR",
+    "building": "Ex24_Mixed_SMF_NS_SCBF_EW_10levels_bidirectional",
+    "file": "qa_annex.html",
+    "bytes": 15323,
+    "sha256": "b1601d1bad862d8b3e470b2866e21690c7f892b29d206cdca65d7fafab480cfa"
+  },
+  {
+    "module": "HR",
+    "building": "Ex24_Mixed_SMF_NS_SCBF_EW_10levels_bidirectional",
+    "file": "report.html",
+    "bytes": 735749,
+    "sha256": "7a5dd12fbcbc2820b2cd12849fac386d98d114fb8ed5e4979187222d368a21b8"
+  },
+  {
+    "module": "HR",
+    "building": "Ex24_Mixed_SMF_NS_SCBF_EW_10levels_bidirectional",
+    "file": "viewer_3d.html",
+    "bytes": 943621,
+    "sha256": "f2a85a975ceba27d2e7f709e98cfe6d6610fb87c6b9cea4907e58251a4da2172"
+  },
+  {
+    "module": "HR",
+    "building": "Ex25_SMF_12levels_atrium_diaphragmdiscontinuity",
+    "file": "activity_log.jsonl",
+    "bytes": 17678,
+    "sha256": "3c5990c04e21a5dd0bdc1386a4fc0b3657e04a663b808619c3cdcb43b551626c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex25_SMF_12levels_atrium_diaphragmdiscontinuity",
+    "file": "cfg.py",
+    "bytes": 20049,
+    "sha256": "f1e605d2e5c5c80a9945a1b459ec0821a3a0e5ab371b31b03f36b40d909bb04c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex25_SMF_12levels_atrium_diaphragmdiscontinuity",
+    "file": "design/_demand_cache.json",
+    "bytes": 538235,
+    "sha256": "6fc486dbf69ec143b5478f6897440fe85624bc9a316d764d4973642c8aa0cb8b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex25_SMF_12levels_atrium_diaphragmdiscontinuity",
+    "file": "design/calc_package.json",
+    "bytes": 492480,
+    "sha256": "799116e66d1997aaf24d61c30da299e42c40f93a097667050c7f15953f4b1ffc"
+  },
+  {
+    "module": "HR",
+    "building": "Ex25_SMF_12levels_atrium_diaphragmdiscontinuity",
+    "file": "design/calc_package.seed.json",
+    "bytes": 71542,
+    "sha256": "96643ed98711a2903765c837a353f9516595c917d0916ee30fc24ef1251c9e98"
+  },
+  {
+    "module": "HR",
+    "building": "Ex25_SMF_12levels_atrium_diaphragmdiscontinuity",
+    "file": "design/connection_demands.csv",
+    "bytes": 156269,
+    "sha256": "9c42416d0fe649389e4e173321ab7e7fbde63b58019053ac78d04d67654df434"
+  },
+  {
+    "module": "HR",
+    "building": "Ex25_SMF_12levels_atrium_diaphragmdiscontinuity",
+    "file": "design/consistency_result.json",
+    "bytes": 319,
+    "sha256": "f410f731422f2bf099a5c1a73aef55cf431b449bfcfe353d90863898c6060218"
+  },
+  {
+    "module": "HR",
+    "building": "Ex25_SMF_12levels_atrium_diaphragmdiscontinuity",
+    "file": "design/design_report.md",
+    "bytes": 1028,
+    "sha256": "68ca6982a6490e96f0a216d4a178285b88e09331d8a22bd158c8602d64199237"
+  },
+  {
+    "module": "HR",
+    "building": "Ex25_SMF_12levels_atrium_diaphragmdiscontinuity",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex25_SMF_12levels_atrium_diaphragmdiscontinuity",
+    "file": "design/member_demands.md",
+    "bytes": 10024,
+    "sha256": "3c4785183e09e15d3ead6490e7eadd5edd96c0673aa8052a30a7bc3be73996ed"
+  },
+  {
+    "module": "HR",
+    "building": "Ex25_SMF_12levels_atrium_diaphragmdiscontinuity",
+    "file": "design/member_schedule.csv",
+    "bytes": 183301,
+    "sha256": "ee88340c5976ebca15e23578d54dc8de479f471983b2266206255bfe657c05ff"
+  },
+  {
+    "module": "HR",
+    "building": "Ex25_SMF_12levels_atrium_diaphragmdiscontinuity",
+    "file": "design/pipeline_results.json",
+    "bytes": 3159,
+    "sha256": "e574ec8050959ccd9e5c03119fb87d5866d5e10ae3c8f9f7d2b4bb19c7038b68"
+  },
+  {
+    "module": "HR",
+    "building": "Ex25_SMF_12levels_atrium_diaphragmdiscontinuity",
+    "file": "design/results_extra.json",
+    "bytes": 1669,
+    "sha256": "d09ac3e8a2f1b82db674dcafa11e01681524671d958225cd0b9cef9c628fa046"
+  },
+  {
+    "module": "HR",
+    "building": "Ex25_SMF_12levels_atrium_diaphragmdiscontinuity",
+    "file": "model_opensees.py",
+    "bytes": 142082,
+    "sha256": "1dbc2023893ba0503559cf26af34ecfac42b89d28ecb3b7af2c54709d9893c41"
+  },
+  {
+    "module": "HR",
+    "building": "Ex25_SMF_12levels_atrium_diaphragmdiscontinuity",
+    "file": "model_static.py",
+    "bytes": 673334,
+    "sha256": "007179a19e5de290e22ff0db3c452920e3c5945f7fafc701b9b1f4dd7c7428fa"
+  },
+  {
+    "module": "HR",
+    "building": "Ex25_SMF_12levels_atrium_diaphragmdiscontinuity",
+    "file": "qa_annex.html",
+    "bytes": 14183,
+    "sha256": "12b3dc8e29caaf2e8551dfdc903553b14930744473ec9fe042109e3eeb2ea62b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex25_SMF_12levels_atrium_diaphragmdiscontinuity",
+    "file": "report.html",
+    "bytes": 687440,
+    "sha256": "655dab2208483e3ff101df993308062603fe72d509b5bde4e44323345d0f3df0"
+  },
+  {
+    "module": "HR",
+    "building": "Ex25_SMF_12levels_atrium_diaphragmdiscontinuity",
+    "file": "viewer_3d.html",
+    "bytes": 1066653,
+    "sha256": "d1b89c27486ffb12a4be2058b921a2ba320240805d77ec12a6acae892b345958"
+  },
+  {
+    "module": "HR",
+    "building": "Ex26_Dual_SMF_SCBF_18levels_slender_windgoverned",
+    "file": "activity_log.jsonl",
+    "bytes": 17016,
+    "sha256": "e6f14c991448f373b5964e1048433a28922143c97228181a44e1ab192ec80d62"
+  },
+  {
+    "module": "HR",
+    "building": "Ex26_Dual_SMF_SCBF_18levels_slender_windgoverned",
+    "file": "cfg.py",
+    "bytes": 12160,
+    "sha256": "5ce84dff4d02694a2e38cf6abb4f25956e1b4a407f369d5116cbc4ea5df0b74b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex26_Dual_SMF_SCBF_18levels_slender_windgoverned",
+    "file": "design/_demand_cache.json",
+    "bytes": 310453,
+    "sha256": "6928930eb214a7ef73bd45cce1e194d7f946f7a884fe1514a7a808239da8e2fe"
+  },
+  {
+    "module": "HR",
+    "building": "Ex26_Dual_SMF_SCBF_18levels_slender_windgoverned",
+    "file": "design/calc_package.json",
+    "bytes": 676275,
+    "sha256": "4045efd98977d0ac23e81ba191d6403e87578f129c880e73f95349a1d3e4420c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex26_Dual_SMF_SCBF_18levels_slender_windgoverned",
+    "file": "design/connection_demands.csv",
+    "bytes": 83928,
+    "sha256": "e18f98257f99f8b766dd61491771df0b186978d703e0de783bdbd9556863a22d"
+  },
+  {
+    "module": "HR",
+    "building": "Ex26_Dual_SMF_SCBF_18levels_slender_windgoverned",
+    "file": "design/consistency_result.json",
+    "bytes": 320,
+    "sha256": "74d58aa69808dc77e3391fffa0f3b802f1854e1bc9f257278d39240024779f71"
+  },
+  {
+    "module": "HR",
+    "building": "Ex26_Dual_SMF_SCBF_18levels_slender_windgoverned",
+    "file": "design/design_report.md",
+    "bytes": 1432,
+    "sha256": "6276eef8cd42ecd2601cf949920e707a69bdb381ec586df4d55a90cc62a47b73"
+  },
+  {
+    "module": "HR",
+    "building": "Ex26_Dual_SMF_SCBF_18levels_slender_windgoverned",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex26_Dual_SMF_SCBF_18levels_slender_windgoverned",
+    "file": "design/member_demands.md",
+    "bytes": 8585,
+    "sha256": "8bd6bcdc249ae1191421aaa2d06ffad3be31f58417833a490bf67dac209e2a9a"
+  },
+  {
+    "module": "HR",
+    "building": "Ex26_Dual_SMF_SCBF_18levels_slender_windgoverned",
+    "file": "design/member_schedule.csv",
+    "bytes": 119623,
+    "sha256": "fc2f3178b34e13048fc8c74f1b2eef8d08039ab052106a351c72776303a96e8e"
+  },
+  {
+    "module": "HR",
+    "building": "Ex26_Dual_SMF_SCBF_18levels_slender_windgoverned",
+    "file": "design/pipeline_results.json",
+    "bytes": 56608,
+    "sha256": "13bd298f569b1f1b68a960d82d85c57b8ff184a3fe44cca24b2aa2cb25d67208"
+  },
+  {
+    "module": "HR",
+    "building": "Ex26_Dual_SMF_SCBF_18levels_slender_windgoverned",
+    "file": "fill_cfg.json",
+    "bytes": 1391,
+    "sha256": "73dded4fc53e22ee1e7baddc1916616f259606cabca211a2001032aeccc08fe9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex26_Dual_SMF_SCBF_18levels_slender_windgoverned",
+    "file": "model_opensees.py",
+    "bytes": 87253,
+    "sha256": "c81b76fb8252696174b379be50b04257b5e801e01dcbff9127dfa28804482d76"
+  },
+  {
+    "module": "HR",
+    "building": "Ex26_Dual_SMF_SCBF_18levels_slender_windgoverned",
+    "file": "model_static.py",
+    "bytes": 352153,
+    "sha256": "88da874b7cfcbf51bbe78b578e777f13a8c36fa63b101b7848ac10a142ef95b2"
+  },
+  {
+    "module": "HR",
+    "building": "Ex26_Dual_SMF_SCBF_18levels_slender_windgoverned",
+    "file": "qa_annex.html",
+    "bytes": 13702,
+    "sha256": "1b56166c8b605e5cdf7fdf20a556113c99602c6d2c7143abb2bc947b7e7fe42c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex26_Dual_SMF_SCBF_18levels_slender_windgoverned",
+    "file": "report.html",
+    "bytes": 857163,
+    "sha256": "de8da8f344e06bcc295e55494d43b6ddc228f0c31304bcd55649a368cadc584d"
+  },
+  {
+    "module": "HR",
+    "building": "Ex26_Dual_SMF_SCBF_18levels_slender_windgoverned",
+    "file": "story_strength.json",
+    "bytes": 302,
+    "sha256": "f1a3a6add5c59bf19af4719c0646f35fc331c87efbcfebe7800ddc353a63cd87"
+  },
+  {
+    "module": "HR",
+    "building": "Ex26_Dual_SMF_SCBF_18levels_slender_windgoverned",
+    "file": "viewer_3d.html",
+    "bytes": 890730,
+    "sha256": "4a04fd3fd96d927491746e2654eccbeb1174cbfd87544fa4edf6b9145053920c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex27_CCPSW_CF_20levels_SpeedCore_composite",
+    "file": "activity_log.jsonl",
+    "bytes": 33356,
+    "sha256": "24ad9262cc1a0558d6083bc6dd77c514dc3083c775f54f252d5a5f6105fc0135"
+  },
+  {
+    "module": "HR",
+    "building": "Ex27_CCPSW_CF_20levels_SpeedCore_composite",
+    "file": "cfg.py",
+    "bytes": 28011,
+    "sha256": "406276513ec8c5006d175dff6598f7014c2178ae5280fc51ade9fc5e55911641"
+  },
+  {
+    "module": "HR",
+    "building": "Ex27_CCPSW_CF_20levels_SpeedCore_composite",
+    "file": "design/_demand_cache.json",
+    "bytes": 806418,
+    "sha256": "7d1cd3faacb5472529d61f403b8bc768618ce27094878cb943ae4e3b36172cc3"
+  },
+  {
+    "module": "HR",
+    "building": "Ex27_CCPSW_CF_20levels_SpeedCore_composite",
+    "file": "design/calc_package.demands.json",
+    "bytes": 126315,
+    "sha256": "8e3313236f20aabf911f807c01a33fa99c4f7397c5fd1c8dbaa271ba5668910b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex27_CCPSW_CF_20levels_SpeedCore_composite",
+    "file": "design/calc_package.json",
+    "bytes": 746070,
+    "sha256": "4141ef57616d0b5bac5c8dcd942e07184c5ecab22c37e9b1550173e94b99bd38"
+  },
+  {
+    "module": "HR",
+    "building": "Ex27_CCPSW_CF_20levels_SpeedCore_composite",
+    "file": "design/connection_demands.csv",
+    "bytes": 209937,
+    "sha256": "5238f2db0a0abeb82f3a563de5d91656f749803254fea63a98f22a2d69ff3e78"
+  },
+  {
+    "module": "HR",
+    "building": "Ex27_CCPSW_CF_20levels_SpeedCore_composite",
+    "file": "design/consistency_result.json",
+    "bytes": 314,
+    "sha256": "3e5d62b028a3e9b0f5332b75e94de2fec9052ee20d9e263235f773cfd28b6663"
+  },
+  {
+    "module": "HR",
+    "building": "Ex27_CCPSW_CF_20levels_SpeedCore_composite",
+    "file": "design/design_report.md",
+    "bytes": 846,
+    "sha256": "d63719a0f42982fe984e2272c117b578a42b229d88fa1b0634ea014c28eb0196"
+  },
+  {
+    "module": "HR",
+    "building": "Ex27_CCPSW_CF_20levels_SpeedCore_composite",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex27_CCPSW_CF_20levels_SpeedCore_composite",
+    "file": "design/member_demands.md",
+    "bytes": 13289,
+    "sha256": "065f584f51d368b95e98b3b971cc6b021cbb2113c995791d7f6c0609cf1a89fb"
+  },
+  {
+    "module": "HR",
+    "building": "Ex27_CCPSW_CF_20levels_SpeedCore_composite",
+    "file": "design/member_schedule.csv",
+    "bytes": 294497,
+    "sha256": "16b71e3047b05935a36e4c8cb7e7f3b2114328aaa0a510d1141dc50acb43a9b6"
+  },
+  {
+    "module": "HR",
+    "building": "Ex27_CCPSW_CF_20levels_SpeedCore_composite",
+    "file": "design/pipeline_results.json",
+    "bytes": 4002,
+    "sha256": "4404f5709bbc250f26c8bd3be0c3ef28a9648b1655d28179d57cdc4ebf1e306b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex27_CCPSW_CF_20levels_SpeedCore_composite",
+    "file": "fill_cfg.json",
+    "bytes": 1338,
+    "sha256": "bdefdf6fad80011e95914979c20fd8eb84582655cf7040f5b5623b6b29198beb"
+  },
+  {
+    "module": "HR",
+    "building": "Ex27_CCPSW_CF_20levels_SpeedCore_composite",
+    "file": "model_opensees.py",
+    "bytes": 234946,
+    "sha256": "ace807081165f033009e61f9fac6d9e01db466aa020f5ad4d4ec65b91d4a3fec"
+  },
+  {
+    "module": "HR",
+    "building": "Ex27_CCPSW_CF_20levels_SpeedCore_composite",
+    "file": "model_static.py",
+    "bytes": 1134860,
+    "sha256": "8a38c090f46689d550fb7e3fd3b066908fd20ea32d8aee344aba3b6ed00c7057"
+  },
+  {
+    "module": "HR",
+    "building": "Ex27_CCPSW_CF_20levels_SpeedCore_composite",
+    "file": "qa_annex.html",
+    "bytes": 23290,
+    "sha256": "f97d2cd961b3d8aec38a8616d16326360fd9ac5ad3178cc5578df6bc6d62d9a2"
+  },
+  {
+    "module": "HR",
+    "building": "Ex27_CCPSW_CF_20levels_SpeedCore_composite",
+    "file": "report.html",
+    "bytes": 1016152,
+    "sha256": "ab51a76e0cfa6bc5afe93c1e89683386e90c234ceb8994343393360becd8b50b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex27_CCPSW_CF_20levels_SpeedCore_composite",
+    "file": "viewer_3d.html",
+    "bytes": 1337193,
+    "sha256": "faca1bc33db799b84e0487ae03a3ff745e9d1b849e4f93957e8028bb1588a3c0"
+  },
+  {
+    "module": "HR",
+    "building": "Ex28_STMF_8levels_longspan_trussmoment",
+    "file": "activity_log.jsonl",
+    "bytes": 17846,
+    "sha256": "083972cfc32ff5547048a286072adbe9e2d72784d628b7e9988e60752595c494"
+  },
+  {
+    "module": "HR",
+    "building": "Ex28_STMF_8levels_longspan_trussmoment",
+    "file": "cfg.py",
+    "bytes": 17388,
+    "sha256": "28fbffab533862e11a930132a8839e938eff1824dab2d62c12b4ac4f2a966d53"
+  },
+  {
+    "module": "HR",
+    "building": "Ex28_STMF_8levels_longspan_trussmoment",
+    "file": "design/_demand_cache.json",
+    "bytes": 113380,
+    "sha256": "0ffe274c24e24a0c5916b872386a99a606002cd37d56c3d15934e5b16a7654e0"
+  },
+  {
+    "module": "HR",
+    "building": "Ex28_STMF_8levels_longspan_trussmoment",
+    "file": "design/calc_package.json",
+    "bytes": 379932,
+    "sha256": "549f5840661ec05cdc69584c712451b975b5020a73e0c9fd245ba37c0357c1b4"
+  },
+  {
+    "module": "HR",
+    "building": "Ex28_STMF_8levels_longspan_trussmoment",
+    "file": "design/calc_package.seed.json",
+    "bytes": 49743,
+    "sha256": "dbd928a8a436f03dbb05f44cd263b8b958823361cad1229abfbe3f0dacda7742"
+  },
+  {
+    "module": "HR",
+    "building": "Ex28_STMF_8levels_longspan_trussmoment",
+    "file": "design/connection_demands.csv",
+    "bytes": 30126,
+    "sha256": "478bce73eb97f1d121df248a32cc4607d78bd00aeeeb0d62467ae832637bc213"
+  },
+  {
+    "module": "HR",
+    "building": "Ex28_STMF_8levels_longspan_trussmoment",
+    "file": "design/consistency_result.json",
+    "bytes": 310,
+    "sha256": "c5750ff6e70ae81289d71a1fbd80d36ea0295873c1e435fa6fac6ef266d4054f"
+  },
+  {
+    "module": "HR",
+    "building": "Ex28_STMF_8levels_longspan_trussmoment",
+    "file": "design/design_report.md",
+    "bytes": 866,
+    "sha256": "14973d09f7aec32c6eabebf352f4b102422ed54ca286e71cd61ea6f1f25a58ea"
+  },
+  {
+    "module": "HR",
+    "building": "Ex28_STMF_8levels_longspan_trussmoment",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex28_STMF_8levels_longspan_trussmoment",
+    "file": "design/member_demands.md",
+    "bytes": 6439,
+    "sha256": "fab4a538ac77663a59cd3f367ac9cfc3f34d2c5812a5f916ce85a67511c7a44f"
+  },
+  {
+    "module": "HR",
+    "building": "Ex28_STMF_8levels_longspan_trussmoment",
+    "file": "design/member_schedule.csv",
+    "bytes": 39613,
+    "sha256": "d2167ba93040aa827901ba491c15deb54446fe3b6a6d12f21a3c9a50185ab7bb"
+  },
+  {
+    "module": "HR",
+    "building": "Ex28_STMF_8levels_longspan_trussmoment",
+    "file": "design/pipeline_results.json",
+    "bytes": 3104,
+    "sha256": "8f1dc983c9ffb6b1e84479b1e34baa1913053bbb28784acb7ac3965556964abb"
+  },
+  {
+    "module": "HR",
+    "building": "Ex28_STMF_8levels_longspan_trussmoment",
+    "file": "design/results_extra.json",
+    "bytes": 3918,
+    "sha256": "7d372406542c795a4321bf8a7d398cb78471a09b1fa77cb81ffa3b6432aa895a"
+  },
+  {
+    "module": "HR",
+    "building": "Ex28_STMF_8levels_longspan_trussmoment",
+    "file": "model_opensees.py",
+    "bytes": 32324,
+    "sha256": "98f681dc12f5db2bd3eaff4fa5e32dd97029cb84a32189d09210e03d16b16c59"
+  },
+  {
+    "module": "HR",
+    "building": "Ex28_STMF_8levels_longspan_trussmoment",
+    "file": "model_static.py",
+    "bytes": 140716,
+    "sha256": "6896aa08db382a6c061e3589430e96af94990ff69bcd538867359c2e6fff90ec"
+  },
+  {
+    "module": "HR",
+    "building": "Ex28_STMF_8levels_longspan_trussmoment",
+    "file": "qa_annex.html",
+    "bytes": 14368,
+    "sha256": "f2d1acaa38a2ee30f41c47fa17155200aae66e6296a37655970113f0948a929b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex28_STMF_8levels_longspan_trussmoment",
+    "file": "report.html",
+    "bytes": 537082,
+    "sha256": "bdf7a33b19da217e631b328e86ba0bec59b40f8400b0c4e9d9134f7ed0555e78"
+  },
+  {
+    "module": "HR",
+    "building": "Ex28_STMF_8levels_longspan_trussmoment",
+    "file": "viewer_3d.html",
+    "bytes": 725909,
+    "sha256": "5948d17e0859c56fdc54c529257e017343c2232c0e85c6b4ce52ef10708e1cf0"
+  },
+  {
+    "module": "HR",
+    "building": "Ex29_Dual_SMF_BRBF_20levels_264ft_NLRHA_PBSD",
+    "file": "activity_log.jsonl",
+    "bytes": 18260,
+    "sha256": "572687141c88ca4b94adc81449337e87d0a291b6ad0e5196152299efe6fb1806"
+  },
+  {
+    "module": "HR",
+    "building": "Ex29_Dual_SMF_BRBF_20levels_264ft_NLRHA_PBSD",
+    "file": "cfg.py",
+    "bytes": 13473,
+    "sha256": "266b960a5e3fdfa9cac5f55007c92d7d73aeb4e66c6916321c2312fc479d86e7"
+  },
+  {
+    "module": "HR",
+    "building": "Ex29_Dual_SMF_BRBF_20levels_264ft_NLRHA_PBSD",
+    "file": "design/_demand_cache.json",
+    "bytes": 718019,
+    "sha256": "7774951f21c27db7b074138351f85b23c8754c031f2fa13ac6403921f95bf931"
+  },
+  {
+    "module": "HR",
+    "building": "Ex29_Dual_SMF_BRBF_20levels_264ft_NLRHA_PBSD",
+    "file": "design/calc_package.json",
+    "bytes": 994191,
+    "sha256": "ae08476a672bebd3b256ecefec36ff05176deec7b08723ecc212020e99e60fdd"
+  },
+  {
+    "module": "HR",
+    "building": "Ex29_Dual_SMF_BRBF_20levels_264ft_NLRHA_PBSD",
+    "file": "design/connection_demands.csv",
+    "bytes": 198787,
+    "sha256": "2f984207b1f8869fcb149f0dcc41c04b24d1d8d258bb1d7cbe552e975fe3b58a"
+  },
+  {
+    "module": "HR",
+    "building": "Ex29_Dual_SMF_BRBF_20levels_264ft_NLRHA_PBSD",
+    "file": "design/consistency_result.json",
+    "bytes": 316,
+    "sha256": "32a0e5cf6243228d1a2f8c86e5b160384c2255ad2c4ccc001bac0d688f011f80"
+  },
+  {
+    "module": "HR",
+    "building": "Ex29_Dual_SMF_BRBF_20levels_264ft_NLRHA_PBSD",
+    "file": "design/design_report.md",
+    "bytes": 1327,
+    "sha256": "f14a28aefbde1a4615b2ed533c8f35d32eec71cf463d1e5771e6401f78899658"
+  },
+  {
+    "module": "HR",
+    "building": "Ex29_Dual_SMF_BRBF_20levels_264ft_NLRHA_PBSD",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex29_Dual_SMF_BRBF_20levels_264ft_NLRHA_PBSD",
+    "file": "design/member_demands.md",
+    "bytes": 14019,
+    "sha256": "8fc631f706e0b4a151b6f3f5e31f8729304f155b564786474aabbfe92b42bdf6"
+  },
+  {
+    "module": "HR",
+    "building": "Ex29_Dual_SMF_BRBF_20levels_264ft_NLRHA_PBSD",
+    "file": "design/member_schedule.csv",
+    "bytes": 268887,
+    "sha256": "32c64b3794b89a6e39999e82e5ec4cba5c1c9c0982abd717e83d7de872dcd19b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex29_Dual_SMF_BRBF_20levels_264ft_NLRHA_PBSD",
+    "file": "design/pipeline_results.json",
+    "bytes": 129832,
+    "sha256": "c95cce6e9e7a187128a2782284a8dd0b8177eb70a72b8fa88efbbe34375ced1a"
+  },
+  {
+    "module": "HR",
+    "building": "Ex29_Dual_SMF_BRBF_20levels_264ft_NLRHA_PBSD",
+    "file": "fill_cfg.json",
+    "bytes": 1568,
+    "sha256": "e81b25624004e6435e5a59a2b7b8ab0713618e1707599a24361a09bc217b04f7"
+  },
+  {
+    "module": "HR",
+    "building": "Ex29_Dual_SMF_BRBF_20levels_264ft_NLRHA_PBSD",
+    "file": "model_opensees.py",
+    "bytes": 188800,
+    "sha256": "edbfd807118afb5d0f3efb153245d9aae30ba2b348726f12adc3e867d12a7d4f"
+  },
+  {
+    "module": "HR",
+    "building": "Ex29_Dual_SMF_BRBF_20levels_264ft_NLRHA_PBSD",
+    "file": "model_static.py",
+    "bytes": 849307,
+    "sha256": "5f0c71e82a8ee0e4b2e528362775527d602e22588f00c681b275d2d7ef6e4ce9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex29_Dual_SMF_BRBF_20levels_264ft_NLRHA_PBSD",
+    "file": "qa_annex.html",
+    "bytes": 14454,
+    "sha256": "e936b75c914a238f38400d2168698b9abd0fc2b6036b5ee15bf5df4f8cd7703e"
+  },
+  {
+    "module": "HR",
+    "building": "Ex29_Dual_SMF_BRBF_20levels_264ft_NLRHA_PBSD",
+    "file": "report.html",
+    "bytes": 1239732,
+    "sha256": "c6230cad70f26f5a3bc06b1e939241cd49f065a940ca647dafc1b4b3b01edf6d"
+  },
+  {
+    "module": "HR",
+    "building": "Ex29_Dual_SMF_BRBF_20levels_264ft_NLRHA_PBSD",
+    "file": "story_strength.json",
+    "bytes": 334,
+    "sha256": "ca685337601cc601e5fea1c13cbd4358a426482ad46d35db64e3b9244a1902d8"
+  },
+  {
+    "module": "HR",
+    "building": "Ex29_Dual_SMF_BRBF_20levels_264ft_NLRHA_PBSD",
+    "file": "viewer_3d.html",
+    "bytes": 1223002,
+    "sha256": "3e8fe9a7e00542d422750fe5454c76a5b9111d152586c3928fd07b8faf06c00b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex30_Composite_SCBF_6levels_studs_camber",
+    "file": "activity_log.jsonl",
+    "bytes": 21220,
+    "sha256": "e259f69a405b84f15de6a6fa0ef12b4780f0ee8b06723e8301cc6a71d94ba61c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex30_Composite_SCBF_6levels_studs_camber",
+    "file": "cfg.py",
+    "bytes": 20965,
+    "sha256": "4c95f92669dbce65b9415ce8fce864901f9a90c5733a3d4bfc2a46ddf7248560"
+  },
+  {
+    "module": "HR",
+    "building": "Ex30_Composite_SCBF_6levels_studs_camber",
+    "file": "design/_demand_cache.json",
+    "bytes": 209841,
+    "sha256": "bb43aa89ff1b9956898f16e8dc8deef2bf53828ace61590006b0bd70d84b98e3"
+  },
+  {
+    "module": "HR",
+    "building": "Ex30_Composite_SCBF_6levels_studs_camber",
+    "file": "design/calc_package.demands.json",
+    "bytes": 52156,
+    "sha256": "8f32b7c897fa85cad5315eded3bf156cb483f85c71f4a09f562eec9383a2a723"
+  },
+  {
+    "module": "HR",
+    "building": "Ex30_Composite_SCBF_6levels_studs_camber",
+    "file": "design/calc_package.json",
+    "bytes": 368122,
+    "sha256": "d0f29d7c523b4caef3ceebc1c2ac9332093f2579f580e118e457fc55e0be2fa6"
+  },
+  {
+    "module": "HR",
+    "building": "Ex30_Composite_SCBF_6levels_studs_camber",
+    "file": "design/connection_demands.csv",
+    "bytes": 65565,
+    "sha256": "ee52c61a901c9060fcdfc54f837acb6065b5d49b68d7b25d1ecd28ff48eb5f1c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex30_Composite_SCBF_6levels_studs_camber",
+    "file": "design/consistency_result.json",
+    "bytes": 312,
+    "sha256": "284d67f9e5c432043475f21d042eb7671ef64753673fda9ed9cbc98e8a9a9bfa"
+  },
+  {
+    "module": "HR",
+    "building": "Ex30_Composite_SCBF_6levels_studs_camber",
+    "file": "design/design_report.md",
+    "bytes": 1210,
+    "sha256": "f20bfe455865d20340f9a7bf9c8f891f172cfb7b77a44de99926c3e99edcd34d"
+  },
+  {
+    "module": "HR",
+    "building": "Ex30_Composite_SCBF_6levels_studs_camber",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex30_Composite_SCBF_6levels_studs_camber",
+    "file": "design/member_demands.md",
+    "bytes": 8506,
+    "sha256": "f33100c5e5564c0a3ab196bf151b5fd9ed807da2b3299ff799a5b769200fac12"
+  },
+  {
+    "module": "HR",
+    "building": "Ex30_Composite_SCBF_6levels_studs_camber",
+    "file": "design/member_schedule.csv",
+    "bytes": 70071,
+    "sha256": "25fd82412bb836b4b6f9ab5ca9376a27c87337711007bae1bf64e063e42fc530"
+  },
+  {
+    "module": "HR",
+    "building": "Ex30_Composite_SCBF_6levels_studs_camber",
+    "file": "design/pipeline_results.json",
+    "bytes": 2585,
+    "sha256": "9002d930f568a691c3921347ffc9872b1f59d839bb54de344999596c80bebd1e"
+  },
+  {
+    "module": "HR",
+    "building": "Ex30_Composite_SCBF_6levels_studs_camber",
+    "file": "model_opensees.py",
+    "bytes": 53298,
+    "sha256": "5c11a62eb78fabdbcca76d1b970905566ce60057009655124dff81db8b1004ef"
+  },
+  {
+    "module": "HR",
+    "building": "Ex30_Composite_SCBF_6levels_studs_camber",
+    "file": "model_static.py",
+    "bytes": 234072,
+    "sha256": "1ea729284f5186bc99417c9b8d04c797c9d451f140a2356f16518507623f0934"
+  },
+  {
+    "module": "HR",
+    "building": "Ex30_Composite_SCBF_6levels_studs_camber",
+    "file": "qa_annex.html",
+    "bytes": 16199,
+    "sha256": "b422c66c4cef88966f0c0a1eae983f041cf6436a60dfbfe5de884bfd41d41088"
+  },
+  {
+    "module": "HR",
+    "building": "Ex30_Composite_SCBF_6levels_studs_camber",
+    "file": "report.html",
+    "bytes": 531644,
+    "sha256": "4d801e61a60da09bb4dee3a14bbf63e77723c5cb27872b946d1c4243e1494e1b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex30_Composite_SCBF_6levels_studs_camber",
+    "file": "viewer_3d.html",
+    "bytes": 788045,
+    "sha256": "0ef9304453e95fe3747ac37e19c1cf6c7822c177f807c5819413cd2a96e65a1d"
+  },
+  {
+    "module": "HR",
+    "building": "Ex31_Gable_warehouse_R3_unbalanced_snow_ponding",
+    "file": "activity_log.jsonl",
+    "bytes": 14907,
+    "sha256": "6cdba6d2637a017623c9633eec23a038516cb7e4cb30de46dfa51b99e313422b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex31_Gable_warehouse_R3_unbalanced_snow_ponding",
+    "file": "cfg.py",
+    "bytes": 24550,
+    "sha256": "4542bc494eaf6cc75ecbaa1636d4cb878d6eee604947d78dafd289977fd2e3b8"
+  },
+  {
+    "module": "HR",
+    "building": "Ex31_Gable_warehouse_R3_unbalanced_snow_ponding",
+    "file": "design/_demand_cache.json",
+    "bytes": 27774,
+    "sha256": "bbb780e6baab18e3c27dc2e2ecb5e8858d5c622caef91c75cc6d5eab32c2f1a3"
+  },
+  {
+    "module": "HR",
+    "building": "Ex31_Gable_warehouse_R3_unbalanced_snow_ponding",
+    "file": "design/calc_package.demands.json",
+    "bytes": 27613,
+    "sha256": "23987a68d890529eb43b93fa8eca077bc63bafa55c90a296834aec8208abfd01"
+  },
+  {
+    "module": "HR",
+    "building": "Ex31_Gable_warehouse_R3_unbalanced_snow_ponding",
+    "file": "design/calc_package.json",
+    "bytes": 128556,
+    "sha256": "7fe5d61dd842b1f92f0a5c9c4356409ad0f83c03cdf0d42c9e1779d61e879b03"
+  },
+  {
+    "module": "HR",
+    "building": "Ex31_Gable_warehouse_R3_unbalanced_snow_ponding",
+    "file": "design/connection_demands.csv",
+    "bytes": 14758,
+    "sha256": "0412b561cd33d0a7dba4c15ac198daa5724b40e98c4c482491024a36414bff9d"
+  },
+  {
+    "module": "HR",
+    "building": "Ex31_Gable_warehouse_R3_unbalanced_snow_ponding",
+    "file": "design/consistency_result.json",
+    "bytes": 319,
+    "sha256": "e14b740468497169fa409f69b95ff879df907facb7ec353aae96ba604f6f7548"
+  },
+  {
+    "module": "HR",
+    "building": "Ex31_Gable_warehouse_R3_unbalanced_snow_ponding",
+    "file": "design/design_report.md",
+    "bytes": 1092,
+    "sha256": "ff13a1040f7b734d82b114cc08cc78074e45bf44a0f47da0b05f29d168c90ee1"
+  },
+  {
+    "module": "HR",
+    "building": "Ex31_Gable_warehouse_R3_unbalanced_snow_ponding",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex31_Gable_warehouse_R3_unbalanced_snow_ponding",
+    "file": "design/member_demands.md",
+    "bytes": 5166,
+    "sha256": "a01ad7f8eba1a0eed54e10701082d78b58139ee258e2e3672995122d517ff62f"
+  },
+  {
+    "module": "HR",
+    "building": "Ex31_Gable_warehouse_R3_unbalanced_snow_ponding",
+    "file": "design/member_schedule.csv",
+    "bytes": 7916,
+    "sha256": "d6bc3cefd8276804a10ee9674fe4a4a6c9be9a543c4ca6434a89ece9398d229a"
+  },
+  {
+    "module": "HR",
+    "building": "Ex31_Gable_warehouse_R3_unbalanced_snow_ponding",
+    "file": "design/pipeline_results.json",
+    "bytes": 2543,
+    "sha256": "edeefb20c6fca9df6bb8d0b4b4c7305f75e3070b8091d7cbe7989468bcc828ec"
+  },
+  {
+    "module": "HR",
+    "building": "Ex31_Gable_warehouse_R3_unbalanced_snow_ponding",
+    "file": "model_opensees.py",
+    "bytes": 11781,
+    "sha256": "079b429f2ccf137d1a532753dc4e3be6037530ecbdcdbe89f920eeffa5f02a10"
+  },
+  {
+    "module": "HR",
+    "building": "Ex31_Gable_warehouse_R3_unbalanced_snow_ponding",
+    "file": "model_static.py",
+    "bytes": 43122,
+    "sha256": "13e45c2756c11a795dee07edddf6d551d7257f6280260efd0533476c97191fdb"
+  },
+  {
+    "module": "HR",
+    "building": "Ex31_Gable_warehouse_R3_unbalanced_snow_ponding",
+    "file": "qa_annex.html",
+    "bytes": 12599,
+    "sha256": "b808ac347dc22a212cee2b8f49635592887f393ab458f519e3cd992e3b8ec9b3"
+  },
+  {
+    "module": "HR",
+    "building": "Ex31_Gable_warehouse_R3_unbalanced_snow_ponding",
+    "file": "report.html",
+    "bytes": 232962,
+    "sha256": "713d2ffa932d3a9f4098f55496453fc133c857e96f3d8275b05b54b8ea04c437"
+  },
+  {
+    "module": "HR",
+    "building": "Ex31_Gable_warehouse_R3_unbalanced_snow_ponding",
+    "file": "viewer_3d.html",
+    "bytes": 659245,
+    "sha256": "5948cad075db70314c9950eec84c2c036260e4b839459151ca7e3a6da21699eb"
+  },
+  {
+    "module": "HR",
+    "building": "Ex32_Vertical_addition_2over3_1968_A36_ASCE41",
+    "file": "activity_log.jsonl",
+    "bytes": 12764,
+    "sha256": "9f3d424a71266eb89920e1bf77c4d9b4d40bbe3f6d50e0b8b0c1c14bd20032cc"
+  },
+  {
+    "module": "HR",
+    "building": "Ex32_Vertical_addition_2over3_1968_A36_ASCE41",
+    "file": "cfg.py",
+    "bytes": 18860,
+    "sha256": "e24e93a04c24229123419c50a0f86e7bb03f1f8fb98b448fc54d16e5eaaf4249"
+  },
+  {
+    "module": "HR",
+    "building": "Ex32_Vertical_addition_2over3_1968_A36_ASCE41",
+    "file": "design/_demand_cache.json",
+    "bytes": 128460,
+    "sha256": "205593c40af4b53e9186c41a7ffcb30e8884454f1205b071aad28795eb02704d"
+  },
+  {
+    "module": "HR",
+    "building": "Ex32_Vertical_addition_2over3_1968_A36_ASCE41",
+    "file": "design/calc_package.demands.json",
+    "bytes": 29146,
+    "sha256": "34744a4dcf8743c0d6333511a1ecac10b5fefc60821ee6d09cfb6a75edd31bc5"
+  },
+  {
+    "module": "HR",
+    "building": "Ex32_Vertical_addition_2over3_1968_A36_ASCE41",
+    "file": "design/calc_package.json",
+    "bytes": 109206,
+    "sha256": "e77a561921c8a7735f9de7d96c3d44073d98eedaffab5ea313dbc4e42217bce4"
+  },
+  {
+    "module": "HR",
+    "building": "Ex32_Vertical_addition_2over3_1968_A36_ASCE41",
+    "file": "design/connection_demands.csv",
+    "bytes": 37996,
+    "sha256": "07280cd40ae5dad57679a37872ffadca4ede9bee863aed6fda2f7ca0f1bde6f0"
+  },
+  {
+    "module": "HR",
+    "building": "Ex32_Vertical_addition_2over3_1968_A36_ASCE41",
+    "file": "design/consistency_result.json",
+    "bytes": 317,
+    "sha256": "fbe97fcb874e658602ea52b472c35a219266181b8eb77e0d531fe98fd61ee425"
+  },
+  {
+    "module": "HR",
+    "building": "Ex32_Vertical_addition_2over3_1968_A36_ASCE41",
+    "file": "design/design_report.md",
+    "bytes": 738,
+    "sha256": "00cd556d2f7b64a6950deac029e2eab4b210605533df09e752beac73a3fd68f3"
+  },
+  {
+    "module": "HR",
+    "building": "Ex32_Vertical_addition_2over3_1968_A36_ASCE41",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex32_Vertical_addition_2over3_1968_A36_ASCE41",
+    "file": "design/member_demands.md",
+    "bytes": 5473,
+    "sha256": "c898dafdbfd6c392f6a7431c5e6ecbf19b8d92a2fe3c5a8b912b911596f9f1d0"
+  },
+  {
+    "module": "HR",
+    "building": "Ex32_Vertical_addition_2over3_1968_A36_ASCE41",
+    "file": "design/member_schedule.csv",
+    "bytes": 41883,
+    "sha256": "5d4126661c5f263f75f30d1916ad9a050645b093eaac95fb1e1a5c184a68efc0"
+  },
+  {
+    "module": "HR",
+    "building": "Ex32_Vertical_addition_2over3_1968_A36_ASCE41",
+    "file": "design/pipeline_results.json",
+    "bytes": 2554,
+    "sha256": "966b483b5b63b4786ab3c88b3bcbbf42d375baa9d78c5921e87cf7f2124bcb20"
+  },
+  {
+    "module": "HR",
+    "building": "Ex32_Vertical_addition_2over3_1968_A36_ASCE41",
+    "file": "model_opensees.py",
+    "bytes": 34167,
+    "sha256": "75e83288dfa03b26f86ca574195bdccd14e8dcdd6e0266b7137905e0794a8a1b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex32_Vertical_addition_2over3_1968_A36_ASCE41",
+    "file": "model_static.py",
+    "bytes": 154715,
+    "sha256": "2abfdbe9ed0900fbcbe4844ab2c40dadf73ed391266b04bde6e42bbd0185e5a0"
+  },
+  {
+    "module": "HR",
+    "building": "Ex32_Vertical_addition_2over3_1968_A36_ASCE41",
+    "file": "qa_annex.html",
+    "bytes": 11269,
+    "sha256": "51ca7fcd019c5d2b38f972bd061f4a01bcd73db184df5187d90a21f4ffb2da63"
+  },
+  {
+    "module": "HR",
+    "building": "Ex32_Vertical_addition_2over3_1968_A36_ASCE41",
+    "file": "report.html",
+    "bytes": 221153,
+    "sha256": "02d668f1bfe80c00c2e9c6e7c5b4a73051e88746f34c8400b3b8a67b05c5a2b5"
+  },
+  {
+    "module": "HR",
+    "building": "Ex32_Vertical_addition_2over3_1968_A36_ASCE41",
+    "file": "viewer_3d.html",
+    "bytes": 733581,
+    "sha256": "631d915bbdd855f17f06fb3197749bf49a5664da61bb4dab2b98f1adc2aa86df"
+  },
+  {
+    "module": "HR",
+    "building": "Ex33_Crane_bay_IMF_runway_fatigue_App3",
+    "file": "activity_log.jsonl",
+    "bytes": 22071,
+    "sha256": "f2bf9288dcdc2204d1ba670d346ad25eb671432353dd114e560546238fe5331c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex33_Crane_bay_IMF_runway_fatigue_App3",
+    "file": "cfg.py",
+    "bytes": 18086,
+    "sha256": "a9f9b1a403b2f81ba8013a9e112551b671b566642435ac15c2b31ca04a80ff11"
+  },
+  {
+    "module": "HR",
+    "building": "Ex33_Crane_bay_IMF_runway_fatigue_App3",
+    "file": "design/_demand_cache.json",
+    "bytes": 42518,
+    "sha256": "ceedfd961f533c6e2ce81020f98a6462149dae9815572a9dbcd1855648af5434"
+  },
+  {
+    "module": "HR",
+    "building": "Ex33_Crane_bay_IMF_runway_fatigue_App3",
+    "file": "design/calc_package.json",
+    "bytes": 134110,
+    "sha256": "7f853daa9290e4d52cac855307e58f969f39affaf9686ea007aae7d3b3070de8"
+  },
+  {
+    "module": "HR",
+    "building": "Ex33_Crane_bay_IMF_runway_fatigue_App3",
+    "file": "design/calc_package.seed.json",
+    "bytes": 24554,
+    "sha256": "27e2a0a0419b4d1eaf7d74f5c15df945cd1684fc3e8b64ae0904949856a974b8"
+  },
+  {
+    "module": "HR",
+    "building": "Ex33_Crane_bay_IMF_runway_fatigue_App3",
+    "file": "design/connection_demands.csv",
+    "bytes": 16816,
+    "sha256": "ae49b6f699103fec2f73dd053138d10053c36658152108b83cfbf9aadadc03aa"
+  },
+  {
+    "module": "HR",
+    "building": "Ex33_Crane_bay_IMF_runway_fatigue_App3",
+    "file": "design/consistency_result.json",
+    "bytes": 310,
+    "sha256": "646da0cd1b306e887633e17b4229756afe98591e0dedc670ce44ee86197e437b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex33_Crane_bay_IMF_runway_fatigue_App3",
+    "file": "design/design_report.md",
+    "bytes": 712,
+    "sha256": "6351c973d9fb66f8a3b3e27cb58fb63fe7b78b0ca92cb085217c695562bdfe87"
+  },
+  {
+    "module": "HR",
+    "building": "Ex33_Crane_bay_IMF_runway_fatigue_App3",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex33_Crane_bay_IMF_runway_fatigue_App3",
+    "file": "design/member_demands.md",
+    "bytes": 5465,
+    "sha256": "6314587143d97ae2a2ceb775097565a79c28c400dcfd07569b0819c5b1126922"
+  },
+  {
+    "module": "HR",
+    "building": "Ex33_Crane_bay_IMF_runway_fatigue_App3",
+    "file": "design/member_schedule.csv",
+    "bytes": 14237,
+    "sha256": "7496ea075704c4888b494538bd80a0d16cb2dadc6bb45f5474b759a515c1dd12"
+  },
+  {
+    "module": "HR",
+    "building": "Ex33_Crane_bay_IMF_runway_fatigue_App3",
+    "file": "design/pipeline_results.json",
+    "bytes": 2468,
+    "sha256": "4d0ce08baa90982aa9656b00da469e5c7fe04e8b3ec0922835415be27876fd4d"
+  },
+  {
+    "module": "HR",
+    "building": "Ex33_Crane_bay_IMF_runway_fatigue_App3",
+    "file": "design/results_extra.json",
+    "bytes": 850,
+    "sha256": "79eaa8902b9ef2ad534c3780aa27cbfe3e6036ae79d79bec52f2c559cddf8c5d"
+  },
+  {
+    "module": "HR",
+    "building": "Ex33_Crane_bay_IMF_runway_fatigue_App3",
+    "file": "model_opensees.py",
+    "bytes": 13153,
+    "sha256": "8edaf8a5b86a49ea98c8e6f7c347f36d6b408a5c23d6fc56042155789b6225e9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex33_Crane_bay_IMF_runway_fatigue_App3",
+    "file": "model_static.py",
+    "bytes": 40394,
+    "sha256": "a1907dd25a786987a06e0c0a4d88e268385a50d28ae6645e4f51cc0c4a65f666"
+  },
+  {
+    "module": "HR",
+    "building": "Ex33_Crane_bay_IMF_runway_fatigue_App3",
+    "file": "qa_annex.html",
+    "bytes": 16709,
+    "sha256": "dc4cf83f2d7f2f4ad05732d651ef971d799cab9e2c6288c047c062129b835cbb"
+  },
+  {
+    "module": "HR",
+    "building": "Ex33_Crane_bay_IMF_runway_fatigue_App3",
+    "file": "report.html",
+    "bytes": 240135,
+    "sha256": "dcf50caad9469631de729b1135546a50acc1197e5f6df77f127234e7fc8008bd"
+  },
+  {
+    "module": "HR",
+    "building": "Ex33_Crane_bay_IMF_runway_fatigue_App3",
+    "file": "viewer_3d.html",
+    "bytes": 659688,
+    "sha256": "56cc4ecdffb3e46b11ed7272d76b12e7053a994bf426482e55cac22a10c629c1"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34a_Twin_towers_BRBF_12story_tower",
+    "file": "activity_log.jsonl",
+    "bytes": 22075,
+    "sha256": "1f49f0185218999aa3bba56702f5d4b52505ece13d966fecf2ae2688561bc530"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34a_Twin_towers_BRBF_12story_tower",
+    "file": "cfg.py",
+    "bytes": 14891,
+    "sha256": "4f1b5ba9d7ea15e4eafd8838f52938be49489741199dfd11ca261e63f3bb846c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34a_Twin_towers_BRBF_12story_tower",
+    "file": "design/_demand_cache.json",
+    "bytes": 350050,
+    "sha256": "b1037555c5c2717c2425bb7320b833fbdbe22a8a12ed9e80ea0280103e909ddc"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34a_Twin_towers_BRBF_12story_tower",
+    "file": "design/calc_package.demands.json",
+    "bytes": 75291,
+    "sha256": "76fa6af5018cf0b9a300085d8395221a053f63809de4c81438c79c2b7905cda6"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34a_Twin_towers_BRBF_12story_tower",
+    "file": "design/calc_package.json",
+    "bytes": 1029960,
+    "sha256": "8ac46bf8cbd42a95296a47663885825ce4b6bc614cb59cf3b29862eb1da32ba4"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34a_Twin_towers_BRBF_12story_tower",
+    "file": "design/connection_demands.csv",
+    "bytes": 103235,
+    "sha256": "e8b2011b77bcb6eed4b74431c528bd32613b67a1fbf252e6c533283a60766a1c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34a_Twin_towers_BRBF_12story_tower",
+    "file": "design/consistency_result.json",
+    "bytes": 308,
+    "sha256": "05c6e5cabc47b1a1e9fbd1c7e15e7c65573274165b0160c0331484d44002e09e"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34a_Twin_towers_BRBF_12story_tower",
+    "file": "design/design_report.md",
+    "bytes": 1246,
+    "sha256": "8c5ea0f5c90520314c6f2b302a6d8eff4acaf00a431851832f6d3fefd2a6b95c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34a_Twin_towers_BRBF_12story_tower",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34a_Twin_towers_BRBF_12story_tower",
+    "file": "design/member_demands.md",
+    "bytes": 9914,
+    "sha256": "5e974266afade5d421262366aca8e304598e1cac62269dffbd0343ae91fb508a"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34a_Twin_towers_BRBF_12story_tower",
+    "file": "design/member_schedule.csv",
+    "bytes": 130518,
+    "sha256": "2290b8b378591db06cd8d87881f68b9b3808cb1f6026f9edc6e3d187ccb1d0eb"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34a_Twin_towers_BRBF_12story_tower",
+    "file": "design/pipeline_results.json",
+    "bytes": 3287,
+    "sha256": "a3f55f4b482624f81f28a0f505d7ad962c4bb654efeded3f8291948b75eabdf6"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34a_Twin_towers_BRBF_12story_tower",
+    "file": "model_opensees.py",
+    "bytes": 92328,
+    "sha256": "5bafeb6d8892545bdbf5df1bc1abb348e88429978ca4e6a148dfeec87f5a0948"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34a_Twin_towers_BRBF_12story_tower",
+    "file": "model_static.py",
+    "bytes": 408973,
+    "sha256": "202bb6e96dfba1c54d018f0d6eb89d1c098be8bf5436a3f4274e603c79c47c1d"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34a_Twin_towers_BRBF_12story_tower",
+    "file": "qa_annex.html",
+    "bytes": 16893,
+    "sha256": "99901e119ab308394bf5153ffa296c7457eb1aa2616a0061d4844e3cafe443cc"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34a_Twin_towers_BRBF_12story_tower",
+    "file": "report.html",
+    "bytes": 1190012,
+    "sha256": "da7b436d52b7f18a807445b5881d21f060b4b95b7107ba295cb03cb74a87688c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34a_Twin_towers_BRBF_12story_tower",
+    "file": "viewer_3d.html",
+    "bytes": 910222,
+    "sha256": "678c239c2c8fa966b0d9347fb70651a33ebfb9255dd94be9c52e437c8ca4d8fd"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34b_Twin_towers_BRBF_8story_tower",
+    "file": "activity_log.jsonl",
+    "bytes": 22070,
+    "sha256": "5d7f72e455f5592ff488f50b9df1bff936bbb2323df9e625f518913dab79e577"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34b_Twin_towers_BRBF_8story_tower",
+    "file": "cfg.py",
+    "bytes": 15317,
+    "sha256": "cebfd98a531110e592700d005d4d2c9653a593cdddbc63fccbcddc9c71f9dd3f"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34b_Twin_towers_BRBF_8story_tower",
+    "file": "design/_demand_cache.json",
+    "bytes": 262588,
+    "sha256": "d148670755b9a152865620a1fd5550d5479e369b7af2f853452bd3586186b1d1"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34b_Twin_towers_BRBF_8story_tower",
+    "file": "design/calc_package.demands.json",
+    "bytes": 69445,
+    "sha256": "3c722c1f42e708116bafdff7731f58e27c7dd1fa364658c7eb8419084375b7f8"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34b_Twin_towers_BRBF_8story_tower",
+    "file": "design/calc_package.json",
+    "bytes": 799805,
+    "sha256": "8fc2a5a726044a23b1181880d56b60b514784ba990810465bc506822ed1047c5"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34b_Twin_towers_BRBF_8story_tower",
+    "file": "design/connection_demands.csv",
+    "bytes": 80123,
+    "sha256": "779942f7ed0557e28e0bd3c4783a2340854c61c8e350dbbb63daf244fe8164fe"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34b_Twin_towers_BRBF_8story_tower",
+    "file": "design/consistency_result.json",
+    "bytes": 307,
+    "sha256": "521154e2c2946d62ebc88ff4aa29d3b609023b5f9591ff9f2ecb0f83bf690f9e"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34b_Twin_towers_BRBF_8story_tower",
+    "file": "design/design_report.md",
+    "bytes": 1244,
+    "sha256": "4c08870bd85032722fffda825921a43aa73b867bc7d91def7aec5a574554b498"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34b_Twin_towers_BRBF_8story_tower",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34b_Twin_towers_BRBF_8story_tower",
+    "file": "design/member_demands.md",
+    "bytes": 9594,
+    "sha256": "a8bccd0a1b64dd39590c386bc97695230864cbd594ff0232d0322830352c57a3"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34b_Twin_towers_BRBF_8story_tower",
+    "file": "design/member_schedule.csv",
+    "bytes": 95523,
+    "sha256": "c1a77e4298c461fd5d9889a79760b7419bee5d44c17e8bd104a3592641392df4"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34b_Twin_towers_BRBF_8story_tower",
+    "file": "design/pipeline_results.json",
+    "bytes": 2675,
+    "sha256": "049d6d99ad4cdc5bf07ba37cf32d9e93a7a968b2e889cda97f262b1d295b36d9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34b_Twin_towers_BRBF_8story_tower",
+    "file": "model_opensees.py",
+    "bytes": 68635,
+    "sha256": "c1615325632027d848035f5c7c395e9a4bac4a60c1446c23de0c46b674b38410"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34b_Twin_towers_BRBF_8story_tower",
+    "file": "model_static.py",
+    "bytes": 309031,
+    "sha256": "c98ca802778e6a4597ca0f3eab61e39b36f039452dd638b028d8247d69ed9c2d"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34b_Twin_towers_BRBF_8story_tower",
+    "file": "qa_annex.html",
+    "bytes": 16893,
+    "sha256": "4a19f9fb46fb935fc7f3d9ca51f3cf416b5c008f9ea8fb10b6a68e728c126644"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34b_Twin_towers_BRBF_8story_tower",
+    "file": "report.html",
+    "bytes": 957381,
+    "sha256": "56fc396a244010c44676fd0f593d98fd4f2f37544a8974305b1cdeddb76bd442"
+  },
+  {
+    "module": "HR",
+    "building": "Ex34b_Twin_towers_BRBF_8story_tower",
+    "file": "viewer_3d.html",
+    "bytes": 839050,
+    "sha256": "c0ee5f76a5a67832a108f3991b9447dc83d095a8c36a6c2b44fb1c62dbc2247f"
+  },
+  {
+    "module": "HR",
+    "building": "Ex35_Ch15_equipment_platform_3tier_OCBF",
+    "file": "activity_log.jsonl",
+    "bytes": 14952,
+    "sha256": "a45fde9c4039abd64640e4cf9cc3404f9d0f5c8df1ccf7a5e7eccf9ccedfc8a6"
+  },
+  {
+    "module": "HR",
+    "building": "Ex35_Ch15_equipment_platform_3tier_OCBF",
+    "file": "cfg.py",
+    "bytes": 16210,
+    "sha256": "7e6536d3a35b79e1f2ab5229d381ae53ab6daf9f85b30c5a430f884f7d6618ad"
+  },
+  {
+    "module": "HR",
+    "building": "Ex35_Ch15_equipment_platform_3tier_OCBF",
+    "file": "design/_demand_cache.json",
+    "bytes": 46929,
+    "sha256": "ccb05cb68991d69bf93a1ec11f56dfc19470ad49421b81c258640b4a2ff7bf7c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex35_Ch15_equipment_platform_3tier_OCBF",
+    "file": "design/calc_package.demands.json",
+    "bytes": 21915,
+    "sha256": "c83dc002c25a39dd5163d194d61fe9a553db7aa33673bc452a4d1aa116af155b"
+  },
+  {
+    "module": "HR",
+    "building": "Ex35_Ch15_equipment_platform_3tier_OCBF",
+    "file": "design/calc_package.json",
+    "bytes": 200661,
+    "sha256": "7578393ba9e159671138851472a265c48625f9aa7e0dcabcc778b040e2d6d1ef"
+  },
+  {
+    "module": "HR",
+    "building": "Ex35_Ch15_equipment_platform_3tier_OCBF",
+    "file": "design/connection_demands.csv",
+    "bytes": 17892,
+    "sha256": "9de251dac4f8512c5998f331dae495711564b96911632d4085f67fb4360e2160"
+  },
+  {
+    "module": "HR",
+    "building": "Ex35_Ch15_equipment_platform_3tier_OCBF",
+    "file": "design/consistency_result.json",
+    "bytes": 311,
+    "sha256": "e597485c89c63abaa4e31e614aabf1c06e3bcc7c025a3efb0bca068851640468"
+  },
+  {
+    "module": "HR",
+    "building": "Ex35_Ch15_equipment_platform_3tier_OCBF",
+    "file": "design/design_report.md",
+    "bytes": 935,
+    "sha256": "6267a479acf687fb881f286af65b425ef52e8db2ed438cf6f7535eafcec9aa40"
+  },
+  {
+    "module": "HR",
+    "building": "Ex35_Ch15_equipment_platform_3tier_OCBF",
+    "file": "design/figures_note.txt",
+    "bytes": 107,
+    "sha256": "d53ed18644ba30d1dc12192dc1a54e4d8bca9dd2359f12a6d3fd430659a5cfb9"
+  },
+  {
+    "module": "HR",
+    "building": "Ex35_Ch15_equipment_platform_3tier_OCBF",
+    "file": "design/member_demands.md",
+    "bytes": 4354,
+    "sha256": "4ad47c9fce9eaec7e78fcc1d8d294a5fccce143de79a4aaaa110d1ccdfa23a9c"
+  },
+  {
+    "module": "HR",
+    "building": "Ex35_Ch15_equipment_platform_3tier_OCBF",
+    "file": "design/member_schedule.csv",
+    "bytes": 16746,
+    "sha256": "53471a7f96a7cdb9c7817c5dae4f408ac390e8364caa94b2f53c430f51ccdb9a"
+  },
+  {
+    "module": "HR",
+    "building": "Ex35_Ch15_equipment_platform_3tier_OCBF",
+    "file": "design/pipeline_results.json",
+    "bytes": 3801,
+    "sha256": "ee3e24dc73d12b822af2a757de2b4846118673206f35d73b2b48f3df6cec23fb"
+  },
+  {
+    "module": "HR",
+    "building": "Ex35_Ch15_equipment_platform_3tier_OCBF",
+    "file": "model_opensees.py",
+    "bytes": 14147,
+    "sha256": "aebea8adc34cbbdef10ebc43ba809641f55f380d40d119d19c42180948c3d1fd"
+  },
+  {
+    "module": "HR",
+    "building": "Ex35_Ch15_equipment_platform_3tier_OCBF",
+    "file": "model_static.py",
+    "bytes": 54256,
+    "sha256": "73baef0fbd8a7e17b27e6492ccb4a171ff88b1ed940bd6a9148187cf2f2465b5"
+  },
+  {
+    "module": "HR",
+    "building": "Ex35_Ch15_equipment_platform_3tier_OCBF",
+    "file": "qa_annex.html",
+    "bytes": 12684,
+    "sha256": "5ca1bc05ae54f8389cb0b209007dbdbfd2e06bb7f33acd33644bb5c3c153d200"
+  },
+  {
+    "module": "HR",
+    "building": "Ex35_Ch15_equipment_platform_3tier_OCBF",
+    "file": "report.html",
+    "bytes": 312961,
+    "sha256": "c5703d8698fd5170a77b5cd71b6c0743bfa282063dfd26aa5176da8e0e2ce477"
+  },
+  {
+    "module": "HR",
+    "building": "Ex35_Ch15_equipment_platform_3tier_OCBF",
+    "file": "viewer_3d.html",
+    "bytes": 670811,
+    "sha256": "fc6d5525efe887035e2935839fe9d22afaf895f4057e5fc2662f8c3083c7f09e"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex1_ShearWall_4levels",
+    "file": "activity_log.jsonl",
+    "bytes": 12878,
+    "sha256": "74d6696c46a05539c3ef30719656f9e8d74236124eca26dbd56ad5f90019dcd1"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex1_ShearWall_4levels",
+    "file": "cfg.py",
+    "bytes": 7516,
+    "sha256": "c43f332651de62c8fab6bf6973330ac86fee24d3c112c42644d5de2f47f30ab7"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex1_ShearWall_4levels",
+    "file": "design/calc_package_cfs.json",
+    "bytes": 549671,
+    "sha256": "32ca4520c347961f9620d6250b599d856b71e8988db7906974f3ed971e5585ca"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex1_ShearWall_4levels",
+    "file": "design/consistency_result.json",
+    "bytes": 221,
+    "sha256": "8f514232a68770cf86258d48cc0b26c62d700108184f46eff348afa5cc1668fa"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex1_ShearWall_4levels",
+    "file": "qa_annex.html",
+    "bytes": 13204,
+    "sha256": "022315dc56ae8608d69e53c8c989ef60db5f75c907e44234d430a2952f83d983"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex1_ShearWall_4levels",
+    "file": "report.html",
+    "bytes": 1416904,
+    "sha256": "11f3e55784d9c37c14c13263eab71d17ee5c308ea84824a1eac7f1fdff5d8c04"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex1_ShearWall_4levels",
+    "file": "viewer_3d.html",
+    "bytes": 789865,
+    "sha256": "fca995526793903010c673e9d3d5369f509e3d9377e029a07b555b548799ae57"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex2_StrapBraced_6levels",
+    "file": "activity_log.jsonl",
+    "bytes": 10738,
+    "sha256": "af2a60d0ee31682326e70cfeb4e3bc680cd7b2f0601c4b3ba0dba6639cb34006"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex2_StrapBraced_6levels",
+    "file": "cfg.py",
+    "bytes": 8676,
+    "sha256": "caaae0e62a57a3e2b17ee7ae8079c8caf08209eedc78cfa3947f9c871d53d41a"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex2_StrapBraced_6levels",
+    "file": "design/calc_package_cfs.json",
+    "bytes": 725769,
+    "sha256": "ea396ea913a112f3a70962696a0f050474062ef324f90e20729c3e03153c233e"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex2_StrapBraced_6levels",
+    "file": "design/consistency_result.json",
+    "bytes": 222,
+    "sha256": "119d974ad16ffc5445c8c98c45eb572a7a64ac9ebb7cdcec708bbd705201b6cf"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex2_StrapBraced_6levels",
+    "file": "qa_annex.html",
+    "bytes": 16908,
+    "sha256": "68d50f3da63554d019cb40ea6440d726b33f56b645bbcae3634431175318763d"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex2_StrapBraced_6levels",
+    "file": "report.html",
+    "bytes": 1896743,
+    "sha256": "40129a2c567e65f283a99682418473f5187f21349763e1b53ceb8604d2c7f93a"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex2_StrapBraced_6levels",
+    "file": "schedule.json",
+    "bytes": 8686,
+    "sha256": "ef926330d3f4496f45d5ddc6ab524f3df8bee7223bba88ae60e23ebfbeb434b2"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex2_StrapBraced_6levels",
+    "file": "viewer_3d.html",
+    "bytes": 881988,
+    "sha256": "6df781c932b7f415dbea3ed15290be17de0e60d43ab7bd1f119b150293bfe9d4"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex3_BearingWall_8levels_podium",
+    "file": "activity_log.jsonl",
+    "bytes": 11073,
+    "sha256": "14d1987e29b42728ab18df391980335e8eb16fc7846ca56539954729b9efbcbc"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex3_BearingWall_8levels_podium",
+    "file": "cfg.py",
+    "bytes": 9266,
+    "sha256": "cd29c93a368b8012b14490433956684ae533769cfb12a9c2dfb26962a59eb9fe"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex3_BearingWall_8levels_podium",
+    "file": "design/calc_package_cfs.json",
+    "bytes": 772409,
+    "sha256": "d582614bfbd3cb3da1dc321b844ebcba747e476cda168c4197716a201381aaa7"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex3_BearingWall_8levels_podium",
+    "file": "design/consistency_result.json",
+    "bytes": 223,
+    "sha256": "740608464cdd2dbe9b699e1f74f4ae37ca5deb95eb97ae2ab8724bff218f4e56"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex3_BearingWall_8levels_podium",
+    "file": "qa_annex.html",
+    "bytes": 19496,
+    "sha256": "466ab80228982aca341ce7195f18916adbfb61934df42d7f410e208abee230be"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex3_BearingWall_8levels_podium",
+    "file": "report.html",
+    "bytes": 2599857,
+    "sha256": "dc894f2663210cce28e72cca63933134231678dfc31e9e461e15852e665ef9ce"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex3_BearingWall_8levels_podium",
+    "file": "schedule.json",
+    "bytes": 18501,
+    "sha256": "92d80a42b8c3004525926229a7e3c71a72f159b7f8b74b4ee6c43e4e690cb728"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex3_BearingWall_8levels_podium",
+    "file": "viewer_3d.html",
+    "bytes": 1378126,
+    "sha256": "84c663701d05e1dccd8a725839bc38154d10d886e135026e0003832b82a348ae"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex4_SBSW_5levels_podium",
+    "file": "activity_log.jsonl",
+    "bytes": 11487,
+    "sha256": "da0849c6b57d3ea1cfce8c9163a8d7d3c094ac101d5f6667c68ebd6d8639c7d0"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex4_SBSW_5levels_podium",
+    "file": "cfg.py",
+    "bytes": 10325,
+    "sha256": "ec8a6fccf76b64d0f58287ee49f4d5c1ba1b7036d0ba5797004c618d6702889f"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex4_SBSW_5levels_podium",
+    "file": "design/calc_package_cfs.json",
+    "bytes": 323539,
+    "sha256": "2863568d041a8e3b56989803a38bed21440098c0049b12f586320dce5028ed01"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex4_SBSW_5levels_podium",
+    "file": "design/consistency_result.json",
+    "bytes": 222,
+    "sha256": "1462ab79e627b342beb117875f765fa40808680e4da0258f1ef757a9e29fd2f7"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex4_SBSW_5levels_podium",
+    "file": "qa_annex.html",
+    "bytes": 15154,
+    "sha256": "87fb6d0c7bc6fb73ba08551b69c85ae161d32f18d8e7f2f3e0e20f98013b2273"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex4_SBSW_5levels_podium",
+    "file": "report.html",
+    "bytes": 1618974,
+    "sha256": "25deb7fa5933457aa22c4c1a941c2cc7bcd9cb187caaae5f4592e31d9cc0bf18"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex4_SBSW_5levels_podium",
+    "file": "viewer_3d.html",
+    "bytes": 913114,
+    "sha256": "ac5abadd3fe4b99d46ed6d8f49a54bdaa83fb3aa174ac5e8c931c9fdd68fe6cb"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex5_StrapBraced_6levels",
+    "file": "activity_log.jsonl",
+    "bytes": 11435,
+    "sha256": "5292954944dbd4102f4dfefad24409bb97fcd8f10e618237ba4232e81003c339"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex5_StrapBraced_6levels",
+    "file": "cfg.py",
+    "bytes": 9017,
+    "sha256": "311247953aaf8e7e31e9ac89262b59e79b18eb003449a6b0134d69979a8765dd"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex5_StrapBraced_6levels",
+    "file": "design/calc_package_cfs.json",
+    "bytes": 751776,
+    "sha256": "458a29a0db47223dfcf0043e4f9f195dfcce6cf39ee86704f79060afc1fe2169"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex5_StrapBraced_6levels",
+    "file": "design/consistency_result.json",
+    "bytes": 223,
+    "sha256": "30f4d14480e5e5dffd7425b4b2dbc98999455093d9819dfd8360538060f22750"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex5_StrapBraced_6levels",
+    "file": "qa_annex.html",
+    "bytes": 11313,
+    "sha256": "7593eb3275f0b9457ca581d084e5f7aec67b34c35c00c1333b70b5e1c51797a6"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex5_StrapBraced_6levels",
+    "file": "report.html",
+    "bytes": 1977247,
+    "sha256": "92d49cdfed38557eef0dd58c259bd7f61e53d04ae7d99f8ede48ed404ccc0c64"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex5_StrapBraced_6levels",
+    "file": "schedule.json",
+    "bytes": 8683,
+    "sha256": "e9affbab467594744b2573ab21d1a75f25651db16b226b345c0e857f1a2a5959"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex5_StrapBraced_6levels",
+    "file": "viewer_3d.html",
+    "bytes": 871429,
+    "sha256": "b871f39743100eec872ddd4f3a9ea5fd047f219c5bff48aed3fd2565f1427c00"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex6_WSP_5levels_Lplan",
+    "file": "activity_log.jsonl",
+    "bytes": 14917,
+    "sha256": "81919b82f50fa9e414b7c2a732a15794aee913cb4daf3dcc9be11b7ba05df100"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex6_WSP_5levels_Lplan",
+    "file": "cfg.py",
+    "bytes": 16171,
+    "sha256": "b9bc2df84b5c14a9540c7d4149abc68d86e6e1ee42d86c4305fd4c756d6902e5"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex6_WSP_5levels_Lplan",
+    "file": "design/calc_package_cfs.json",
+    "bytes": 980455,
+    "sha256": "36389ba6164c4769c61305c02eaff85de52f958dfdbb8d2e02574826961da4d8"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex6_WSP_5levels_Lplan",
+    "file": "design/consistency_result.json",
+    "bytes": 222,
+    "sha256": "64d4fb6be2739913e63948a2c01691805cf98b7e8ca3f23788d80d4eb51c6a97"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex6_WSP_5levels_Lplan",
+    "file": "qa_annex.html",
+    "bytes": 14703,
+    "sha256": "ab0c300c28c5000b11423697dea17c7b1297f1cacf55b9ed37abd08b860703a7"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex6_WSP_5levels_Lplan",
+    "file": "report.html",
+    "bytes": 2355692,
+    "sha256": "9634b224da17ae847fc4b638b1ca8095807e1af010e94e48c393dfc414af4a10"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex6_WSP_5levels_Lplan",
+    "file": "viewer_3d.html",
+    "bytes": 1012852,
+    "sha256": "6496bb26ed631009220d3607977890205c3ca1d58b6f2c4fbed9bc1dbf40b79e"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex7_SteelSheet_6levels_Zplan",
+    "file": "activity_log.jsonl",
+    "bytes": 11694,
+    "sha256": "736e610ba235e4a1415eee868d8e0c3035d0a49e5fd560728171f755bd220a5c"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex7_SteelSheet_6levels_Zplan",
+    "file": "cfg.py",
+    "bytes": 10009,
+    "sha256": "9c39471ad84fe646c41f198c9ee533554afeb0bc43f0a73d9f35bd979d6cb6d4"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex7_SteelSheet_6levels_Zplan",
+    "file": "design/calc_package_cfs.json",
+    "bytes": 1408561,
+    "sha256": "1b9a130831eb9d4147617bf9c8baef829296588634df50a77dad874c856f3735"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex7_SteelSheet_6levels_Zplan",
+    "file": "design/consistency_result.json",
+    "bytes": 222,
+    "sha256": "3da1a8138592b470303082aad407edb522a1f6553bd0a7940966b08c43201c85"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex7_SteelSheet_6levels_Zplan",
+    "file": "qa_annex.html",
+    "bytes": 11490,
+    "sha256": "ebf42d81c534bba432d8f4c56f898124c7f92c3d9f372c7cb824b1af0a974cb9"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex7_SteelSheet_6levels_Zplan",
+    "file": "report.html",
+    "bytes": 2886814,
+    "sha256": "65db0e1f60bd7b3f66fa70a675394bdb4e67095a39c4c08148bc26b029a07732"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex7_SteelSheet_6levels_Zplan",
+    "file": "schedule.json",
+    "bytes": 33681,
+    "sha256": "5998683e7348c78810b461adbc4bc5af6605738376dc7249591efa3cb3112ebf"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex7_SteelSheet_6levels_Zplan",
+    "file": "viewer_3d.html",
+    "bytes": 1088606,
+    "sha256": "05af7fe6588a2d0a9c6910a2dcc3d45e0bf14e8baca5ed5649ecbcb013874a42"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex8_StrapBraced_4levels_Tplan",
+    "file": "activity_log.jsonl",
+    "bytes": 10768,
+    "sha256": "333478aafb20795cbf39f7537c10f696e8ade2dfe8b18200e2b3c9f57b7e65d7"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex8_StrapBraced_4levels_Tplan",
+    "file": "cfg.py",
+    "bytes": 7402,
+    "sha256": "c1318182ec1b816df5ef501267bc04568e70778a3982f8bd0742c9a7c0396306"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex8_StrapBraced_4levels_Tplan",
+    "file": "design/calc_package_cfs.json",
+    "bytes": 428864,
+    "sha256": "667f8f1fed23901817fb07c3d53241762ad5bbb6e50f6c5c5bff788d4385d580"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex8_StrapBraced_4levels_Tplan",
+    "file": "design/consistency_result.json",
+    "bytes": 222,
+    "sha256": "262d28a3e0889588cc2880fedbe5f9cc3ec6d4c99cfa221f0d1c161850235ada"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex8_StrapBraced_4levels_Tplan",
+    "file": "qa_annex.html",
+    "bytes": 10860,
+    "sha256": "edbb19fa24fb5cdd07cb8391de9da3af35c8609a1ddb9ffa379039f4825f588c"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex8_StrapBraced_4levels_Tplan",
+    "file": "report.html",
+    "bytes": 1002097,
+    "sha256": "5fecf4ef5671e7296953862b35000eb90521e208d3b7e5c20c2f3131edd0e90f"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex8_StrapBraced_4levels_Tplan",
+    "file": "schedule.json",
+    "bytes": 3861,
+    "sha256": "c5f2b90b14ddd06acc3a68cbec96eeb02730a7d7d565fe0ec732b37b14411e26"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex8_StrapBraced_4levels_Tplan",
+    "file": "viewer_3d.html",
+    "bytes": 715955,
+    "sha256": "d5d453cf2f85d49ce5c5691113f7fc826bd37b28d870e5012e12f16bca13f36d"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex9_Podium_5over2_Uplan",
+    "file": "activity_log.jsonl",
+    "bytes": 10368,
+    "sha256": "302d9e464655b80785fa811b32694c646df8bed2bfbeac997d54901d821a9586"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex9_Podium_5over2_Uplan",
+    "file": "cfg.py",
+    "bytes": 7041,
+    "sha256": "573c9ca7680c3ba8ab3c235d0077628ff65e651c06287a221c2caae6f4322877"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex9_Podium_5over2_Uplan",
+    "file": "design/calc_package_cfs.json",
+    "bytes": 657898,
+    "sha256": "593394cd91474cee7dc0fa543e6788fc3af29bdb360a591b9fac8944428f1339"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex9_Podium_5over2_Uplan",
+    "file": "design/consistency_result.json",
+    "bytes": 222,
+    "sha256": "975331a08a298b04cd695ec4dac190f758ca0a3e5a8efcd877dfac998cffe539"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex9_Podium_5over2_Uplan",
+    "file": "qa_annex.html",
+    "bytes": 11028,
+    "sha256": "e314571aaa59536bbe230bc84363a7615e43e2d610111a0ab14d76a8996300e1"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex9_Podium_5over2_Uplan",
+    "file": "report.html",
+    "bytes": 2322602,
+    "sha256": "428c45691bc55297945c38fffb56c2ecfcbc238a5fde5ea3493ced1863d96c9c"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex9_Podium_5over2_Uplan",
+    "file": "schedule.json",
+    "bytes": 4621,
+    "sha256": "78a57793cc81bf2f1be1b6dfef78c402b10cba29d28f73dabb53c8387f95adb8"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex9_Podium_5over2_Uplan",
+    "file": "viewer_3d.html",
+    "bytes": 1087600,
+    "sha256": "ca69a1656836a77d658555286a8a63c5f05f156d6404db1884728c7eefbf9a14"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex10_SBMF_2levels_highbay",
+    "file": "activity_log.jsonl",
+    "bytes": 15509,
+    "sha256": "cc0b6240b45dbc5facc583996e0dd15c0af638e698109cb0a17fe845c8763b81"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex10_SBMF_2levels_highbay",
+    "file": "cfg.py",
+    "bytes": 9838,
+    "sha256": "a2762b6b6b7acaeb3518e52141afdeab976025192e0e25a7c92dcb57e509b5ea"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex10_SBMF_2levels_highbay",
+    "file": "design/calc_package_cfs.json",
+    "bytes": 179108,
+    "sha256": "81e5df87ccb149912d86c0190e110b1e626bd3d3a9601bcc435f7626a205acfb"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex10_SBMF_2levels_highbay",
+    "file": "design/consistency_result.json",
+    "bytes": 222,
+    "sha256": "d1c22c4780f4d51e02028af07ec1dd0b933da1e396ee94b13dddf16dc5ba7e29"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex10_SBMF_2levels_highbay",
+    "file": "office.py",
+    "bytes": 3143,
+    "sha256": "840105a82814d8cb2374cc09af0a0acd1a1b9040cb2903216c4b2afc70a515b2"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex10_SBMF_2levels_highbay",
+    "file": "qa_annex.html",
+    "bytes": 14534,
+    "sha256": "3f334ea36727448d11a4f0aa3a333f78d7829877394bdc5a0919cbeb6e49942b"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex10_SBMF_2levels_highbay",
+    "file": "report.html",
+    "bytes": 232002,
+    "sha256": "0b2612f3dfdbdbfac12bf21e85b5d318b1eb4194b79d621ebb1fdd5d4986de22"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex10_SBMF_2levels_highbay",
+    "file": "viewer_3d.html",
+    "bytes": 708483,
+    "sha256": "1798cd77f81b11134d8b87884b73e445ae382b5351ecc9510065e3322694bd3e"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex11_Gypsum_3levels_coastal_wind",
+    "file": "activity_log.jsonl",
+    "bytes": 18373,
+    "sha256": "85735c566f991a11c6f8e3d37cd432fa5393f5073ef706b5b893418552e5dc86"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex11_Gypsum_3levels_coastal_wind",
+    "file": "cfg.py",
+    "bytes": 18182,
+    "sha256": "77d2709af309960b25816f7ae6e0273f23cfb5b83615bfc3e59fc660f386d130"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex11_Gypsum_3levels_coastal_wind",
+    "file": "design/calc_package_cfs.json",
+    "bytes": 803890,
+    "sha256": "12872679641ee60d557cd576ab3da09f12a82f79a330243fe69ec689d122bdfa"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex11_Gypsum_3levels_coastal_wind",
+    "file": "design/consistency_result.json",
+    "bytes": 223,
+    "sha256": "636f5032d88edfa79bdb29396f0230ad197bb90179adaacdf03134b66c979a4f"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex11_Gypsum_3levels_coastal_wind",
+    "file": "qa_annex.html",
+    "bytes": 17058,
+    "sha256": "b3fac0a6113b453b6f27f374f99e19dee68f76bd5ded392a36a3d3447c36410f"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex11_Gypsum_3levels_coastal_wind",
+    "file": "report.html",
+    "bytes": 1617850,
+    "sha256": "d7055c43fcd6544f40040c6e7f66307de01b2ed50a541e39fe5aeb9c5b91c070"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex11_Gypsum_3levels_coastal_wind",
+    "file": "viewer_3d.html",
+    "bytes": 776209,
+    "sha256": "ed3ca008428c677f16b37e06e79ee2480f1fc50eb41330afe5edefb4e0b1ff2e"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex12_SteelSheet_8levels_crossplan",
+    "file": "activity_log.jsonl",
+    "bytes": 11088,
+    "sha256": "9fb19b7a37898a8312ed2297a9366552de729c851b32f5d76d1a80eef02fb10b"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex12_SteelSheet_8levels_crossplan",
+    "file": "cfg.py",
+    "bytes": 8026,
+    "sha256": "b35062eba29c771512a57b4c23a097071f05d8488ab35846bdd3217ae7da8f0c"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex12_SteelSheet_8levels_crossplan",
+    "file": "design/calc_package_cfs.json",
+    "bytes": 1098127,
+    "sha256": "50d2632796051725287f165f614fb226811d808f33023de4f8ac5873219fc0c9"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex12_SteelSheet_8levels_crossplan",
+    "file": "design/consistency_result.json",
+    "bytes": 223,
+    "sha256": "d4612fd02fddf8d69cb15fbe0eef0207b02ca7bc8e5d00d934001e2239503d92"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex12_SteelSheet_8levels_crossplan",
+    "file": "qa_annex.html",
+    "bytes": 11115,
+    "sha256": "e073f80215c63c466f048c7edf51e01dd4c666a65945d8d02ee1a474db41a53a"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex12_SteelSheet_8levels_crossplan",
+    "file": "report.html",
+    "bytes": 2506374,
+    "sha256": "e65ecd55610f8e8addef028bad75a71e4a3e95cb4f30abdba024edf1d46c7d61"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex12_SteelSheet_8levels_crossplan",
+    "file": "schedule.json",
+    "bytes": 25748,
+    "sha256": "cbcb0439352e46396486b0900fe2d2980429f351f55bd91a954b4f50caf8c4a9"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex12_SteelSheet_8levels_crossplan",
+    "file": "viewer_3d.html",
+    "bytes": 1181347,
+    "sha256": "4263941b619f8baffae676df185ffd4aa9c8cbd8746ac072261eb801c6c05354"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex13_TypeII_perforated_4levels",
+    "file": "activity_log.jsonl",
+    "bytes": 16726,
+    "sha256": "97b2a26a824e4db5e655499354cf52e7b30f98798a3377d99ada3ef5242b53dc"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex13_TypeII_perforated_4levels",
+    "file": "cfg.py",
+    "bytes": 16787,
+    "sha256": "ddf322ef29381ceb43ed93286de08b11ba60aa729d8b49f1bc5bf73e32b43f4c"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex13_TypeII_perforated_4levels",
+    "file": "design/calc_package_cfs.json",
+    "bytes": 922139,
+    "sha256": "8ddf32424a5c308c90a2a50261614fdbd05217fbea85304228b9d67d90107ba9"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex13_TypeII_perforated_4levels",
+    "file": "design/consistency_result.json",
+    "bytes": 223,
+    "sha256": "35e5bfb3d0ed08214b9b3f5e0e7282826587005467248a6a63b5b66e09fc2f61"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex13_TypeII_perforated_4levels",
+    "file": "qa_annex.html",
+    "bytes": 14960,
+    "sha256": "b3b8aa55ca19f7e64d9ca7185daacd0003db62843456c48ced2f7a311bac8e2c"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex13_TypeII_perforated_4levels",
+    "file": "report.html",
+    "bytes": 1723891,
+    "sha256": "b7a79eba570462ea18e65e8c416c804e107cbb174c61f408435c22ded9c1958f"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex13_TypeII_perforated_4levels",
+    "file": "viewer_3d.html",
+    "bytes": 768606,
+    "sha256": "de04eccb9d78e8c9bcf71577d1c08cce509178b5e767c64a6d207bba14b2aa73"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex14_Mixed_3levels_splitlevel",
+    "file": "activity_log.jsonl",
+    "bytes": 17916,
+    "sha256": "91a085bae4f1170fdf5e6abc98ec43595ffa0db511a56aae4f4b1319a71c150e"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex14_Mixed_3levels_splitlevel",
+    "file": "cfg.py",
+    "bytes": 13178,
+    "sha256": "f16858f04e1dba4c572c56670ca9789c16758b30192cb9eb532c800d96e809dc"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex14_Mixed_3levels_splitlevel",
+    "file": "design/calc_package_cfs.json",
+    "bytes": 724219,
+    "sha256": "4b2bd7bc0268e6f5c8849c219157eb86a410d26b18cc09e9869493dd1a6057a5"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex14_Mixed_3levels_splitlevel",
+    "file": "design/consistency_result.json",
+    "bytes": 223,
+    "sha256": "fd0b8675e40ae5b88868f96e3c7f7cbc5997e3afb6e0b49ed0919c49ac555c2a"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex14_Mixed_3levels_splitlevel",
+    "file": "qa_annex.html",
+    "bytes": 15629,
+    "sha256": "3cfc4f9ca4d020c2d49c6dc033d02e95d5813ee97f0993de45bebd01b89b1fa0"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex14_Mixed_3levels_splitlevel",
+    "file": "report.html",
+    "bytes": 1354911,
+    "sha256": "bf01229d57f4c0b9de3320af269e00d7d5ed12292f123f15a3d8f4377cf45e5d"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex14_Mixed_3levels_splitlevel",
+    "file": "viewer_3d.html",
+    "bytes": 712741,
+    "sha256": "c732fb7cd536a15f25cb9313cd8c520384b2d2cc36ca4b8cc9b7117cd3c89f3c"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex15_WSP_6levels_steppedbar",
+    "file": "activity_log.jsonl",
+    "bytes": 15404,
+    "sha256": "98adc63e9c336a3e6a5cfa594e440239e235917d2ff7eb7ca350529578194b46"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex15_WSP_6levels_steppedbar",
+    "file": "cfg.py",
+    "bytes": 16590,
+    "sha256": "1fe847613d4dfa13c63d994a08b32832b0fb9867afe5e5d63586b2aa2a108fa8"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex15_WSP_6levels_steppedbar",
+    "file": "design/calc_package_cfs.json",
+    "bytes": 1531774,
+    "sha256": "603bd287e3f84474e9efd6976e8bc3158b99892f79e7836b2344b4133d87b6e5"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex15_WSP_6levels_steppedbar",
+    "file": "design/consistency_result.json",
+    "bytes": 223,
+    "sha256": "4d50e879087eee543fa704dc73b7f83dbcba317b58e2a0f2fb3fbf882468e40a"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex15_WSP_6levels_steppedbar",
+    "file": "qa_annex.html",
+    "bytes": 14038,
+    "sha256": "b97efd67f8280fbf4cdc9dd706ed36795e3dca8b94d399994bd3a7e6f9278e47"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex15_WSP_6levels_steppedbar",
+    "file": "report.html",
+    "bytes": 2949624,
+    "sha256": "066addf77bb0651883773465114f91b83efbc9c02e917a19276b36213a36c5e5"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex15_WSP_6levels_steppedbar",
+    "file": "viewer_3d.html",
+    "bytes": 988954,
+    "sha256": "2cfcca373d37f9f6d1542d9c9d4d6573dc21a8cea00fd12d59b6a62028c8b62b"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex16_Portal_singlespan_warehouse",
+    "file": "activity_log.jsonl",
+    "bytes": 9604,
+    "sha256": "3671b7081f3de0eaee0dcb774c06c52dad9cdd7e89bf1f33e1f0815142a02a44"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex16_Portal_singlespan_warehouse",
+    "file": "cfg.py",
+    "bytes": 2344,
+    "sha256": "e528b8f50da924a64b292222ba56d6bb3459c3e11fc8bf4c6ef0162ae6ab93b4"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex16_Portal_singlespan_warehouse",
+    "file": "design/calc_package_cfs.json",
+    "bytes": 181474,
+    "sha256": "92e320a5de9318ee4dcaf43b23ee2121c529b640f84e8c78aedfa1032b6bf02c"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex16_Portal_singlespan_warehouse",
+    "file": "design/consistency_result.json",
+    "bytes": 223,
+    "sha256": "47a0140436b747a96de9a7bbd42e5789b7b2e9f23970c67e8d157aa30a8b361d"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex16_Portal_singlespan_warehouse",
+    "file": "qa_annex.html",
+    "bytes": 10191,
+    "sha256": "fea21e654a2aa648690d7991411a9b02f577b53f97f87d425686af136e051877"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex16_Portal_singlespan_warehouse",
+    "file": "report.html",
+    "bytes": 556656,
+    "sha256": "d193bd7ed72a1ab16c6b19dabd9d285220eb80dbda4f9496c8b3c31e25882bc3"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex16_Portal_singlespan_warehouse",
+    "file": "viewer_3d.html",
+    "bytes": 832515,
+    "sha256": "c830d8d52581db2443b7de8a712a1b3a96f75e2b2ffe7a04cbb10e7995dc66e7"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex17_Portal_twospan_snow",
+    "file": "activity_log.jsonl",
+    "bytes": 11076,
+    "sha256": "9c0836900d021acc67e82b026b5a655d3a344a82c64e5e06857edff9bc83949a"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex17_Portal_twospan_snow",
+    "file": "cfg.py",
+    "bytes": 2479,
+    "sha256": "704899c9088f4002237840ae1aa2dbd1ad72c018c2d38e555bf2ce79f3bddf73"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex17_Portal_twospan_snow",
+    "file": "design/calc_package_cfs.json",
+    "bytes": 187225,
+    "sha256": "f693f3912b21eb192a6ba9ad664f9dc7ee775458444d0904083e1eccc674c336"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex17_Portal_twospan_snow",
+    "file": "design/consistency_result.json",
+    "bytes": 221,
+    "sha256": "0c256fff03ddd73b5b2493ae8bc6039f3ad5fe69579cb0fa8e9a48c997fd8554"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex17_Portal_twospan_snow",
+    "file": "qa_annex.html",
+    "bytes": 11207,
+    "sha256": "530dc09cb98aa8712357d0f3f8e1d0d1e8f6dedc67d00a4e9408a5c9961ed5c8"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex17_Portal_twospan_snow",
+    "file": "report.html",
+    "bytes": 686321,
+    "sha256": "9565376f7e939fbb7a02b3f328d716be3ee2717e0677bc7af0340fc0123678ff"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex17_Portal_twospan_snow",
+    "file": "viewer_3d.html",
+    "bytes": 888053,
+    "sha256": "cedb8509d5d499656a5bfcba448f8ea1b6a98a514bc775d19ad74d68eb2c37ad"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex18_Portal_mezzanine_mixedR",
+    "file": "activity_log.jsonl",
+    "bytes": 12806,
+    "sha256": "08ce09f21ec47143ccf8cb3865b681dfa10711b7f688c82e32723872c74e224c"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex18_Portal_mezzanine_mixedR",
+    "file": "cfg.py",
+    "bytes": 10026,
+    "sha256": "faf6595c0f689cd6aa33fd459208720e39b73b82f08061a2285e5e15ae536e7e"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex18_Portal_mezzanine_mixedR",
+    "file": "design/calc_package_cfs.json",
+    "bytes": 136433,
+    "sha256": "3cbc7a434699ea930b17359bdd381f469831e677ca1278318fe6575165b95ba5"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex18_Portal_mezzanine_mixedR",
+    "file": "design/consistency_result.json",
+    "bytes": 222,
+    "sha256": "03e3319e2c68bc16da75c714cca173610725e9dbe5c3ca14c2f0e1e18f1007e0"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex18_Portal_mezzanine_mixedR",
+    "file": "mezz.py",
+    "bytes": 3570,
+    "sha256": "9e30a9cfb768da21c8d0865e421d60943dfd5850cde134cf087ca0e88d85233f"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex18_Portal_mezzanine_mixedR",
+    "file": "qa_annex.html",
+    "bytes": 12672,
+    "sha256": "17832049e9a111ad0d560a2f8264a456d5a2ed2dd8585cdb50bf3f8bff053a6d"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex18_Portal_mezzanine_mixedR",
+    "file": "report.html",
+    "bytes": 463442,
+    "sha256": "545fb1dab121348adc0fd8f0535f3708240dd5c17facea5967392ce7248fb40b"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex18_Portal_mezzanine_mixedR",
+    "file": "viewer_3d.html",
+    "bytes": 778717,
+    "sha256": "e6f859fdb3557f79d2c8520a7fd37df306400b65fa2bd72890674a25a55b5562"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex19_Portal_monorail_fatigue",
+    "file": "activity_log.jsonl",
+    "bytes": 13006,
+    "sha256": "d6fe2810831f97df5b7a470c80db64ed61ea8321634460a4084d54fd010079d3"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex19_Portal_monorail_fatigue",
+    "file": "cfg.py",
+    "bytes": 2884,
+    "sha256": "53f518e397a2d89b957d02c6bf840da611814c21d68c83b0297dae167124d74d"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex19_Portal_monorail_fatigue",
+    "file": "design/calc_package_cfs.json",
+    "bytes": 176381,
+    "sha256": "14c94f5e9660d76098a7e4d756da31e3e0bcddb899c481a4f3a408afac61dc6b"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex19_Portal_monorail_fatigue",
+    "file": "design/consistency_result.json",
+    "bytes": 222,
+    "sha256": "dc03cf9e9adb48f15b68db07fc4d2993d58383a4849195634b6887291caceb44"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex19_Portal_monorail_fatigue",
+    "file": "qa_annex.html",
+    "bytes": 12459,
+    "sha256": "c8adcc3513085886eabc5c73129774d503c35405ade94f3aedcbb33432882862"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex19_Portal_monorail_fatigue",
+    "file": "report.html",
+    "bytes": 481428,
+    "sha256": "60f8c7aad2a7ba1791fcbd694e0264ae44a6e7100cbe97ff79606ad952cb83a4"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex19_Portal_monorail_fatigue",
+    "file": "viewer_3d.html",
+    "bytes": 686392,
+    "sha256": "d713e0a6c88e02a6d424cc8fd434704d092b190793f5872ca6adbd106f04ce05"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex25_PurlinGirt_uplift_retrofit",
+    "file": "activity_log.jsonl",
+    "bytes": 13574,
+    "sha256": "8e2cbc93bc64e6d0fbd3f0b32380891a4ec282819da3a7b103f5e7167c663626"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex25_PurlinGirt_uplift_retrofit",
+    "file": "cfg.py",
+    "bytes": 1840,
+    "sha256": "22ef3747940e5b3cbbdffd23dbf6425af7743304101374dd561d47dbec14fe8b"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex25_PurlinGirt_uplift_retrofit",
+    "file": "design/calc_package_cfs.json",
+    "bytes": 110964,
+    "sha256": "404bfa48f8bf261786505967c1e76713d008ca024897ba1d02e94d8c26a5678b"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex25_PurlinGirt_uplift_retrofit",
+    "file": "design/consistency_result.json",
+    "bytes": 222,
+    "sha256": "6dd8727cb4d3d421fb63b1d81af64912087ca074c714dead72bb20cf058c5d41"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex25_PurlinGirt_uplift_retrofit",
+    "file": "qa_annex.html",
+    "bytes": 12812,
+    "sha256": "4805cb49dc5adbfad4a2d95e8be517f15c08571bd894e8ebb4af36205aeb7d15"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex25_PurlinGirt_uplift_retrofit",
+    "file": "report.html",
+    "bytes": 457094,
+    "sha256": "f40ead738bb0bad299f529d5b20aff9ad0b9a094b6020344c0d158d627238880"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex25_PurlinGirt_uplift_retrofit",
+    "file": "viewer_3d.html",
+    "bytes": 756766,
+    "sha256": "562916859d7c0f4e9b55a72025f8f3acb8c49d8fb07b52d12713f76ffb1b50bf"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex26_Canopy_open_wind",
+    "file": "activity_log.jsonl",
+    "bytes": 10780,
+    "sha256": "feb59bcaa981a460ab23cbfd587d62641850ac7401015178be7994fb5362e899"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex26_Canopy_open_wind",
+    "file": "cfg.py",
+    "bytes": 8247,
+    "sha256": "314391c69b5832e9cb11e2d23c3fef389b0586d6c3087caf501e7dc0daf399f0"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex26_Canopy_open_wind",
+    "file": "design/calc_package_cfs.json",
+    "bytes": 108130,
+    "sha256": "5b379cc1433af5748591e3946adafce7a429cb5943875003dca9eaac53931bb0"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex26_Canopy_open_wind",
+    "file": "design/consistency_result.json",
+    "bytes": 223,
+    "sha256": "463a42db7163f68818d6cb12853ddcdd021260790d83a373d87de850666fbdfa"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex26_Canopy_open_wind",
+    "file": "qa_annex.html",
+    "bytes": 11077,
+    "sha256": "de5e6d4ffd93ee01bf9a139d60e9a9bb0e4249d90bf6f34da5b664aea645fdc3"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex26_Canopy_open_wind",
+    "file": "report.html",
+    "bytes": 458711,
+    "sha256": "0def9a68b04c96d962841f9d5f799e6997c235cb1bb3a3d022887dd77e8730be"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex26_Canopy_open_wind",
+    "file": "viewer_3d.html",
+    "bytes": 670380,
+    "sha256": "7fcc1c60e2d5a10e12c3c00715a24f2ee41debf0e1ddec82b1d52a46525bdfe6"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex27_Portal_singlechannel_torsion",
+    "file": "activity_log.jsonl",
+    "bytes": 11945,
+    "sha256": "a8ec35d3e9e5e34cf473102b5e077238a23ced274f4edd6078ea3b3145d7c416"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex27_Portal_singlechannel_torsion",
+    "file": "cfg.py",
+    "bytes": 2110,
+    "sha256": "385cc1bb54e03667e1f31fb7e69bb1262d233bddaf6fcce7704b74c96431b50b"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex27_Portal_singlechannel_torsion",
+    "file": "design/calc_package_cfs.json",
+    "bytes": 160378,
+    "sha256": "00f7b44599054bb41f759ffcaa2eef3c29df368f54ad9055b621e1f3f2e7efe9"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex27_Portal_singlechannel_torsion",
+    "file": "design/consistency_result.json",
+    "bytes": 223,
+    "sha256": "3019badd2f040127f1b1c9dc014dbb8ab77630ab825aa773a6d806e6c5de1bc4"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex27_Portal_singlechannel_torsion",
+    "file": "qa_annex.html",
+    "bytes": 11801,
+    "sha256": "7821b191a788446e6f935abac9833cad8e6c6cebf9d67bdaa4883c6d227f9737"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex27_Portal_singlechannel_torsion",
+    "file": "report.html",
+    "bytes": 546412,
+    "sha256": "6fb81b6059228589897d198b3f257341415e50a57662110aaf72ccba7417a916"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex27_Portal_singlechannel_torsion",
+    "file": "viewer_3d.html",
+    "bytes": 821066,
+    "sha256": "d59743012ce025d62af0e35adf9c3e828c1816fb84e1bb832824d1941bd5f123"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex28_AgBuilding_partially_enclosed",
+    "file": "activity_log.jsonl",
+    "bytes": 11582,
+    "sha256": "8ca0e57a195ebb1c3eaded8d8af8e862ad68fc6e9f89d487ae0f371038cb7ef1"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex28_AgBuilding_partially_enclosed",
+    "file": "cfg.py",
+    "bytes": 2247,
+    "sha256": "483b7f591f5202765198d832a44c4c4cf4fcb0b34e55e365357450f44b709b04"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex28_AgBuilding_partially_enclosed",
+    "file": "design/calc_package_cfs.json",
+    "bytes": 182265,
+    "sha256": "952041e7029bc3ed0b44e334a5501af126a6ff5029f1cf332a9aa540356714e4"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex28_AgBuilding_partially_enclosed",
+    "file": "design/consistency_result.json",
+    "bytes": 223,
+    "sha256": "53f4ff75f312509ecfab3946e5564c50d4c408399443cef2ffc12851919af706"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex28_AgBuilding_partially_enclosed",
+    "file": "qa_annex.html",
+    "bytes": 11445,
+    "sha256": "f944dd042cb285a261b2296735782d8801723170e1b827535c2c5434f7b3d9ac"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex28_AgBuilding_partially_enclosed",
+    "file": "report.html",
+    "bytes": 208856,
+    "sha256": "007c82a018452a58e206d566a06b48aba50e24515c0ab4fa866075b5798c67c0"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex28_AgBuilding_partially_enclosed",
+    "file": "viewer_3d.html",
+    "bytes": 729231,
+    "sha256": "34562b6bbad2ecfb38ae0d10a7676cce6337d4b847c52811b2cbcd69192b7407"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex29_Mezzanine_freestanding_existing",
+    "file": "activity_log.jsonl",
+    "bytes": 10950,
+    "sha256": "cb4e10cf285fd5576f7e1edbe8f7797bf860797757a4ae6fbd1b3adc809fa2a7"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex29_Mezzanine_freestanding_existing",
+    "file": "cfg.py",
+    "bytes": 6972,
+    "sha256": "96d697b7dbc9e9ded88dd53a089e3d54318bd2163b6d5da3cad4666a652a89af"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex29_Mezzanine_freestanding_existing",
+    "file": "design/calc_package_cfs.json",
+    "bytes": 136686,
+    "sha256": "a597b755c8452955a0ffd20fc22634d2b5e3dc75eb14fc4af192e54658b5f569"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex29_Mezzanine_freestanding_existing",
+    "file": "design/consistency_result.json",
+    "bytes": 223,
+    "sha256": "7943230c98101311b579c35d410e0b3fa0bc3f6bf5411f04d120c5b6822290a0"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex29_Mezzanine_freestanding_existing",
+    "file": "qa_annex.html",
+    "bytes": 12590,
+    "sha256": "44a3e2ad13658fb9d47a9a5e5d9cd95c1fc4fd964e1b2faa2d6b0b3bc25a7f74"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex29_Mezzanine_freestanding_existing",
+    "file": "report.html",
+    "bytes": 372573,
+    "sha256": "20d625b537c529834cca89d08856828d30cb03be7cdfe2c6d9fe9af114898939"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex29_Mezzanine_freestanding_existing",
+    "file": "viewer_3d.html",
+    "bytes": 640534,
+    "sha256": "2c3a259c10bb117e876a66f933363ca2d3433b6b72f0a58c581cbcc6cce1e498"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex30_ColdStorage_portal",
+    "file": "activity_log.jsonl",
+    "bytes": 12318,
+    "sha256": "1fee9e48e81071ac79c545c20365a0b07adf163aaa075de475690afbf0344ec2"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex30_ColdStorage_portal",
+    "file": "cfg.py",
+    "bytes": 3892,
+    "sha256": "d88c3b741a2be567e0ad0429aecc23475c928ca976308bf0750a17181d0ad3d3"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex30_ColdStorage_portal",
+    "file": "design/calc_package_cfs.json",
+    "bytes": 222332,
+    "sha256": "c4f44434afb736fc257a8e0cbdea3e916da3d81cdb6ae3a0b79e3232dc990dbd"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex30_ColdStorage_portal",
+    "file": "design/consistency_result.json",
+    "bytes": 222,
+    "sha256": "86a6c136206d1aeb96a7c8261cdae613d7b6be4b1a5357df747c408da421c27c"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex30_ColdStorage_portal",
+    "file": "qa_annex.html",
+    "bytes": 12123,
+    "sha256": "bd22b88061deff298f777c919a51300d6a9da785f0221aa50bc599e9e4b0e1d3"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex30_ColdStorage_portal",
+    "file": "report.html",
+    "bytes": 692947,
+    "sha256": "3eb05da9e17dd7b9eb6286131d43267a26727251ae2b4268488ba53f53da9be8"
+  },
+  {
+    "module": "CFS",
+    "building": "CFS_Ex30_ColdStorage_portal",
+    "file": "viewer_3d.html",
+    "bytes": 822212,
+    "sha256": "57a3ff2a4b84cdd2159ccd0ff8a330eefcc0629c06dec17182922405c85fb814"
+  }
+]
