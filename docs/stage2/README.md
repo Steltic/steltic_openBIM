@@ -140,6 +140,9 @@ Replay commits: HR `00c51bd`, CFS `b96a36c`. Each package embeds the full replay
 revision and file hashes. Historical producer revisions remain unknown rather
 than being replaced with the current replay revision.
 
-Source-module changes are published for review as [HR PR #95](https://github.com/Steltic/steltic/pull/95)
-and [CFS PR #45](https://github.com/Steltic/steltic_cfs/pull/45). Their main branches
-have not been merged by this stage. Use those branches to enable the exporters.
+Source-module changes were merged into main on 2 November 2026:
+[HR PR #95](https://github.com/Steltic/steltic/pull/95), merge commit `38f47c0`, and
+[CFS PR #45](https://github.com/Steltic/steltic_cfs/pull/45), merge commit `78fd41a`.
+Both merged file trees match the tested replay commits exactly. Use the updated
+main branches to enable the exporters. The replay bundle retains its original
+pre-merge report; the exported data and validation results are unchanged.
