@@ -1,0 +1,212 @@
+{
+  "additional_HR": [
+    "hr14",
+    "hr16",
+    "hr18",
+    "hr20",
+    "hr21",
+    "hr24",
+    "hr25",
+    "hr30",
+    "hr31",
+    "hr35"
+  ],
+  "additional_CFS": [
+    "cfs2",
+    "cfs4",
+    "cfs6",
+    "cfs9",
+    "cfs10",
+    "cfs12",
+    "cfs18",
+    "cfs25",
+    "cfs27",
+    "cfs28"
+  ],
+  "status": "generated and sampled visual review complete",
+  "user_authorized_total": 43,
+  "cases": [
+    {
+      "id": "hr14",
+      "building": "HR-14",
+      "module": "HR",
+      "source_building": "Ex14_EBF_11levels_cruciform_hillside",
+      "system": "EBF",
+      "geometry_case": "Eleven-level cruciform on hillside; stepped bases and eccentric links",
+      "source_sha256": "23af656044d115eff63fccfe84dba795434834fb910676b80a2cb6d44cfc6482"
+    },
+    {
+      "id": "hr16",
+      "building": "HR-16",
+      "module": "HR",
+      "source_building": "Ex16_IMF_3levels_Zplan_school",
+      "system": "SMF (completed source design)",
+      "drawing_title": "Ex16 SMF school / three wings and stepped roofs",
+      "geometry_case": "Three-level Z-plan school",
+      "source_sha256": "92c9d0cbf04b9191df0671362c938beb61a890686e373c9cc604b3c5419bee58"
+    },
+    {
+      "id": "hr18",
+      "building": "HR-18",
+      "module": "HR",
+      "source_building": "Ex18_R3_NotDetailed_8levels_lowseismic",
+      "system": "R3 not specifically detailed",
+      "geometry_case": "Eight-level low-seismic frame",
+      "source_sha256": "f4319403ee3d010cf0d30eddba96c0917741e6b5117acab839c8293bb60bdba8"
+    },
+    {
+      "id": "hr20",
+      "building": "HR-20",
+      "module": "HR",
+      "source_building": "Ex20_SCBF_12levels_transfer_discontinuous",
+      "system": "SCBF",
+      "geometry_case": "Twelve levels with transfer and discontinuous bracing",
+      "source_sha256": "1df79a1d8f598217cfeee56f9fb722941b11f8a7a54f2ba03098f79a7bc7f37c"
+    },
+    {
+      "id": "hr21",
+      "building": "HR-21",
+      "module": "HR",
+      "source_building": "Ex21_OCBF_1story_bigbox_flexiblediaphragm",
+      "system": "OCBF",
+      "geometry_case": "One-storey big box with flexible roof diaphragm",
+      "source_sha256": "bb5b766562ee586e93025d08eb295f44ea16c9c80463d27bd5e26f9aa193749f"
+    },
+    {
+      "id": "hr24",
+      "building": "HR-24",
+      "module": "HR",
+      "source_building": "Ex24_Mixed_SMF_NS_SCBF_EW_10levels_bidirectional",
+      "system": "SMF X / SCBF Y (completed source design)",
+      "drawing_title": "Ex24 mixed SMF X / SCBF Y / ten levels",
+      "geometry_case": "Ten levels; orthogonal systems",
+      "source_sha256": "22013e2ab57d0119af097372d70cca8bf51cfe1fbe5bd24fe7d00506d2cc73ec"
+    },
+    {
+      "id": "hr25",
+      "building": "HR-25",
+      "module": "HR",
+      "source_building": "Ex25_SMF_12levels_atrium_diaphragmdiscontinuity",
+      "system": "SMF",
+      "geometry_case": "Twelve levels with atrium and diaphragm discontinuity",
+      "source_sha256": "cc3d4e4ca4e47202571ca38e4d00c372285c95eb16f4eb49df59ce8ed0639cef"
+    },
+    {
+      "id": "hr30",
+      "building": "HR-30",
+      "module": "HR",
+      "source_building": "Ex30_Composite_SCBF_6levels_studs_camber",
+      "system": "Composite SCBF",
+      "geometry_case": "Six levels with headed studs and camber",
+      "source_sha256": "8537869421e4804bb595c74740b57e32423c8d6d9c818eaf3a4a21d5e323caf2"
+    },
+    {
+      "id": "hr31",
+      "building": "HR-31",
+      "module": "HR",
+      "source_building": "Ex31_Gable_warehouse_R3_unbalanced_snow_ponding",
+      "system": "R3 gable warehouse",
+      "geometry_case": "Unbalanced snow and ponding",
+      "source_sha256": "5935e9192567aa86d5caafee494245f2e10c8d4065d0061ae9fef4c10c15f5bb"
+    },
+    {
+      "id": "hr35",
+      "building": "HR-35",
+      "module": "HR",
+      "source_building": "Ex35_Ch15_equipment_platform_3tier_OCBF",
+      "system": "Ch15 equipment platform",
+      "geometry_case": "Three-tier nonbuilding OCBF platform",
+      "source_sha256": "ce6a6f154b30b70b1495b63134ae49d5fbdd23a9d70e4d61b081b24eef38cda9"
+    },
+    {
+      "id": "cfs2",
+      "building": "CFS-2",
+      "module": "CFS",
+      "source_building": "CFS_Ex2_StrapBraced_6levels",
+      "system": "Strap-braced walls",
+      "geometry_case": "Six-level bearing-wall building",
+      "source_sha256": "3a9ce736621d944ec43f5bf01916cd4206d17c45e63562d29bcc3ffd760e1fc8"
+    },
+    {
+      "id": "cfs4",
+      "building": "CFS-4",
+      "module": "CFS",
+      "source_building": "CFS_Ex4_SBSW_5levels_podium",
+      "system": "SBSW",
+      "geometry_case": "Five levels on podium",
+      "source_sha256": "6f0e0f9edbd35d14afac77237db3a06a744dec5d67c9dc6f9815f19774ecbaf7"
+    },
+    {
+      "id": "cfs6",
+      "building": "CFS-6",
+      "module": "CFS",
+      "source_building": "CFS_Ex6_WSP_5levels_Lplan",
+      "system": "WSP walls",
+      "geometry_case": "Five-level L plan",
+      "source_sha256": "beb77cc70338aa6a18d1d8030034781d0c432694d2fd431a02c68ddb370f4987"
+    },
+    {
+      "id": "cfs9",
+      "building": "CFS-9",
+      "module": "CFS",
+      "source_building": "CFS_Ex9_Podium_5over2_Uplan",
+      "system": "Podium wall building",
+      "geometry_case": "Five over two; U plan",
+      "source_sha256": "752bea707feed252b1f521d0e38c05e4ea7d75ed6493a5981b1e395aa98411e4"
+    },
+    {
+      "id": "cfs10",
+      "building": "CFS-10",
+      "module": "CFS",
+      "source_building": "CFS_Ex10_SBMF_2levels_highbay",
+      "system": "SBMF",
+      "geometry_case": "Two levels with high bay",
+      "source_sha256": "639e4d121d6fe3650592fe7d2c36d3b5d82b5ee6ce0476feb0bfaff3c779354d"
+    },
+    {
+      "id": "cfs12",
+      "building": "CFS-12",
+      "module": "CFS",
+      "source_building": "CFS_Ex12_SteelSheet_8levels_crossplan",
+      "system": "Steel-sheet walls",
+      "geometry_case": "Eight-level cross plan",
+      "source_sha256": "55dbb8b06438642dd990a4ee340fcee7ca3989033cd9fbe6bbe041ae6aacc21e"
+    },
+    {
+      "id": "cfs18",
+      "building": "CFS-18",
+      "module": "CFS",
+      "source_building": "CFS_Ex18_Portal_mezzanine_mixedR",
+      "system": "Portal with mezzanine",
+      "geometry_case": "Mixed-R portal/mezzanine interfaces",
+      "source_sha256": "ad6cae9736ff41b40c483c05bcfb9a6bdf679d9704cb4738cf9cc82cf6aa5b09"
+    },
+    {
+      "id": "cfs25",
+      "building": "CFS-25",
+      "module": "CFS",
+      "source_building": "CFS_Ex25_PurlinGirt_uplift_retrofit",
+      "system": "Purlin/girt retrofit",
+      "geometry_case": "Existing framing; uplift reinforcement",
+      "source_sha256": "ade5ee1a337fc51b018f2f7f63bc7024df20efff1cdc08913789174f73db6c65"
+    },
+    {
+      "id": "cfs27",
+      "building": "CFS-27",
+      "module": "CFS",
+      "source_building": "CFS_Ex27_Portal_singlechannel_torsion",
+      "system": "Single-channel portal",
+      "geometry_case": "Torsion and restraint interfaces",
+      "source_sha256": "14ba1632655f525debe1af5e1376faffbb69a51a0b3b730879b0160daa7c9bde"
+    },
+    {
+      "id": "cfs28",
+      "building": "CFS-28",
+      "module": "CFS",
+      "source_building": "CFS_Ex28_AgBuilding_partially_enclosed",
+      "system": "Agricultural portal",
+      "geometry_case": "Partially enclosed building",
+      "source_sha256": "58e35af574181b15d2c292f3bf566fe89bc23f5562c5730a8f14b6d904d08a64"
+    }
+  ]
+}

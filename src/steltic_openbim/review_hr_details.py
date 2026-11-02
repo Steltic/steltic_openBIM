@@ -4,6 +4,8 @@ from .review_assemblies import *
 
 def bolt_data(text):
     rows,cols,dia,pitch,gauge=4,1,.75,3,3
+    matrix=re.search(r'(\d+)\s*x\s*(\d+)\s*x\s*'+NUMBER+r'\s*in\.?\s*(?:A325|ASTM)',text,re.I)
+    if matrix:return int(matrix[1]),int(matrix[2]),number(matrix[3]),3,3
     explicit=re.search(r'(\d+) x (\d+) = \d+ bolts '+NUMBER+r' in',text)
     if explicit:
         cols,rows,dia=int(explicit[1]),int(explicit[2]),number(explicit[3]);pitch=findnum(r'pitch and gauge '+NUMBER,text,4)
@@ -31,10 +33,11 @@ def support(ctx,bp):
         a.member('M1',cp,[0,-24,-cd/2],[0,24,-cd/2],y=[1,0,0],description='Receiving girder '+cp);face=p[cp]['dimensions'].get('tw',p[cp]['dimensions'].get('t',.25))/2
     if ctx.params.get('boxing_t'):
         t=ctx.params['boxing_t'];cw=effective(p,cp,'width')
+        length=ctx.params.get('boxing_length_in',bd+28);zlo=-bd/2-length/2;zhi=-bd/2+length/2
         for j,sg in enumerate((-1,1)):
             offset=sg*(cw+t)/2;name='BOX'+str(j);plate=flat(p,cd,t)
-            a.member(name,plate,[offset if weak else 0,0 if weak else offset,-bd-14],[offset if weak else 0,0 if weak else offset,14],y=[0,1,0] if weak else [1,0,0],basis='A',description='Source full-height column boxing; A 2 in fit')
-            a.weld('WB'+str(j),[offset if weak else cd/2,cd/2 if weak else offset,-bd-14],[offset if weak else cd/2,cd/2 if weak else offset,14],['M1',name],kind='CJP',description='Source boxing plate to column flange tips')
+            a.member(name,plate,[offset if weak else 0,0 if weak else offset,zlo],[offset if weak else 0,0 if weak else offset,zhi],y=[0,1,0] if weak else [1,0,0],basis='A',description=f'Source {str(length)+" in local" if "boxing_length_in" in ctx.params else "full-height"} column boxing; {t:g} in plate; A local edge fit')
+            a.weld('WB'+str(j),[offset if weak else cd/2,cd/2 if weak else offset,zlo],[offset if weak else cd/2,cd/2 if weak else offset,zhi],['M1',name],kind='CJP',description='Source boxing plate to column flange tips')
         if weak:face=cw/2+t
     ctx.weak_axis_support=weak
     return cp,face
@@ -42,7 +45,7 @@ def support(ctx,bp):
 def draw(ctx):
     a,p,pid,txt,par,f=ctx.a,ctx.p,ctx.pid,ctx.text,ctx.params,ctx.family
     if f in ('review_beam','review_existing_joint','review_crane_bracket'):
-        bp=pid;bd=effective(p,bp);bf=effective(p,bp,'width');cp,face=support(ctx,bp);moment=par.get('moment',False) or f=='review_crane_bracket';gap=0 if moment else 1.25
+        bp=pid;bd=effective(p,bp);bf=effective(p,bp,'width');cp,face=support(ctx,bp);moment=par.get('moment',False) or f=='review_crane_bracket';gap=0 if moment else 1 if ctx.model['pilot']=='hr30' and par.get('paired_shear_plates') else 1.25
         rbs={};hit=re.search(r'RBS\s*\(?a = '+NUMBER+r'(?: in)?, b = '+NUMBER+r'(?: in)?, c = '+NUMBER,txt,re.I)
         if hit:rbs=dict(a_in=number(hit[1]),b_in=number(hit[2]),c_in=number(hit[3]));moment=True;gap=0
         m=a.member('M2',bp,[face+gap,0,-bd/2],[face+gap+max(42,rbs.get('a_in',0)+rbs.get('b_in',0)+8),0,-bd/2],**({'rbs':rbs} if rbs else {}))
@@ -65,19 +68,27 @@ def draw(ctx):
             moment=False;rows,cols,dia,pitch=4,1,.875,3;t=.5
             a.notes.append('A: fictional existing joint survey answer: paired bolted web angles and flange cover/seat plates. No welding to existing A36 steel is shown; source survey and weldability requirements remain.')
         ph=(rows-1)*pitch+2*max(dia*1.5,1.5);edge=(ph-(rows-1)*pitch)/2
+        twin=re.search(r'two plates PL '+NUMBER+r' x '+NUMBER+r' in',txt) if ctx.model['pilot']=='hr30' else None
+        if twin:t,ph=map(number,twin.groups());edge=(ph-(rows-1)*pitch)/2
         if ph>bd-2:
             # Preserve the source pattern; a mismatched source profile is an error.
             ph=bd-1.5;edge=(ph-(rows-1)*pitch)/2
             if edge<dia*.8:raise ValueError('Source bolt group does not fit '+ctx.model['pilot']+' '+pid+' '+str((rows,cols,dia,pitch)))
         width=ctx.n(r'bolt line '+NUMBER+r' in from the weld',3)+(cols-1)*gauge+max(2*dia,1.5);tw=p[bp]['dimensions'].get('tw',.375);z=-bd/2-ph/2
         pattern_basis='S' if re.search(r'\b(?:bolts|erection tab|column\(s\))\b',txt,re.I) else 'A'
-        a.box('P1',[face,tw/2,z],[width,t,ph],pattern_basis,'Shear plate / erection tab; A fitted width where unprovided')
+        shim=.0625 if twin else 0
+        a.box('P1',[face,tw/2+shim,z],[width,t,ph],pattern_basis,'Shear plate / erection tab; A fitted width where unprovided')
         paired=par.get('paired_shear_plates',False);joins=['M2','P1']
         if paired:a.box('P2',[face,-tw/2-t,z],[width,t,ph],'S','Source second shear plate / double-shear joint');joins.append('P2')
-        a.fastener('F1',grid(rows*cols,cols,pitch,gauge,(face+width-max(2*dia,1.5)-(cols-1)*gauge,-tw/2-(t if paired else 0),z+edge)),[0,1,0],dia,tw+t*(2 if paired else 1),joins,f'{rows} rows x {cols}; {dia:g} in '+('A490' if 'A490' in txt else 'A325')+'; source pretension/faying-surface requirements',pattern_basis)
+        if shim:a.box('SHIM',[face+gap,tw/2,z],[width-gap,shim,ph],'S','Source 1/16 in finger shim against beam web');joins.append('SHIM')
+        a.fastener('F1',grid(rows*cols,cols,pitch,gauge,(face+width-max(2*dia,1.5)-(cols-1)*gauge,-tw/2-(t if paired else 0),z+edge)),[0,1,0],dia,tw+shim+t*(2 if paired else 1),joins,f'{rows} rows x {cols}; {dia:g} in '+('A490' if 'A490' in txt else 'A325')+'; source pretension/faying-surface requirements',pattern_basis)
         weld=ctx.n(r'\('+NUMBER+r' in fillets both sides',.25)
+        if twin:weld=ctx.n(r'with one '+NUMBER+r' in E70 fillet',.5)
         a.weld('W1',[face,tw/2,z],[face,tw/2,z+ph],['M1','P1'],weld,description=f'{weld:g} in fillet both sides to support')
         if paired:a.weld('W2',[face,-tw/2,z],[face,-tw/2,z+ph],['M1','P2'],weld,description='Source second shear-plate support weld')
+        if twin:
+            for w in a.welds:w['description']='Source one fillet on the outer face only; inner face not welded'
+            a.notes.append('S: paired shear plates spaced t_w + 1/16 in, source finger shim fitted at one web face before pretensioning. One-sided outer fillets only; bolted beam web restrains plate rotation.')
         if moment:
             for i,zz in enumerate((0,-bd)):a.weld('WF'+str(i),[face,-bf/2,zz],[face,bf/2,zz],['M1','M2'],kind='CJP',description='Source flange CJP; demand-critical / access-hole requirements retained')
             if 'web CJP' in txt or 'welded web' in txt:a.weld('WW',[face,0,-bd+1.5],[face,0,-1.5],['M1','M2'],kind='CJP')
@@ -113,14 +124,15 @@ def draw(ctx):
     elif f in ('review_plate_wall','review_core_wall','review_coupling'):wall(ctx)
     elif f in ('review_stmf_node','review_stmf_end'):stmf(ctx)
     elif f=='review_ebf_link':
+        length=par.get('link_length',36)
         d=effective(p,pid);bf=effective(p,pid,'width');tw=p[pid]['dimensions'].get('tw',.375);tf=p[pid]['dimensions'].get('tf',.5)
         a.member('M1',pid,[-30,0,0],[30,0,0]);a.member('M2',pid,[30,0,0],[42,0,0],description='Same continuous source beam beyond protected link')
         t=ctx.n(r'stiffeners?\s*(?:PL\s*)?'+NUMBER,.5)
-        for j,x in enumerate((-18,-9,0,9,18)):
+        for j,x in enumerate((-length/2,-length/4,0,length/4,length/2)):
             for side in (-1,1):
                 label=f'S{j}{side}';yy=tw/2 if side>0 else -bf/2+.25;a.box(label,[x-t/2,yy,-d/2+tf],[t,bf/2-tw/2-.25,d-2*tf],'A','Link full-depth web stiffener; adopted station')
                 a.weld('W'+label,[x,yy,-d/2+tf],[x,yy,d/2-tf],['M1',label],.25,basis='A')
-        a.dim([-18,0,-d/2],[18,0,-d/2],'36 in protected shear link',basis='S');a.section_at=0
+        a.dim([-length/2,0,-d/2],[length/2,0,-d/2],f'{length:g} in protected shear link',basis='S');a.section_at=0
     elif f.startswith('review_retrofit_'):retrofit(ctx)
     elif f in ('review_crane_seat','review_crane_tie','review_rail_clip','review_sliding_post','review_joist_seat'):industrial(ctx)
     else:raise ValueError(f)
@@ -217,7 +229,20 @@ def splice(ctx):
         a.weld('CONT',[0,-w/2,0],[0,w/2,0],['M1','M2'],kind='CONTINUOUS',basis='S',description='Continuous physical column across analysis storey split; NO field joint or weld at this datum');a.section_axis=2;a.section_at=0;return
     if 'CJP' in txt and 'bolted' not in txt[:100]:
         a.weld('SPLICE',[-d/2,-w/2,0],[d/2,w/2,0],['M1','M2'],kind='CJP',description='Source all-around column splice CJP; thickness transitions and demand-critical requirements retained')
-        a.section_axis=2;a.section_at=0;a.dim([d/2,0,0],[d/2,0,12],'Splice 48 in above source floor',basis='S');return
+        boxing=ctx.params.get('boxing_t') or ctx.ms[0].get('boxing_thickness_in')
+        if boxing:
+            for j,sg in enumerate((-1,1)):
+                names=[]
+                for index,(shape,z0,z1) in enumerate(((lower,-30,0),(pid,.0625,30))):
+                    cw=effective(p,shape,'width');cd=effective(p,shape);name=f'BOX{j}{index}';names.append(name);offset=sg*(cw+boxing)/2
+                    a.member(name,flat(p,cd,boxing),[0,offset,z0],[0,offset,z1],y=[1,0,0],basis='A',description=f'Source {boxing:g} in full-height side plate; A local edge fit')
+                    for edge in (-1,1):a.weld(f'WB{j}{index}{edge}',[edge*cd/2,offset,z0],[edge*cd/2,offset,z1],['M1' if index==0 else 'M2',name],kind='CJP',description='Boxing side plate to column flange tips')
+                a.weld(f'BOX-SPLICE{j}',[-d/2,sg*(w+boxing)/2,0],[d/2,sg*(w+boxing)/2,0],names,kind='CJP',basis='S' if 'side plates spliced' in txt else 'A',description='Side-plate splice at the shaft splice datum')
+        from .review_splice_parts import transition,erection
+        transition(ctx,lower);erection(ctx,lower)
+        a.section_axis=2;a.section_at=-12 if any(q['id']=='DIVISION' for q in a.parts) else 4;a.dim([-d/2,0,15],[d/2,0,15],'Upper shaft depth',basis='S',offset=-30)
+        a.notes.append('Splice world elevation and source floor offset are in the occurrence index. Source CJP requirements remain authoritative; temporary erection fit and installation sequence shown as A.')
+        return
     dia=ctx.n(NUMBER+r' in (?:ASTM F3125 )?A325',.875);t=ctx.n(r'flange (?:plates?|plate splice)\s*(?:PL)?\s*'+NUMBER,.75);width=w
     match=re.search(r'PL '+NUMBER+r' x '+NUMBER+r' in outside each flange with (\d+) x',txt)
     flange_count=8 if ctx.model['pilot']=='hr32' else 4

@@ -1,0 +1,69 @@
+{
+  "buildings": 43,
+  "module_counts": {
+    "HR": 21,
+    "CFS": 22
+  },
+  "sheets": 8892,
+  "indexes": [
+    {
+      "path": "index.html",
+      "cards": 43,
+      "local_links_checked": 306,
+      "javascript_syntax": "passed",
+      "browser_preview": "blocked by local-file browser policy"
+    },
+    {
+      "path": "stage6/index.html",
+      "cards": 23,
+      "local_links_checked": 278,
+      "javascript_syntax": "passed",
+      "browser_preview": "blocked by local-file browser policy"
+    },
+    {
+      "path": "stage7/index.html",
+      "cards": 20,
+      "local_links_checked": 242,
+      "javascript_syntax": "passed",
+      "browser_preview": "blocked by local-file browser policy"
+    }
+  ],
+  "archives": [
+    {
+      "path": "stage6/steltic_23_building_review.zip",
+      "bytes": 175232420,
+      "sha256": "e9c1376ab8f35ac0523ff751141e2abcd7bec449372220b9e8ebb6809d7c647f",
+      "pdfs": 23,
+      "crc": "passed"
+    },
+    {
+      "path": "stage7/steltic_next_20_building_review.zip",
+      "bytes": 141610388,
+      "sha256": "fb582645eded87758220f62539576ce479b833108199bcdd109c35cf534762aa",
+      "pdfs": 20,
+      "crc": "passed"
+    }
+  ],
+  "wheel": {
+    "path": "stage7/steltic_openbim-0.6.0-py3-none-any.whl",
+    "bytes": 6749430,
+    "sha256": "e707301f1b4a75cac791fbc9295de56df7e6826c16460fd2f61d55905c3146b8",
+    "version": "0.6.0",
+    "frozen_additional_cases": 40,
+    "source_files_match": true
+  },
+  "tests": {
+    "openbim": {
+      "passed": 126,
+      "seconds": 313.66
+    },
+    "hub_drawing_integration": {
+      "passed": 4,
+      "seconds": 4.3
+    }
+  },
+  "original_source_files_unchanged": 812,
+  "visual_review": "All pages rendered; sampled visual inspection with exact hashes recorded per building.",
+  "analysis_or_redesign_executed": false,
+  "release_upload": "Not uploaded; separate approval is pending."
+}

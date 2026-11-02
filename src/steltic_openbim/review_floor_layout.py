@@ -1,13 +1,16 @@
 """Declared floor footprints take precedence over incomplete legacy viewer cells."""
 
 def cells(b,levels):
-    c=b.config;g=c.get('G',{});present=c.get('PRESENT',g.get('present'));nx,ny=c.get('NX'),c.get('NY')
+    c=b.config;g=c.get('G',c.get('GEO',{}));present=c.get('PRESENT',g.get('present'));nx,ny=c.get('NX'),c.get('NY')
     xs=c.get('XS',g.get('xs'));ys=c.get('YS',g.get('ys'))
     if not xs and nx is not None:xs=[i*c.get('SX',c.get('S_',336)) for i in range(nx+1)]
     if not ys and ny is not None:ys=[j*c.get('SY',c.get('S_',336)) for j in range(ny+1)]
     if b.key=='hr9':present={str(k):c['PENT'] if k==13 else c['FLANGE']+c['STEM'] for k in range(1,len(levels))}
     if b.key=='hr12':present={str(k):c['FULL'] if k<=9 else c['TOWER'] for k in range(1,len(levels))}
     if b.key in ('hr27','hr28'):present={str(k):[(i,j) for i in range(nx+1) for j in range(ny+1)] for k in range(1,len(levels))}
+    if b.key in ('hr14','hr16','hr18','hr20','hr21','hr24','hr25','hr30','hr35'):
+        from .review_next_hr import floor_cells
+        return floor_cells(b,levels)
     if not present or not xs or not ys:return b.source['viewer'].get('slabs',[])
     result=[]
     for k,z in enumerate(levels[1:],1):
@@ -21,6 +24,9 @@ def cells(b,levels):
     return result
 
 def thickness(key,k):
+    if key=='hr16' and k==3 or key=='hr21':return 1.5
+    if key=='hr35':return 1.5
+    if key=='hr20' and k==3:return 6.25
     if key=='hr9':return 4.5
     if key=='hr13':return 1.5 if k in (4,6) else 9 if k==2 else 5
     if key=='hr32':return 4 if k<=3 else 4.5

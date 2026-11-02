@@ -59,6 +59,28 @@ def draw_view(sh,scene,mode,rect,title):
     for part,face in polys:
         fill,stroke=COLORS.get(part['kind'],COLORS['plate'])
         path_polygon(sh.c,[tr(p) for p in face],fill,stroke,.7 if part['kind']=='member' else .6)
+    if mode=='front' and scene['family']=='review_transfer_truss':
+        for part in parts:
+            if part['kind']!='member':continue
+            for face in part['faces']:
+                pts=[tr(project(p)) for p in face]
+                for aa,bb in zip(pts,pts[1:]+pts[:1]):sh.line(aa,bb,'#527b91',.7,[5,3])
+        sh.text(x+12,y+35,'Member outlines behind gussets shown dashed',10)
+    if mode in ('front','iso'):
+        # Long slots are drawing geometry, independent of the illustrative bolt solid.
+        from .pilots.model import add,mul
+        for group in scene['fasteners']:
+            slot=group.get('slot')
+            if not slot:continue
+            along=unit(slot['direction']);across=unit(cross(group['axis'],along));radius=(group['diameter']+.0625)/2;half=max(0,(slot['length_in']-2*radius)/2)
+            for point in group['points']:
+                pts=[]
+                for end in (1,-1):
+                    for j in range(13):
+                        angle=(-math.pi/2 if end==1 else math.pi/2)+j*math.pi/12
+                        q=add(point,add(mul(along,end*half+radius*math.cos(angle)),mul(across,radius*math.sin(angle))));pts.append(tr(project(q)))
+                for aa,bb in zip(pts,pts[1:]+pts[:1]):sh.line(aa,bb,'#a56518',1.1)
+            pa=tr(project(group['points'][0]));sh.label(pa[0]+12,pa[1]+10,f'SLOT {slot["length_in"]:g} in [{slot["basis"]}]',10,'#a56518')
     # Transverse sections retain individual profile strips and cut fastener bodies.
     if mode=='section':
         sh.text(x+12,y+17,f"CUT {chr(65+scene['section_axis'])} AT LOCAL {'XYZ'[scene['section_axis']]}={scene['section_at']:g} in | scale 1:{denom:g}",11)
@@ -123,7 +145,9 @@ def draw_assembly(sh,scene):
     estimate=sum(max(1,len(sh.lines(t,925,font)))*line+6 for _,_,t in entries)
     if estimate>480:font=10;line=13
     for label,basis,description in entries:
-        sh.text(x,y,label,11,font='Helvetica-Bold');sh.text(x+64,y,basis,10,'#946320' if basis=='A' else '#243d49')
+        from reportlab.pdfbase.pdfmetrics import stringWidth
+        label_size=min(11,11*56/max(1,stringWidth(label,'Helvetica-Bold',11)))
+        sh.text(x,y,label,label_size,font='Helvetica-Bold');sh.text(x+64,y,basis,10,'#946320' if basis=='A' else '#243d49')
         y=sh.wrap(x+98,y,description,965,font,line)-6
     y-=9
     for note in scene['notes']:

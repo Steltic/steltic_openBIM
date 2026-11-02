@@ -110,7 +110,7 @@ def secondary(ctx):
     a.member('M1',receiver,[-24,0,-rd/2],[24,0,-rd/2]);a.member('M2',pid,[0,-24,d/2+.125],[0,24,d/2+.125],y=[1,0,0]);lap=par.get('lap',0)
     if lap:
         offset=.125+p[pid]['dimensions'].get('t',.1);a.member('M3',pid,[offset,-min(24,lap),d/2+.125],[offset,min(24,lap),d/2+.125],y=[1,0,0],description='Nested same-section lap; A ply separation')
-    web=p[pid]['dimensions'].get('t',.1017);t=.25;height=min(d-1,8);z=1
+    web=p[pid]['dimensions'].get('t',.1017);t=par.get('clip_t',.25);height=min(d-1,8);z=1
     a.box('CLIP-W',[web/2,-3,z],[t,6,height],'A','Web leg of source bolted clip');a.box('CLIP-F',[web/2,-3,.125],[4,6,t],'A','Clip foot on receiving flange')
     pts=[[web/2+t,y,z+height/2] for y in (-1.5,1.5)];a.fastener('F1',pts,[-1,0,0],.5,t+web+(.125+web if lap else 0),['CLIP-W','M2']+(['M3'] if lap else []),'2 x 1/2 in A325 web bolts / source support clip')
     a.fastener('F2',[[2,y,-p[receiver]['dimensions'].get('tf',.13)] for y in (-1.5,1.5)],[0,0,1],.5,p[receiver]['dimensions'].get('tf',.13)+.125+t,['M1','CLIP-F'],'A: two 1/2 in receiving-flange bolts; source attachment retained in specification',basis='A')
@@ -124,6 +124,7 @@ def hold_down(ctx):
     a,p,pid,par,txt=ctx.a,ctx.p,ctx.pid,ctx.params,ctx.text;dia=par['rod_diameter'];w=effective(p,pid,'width');d=effective(p,pid);t=.5
     match=re.search(r'(?:bearing|bracket) plate\s*(?:PL\s*)?'+NUMBER,txt,re.I)
     if match:t=number(match[1])
+    if par.get('bearing_thickness'):t=par['bearing_thickness']
     a.member('CHORD',pid,[0,0,-24],[0,0,24],y=[1,0,0]);rp=rod(p,dia);a.member('ROD',rp,[0,0,-30],[0,0,30],basis='S',description=f'Source story {par["story"]} tie rod dia {dia:g}')
     # Plate spans actual pack; side returns fasten to every physical outer web.
     a.box('BEARING',[-w/2-1,-d/2,-t/2],[w+2,d,t],'A','Source bearing plate thickness / A fit envelope')
@@ -142,13 +143,19 @@ def strap(ctx):
     story=re.search(r'story '+str(level)+r':\s*(.*?)(?=; story|\n|$)',txt,re.I);txt=story[1] if story else txt
     count=int(par.get('screws') or findnum(r'(\d+) No\.?\s*(?:10|12|14)',txt,10));size=int(par.get('screw_size') or findnum(r'\d+ No\.?\s*(\d+)',txt,14));dia=screw_diameter(size)
     cp=par.get('host_profile') or ctx.select(('chord','column','endwall_post','stud'));tp=ctx.select(('top_track','bottom_track','eave_strut'),cp);cd=effective(p,cp);width=p[pid]['dimensions']['width'];t=p[pid]['dimensions']['thickness'];gusset=.1017 if ctx.model['pilot'] in ('cfs14','cfs29') else .1875
+    if ctx.model['pilot']=='cfs2':gusset=.1423
     a.member('CHORD',cp,[0,0,-6],[0,0,30]);a.member('TRACK',tp,[0,0,0],[34,0,0],y=[0,0,1]);y=cd/2+.25
     a.polygon('GUSSET',[[0,y,0],[26,y,0],[26,y,14],[14,y,26],[0,y,26]],gusset,basis='A',description='Source gusset thickness / A corner outline')
     angle=math.atan2(abs(ctx.ms[0]['axis'][1][2]-ctx.ms[0]['axis'][0][2]),math.dist(ctx.ms[0]['axis'][0][:2],ctx.ms[0]['axis'][1][:2]));v=[math.cos(angle),0,math.sin(angle)];across=[-v[2],0,v[0]]
-    a.member('STRAP',pid,add(mul(v,4),[0,y+gusset+t/2,0]),add(mul(v,42),[0,y+gusset+t/2,0]),y=across);cols=max(1,min(4,int(width-1)));rows=math.ceil(count/cols)
+    a.member('STRAP',pid,add(mul(v,4),[0,y+gusset+t/2,0]),add(mul(v,42),[0,y+gusset+t/2,0]),y=across);cols=max(1,min(4,int(width-1)))
+    if ctx.model['pilot']=='cfs2':cols={3:2,4:3,5:3,8:5}[width]
+    rows=math.ceil(count/cols)
     pts=[add(mul(v,6+(i//cols)),add(mul(across,(i%cols-(cols-1)/2)),[0,y+gusset+t,0])) for i in range(count)]
     a.fastener('FS',pts,[0,-1,0],dia,t+gusset,['STRAP','GUSSET'],f'{count} No.{size} source strap-end screws'+(' stainless bi-metal' if par.get('stainless') else ''),screw=True)
-    for name,host,pts in [('FC','CHORD',[[1,y,z] for z in (2,4,6,8,10,12)]),('FT','TRACK',[[x,y,1] for x in (2,4,6,8,10,12)])]:a.fastener(name,pts,[0,-1,0],.25,gusset+.125,[host,'GUSSET'],'A gusset-to-host screws; source line/story count remains in specification',basis='A',screw=True)
+    counts={3:(5,6),4:(7,8),5:(8,10),8:(17,19)}.get(width,(6,6)) if ctx.model['pilot']=='cfs2' else (6,6)
+    for name,host,n in [('FC','CHORD',counts[0]),('FT','TRACK',counts[1])]:
+        pts=[[1+(j//12),y,2+j%12] if host=='CHORD' else [2+j%20,y,1+(j//20)] for j in range(n)]
+        a.fastener(name,pts,[0,-1,0],.25,gusset+.125,[host,'GUSSET'],f'{n} No.14 gusset-to-host screws; A local fit',basis='S' if ctx.model['pilot']=='cfs2' else 'A',screw=True)
     a.section_at=8;a.dim(mul(v,6),mul(v,6+rows-1),f'{rows-1} @ 1 in (A)',basis='A')
 
 def sheathing(ctx):

@@ -18,10 +18,10 @@ Install the drawing extra and run from the repository:
 
 ```powershell
 python -m pip install ".[drawings]"
-python tools/generate_review_batch.py --confirm-fictional --author "User-authorized fictional review inputs" --output review
+python tools/generate_review_batch.py --confirm-fictional --author "User-authorized fictional review inputs" --output review --cases hr22 cfs16 cfs8 hr8 hr9 hr10 hr11 hr12 hr13 hr27 hr28 hr32 hr33 cfs3 cfs7 cfs11 cfs13 cfs14 cfs17 cfs19 cfs26 cfs29 cfs30
 ```
 
-Use `--cases hr8 cfs17` for a subset. Original pilot packages are in `docs/stage3/pilots.zip`; the 20 additional frozen source/configuration/calculation/viewer packages are in `src/steltic_openbim/review_data/inputs.zip`. The generator needs neither source engine nor OpenSees. Exact source and answer hashes gate the authored recipes; ordinary jobs cannot silently acquire fictional answers.
+Use `--cases hr8 cfs17` for a subset. Original pilot packages are in `docs/stage3/pilots.zip`; frozen source/configuration/calculation/viewer packages for both additional batches are in `src/steltic_openbim/review_data/inputs.zip`. Omitting `--cases` now generates all 43. The generator needs neither source engine nor OpenSees. Exact source and answer hashes gate the authored recipes; ordinary jobs cannot silently acquire fictional answers.
 
 Each folder contains the PDF, physical model, assembled geometry, member index, immutable source records, adopted answers and revisioned decision state. The shared Hub request widget and CLI use the same model and renderer. JSON assembly downloads retain full notes where a PDF annotation must be shortened.
 
@@ -31,4 +31,6 @@ Every PDF page was rendered. Selected plans, sections, schedules and each connec
 
 Automated checks cover model/source/PDF hashes, unique member and sheet identifiers, positive-length axes, occurrence-to-detail mapping, dimension coverage, preserved source records and explicit fictional-answer confirmation. All 812 audited files across the 61 original jobs remain unchanged. The module suite passed 90 tests; the Hub drawing integration passed three tests. Regression tests cover assembly fit, source variants, irregular footprints, story-specific connections, provisional-query behavior and API gating. The 0.5.0 wheel includes frozen case data and renderers. All 278 links in the local review index resolve; browser preview of that local HTML file was blocked by browser policy.
 
-The next authorized batch is a further ten HR and ten CFS buildings, bringing the review scope to 43; implementation and verification of that batch follow this checkpoint.
+## Reissue with the second batch
+
+[Stage 7](../stage7/README.md) completes the next ten HR and ten CFS buildings, bringing the collection to 43. Its shared corrections reissue HR8, HR9, HR10, HR11, HR12, HR13, HR27 and HR28: CJP splices show source transition components and explicit temporary erection fit, and apex/link-end dimension endpoints follow the welded interface. Unprovided fit is marked A. The verification and visual-review records here identify the reissued PDFs and retain their prior reviewed hashes. The original 23 sets still contain 5,139 sheets; the initial 0.5.0 test counts above describe the earlier checkpoint. Current regression results are recorded in Stage 7.

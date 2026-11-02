@@ -63,6 +63,10 @@ class Context:
 
 def build_scene(model,package,c,subtype=''):
     ctx=Context(model,package,c);family=ctx.family
+    from .review_next_hr_details import FAMILIES,draw as next_hr
+    if family in FAMILIES:next_hr(ctx);return ctx.finish()
+    from .review_next_cfs_details import FAMILIES as NEXT_CFS,draw as next_cfs
+    if family in NEXT_CFS:next_cfs(ctx);return ctx.finish()
     if family in ('review_truss_node','review_truss_heel'):
         from .assembly_templates import build_scene as pilot_scene
         cc=copy.deepcopy(c);cc['detail_ref']['id']='test_roof_truss'

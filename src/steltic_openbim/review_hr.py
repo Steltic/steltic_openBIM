@@ -9,7 +9,12 @@ def shape_in(text,default=None):
     return match[0].upper() if match else default
 
 def build(b):
-    p=b.package;c=b.config;levels=p['layout_evidence']['levels_in'];level=lambda z:min(range(len(levels)),key=lambda k:abs(levels[k]-z))
+    from .review_next_hr import prepare,physical_extras,connection_extras,is_case
+    if is_case(b):prepare(b)
+    if b.key=='hr31':
+        from .review_next_hr_industrial import gable
+        gable(b);return
+    p=b.package;c=b.config;levels=c['Z'] if b.key=='hr14' else p['layout_evidence']['levels_in'];level=lambda z:min(range(len(levels)),key=lambda k:abs(levels[k]-z))
     b.levels=[(k,'BASE' if k==0 else ('ROOF' if k==len(levels)-1 else 'L'+str(k))+' TOS',z) for k,z in enumerate(levels)]
     analysis={x['id']:x for x in p['analysis']['elements']};nodes={}
     rawmembers={m['id']:m for m in b.raw['members']};column_ids=set()
@@ -26,9 +31,12 @@ def build(b):
             b.excluded.append(dict(id=m['id'],reason='Equivalent STMF beam replaced by individual truss members',profile_id=pid));continue
         if pid.startswith('BRB'):
             core=float(pid[3:]);body=max(10,math.ceil(math.sqrt(core)*2));b.custom(pid,'rhs',dict(h=body,b=body,t=.375),basis='A: supplier BRB casing envelope; source core area retained',core_area_in2=core)
+        elif b.key=='hr16' and re.fullmatch(r'W\d+X\d+B',pid):
+            b.profile(pid[:-1]);pid=pid[:-1]
         else:b.profile(pid)
         a=analysis.get(m['id'],{});rec=member_records(pid,kind,k)
         made=b.member(m['id'],pid,kind,aa,bb,k,records=[r for r in rec if r],local_y=m.get('local_y'),source=m['id'],analysis_ids=m.get('analysis_ids',[]),source_forces=a.get('source_schedule',{}))
+        if b.key=='hr16' and m['profile_id'].endswith('B'):made['boxing_thickness_in']=1;made['source_boxed_profile']=m['profile_id']
         if b.key=='hr32':made['phase']='existing A36' if max(aa[2],bb[2])<=468.01 else 'new A992'
         if kind=='column':column_ids.add(made['id'])
     # Floor cells preserve real voids and setbacks; the crane bracket level is not a floor.
@@ -49,11 +57,15 @@ def build(b):
         for panel in list(b.panels):
             if panel['kind']!='floor':continue
             pts=panel['vertices'];z=pts[0][2];k=panel['level'];xs=[v[0] for v in pts];ys=[v[1] for v in pts];lo=[min(xs),min(ys)];hi=[max(xs),max(ys)];other=1-span_axis
+            if isinstance(deck,dict):span_axis=0 if deck.get(str(k),deck.get(k,'X'))=='Y' else 1;other=1-span_axis
             records=[r for r in rawmembers if 'infill' in r]
             candidates=[r for r in records if ('roof' in r)==(k==len(levels)-1)] or records
             if b.key=='hr9':want='infill-roof-' if k==13 else ('infill-L12-' if k==12 else 'infill-floor-');candidates=[r for r in records if r.startswith(want)]
             if b.key=='hr13':want='mezzanine' if k==2 else ('office-roof' if k==6 else 'office');candidates=[r for r in records if want in r]
             if b.key=='hr32':candidates=[r for r in records if ('existing' in r if k<=3 else f'L{k}-' in r)]
+            if b.key=='hr16' and k==3:candidates=['floor-W16X36'];span_axis=0;other=1
+            if b.key=='hr20' and k in (1,2):candidates=[r for r in records if f'level{k+1}-' in r]
+            if b.key=='hr35':candidates=[r for r in records if 'W12X16' in r]
             if b.key=='hr8' and k==5 and lo[1]>=720:candidates=[r for r in records if 'terrace' in r]
             record=candidates[0] if candidates else None;pid=shape_in(record,'W18X35');b.profile(pid)
             step=spacing.get(str(k),spacing.get(k,100)) if isinstance(spacing,dict) else spacing
@@ -63,6 +75,10 @@ def build(b):
                 ends=interval(pts,station,other,span_axis)
                 if not ends or ends[1]-ends[0]<.1:station+=step;continue
                 aa=[0,0,z];bb=aa.copy();aa[other]=bb[other]=station;aa[span_axis],bb[span_axis]=ends
+                if b.key=='hr21':
+                    from .review_cfs import simple_truss
+                    simple_truss(b,'ROOF-JOIST-'+panel['id']+'-'+str(station),span_axis,station,*ends,z-36,33,k,'2X600S162-97','2X362S162-68',60,flat=True)
+                    station+=step;continue
                 if b.key=='hr13' and k==4:
                     from .review_cfs import simple_truss
                     simple_truss(b,'WORKSHOP-JOIST-'+panel['id']+'-'+str(station),span_axis,station,*ends,z-18,16,k,'2X250S162-68','2X250S137-54',30,flat=True)
@@ -71,16 +87,18 @@ def build(b):
                 if ident not in existing:
                     m=b.member('INF-'+panel['id']+'-'+str(round(station,3)),pid,'infill',aa,bb,k,'A',records=[b.record('members',record)] if record else [],setout_basis='Source spacing, adopted datum/end fitting');existing.add(ident)
                 station+=step
-    if b.key=='hr8':ebf(b)
+    if b.key in ('hr8','hr14'):ebf(b)
     if b.key=='hr9':plate_walls(b,levels);rocking_posts(b,levels)
     if b.key=='hr27':core_walls(b,levels)
     if b.key=='hr28':stmf(b,levels)
     if b.key=='hr33':crane(b)
     if b.key=='hr32':retrofit(b)
     if b.key=='hr13':b.note('WORKSHOP-JOISTS','S: workshop roof open-web joists at 75 in centres; source delegated supplier design requirements remain in the source records. A: the displayed 18 in nominal envelope, paired-channel chords/webs, panel nodes and bearing seats are fictional supplier coordination geometry, not a selected or verified SJI product.')
+    if is_case(b):physical_extras(b,levels)
     connect_primary(b,levels)
     from .review_hr_complements import apply
     apply(b,levels)
+    if is_case(b):connection_extras(b,levels)
     # Keep the drawing datum and every secondary cutback explicit.
     b.note('DATUM','A: source floor nodes are adopted as top-of-steel datums; physical beam axes are lowered by half their actual section depth. Added infills follow source spacing. Local end cutbacks use the connected support face; schedules report workline lengths.')
     for m in b.members:
@@ -106,6 +124,7 @@ def brace_record(b,m,raw):
     pid=m['profile_id'];k=m['level'];aa,dd=m['axis'];along=0 if abs(dd[0]-aa[0])>abs(dd[1]-aa[1]) else 1;normal=1-along
     frame=None
     for f in b.config.get('FRAMES',[]):
+        if not isinstance(f,dict):continue
         step=b.config.get('SY' if normal==1 else 'SX',336);span=b.config.get('SX' if along==0 else 'SY',336)
         if f['dir']=='XY'[along] and abs(aa[normal]-f['line']*step)<.1 and f['bay']*span-.1<=sum(q[along] for q in m['axis'])/2<=(f['bay']+1)*span+.1 and k in f['levels']:
             frame=f['name'].split()[0];break
@@ -135,16 +154,18 @@ def brace_record(b,m,raw):
     return max(candidates,key=score) if candidates else None,frame
 
 def connect_primary(b,levels):
+    from .review_next_hr import is_case as is_next_case
     existing={mid for c in b.connections if c['detail_ref']['id'] not in ('review_retrofit_beam','review_retrofit_column','review_ebf_link') for mid in c['member_ids']};raw={r['id']:r for r in b.raw['connections']}
     columns=[m for m in b.members if m['kind']=='column']
     for m in list(b.members):
         pid=m['profile_id'];k=m['level'];kind=m['kind'];members=[]
-        if m['id'] in existing and kind!='column':continue
+        if m['id'] in existing and kind!='column' and not (is_next_case(b) and kind in ('brace','beam','girder','moment_beam','infill')):continue
         if kind=='column':
             low=min(m['axis'],key=lambda p:p[2]);bases=[r for r in raw if 'base-' in r and r.endswith('-'+pid)]
-            if low[2]<.1:
+            founded=low[2]<.1 or b.key=='hr14' and not any(mm['id']!=m['id'] and max(q[2] for q in mm['axis'])<=low[2]+.1 and math.dist(max(mm['axis'],key=lambda q:q[2]),low)<.1 for mm in columns)
+            if founded:
                 brace_column=any(mm['kind']=='brace' and any(math.dist(q[:2],low[:2])<.1 for q in mm['axis']) for mm in b.members)
-                preferred='lateral_col' if brace_column or m['id'] in existing or b.key=='hr33' or pid.startswith('BOX') else 'gravity_col'
+                preferred='lateral_col' if brace_column or m['id'] in existing and b.key!='hr35' or b.key=='hr33' or pid.startswith('BOX') else 'gravity_col'
                 rid=next((r for r in bases if preferred in r),bases[0] if bases else None)
                 refs=[b.record('connections',rid)] if rid else []
                 extra=b.record('connections','conn-column-base-segment-'+pid)
@@ -161,8 +182,11 @@ def connect_primary(b,levels):
                 if b.key=='hr32' and k==4:preferred=next((r for r in choices if 'lateral_col' in r),preferred)
                 rid=transitions[0] if transitions else preferred if preferred in pair_records else pair_records[0] if pair_records else (preferred or choices[0]) if choices else rid;txt=str(raw.get(rid,{}))
                 changes_profile=below and below['profile_id']!=pid
-                no_splice=any(w in txt.lower() for w in ('no column splice','no field splice'))
-                if rid and not no_splice and (changes_profile or k%2==1 or 'gravity' in txt.lower() or b.key=='hr32' and k==4):
+                no_splice=any(w in txt.lower() for w in (('no column splice','no field splice','one-piece','single-story','single length','no splice') if b.key in ('hr14','hr16','hr18','hr20','hr21','hr24','hr25','hr30','hr35') else ('no column splice','no field splice')))
+                school_splice=b.key=='hr16' and 'classroom only' in txt.lower() and abs(low[2]-288)<.1 and low[0]<=1008 and low[1]<=672
+                if b.key=='hr16' and 'classroom only' in txt.lower():no_splice=not school_splice
+                initial_ocbf_splice=b.key=='hr18' and k==2 and pid=='W14X145'
+                if rid and not no_splice and (changes_profile or k%2==1 or 'gravity' in txt.lower() or b.key=='hr32' and k==4 or school_splice or initial_ocbf_splice):
                     equivalent=[r for r in pair_records if raw[r].get('components')==raw[rid].get('components')]
                     refs=[b.record('connections',r) for r in dict.fromkeys([rid]+equivalent)]
                     pp=add(low,[0,0,48]);b.connection(m['id']+':splice','review_splice',pp,[m]+([below] if below else []),refs,parameters={'splice_offset_in':48})
@@ -174,7 +198,7 @@ def connect_primary(b,levels):
             rid,frame=brace_record(b,m,raw)
             for side,point in enumerate(m['axis']):
                 col=nearest(b,point,('column',),(m['id'],));beam=nearest(b,point,('beam','moment_beam','girder'),(m['id'],));others=[m]+([col] if col else [])+([beam] if beam else [])
-                joint='base' if point[2]<.1 else 'corner' if col else 'link_end' if b.key=='hr8' else 'apex'
+                joint='base' if point[2]<.1 or b.key=='hr14' and col and point[2]<=min(q[2] for q in col['axis'])+.1 and not any(mm['kind']=='column' and max(q[2] for q in mm['axis'])<point[2]+.1 and math.dist(max(mm['axis'],key=lambda q:q[2]),point)<.1 for mm in b.members) else 'corner' if col else 'link_end' if b.key in ('hr8','hr14') else 'apex'
                 refs=[b.record('connections',rid)] if rid else []
                 if b.key=='hr10':
                     extra=b.record('connections','conn-brace-base-'+pid) if joint=='base' else b.record('connections','conn-brace-apex-'+beam['profile_id']) if joint=='apex' and beam else None
@@ -218,11 +242,12 @@ def connect_primary(b,levels):
             b.connection(m['id']+':'+str(side),family,point,[m]+([support] if support else []),refs,parameters={'moment':moment,'collector':abs(axial)>10,'existing':b.key=='hr32' and k<=3})
 
 def ebf(b):
+    length=b.config.get('E_LINK',36)
     for m in b.members:
-        if m['kind']!='beam' or abs(math.dist(*m['axis'])-36)>.1:continue
+        if m['kind']!='beam' or abs(math.dist(*m['axis'])-length)>.1:continue
         pid=m['profile_id'];rid=b.record('members','floor-'+pid) or b.record('members','roof-'+pid)
-        b.connection('LINK-'+m['id'],'review_ebf_link',[(a+d)/2 for a,d in zip(*m['axis'])],[m],[rid] if rid else [],parameters={'link_length':36})
-        m['protected_zone']='Entire 36 in shear link; no attachment inside except specified stiffeners'
+        b.connection('LINK-'+m['id'],'review_ebf_link',[(a+d)/2 for a,d in zip(*m['axis'])],[m],[rid] if rid else [],parameters={'link_length':length})
+        m['protected_zone']=f'Entire {length:g} in shear link; no attachment inside except specified stiffeners'
 
 def plate_walls(b,levels):
     for name,(direction,line,bay,first,last,count) in b.config['PIERS'].items():
