@@ -1,0 +1,20 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "steltic-openbim"
+version = "0.1.0"
+description = "Steltic physical-data contract and validation for design drawings and IFC"
+requires-python = ">=3.10"
+dependencies = ["jsonschema>=4.23"]
+
+[project.scripts]
+steltic-openbim = "steltic_openbim.__main__:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/steltic_openbim"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

@@ -1,0 +1,103 @@
+{
+  "HR": {
+    "buildings": 36,
+    "statuses": {
+      "needs_input": 36
+    },
+    "replay_modes": {
+      "replayed_saved_model": 21,
+      "match": 15
+    },
+    "analysis_elements": 27683,
+    "physical_member_candidates": 27363,
+    "physical_panel_candidates": 0,
+    "analysis_only_entities": 320,
+    "connection_design_records": 1746,
+    "all_design_records": 2928,
+    "package_bytes": 77362674
+  },
+  "CFS": {
+    "buildings": 25,
+    "statuses": {
+      "needs_input": 25
+    },
+    "replay_modes": {
+      "native_builder": 10,
+      "not_applicable": 15
+    },
+    "analysis_elements": 3029,
+    "physical_member_candidates": 665,
+    "physical_panel_candidates": 88,
+    "analysis_only_entities": 0,
+    "connection_design_records": 332,
+    "all_design_records": 8236,
+    "package_bytes": 19405961
+  },
+  "findings": [
+    {
+      "code": "assembly_mapping",
+      "severity": "needs_input",
+      "buildings": 61
+    },
+    {
+      "code": "connection_mapping",
+      "severity": "needs_input",
+      "buildings": 60
+    },
+    {
+      "code": "coverage_connections",
+      "severity": "needs_input",
+      "buildings": 61
+    },
+    {
+      "code": "coverage_openings",
+      "severity": "needs_input",
+      "buildings": 61
+    },
+    {
+      "code": "coverage_primary_members",
+      "severity": "needs_input",
+      "buildings": 61
+    },
+    {
+      "code": "coverage_secondary_members",
+      "severity": "needs_input",
+      "buildings": 61
+    },
+    {
+      "code": "empty_model",
+      "severity": "needs_input",
+      "buildings": 14
+    },
+    {
+      "code": "existing_shell_scope",
+      "severity": "needs_input",
+      "buildings": 1
+    },
+    {
+      "code": "legacy_configuration_dependency",
+      "severity": "needs_input",
+      "buildings": 21
+    },
+    {
+      "code": "member_placement",
+      "severity": "needs_input",
+      "buildings": 46
+    },
+    {
+      "code": "panel_placement",
+      "severity": "needs_input",
+      "buildings": 1
+    },
+    {
+      "code": "physical_idealization",
+      "severity": "needs_input",
+      "buildings": 1
+    },
+    {
+      "code": "wall_segment_positions",
+      "severity": "needs_input",
+      "buildings": 14
+    }
+  ]
+}

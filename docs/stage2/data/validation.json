@@ -1,0 +1,20 @@
+{
+  "source_preservation": {
+    "baseline_files": 812,
+    "current_files": 812,
+    "baseline_bytes": 197184958,
+    "modified": [],
+    "missing": [],
+    "added": [],
+    "unchanged": true
+  },
+  "shared_contract_byte_identical": {
+    "bim_contract.py": true,
+    "bim_package.schema.json": true
+  },
+  "packages_independently_validated": 61,
+  "source_record_data_unchanged": true,
+  "source_fingerprints_match": true,
+  "engine_fingerprints_match": true,
+  "all_analysis_executed_flags_false": true
+}

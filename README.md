@@ -4,7 +4,14 @@ Drawing and IFC module planned for Steltic Hub. The first release targets dimens
 
 ## Current status
 
-Stage 1 is a source-data audit of all **61 supplied gold-standard buildings: 36 HR and 25 CFS**. No drawing engine, IFC exporter or Hub integration has been implemented.
+Stage 2 implements **HR/CFS physical-data export, legacy-job replay and an engine-independent consumer**. All **61 supplied gold-standard buildings (36 HR, 25 CFS)** exported successfully, with all 812 audited source files unchanged. Their unresolved physical details remain explicitly flagged. New source-module design jobs require physical declarations before completion.
+
+- [Stage 2 results, limitations and validation](docs/stage2/README.md)
+- [All 61 replay packages](docs/stage2/bim_packages.zip)
+- [Physical-data contract](contracts/BIM_EXPORT.md)
+- [Coverage of every building](docs/stage2/data/building_coverage.csv)
+
+The drawing renderer, IFC export and Hub integration follow this data stage. The original Stage 1 audit remains available:
 
 - [Audit findings, scope and next tasks](docs/stage1/README.md)
 - [Review workbook](docs/stage1/steltic_openBIM_stage1_audit.xlsx)
@@ -16,6 +23,8 @@ The register distinguishes extracting existing information, locating physical oc
 
 ## Integration principle
 
-Read existing HR/CFS outputs and keep drawing-specific supplements in this repository or an openBIM project workspace. Keep the supplied calculation packages immutable. Stage 1 changed neither upstream module nor Hub.
+Consume a versioned physical-data package emitted by HR/CFS during a new job. Replay legacy jobs without analysis or redesign, keeping the supplied calculation packages immutable and recording missing data explicitly. Stage 1 changed neither source module; Stage 2 adds exporters in their feature branches. Hub remains unchanged.
+
+Install this repository with `pip install .`, then use `steltic-openbim validate path/to/bim_package.json`. The validator has no OpenSees or source-engine dependency. Consumers must recompute readiness; the package's stored status is informational.
 
 The audit scripts in [tools/stage1](tools/stage1/) operate on supplied files without running job configurations or design engines. They are audit utilities, not a production drawing parser.

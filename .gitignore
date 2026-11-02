@@ -2,6 +2,8 @@ work/
 outputs/
 node_modules/
 __pycache__/
+.pytest_cache/
 *.pyc
+dist/
 .venv/
 *.xlsx.inspect.ndjson

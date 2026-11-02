@@ -1,0 +1,57 @@
+{
+  "tests_passed": 160,
+  "adapter_specific_skips": 4,
+  "suites": [
+    {
+      "module": "HR",
+      "command": "pytest tests/test_bim_export.py tests/test_hr_gates.py -q",
+      "passed": 59,
+      "skipped": 2
+    },
+    {
+      "module": "HR",
+      "command": "pytest tests/test_build_only.py -q",
+      "passed": 24,
+      "skipped": 0,
+      "note": "Windows sandbox prevents event-loop loopback socket; passed with loopback permitted. Existing Starlette/httpx deprecation warning."
+    },
+    {
+      "module": "CFS",
+      "command": "pytest tests/test_bim_export.py tests/test_cfs_gates.py tests/test_cfs_wall_loads.py -q",
+      "passed": 70,
+      "skipped": 2
+    },
+    {
+      "module": "openBIM",
+      "command": "pytest -q",
+      "passed": 7,
+      "skipped": 0
+    }
+  ],
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "dependencies": {
+    "openseespy": "3.8.0.0",
+    "jsonschema": "4.26.0",
+    "numpy": "2.5.2",
+    "scipy": "1.18.0",
+    "pytest": "9.1.1"
+  },
+  "replay_commits": {
+    "HR": "00c51bd5dcafb860b10ddf7bbe4c029f21fcbd81",
+    "CFS": "b96a36c9ea65f139e7dec4516b108ceeec9f8213"
+  },
+  "pull_requests": {
+    "HR": "https://github.com/Steltic/steltic/pull/95",
+    "CFS": "https://github.com/Steltic/steltic_cfs/pull/45"
+  },
+  "wheel_builds": [
+    "HR",
+    "CFS",
+    "openBIM"
+  ],
+  "installed_wheel_smoke": {
+    "HR_replay_require_ready": "PASS",
+    "CFS_replay_require_ready": "PASS",
+    "openBIM_validate": "PASS"
+  }
+}
