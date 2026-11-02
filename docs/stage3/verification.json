@@ -1,0 +1,81 @@
+{
+  "gold_source_files_verified": 812,
+  "gold_source_bytes_verified": 197184958,
+  "gold_buildings": 61,
+  "changed_gold_files": [],
+  "contract_sha256": {
+    "bim_contract.py": "c9bad714b1880fe3e916405556a5f6219a306e9b43bf11c363ed74d600d9ca8d",
+    "bim_package.schema.json": "502052eaeceaa6e328a78305f8531b3665f4c8e6e30ee9f46c7fb8ec6f8b8efe"
+  },
+  "pilots": {
+    "hr22": {
+      "model_sha256": "f134698729e8d92a782720f6482a21da48e32ce5f4fbf92e12257df27f8c13fc",
+      "deterministic_rebuild": true,
+      "source_freshness_checked": true,
+      "status": "needs_input",
+      "design_records_preserved": 53,
+      "counts": {
+        "members": 741,
+        "panels": 12,
+        "openings": 0,
+        "profiles": 15,
+        "materials": 5,
+        "joints": 1668,
+        "connections": 1633,
+        "interfaces": 4
+      },
+      "coordination_items": 6
+    },
+    "cfs16": {
+      "model_sha256": "14b7af0e1a74aa0e5ab8889cc49f593ecefecdd9696bf683197941b03831db6f",
+      "deterministic_rebuild": true,
+      "source_freshness_checked": true,
+      "status": "needs_input",
+      "design_records_preserved": 149,
+      "counts": {
+        "members": 1124,
+        "panels": 2,
+        "openings": 2,
+        "profiles": 13,
+        "materials": 11,
+        "joints": 2179,
+        "connections": 2179,
+        "interfaces": 2
+      },
+      "coordination_items": 5
+    },
+    "cfs8": {
+      "model_sha256": "1c7a843165fc0df5f442aa561ba5707dec1996f4daa5bb91f9f0ec6248337159",
+      "deterministic_rebuild": true,
+      "source_freshness_checked": true,
+      "status": "needs_input",
+      "design_records_preserved": 228,
+      "counts": {
+        "members": 12404,
+        "panels": 277,
+        "openings": 0,
+        "profiles": 83,
+        "materials": 9,
+        "joints": 25080,
+        "connections": 25102,
+        "interfaces": 3
+      },
+      "coordination_items": 7
+    }
+  },
+  "tests": {
+    "openbim": {
+      "passed": 22
+    },
+    "hr": {
+      "passed": 38,
+      "skipped": 2
+    },
+    "cfs": {
+      "passed": 38,
+      "skipped": 2
+    }
+  },
+  "skip_reason": "Tests specific to the other source engine",
+  "analysis_or_capacity_design_executed": false
+}

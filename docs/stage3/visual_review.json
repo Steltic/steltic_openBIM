@@ -1,0 +1,70 @@
+{
+  "reviewed_on": "2026-11-02",
+  "reviewer": "Codex visual and data review",
+  "pilots": {
+    "hr22": {
+      "model_sha256": "f134698729e8d92a782720f6482a21da48e32ce5f4fbf92e12257df27f8c13fc",
+      "images_inspected": {
+        "01_overview.png": "7fd365e9cdc0c2cd84fec0550ca75e2b6deb1f874cc3bcc5ae059cfdb5adbecc",
+        "02_plan.png": "012abfd1ba193f9e430f78dff17b9e1aebb02c2381c760692f8830d7c80c6ff8",
+        "03_connection.png": "ac62bd39d4bdd1c8bdbc2043e68444afbe63e40636d85694a072e77b0840b3de"
+      },
+      "observations": [
+        "Six framing levels and 180 by 120 ft plan visible; 30 ft grid and 10 ft infills retained.",
+        "Physical column pieces extend through story workpoints; 48 in-above-floor splices and embedded bases checked numerically.",
+        "Connection close-up shows RBS flange reductions, continuous column, split continuity plates and shear-plate orientation.",
+        "Original member record, source-conflict modal and exported question download inspected in the browser."
+      ],
+      "browser_console_errors": [],
+      "status": "review_pass_with_explicit_coordination_items"
+    },
+    "cfs16": {
+      "model_sha256": "14b7af0e1a74aa0e5ab8889cc49f593ecefecdd9696bf683197941b03831db6f",
+      "images_inspected": {
+        "01_overview.png": "18346d5fd6d808861036212ad7dc884aff711c221180c707c5bc5c78d3f3b43d",
+        "02_plan.png": "df2e42e3b21b15d722b0d32d0ddc2bef10eab30ce4a31aea51ee92f5eaa6816a",
+        "03_connection.png": "bba2473a2a345b3d4a54dd9110dea9b52f27b9c665a8b584e4636258bd0a14bb",
+        "04_endwall.png": "18c8a449a4dc79c5d45664f102d1fac9e8366b2a17207063226730cd2781b165"
+      },
+      "observations": [
+        "All 23 portal stations and end bracing shown; roof purlins span the full 275 ft length.",
+        "End-wall elevation has a clear 14 by 16 ft overhead door, with jambs at 23 and 37 ft and interrupted low girts.",
+        "Knee close-up shows four-channel profile, source bolt groups and explicit gusset envelopes.",
+        "Browser front view, layer filtering and connection X-ray checked."
+      ],
+      "browser_console_errors": [],
+      "status": "review_pass_with_explicit_coordination_items"
+    },
+    "cfs8": {
+      "model_sha256": "1c7a843165fc0df5f442aa561ba5707dec1996f4daa5bb91f9f0ec6248337159",
+      "images_inspected": {
+        "01_overview.png": "158875690a36426c90a33215d23c7e02a1e3e7956552e356f924dd1b15b7ea6d",
+        "02_plan.png": "b63b6856b0408ababcf070b15ec7e0dd62e991bfc0f8f4884fbf2d262477e23e",
+        "03_connection.png": "7f91e513f964efa43aec9c62b98c765380813da95edc48f29ce610862b027662",
+        "04_roof.png": "b159fce23b5ed9b05b36d8d46703417a6fd004fd17af7d13a378da2e79c75133"
+      },
+      "observations": [
+        "True T footprint and natural wall positions visible; full roof envelope lies inside overview bounds.",
+        "Party walls and braced-bay locations inspected in first-level plan with secondary framing filtered.",
+        "Connection close-up shows chord pack, rod, bearing plate, tracks and floor framing; floor/chord conflicts remain visible.",
+        "Roof plan shows a clear delegated valley/girder-truss zone without invented crossing truss internals.",
+        "Browser connection X-ray and model navigation checked."
+      ],
+      "browser_console_errors": [],
+      "status": "review_pass_with_explicit_coordination_items"
+    }
+  },
+  "corrections_made": [
+    "Included roof vertices in image and viewer fit bounds.",
+    "Corrected CFS top/bottom track opening direction and channel outer-depth preview.",
+    "Corrected shear-plate handedness, split continuity plates around the column web and centred gusset envelopes in the web gap.",
+    "Assigned source material grades to 43 mil CFS and HSS door headers.",
+    "Added scheduled rim pieces, bridging anchors and required hospital bottom-flange-brace attachment stations.",
+    "Used transparent connection context to expose internal parts."
+  ],
+  "limits": [
+    "Eleven selected whole-building, plan and detail views inspected, not every individual connection from every angle.",
+    "No general collision-free, capacity, fabrication or construction-release certification.",
+    "The 18 unresolved coordination items and delegated interfaces remain open; no owner or engineer approval is implied."
+  ]
+}

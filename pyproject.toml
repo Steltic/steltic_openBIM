@@ -4,10 +4,14 @@ build-backend = "hatchling.build"
 
 [project]
 name = "steltic-openbim"
-version = "0.1.0"
+version = "0.2.0"
 description = "Steltic physical-data contract and validation for design drawings and IFC"
 requires-python = ">=3.10"
 dependencies = ["jsonschema>=4.23"]
+
+[project.optional-dependencies]
+review = ["matplotlib>=3.9"]
+test = ["pytest>=8"]
 
 [project.scripts]
 steltic-openbim = "steltic_openbim.__main__:main"

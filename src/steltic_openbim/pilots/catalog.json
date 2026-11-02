@@ -1,0 +1,501 @@
+{
+  "W14X120": {
+    "family": "i",
+    "dimensions": {
+      "d": 14.5,
+      "bf": 14.7,
+      "tf": 0.94,
+      "tw": 0.59
+    },
+    "basis": "HR steel_engine/sections.props; frozen replay catalogue"
+  },
+  "W14X61": {
+    "family": "i",
+    "dimensions": {
+      "d": 13.9,
+      "bf": 10.0,
+      "tf": 0.645,
+      "tw": 0.375
+    },
+    "basis": "HR steel_engine/sections.props; frozen replay catalogue"
+  },
+  "W14X90": {
+    "family": "i",
+    "dimensions": {
+      "d": 14.0,
+      "bf": 14.5,
+      "tf": 0.71,
+      "tw": 0.44
+    },
+    "basis": "HR steel_engine/sections.props; frozen replay catalogue"
+  },
+  "W18X40": {
+    "family": "i",
+    "dimensions": {
+      "d": 17.9,
+      "bf": 6.02,
+      "tf": 0.525,
+      "tw": 0.315
+    },
+    "basis": "HR steel_engine/sections.props; frozen replay catalogue"
+  },
+  "W24X62": {
+    "family": "i",
+    "dimensions": {
+      "d": 23.7,
+      "bf": 7.04,
+      "tf": 0.59,
+      "tw": 0.43
+    },
+    "basis": "HR steel_engine/sections.props; frozen replay catalogue"
+  },
+  "W27X84": {
+    "family": "i",
+    "dimensions": {
+      "d": 26.7,
+      "bf": 10.0,
+      "tf": 0.64,
+      "tw": 0.46
+    },
+    "basis": "HR steel_engine/sections.props; frozen replay catalogue"
+  },
+  "W30X132": {
+    "family": "i",
+    "dimensions": {
+      "d": 30.3,
+      "bf": 10.5,
+      "tf": 1.0,
+      "tw": 0.615
+    },
+    "basis": "HR steel_engine/sections.props; frozen replay catalogue"
+  },
+  "W30X99": {
+    "family": "i",
+    "dimensions": {
+      "d": 29.7,
+      "bf": 10.5,
+      "tf": 0.67,
+      "tw": 0.52
+    },
+    "basis": "HR steel_engine/sections.props; frozen replay catalogue"
+  },
+  "W33X130": {
+    "family": "i",
+    "dimensions": {
+      "d": 33.1,
+      "bf": 11.5,
+      "tf": 0.855,
+      "tw": 0.58
+    },
+    "basis": "HR steel_engine/sections.props; frozen replay catalogue"
+  },
+  "W36X194": {
+    "family": "i",
+    "dimensions": {
+      "d": 36.5,
+      "bf": 12.1,
+      "tf": 1.26,
+      "tw": 0.765
+    },
+    "basis": "HR steel_engine/sections.props; frozen replay catalogue"
+  },
+  "W36X231": {
+    "family": "i",
+    "dimensions": {
+      "d": 36.5,
+      "bf": 16.5,
+      "tf": 1.26,
+      "tw": 0.76
+    },
+    "basis": "HR steel_engine/sections.props; frozen replay catalogue"
+  },
+  "W36X256": {
+    "family": "i",
+    "dimensions": {
+      "d": 37.4,
+      "bf": 12.2,
+      "tf": 1.73,
+      "tw": 0.96
+    },
+    "basis": "HR steel_engine/sections.props; frozen replay catalogue"
+  },
+  "W36X302": {
+    "family": "i",
+    "dimensions": {
+      "d": 37.3,
+      "bf": 16.7,
+      "tf": 1.68,
+      "tw": 0.945
+    },
+    "basis": "HR steel_engine/sections.props; frozen replay catalogue"
+  },
+  "W36X361": {
+    "family": "i",
+    "dimensions": {
+      "d": 38.0,
+      "bf": 16.7,
+      "tf": 2.01,
+      "tw": 1.12
+    },
+    "basis": "HR steel_engine/sections.props; frozen replay catalogue"
+  },
+  "W36X395": {
+    "family": "i",
+    "dimensions": {
+      "d": 38.4,
+      "bf": 16.8,
+      "tf": 2.2,
+      "tw": 1.22
+    },
+    "basis": "HR steel_engine/sections.props; frozen replay catalogue"
+  },
+  "1200S200-68": {
+    "family": "channel",
+    "dimensions": {
+      "d": 12.0,
+      "b": 2.0,
+      "lip": 0.625,
+      "t": 0.0713,
+      "r": 0.1069
+    },
+    "lip_angle_deg": 90.0,
+    "profile_origin": "web midline at mid-depth",
+    "basis": "CFS steel_engine/cfs_sections.gross; track fitting allowance and design thickness included",
+    "Fy": 50.0
+  },
+  "1200S250-97": {
+    "family": "channel",
+    "dimensions": {
+      "d": 12.0,
+      "b": 2.5,
+      "lip": 0.625,
+      "t": 0.1017,
+      "r": 0.1525
+    },
+    "lip_angle_deg": 90.0,
+    "profile_origin": "web midline at mid-depth",
+    "basis": "CFS steel_engine/cfs_sections.gross; track fitting allowance and design thickness included",
+    "Fy": 50.0
+  },
+  "1200T200-54": {
+    "family": "channel",
+    "dimensions": {
+      "d": 12.1981,
+      "b": 2.0,
+      "lip": 0.0,
+      "t": 0.0566,
+      "r": 0.0849
+    },
+    "lip_angle_deg": 90.0,
+    "profile_origin": "web midline at mid-depth",
+    "basis": "CFS steel_engine/cfs_sections.gross; track fitting allowance and design thickness included",
+    "Fy": 50.0
+  },
+  "1400S300-118": {
+    "family": "channel",
+    "dimensions": {
+      "d": 14.0,
+      "b": 3.0,
+      "lip": 0.625,
+      "t": 0.1242,
+      "r": 0.1863
+    },
+    "lip_angle_deg": 90.0,
+    "profile_origin": "web midline at mid-depth",
+    "basis": "CFS steel_engine/cfs_sections.gross; track fitting allowance and design thickness included",
+    "Fy": 50.0
+  },
+  "150U050-54": {
+    "family": "channel",
+    "dimensions": {
+      "d": 1.5,
+      "b": 0.5,
+      "lip": 0.0,
+      "t": 0.0566,
+      "r": 0.0849
+    },
+    "lip_angle_deg": 90.0,
+    "profile_origin": "web midline at mid-depth",
+    "basis": "CFS steel_engine/cfs_sections.gross; track fitting allowance and design thickness included",
+    "Fy": 33.0
+  },
+  "362S162-43": {
+    "family": "channel",
+    "dimensions": {
+      "d": 3.62,
+      "b": 1.625,
+      "lip": 0.5,
+      "t": 0.0451,
+      "r": 0.0712
+    },
+    "lip_angle_deg": 90.0,
+    "profile_origin": "web midline at mid-depth",
+    "basis": "CFS steel_engine/cfs_sections.gross; track fitting allowance and design thickness included",
+    "Fy": 33.0
+  },
+  "600S162-43": {
+    "family": "channel",
+    "dimensions": {
+      "d": 6.0,
+      "b": 1.625,
+      "lip": 0.5,
+      "t": 0.0451,
+      "r": 0.0712
+    },
+    "lip_angle_deg": 90.0,
+    "profile_origin": "web midline at mid-depth",
+    "basis": "CFS steel_engine/cfs_sections.gross; track fitting allowance and design thickness included",
+    "Fy": 33.0
+  },
+  "600S162-54": {
+    "family": "channel",
+    "dimensions": {
+      "d": 6.0,
+      "b": 1.625,
+      "lip": 0.5,
+      "t": 0.0566,
+      "r": 0.0849
+    },
+    "lip_angle_deg": 90.0,
+    "profile_origin": "web midline at mid-depth",
+    "basis": "CFS steel_engine/cfs_sections.gross; track fitting allowance and design thickness included",
+    "Fy": 50.0
+  },
+  "600S162-68": {
+    "family": "channel",
+    "dimensions": {
+      "d": 6.0,
+      "b": 1.625,
+      "lip": 0.5,
+      "t": 0.0713,
+      "r": 0.1069
+    },
+    "lip_angle_deg": 90.0,
+    "profile_origin": "web midline at mid-depth",
+    "basis": "CFS steel_engine/cfs_sections.gross; track fitting allowance and design thickness included",
+    "Fy": 50.0
+  },
+  "600S200-68": {
+    "family": "channel",
+    "dimensions": {
+      "d": 6.0,
+      "b": 2.0,
+      "lip": 0.625,
+      "t": 0.0713,
+      "r": 0.1069
+    },
+    "lip_angle_deg": 90.0,
+    "profile_origin": "web midline at mid-depth",
+    "basis": "CFS steel_engine/cfs_sections.gross; track fitting allowance and design thickness included",
+    "Fy": 50.0
+  },
+  "600S200-97": {
+    "family": "channel",
+    "dimensions": {
+      "d": 6.0,
+      "b": 2.0,
+      "lip": 0.625,
+      "t": 0.1017,
+      "r": 0.1525
+    },
+    "lip_angle_deg": 90.0,
+    "profile_origin": "web midline at mid-depth",
+    "basis": "CFS steel_engine/cfs_sections.gross; track fitting allowance and design thickness included",
+    "Fy": 50.0
+  },
+  "600T125-43": {
+    "family": "channel",
+    "dimensions": {
+      "d": 6.1614,
+      "b": 1.25,
+      "lip": 0.0,
+      "t": 0.0451,
+      "r": 0.0712
+    },
+    "lip_angle_deg": 90.0,
+    "profile_origin": "web midline at mid-depth",
+    "basis": "CFS steel_engine/cfs_sections.gross; track fitting allowance and design thickness included",
+    "Fy": 33.0
+  },
+  "600T125-54": {
+    "family": "channel",
+    "dimensions": {
+      "d": 6.1981,
+      "b": 1.25,
+      "lip": 0.0,
+      "t": 0.0566,
+      "r": 0.0849
+    },
+    "lip_angle_deg": 90.0,
+    "profile_origin": "web midline at mid-depth",
+    "basis": "CFS steel_engine/cfs_sections.gross; track fitting allowance and design thickness included",
+    "Fy": 50.0
+  },
+  "600T125-68": {
+    "family": "channel",
+    "dimensions": {
+      "d": 6.249499999999999,
+      "b": 1.25,
+      "lip": 0.0,
+      "t": 0.0713,
+      "r": 0.1069
+    },
+    "lip_angle_deg": 90.0,
+    "profile_origin": "web midline at mid-depth",
+    "basis": "CFS steel_engine/cfs_sections.gross; track fitting allowance and design thickness included",
+    "Fy": 50.0
+  },
+  "600T125-97": {
+    "family": "channel",
+    "dimensions": {
+      "d": 6.3559,
+      "b": 1.25,
+      "lip": 0.0,
+      "t": 0.1017,
+      "r": 0.1525
+    },
+    "lip_angle_deg": 90.0,
+    "profile_origin": "web midline at mid-depth",
+    "basis": "CFS steel_engine/cfs_sections.gross; track fitting allowance and design thickness included",
+    "Fy": 50.0
+  },
+  "600T200-54": {
+    "family": "channel",
+    "dimensions": {
+      "d": 6.1981,
+      "b": 2.0,
+      "lip": 0.0,
+      "t": 0.0566,
+      "r": 0.0849
+    },
+    "lip_angle_deg": 90.0,
+    "profile_origin": "web midline at mid-depth",
+    "basis": "CFS steel_engine/cfs_sections.gross; track fitting allowance and design thickness included",
+    "Fy": 50.0
+  },
+  "600T200-97": {
+    "family": "channel",
+    "dimensions": {
+      "d": 6.3559,
+      "b": 2.0,
+      "lip": 0.0,
+      "t": 0.1017,
+      "r": 0.1525
+    },
+    "lip_angle_deg": 90.0,
+    "profile_origin": "web midline at mid-depth",
+    "basis": "CFS steel_engine/cfs_sections.gross; track fitting allowance and design thickness included",
+    "Fy": 50.0
+  },
+  "800S200-54": {
+    "family": "channel",
+    "dimensions": {
+      "d": 8.0,
+      "b": 2.0,
+      "lip": 0.625,
+      "t": 0.0566,
+      "r": 0.0849
+    },
+    "lip_angle_deg": 90.0,
+    "profile_origin": "web midline at mid-depth",
+    "basis": "CFS steel_engine/cfs_sections.gross; track fitting allowance and design thickness included",
+    "Fy": 50.0
+  },
+  "800S250-68": {
+    "family": "channel",
+    "dimensions": {
+      "d": 8.0,
+      "b": 2.5,
+      "lip": 0.625,
+      "t": 0.0713,
+      "r": 0.1069
+    },
+    "lip_angle_deg": 90.0,
+    "profile_origin": "web midline at mid-depth",
+    "basis": "CFS steel_engine/cfs_sections.gross; track fitting allowance and design thickness included",
+    "Fy": 50.0
+  },
+  "800S250-97": {
+    "family": "channel",
+    "dimensions": {
+      "d": 8.0,
+      "b": 2.5,
+      "lip": 0.625,
+      "t": 0.1017,
+      "r": 0.1525
+    },
+    "lip_angle_deg": 90.0,
+    "profile_origin": "web midline at mid-depth",
+    "basis": "CFS steel_engine/cfs_sections.gross; track fitting allowance and design thickness included",
+    "Fy": 50.0
+  },
+  "800Z250-54": {
+    "family": "z",
+    "dimensions": {
+      "d": 8.0,
+      "b": 2.5,
+      "lip": 0.625,
+      "t": 0.0566,
+      "r": 0.0849
+    },
+    "lip_angle_deg": 50.0,
+    "profile_origin": "web midline at mid-depth",
+    "basis": "CFS steel_engine/cfs_sections.gross; track fitting allowance and design thickness included",
+    "Fy": 50.0
+  },
+  "800Z250-68": {
+    "family": "z",
+    "dimensions": {
+      "d": 8.0,
+      "b": 2.5,
+      "lip": 0.625,
+      "t": 0.0713,
+      "r": 0.1069
+    },
+    "lip_angle_deg": 50.0,
+    "profile_origin": "web midline at mid-depth",
+    "basis": "CFS steel_engine/cfs_sections.gross; track fitting allowance and design thickness included",
+    "Fy": 50.0
+  },
+  "800Z250-97": {
+    "family": "z",
+    "dimensions": {
+      "d": 8.0,
+      "b": 2.5,
+      "lip": 0.625,
+      "t": 0.1017,
+      "r": 0.1525
+    },
+    "lip_angle_deg": 50.0,
+    "profile_origin": "web midline at mid-depth",
+    "basis": "CFS steel_engine/cfs_sections.gross; track fitting allowance and design thickness included",
+    "Fy": 50.0
+  },
+  "L2x2x1/8": {
+    "family": "angle",
+    "dimensions": {
+      "h": 2,
+      "b": 2,
+      "t": 0.125
+    },
+    "basis": "source connection schedule; sharp-corner design representation"
+  },
+  "L2.5x2.5x1/4": {
+    "family": "angle",
+    "dimensions": {
+      "h": 2.5,
+      "b": 2.5,
+      "t": 0.25
+    },
+    "basis": "source HR beam bracing schedule"
+  },
+  "HSS6X4X3/16": {
+    "family": "rhs",
+    "dimensions": {
+      "h": 6.0,
+      "b": 4.0,
+      "t": 0.174375
+    },
+    "basis": "CFS parse_hss; A500 0.93 nominal design thickness"
+  }
+}

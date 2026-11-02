@@ -4,6 +4,10 @@ Drawing and IFC module planned for Steltic Hub. The first release targets dimens
 
 ## Current status
 
+Stage 3 adds **three visually checked physical-model review pilots**: the HR six-storey hospital, CFS portal warehouse and CFS T-plan student housing. Open the [pilot report and review bundle](docs/stage3/README.md). The bundle contains offline interactive viewers, set-out plans, connection close-ups, source-linked physical packages and 18 explicit coordination questions. These are review models; drawing release remains held where physical information is missing, conflicting or delegated.
+
+The pilot recipes are bound to the three supplied source revisions. They demonstrate the required data and review workflow; they are not a general converter for the other 58 buildings. Hub's question/acceptance format is reused without modifying Hub. Dimensioned drawing production and IFC export remain the next implementation stage.
+
 Stage 2 implements **HR/CFS physical-data export, legacy-job replay and an engine-independent consumer**. All **61 supplied gold-standard buildings (36 HR, 25 CFS)** exported successfully, with all 812 audited source files unchanged. Their unresolved physical details remain explicitly flagged. New source-module design jobs require physical declarations before completion.
 
 - [Stage 2 results, limitations and validation](docs/stage2/README.md)
