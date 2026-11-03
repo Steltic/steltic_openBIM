@@ -64,6 +64,8 @@ def _export_source(directory,destination,source):
     else:
         from .source_worklines import physical_view
         physical=physical_view(package);basis='Source-declared design coordination geometry'
+    from .physical_review import review_physical
+    physical_checks=review_physical(physical)
     model=ifcopenshell.file(schema='IFC4')
     def entity(cls,label,key):
         obj=ifcopenshell.api.root.create_entity(model,ifc_class=cls,name=str(label))
@@ -201,14 +203,16 @@ def _export_source(directory,destination,source):
         UnassignedElements=counts['unassigned_elements'],
         SourceOpenings=physical.get('openings',[]),SourceOpeningCoordinateUnits='inch',
         Limits='Coordination surfaces omit rolled fillets and unmodelled cuts. Panels are source surfaces with thickness properties. Source opening boundaries are reference annotations, not cuts in panel/member geometry. Unlocated assembly details are not placed at guessed joints.'))
+    property_set(model,project,dict(Status=physical_checks['status'],Findings=physical_checks['findings'],
+        StructuralDesignApproval=False,Limits=physical_checks['limits']),name='Steltic_PhysicalChecks')
     model.header.file_name.name=destination.name
-    model.header.file_name.originating_system='Steltic openBIM 0.8.10'
+    model.header.file_name.originating_system='Steltic openBIM 0.8.11'
     model.write(str(destination));errors=schema_errors(destination)
     if errors:raise ValueError('Generated IFC failed schema validation: '+str(errors[:3]))
     reopened=ifcopenshell.open(str(destination))
     if len(reopened.by_type('IfcElement'))+len(reopened.by_type('IfcAnnotation'))!=len(objects):raise ValueError('IFC round-trip product count changed')
     return dict(schema='IFC4',source=source,**({'physical_revision':state['revision'],'source_job':state['source_job'],'source_module':state['source_module']} if structural else {'drawing_revision':state['revision']}),source_sha256=state['source_model_sha256'],
-        counts=counts,objects=objects,warnings=warnings,schema_errors=errors,sha256=hashlib.sha256(destination.read_bytes()).hexdigest(),
+        counts=counts,objects=objects,warnings=warnings,physical_checks=physical_checks,schema_errors=errors,sha256=hashlib.sha256(destination.read_bytes()).hexdigest(),
         limits=['Coordination IFC, not an editable Revit family library or a fabrication issue.',
                 'Panels are surfaces; their thickness is metadata. Source opening polygons are traceable reference annotations; panels/members are not cut by these boundaries. Unconfirmed proposals remain request metadata.',
                 'Unlocated connection assemblies are metadata only. Captured worklines remain reference axes where physical set-out is unknown.',
