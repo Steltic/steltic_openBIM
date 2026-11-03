@@ -227,7 +227,7 @@ def test_braced_bay_and_unknown_panel_are_not_misclassified_as_floor_slabs(tmp_p
     assert build_review(path,{'scope':'all','units':'auto'})['counts']['unrendered']==0
 
 
-def test_source_opening_coordinates_and_host_survive_without_claiming_a_void_cut(tmp_path):
+def test_source_opening_coordinates_and_host_survive_with_panel_cut(tmp_path):
     folder,p,_=drawing_source(tmp_path);p['module']='CFS'
     panel=dict(id='deck',kind='floor',status='declared',level=2,thickness=.5,material_id='steel',vertices=[[0,0,180],[120,0,180],[120,120,180],[0,120,180]])
     opening=dict(id='stair',host_id='deck',vertices=[[12,12,180],[48,12,180],[48,60,180],[12,60,180]])
@@ -239,7 +239,8 @@ def test_source_opening_coordinates_and_host_survive_without_claiming_a_void_cut
     props=ifcopenshell.util.element.get_psets(annotation)['Steltic_Coordination']
     assert props['SourceId']=='stair' and props['HostSourceId']=='deck'
     assert props['GeometryRole']=='source_opening_reference'
-    assert 'not cut' in annotation.Description
+    assert 'cut in declared host' in annotation.Description
+    assert props['OpeningCutInHost'] is True and report['counts']['panel_opening_cuts']==1
     assert ifcopenshell.util.element.get_container(annotation).Name=='Level 2'
     assert not model.by_type('IfcOpeningElement') and not model.by_type('IfcRelVoidsElement')
     review=build_review(path,{'scope':'all','units':'auto'})
