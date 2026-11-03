@@ -29,10 +29,17 @@ def required(package):
 
 
 def physical_view(package):
-    """Infer absent storey labels from source elevations, without changing geometry."""
-    physical=package['physical'];levels=sorted(set(package.get('layout_evidence',{}).get('levels_in') or []))
+    """Retain numeric storey aliases and group HR elevations without moving geometry."""
+    physical=copy.deepcopy(package['physical'])
+    for collection in ('members','panels','joints','connections','openings'):
+        for entity in physical.get(collection,[]):
+            value=entity.get('storey')
+            if entity.get('level') is None and type(value) in (int,float) and math.isfinite(value) and int(value)==value:
+                entity['level']=int(value)
+                entity['level_basis']='Source-declared numeric storey field'
+                entity['level_source_field']='storey'
+    levels=sorted(set(package.get('layout_evidence',{}).get('levels_in') or []))
     if package.get('module')!='HR' or len(levels)<2:return physical
-    physical=copy.deepcopy(physical)
     for collection,key in (('members','axis'),('panels','vertices')):
         for entity in physical[collection]:
             if entity.get('level') is not None:continue
