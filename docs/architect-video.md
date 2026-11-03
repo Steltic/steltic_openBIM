@@ -22,7 +22,7 @@ Each preview was checked for connected member topology, zero-length members and 
 
 1. Create/select a new Hub project. In openBIM > IFC import, upload the example's `architect.ifc`.
 2. Retain all objects and declared millimetres; build and inspect the review. Record model-review notes if useful.
-3. Paste `job_brief.txt` into Continue to HR and prepare the HR design brief. Download it.
+3. Under Continue to structural design, choose HR Steel, paste `job_brief.txt` and prepare the HR design brief. Download it.
 4. Open HR Steel > Design for the same project. Upload `hr_brief.txt` and run the normal design workflow.
 5. When the HR run is complete, select its source in openBIM > Steltic import. Generate drawings and review the request register.
 6. Generate the return model in IFC export, choosing the Steltic drawing revision. The IFC report states exactly which physical geometry and connection information the HR output supplied.

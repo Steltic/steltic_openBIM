@@ -118,7 +118,10 @@ class IFCStore:
             r=read(f);result['exports'].append({k:v for k,v in r.items() if k!='objects'})
         for f in sorted((self.root(p)/'handoffs').glob('*/summary.json'),key=lambda p:p.stat().st_mtime,reverse=True):
             result['handoffs'].append(read(f))
-            if 'hr_brief' not in result:result['hr_brief']=read(f.parent/'request.json')['brief']
+            if 'design_brief' not in result:
+                request=read(f.parent/'request.json')
+                result['design_brief']=request['brief'];result['target_module']=request.get('target_module','HR')
+                result['hr_brief']=request['brief']  # older embedded clients
         return result
 
     def handoff(self,p,body):
@@ -126,9 +129,11 @@ class IFCStore:
             old=self.current(p);self.verify(old,body);folder,state=old
             if state['status'] not in ('built','reviewed'):raise ValueError('Build the IFC review model first')
             brief=body.get('brief')
-            if not isinstance(brief,str) or not brief.strip() or len(brief)>60000:raise ValueError('Provide an HR design brief of 1 to 60,000 characters')
+            target=body.get('target_module','HR')
+            if target not in ('HR','CFS'):raise ValueError('Choose HR or CFS for the design handoff')
+            if not isinstance(brief,str) or not brief.strip() or len(brief)>60000:raise ValueError('Provide a design brief of 1 to 60,000 characters')
             dest=self.root(p)/'handoffs'/('h-'+uuid.uuid4().hex);dest.mkdir(parents=True)
-            write_json(dest/'request.json',dict(brief=brief))
+            write_json(dest/'request.json',dict(brief=brief,target_module=target))
             summary=worker('handoff',folder,dest/'summary.json',dest/'request.json')
             summary['key']=dest.name;write_json(dest/'summary.json',summary)
             return summary
