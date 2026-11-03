@@ -37,8 +37,13 @@ window.StelticDrawingQueries={async mount(root,project){
  async function render(){
    box.replaceChildren(el('h2',{},'Drawings and information requests'),el('p',{},state.drawing_status==='design_test'?'Dimensioned design drawings use the adopted fictional test answers. Grids, member marks, sections and connection callouts are coordinated; A identifies every assumed input.':'Every request has a provisional proposal, accepted for drawings by default. Dashed items and TBD labels identify unconfirmed information; drawings continue while requests remain open.'));
    if(state.state==='available'){
+     const register=el('section',{class:'ob-card',tabindex:'-1','aria-label':'Request register'},el('h3',{},'Request register'),el('p',{},'Open a request below to add information or confirm its locations. Saving an answer updates the drawings and preserves the previous revision.'));
+     let firstRequest=null,firstUnresolved=null;
+     for(const group of state.questions.groups){const section=el('section',{},el('h4',{},group.group));for(const r of group.items){const card=requestCard(r);firstRequest??=card;if(!r.confirmed)firstUnresolved??=card;section.append(card)}register.append(section)}
+     if(!firstRequest)register.append(el('p',{},'There are no information requests for this drawing set.'));
+     const openRegister=()=>{const card=firstUnresolved||firstRequest;if(card)card.open=true;register.scrollIntoView({block:'start'});register.focus({preventScroll:true})};
      box.append(el('div',{class:'ob-card'},el('div',{class:'ob-row'},el('b',{},'Revision '+state.revision),el('span',{class:'ob-badge'},state.drawing_status+' / '+state.sheets.length+' sheets'),
-       el('a',{href:base+'/file/drawings.pdf?r='+state.revision,target:'_blank'},'Open drawing set'),el('a',{href:base+'/file/information_requests.json',target:'_blank'},'Request register')),
+       el('a',{href:base+'/file/drawings.pdf?r='+state.revision,target:'_blank'},'Open drawing set'),el('button',{class:'ob-primary',onclick:openRegister},'Request register / answer queries')),
        el('p',{class:'ob-note'},'Source '+state.building_id+'. Confirmed answers regenerate the set and keep previous revisions. Source-design completeness remains separate.')));
      const regenerate=el('button',{onclick:async()=>{regenerate.disabled=true;message.textContent='Regenerating drawings...';try{await api(base+'/regenerate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({revision:state.revision,source_model_sha256:state.source_model_sha256})});await refresh();message.textContent='Regenerated. Source and answers retained; previous PDF kept.'}catch(e){error(e)}finally{regenerate.disabled=false}}},'Regenerate drawing set');box.append(regenerate);
      if(state.available_test_scenario&&(!state.design_scenario||state.drawing_status!=='design_test')){
@@ -47,7 +52,8 @@ window.StelticDrawingQueries={async mount(root,project){
        box.append(el('div',{class:'ob-card'},el('h3',{},'Fictional drawing pilot'),el('p',{},'This exact source package has authored test answers for every outstanding request, including opening locations and supplementary framing. Adopting them produces dimensioned A1 design drawings with grids, marks, sections and connection callouts. Every assumed input is labelled A; the source design is retained.'),el('label',{},fictional,' This is a fictional test building'),author,develop));
      }
      if(state.design_scenario){box.append(el('div',{class:'ob-card'},el('b',{},'Fictional test assumptions adopted'),el('p',{},'A identifies assumed inputs and supplementary geometry. Source capacity checks have not been rerun for these changes. Reopening a request returns the set to provisional drawings until the test scenario is explicitly adopted again.'),el('div',{class:'ob-row'},...['adopted_answers.json','member_index.json','connection_assemblies.json','design_model.json'].filter(file=>state.artifacts.includes(file)).map(file=>el('a',{href:base+'/file/'+file,target:'_blank'},file.replaceAll('_',' '))))));}
-     for(const group of state.questions.groups){const section=el('section',{},el('h3',{},group.group));for(const r of group.items)section.append(requestCard(r));box.append(section)}
+     box.append(register);
+     register.append(el('a',{href:base+'/file/information_requests.json',download:'information_requests.json'},'Download request data (JSON)'));
      const h=await api(base+'/history');const hist=el('details',{},el('summary',{},'Drawing revision history'));for(const r of h.revisions)hist.append(el('p',{},el('a',{href:base+'/file/drawings.pdf?revision='+encodeURIComponent(r.directory),target:'_blank'},'Revision '+r.revision+' - '+r.drawing_status)));box.append(hist);
    }
    const imports=el('details',{},el('summary',{},state.state==='available'?'Update physical source package':'Choose a completed HR/CFS physical package'));if(state.state!=='available')imports.open=true;
