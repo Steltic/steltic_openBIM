@@ -152,7 +152,7 @@ def export_drawing(directory,destination):
         UnlocatedConnectionReferences=unlocated_connections,Interfaces=package['physical'].get('interfaces',[]),
         Limits='Coordination surfaces omit rolled fillets and unmodelled cuts. Panels are source surfaces with thickness properties. Unconfirmed openings are not cut into geometry. Unlocated assembly details are not placed at guessed joints.'))
     model.header.file_name.name=destination.name
-    model.header.file_name.originating_system='Steltic openBIM 0.8.3'
+    model.header.file_name.originating_system='Steltic openBIM 0.8.4'
     model.write(str(destination));errors=schema_errors(destination)
     if errors:raise ValueError('Generated IFC failed schema validation: '+str(errors[:3]))
     reopened=ifcopenshell.open(str(destination))
