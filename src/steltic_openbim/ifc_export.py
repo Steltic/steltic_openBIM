@@ -127,23 +127,36 @@ def _export_source(directory,destination,source):
     levels=sorted({level_of(item) for item in members+panels+connections+physical.get('joints',[])+physical.get('openings',[]) if item.get('level') is not None})
     # Preserve explicit source datums, including the ground datum even when no
     # physical element is assigned to it. Do not derive them from shifted solids.
-    datum_levels={}
-    for item in physical.get('levels',[]):
+    reference=package.get('reference_system',{})
+    datum_levels={};datum_names={}
+    for item in reference.get('levels',[]) or physical.get('levels',[]):
         if isinstance(item,dict) and 'level' in item and 'elevation_in' in item:
             datum_levels[int(item['level'])]=float(item['elevation_in'])
+            if item.get('name'):datum_names[int(item['level'])]=item['name']
         elif isinstance(item,(list,tuple)) and len(item)==3:
             datum_levels[int(item[0])]=float(item[2])
-    if not datum_levels and package.get('module')=='HR':
+    if not datum_levels:
         datum_levels={i:float(z) for i,z in enumerate(package.get('layout_evidence',{}).get('levels_in') or [])}
     levels=sorted(set(levels)|set(datum_levels))
     storeys={}
     for level in levels:
-        s=entity('IfcBuildingStorey','Level '+str(level),'level:'+str(level))
+        s=entity('IfcBuildingStorey',datum_names.get(level,'Level '+str(level)),'level:'+str(level))
         points=[p[2] for m in members if level_of(m)==level for p in m['axis']]
         # Storey elevation follows the source floor framing plane, not a moved member placement.
         floor=[p[2] for m in members if level_of(m)==level and abs(m['axis'][0][2]-m['axis'][1][2])<1e-6 for p in m['axis']]
         s.Elevation=datum_levels.get(level,min(floor) if floor else min(points,default=0))*INCH
         ifcopenshell.api.aggregate.assign_object(model,products=[s],relating_object=building);storeys[level]=s
+    def grid_axis(label,points):
+        curve=model.create_entity('IfcPolyline',Points=[model.create_entity('IfcCartesianPoint',Coordinates=tuple(float(v)*INCH for v in p)) for p in points])
+        return model.create_entity('IfcGridAxis',AxisTag=label,AxisCurve=curve,SameSense=True)
+    def add_grid(rows,grid_basis):
+        grid=entity('IfcGrid','Structural reference grid','source-grid')
+        grid.ObjectPlacement=model.create_entity('IfcLocalPlacement',RelativePlacement=model.create_entity('IfcAxis2Placement3D',Location=model.create_entity('IfcCartesianPoint',Coordinates=(0.,0.,0.))))
+        for direction in ('U','V','W'):
+            axes=[grid_axis(row['label'],row['points_in']) for row in rows if row['direction']==direction]
+            if axes:setattr(grid,direction+'Axes',axes)
+        ifcopenshell.api.spatial.assign_container(model,products=[grid],relating_structure=building)
+        property_set(model,grid,dict(Basis=grid_basis,SourceModelSHA256=state['source_model_sha256'],SourceIFCSHA256=reference.get('source_ifc_sha256')))
     source_grids=physical.get('grids')
     grid_basis='Reviewed coordination grid' if source_grids else 'Explicit source layout grid'
     if recovered and source_grids:grid_basis='Derived from captured column worklines; not architect-confirmed'
@@ -153,19 +166,14 @@ def _export_source(directory,destination,source):
     def grid_rows(axis):
         return [(str(v[0]),float(v[1])) if isinstance(v,(list,tuple)) else (str(i+1),float(v)) for i,v in enumerate(source_grids.get(axis,[]))]
     gx,gy=grid_rows('x'),grid_rows('y')
-    if gx and gy:
-        grid=entity('IfcGrid','Structural reference grid','source-grid');grid.PredefinedType='RECTANGULAR'
-        grid.ObjectPlacement=model.create_entity('IfcLocalPlacement',RelativePlacement=model.create_entity('IfcAxis2Placement3D',Location=model.create_entity('IfcCartesianPoint',Coordinates=(0.,0.,0.))))
-        def grid_axis(label,points):
-            curve=model.create_entity('IfcPolyline',Points=[model.create_entity('IfcCartesianPoint',Coordinates=tuple(float(v)*INCH for v in p)) for p in points])
-            return model.create_entity('IfcGridAxis',AxisTag=label,AxisCurve=curve,SameSense=True)
+    if reference.get('grids'):
+        add_grid(reference['grids'],reference['basis'])
+    elif gx and gy:
         xmin,xmax=min(v for _,v in gx),max(v for _,v in gx);ymin,ymax=min(v for _,v in gy),max(v for _,v in gy)
         if xmin<xmax and ymin<ymax:
-            grid.UAxes=[grid_axis(label,[(x,ymin,0),(x,ymax,0)]) for label,x in gx]
-            grid.VAxes=[grid_axis(label,[(xmin,y,0),(xmax,y,0)]) for label,y in gy]
-            ifcopenshell.api.spatial.assign_container(model,products=[grid],relating_structure=building)
-            property_set(model,grid,dict(Basis=grid_basis,SourceModelSHA256=state['source_model_sha256']))
-        else:model.remove(grid)
+            rows=[dict(label=label,direction='U',points_in=[(x,ymin,0),(x,ymax,0)]) for label,x in gx]
+            rows += [dict(label=label,direction='V',points_in=[(xmin,y,0),(xmax,y,0)]) for label,y in gy]
+            add_grid(rows,grid_basis)
     profiles={p['id']:p for p in physical.get('profiles',[])}
     materials={};material_source={m['id']:m for m in package['physical'].get('materials',[])}
     containment=defaultdict(list);material_products=defaultdict(list)
@@ -239,6 +247,7 @@ def _export_source(directory,destination,source):
             HostSourceId=item.get('host_id'),GeometryRole=item.get('geometry_role'),
             AppliedOpeningIds=item.get('applied_opening_ids'),OpeningCutInHost=item.get('opening_cut_in_host'),
             AnalysisIds=item.get('analysis_ids'),AnalysisSegments=item.get('analysis_segments'),
+            SourceIFCGuid=item.get('source_ifc_guid'),
             SourceKind=item.get('kind'),SourceLevel=None if item.get('level_basis') else item.get('level'),AssignedLevel=item.get('level'),
             SourceStorey=item.get('storey'),LevelSourceField=item.get('level_source_field'),
             StoreyAssignment=item.get('level_basis') or ('source declared' if item.get('level') is not None else 'not supplied; contained in building'),
@@ -308,6 +317,7 @@ def _export_source(directory,destination,source):
     property_set(model,project,dict(SourceModelSHA256=state['source_model_sha256'],**revision_properties,Basis=basis,
         SupplementProvenance=state.get('supplement_provenance'),
         SourceModule=state.get('source_module'),SourceJob=state.get('source_job'),
+        ReferenceSystem=reference or None,RequireConnectionParts=package.get('require_connection_parts',False),
         **({'SourceStatus':status} if structural else {'DrawingStatus':status}),
         OpenRequests=[dict(id=r['id'],proposal=r['proposal'],confirmed=r['confirmed']) for r in state['requests']],
         ConnectionSchedules=[r for r in package.get('design_records',[]) if r['table']=='connections'],
@@ -319,7 +329,7 @@ def _export_source(directory,destination,source):
     property_set(model,project,dict(Status=physical_checks['status'],Findings=physical_checks['findings'],
         StructuralDesignApproval=False,Limits=physical_checks['limits']),name='Steltic_PhysicalChecks')
     model.header.file_name.name=destination.name
-    model.header.file_name.originating_system='Steltic openBIM 0.8.15'
+    model.header.file_name.originating_system='Steltic openBIM 0.8.16'
     model.write(str(destination));errors=schema_errors(destination)
     if errors:raise ValueError('Generated IFC failed schema validation: '+str(errors[:3]))
     reopened=ifcopenshell.open(str(destination))
