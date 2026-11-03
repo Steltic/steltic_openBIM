@@ -6,7 +6,7 @@ from pathlib import Path
 DATA=Path(__file__).with_name('review_data')
 CASES={c['id']:c for c in json.loads((DATA/'cases.json').read_text(encoding='utf-8'))} if (DATA/'cases.json').is_file() else {}
 
-@lru_cache(maxsize=48)
+@lru_cache(maxsize=64)
 def evidence(key):
     if key not in CASES:raise ValueError('Unknown review case '+key)
     with zipfile.ZipFile(DATA/'inputs.zip') as z:
@@ -41,5 +41,8 @@ def build_model(package,state):
     apply(b)
     if key in ('cfs2','cfs4','cfs6','cfs9','cfs10','cfs12'):
         from .review_next_cfs_walls import connections
+        connections(b)
+    if key in ('cfs1','cfs5','cfs15'):
+        from .review_final_cfs import connections
         connections(b)
     return b.finish()

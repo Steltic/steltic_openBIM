@@ -1,6 +1,8 @@
 """Declared floor footprints take precedence over incomplete legacy viewer cells."""
 
 def cells(b,levels):
+    from .review_final_hr import KEYS,floor_cells
+    if b.key in KEYS:return floor_cells(b,levels)
     c=b.config;g=c.get('G',c.get('GEO',{}));present=c.get('PRESENT',g.get('present'));nx,ny=c.get('NX'),c.get('NY')
     xs=c.get('XS',g.get('xs'));ys=c.get('YS',g.get('ys'))
     if not xs and nx is not None:xs=[i*c.get('SX',c.get('S_',336)) for i in range(nx+1)]
@@ -24,6 +26,11 @@ def cells(b,levels):
     return result
 
 def thickness(key,k):
+    if key=='hr4':return 7.5
+    if key=='hr6':return 1.5 if k==6 else 5.5
+    if key in ('hr19','hr29'):return 6
+    if key=='hr26':return 4.5
+    if key in ('hr34a','hr34b'):return 1.5 if k==(14 if key=='hr34a' else 10) else 9 if k==2 else 6.25
     if key=='hr16' and k==3 or key=='hr21':return 1.5
     if key=='hr35':return 1.5
     if key=='hr20' and k==3:return 6.25

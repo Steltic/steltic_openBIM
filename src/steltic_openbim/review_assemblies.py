@@ -63,6 +63,10 @@ class Context:
 
 def build_scene(model,package,c,subtype=''):
     ctx=Context(model,package,c);family=ctx.family
+    from .review_final_details import FAMILIES as FINAL,draw as final
+    if family in FINAL:final(ctx);return ctx.finish()
+    from .review_final_cfs_details import FAMILIES as FINAL_CFS,draw as final_cfs
+    if family in FINAL_CFS:final_cfs(ctx);return ctx.finish()
     from .review_next_hr_details import FAMILIES,draw as next_hr
     if family in FAMILIES:next_hr(ctx);return ctx.finish()
     from .review_next_cfs_details import FAMILIES as NEXT_CFS,draw as next_cfs

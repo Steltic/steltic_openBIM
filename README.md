@@ -4,13 +4,15 @@ Drawing and IFC module for Steltic Hub. The first release targets dimensioned en
 
 ## Current status
 
-Stage 7 develops **43 fictional buildings into dimensioned A1 design sets with assembled connection details**: the original three pilots, twenty additional HR buildings and twenty additional CFS buildings. Each joint variant includes joined members, plates, fasteners, weld/interface callouts, a section and an isometric view. Plans, member marks and connection references link to every occurrence. [Latest twenty, verification and reproduction](docs/stage7/README.md); [first 23](docs/stage6/README.md).
+Stage 8 completes **all 61 fictional buildings (36 HR, 25 CFS) as dimensioned A1 design sets with assembled connection details**. Each joint variant includes joined members, plates, fasteners, weld/interface callouts, a section and an isometric view. Plans, member marks and connection references link to every occurrence. [Final eighteen, verification and reproduction](docs/stage8/README.md); [previous twenty](docs/stage7/README.md); [first 23](docs/stage6/README.md).
 
 The shared Hub widget offers this development step only for the registered exact source packages, after explicit fictional-building confirmation. It never supplies fictional answers to ordinary jobs. `steltic-openbim design-test package.json --confirm-fictional --author "Test author" --output drawings` provides the same workflow from the CLI. Regeneration retains answers and revision history; reopening a request returns to provisional drawings. Source values are labelled S; authored fictional fit, layout and delegated geometry are labelled A. This does not rerun engineering or establish fabrication readiness.
 
 Stage 4 starts the **provisional drawing workflow**: 54 A3 sheets across the HR hospital, CFS warehouse and CFS student housing. All 18 information requests have explicit proposals accepted for drawing by default. Proposed openings and unresolved interfaces appear as dashed symbols with `TBD - resolve query`; their dimensions stay hidden until quantitatively confirmed. [Workflow, example sets and validation](docs/stage4/README.md).
 
 Hub integration mounts the same request widget inside User-designed building's Questions/Drawings flow and the standalone openBIM module. Confirmed opening answers regenerate a revisioned PDF set; notes alone retain TBD status. Source-engineering readiness and existing model/analysis checks stay separate. Structural/supplier decisions update geometry through a revised physical package.
+
+The **Request register / answer queries** button opens the editable request form in the page. Raw data is available separately through **Download request data (JSON)**. Update/relaunch the openBIM module and refresh its tab to load the fix in an existing local Hub installation.
 
 The [Stage 3 physical-model review pilots](docs/stage3/README.md) remain source evidence, with their dimensioned development recorded in [Stage 5](docs/stage5/README.md). Authored review recipes are bound to supplied source revisions; they are not a general converter for arbitrary buildings. Stage 4 supersedes Stage 3's drawing hold policy. Wider automatic detailing and IFC export remain subsequent work.
 

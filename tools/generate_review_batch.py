@@ -1,4 +1,4 @@
-"""Reproduce the 43 explicitly fictional design review sets without either engine."""
+"""Reproduce all 61 explicitly fictional design review sets without either engine."""
 import argparse,json,zipfile
 from pathlib import Path
 from steltic_openbim.review_cases import CASES,evidence

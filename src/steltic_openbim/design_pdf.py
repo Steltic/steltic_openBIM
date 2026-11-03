@@ -166,8 +166,8 @@ class DesignSheets(Sheets):
                 self.labels.append(dict(sheet=self.current,member_id=m['id'],mark=m['mark']))
         return marks
 
-    def representative_marks(self,groups,max_labels=24):
-        occupied=[]
+    def representative_marks(self,groups,max_labels=24,reserved=()):
+        occupied=list(reserved)
         # Small members are intentionally called out by a repeated group, not at every station.
         for mark,rows in sorted(groups.items(),key=lambda kv:(-len(kv[1]),kv[0]))[:max_labels]:
             for m,p,q in rows:
