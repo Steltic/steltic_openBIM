@@ -62,6 +62,7 @@ def metadata(model):
             if start:
                 profiles += [x.ProfileName or x.is_a() for x in model.traverse(start) if x.is_a('IfcProfileDef')]
         props=element_util.get_psets(e)
+        bearing_wall=e.is_a('IfcWall') and props.get('Pset_WallCommon',{}).get('LoadBearing') is True
         if not profiles:
             profiles=[str(v) for p in props.values() if isinstance(p,dict) for k,v in p.items()
                       if k.lower() in ('section','sectionname','profile','profile_id') and v]
@@ -69,7 +70,7 @@ def metadata(model):
             type_name=kind.Name if kind else '',storey=container.GlobalId if container else None,
             storey_name=container.Name if container else 'Unassigned',spatial_container=spatial.Name if spatial else None,materials=sorted({m.Name for m in mats if m.Name}),
             sections=sorted(set(profiles)),has_representation=bool(getattr(e,'Representation',None)),
-            structural=any(e.is_a(cls) for cls in STRUCTURAL),linear_structural=any(e.is_a(cls) for cls in ('IfcBeam','IfcColumn','IfcMember')),properties=props))
+            structural=bearing_wall or any(e.is_a(cls) for cls in STRUCTURAL),linear_structural=any(e.is_a(cls) for cls in ('IfcBeam','IfcColumn','IfcMember')),properties=props))
     ids=Counter(r['guid'] for r in rows)
     problems=[]
     def finding(code,title,items):
@@ -103,13 +104,13 @@ def review_options(raw,meta):
     return dict(scope=scope,units=unit,note=note,missing_data='TBD',structural_analysis=False)
 
 
-def axis_lines(model,e,scale):
+def axis_lines(model,e,scale,identifiers=('Axis','Body','Annotation')):
     """Fallback for explicit polylines; never manufacture an axis from a bounding box."""
     lines=[];rep=getattr(e,'Representation',None)
     if not rep:return lines
     matrix=placement.get_local_placement(e.ObjectPlacement)
     for representation in rep.Representations:
-        if representation.RepresentationIdentifier not in ('Axis','Body','Annotation'):continue
+        if representation.RepresentationIdentifier not in identifiers:continue
         for item in representation.Items:
             curves=item.Elements if item.is_a('IfcGeometricCurveSet') else [item]
             for curve in curves:

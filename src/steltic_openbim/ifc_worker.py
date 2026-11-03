@@ -22,10 +22,12 @@ def main():
         from .ifc_handoff import prepare
         folder=Path(source);dest=Path(output).parent
         read=lambda p:json.loads(p.read_text(encoding='utf-8'))
-        geometry,brief=prepare(folder/'original.ifc',read(folder/'model.json'),read(folder/'state.json'),read(Path(args[0]))['brief'])
-        (dest/'hr_brief.txt').write_text(brief,encoding='utf-8')
+        request=read(Path(args[0]));target=request.get('target_module','HR')
+        geometry,brief=prepare(folder/'original.ifc',read(folder/'model.json'),read(folder/'state.json'),request['brief'],target)
+        brief_filename=target.lower()+'_brief.txt'
+        (dest/brief_filename).write_text(brief,encoding='utf-8')
         (dest/'architectural_geometry.json').write_text(json.dumps(geometry,indent=2),encoding='utf-8')
-        result=dict(source_sha256=geometry['source_sha256'],import_revision=geometry['import_revision'],warnings=geometry['warnings'])
+        result=dict(source_sha256=geometry['source_sha256'],import_revision=geometry['import_revision'],target_module=target,brief_filename=brief_filename,warnings=geometry['warnings'])
     else:raise ValueError('Unknown IFC worker action')
     Path(output).write_text(json.dumps(result,ensure_ascii=True,allow_nan=False,separators=(',',':')),encoding='utf-8')
 

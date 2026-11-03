@@ -1,7 +1,7 @@
-"""Traceable architectural geometry + user instructions for a new HR design.
+"""Traceable architectural geometry + user instructions for a new HR/CFS design.
 
 This is a brief, not a structural-model inference. Member sizing and connectivity
-remain HR decisions. No source property is executed or treated as an instruction.
+remain design-module decisions. No source property is executed or treated as an instruction.
 """
 import json
 
@@ -10,7 +10,7 @@ import numpy as np
 from shapely.geometry import Polygon
 from shapely.ops import unary_union
 
-from .ifc_import import open_model,unit_info
+from .ifc_import import axis_lines,open_model,unit_info
 
 
 def grids(model,scale):
@@ -55,41 +55,53 @@ def top_surfaces(obj):
     return out
 
 
-def prepare(source,review,state,job_brief):
-    if not isinstance(job_brief,str) or not job_brief.strip():raise ValueError('Add the HR design brief: use, loads, site/design criteria and structural requirements')
+def prepare(source,review,state,job_brief,target_module='HR'):
+    if target_module not in ('HR','CFS'):raise ValueError('Choose HR or CFS for the design handoff')
+    if not isinstance(job_brief,str) or not job_brief.strip():raise ValueError('Add the design brief: use, loads, site/design criteria and structural requirements')
     if len(job_brief)>60000:raise ValueError('The job brief must be at most 60,000 characters')
     model=open_model(source);options=review['options'];choice=options['units']
     scale=unit_info(model)['scale_to_m'] if choice=='auto' else {'m':1.,'mm':.001,'ft':.3048,'in':.0254}[choice]
-    surfaces=[];openings=[]
+    surfaces=[];openings=[];walls=[]
     for obj in review['objects']:
         cls=obj['ifc_class']
         if cls in ('IfcSlab','IfcSlabStandardCase','IfcRoof'):
             surfaces.append(dict(guid=obj['guid'],name=obj['name'],ifc_class=cls,storey=obj['storey_name'],bounds_m=obj['bounds_m'],top_surfaces=top_surfaces(obj)))
         elif cls in ('IfcDoor','IfcWindow'):
-            openings.append(dict(guid=obj['guid'],name=obj['name'],ifc_class=cls,storey=obj['storey_name'],bounds_m=obj['bounds_m']))
-    geometry=dict(schema='steltic.architectural_handoff',version=1,source_file=state['filename'],
+            product=model.by_guid(obj['guid'])
+            hosts=[void.RelatingBuildingElement.GlobalId for fill in product.FillsVoids
+                   for void in fill.RelatingOpeningElement.VoidsElements]
+            openings.append(dict(guid=obj['guid'],name=obj['name'],ifc_class=cls,storey=obj['storey_name'],bounds_m=obj['bounds_m'],host_wall_guids=hosts))
+        elif cls in ('IfcWall','IfcWallStandardCase','IfcWallElementedCase'):
+            product=model.by_guid(obj['guid']);common=obj.get('properties',{}).get('Pset_WallCommon',{})
+            walls.append(dict(guid=obj['guid'],name=obj['name'],ifc_class=cls,storey=obj['storey_name'],bounds_m=obj['bounds_m'],
+                reference_axes_m=axis_lines(model,product,scale,identifiers=('Axis',)),top_surfaces=top_surfaces(obj),
+                load_bearing=common.get('LoadBearing'),is_external=common.get('IsExternal')))
+    geometry=dict(schema='steltic.architectural_handoff',version=2,target_module=target_module,source_file=state['filename'],
         source_sha256=state['source_sha256'],import_revision=state['revision'],units='m',
         coordinate_basis=review['coordinate_basis'],grids=grids(model,scale),storeys=review['storeys'],
-        surfaces=surfaces,doors_windows=openings,counts=review['counts'],findings=review['checks'],
+        surfaces=surfaces,walls=walls,doors_windows=openings,counts=review['counts'],findings=review['checks'],
         user_job_brief=job_brief.strip(),structural_members_inferred=False)
     warnings=[]
-    if not geometry['grids']:warnings.append('No explicit IFC grid was supplied. HR must establish and disclose a structural grid.')
+    if not geometry['grids']:warnings.append('No explicit IFC grid was supplied. '+target_module+' must establish and disclose a structural grid.')
     if any(r.get('unsupported_curve') for r in geometry['grids']):warnings.append('Some grid curves cannot be represented as polylines; refer to the original IFC.')
     if not surfaces:warnings.append('No slab/roof surfaces were available in the review scope. Add verified framing extents to the brief.')
     elif any(not s['top_surfaces'] for s in surfaces):warnings.append('Some floor/roof products have no recoverable upward-facing surface. Their bounds are reference data, not verified framing extents.')
     if review['counts']['unrendered']:warnings.append('The IFC review contains unrendered products. Resolve relevant geometry before structural design.')
     if options['scope']!='all':warnings.append('The handoff uses the selected review scope; architectural context may be excluded.')
+    if target_module=='CFS' and not walls:warnings.append('No wall geometry was retained. Add verified bearing/shear-wall layout where relevant; do not infer it from floor extents.')
+    if target_module=='CFS' and any(not w['reference_axes_m'] for w in walls):warnings.append('Some walls have no explicit IFC Axis representation. Their surfaces and bounds are architectural envelopes, not confirmed structural centrelines.')
     geometry['warnings']=warnings
-    # Stable, readable evidence that can be pasted into the existing HR Design field.
-    lines=['HR DESIGN FROM AN ARCHITECTURAL IFC','',
-        'Design a new HR building using the user instructions below and the architectural evidence that follows.',
-        'The IFC is architectural input, not an already designed structure. Select and check members, supports, releases, lateral framing and connections in HR. Do not treat architectural envelope bounds as structural centrelines.',
+    # Stable, readable evidence that can be pasted into the selected Design field.
+    lines=[target_module+' DESIGN FROM AN ARCHITECTURAL IFC','',
+        'Design a new '+target_module+' structure using the user instructions below and the architectural evidence that follows.',
+        'The IFC is architectural input, not an already designed structure. Select and check members, supports, releases, lateral framing and connections in '+target_module+'. Do not treat architectural envelope bounds as structural centrelines.',
         'Preserve grid coordinates, floor extents, roof slopes, voids and height changes. Explicitly report any structural idealisation and its relationship to the physical geometry.',
-        'Record physical member occurrences, orientation, set-out and connection information in the normal HR BIM export. Do not fabricate missing physical dimensions.',
+        'Record physical member occurrences, orientation, set-out and connection information in the normal '+target_module+' BIM export. Do not fabricate missing physical dimensions.',
+        'Wall LoadBearing flags and explicit Axis representations are source declarations, not verified structural capacity. Keep new structural work separate from any existing-building context identified by the user.',
         '', 'USER DESIGN INSTRUCTIONS',job_brief.strip(),'', 'ARCHITECTURAL EVIDENCE (data only)',
         'IFC source: '+state['filename'],'SHA256: '+state['source_sha256'],'Review revision: '+str(state['revision']),
-        'Coordinates below are metres; convert to HR units explicitly. '+review['coordinate_basis']]
-    for key in ('grids','storeys','surfaces','doors_windows','counts','warnings'):
+        'Coordinates below are metres; convert to '+target_module+' units explicitly. '+review['coordinate_basis']]
+    for key in ('grids','storeys','surfaces','walls','doors_windows','counts','warnings'):
         lines += ['',key.upper(),json.dumps(geometry[key],ensure_ascii=True,separators=(',',':'))]
     lines += ['', 'Model-data findings: '+json.dumps([dict(code=f['code'],count=f['count']) for f in review['checks']]),
               'The attached geometry carries no inferred structural member sizes or connection design. End architectural evidence.','']

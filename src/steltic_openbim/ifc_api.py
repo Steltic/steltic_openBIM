@@ -46,7 +46,7 @@ def router(drawings):
 
     @r.get('/api/project/{p}/ifc/handoff/{key}/{filename}')
     def handoff_file(p,key,filename):
-        if not re.fullmatch(r'h-[a-f0-9]{32}',key) or filename not in ('hr_brief.txt','architectural_geometry.json'):raise HTTPException(404)
+        if not re.fullmatch(r'h-[a-f0-9]{32}',key) or filename not in ('hr_brief.txt','cfs_brief.txt','architectural_geometry.json'):raise HTTPException(404)
         path=invoke(store.root,p)/'handoffs'/key/filename
         if not path.is_file() or not (path.parent/'summary.json').is_file():raise HTTPException(404)
         return FileResponse(path,filename=filename,media_type='text/plain' if filename.endswith('.txt') else 'application/json',headers={'Cache-Control':'no-store'})
