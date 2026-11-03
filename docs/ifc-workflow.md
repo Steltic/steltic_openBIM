@@ -1,4 +1,4 @@
-# IFC workflow (0.8.7)
+# IFC workflow (0.8.8)
 
 The openBIM module has three workflow tabs and the existing Files tab. Steltic import retains the HR/CFS drawing importer and editable request register. IFC import reads an external model for geometry and model-data review. IFC export generates a downloadable exchange file from either source. Each tab uses the selected Hub project.
 
@@ -32,7 +32,7 @@ Source-declared HR and CFS physical models use the dimensioned coordination rend
 Where HR has source level elevations but no per-object labels, its existing coordination grouping is disclosed as derived rather than source-declared. Generic braced-bay or supplier-envelope panels are `IfcBuildingElementProxy` objects, with their source kind retained, instead of being misclassified as floor slabs. The top framing plan is called a roof only where a source roof panel establishes that role.
 
 - Located members use the existing design meshes. Rolled fillets, bend radii and unmodelled fabrication cuts are not added.
-- Panels use source surfaces with thickness metadata. Unconfirmed openings do not cut geometry.
+- Panels use source surfaces with thickness metadata. Source opening polygons export as visible `IfcAnnotation` boundaries, with their host-source IDs, explicit or host-derived levels and source records. Their full source data and coordinate units also remain in project properties. These references do not cut panel/member geometry or assert an `IfcRelVoidsElement` relationship. Unconfirmed proposed openings remain request metadata.
 - Located connection parts are exported where the physical package supplies their actual geometry. Parent connection, joint and connected-member identifiers are retained. A source-declared storey on the connection or joint is preserved, including level zero; otherwise the parts remain contained in the building and their missing storey is disclosed. Unlocated connection specifications remain metadata. The locally drawn detail assemblies in the 61 fictional review PDFs are not automatically transformed into global placements without an occurrence transform.
 - Recovered ordinary-job source worklines remain reference axes. Unknown section orientation, physical set-out and connection geometry are not converted into invented solids. The export tab identifies this before generation. Some receiving applications may not display all curve-only representations; use the report and the openBIM review to inspect coverage.
 
