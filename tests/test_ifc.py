@@ -172,6 +172,32 @@ def test_unassigned_member_is_not_silently_placed_on_level_one(tmp_path):
     assert not schema_errors(path)
 
 
+def test_derived_hr_storey_is_disclosed_instead_of_claimed_as_declared(tmp_path):
+    folder,p,_=drawing_source(tmp_path)
+    p['layout_evidence']['levels_in']=[0,120]
+    for member in p['physical']['members']:member.pop('level',None)
+    write_json(folder/'source.json',p);write_json(folder/'state.json',initial_state(p,1))
+    path=tmp_path/'derived.ifc';export_drawing(folder,path)
+    model=ifcopenshell.open(str(path));beam=model.by_type('IfcBeam')[0]
+    props=ifcopenshell.util.element.get_psets(beam)['Steltic_Coordination']
+    assert props['AssignedLevel']==1 and 'SourceLevel' not in props
+    assert props['StoreyAssignment']=='Derived from source level elevations for coordination'
+
+
+def test_braced_bay_and_unknown_panel_are_not_misclassified_as_floor_slabs(tmp_path):
+    folder,p,_=drawing_source(tmp_path);p['module']='CFS'
+    p['physical']['panels']=[dict(id=kind,kind=kind,status='declared',thickness=.05,material_id='steel',vertices=[[i*12,0,0],[i*12,120,0],[i*12,120,120]]) for i,kind in enumerate(('strap_braced_bay','supplier_envelope','floor','shear_wall'))]
+    write_json(folder/'source.json',p);write_json(folder/'state.json',initial_state(p,1))
+    path=tmp_path/'panels.ifc';export_drawing(folder,path)
+    model=ifcopenshell.open(str(path))
+    assert len(model.by_type('IfcSlab'))==1 and len(model.by_type('IfcWall'))==1
+    proxies=model.by_type('IfcBuildingElementProxy')
+    assert len(proxies)==2
+    assert {ifcopenshell.util.element.get_psets(o)['Steltic_Coordination']['SourceKind'] for o in proxies}=={'strap_braced_bay','supplier_envelope'}
+    assert not schema_errors(path)
+    assert build_review(path,{'scope':'all','units':'auto'})['counts']['unrendered']==0
+
+
 def test_review_export_preserves_all_source_products_and_records_notes(tmp_path):
     src=tmp_path/'source.ifc';m=fixture_ifc(src);ids={e.GlobalId for e in m.by_type('IfcProduct')}
     state=dict(revision=2,source_sha256='synthetic',status='reviewed',options={'scope':'structural','units':'auto'},review_note='Geometry reviewed; material grades TBD')

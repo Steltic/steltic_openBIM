@@ -249,7 +249,8 @@ def generate(package, state, dest):
     for k, z in enumerate(levels[1:] or levels, 1):
         selected = [m for m in ms if (m['id'] in column_ids and min(p[2] for p in m['axis'])-1e-5 <= z <= max(p[2] for p in m['axis'])+1e-5)
                     or (m['id'] not in column_ids and (abs(max(p[2] for p in m['axis'])-z)<1e-5 or m.get('level')==k))]
-        plot(sh, f'S{100+k:03}', f"{'Roof' if z==levels[-1] else 'Level '+str(k)} framing / {feet(z)}", selected,
+        is_roof=any('roof' in p.get('kind','').lower() and p.get('vertices') and min(v[2] for v in p['vertices'])-1e-5<=z<=max(v[2] for v in p['vertices'])+1e-5 for p in model['panels'])
+        plot(sh, f'S{100+k:03}', f"{'Roof' if is_roof else 'Level '+str(k)} framing / {feet(z)}", selected,
              features=[f for f in features if f['level']==k and f['plane']=='xy'], z=z)
     section = 200
     for axis in (0,1):
