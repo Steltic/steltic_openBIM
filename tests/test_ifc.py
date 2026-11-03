@@ -134,6 +134,44 @@ def test_connection_reference_keeps_coordinates_detail_notes_and_stable_identity
     assert report['objects']==again['objects']
 
 
+@pytest.mark.parametrize('where,level',[('unspecified',None),('connection',0),('connection',2),('joint',2)])
+def test_connection_parts_keep_parent_identity_and_never_invent_a_storey(tmp_path,where,level):
+    folder,p,_=drawing_source(tmp_path)
+    connection=p['physical']['connections'][0]
+    joint=p['physical']['joints'][0]
+    if where=='connection':connection['level']=level
+    if where=='joint':joint['level']=level
+    write_json(folder/'source.json',p);write_json(folder/'state.json',initial_state(p,1))
+    path=tmp_path/'parts.ifc';report=export_drawing(folder,path)
+    model=ifcopenshell.open(str(path));part=model.by_type('IfcPlate')[0]
+    data=ifcopenshell.util.element.get_psets(part)['Steltic_Coordination']
+    assert data['ConnectionId']==connection['id'] and data['JointId']==joint['id']
+    assert json.loads(data['ConnectedMembers'])==['beam']
+    container=ifcopenshell.util.element.get_container(part)
+    if level is None:
+        assert container.is_a('IfcBuilding')
+        assert data['StoreyAssignment']=='not supplied; contained in building'
+        assert report['counts']['unassigned_connection_parts']==1
+    else:
+        assert container.is_a('IfcBuildingStorey') and container.Name=='Level '+str(level)
+        assert data['SourceLevel']==level and report['counts']['unassigned_connection_parts']==0
+    assert not schema_errors(path)
+    review=build_review(path,{'units':'auto'})
+    assert review['counts']['displayed']==2 and not review['counts']['unrendered']
+
+
+def test_unassigned_member_is_not_silently_placed_on_level_one(tmp_path):
+    folder,p,_=drawing_source(tmp_path)
+    for member in p['physical']['members']:member.pop('level',None)
+    write_json(folder/'source.json',p);write_json(folder/'state.json',initial_state(p,1))
+    path=tmp_path/'unassigned.ifc';report=export_drawing(folder,path)
+    model=ifcopenshell.open(str(path));beam=model.by_type('IfcBeam')[0]
+    assert ifcopenshell.util.element.get_container(beam).is_a('IfcBuilding')
+    assert ifcopenshell.util.element.get_psets(beam)['Steltic_Coordination']['StoreyAssignment']=='not supplied; contained in building'
+    assert report['counts']['unassigned_elements']>=1
+    assert not schema_errors(path)
+
+
 def test_review_export_preserves_all_source_products_and_records_notes(tmp_path):
     src=tmp_path/'source.ifc';m=fixture_ifc(src);ids={e.GlobalId for e in m.by_type('IfcProduct')}
     state=dict(revision=2,source_sha256='synthetic',status='reviewed',options={'scope':'structural','units':'auto'},review_note='Geometry reviewed; material grades TBD')

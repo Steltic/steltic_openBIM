@@ -65,13 +65,14 @@ def export_drawing(directory,destination):
     ifcopenshell.api.aggregate.assign_object(model,products=[site],relating_object=project)
     ifcopenshell.api.aggregate.assign_object(model,products=[building],relating_object=site)
     members=physical.get('members',[]);panels=physical.get('panels',[]);connections=physical.get('connections',[])
-    levels=sorted({int(m.get('level') or 1) for m in members+panels}) or [1]
+    level_of=lambda item:int(item['level']) if item.get('level') is not None else None
+    levels=sorted({level_of(item) for item in members+panels+connections+physical.get('joints',[]) if item.get('level') is not None})
     storeys={}
     for level in levels:
         s=entity('IfcBuildingStorey','Level '+str(level),'level:'+str(level))
-        points=[p[2] for m in members if int(m.get('level') or 1)==level for p in m['axis']]
+        points=[p[2] for m in members if level_of(m)==level for p in m['axis']]
         # Storey elevation follows the source floor framing plane, not a moved member placement.
-        floor=[p[2] for m in members if int(m.get('level') or 1)==level and abs(m['axis'][0][2]-m['axis'][1][2])<1e-6 for p in m['axis']]
+        floor=[p[2] for m in members if level_of(m)==level and abs(m['axis'][0][2]-m['axis'][1][2])<1e-6 for p in m['axis']]
         s.Elevation=(min(floor) if floor else min(points,default=0))*INCH
         ifcopenshell.api.aggregate.assign_object(model,products=[s],relating_object=building);storeys[level]=s
     profiles={p['id']:p for p in physical.get('profiles',[])}
@@ -79,13 +80,15 @@ def export_drawing(directory,destination):
     containment=defaultdict(list);material_products=defaultdict(list)
     origin=model.create_entity('IfcAxis2Placement3D',Location=model.create_entity('IfcCartesianPoint',Coordinates=(0.,0.,0.)))
     records={r['id']:r for r in package.get('design_records',[])}
-    counts=dict(members=0,member_surfaces=0,reference_axes=0,panel_surfaces=0,connection_parts=0,connection_reference_parts=0,connection_references=0)
+    counts=dict(members=0,member_surfaces=0,reference_axes=0,panel_surfaces=0,connection_parts=0,connection_reference_parts=0,connection_references=0,unassigned_connection_parts=0,unassigned_elements=0)
     warnings=[];objects=[];unlocated_connections=[]
     def add(cls,item,faces=(),lines=(),key=None):
         key=key or item['id'];obj=entity(cls,item.get('mark') or item['id'],key)
         obj.Description=item.get('description') or item.get('kind') or basis
         obj.ObjectPlacement=model.create_entity('IfcLocalPlacement',RelativePlacement=origin)
-        containment[int(item.get('level') or 1)].append(obj)
+        connection_part=item.get('connection_id') is not None
+        containment[level_of(item)].append(obj)
+        if level_of(item) is None:counts['unassigned_elements']+=1
         if faces:
             vertices=[];indices=[];lookup={}
             for face in faces:
@@ -116,8 +119,12 @@ def export_drawing(directory,destination):
             SourceModelSHA256=state['source_model_sha256'],DrawingRevision=state['revision'],
             SectionDefinition=profiles.get(item.get('profile_id')),ThicknessIn=item.get('thickness_in',item.get('thickness')),
             DetailReference=item.get('detail_ref'),PartParameters=item.get('parameters'),PartKind=item.get('kind') if item.get('geometry') else None,
+            ConnectionId=item.get('connection_id'),JointId=item.get('joint_id'),ConnectedMembers=item.get('connected_member_ids'),
+            SourceLevel=item.get('level'),StoreyAssignment='source declared' if item.get('level') is not None else 'not supplied; contained in building',
             DesignRecords=[records[r] for r in refs if r in records]))
-        objects.append(dict(source_id=item['id'],guid=obj.GlobalId,ifc_class=cls,geometry='surfaces' if faces else 'axes' if lines else 'metadata'))
+        row=dict(source_id=item['id'],guid=obj.GlobalId,ifc_class=cls,geometry='surfaces' if faces else 'axes' if lines else 'metadata')
+        if connection_part:row.update(connection_id=item['connection_id'],joint_id=item.get('joint_id'),source_level=item.get('level'))
+        objects.append(row)
         return obj
     for m in members:
         faces=[]
@@ -130,29 +137,37 @@ def export_drawing(directory,destination):
         vertices=p.get('vertices',[])
         if len(vertices)>=3:
             add('IfcWall' if 'wall' in p.get('kind','') else 'IfcSlab',p,[vertices],key='panel:'+p['id']);counts['panel_surfaces']+=1
+    joints={j['id']:j for j in physical.get('joints',[])}
     for c in connections:
+        joint=joints.get(c.get('joint_id'),{})
+        connected=sorted(set(c.get('member_ids',[])) | {e['member_id'] for e in joint.get('member_ends',[])+joint.get('attachments',[])})
+        source_level=c['level'] if c.get('level') is not None else joint.get('level')
         for i,part in enumerate(c.get('parts',[])):
             faces=part_faces(part,profiles);lines=part_lines(part)
             if not faces and not lines:warnings.append(dict(id=c['id'],message='Unsupported connection-part geometry'));continue
-            kind=part.get('kind','plate');item=dict(part,level=c.get('level',1),design_record_ids=c.get('design_record_ids',[]))
+            kind=part.get('kind','plate');item=dict(part,level=source_level,design_record_ids=c.get('design_record_ids',[]),
+                connection_id=c['id'],joint_id=c.get('joint_id'),connected_member_ids=connected)
             cls='IfcAnnotation' if lines else 'IfcMechanicalFastener' if kind in ('bolt','screw','anchor') else 'IfcPlate'
             if lines:item['description']='Connection reference only: '+kind+'; physical part set-out remains unspecified'
             add(cls,item,faces,lines,key='connection:'+c['id']+':'+str(i))
             counts['connection_reference_parts' if lines else 'connection_parts']+=1
+            if source_level is None:counts['unassigned_connection_parts']+=1
         if not c.get('parts'):
             unlocated_connections.append({k:c[k] for k in ('id','point','joint_id','member_ids','detail_ref','design_record_ids','basis') if k in c})
             counts['connection_references']+=1
     for level,items in containment.items():
-        ifcopenshell.api.spatial.assign_container(model,products=items,relating_structure=storeys.get(level,storeys[levels[0]]))
+        ifcopenshell.api.spatial.assign_container(model,products=items,relating_structure=storeys.get(level,building))
     for material,items in material_products.items():
         ifcopenshell.api.material.assign_material(model,products=items,material=materials[material])
     property_set(model,project,dict(SourceModelSHA256=state['source_model_sha256'],DrawingRevision=state['revision'],Basis=basis,
         DrawingStatus=state['drawing_status'],OpenRequests=[dict(id=r['id'],proposal=r['proposal'],confirmed=r['confirmed']) for r in state['requests']],
         ConnectionSchedules=[r for r in package.get('design_records',[]) if r['table']=='connections'],
         UnlocatedConnectionReferences=unlocated_connections,Interfaces=package['physical'].get('interfaces',[]),
+        UnassignedConnectionParts=counts['unassigned_connection_parts'],
+        UnassignedElements=counts['unassigned_elements'],
         Limits='Coordination surfaces omit rolled fillets and unmodelled cuts. Panels are source surfaces with thickness properties. Unconfirmed openings are not cut into geometry. Unlocated assembly details are not placed at guessed joints.'))
     model.header.file_name.name=destination.name
-    model.header.file_name.originating_system='Steltic openBIM 0.8.5'
+    model.header.file_name.originating_system='Steltic openBIM 0.8.6'
     model.write(str(destination));errors=schema_errors(destination)
     if errors:raise ValueError('Generated IFC failed schema validation: '+str(errors[:3]))
     reopened=ifcopenshell.open(str(destination))
@@ -162,7 +177,8 @@ def export_drawing(directory,destination):
         limits=['Coordination IFC, not an editable Revit family library or a fabrication issue.',
                 'Panels are surfaces; their thickness is metadata. Unconfirmed openings do not cut the model.',
                 'Unlocated connection assemblies are metadata only. Captured worklines remain reference axes where physical set-out is unknown.',
-                'Connection reference polylines are annotations with source detail notes, not fabricated plate or weld solids.'])
+                'Connection reference polylines are annotations with source detail notes, not fabricated plate or weld solids.',
+                'Objects without a source-declared storey remain contained in the building, with coordinates and parent-connection identity retained; they are not silently assigned to Level 1.'])
 
 
 def export_import(source,destination,state):

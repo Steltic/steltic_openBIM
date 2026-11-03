@@ -1,4 +1,4 @@
-"""Dimensioned HR coordination sheets from declared physical occurrences.
+"""Dimensioned coordination sheets from declared HR/CFS physical occurrences.
 
 The drawing identifiers are assigned here. Member geometry, section sizes and
 connection parts come only from the saved source package; no test recipe is used.
@@ -17,6 +17,8 @@ from .pilots.geometry import member_faces, part_faces, part_lines
 from .source_worklines import physical_view
 from .source_workline_pdf import WorklineSheets
 
+VERTICAL_KINDS = ('col', 'column', 'post', 'endwall_post', 'chord')
+
 
 def drawing_model(package):
     model = copy.deepcopy(physical_view(package))
@@ -27,7 +29,7 @@ def drawing_model(package):
     for m in members:
         m['mark'] = m.get('mark') or marks[m['kind'], m.get('profile_id') or 'TBD']
         m['basis'] = 'S'
-    columns = [m for m in members if m['kind'] in ('col', 'column')]
+    columns = [m for m in members if m['kind'] in VERTICAL_KINDS]
     points = [p for m in (columns or members) for p in m['axis']]
     model['grids'] = {}
     for axis, key in enumerate(('x', 'y')):
@@ -240,7 +242,7 @@ def generate(package, state, dest):
                 sh.text(65,y,line,17); y-=25
             y-=35
     ms = model['members']; levels = model['levels']; base = levels[0]
-    columns = [m for m in ms if m['kind'] in ('col','column')]
+    columns = [m for m in ms if m['kind'] in VERTICAL_KINDS]
     column_ids={m['id'] for m in columns}
     plot(sh, 'S100', 'Base column worklines', [m for m in columns if min(p[2] for p in m['axis']) <= base+1e-5] or ms, z=base)
     features = source_openings(package)+state['features']
@@ -263,8 +265,8 @@ def generate(package, state, dest):
         rows = []
         for f in features:
             dims = [feet(f[key]*12) if f['confirmed'] else 'TBD' for key in ('x_ft','y_ft','z_ft','width_ft','height_ft')]
-            rows.append([f['id'],f['level'],f['kind'],*dims,f['query_id']])
-            if f['confirmed']: sh.dimensions.append(dict(kind='confirmed_opening', feature_id=f['id'], values_ft={key:f[key] for key in ('x_ft','y_ft','z_ft','width_ft','height_ft')}))
+            rows.append([f['id'],f['level'],f['kind'],*dims,f['query_id']+(' / confirmed' if f['confirmed'] else ' / resolve query')])
+            if f['confirmed']: sh.dimensions.append(dict(kind='source_opening' if f.get('geometry_role')=='source_opening' else 'confirmed_opening', feature_id=f['id'], values_ft={key:f[key] for key in ('x_ft','y_ft','z_ft','width_ft','height_ft')}))
         sh.table('A','Opening schedule',['ID','Level','Kind','X','Y','Z','Width','Height','Source / request'],[140,90,230,220,220,220,220,220,sh.W-1790],rows)
     sh.c.save()
     write_json(dest/'member_index.json', model['members']); write_json(dest/'connection_index.json', model['connections'])

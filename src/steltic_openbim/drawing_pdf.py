@@ -37,8 +37,8 @@ def source_openings(package):
         vertices=opening['vertices']; lo=[min(p[i] for p in vertices)/12 for i in range(3)]
         hi=[max(p[i] for p in vertices)/12 for i in range(3)]; spans=[b-a for a,b in zip(lo,hi)]
         normal=min(range(3),key=lambda i:spans[i]); axes=[i for i in range(3) if i!=normal]
-        out.append(dict(id='SRC-'+opening['id'],kind=opening['kind'],plane=''.join('xyz'[i] for i in axes),
-            level=panels.get(opening.get('host_id'),{}).get('level',1),x_ft=lo[0],y_ft=lo[1],z_ft=lo[2],
+        out.append(dict(id='SRC-'+opening['id'],kind=opening.get('kind') or 'opening',plane=''.join('xyz'[i] for i in axes),
+            level=opening.get('level',panels.get(opening.get('host_id'),{}).get('level',1)),x_ft=lo[0],y_ft=lo[1],z_ft=lo[2],
             width_ft=spans[axes[0]],height_ft=spans[axes[1]],query_id='Source design',confirmed=True,
             geometry_role='source_opening',source_vertices=vertices,
             design_record_ids=opening.get('design_record_ids',[])))
@@ -236,7 +236,7 @@ def generate(package,state,dest):
     if required(package):
         from .source_workline_pdf import generate as workline_generate
         return workline_generate(package,state,dest)
-    if package['module']=='HR' and package['physical']['members'] and all(m.get('status')=='declared' for m in package['physical']['members']):
+    if package['physical']['members'] and all(m.get('status')=='declared' for m in package['physical']['members']):
         from .physical_pdf import generate as physical_generate
         return physical_generate(package,state,dest)
     dest=Path(dest); dest.mkdir(parents=True,exist_ok=True); sh=Sheets(package,state,dest); ph=physical_view(package)
