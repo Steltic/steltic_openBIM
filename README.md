@@ -4,6 +4,8 @@ Drawing and IFC module for Steltic Hub. The first release targets dimensioned en
 
 ## Current status
 
+Version 0.7.1 checks occurrence geometry as well as analysis-ID coverage. Ordinary HR exports with grouped or missing physical occurrences can now produce a complete source-workline coordination set, with storey plans, grids, member marks, frame sections and non-blocking requests. Regenerating an existing job rechecks completeness while retaining answers and history. [Live-job recovery, limits and validation](docs/live-job-recovery.md).
+
 Stage 8 completes **all 61 fictional buildings (36 HR, 25 CFS) as dimensioned A1 design sets with assembled connection details**. Each joint variant includes joined members, plates, fasteners, weld/interface callouts, a section and an isometric view. Plans, member marks and connection references link to every occurrence. [Final eighteen, verification and reproduction](docs/stage8/README.md); [previous twenty](docs/stage7/README.md); [first 23](docs/stage6/README.md).
 
 The shared Hub widget offers this development step only for the registered exact source packages, after explicit fictional-building confirmation. It never supplies fictional answers to ordinary jobs. `steltic-openbim design-test package.json --confirm-fictional --author "Test author" --output drawings` provides the same workflow from the CLI. Regeneration retains answers and revision history; reopening a request returns to provisional drawings. Source values are labelled S; authored fictional fit, layout and delegated geometry are labelled A. This does not rerun engineering or establish fabrication readiness.
