@@ -21,9 +21,9 @@ def read(path):return json.loads(Path(path).read_text(encoding='utf-8'))
 def worker(action,source,output,*args):
     cmd=[sys.executable,'-m','steltic_openbim.ifc_worker',action,str(source),str(output),*[str(a) for a in args]]
     try:
-        result=subprocess.run(cmd,capture_output=True,text=True,encoding='utf-8',errors='replace',timeout=300,
+        result=subprocess.run(cmd,capture_output=True,text=True,encoding='utf-8',errors='replace',timeout=600,
                               creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
-    except subprocess.TimeoutExpired:raise ValueError('IFC processing exceeded five minutes. Export a smaller model or discipline.') from None
+    except subprocess.TimeoutExpired:raise ValueError('IFC processing exceeded ten minutes. Export a smaller model or discipline.') from None
     if result.returncode:raise ValueError('IFC processing failed: '+(result.stderr or result.stdout)[-1000:])
     return read(output)
 
