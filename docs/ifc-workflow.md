@@ -1,4 +1,11 @@
-# IFC workflow (0.8.16)
+# IFC workflow (0.8.17)
+
+HR/CFS now preserve structured architectural handoff data as a fingerprinted
+job input. Physical packages can include the optional `architectural_input`
+field. openBIM independently checks retained named levels, grids and opening
+identities/bounds, even if a producer declares its physical coverage complete.
+Repeated identical physical members also remain a readiness finding. Update
+HR/CFS and openBIM together when using this contract extension.
 
 The openBIM module has three workflow tabs and the existing Files tab. Steltic import retains the HR/CFS drawing importer and editable request register. IFC import reads an external model for geometry and model-data review. IFC export generates a downloadable exchange file from either source. Each tab uses the selected Hub project.
 
