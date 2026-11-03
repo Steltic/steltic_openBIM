@@ -97,3 +97,19 @@ def test_direct_legacy_source_remains_reference_worklines(tmp_path):
     assert state['representation']=='captured_source_worklines'
     report=export_structural(store.structural_current('Direct')[0],tmp_path/'axes.ifc')
     assert report['counts']['reference_axes']==16 and report['counts']['member_surfaces']==0
+
+
+def test_reloading_source_recomputes_new_findings_without_mutating_old_revision(tmp_path):
+    package,path,drawings,roots=setup(tmp_path,'HR')
+    package['physical']['connections'][0]['parts'][0]['geometry']['origin']=[1000,0,0]
+    write_json(path,package);store=IFCStore(drawings,roots)
+    first=store.import_structural('Direct',dict(module='HR',job='Example'))
+    folder=store.structural_current('Direct')[0]
+    # Simulate a snapshot saved before these physical screens existed.
+    old=dict(first,source_readiness='ready',requests=[],source_status='source_geometry')
+    write_json(folder/'state.json',old);before=(folder/'state.json').read_bytes()
+    fresh=store.import_structural('Direct',dict(module='HR',job='Example',revision=1))
+    assert fresh['revision']==2 and fresh['source_readiness']=='needs_input'
+    assert fresh['source_model_sha256']==old['source_model_sha256'] and fresh['requests']
+    assert (folder/'state.json').read_bytes()==before
+    assert store.import_structural('Direct',dict(module='HR',job='Example',revision=2))==fresh
