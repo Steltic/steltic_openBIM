@@ -236,6 +236,9 @@ def generate(package,state,dest):
     if required(package):
         from .source_workline_pdf import generate as workline_generate
         return workline_generate(package,state,dest)
+    if package['module']=='HR' and package['physical']['members'] and all(m.get('status')=='declared' for m in package['physical']['members']):
+        from .physical_pdf import generate as physical_generate
+        return physical_generate(package,state,dest)
     dest=Path(dest); dest.mkdir(parents=True,exist_ok=True); sh=Sheets(package,state,dest); ph=physical_view(package)
     members=ph['members']; levels=sorted({m.get('level',1) for m in members}); requests=state['requests']
     all_features=source_openings(package)+state['features']
