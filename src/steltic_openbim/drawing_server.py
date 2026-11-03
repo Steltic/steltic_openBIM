@@ -12,7 +12,7 @@ local_guard.install(app)
 store=DrawingStore(os.environ.get('OPENBIM_JOBS','openbim_jobs'))
 app.include_router(router(store,{'HR':os.environ.get('HR_JOBS'),'CFS':os.environ.get('CFS_JOBS')}))
 from .ifc_api import router as ifc_router
-app.include_router(ifc_router(store))
+app.include_router(ifc_router(store,{'HR':os.environ.get('HR_JOBS'),'CFS':os.environ.get('CFS_JOBS')}))
 
 
 @app.get('/healthz')

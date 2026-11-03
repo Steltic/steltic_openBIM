@@ -9,7 +9,8 @@ import subprocess
 import sys
 import uuid
 
-from .drawing_workflow import StaleRevision,write_json
+from .drawing_workflow import StaleRevision,write_json,fingerprint,initial_state
+from .job_sources import JobSources
 
 MAX_FILE=100*1024*1024
 
@@ -28,9 +29,44 @@ def worker(action,source,output,*args):
 
 
 class IFCStore:
-    def __init__(self,drawings):self.drawings=drawings
+    def __init__(self,drawings,source_roots=None):
+        self.drawings=drawings;self.jobs=JobSources(source_roots)
 
     def root(self,p):return self.drawings.project(p)/'ifc'
+
+    def structural_current(self,p):
+        pointer=self.root(p)/'structural_current.json'
+        if not pointer.is_file():return None
+        key=read(pointer)['directory']
+        if not re.fullmatch(r'r\d{4,}-[a-f0-9]{12}',key):raise ValueError('Invalid structural revision pointer')
+        folder=self.root(p)/'structural'/key
+        return folder,read(folder/'state.json')
+
+    def import_structural(self,p,body):
+        with self.drawings.lock(p):
+            old=self.structural_current(p)
+            if old and body.get('revision')!=old[1]['revision']:
+                raise StaleRevision('The structural source changed. Refresh before importing.')
+            module,job=body.get('module'),body.get('job')
+            package=read(self.jobs.path(module,job))
+            if not isinstance(package,dict) or package.get('module')!=module:
+                raise ValueError('The physical export does not match the selected module')
+            if old and old[1]['source_model_sha256']==fingerprint(package) and old[1]['source_job']==job and old[1]['source_module']==module:
+                return old[1]
+            initial=initial_state(package,old[1]['revision']+1 if old else 1)
+            from .source_worklines import required
+            state={k:initial[k] for k in ('revision','building_id','source_model_sha256','source_readiness','requests')}
+            state.update(schema='steltic.ifc_physical_source',source_module=module,source_job=job,
+                         source_status=initial['drawing_status'],
+                         representation='captured_source_worklines' if required(package) else 'physical_geometry',
+                         counts={k:len(v) for k,v in package['physical'].items() if isinstance(v,list)})
+            dest=self.root(p)/'structural'/f'r{state["revision"]:04}-{uuid.uuid4().hex[:12]}'
+            dest.mkdir(parents=True)
+            write_json(dest/'source.json',package);write_json(dest/'state.json',state)
+            pointer=self.root(p)/('structural-'+uuid.uuid4().hex+'.tmp')
+            write_json(pointer,dict(directory=dest.name))
+            os.replace(pointer,self.root(p)/'structural_current.json')
+            return state
 
     def current(self,p):
         pointer=self.root(p)/'current.json'
@@ -93,19 +129,23 @@ class IFCStore:
 
     def export(self,p,body):
         with self.drawings.lock(p):
-            source=body.get('source');current=self.drawings.current(p) if source=='steltic' else self.current(p) if source=='ifc_import' else None
-            if current is None:raise ValueError('Choose an available Steltic drawing set or built IFC review')
-            folder,state=current;sha=state['source_model_sha256'] if source=='steltic' else state['source_sha256']
+            source=body.get('source');current=self.drawings.current(p) if source=='steltic' else self.structural_current(p) if source=='structural' else self.current(p) if source=='ifc_import' else None
+            if current is None:raise ValueError('Choose an available HR/CFS job source, Steltic drawing set or built IFC review')
+            folder,state=current;sha=state['source_model_sha256'] if source in ('steltic','structural') else state['source_sha256']
             if body.get('revision')!=state['revision'] or body.get('source_sha256')!=sha:raise StaleRevision('The source changed. Refresh before exporting.')
             if source=='ifc_import' and state['status'] not in ('built','reviewed'):raise ValueError('Build the imported IFC review model first')
             dest=self.root(p)/'exports'/('e-'+uuid.uuid4().hex);dest.mkdir(parents=True)
-            report=worker('export',folder,dest/'report.json') if source=='steltic' else worker('export_import',folder/'original.ifc',dest/'report.json',folder/'state.json')
+            if source in ('steltic','structural'):
+                report=worker('export' if source=='steltic' else 'export_structural',folder,dest/'report.json')
+            else:report=worker('export_import',folder/'original.ifc',dest/'report.json',folder/'state.json')
             report.update(key=dest.name,source_directory=folder.name);write_json(dest/'report.json',report)
             return report
 
     def state(self,p):
-        current=self.current(p);drawing=self.drawings.current(p)
-        result=dict(imported=None,drawing=None,exports=[],history=[],handoffs=[])
+        current=self.current(p);drawing=self.drawings.current(p);structural=self.structural_current(p)
+        result=dict(imported=None,drawing=None,structural=None,sources=self.jobs.list(),exports=[],history=[],handoffs=[])
+        if structural:
+            _,s=structural;result['structural']=dict(s,source_sha256=s['source_model_sha256'])
         if current:
             folder,state=current;meta=read(folder/'inspection.json')
             result['imported']=dict(state,directory=folder.name,inspection={k:v for k,v in meta.items() if k!='products'})

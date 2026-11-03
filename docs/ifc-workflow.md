@@ -1,4 +1,4 @@
-# IFC workflow (0.8.8)
+# IFC workflow (0.8.9)
 
 The openBIM module has three workflow tabs and the existing Files tab. Steltic import retains the HR/CFS drawing importer and editable request register. IFC import reads an external model for geometry and model-data review. IFC export generates a downloadable exchange file from either source. Each tab uses the selected Hub project.
 
@@ -17,13 +17,17 @@ Missing materials, sections, storeys, geometry, duplicate GlobalIds, identical c
 
 After building the IFC review, choose **HR Steel** or **CFS Steel** under **Continue to structural design**, enter the engineering instructions, and prepare the design brief. The versioned handoff combines those instructions with explicit IFC grid polylines, storey datums, floor/roof surface boundaries (including slopes and holes), wall surfaces and explicitly supplied axes, source bearing-wall flags, door/window bounds and their host-wall references, source fingerprint and review revision. It does not infer wall centrelines from envelope bounds or choose member sizes. Source properties are evidence, not executable instructions. Missing/unrendered geometry and unsupported grid curves remain disclosed.
 
-Download `hr_brief.txt` or `cfs_brief.txt`, then load it through the chosen module's **Design > Upload files** using the same project name. That module selects and checks the structure through its normal workflow. Once it finishes, return to **Steltic import** for drawings and **IFC export** for the return model. Preparing a handoff does not launch a paid design run. The architectural IFC alone does not establish loads, supports, structural systems, capacities or connection details. Existing HR handoffs and callers that omit the target module remain supported.
+Download `hr_brief.txt` or `cfs_brief.txt`, then load it through the chosen module's **Design > Upload files** using the same project name. That module selects and checks the structure through its normal workflow. Once it finishes, use **IFC export** for the return model; **Steltic import** can generate drawings when needed. Preparing a handoff does not launch a paid design run. The architectural IFC alone does not establish loads, supports, structural systems, capacities or connection details. Existing HR handoffs and callers that omit the target module remain supported.
 
 The three fictional [architectural video examples](architect-video.md) cover a regular office, a stepped school and a gabled warehouse. Their preliminary OpenSees builds are model-creation checks; the separate fresh HR office run supplies the design/drawing/return-IFC example.
 
 ## Export
 
 Select a source in IFC export, click Generate IFC, then Download IFC. The export report records counts, geometry warnings, source/revision fingerprints and schema results. Outputs are retained under the project's `openbim/ifc/exports` directory, separate from drawing revisions.
+
+For a **direct HR/CFS job**, choose the job under **HR/CFS physical source** and click **Load job for IFC export**. This validates and snapshots its `bim_package.json`, without running the drawing engine. Generate IFC from that physical revision. Reload after updating the design job; existing snapshots and IFCs remain immutable. Concurrent source replacement and stale export requests are rejected. The output records the source module, job, physical revision and package fingerprint. It uses supplied physical geometry and the same disclosed reference-axis fallback as drawing exports. It does not adopt fictional drawing supplements or assert a design completion check merely because the package can be exported.
+
+The local API uses `POST /api/project/{project}/ifc/structural/import` with `module`, `job` and the current physical `revision` when replacing a source. `POST /api/project/{project}/ifc/export` then accepts `source: "structural"`, `revision` and `source_sha256`. Jobs are restricted to configured HR/CFS roots; callers cannot supply arbitrary source paths. Physical snapshots are stored under `openbim/ifc/structural` and have their own current pointer. Existing drawing and imported-IFC export APIs retain their behavior.
 
 For a **Steltic drawing revision**, the exporter writes IFC4 in metres with a project/site/building/storey hierarchy, stable product GlobalIds, classifications, material assignments, member marks, source sections, design-record references and outstanding requests. It reopens and validates the resulting IFC and checks product counts. This is a coordination IFC, not a claim of certified MVD conformance or editable native Revit families.
 

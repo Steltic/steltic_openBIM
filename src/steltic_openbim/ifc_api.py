@@ -8,8 +8,8 @@ from .drawing_workflow import StaleRevision
 from .ifc_store import IFCStore,MAX_FILE
 
 
-def router(drawings):
-    r=APIRouter();store=IFCStore(drawings)
+def router(drawings,source_roots=None):
+    r=APIRouter();store=IFCStore(drawings,source_roots)
     def invoke(fn,*args):
         try:return fn(*args)
         except StaleRevision as ex:raise HTTPException(409,str(ex)) from ex
@@ -40,6 +40,9 @@ def router(drawings):
 
     @r.post('/api/project/{p}/ifc/export')
     async def export(p,request:Request):return await run_in_threadpool(invoke,store.export,p,await body(request))
+
+    @r.post('/api/project/{p}/ifc/structural/import')
+    async def structural(p,request:Request):return await run_in_threadpool(invoke,store.import_structural,p,await body(request))
 
     @r.post('/api/project/{p}/ifc/handoff')
     async def handoff(p,request:Request):return await run_in_threadpool(invoke,store.handoff,p,await body(request))

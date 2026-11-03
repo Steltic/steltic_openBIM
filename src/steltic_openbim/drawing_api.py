@@ -6,20 +6,12 @@ from fastapi import APIRouter,HTTPException,Request
 from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import FileResponse,Response
 
-from .drawing_workflow import DrawingStore,StaleRevision,name
+from .drawing_workflow import DrawingStore,StaleRevision
+from .job_sources import JobSources
 
 
 def router(store:DrawingStore,source_roots=None):
-    r=APIRouter(); roots={k:Path(v).resolve() for k,v in (source_roots or {}).items() if v}
-
-    def source_path(module,job):
-        if module not in roots: raise ValueError('Source module is not configured')
-        folder=(roots[module]/name(job)).resolve()
-        if not folder.is_relative_to(roots[module]): raise ValueError('Invalid source job path')
-        for rel in ('design/bim_package.json','bim_package.json'):
-            p=(folder/rel).resolve()
-            if p.is_relative_to(folder) and p.is_file(): return p
-        raise ValueError('No physical export exists for this job yet')
+    r=APIRouter(); jobs=JobSources(source_roots)
 
     def invoke(fn,*args):
         try: return fn(*args)
@@ -36,15 +28,7 @@ def router(store:DrawingStore,source_roots=None):
 
     @r.get('/api/drawings/sources')
     def sources():
-        out=[]
-        for module,root in roots.items():
-            if not root.is_dir(): continue
-            for folder in sorted(root.iterdir()):
-                if not folder.is_dir(): continue
-                try: source_path(module,folder.name)
-                except ValueError: continue
-                out.append(dict(module=module,job=folder.name))
-        return {'sources':out}
+        return {'sources':jobs.list()}
 
     @r.get('/api/project/{p}/drawings')
     def state(p:str):
@@ -58,7 +42,7 @@ def router(store:DrawingStore,source_roots=None):
     @r.post('/api/project/{p}/drawings/import')
     async def import_source(p:str,request:Request):
         body=await body_object(request)
-        path=invoke(source_path,body.get('module'),body.get('job'))
+        path=invoke(jobs.path,body.get('module'),body.get('job'))
         package=invoke(json_object,path.read_bytes())
         return await run_in_threadpool(invoke,store.import_package,p,package,body.get('revision'))
 

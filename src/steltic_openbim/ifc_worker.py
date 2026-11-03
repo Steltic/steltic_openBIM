@@ -15,6 +15,9 @@ def main():
     elif action=='export':
         from .ifc_export import export_drawing
         result=export_drawing(source,Path(output).with_name('model.ifc'))
+    elif action=='export_structural':
+        from .ifc_export import export_structural
+        result=export_structural(source,Path(output).with_name('model.ifc'))
     elif action=='export_import':
         from .ifc_export import export_import
         result=export_import(source,Path(output).with_name('model.ifc'),json.loads(Path(args[0]).read_text(encoding='utf-8')))
