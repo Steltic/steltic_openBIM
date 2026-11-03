@@ -13,7 +13,7 @@ from pathlib import Path
 from .design_pdf import feet, inches, INK, BLUE, LIGHT, ASSUMED
 from .drawing_pdf import feature_vertices, source_openings
 from .drawing_workflow import write_json, fingerprint
-from .pilots.geometry import member_faces, part_faces
+from .pilots.geometry import member_faces, part_faces, part_lines
 from .source_worklines import physical_view
 from .source_workline_pdf import WorklineSheets
 
@@ -138,24 +138,27 @@ def plot(sh, number, title, members, axes=(0, 1), features=(), z=None):
 
 def detail(sh, row):
     cs = row['connections']; source = next((c for c in cs if c.get('parts')), cs[0])
-    sh.start(row['reference'], 'Connection family / ' + row['family'][:85])
+    kinds = sorted({p.get('kind', 'part').replace('_', ' ') for c in cs for p in c.get('parts', [])})
+    sh.start(row['reference'], 'Connection / ' + (', '.join(kinds).capitalize() if kinds else 'Source specification'))
     joints = {j['id']: j for j in sh.m['joints']}; joint = joints.get(source.get('joint_id'), {})
     center = joint.get('point', source.get('point', [0, 0, 0]))
     parts = [(face, True) for p in source.get('parts', []) for face in part_faces(p, sh.profiles)]
+    lines = [line for p in source.get('parts', []) for line in part_lines(p)]
     faces = list(parts)
-    linked = set(source.get('member_ids', [])) | {e['member_id'] for e in joint.get('member_ends', [])}
+    linked = (set(source.get('member_ids', [])) | {e['member_id'] for e in joint.get('member_ends', [])}
+              | {e['member_id'] for e in joint.get('attachments', [])})
     crop = [(v-36, v+36) for v in center]
     for m in sh.m['members']:
         if m['id'] in linked:
             faces += [(f, False) for f in member_faces(m, sh.profiles, crop)]
-    if parts:
+    if parts or lines:
         views = [('PLAN X-Y', (0, 1), (80, 910, 660, 480)), ('ELEVATION X-Z', (0, 2), (790, 910, 660, 480)),
                  ('ELEVATION Y-Z', (1, 2), (80, 260, 660, 500)), ('ASSEMBLY / ISOMETRIC', None, (790, 260, 660, 500))]
         for label, axes, (x, y, w, h) in views:
             def raw(p):
                 q = [p[i]-center[i] for i in range(3)]
                 return [q[axes[0]], q[axes[1]]] if axes else [q[0]*.8-q[1]*.6, q[2]*.9-q[0]*.26-q[1]*.35]
-            allp = [raw(p) for f, _ in faces for p in f]
+            allp = [raw(p) for f, _ in faces for p in f] + [raw(p) for line in lines for p in line]
             bounds = [(min(p[i] for p in allp), max(p[i] for p in allp)) for i in (0, 1)]
             scale = min((w-110)/max(1, bounds[0][1]-bounds[0][0]), (h-100)/max(1, bounds[1][1]-bounds[1][0]))
             def tr(p):
@@ -165,7 +168,10 @@ def detail(sh, row):
             for f, ispart in sorted(faces, key=lambda r:r[1]):
                 pp = [tr(p) for p in f]
                 for a, b in zip(pp, pp[1:]+pp[:1]): sh.line(a, b, BLUE if ispart else LIGHT, .8 if ispart else .35)
-            if axes:
+            for line in lines:
+                pp = [tr(p) for p in line]
+                for a, b in zip(pp, pp[1:]): sh.line(a, b, ASSUMED, 1.4, [5, 3])
+            if axes and parts:
                 pp = [p for f, _ in parts for p in f]
                 low = [min(p[i] for p in pp) for i in range(3)]; high = [max(p[i] for p in pp) for i in range(3)]
                 a = list(low); b = list(low); b[axes[0]] = high[axes[0]]
@@ -173,8 +179,8 @@ def detail(sh, row):
                 sh.dim(tr(a), tr(b), -30, value=value, label=inches(value), ref='Source connection-part envelope', size=11)
                 b=list(low); b[axes[1]]=high[axes[1]]; value=high[axes[1]]-low[axes[1]]
                 sh.dim(tr(a), tr(b), 35, value=value, label=inches(value), ref='Source connection-part envelope', size=11)
-            sh.views.append(dict(sheet=sh.current, kind='source_connection_assembly', axes=list(axes) if axes else None,
-                                 connection_id=source['id'], part_ids=[p['id'] for p in source['parts']]))
+            sh.views.append(dict(sheet=sh.current, kind='source_connection_assembly' if parts else 'source_connection_reference', axes=list(axes) if axes else None,
+                                 connection_id=source['id'], part_ids=[p['id'] for p in source['parts']], contextual_member_ids=sorted(linked)))
     else:
         sh.text(85, sh.H-250, 'No located part geometry supplied for this family.', 22, ASSUMED)
         sh.wrap(85, sh.H-300, 'Connection specification retained below. Part set-out and assembly views: TBD - resolve query. No geometry has been invented.', 1250, 18, 28)
@@ -183,6 +189,7 @@ def detail(sh, row):
              'Blue: supplied connection parts. Grey: connected members cropped around the source joint.',
              'Dimensions identify the supplied part envelope, not hole centres or fabrication cut sizes. Only explicitly supplied parts are shown.',
              'Design records: ' + ', '.join(source.get('design_record_ids', []))]
+    if lines: notes.insert(1, 'Amber dashed lines: source reference locations only. Physical plate/weld set-out: TBD - resolve query. No solid geometry inferred from detail notes.')
     y = sh.panel_notes(notes, x=x, y=y, width=735)-10
     counts = Counter(p.get('kind', 'part') for p in source.get('parts', []))
     y = sh.wrap(x, y, 'REPRESENTATIVE PARTS: ' + (', '.join(f'{n} {k}' for k,n in counts.items()) or 'TBD'), 735, 13, 19)-28
@@ -211,6 +218,13 @@ def generate(package, state, dest):
                  'Opening proposals remain separate from the structural source. Provisional symbols have no dimensions. Confirmed openings retain their source or user resolution.',
                  'G: basis and requests. S: base, floor/roof plans and frame sections. C: connection families. M: section schedule. A: opening schedule. Full occurrence data accompany the PDF.']:
         y = sh.wrap(65, y, text, sh.W-150, 18, 27)-32
+    for interface in package['physical'].get('interfaces', []):
+        text = 'DECLARED INTERFACE: ' + ' | '.join(str(interface[k]) for k in ('id', 'scope', 'responsible_party', 'representation') if k in interface)
+        for line in sh.lines(text, sh.W-150, 16):
+            if y < 180:
+                sh.start(f'G001-{sh.page}', 'Declared interfaces / continued'); y=sh.H-200
+            sh.text(65, y, line, 16); y-=25
+        y-=24
     for i, r in enumerate(state['requests'], 2):
         sh.start(f'G{i:03}', 'Information request / ' + r['id']); y = sh.H-200
         for label, value in [('Question', r['question']), ('Proposal', r['proposal']), ('Basis', r['evidence']), ('Status', r.get('resolution') or 'TBD - resolve query; drawings proceed.')]:

@@ -121,6 +121,12 @@ def member_faces(member,profiles,limits=None):
     return faces
 
 
+def part_lines(part):
+    """Keep explicitly declared reference polylines; never infer a solid from them."""
+    g = part.get('geometry', {})
+    return [g['points']] if g.get('type') == 'polyline' else []
+
+
 def part_faces(part,profiles):
     g=part['geometry']; kind=g['type']; a=g.get('origin')
     if kind=='box':

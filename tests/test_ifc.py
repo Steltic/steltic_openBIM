@@ -114,6 +114,26 @@ def test_recovered_worklines_export_every_occurrence_without_inventing_solids(tm
     assert model['counts']['displayed']==16 and all(o['lines'] and not o['faces'] for o in model['objects'])
 
 
+def test_connection_reference_keeps_coordinates_detail_notes_and_stable_identity(tmp_path):
+    folder,p,_=drawing_source(tmp_path)
+    part=p['physical']['connections'][0]['parts'][0]
+    part.update(kind='splice_weld',geometry={'type':'polyline','points':[[1,2,3],[4,5,6],[7,5,6]]},
+                parameters={'detail':'CJP splice; preparation is not supplied'})
+    write_json(folder/'source.json',p);write_json(folder/'state.json',initial_state(p,1))
+    out=tmp_path/'reference.ifc';report=export_drawing(folder,out)
+    assert not schema_errors(out) and not report['warnings']
+    assert report['counts']['connection_parts']==0 and report['counts']['connection_reference_parts']==1
+    review=build_review(out,{'units':'auto'})
+    assert not review['counts']['unrendered']
+    reference=next(o for o in review['objects'] if o['ifc_class']=='IfcAnnotation')
+    assert not reference['faces']
+    assert np.allclose(reference['lines'],np.array([[[1,2,3],[4,5,6]],[[4,5,6],[7,5,6]]])*.0254)
+    data=reference['properties']['Steltic_Coordination']
+    assert json.loads(data['PartParameters'])==part['parameters'] and data['PartKind']=='splice_weld'
+    again=export_drawing(folder,tmp_path/'again.ifc')
+    assert report['objects']==again['objects']
+
+
 def test_review_export_preserves_all_source_products_and_records_notes(tmp_path):
     src=tmp_path/'source.ifc';m=fixture_ifc(src);ids={e.GlobalId for e in m.by_type('IfcProduct')}
     state=dict(revision=2,source_sha256='synthetic',status='reviewed',options={'scope':'structural','units':'auto'},review_note='Geometry reviewed; material grades TBD')

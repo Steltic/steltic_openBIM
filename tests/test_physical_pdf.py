@@ -54,3 +54,17 @@ def test_physical_joint_offset_keeps_floor_plan_connection_callout(tmp_path):
     for end in joint['member_ends']: end['joint_offset']=[0,0,-12]
     report=generate(p,initial_state(p,1),tmp_path)
     assert any(c['sheet']=='S101' and 'C001' in c['reference'] for c in report['callouts'])
+
+
+def test_splice_reference_is_visible_with_attachment_context_without_solid_dimensions(tmp_path):
+    p=source_frame(); connection=p['physical']['connections'][0]
+    connection['parts'][0]['geometry']={'type':'polyline','points':[[-4,0,180],[4,0,180]]}
+    joint=p['physical']['joints'][0]
+    joint['member_ends']=[dict(member_id='C00',end='end')]
+    joint['attachments']=[dict(member_id='beam',station=0,offset=[0,0,0])]
+    report=generate(p,initial_state(p,1),tmp_path)
+    views=[v for v in report['views'] if v.get('kind')=='source_connection_reference']
+    assert len(views)==4 and all('beam' in v['contextual_member_ids'] for v in views)
+    assert not any(d.get('reference')=='Source connection-part envelope' for d in report['dimensions'])
+    text='\n'.join(page.extract_text() for page in PdfReader(tmp_path/'drawings.pdf').pages)
+    assert 'Amber dashed lines: source reference locations only' in text and 'Physical plate/weld set-out: TBD' in text
