@@ -172,6 +172,35 @@ def test_unassigned_member_is_not_silently_placed_on_level_one(tmp_path):
     assert not schema_errors(path)
 
 
+@pytest.mark.parametrize('level',[0,2])
+def test_numeric_storey_alias_preserves_source_provenance_and_connection_container(tmp_path,level):
+    folder,p,_=drawing_source(tmp_path);p['module']='CFS'
+    member=p['physical']['members'][0];member.pop('level',None);member['storey']=level
+    joint=p['physical']['joints'][0];joint['storey']=level
+    write_json(folder/'source.json',p);write_json(folder/'state.json',initial_state(p,1))
+    before=json.dumps(p,sort_keys=True)
+    path=tmp_path/'storey-alias.ifc';report=export_drawing(folder,path)
+    model=ifcopenshell.open(str(path))
+    for obj in model.by_type('IfcBeam')+model.by_type('IfcPlate'):
+        props=ifcopenshell.util.element.get_psets(obj)['Steltic_Coordination']
+        assert props['AssignedLevel']==level and props['SourceStorey']==level
+        assert props['LevelSourceField']=='storey' and 'SourceLevel' not in props
+        assert props['StoreyAssignment']=='Source-declared numeric storey field'
+        assert ifcopenshell.util.element.get_container(obj).Name=='Level '+str(level)
+    assert report['counts']['unassigned_elements']==0 and not schema_errors(path)
+    assert json.dumps(p,sort_keys=True)==before
+
+
+@pytest.mark.parametrize('value',['Roof','2',2.5,True])
+def test_noninteger_storey_alias_does_not_guess_a_level(tmp_path,value):
+    folder,p,_=drawing_source(tmp_path);p['module']='CFS'
+    member=p['physical']['members'][0];member.pop('level',None);member['storey']=value
+    write_json(folder/'source.json',p);write_json(folder/'state.json',initial_state(p,1))
+    path=tmp_path/'storey-unknown.ifc';export_drawing(folder,path)
+    model=ifcopenshell.open(str(path));beam=model.by_type('IfcBeam')[0]
+    assert ifcopenshell.util.element.get_container(beam).is_a('IfcBuilding')
+
+
 def test_derived_hr_storey_is_disclosed_instead_of_claimed_as_declared(tmp_path):
     folder,p,_=drawing_source(tmp_path)
     p['layout_evidence']['levels_in']=[0,120]

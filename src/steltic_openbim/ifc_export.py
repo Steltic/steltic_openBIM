@@ -135,6 +135,7 @@ def _export_source(directory,destination,source):
             ConnectionId=item.get('connection_id'),JointId=item.get('joint_id'),ConnectedMembers=item.get('connected_member_ids'),
             HostSourceId=item.get('host_id'),GeometryRole=item.get('geometry_role'),
             SourceKind=item.get('kind'),SourceLevel=None if item.get('level_basis') else item.get('level'),AssignedLevel=item.get('level'),
+            SourceStorey=item.get('storey'),LevelSourceField=item.get('level_source_field'),
             StoreyAssignment=item.get('level_basis') or ('source declared' if item.get('level') is not None else 'not supplied; contained in building'),
             DesignRecords=[records[r] for r in refs if r in records]))
         row=dict(source_id=item['id'],guid=obj.GlobalId,ifc_class=cls,geometry='surfaces' if faces else 'axes' if lines else 'metadata')
@@ -170,11 +171,14 @@ def _export_source(directory,destination,source):
         joint=joints.get(c.get('joint_id'),{})
         connected=sorted(set(c.get('member_ids',[])) | {e['member_id'] for e in joint.get('member_ends',[])+joint.get('attachments',[])})
         source_level=c['level'] if c.get('level') is not None else joint.get('level')
+        level_source=c if c.get('level') is not None else joint
         for i,part in enumerate(c.get('parts',[])):
             faces=part_faces(part,profiles);lines=part_lines(part)
             if not faces and not lines:warnings.append(dict(id=c['id'],message='Unsupported connection-part geometry'));continue
             kind=part.get('kind','plate');item=dict(part,level=source_level,design_record_ids=c.get('design_record_ids',[]),
                 connection_id=c['id'],joint_id=c.get('joint_id'),connected_member_ids=connected)
+            for field in ('storey','level_basis','level_source_field'):
+                if field in level_source:item[field]=level_source[field]
             cls='IfcAnnotation' if lines else 'IfcMechanicalFastener' if kind in ('bolt','screw','anchor') else 'IfcPlate'
             if lines:item['description']='Connection reference only: '+kind+'; physical part set-out remains unspecified'
             add(cls,item,faces,lines,key='connection:'+c['id']+':'+str(i))
@@ -198,7 +202,7 @@ def _export_source(directory,destination,source):
         SourceOpenings=physical.get('openings',[]),SourceOpeningCoordinateUnits='inch',
         Limits='Coordination surfaces omit rolled fillets and unmodelled cuts. Panels are source surfaces with thickness properties. Source opening boundaries are reference annotations, not cuts in panel/member geometry. Unlocated assembly details are not placed at guessed joints.'))
     model.header.file_name.name=destination.name
-    model.header.file_name.originating_system='Steltic openBIM 0.8.9'
+    model.header.file_name.originating_system='Steltic openBIM 0.8.10'
     model.write(str(destination));errors=schema_errors(destination)
     if errors:raise ValueError('Generated IFC failed schema validation: '+str(errors[:3]))
     reopened=ifcopenshell.open(str(destination))
