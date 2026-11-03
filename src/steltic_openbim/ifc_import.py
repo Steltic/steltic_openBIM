@@ -50,6 +50,10 @@ def metadata(model):
         storeys.append(dict(id=s.GlobalId,name=s.Name or s.GlobalId,elevation_m=z))
     for e in products(model):
         container=element_util.get_container(e,ifc_class='IfcBuildingStorey')
+        if e.is_a('IfcSpace') and container is None:
+            parent=element_util.get_aggregate(e)
+            while parent and not parent.is_a('IfcBuildingStorey'):parent=element_util.get_aggregate(parent)
+            container=parent
         spatial=element_util.get_container(e)
         kind=element_util.get_type(e)
         mats=element_util.get_materials(e)

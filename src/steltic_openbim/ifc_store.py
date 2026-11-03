@@ -105,7 +105,7 @@ class IFCStore:
 
     def state(self,p):
         current=self.current(p);drawing=self.drawings.current(p)
-        result=dict(imported=None,drawing=None,exports=[],history=[])
+        result=dict(imported=None,drawing=None,exports=[],history=[],handoffs=[])
         if current:
             folder,state=current;meta=read(folder/'inspection.json')
             result['imported']=dict(state,directory=folder.name,inspection={k:v for k,v in meta.items() if k!='products'})
@@ -116,4 +116,19 @@ class IFCStore:
             s=read(f);result['history'].append({k:s[k] for k in ('revision','filename','status','source_sha256')})
         for f in sorted((self.root(p)/'exports').glob('*/report.json'),key=lambda p:p.stat().st_mtime,reverse=True):
             r=read(f);result['exports'].append({k:v for k,v in r.items() if k!='objects'})
+        for f in sorted((self.root(p)/'handoffs').glob('*/summary.json'),key=lambda p:p.stat().st_mtime,reverse=True):
+            result['handoffs'].append(read(f))
+            if 'hr_brief' not in result:result['hr_brief']=read(f.parent/'request.json')['brief']
         return result
+
+    def handoff(self,p,body):
+        with self.drawings.lock(p):
+            old=self.current(p);self.verify(old,body);folder,state=old
+            if state['status'] not in ('built','reviewed'):raise ValueError('Build the IFC review model first')
+            brief=body.get('brief')
+            if not isinstance(brief,str) or not brief.strip() or len(brief)>60000:raise ValueError('Provide an HR design brief of 1 to 60,000 characters')
+            dest=self.root(p)/'handoffs'/('h-'+uuid.uuid4().hex);dest.mkdir(parents=True)
+            write_json(dest/'request.json',dict(brief=brief))
+            summary=worker('handoff',folder,dest/'summary.json',dest/'request.json')
+            summary['key']=dest.name;write_json(dest/'summary.json',summary)
+            return summary

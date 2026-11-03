@@ -34,6 +34,12 @@ window.StelticIFC={async mount(root,project,mode){
      const reviewNote=el('textarea',{'aria-label':'Model review conclusion',placeholder:'Record your model-review notes'});reviewNote.value=s.review_note||'';
      const check=el('input',{type:'checkbox','aria-label':'Confirm geometry and data review'}),confirm=el('button',{onclick:()=>run(confirm,async()=>{if(!check.checked)throw Error('Confirm you reviewed the geometry and data findings');await post('/review',{...importGuard(),confirm:true,note:reviewNote.value})})},'Record model review');
      box.append(card(el('h3',{},s.status==='reviewed'?'Model review recorded':'Record your review'),reviewNote,el('label',{},check,' I have reviewed the geometry and data findings. This is not a structural design approval.'),confirm));
+     const brief=el('textarea',{'aria-label':'HR job brief',rows:'10',placeholder:'Building use, loads, seismic and wind criteria, proposed structural system, support assumptions and project requirements. HR will size and check the structure.'});
+     brief.value=state.hr_brief||'';
+     const prepare=el('button',{class:'primary',onclick:()=>run(prepare,()=>post('/handoff',{...importGuard(),brief:brief.value}))},'Prepare HR design brief');
+     box.append(card(el('h3',{},'4. Continue to HR'),el('p',{},'Add your engineering brief. The handoff includes the IFC grids, storeys, floor/roof surfaces and opening locations with source references. It does not infer a structural design.'),brief,prepare,
+       el('p',{class:'ifc-note'},'Download the prepared brief and load it into HR Steel → Design using the same project name. Run HR, then return to Steltic import to generate drawings and IFC export for the return model.')));
+     for(const h of state.handoffs||[]){const url=base+'/handoff/'+h.key;box.append(card(el('h4',{},'HR handoff · IFC revision '+h.import_revision),el('a',{href:url+'/hr_brief.txt',class:'ifc-download'},'Download HR design brief'),el('a',{href:url+'/architectural_geometry.json'},'Download architectural geometry'),h.import_revision!==s.revision?el('p',{},'Prepared from an earlier IFC review revision. Prepare a new brief if the source or answers changed.'):null,el('ul',{},h.warnings.map(w=>el('li',{},w)))))}
    }
    box.append(el('details',{},el('summary',{},'IFC import history'),el('ul',{},state.history.map(r=>el('li',{},`Revision ${r.revision} · ${r.filename} · ${r.status}`)))));
  }
