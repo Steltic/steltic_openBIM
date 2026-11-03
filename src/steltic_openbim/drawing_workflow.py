@@ -36,6 +36,10 @@ class StaleRevision(ValueError): pass
 
 
 def bounds(package):
+    from .source_worklines import required,build
+    if required(package):
+        pts=[p for m in build(package)['members'] for p in m['axis']]
+        return [(min(p[i] for p in pts)/12,max(p[i] for p in pts)/12) for i in range(3)]
     pts=[p for m in package['physical']['members'] for p in m['axis']]
     pts += [p for panel in package['physical']['panels'] for p in panel['vertices']]
     if not pts: raise ValueError('A drawing package needs some finite physical geometry')
@@ -62,7 +66,7 @@ PROPOSALS={
  'CFS8-STUD-SETOUT':'Use the displayed party-wall grid and chord replacements provisionally. Final wall starting positions and intersections remain TBD - resolve query.',
  'CFS8-DETAILS':'Show the placed connection families and source specifications. Missing gusset boundaries, screw/anchor set-out and side-plate extents remain TBD - resolve query.',
 }
-EXTERNAL={'HR-OPENINGS','HR-SEPARATION','CFS16-DOORS','CFS8-OPENINGS','CFS8-ROOF-INTERFACE','CFS8-WALKWAY-EDGE'}
+EXTERNAL={'HR-OPENINGS','HR-SEPARATION','CFS16-DOORS','CFS8-OPENINGS','CFS8-ROOF-INTERFACE','CFS8-WALKWAY-EDGE','MODEL-OPENINGS'}
 
 
 def initial_requests(package):
@@ -76,7 +80,8 @@ def initial_requests(package):
             status='provisional',assignee='design_agent',entity_ids=[],resolution_mode='information',notes=[],
             default_reason='Accepted as a drawing proposal; quantitative test inputs require explicit adoption.')
             for iid,answer in scenario(key)['answers'].items()]
-    items=copy.deepcopy(package.get('review',{}).get('items',[]))
+    from .source_worklines import required,request_items
+    items=request_items(package) if required(package) else copy.deepcopy(package.get('review',{}).get('items',[]))
     if not items:
         for f in inspect_package(package)['findings']:
             if f['severity']=='needs_input':
@@ -91,13 +96,16 @@ def initial_requests(package):
         result.append(dict(id=iid,question=item['title'],evidence=item.get('basis',''),proposal=proposed,
             kind='default',accepted=True,acceptance='provisional_drawing_policy',confirmed=False,status='provisional',
             assignee='external' if iid in EXTERNAL or item.get('kind')=='delegated' else 'design_agent',
-            entity_ids=item.get('entity_ids',[]),resolution_mode='opening_layout' if iid in ('HR-OPENINGS','CFS16-DOORS','CFS8-OPENINGS') else 'information',
+            entity_ids=item.get('entity_ids',[]),resolution_mode='opening_layout' if iid in ('HR-OPENINGS','CFS16-DOORS','CFS8-OPENINGS','MODEL-OPENINGS') else 'information',
             notes=[],default_reason='Accepted for provisional drawings. Quantitative information is still outstanding.'))
     return result
 
 
 def initial_features(package,requests):
     """Explicitly authored illustrative geometry, isolated from designed members."""
+    if any(r['id']=='MODEL-OPENINGS' for r in requests):
+        from .source_worklines import opening_features
+        return opening_features(package)
     if not any(r['id'] in EXTERNAL for r in requests):return []
     ids={r['id'] for r in requests}; out=[]; b=bounds(package)
     def feature(q,kind,plane,x,y,z,w,h,level):
@@ -133,6 +141,19 @@ def initial_state(package,revision):
                 'source_design_immutable':True,'structural_analysis_unchanged':True})
 
 
+def reconcile_state(package,state):
+    """Re-run readiness after a renderer upgrade, without discarding saved answers."""
+    fresh=initial_state(package,state['revision']);result=copy.deepcopy(state)
+    result['source_readiness']=fresh['source_readiness']
+    ids={r['id'] for r in result['requests']}
+    added={r['id'] for r in fresh['requests'] if r['id'] not in ids}
+    result['requests'] += [r for r in fresh['requests'] if r['id'] in added]
+    existing={f['id'] for f in result['features']}
+    result['features'] += [f for f in fresh['features'] if f['query_id'] in added and f['id'] not in existing]
+    if any(not r['confirmed'] for r in result['requests']):result['drawing_status']='provisional'
+    return result
+
+
 def apply_answer(package,state,body):
     if body.get('revision')!=state['revision'] or body.get('source_model_sha256')!=state['source_model_sha256']:
         raise StaleRevision('The drawings changed. Refresh before saving this answer.')
@@ -148,6 +169,9 @@ def apply_answer(package,state,body):
         if not isinstance(supplied,list) or len(supplied)>1000: raise ValueError('Supply the confirmed opening layout')
         if not supplied and body.get('confirm_no_openings') is not True: raise ValueError('Explicitly confirm if there are no openings')
         fresh=[]; used={f['id'] for f in result['features'] if f['query_id']!=iid}; bb=bounds(package)
+        from .source_worklines import required,build,physical_view
+        allowed_levels=({m['level'] for m in build(package)['members']} if required(package)
+                        else {m.get('level',1) for m in physical_view(package)['members']})
         for f in supplied:
             if not isinstance(f,dict): raise ValueError('Each opening needs a name, level, plane and five dimensions in feet')
             fid=f.get('id')
@@ -159,7 +183,7 @@ def apply_answer(package,state,body):
                 if isinstance(v,bool) or not isinstance(v,(int,float)) or not math.isfinite(v): raise ValueError('All opening coordinates and sizes must be finite numbers in feet')
             if not (0<f['width_ft']<=100 and 0<f['height_ft']<=100): raise ValueError('Opening sizes must be positive and at most 100 ft')
             if any(not lo-10<=f[k]<=hi+10 for k,(lo,hi) in zip(('x_ft','y_ft','z_ft'),bb)): raise ValueError('Opening coordinates are outside the building vicinity')
-            if type(f.get('level')) is not int or f['level'] not in {m.get('level',1) for m in package['physical']['members']}: raise ValueError('Opening level must exist in the model')
+            if type(f.get('level')) is not int or f['level'] not in allowed_levels: raise ValueError('Opening level must exist in the model')
             fresh.append({k:f[k] for k in ('id','plane','level','x_ft','y_ft','z_ft','width_ft','height_ft')})
             fresh[-1].update(kind=str(f.get('kind','opening'))[:80],query_id=iid,confirmed=True,geometry_role='confirmed_coordination_opening',confirmed_by=author)
         result['features']=[f for f in result['features'] if f['query_id']!=iid]+fresh
@@ -217,6 +241,8 @@ class DrawingStore:
         write_json(directory/'source.json',package)
         report=generate(package,state,directory)
         state['sheets']=report['sheets']; state['artifacts']=report.get('artifacts',['drawings.pdf','drawing_manifest.json','information_requests.json'])
+        state['representation']=report.get('representation','physical_geometry')
+        state['drawing_counts']=report.get('counts',{})
         write_json(directory/'state.json',state)
         write_json(directory/'information_requests.json',self.questions(state))
         pointer=base/('current-'+uuid.uuid4().hex+'.tmp'); write_json(pointer,{'directory':key})
@@ -227,7 +253,12 @@ class DrawingStore:
         with self.lock(p):
             current=self.current(p)
             if current and revision!=current[1]['revision']: raise StaleRevision('Refresh before replacing the source package')
-            if current and current[1]['source_model_sha256']==fingerprint(package): return current[1]
+            if current and current[1]['source_model_sha256']==fingerprint(package):
+                updated=reconcile_state(package,current[1])
+                if updated==current[1]:return current[1]
+                updated['revision']+=1
+                updated['events'].append(dict(revision=updated['revision'],action='readiness_rechecked',note='Rechecked source completeness with the current validator; existing answers retained.'))
+                return self.publish(p,package,updated)
             n=current[1]['revision']+1 if current else 1
             state=initial_state(package,n)
             if current: state['events']=[dict(revision=n,action='source_replaced',previous_source_model_sha256=current[1]['source_model_sha256'],note='Previous answers retained in revision history; new source starts with provisional proposals.')]
@@ -256,6 +287,7 @@ class DrawingStore:
             if body.get('revision')!=state['revision'] or body.get('source_model_sha256')!=state['source_model_sha256']:
                 raise StaleRevision('Refresh before regenerating the drawings')
             package=json.loads((directory/'source.json').read_text(encoding='utf-8'))
+            state=reconcile_state(package,state)
             state['revision']+=1
             state['events'].append(dict(revision=state['revision'],action='regenerated',note='Drawing set regenerated with the current renderer; source and answers retained.'))
             return self.publish(p,package,state)

@@ -232,7 +232,11 @@ def generate(package,state,dest):
         if available_scenario(package) in CASES:
             from .review_provisional import generate as provisional
             return provisional(package,state,dest)
-    dest=Path(dest); dest.mkdir(parents=True,exist_ok=True); sh=Sheets(package,state,dest); ph=package['physical']
+    from .source_worklines import required,physical_view
+    if required(package):
+        from .source_workline_pdf import generate as workline_generate
+        return workline_generate(package,state,dest)
+    dest=Path(dest); dest.mkdir(parents=True,exist_ok=True); sh=Sheets(package,state,dest); ph=physical_view(package)
     members=ph['members']; levels=sorted({m.get('level',1) for m in members}); requests=state['requests']
     all_features=source_openings(package)+state['features']
     sh.start('G001','Drawing basis and issue register')

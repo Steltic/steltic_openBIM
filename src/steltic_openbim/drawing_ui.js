@@ -37,6 +37,10 @@ window.StelticDrawingQueries={async mount(root,project){
  async function render(){
    box.replaceChildren(el('h2',{},'Drawings and information requests'),el('p',{},state.drawing_status==='design_test'?'Dimensioned design drawings use the adopted fictional test answers. Grids, member marks, sections and connection callouts are coordinated; A identifies every assumed input.':'Every request has a provisional proposal, accepted for drawings by default. Dashed items and TBD labels identify unconfirmed information; drawings continue while requests remain open.'));
    if(state.state==='available'){
+     if(state.representation==='captured_source_worklines'){
+       const n=state.drawing_counts||{};
+       box.append(el('div',{class:'ob-card'},el('b',{},'Source model recovered - physical details remain TBD'),el('p',{},`${n.drawn_occurrences||0} captured member occurrences across ${n.levels||0} levels. These drawings use the saved model locations because the physical declarations were incomplete. Resolve the requests below or import corrected physical data to develop the details.`),el('div',{class:'ob-row'},el('a',{href:base+'/file/member_index.json',target:'_blank'},'Source member index'),el('a',{href:base+'/file/source_records.json',target:'_blank'},'Original design records'))));
+     }
      const register=el('section',{class:'ob-card',tabindex:'-1','aria-label':'Request register'},el('h3',{},'Request register'),el('p',{},'Open a request below to add information or confirm its locations. Saving an answer updates the drawings and preserves the previous revision.'));
      let firstRequest=null,firstUnresolved=null;
      for(const group of state.questions.groups){const section=el('section',{},el('h4',{},group.group));for(const r of group.items){const card=requestCard(r);firstRequest??=card;if(!r.confirmed)firstUnresolved??=card;section.append(card)}register.append(section)}
