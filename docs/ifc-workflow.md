@@ -1,4 +1,4 @@
-# IFC workflow (0.8.17)
+# IFC workflow (0.8.22)
 
 HR/CFS now preserve structured architectural handoff data as a fingerprinted
 job input. Physical packages can include the optional `architectural_input`
@@ -11,14 +11,16 @@ The openBIM module has three workflow tabs and the existing Files tab. Steltic i
 
 ## Import and review
 
-1. Export an uncompressed `.ifc` STEP file from the authoring application. IFC2X3, IFC4 and IFC4X3 are supported. The first version accepts files up to 100 MB and 20,000 products.
+1. Export an uncompressed `.ifc` STEP file from the authoring application. IFC2X3, IFC4 and IFC4X3 are supported. Import accepts files up to 100 MB and 100,000 products, including individual connection parts.
 2. Inspect the file. The module records its fingerprint, schema, source units, storeys, classes, GlobalIds, materials, section information and schema/data findings. The original is preserved.
 3. Review the questions. The defaults retain all objects and the declared IFC units. Structural-only scope selects structural IFC classes and walls explicitly declared `Pset_WallCommon.LoadBearing = true`; it does not infer bearing behaviour for other architectural walls. Missing length units require an explicit answer. Notes record further information; they do not invent or overwrite source properties.
-4. Build the review model. IFC geometry is evaluated using its product placements, including mapped representations, and converted to metres. Native parsing/meshing runs in a separate worker with a five-minute time limit. The preview is centred to preserve display precision; source coordinates are not moved. Map-conversion metadata is retained in the IFC but is not applied to the preview. The mesh budget is 1.5 million triangles; products beyond it are listed as unrendered, never silently dropped.
+4. Build the review model. IFC geometry is evaluated using its product placements, including mapped representations, and converted to metres. Native parsing/meshing runs in a separate worker with a ten-minute time limit. A shared native geometry kernel retains mapping/conversion caches while preserving each product's placement and opening cuts. The preview is centred to preserve display precision; source coordinates are not moved. Map-conversion metadata is retained in the IFC but is not applied to the preview. The mesh budget is six million triangles. Exceeding it rejects the build and preserves the previous revision; it never publishes a partial model or substitutes reference axes for solids to fit the budget. Unsupported individual representations remain explicit unrendered findings.
 5. Orbit, pan, zoom, filter by class/storey, and inspect object properties. Space volumes are hidden initially so they do not obscure building elements. Fit building focuses the initial camera on building elements; Fit all also includes proxy markers. Source objects, filtered objects and unrendered products are counted separately. Explicit polyline axes remain lines if no surface geometry exists.
 6. Record the model review and notes. This records a geometry/data review, not engineering acceptance. Structural loads, supports, connection behaviour and capacity checks are outside this first IFC import release.
 
 Missing materials, sections, storeys, geometry, duplicate GlobalIds, identical coincident geometry and IFC schema issues are reported. Some source assemblies are represented only by their child objects; a geometry-less assembly remains visible in the findings. Unknown information stays TBD. Answering scope or unit questions rebuilds a new revision; replacing the source preserves earlier IFCs and review results. Every save has a revision/fingerprint guard against stale edits.
+
+A local synthetic scale fixture exported and reimported 60,001 products (60,000 separate fasteners plus one member), retaining all 2,640,036 triangles with zero unrendered products. Its IFC was 50.6 MB; export took about 116 seconds and review about 257 seconds on the test machine while design jobs were running. This tests exchange capacity, not engineering design or native Revit performance. The limits are processing ceilings, not a guarantee that every model below them will mesh within the time or available memory.
 
 ## Architectural IFC to HR or CFS
 

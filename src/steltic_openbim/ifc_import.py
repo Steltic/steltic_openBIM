@@ -14,8 +14,8 @@ import numpy as np
 
 STRUCTURAL = {'IfcBeam','IfcColumn','IfcMember','IfcPlate','IfcSlab','IfcFooting','IfcPile',
               'IfcMechanicalFastener','IfcFastener','IfcElementAssembly','IfcStructuralCurveMember'}
-MAX_PRODUCTS = 20000
-MAX_TRIANGLES = 1500000
+MAX_PRODUCTS = 100000
+MAX_TRIANGLES = 6000000
 
 
 def open_model(path):
@@ -26,7 +26,7 @@ def open_model(path):
     if model.schema not in ('IFC2X3','IFC4','IFC4X3'):
         raise ValueError('Supported IFC schemas: IFC2X3, IFC4 and IFC4X3')
     if not model.by_type('IfcProject'):raise ValueError('The IFC has no IfcProject')
-    if len(model.by_type('IfcProduct'))>MAX_PRODUCTS:raise ValueError('This review supports up to 20,000 products; export a smaller discipline or building model')
+    if len(model.by_type('IfcProduct'))>MAX_PRODUCTS:raise ValueError(f'This review supports up to {MAX_PRODUCTS:,} products; export a smaller discipline or building model')
     return model
 
 
@@ -148,20 +148,27 @@ def build_review(path,options):
     if not selected:raise ValueError('The chosen scope contains no IFC products')
     settings=ifcopenshell.geom.settings();settings.set('use-world-coords',True)
     settings.set('mesher-linear-deflection',0.002)
+    # Keep IfcOpenShell's mapping/conversion caches for repeated members and
+    # connection parts. Each product still receives its own world placement
+    # and opening cuts through the native geometry kernel.
+    kernel=ifcopenshell.geom.kernel(settings,model)
     objects=[];failed=[];total=0;bounds=[];duplicates=[];shapes={}
     for row in selected:
         e=model.by_id(int(row['id']));verts=[];faces=[];lines=[];reason=''
         try:
-            shape=ifcopenshell.geom.create_shape(settings,e)
+            shape=kernel.create_shape(e)
             verts=(np.asarray(shape.geometry.verts).reshape((-1,3))*multiplier).tolist()
             faces=np.asarray(shape.geometry.faces,dtype=int).reshape((-1,3)).tolist()
             if not verts or not faces:raise ValueError('No surface geometry')
             if not all(math.isfinite(v) for p in verts for v in p):raise ValueError('Non-finite geometry')
-            if total+len(faces)>MAX_TRIANGLES:raise ValueError('Review mesh limit reached; export a smaller model')
-            total+=len(faces)
         except Exception as ex:
             verts=[];faces=[];reason=str(ex)[:200]
             lines=axis_lines(model,e,scale)
+        # A resource limit is a failed build, not a per-product meshing error.
+        # Never publish a partial model or silently replace solids with axes.
+        if total+len(faces)>MAX_TRIANGLES:
+            raise ValueError(f'Review exceeds {MAX_TRIANGLES:,} triangles; choose a smaller scope or export a smaller model')
+        total+=len(faces)
         points=verts or [p for line in lines for p in line]
         if points:
             bb=[[min(p[i] for p in points),max(p[i] for p in points)] for i in range(3)];bounds.append(bb)
