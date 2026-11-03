@@ -38,6 +38,7 @@ def physical_view(package):
             if entity.get('level') is not None:continue
             z=max(p[2] for p in entity[key])
             entity['level']=max(1,min(len(levels)-1,bisect_left(levels,z-1e-5)))
+            entity['level_basis']='Derived from source level elevations for coordination'
     return physical
 
 

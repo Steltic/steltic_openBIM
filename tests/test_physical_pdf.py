@@ -69,6 +69,15 @@ def test_reference_only_connections_have_no_invented_assembly(tmp_path):
     assert 'No located part geometry supplied' in text and 'TBD - resolve query' in text
 
 
+@pytest.mark.parametrize('kind,roof',[('floor',False),('roof',True)])
+def test_top_floor_is_only_labelled_roof_when_source_declares_it(tmp_path,kind,roof):
+    p=source_frame();p['module']='CFS'
+    p['physical']['panels']=[dict(id='top',kind=kind,status='declared',thickness=.5,material_id='steel',vertices=[[0,0,180],[360,0,180],[360,360,180],[0,360,180]])]
+    report=generate(p,initial_state(p,1),tmp_path)
+    framing=next(row for row in report['sheets'] if row['number']=='S101')
+    assert framing['title'].startswith('Roof' if roof else 'Level 1')
+
+
 def test_physical_joint_offset_keeps_floor_plan_connection_callout(tmp_path):
     p=source_frame(); joint=p['physical']['joints'][0]; joint['point'][2]-=12
     for end in joint['member_ends']: end['joint_offset']=[0,0,-12]

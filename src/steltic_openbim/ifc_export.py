@@ -120,7 +120,8 @@ def export_drawing(directory,destination):
             SectionDefinition=profiles.get(item.get('profile_id')),ThicknessIn=item.get('thickness_in',item.get('thickness')),
             DetailReference=item.get('detail_ref'),PartParameters=item.get('parameters'),PartKind=item.get('kind') if item.get('geometry') else None,
             ConnectionId=item.get('connection_id'),JointId=item.get('joint_id'),ConnectedMembers=item.get('connected_member_ids'),
-            SourceLevel=item.get('level'),StoreyAssignment='source declared' if item.get('level') is not None else 'not supplied; contained in building',
+            SourceKind=item.get('kind'),SourceLevel=None if item.get('level_basis') else item.get('level'),AssignedLevel=item.get('level'),
+            StoreyAssignment=item.get('level_basis') or ('source declared' if item.get('level') is not None else 'not supplied; contained in building'),
             DesignRecords=[records[r] for r in refs if r in records]))
         row=dict(source_id=item['id'],guid=obj.GlobalId,ifc_class=cls,geometry='surfaces' if faces else 'axes' if lines else 'metadata')
         if connection_part:row.update(connection_id=item['connection_id'],joint_id=item.get('joint_id'),source_level=item.get('level'))
@@ -136,7 +137,11 @@ def export_drawing(directory,destination):
     for p in panels:
         vertices=p.get('vertices',[])
         if len(vertices)>=3:
-            add('IfcWall' if 'wall' in p.get('kind','') else 'IfcSlab',p,[vertices],key='panel:'+p['id']);counts['panel_surfaces']+=1
+            kind=p.get('kind','').lower()
+            cls='IfcWall' if 'wall' in kind else 'IfcSlab' if any(token in kind for token in ('floor','roof','slab','deck')) else 'IfcBuildingElementProxy'
+            obj=add(cls,p,[vertices],key='panel:'+p['id'])
+            if cls=='IfcBuildingElementProxy':obj.ObjectType='Coordination panel: '+kind
+            counts['panel_surfaces']+=1
     joints={j['id']:j for j in physical.get('joints',[])}
     for c in connections:
         joint=joints.get(c.get('joint_id'),{})
@@ -167,7 +172,7 @@ def export_drawing(directory,destination):
         UnassignedElements=counts['unassigned_elements'],
         Limits='Coordination surfaces omit rolled fillets and unmodelled cuts. Panels are source surfaces with thickness properties. Unconfirmed openings are not cut into geometry. Unlocated assembly details are not placed at guessed joints.'))
     model.header.file_name.name=destination.name
-    model.header.file_name.originating_system='Steltic openBIM 0.8.6'
+    model.header.file_name.originating_system='Steltic openBIM 0.8.7'
     model.write(str(destination));errors=schema_errors(destination)
     if errors:raise ValueError('Generated IFC failed schema validation: '+str(errors[:3]))
     reopened=ifcopenshell.open(str(destination))

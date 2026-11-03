@@ -1,4 +1,4 @@
-# IFC workflow (0.8.6)
+# IFC workflow (0.8.7)
 
 The openBIM module has three workflow tabs and the existing Files tab. Steltic import retains the HR/CFS drawing importer and editable request register. IFC import reads an external model for geometry and model-data review. IFC export generates a downloadable exchange file from either source. Each tab uses the selected Hub project.
 
@@ -28,6 +28,8 @@ Select a source in IFC export, click Generate IFC, then Download IFC. The export
 For a **Steltic drawing revision**, the exporter writes IFC4 in metres with a project/site/building/storey hierarchy, stable product GlobalIds, classifications, material assignments, member marks, source sections, design-record references and outstanding requests. It reopens and validates the resulting IFC and checks product counts. This is a coordination IFC, not a claim of certified MVD conformance or editable native Revit families.
 
 Source-declared HR and CFS physical models use the dimensioned coordination renderer. Missing optional opening labels are displayed as “opening”; source geometry and any explicit level are retained. Proposed openings stay marked TBD until quantitatively resolved. Exported objects without a declared numeric level remain contained in the building, rather than being assigned an invented Level 1. The export report counts these unassigned objects.
+
+Where HR has source level elevations but no per-object labels, its existing coordination grouping is disclosed as derived rather than source-declared. Generic braced-bay or supplier-envelope panels are `IfcBuildingElementProxy` objects, with their source kind retained, instead of being misclassified as floor slabs. The top framing plan is called a roof only where a source roof panel establishes that role.
 
 - Located members use the existing design meshes. Rolled fillets, bend radii and unmodelled fabrication cuts are not added.
 - Panels use source surfaces with thickness metadata. Unconfirmed openings do not cut geometry.
