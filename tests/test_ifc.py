@@ -198,6 +198,32 @@ def test_braced_bay_and_unknown_panel_are_not_misclassified_as_floor_slabs(tmp_p
     assert build_review(path,{'scope':'all','units':'auto'})['counts']['unrendered']==0
 
 
+def test_source_opening_coordinates_and_host_survive_without_claiming_a_void_cut(tmp_path):
+    folder,p,_=drawing_source(tmp_path);p['module']='CFS'
+    panel=dict(id='deck',kind='floor',status='declared',level=2,thickness=.5,material_id='steel',vertices=[[0,0,180],[120,0,180],[120,120,180],[0,120,180]])
+    opening=dict(id='stair',host_id='deck',vertices=[[12,12,180],[48,12,180],[48,60,180],[12,60,180]])
+    p['physical'].update(panels=[panel],openings=[opening])
+    write_json(folder/'source.json',p);write_json(folder/'state.json',initial_state(p,1))
+    path=tmp_path/'opening.ifc';report=export_drawing(folder,path)
+    assert report['counts']['opening_references']==1 and not schema_errors(path)
+    model=ifcopenshell.open(str(path));annotation=model.by_type('IfcAnnotation')[0]
+    props=ifcopenshell.util.element.get_psets(annotation)['Steltic_Coordination']
+    assert props['SourceId']=='stair' and props['HostSourceId']=='deck'
+    assert props['GeometryRole']=='source_opening_reference'
+    assert 'not cut' in annotation.Description
+    assert ifcopenshell.util.element.get_container(annotation).Name=='Level 2'
+    assert not model.by_type('IfcOpeningElement') and not model.by_type('IfcRelVoidsElement')
+    review=build_review(path,{'scope':'all','units':'auto'})
+    obj=next(o for o in review['objects'] if o['guid']==annotation.GlobalId)
+    expected=[[a,b] for a,b in zip(opening['vertices'],opening['vertices'][1:]+opening['vertices'][:1])]
+    assert np.allclose(np.asarray(obj['lines']),np.asarray(expected)*.0254) and not obj['faces']
+    assert review['counts']['unrendered']==0
+    project=ifcopenshell.util.element.get_psets(model.by_type('IfcProject')[0])['Steltic_Coordination']
+    assert json.loads(project['SourceOpenings'])==[opening] and project['SourceOpeningCoordinateUnits']=='inch'
+    again=export_drawing(folder,tmp_path/'opening-again.ifc')
+    assert report['objects']==again['objects']
+
+
 def test_review_export_preserves_all_source_products_and_records_notes(tmp_path):
     src=tmp_path/'source.ifc';m=fixture_ifc(src);ids={e.GlobalId for e in m.by_type('IfcProduct')}
     state=dict(revision=2,source_sha256='synthetic',status='reviewed',options={'scope':'structural','units':'auto'},review_note='Geometry reviewed; material grades TBD')

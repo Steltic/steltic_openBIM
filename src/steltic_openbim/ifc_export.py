@@ -66,7 +66,7 @@ def export_drawing(directory,destination):
     ifcopenshell.api.aggregate.assign_object(model,products=[building],relating_object=site)
     members=physical.get('members',[]);panels=physical.get('panels',[]);connections=physical.get('connections',[])
     level_of=lambda item:int(item['level']) if item.get('level') is not None else None
-    levels=sorted({level_of(item) for item in members+panels+connections+physical.get('joints',[]) if item.get('level') is not None})
+    levels=sorted({level_of(item) for item in members+panels+connections+physical.get('joints',[])+physical.get('openings',[]) if item.get('level') is not None})
     storeys={}
     for level in levels:
         s=entity('IfcBuildingStorey','Level '+str(level),'level:'+str(level))
@@ -80,7 +80,7 @@ def export_drawing(directory,destination):
     containment=defaultdict(list);material_products=defaultdict(list)
     origin=model.create_entity('IfcAxis2Placement3D',Location=model.create_entity('IfcCartesianPoint',Coordinates=(0.,0.,0.)))
     records={r['id']:r for r in package.get('design_records',[])}
-    counts=dict(members=0,member_surfaces=0,reference_axes=0,panel_surfaces=0,connection_parts=0,connection_reference_parts=0,connection_references=0,unassigned_connection_parts=0,unassigned_elements=0)
+    counts=dict(members=0,member_surfaces=0,reference_axes=0,panel_surfaces=0,opening_references=0,connection_parts=0,connection_reference_parts=0,connection_references=0,unassigned_connection_parts=0,unassigned_elements=0)
     warnings=[];objects=[];unlocated_connections=[]
     def add(cls,item,faces=(),lines=(),key=None):
         key=key or item['id'];obj=entity(cls,item.get('mark') or item['id'],key)
@@ -120,6 +120,7 @@ def export_drawing(directory,destination):
             SectionDefinition=profiles.get(item.get('profile_id')),ThicknessIn=item.get('thickness_in',item.get('thickness')),
             DetailReference=item.get('detail_ref'),PartParameters=item.get('parameters'),PartKind=item.get('kind') if item.get('geometry') else None,
             ConnectionId=item.get('connection_id'),JointId=item.get('joint_id'),ConnectedMembers=item.get('connected_member_ids'),
+            HostSourceId=item.get('host_id'),GeometryRole=item.get('geometry_role'),
             SourceKind=item.get('kind'),SourceLevel=None if item.get('level_basis') else item.get('level'),AssignedLevel=item.get('level'),
             StoreyAssignment=item.get('level_basis') or ('source declared' if item.get('level') is not None else 'not supplied; contained in building'),
             DesignRecords=[records[r] for r in refs if r in records]))
@@ -142,6 +143,15 @@ def export_drawing(directory,destination):
             obj=add(cls,p,[vertices],key='panel:'+p['id'])
             if cls=='IfcBuildingElementProxy':obj.ObjectType='Coordination panel: '+kind
             counts['panel_surfaces']+=1
+    panel_lookup={p['id']:p for p in panels}
+    for opening in physical.get('openings',[]):
+        vertices=opening['vertices'];host=panel_lookup.get(opening.get('host_id'),{})
+        item=dict(opening,kind=opening.get('kind') or 'opening',geometry_role='source_opening_reference',
+                  description='Source opening boundary reference only; panel/member geometry is not cut')
+        if item.get('level') is None and host.get('level') is not None:
+            item['level']=host['level'];item['level_basis']='Inherited from host panel: '+str(host.get('level_basis') or 'source declared')
+        add('IfcAnnotation',item,lines=[vertices+[vertices[0]]],key='opening:'+opening['id'])
+        counts['opening_references']+=1
     joints={j['id']:j for j in physical.get('joints',[])}
     for c in connections:
         joint=joints.get(c.get('joint_id'),{})
@@ -170,9 +180,10 @@ def export_drawing(directory,destination):
         UnlocatedConnectionReferences=unlocated_connections,Interfaces=package['physical'].get('interfaces',[]),
         UnassignedConnectionParts=counts['unassigned_connection_parts'],
         UnassignedElements=counts['unassigned_elements'],
-        Limits='Coordination surfaces omit rolled fillets and unmodelled cuts. Panels are source surfaces with thickness properties. Unconfirmed openings are not cut into geometry. Unlocated assembly details are not placed at guessed joints.'))
+        SourceOpenings=physical.get('openings',[]),SourceOpeningCoordinateUnits='inch',
+        Limits='Coordination surfaces omit rolled fillets and unmodelled cuts. Panels are source surfaces with thickness properties. Source opening boundaries are reference annotations, not cuts in panel/member geometry. Unlocated assembly details are not placed at guessed joints.'))
     model.header.file_name.name=destination.name
-    model.header.file_name.originating_system='Steltic openBIM 0.8.7'
+    model.header.file_name.originating_system='Steltic openBIM 0.8.8'
     model.write(str(destination));errors=schema_errors(destination)
     if errors:raise ValueError('Generated IFC failed schema validation: '+str(errors[:3]))
     reopened=ifcopenshell.open(str(destination))
@@ -180,7 +191,7 @@ def export_drawing(directory,destination):
     return dict(schema='IFC4',source='steltic',drawing_revision=state['revision'],source_sha256=state['source_model_sha256'],
         counts=counts,objects=objects,warnings=warnings,schema_errors=errors,sha256=hashlib.sha256(destination.read_bytes()).hexdigest(),
         limits=['Coordination IFC, not an editable Revit family library or a fabrication issue.',
-                'Panels are surfaces; their thickness is metadata. Unconfirmed openings do not cut the model.',
+                'Panels are surfaces; their thickness is metadata. Source opening polygons are traceable reference annotations; panels/members are not cut by these boundaries. Unconfirmed proposals remain request metadata.',
                 'Unlocated connection assemblies are metadata only. Captured worklines remain reference axes where physical set-out is unknown.',
                 'Connection reference polylines are annotations with source detail notes, not fabricated plate or weld solids.',
                 'Objects without a source-declared storey remain contained in the building, with coordinates and parent-connection identity retained; they are not silently assigned to Level 1.'])
