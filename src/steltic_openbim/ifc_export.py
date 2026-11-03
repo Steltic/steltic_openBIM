@@ -52,10 +52,22 @@ def opening_boundary(opening):
     return vertices
 
 
-def property_set(model,product,values,name='Steltic_Coordination'):
-    pset=ifcopenshell.api.pset.add_pset(model,product=product,name=name)
+def property_set(model,product,values,name='Steltic_Coordination',cache=None):
     clean={k:(json.dumps(v,ensure_ascii=True,sort_keys=True) if isinstance(v,(list,dict)) else v)
            for k,v in values.items() if v is not None}
+    if cache is not None:
+        properties=[]
+        for key,value in clean.items():
+            kind='IfcBoolean' if isinstance(value,bool) else 'IfcInteger' if isinstance(value,int) else 'IfcReal' if isinstance(value,float) else 'IfcText'
+            if kind=='IfcText':value=str(value)
+            token=(key,kind,value)
+            if token not in cache:
+                cache[token]=model.create_entity('IfcPropertySingleValue',Name=key,NominalValue=model.create_entity(kind,value))
+            properties.append(cache[token])
+        pset=model.create_entity('IfcPropertySet',GlobalId=ifcopenshell.guid.new(),Name=name,HasProperties=properties)
+        model.create_entity('IfcRelDefinesByProperties',GlobalId=ifcopenshell.guid.new(),RelatedObjects=[product],RelatingPropertyDefinition=pset)
+        return
+    pset=ifcopenshell.api.pset.add_pset(model,product=product,name=name)
     ifcopenshell.api.pset.edit_pset(model,pset=pset,properties=clean)
 
 
@@ -160,7 +172,8 @@ def _export_source(directory,destination,source):
     origin=model.create_entity('IfcAxis2Placement3D',Location=model.create_entity('IfcCartesianPoint',Coordinates=(0.,0.,0.)))
     records={r['id']:r for r in package.get('design_records',[])}
     counts=dict(members=0,member_surfaces=0,reference_axes=0,panel_surfaces=0,opening_references=0,connection_parts=0,connection_reference_parts=0,connection_references=0,unassigned_connection_parts=0,unassigned_elements=0)
-    warnings=[];objects=[];unlocated_connections=[]
+    warnings=[];objects=[];unlocated_connections=[];property_pool={};mesh_templates={}
+    identity_mapping=model.create_entity('IfcCartesianTransformationOperator3D',LocalOrigin=origin.Location,Scale=1.)
     def add(cls,item,faces=(),lines=(),key=None):
         key=key or item['id'];obj=entity(cls,item.get('mark') or item['id'],key)
         obj.Description=item.get('description') or item.get('kind') or basis
@@ -170,14 +183,24 @@ def _export_source(directory,destination,source):
         if level_of(item) is None:counts['unassigned_elements']+=1
         if faces:
             vertices=[];indices=[];lookup={}
+            # Repeated members/parts share a local mesh. Only their recorded
+            # translations differ; no rotation, rounding of source placement or
+            # change to the section geometry is inferred.
+            translation=tuple(float(v)*INCH for v in faces[0][0])
             for face in faces:
                 row=[]
                 for p in face:
-                    point=tuple(float(v)*INCH for v in p)
+                    point=tuple(round(float(v)*INCH-translation[i],9) for i,v in enumerate(p))
                     if point not in lookup:lookup[point]=len(vertices);vertices.append(point)
                     row.append(lookup[point])
                 if len(set(row))>=3:indices.append(row)
-            rep=ifcopenshell.api.geometry.add_mesh_representation(model,context=body_context,vertices=[vertices],faces=[indices])
+            token=(tuple(vertices),tuple(tuple(row) for row in indices))
+            if token not in mesh_templates:
+                template=ifcopenshell.api.geometry.add_mesh_representation(model,context=body_context,vertices=[vertices],faces=[indices])
+                mesh_templates[token]=model.create_entity('IfcRepresentationMap',MappingOrigin=origin,MappedRepresentation=template)
+            mapped=model.create_entity('IfcMappedItem',MappingSource=mesh_templates[token],MappingTarget=identity_mapping)
+            rep=model.create_entity('IfcShapeRepresentation',ContextOfItems=body_context,RepresentationIdentifier='Body',RepresentationType='MappedRepresentation',Items=[mapped])
+            obj.ObjectPlacement=model.create_entity('IfcLocalPlacement',RelativePlacement=model.create_entity('IfcAxis2Placement3D',Location=model.create_entity('IfcCartesianPoint',Coordinates=translation)))
             ifcopenshell.api.geometry.assign_representation(model,product=obj,representation=rep)
         elif lines:
             curves=[model.create_entity('IfcPolyline',Points=[model.create_entity('IfcCartesianPoint',Coordinates=[float(v)*INCH for v in p]) for p in line]) for line in lines]
@@ -204,7 +227,7 @@ def _export_source(directory,destination,source):
             SourceKind=item.get('kind'),SourceLevel=None if item.get('level_basis') else item.get('level'),AssignedLevel=item.get('level'),
             SourceStorey=item.get('storey'),LevelSourceField=item.get('level_source_field'),
             StoreyAssignment=item.get('level_basis') or ('source declared' if item.get('level') is not None else 'not supplied; contained in building'),
-            DesignRecords=[records[r] for r in refs if r in records]))
+            DesignRecords=[records[r] for r in refs if r in records]),cache=property_pool)
         row=dict(source_id=item['id'],guid=obj.GlobalId,ifc_class=cls,geometry='surfaces' if faces else 'axes' if lines else 'metadata')
         if connection_part:row.update(connection_id=item['connection_id'],joint_id=item.get('joint_id'),source_level=item.get('level'))
         objects.append(row)
@@ -259,6 +282,7 @@ def _export_source(directory,destination,source):
     for material,items in material_products.items():
         ifcopenshell.api.material.assign_material(model,products=items,material=materials[material])
     property_set(model,project,dict(SourceModelSHA256=state['source_model_sha256'],**revision_properties,Basis=basis,
+        SupplementProvenance=state.get('supplement_provenance'),
         SourceModule=state.get('source_module'),SourceJob=state.get('source_job'),
         **({'SourceStatus':status} if structural else {'DrawingStatus':status}),
         OpenRequests=[dict(id=r['id'],proposal=r['proposal'],confirmed=r['confirmed']) for r in state['requests']],
@@ -271,13 +295,13 @@ def _export_source(directory,destination,source):
     property_set(model,project,dict(Status=physical_checks['status'],Findings=physical_checks['findings'],
         StructuralDesignApproval=False,Limits=physical_checks['limits']),name='Steltic_PhysicalChecks')
     model.header.file_name.name=destination.name
-    model.header.file_name.originating_system='Steltic openBIM 0.8.13'
+    model.header.file_name.originating_system='Steltic openBIM 0.8.14'
     model.write(str(destination));errors=schema_errors(destination)
     if errors:raise ValueError('Generated IFC failed schema validation: '+str(errors[:3]))
     reopened=ifcopenshell.open(str(destination))
     if len(reopened.by_type('IfcElement'))+len(reopened.by_type('IfcAnnotation'))!=len(objects):raise ValueError('IFC round-trip product count changed')
     return dict(schema='IFC4',source=source,**({'physical_revision':state['revision'],'source_job':state['source_job'],'source_module':state['source_module']} if structural else {'drawing_revision':state['revision']}),source_sha256=state['source_model_sha256'],
-        counts=counts,objects=objects,warnings=warnings,physical_checks=physical_checks,schema_errors=errors,sha256=hashlib.sha256(destination.read_bytes()).hexdigest(),
+        counts=counts,objects=objects,warnings=warnings,physical_checks=physical_checks,schema_errors=errors,mesh_templates=len(mesh_templates),shared_property_values=len(property_pool),sha256=hashlib.sha256(destination.read_bytes()).hexdigest(),
         limits=['Coordination IFC, not an editable Revit family library or a fabrication issue.',
                 'Panels are surfaces; their thickness is metadata. Source opening polygons are traceable reference annotations; panels/members are not cut by these boundaries. Unconfirmed proposals remain request metadata.',
                 'Unlocated connection assemblies are metadata only. Captured worklines remain reference axes where physical set-out is unknown.',

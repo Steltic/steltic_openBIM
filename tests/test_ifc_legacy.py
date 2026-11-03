@@ -1,4 +1,5 @@
 import json
+import copy
 import numpy as np
 import pytest
 
@@ -53,3 +54,25 @@ def test_source_grid_and_datums_survive_without_moving_members(tmp_path):
     review=build_review(out,{'units':'auto'})
     beam=next(o for o in review['objects'] if o['ifc_class']=='IfcBeam')
     assert np.allclose(beam['bounds_m'],[[0,3.048],[-.0508,.0508],[-.1016,.1016]])
+
+
+def test_repeated_geometry_and_properties_are_shared_without_moving_occurrences(tmp_path):
+    import ifcopenshell
+    import ifcopenshell.util.element as element_util
+    folder,package,_=drawing_source(tmp_path)
+    physical=copy.deepcopy(package['physical']);first=physical['members'][0]
+    second=copy.deepcopy(first);second['id']='translated';second['axis']=[[x+120,y+180,z+36] for x,y,z in first['axis']]
+    physical['members'].append(second);write_json(folder/'design_model.json',physical)
+    path=tmp_path/'instances.ifc';report=export_drawing(folder,path)
+    assert report['mesh_templates']==2  # shared beam plus the fixture's base plate
+    model=ifcopenshell.open(str(path));assert len(model.by_type('IfcRepresentationMap'))==2
+    products=model.by_type('IfcBeam');assert len(products)==2
+    assert products[0].Representation.Representations[0].Items[0].MappingSource==products[1].Representation.Representations[0].Items[0].MappingSource
+    props=[element_util.get_psets(p)['Steltic_Coordination'] for p in products]
+    assert {p['SourceId'] for p in props}=={first['id'],'translated'}
+    shared=[p for p in model.by_type('IfcPropertySingleValue') if p.Name=='SourceModelSHA256']
+    # One shared value on member property sets; the project has its own record.
+    assert len(shared)==2
+    review=build_review(path,{'units':'auto'})
+    boxes={o['properties']['Steltic_Coordination']['SourceId']:np.asarray(o['bounds_m']) for o in review['objects'] if o['ifc_class']=='IfcBeam'}
+    assert np.allclose(boxes['translated']-boxes[first['id']],np.asarray([[120,120],[180,180],[36,36]])*.0254)
