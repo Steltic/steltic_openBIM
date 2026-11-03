@@ -51,9 +51,10 @@ class IFCStore:
             package=read(self.jobs.path(module,job))
             if not isinstance(package,dict) or package.get('module')!=module:
                 raise ValueError('The physical export does not match the selected module')
-            if old and old[1]['source_model_sha256']==fingerprint(package) and old[1]['source_job']==job and old[1]['source_module']==module:
-                return old[1]
             initial=initial_state(package,old[1]['revision']+1 if old else 1)
+            if (old and old[1]['source_model_sha256']==fingerprint(package) and old[1]['source_job']==job and old[1]['source_module']==module
+                    and old[1]['source_readiness']==initial['source_readiness'] and old[1]['requests']==initial['requests']):
+                return old[1]
             from .source_worklines import required
             state={k:initial[k] for k in ('revision','building_id','source_model_sha256','source_readiness','requests')}
             state.update(schema='steltic.ifc_physical_source',source_module=module,source_job=job,
