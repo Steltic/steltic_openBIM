@@ -68,3 +68,16 @@ def test_splice_reference_is_visible_with_attachment_context_without_solid_dimen
     assert not any(d.get('reference')=='Source connection-part envelope' for d in report['dimensions'])
     text='\n'.join(page.extract_text() for page in PdfReader(tmp_path/'drawings.pdf').pages)
     assert 'Amber dashed lines: source reference locations only' in text and 'Physical plate/weld set-out: TBD' in text
+
+
+def test_physical_centroid_below_floor_keeps_plan_connection_callout(tmp_path):
+    p=source_frame()
+    for m in p['physical']['members']:
+        if m['kind']=='beam':
+            for point in m['axis']:point[2]-=12
+    for joint in p['physical']['joints']:
+        joint['point'][2]-=12
+        for end in joint['member_ends']:
+            if end['member_id']=='C00':end['joint_offset']=[0,0,-12]
+    report=generate(p,initial_state(p,1),tmp_path)
+    assert any(c['sheet']=='S101' and 'C001' in c['reference'] for c in report['callouts'])

@@ -111,6 +111,9 @@ def plot(sh, number, title, members, axes=(0, 1), features=(), z=None):
                 m=sh.lookup.get(end['member_id'])
                 if m and m['id'] in ids:
                     on_plane |= abs(m['axis'][0 if end['end']=='start' else 1][2]-z)<1e-5
+                    level=m.get('level')
+                    if m['kind'] not in ('col','column') and isinstance(level,int) and 0<level<len(sh.m['levels']):
+                        on_plane |= abs(sh.m['levels'][level]-z)<1e-5
             if not on_plane: continue
         p = tr(j['point'])
         if not (205 <= p[0] <= sh.W - 600 and 315 <= p[1] <= sh.H - 215): continue
