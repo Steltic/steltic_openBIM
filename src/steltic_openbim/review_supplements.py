@@ -21,6 +21,10 @@ def complete_walls(b,outline,bystory,levels):
             from .review_next_cfs_walls import bearing_lines,depth
             lines={key:levels[k]-depth(b,k) for key in lines}
             for axis,pos in bearing_lines(b):lines[axis,pos]=levels[k]-depth(b,k)
+        if b.key in ('cfs1','cfs5','cfs15'):
+            from .review_final_cfs import bearing_lines,depth
+            lines={key:levels[k]-depth(b,k) for key in lines}
+            for axis,pos in bearing_lines(b):lines[axis,pos]=levels[k]-depth(b,k)
         for (axis,pos),top in lines.items():
             normal=1-axis;ranges=intersections(poly,axis,pos/12)
             occupied=[(r['start_in']-6,r['end_in']+6) for w in b.walls if w['level']==k and w['direction']==('X' if axis==0 else 'Y') for r in w['runs'] if abs(r['position_in']-pos)<.1]

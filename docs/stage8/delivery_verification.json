@@ -1,0 +1,79 @@
+{
+  "buildings": 61,
+  "module_counts": {
+    "HR": 36,
+    "CFS": 25
+  },
+  "sheets": 12929,
+  "indexes": [
+    {
+      "path": "index.html",
+      "cards": 61,
+      "local_links_checked": 432,
+      "javascript_syntax": "passed",
+      "browser_preview": "blocked by local-file browser policy; not bypassed"
+    },
+    {
+      "path": "stage6/index.html",
+      "cards": 23,
+      "local_links_checked": 278,
+      "javascript_syntax": "passed",
+      "browser_preview": "blocked by local-file browser policy; not bypassed"
+    },
+    {
+      "path": "stage7/index.html",
+      "cards": 20,
+      "local_links_checked": 242,
+      "javascript_syntax": "passed",
+      "browser_preview": "blocked by local-file browser policy; not bypassed"
+    },
+    {
+      "path": "stage8/index.html",
+      "cards": 18,
+      "local_links_checked": 218,
+      "javascript_syntax": "passed",
+      "browser_preview": "blocked by local-file browser policy; not bypassed"
+    }
+  ],
+  "archives": [
+    {
+      "path": "steltic_all_61_drawing_pdfs.zip",
+      "bytes": 222937299,
+      "sha256": "e0f0ebca4512450a133982fb90b085728388664f8413c94342195e7e9a0c4815",
+      "pdfs": 61,
+      "pdf_only": true,
+      "crc_and_member_hashes_verified": true
+    }
+  ],
+  "wheel": {
+    "path": "stage8/steltic_openbim-0.7.0-py3-none-any.whl",
+    "bytes": 10751848,
+    "sha256": "581600988bb49c19c25da970e8ef67d1e5a783fc0b19608f65dbda01264816db",
+    "version": "0.7.0",
+    "frozen_additional_cases": 58,
+    "source_files_checked": 61,
+    "source_files_match": true
+  },
+  "tests": {
+    "openbim_full_suite": {
+      "passed": 157,
+      "seconds": 437.28
+    },
+    "openbim_final_case_and_assembly_regression": {
+      "passed": 21,
+      "seconds": 73.8
+    },
+    "hub_drawing_integration": {
+      "passed": 5,
+      "seconds": 14.78,
+      "includes_final_batch": "hr19 sliding-seat adoption and regeneration"
+    },
+    "final_annotation_edits": "Verified through complete affected-set regeneration, render and sampled visual inspection.",
+    "warnings": "Existing Starlette/httpx deprecation warning; no test failure."
+  },
+  "original_source_files_unchanged": 812,
+  "previous_43_delivered_pdf_hashes_unchanged": true,
+  "visual_review": "All pages rendered; sampled visual inspection with exact hashes recorded per building.",
+  "analysis_or_redesign_executed": false,
+  "release_upload": "Prepared for public release under existing user authorization."
+}

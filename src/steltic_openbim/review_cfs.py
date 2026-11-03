@@ -70,6 +70,8 @@ def build(b):
         from .review_cfs_frames import build as frames
         frames(b);return
     from .review_next_cfs_walls import KEYS as next_keys,prepare,locations as next_locations,depth as next_depth,stud as next_stud,floors as next_floors
+    from . import review_final_cfs as final
+    if b.key in final.KEYS:final.prepare(b)
     if b.key in next_keys:prepare(b)
     cfg=b.cfg;lx,ly=cfg['plan_ft'];base=180 if b.key in ('cfs3','cfs4') else 288 if b.key=='cfs9' else 0
     heights=cfg['heights_ft'];levels=[base]
@@ -129,11 +131,13 @@ def build(b):
                 locations=[tuple(map(float,m)) for m in re.findall(r'(\d+(?:\.\d+)?)-(\d+(?:\.\d+)?)',match[1])] if match else []
                 if len(locations)!=len(widths):locations=spaced_segments(lo,hi,widths)
             elif b.key in next_keys:locations=next_locations(b,d,line,k,ranges)
+            elif b.key in final.KEYS:locations=final.locations(b,d,line,k,ranges)
             else:locations=[(0,12),(48,60)] if d=='X' else [(10,22)]
             record=rawwalls.get(f'wall-{d}-{name}-s{k}',{});props=dict(line.get('wall_props') or {});props.update(props.get('by_story',{}).get(str(k),{}))
             floor_depth=14 if b.key=='cfs3' else (14.25 if b.key=='cfs13' else (16.25 if b.key=='cfs14' else 12))
             z0=levels[k-1];zt=levels[k]-(floor_depth if k<len(heights) or b.key=='cfs3' else 0)
             if b.key in next_keys:floor_depth=next_depth(b,k);zt=levels[k]-floor_depth
+            if b.key in final.KEYS:floor_depth=final.depth(b,k);zt=levels[k]-floor_depth
             # This line is a geometric physical wall, not its fitted tributary line.
             runs=[]
             for j,(a,dend) in enumerate(locations):
@@ -147,7 +151,9 @@ def build(b):
                 rstud=story_value(next((r for r in b.raw['studs'] if r['id']==wanted),ordinary),k)
             elif b.key=='cfs7':rstud=story_value(next((r for r in b.raw['studs'] if r['id']=='stud-cross-segments'),ordinary),k)
             elif b.key in next_keys:rstud=next_stud(b,d,name,k,props,ordinary)
+            elif b.key in final.KEYS:rstud=final.stud(b,d,name,k,props,ordinary)
             studpid=b.profile(section(rstud.get('section')));spacing=float(rstud.get('spacing_in',12 if b.key=='cfs14' else 16));trackpid=b.profile('600T150-'+str(int(round(props.get('t_stud_in',.054)*1000))))
+            if b.key=='cfs5':trackpid=b.profile('600T125-97')
             chordrec=story_value(chords.get(f'chord-{d}-{name}',{}),k);hold=story_value(holds.get(f'hd-{d}-{name}',{}),k)
             if b.key=='cfs14' and ((name in ('S','M','N') and k>=3) or (name in ('C1S','C2S') and k>=2)):
                 hold=story_value(holds[f'hd-{d}-{name}-above'],k)
@@ -175,6 +181,13 @@ def build(b):
                 b.connection(bottom['id'],'review_cfs_sill',pt(a+6,z0),[bottom], [b.record('anchorage',f'anch-{d}-{name}')],parameters={'podium':base>0,'slab_thickness':12 if base else (6 if b.key=='cfs29' else 10)})
                 b.connection(top['id'],'review_cfs_floor',pt(a,zt),[top],[b.record('connections',f'conn-floor-{d}-{name}')],parameters={'concrete_slab':b.key=='cfs3','floor_depth':floor_depth})
                 for side,u in enumerate((a,dend) if b.key=='cfs29' else (a+3,dend-3)):
+                    if b.key=='cfs5' and d=='Y':
+                        continuous_left=j>0 and abs(runs[j-1]['end_in']-a)<.1
+                        continuous_right=j<len(runs)-1 and abs(runs[j+1]['start_in']-dend)<.1
+                        if side==0 and continuous_left:continue
+                        if side==1 and continuous_right:
+                            postrec=story_value(next(r for r in b.raw['studs'] if r['id']==f'post-Y-{name}'),k)
+                            post=b.member(label+'-INTERMEDIATE',physical_pack(b,postrec['section'],f'POST-{name}-{k}'),'chord',pt(dend,z0+.1),pt(dend,zt-.1),k,'A',local_y=local_y,records=[b.record('studs',postrec['id'])]);b.ends(post,'cfs_stud');continue
                     typeii=b.key=='cfs13' and name in ('SW','SE','SEE','NB','NW','NE');is_end=not typeii or (j==0 and side==0) or (j==len(runs)-1 and side==1)
                     cp=chordpid if is_end else b.profile('2X600S162-54')
                     chord=b.member(label+'-CH'+str(side),cp,'chord' if is_end else 'opening_jamb',pt(u,z0+.1),pt(u,zt-.1),k,'A',local_y=local_y,records=[b.record('studs',chordrec.get('id'))])
@@ -201,6 +214,7 @@ def build(b):
                     t=float(tm[1]) if tm else MIL[int(mil[1])] if mil else .0451
                     # Ex2 selection includes strap area in in2, not a plate thickness.
                     if b.key=='cfs2':t=MIL[68 if w==8 else 54]
+                    if b.key=='cfs5':t=MIL[int(mil[1])]
                     strap=b.custom(f'STRAP-{w:g}X{t:g}','flat',dict(width=w,thickness=t),basis='S: source strap schedule')
                     for face in (-1,1):
                         for diagonal,(u,v) in enumerate(((a,dend),(dend,a))):
@@ -225,6 +239,7 @@ def build(b):
     from .review_supplements import complete_walls
     complete_walls(b,outline,bystory,levels)
     if b.key in next_keys:next_floors(b,outline,levels)
+    elif b.key in final.KEYS:final.floors(b,outline,levels)
     else:floors_and_roofs(b,outline,bystory,levels)
     if b.key=='cfs11':walkways(b,levels)
     if b.key=='cfs29':mezzanine(b,levels)

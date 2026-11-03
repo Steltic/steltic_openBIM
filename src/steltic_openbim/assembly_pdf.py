@@ -92,17 +92,27 @@ def draw_view(sh,scene,mode,rect,title):
     else:sh.text(x+12,y+17,('AXONOMETRIC - NTS' if mode=='iso' else f'ASSEMBLED ELEVATION | scale 1:{denom:g}')+' | dimensions inches',11)
     # Labels use separate rails; one leader per component/group, no scattered text.
     visible={part['id'] for part,_ in polys};labels=[]
+    labelled_groups=set()
     for part in parts:
         if part['id'] not in visible or (mode=='section' and part['kind']=='fastener'):continue
+        label=part.get('annotation_group',part['id'])
+        if label in labelled_groups:continue
+        labelled_groups.add(label)
         bb=part['bounds'];center=[(a+b)/2 for a,b in bb]
         if mode=='section':center[scene['section_axis']]=scene['section_at']
-        q=project(center);labels.append((q[1],part['id'],tr(q),part))
+        q=project(center);labels.append((q[1],label,tr(q),part))
+    # These welds share one elevation and need rails even at small counts.
+    rail_welds=mode=='front' and (len(scene['welds'])>10 or scene['family'] in (
+        'review_cfs_hold_down','review_pg_seat','review_pg_pickup'))
+    if rail_welds:
+        for weld in scene['welds']:
+            q=project([(a+b)/2 for a,b in zip(weld['a'],weld['b'])]);labels.append((q[1],weld['id'],tr(q),dict(kind='weld',basis=weld['basis'])))
     if mode in ('front','iso'):
         labels.sort(reverse=True)
         for i,(_,label,point,part) in enumerate(labels):
             right=(i%2==1);idx=i//2;tx=x+w-55 if right else x+18;ty=y+h-72-idx*max(23,min(42,(h-180)/max(1,math.ceil(len(labels)/2))))
             sh.line(point,(tx-8 if right else tx+37,ty+3),'#6d858f',.55)
-            sh.label(tx,ty,label,12,'#8c6022' if part['basis']=='A' else '#294e63')
+            sh.label(tx,ty,label,12,'#a54841' if part['kind']=='weld' else '#8c6022' if part['basis']=='A' else '#294e63')
     if mode in ('front','section'):
         for d in scene['dimensions']:
             if d['view']!=mode:continue
@@ -118,7 +128,8 @@ def draw_view(sh,scene,mode,rect,title):
             sh.line(tr(p),tr(q),'#347b8f',.85,[9,3]);sh.label(*tr(q),'A-A',11,'#347b8f')
         for weld in scene['welds']:
             aa,bb=project(weld['a']),project(weld['b']);sh.line(tr(aa),tr(bb),'#ae4742',2)
-            pt=tr([(aa[i]+bb[i])/2 for i in range(3)]);sh.label(pt[0]+7,pt[1]+4,weld['id'],10,'#a54841')
+            if not rail_welds:
+                pt=tr([(aa[i]+bb[i])/2 for i in range(3)]);sh.label(pt[0]+7,pt[1]+4,weld['id'],10,'#a54841')
     sh.views.append(dict(sheet=sh.current,kind='connection_'+mode,assembly_id=scene['id'],scale_denominator=denom,points_per_inch=scale,
                          section_axis=scene['section_axis'] if mode=='section' else None,section_at=scene['section_at'] if mode=='section' else None))
 
@@ -130,17 +141,22 @@ def draw_assembly(sh,scene):
     draw_view(sh,scene,'section',(1190,855,1120,620),'2  SECTION A-A / JOINED MEMBERS AND PLIES')
     draw_view(sh,scene,'iso',(70,155,1090,675),'3  ASSEMBLY / ISOMETRIC')
     x=1210;y=805;sh.text(x,y,'PARTS, ATTACHMENTS AND LOCAL DIMENSIONS',16,font='Helvetica-Bold');y-=31
-    entries=[]
+    entries=[];groups={};part_labels={}
     for part in scene['parts']:
+        label=part.get('annotation_group',part['id']);groups.setdefault(label,[]).append(part);part_labels[part['id']]=label
+    def joined(ids):return ', '.join(dict.fromkeys(part_labels.get(i,i) for i in ids))
+    for label,parts in groups.items():
+        part=parts[0]
         description=part['description']
+        if len(parts)>1:description+=f' | qty {len(parts)}; repeated group'
         if part.get('geometry',{}).get('type')=='box':description+=' | '+ ' x '.join(f'{v:g}' for v in part['geometry']['size'])+' in'
         if part['kind']=='fastener':
             description+=f" | qty {part['count']}; grip {part['grip']:g} in"
             if 'pattern' in part:
                 pat=part['pattern'];description+=' | grid '+ ' / '.join(f'{n} at {d:g} in' for n,d in zip(pat['counts'],pat['spacing']) if n>1 and d is not None)
-        entries.append((part['id'],part['basis'],description))
-    entries += [(w['id'],w['basis'],w['description']+' | '+', '.join(w['connects'])) for w in scene['welds']]
-    entries += [(i['id'],i['basis'],i['description']+' | '+', '.join(i['connects'])) for i in scene.get('interfaces',[])]
+        entries.append((label,part['basis'],description))
+    entries += [(w['id'],w['basis'],w['description']+' | '+joined(w['connects'])) for w in scene['welds']]
+    entries += [(i['id'],i['basis'],i['description']+' | '+joined(i['connects'])) for i in scene.get('interfaces',[])]
     font=11;line=15
     estimate=sum(max(1,len(sh.lines(t,925,font)))*line+6 for _,_,t in entries)
     if estimate>480:font=10;line=13

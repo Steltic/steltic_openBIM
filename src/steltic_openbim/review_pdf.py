@@ -49,7 +49,11 @@ def plan(sh,k,kind):
         if p['kind'] in ('floor','roof') and p['level']==k:
             vertices=[tr(q) for q in p['vertices']]
             for a,b in zip(vertices,vertices[1:]+vertices[:1]):sh.line(a,b,LIGHT,.7)
-    groups=sh.draw_members(selected,tr,(0,1),s);sh.representative_marks(groups,28)
+    reserved=[]
+    for f in m['openings']:
+        if f['level']==k and f['plane']=='xy':
+            pts=[tr(q) for q in feature_vertices(f)];reserved.append(tuple(sum(q[i] for q in pts)/len(pts) for i in (0,1)))
+    groups=sh.draw_members(selected,tr,(0,1),s);sh.representative_marks(groups,28,reserved)
     selected_ids={q['id'] for q in selected};seen=set();points=[]
     for c in m['connections']:
         if c['drawing_ref'] in seen or not any(i in selected_ids for i in c['member_ids']):continue
@@ -117,7 +121,7 @@ def generate(package,state,dest):
     if single:queue('S101','Roof framing and bracing plan',lambda:plan(sh,1,'roof'))
     else:
         for k,label,z in m['levels']:
-            if k==0:continue
+            if k<=0:continue # Base/cellar support datums are covered by S001 and the sections.
             if m['pilot']=='hr31' and k==3:continue # Ridge is a datum; the hall roof is the level-2 framing assembly.
             queue(f'S{100+k:03}',label+' framing plan',lambda k=k:plan(sh,k,'roof' if k==last else 'floor'))
         if m['pilot'].startswith('cfs'):

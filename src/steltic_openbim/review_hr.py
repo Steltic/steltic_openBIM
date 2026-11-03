@@ -9,6 +9,8 @@ def shape_in(text,default=None):
     return match[0].upper() if match else default
 
 def build(b):
+    from . import review_final_hr as final
+    if b.key in final.KEYS:final.prepare(b)
     from .review_next_hr import prepare,physical_extras,connection_extras,is_case
     if is_case(b):prepare(b)
     if b.key=='hr31':
@@ -67,6 +69,7 @@ def build(b):
             if b.key=='hr20' and k in (1,2):candidates=[r for r in records if f'level{k+1}-' in r]
             if b.key=='hr35':candidates=[r for r in records if 'W12X16' in r]
             if b.key=='hr8' and k==5 and lo[1]>=720:candidates=[r for r in records if 'terrace' in r]
+            if b.key in final.KEYS:candidates=final.infill(b,k,lo,hi,records,candidates)
             record=candidates[0] if candidates else None;pid=shape_in(record,'W18X35');b.profile(pid)
             step=spacing.get(str(k),spacing.get(k,100)) if isinstance(spacing,dict) else spacing
             if b.key=='hr13' and k==4:step=75
@@ -95,10 +98,12 @@ def build(b):
     if b.key=='hr32':retrofit(b)
     if b.key=='hr13':b.note('WORKSHOP-JOISTS','S: workshop roof open-web joists at 75 in centres; source delegated supplier design requirements remain in the source records. A: the displayed 18 in nominal envelope, paired-channel chords/webs, panel nodes and bearing seats are fictional supplier coordination geometry, not a selected or verified SJI product.')
     if is_case(b):physical_extras(b,levels)
+    if b.key in final.KEYS:final.physical_extras(b,levels)
     connect_primary(b,levels)
     from .review_hr_complements import apply
     apply(b,levels)
     if is_case(b):connection_extras(b,levels)
+    if b.key in final.KEYS:final.connections(b,levels)
     # Keep the drawing datum and every secondary cutback explicit.
     b.note('DATUM','A: source floor nodes are adopted as top-of-steel datums; physical beam axes are lowered by half their actual section depth. Added infills follow source spacing. Local end cutbacks use the connected support face; schedules report workline lengths.')
     for m in b.members:
@@ -155,11 +160,12 @@ def brace_record(b,m,raw):
 
 def connect_primary(b,levels):
     from .review_next_hr import is_case as is_next_case
+    from . import review_final_hr as final
     existing={mid for c in b.connections if c['detail_ref']['id'] not in ('review_retrofit_beam','review_retrofit_column','review_ebf_link') for mid in c['member_ids']};raw={r['id']:r for r in b.raw['connections']}
     columns=[m for m in b.members if m['kind']=='column']
     for m in list(b.members):
         pid=m['profile_id'];k=m['level'];kind=m['kind'];members=[]
-        if m['id'] in existing and kind!='column' and not (is_next_case(b) and kind in ('brace','beam','girder','moment_beam','infill')):continue
+        if m['id'] in existing and kind!='column' and not ((is_next_case(b) or b.key in final.KEYS) and kind in ('brace','beam','girder','moment_beam','infill')):continue
         if kind=='column':
             low=min(m['axis'],key=lambda p:p[2]);bases=[r for r in raw if 'base-' in r and r.endswith('-'+pid)]
             founded=low[2]<.1 or b.key=='hr14' and not any(mm['id']!=m['id'] and max(q[2] for q in mm['axis'])<=low[2]+.1 and math.dist(max(mm['axis'],key=lambda q:q[2]),low)<.1 for mm in columns)
@@ -210,6 +216,7 @@ def connect_primary(b,levels):
         options=[r for r in raw if r.endswith('-'+pid) and not any(s in r for s in ('base-','col-','brace-','joint-'))]
         rid=next((r for r in options if ('infill' in r)==(kind=='infill') and ('roof' in r)==(k==len(levels)-1)),options[0] if options else None)
         if not rid and kind=='infill':rid=next((r for r in raw if 'infill' in r),None)
+        if b.key in final.KEYS:rid=final.beam_record(b,m,raw,rid,levels)
         text=str(raw.get(rid,{}));moment=any(w in text.lower() for w in ('rbs','fully restrained','flanges cjp'))
         if b.key=='hr32' and k<=3:moment=any(all(abs(p[axis]-value)<.1 for p in m['axis']) for axis,value in ((0,0),(0,1440),(1,0),(1,1080)))
         if moment:m['kind']='moment_beam'

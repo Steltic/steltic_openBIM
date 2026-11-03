@@ -144,18 +144,21 @@ def strap(ctx):
     count=int(par.get('screws') or findnum(r'(\d+) No\.?\s*(?:10|12|14)',txt,10));size=int(par.get('screw_size') or findnum(r'\d+ No\.?\s*(\d+)',txt,14));dia=screw_diameter(size)
     cp=par.get('host_profile') or ctx.select(('chord','column','endwall_post','stud'));tp=ctx.select(('top_track','bottom_track','eave_strut'),cp);cd=effective(p,cp);width=p[pid]['dimensions']['width'];t=p[pid]['dimensions']['thickness'];gusset=.1017 if ctx.model['pilot'] in ('cfs14','cfs29') else .1875
     if ctx.model['pilot']=='cfs2':gusset=.1423
+    if ctx.model['pilot']=='cfs5':gusset=.1242 if width==8 else .1017
     a.member('CHORD',cp,[0,0,-6],[0,0,30]);a.member('TRACK',tp,[0,0,0],[34,0,0],y=[0,0,1]);y=cd/2+.25
     a.polygon('GUSSET',[[0,y,0],[26,y,0],[26,y,14],[14,y,26],[0,y,26]],gusset,basis='A',description='Source gusset thickness / A corner outline')
     angle=math.atan2(abs(ctx.ms[0]['axis'][1][2]-ctx.ms[0]['axis'][0][2]),math.dist(ctx.ms[0]['axis'][0][:2],ctx.ms[0]['axis'][1][:2]));v=[math.cos(angle),0,math.sin(angle)];across=[-v[2],0,v[0]]
     a.member('STRAP',pid,add(mul(v,4),[0,y+gusset+t/2,0]),add(mul(v,42),[0,y+gusset+t/2,0]),y=across);cols=max(1,min(4,int(width-1)))
     if ctx.model['pilot']=='cfs2':cols={3:2,4:3,5:3,8:5}[width]
+    if ctx.model['pilot']=='cfs5':cols={3:2,4:3,5:3,6:4,8:5}[width]
     rows=math.ceil(count/cols)
     pts=[add(mul(v,6+(i//cols)),add(mul(across,(i%cols-(cols-1)/2)),[0,y+gusset+t,0])) for i in range(count)]
     a.fastener('FS',pts,[0,-1,0],dia,t+gusset,['STRAP','GUSSET'],f'{count} No.{size} source strap-end screws'+(' stainless bi-metal' if par.get('stainless') else ''),screw=True)
     counts={3:(5,6),4:(7,8),5:(8,10),8:(17,19)}.get(width,(6,6)) if ctx.model['pilot']=='cfs2' else (6,6)
+    if ctx.model['pilot']=='cfs5':counts={3:(5,6),4:(7,8),5:(8,10),6:(13,13) if t>.06 else (9,12),8:(15,19)}[width]
     for name,host,n in [('FC','CHORD',counts[0]),('FT','TRACK',counts[1])]:
         pts=[[1+(j//12),y,2+j%12] if host=='CHORD' else [2+j%20,y,1+(j//20)] for j in range(n)]
-        a.fastener(name,pts,[0,-1,0],.25,gusset+.125,[host,'GUSSET'],f'{n} No.14 gusset-to-host screws; A local fit',basis='S' if ctx.model['pilot']=='cfs2' else 'A',screw=True)
+        a.fastener(name,pts,[0,-1,0],.25,gusset+.125,[host,'GUSSET'],f'{n} No.14 gusset-to-host screws; A local fit',basis='S' if ctx.model['pilot'] in ('cfs2','cfs5') else 'A',screw=True)
     a.section_at=8;a.dim(mul(v,6),mul(v,6+rows-1),f'{rows-1} @ 1 in (A)',basis='A')
 
 def sheathing(ctx):

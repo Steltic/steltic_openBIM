@@ -50,7 +50,7 @@ Install `.[drawings]`, then run:
 python tools/generate_review_batch.py --confirm-fictional --author "User-authorized fictional review inputs" --output review --cases hr14 hr16 hr18 hr20 hr21 hr24 hr25 hr30 hr31 hr35 cfs2 cfs4 cfs6 cfs9 cfs10 cfs12 cfs18 cfs25 cfs27 cfs28
 ```
 
-Omit `--cases` for all 43. Frozen inputs for forty additional cases are shipped in `review_data/inputs.zip`; the three original pilot sources remain in `docs/stage3/pilots.zip`. The renderer requires neither HR/CFS engines nor OpenSees. Exact package and answer hashes gate these authored review recipes, preventing them from silently supplying invented answers to ordinary jobs.
+At release 0.6.0, omitting `--cases` reproduces all 43, with forty additional frozen cases in `review_data/inputs.zip`. Current main includes [all 61](../stage8/README.md); use the explicit case list above to reproduce this batch. The three original pilot sources remain in `docs/stage3/pilots.zip`. The renderer requires neither HR/CFS engines nor OpenSees. Exact package and answer hashes gate these authored review recipes, preventing them from silently supplying invented answers to ordinary jobs.
 
 The Hub's existing information-request widget and CLI use the same renderer. Reopening a request restores provisional drawing behavior. Ordinary jobs can still draw with proposals and TBD dimensions; this reviewed fictional catalog is not yet a general automatic detailing engine or an IFC exporter.
 

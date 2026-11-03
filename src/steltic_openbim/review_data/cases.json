@@ -380,5 +380,185 @@
     "system": "Agricultural portal",
     "geometry_case": "Partially enclosed building",
     "source_sha256": "58e35af574181b15d2c292f3bf566fe89bc23f5562c5730a8f14b6d904d08a64"
+  },
+  {
+    "id": "cfs1",
+    "module": "CFS",
+    "suffix": "1",
+    "source_building": "CFS_Ex1_ShearWall_4levels",
+    "building": "CFS-1",
+    "system": "ShearWall",
+    "geometry_case": "ShearWall 4levels",
+    "source_sha256": "e092de17dc2dc8cdcaa265d76961edf5615206a68cc12bc5160d559710b927d8"
+  },
+  {
+    "id": "cfs5",
+    "module": "CFS",
+    "suffix": "5",
+    "source_building": "CFS_Ex5_StrapBraced_6levels",
+    "building": "CFS-5",
+    "system": "StrapBraced",
+    "geometry_case": "StrapBraced 6levels",
+    "source_sha256": "28a078bc988ebff745f0c85d47423704a4cd7fb2ee868fd806175b8f6b1fcdb8"
+  },
+  {
+    "id": "cfs15",
+    "module": "CFS",
+    "suffix": "15",
+    "source_building": "CFS_Ex15_WSP_6levels_steppedbar",
+    "building": "CFS-15",
+    "system": "WSP",
+    "geometry_case": "WSP 6levels steppedbar",
+    "source_sha256": "f01bac22dc41251069114a6c9d5aa3b7bf5a637015b796cc931d95994f55729c"
+  },
+  {
+    "id": "hr1",
+    "module": "HR",
+    "suffix": "1",
+    "source_building": "Ex1_SCBF_5levels",
+    "building": "HR-1",
+    "system": "SCBF",
+    "geometry_case": "SCBF 5levels",
+    "source_sha256": "3ef4e4b9e4668cd35af32eecdc4061f208ddeb2bc19ca450467333b595349c35"
+  },
+  {
+    "id": "hr2",
+    "module": "HR",
+    "suffix": "2",
+    "source_building": "Ex2_SMF_9levels",
+    "building": "HR-2",
+    "system": "SMF",
+    "geometry_case": "SMF 9levels",
+    "source_sha256": "7bdac2fbaa97de98bcc2ac01f56a666f0dfde047f00c14585379adab327f2b30"
+  },
+  {
+    "id": "hr3",
+    "module": "HR",
+    "suffix": "3",
+    "source_building": "Ex3_BracedMoment_7levels",
+    "building": "HR-3",
+    "system": "BracedMoment",
+    "geometry_case": "BracedMoment 7levels",
+    "source_sha256": "ba4de437b82f49bbaee5ff723bc2120d6066b2c52e906655f7ec2d4a4863d6b0"
+  },
+  {
+    "id": "hr4",
+    "module": "HR",
+    "suffix": "4",
+    "source_building": "Ex4_BRBF_3levels",
+    "building": "HR-4",
+    "system": "BRBF",
+    "geometry_case": "BRBF 3levels",
+    "source_sha256": "07c110b3734e77e5699ad03a63edcd3428d0e387c3f90e5742009e407787c54a"
+  },
+  {
+    "id": "hr5",
+    "module": "HR",
+    "suffix": "5",
+    "source_building": "Ex5_SMF_10levels",
+    "building": "HR-5",
+    "system": "SMF",
+    "geometry_case": "SMF 10levels",
+    "source_sha256": "d4e39eaf3cb7edfa41b043bdac311d18404dda270731c63418f5d79bb55c87d7"
+  },
+  {
+    "id": "hr6",
+    "module": "HR",
+    "suffix": "6",
+    "source_building": "Ex6_SCBF_6levels",
+    "building": "HR-6",
+    "system": "SCBF",
+    "geometry_case": "SCBF 6levels",
+    "source_sha256": "85054858a332e364bba189819b94d935cac77eee5bb567d67d3bcdf66869e907"
+  },
+  {
+    "id": "hr7a",
+    "module": "HR",
+    "suffix": "7a",
+    "source_building": "Ex7a_SMF_7levels",
+    "building": "HR-7a",
+    "system": "SMF",
+    "geometry_case": "SMF 7levels",
+    "source_sha256": "bb1444f1cb2b3da2da4335e2edc7caffc03bb08138240077a266ead17d0680c8"
+  },
+  {
+    "id": "hr15",
+    "module": "HR",
+    "suffix": "15",
+    "source_building": "Ex15_Dual_SMF_BRBF_20levels_weddingcake",
+    "building": "HR-15",
+    "system": "Dual",
+    "geometry_case": "Dual SMF BRBF 20levels weddingcake",
+    "source_sha256": "3a547d37ff3c2cad1491f7e32744b27adf7c86695aa675a4643eb2b19e226052"
+  },
+  {
+    "id": "hr17",
+    "module": "HR",
+    "suffix": "17",
+    "source_building": "Ex17_SCBF_9levels_offset_core",
+    "building": "HR-17",
+    "system": "SCBF",
+    "geometry_case": "SCBF 9levels offset core",
+    "source_sha256": "0194b30ec87d91fdcc928200a91aab10f53b81070204f19d302fbf9468208aa1"
+  },
+  {
+    "id": "hr19",
+    "module": "HR",
+    "suffix": "19",
+    "source_building": "Ex19_SMF_11levels_softstory_podium",
+    "building": "HR-19",
+    "system": "SMF",
+    "geometry_case": "SMF 11levels softstory podium",
+    "source_sha256": "27ccfec45f771780761cabf6a32121975830098521462506a6c4e632b061ea33"
+  },
+  {
+    "id": "hr23",
+    "module": "HR",
+    "suffix": "23",
+    "source_building": "Ex23_Dual_SMF_BRBF_9levels_SDCF_nearfault_EOC",
+    "building": "HR-23",
+    "system": "Dual",
+    "geometry_case": "Dual SMF BRBF 9levels SDCF nearfault EOC",
+    "source_sha256": "c4b9dea4660050f33323267b28c513531a45aae5e08e183930598cd20bcf9ddd"
+  },
+  {
+    "id": "hr26",
+    "module": "HR",
+    "suffix": "26",
+    "source_building": "Ex26_Dual_SMF_SCBF_18levels_slender_windgoverned",
+    "building": "HR-26",
+    "system": "Dual",
+    "geometry_case": "Dual SMF SCBF 18levels slender windgoverned",
+    "source_sha256": "492ca1a10ad1802ccc1f0705852d28e25f00af4e9145d4ef4518dc8a7dec2292"
+  },
+  {
+    "id": "hr29",
+    "module": "HR",
+    "suffix": "29",
+    "source_building": "Ex29_Dual_SMF_BRBF_20levels_264ft_NLRHA_PBSD",
+    "building": "HR-29",
+    "system": "Dual",
+    "geometry_case": "Dual SMF BRBF 20levels 264ft NLRHA PBSD",
+    "source_sha256": "a1250b2d79abbd76ad066b6d711cc28db11933f19e87b606c8ab9e462767c672"
+  },
+  {
+    "id": "hr34a",
+    "module": "HR",
+    "suffix": "34a",
+    "source_building": "Ex34a_Twin_towers_BRBF_12story_tower",
+    "building": "HR-34a",
+    "system": "Twin",
+    "geometry_case": "Twin towers BRBF 12story tower",
+    "source_sha256": "a74c95b266ccc0990c363eec5fc22af9d8ee164ff514884545747a339564b1a9"
+  },
+  {
+    "id": "hr34b",
+    "module": "HR",
+    "suffix": "34b",
+    "source_building": "Ex34b_Twin_towers_BRBF_8story_tower",
+    "building": "HR-34b",
+    "system": "Twin",
+    "geometry_case": "Twin towers BRBF 8story tower",
+    "source_sha256": "94725a1dcc9e97c58884a9423b5749fe66178365768c7ec506d8e7dc8a4db932"
   }
 ]

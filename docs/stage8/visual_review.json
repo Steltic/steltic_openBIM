@@ -1,0 +1,837 @@
+{
+  "cfs1": {
+    "pdf_sha256": "06a10e38bd31edbb91eaf651804b516833ffbb5fec9bf5812d200b1b6a6e0884",
+    "rendered_pages": 240,
+    "selected_pages": [
+      6,
+      7,
+      14,
+      15,
+      28,
+      29,
+      33,
+      37,
+      38,
+      51,
+      55,
+      91,
+      135,
+      138,
+      139,
+      179,
+      189,
+      229,
+      232,
+      233,
+      234,
+      235,
+      238
+    ],
+    "visual_review_status": "reviewed",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and each assembled family/subtype inspected on contact sheets during development. A 2600 px plan and complex-joint sample inspected for each building. Changed connection families and layouts were sampled again after corrections. This is sampled visual review, not full-size inspection of every page or structural approval.",
+    "reviewed_by": "Codex visual inspection",
+    "full_size_samples": {
+      "pdf_sha256": "06a10e38bd31edbb91eaf651804b516833ffbb5fec9bf5812d200b1b6a6e0884",
+      "plan_page": 7,
+      "joint_page": 51,
+      "scale_to_px": 2600
+    },
+    "correction_samples": {
+      "pdf_sha256": "06a10e38bd31edbb91eaf651804b516833ffbb5fec9bf5812d200b1b6a6e0884",
+      "scale_to_px": 2600,
+      "samples": [
+        {
+          "sheet": "C105",
+          "page": 137,
+          "title": "FINAL CFS JOIST | 800S162-54",
+          "image": "extra-C105.png"
+        },
+        {
+          "sheet": "C106",
+          "page": 138,
+          "title": "FINAL HEADER | 2X800S162-54",
+          "image": "extra-C106.png"
+        }
+      ]
+    },
+    "corrections_verified": [
+      "Opening labels and representative member marks are separated.",
+      "Repeated weld labels on crowded assemblies use separate annotation rails.",
+      "Joist clips and stiffener screws reach receiving material; hold-down weld labels separated.",
+      "Header jamb screw locations checked within fitted clip flanges."
+    ]
+  },
+  "cfs15": {
+    "pdf_sha256": "462c6248c5f4b61d1915194762b3fe73941a082fe9001db78e888e11614927cd",
+    "rendered_pages": 712,
+    "selected_pages": [
+      12,
+      13,
+      24,
+      25,
+      54,
+      55,
+      62,
+      68,
+      69,
+      90,
+      118,
+      212,
+      224,
+      364,
+      369,
+      371,
+      374,
+      378,
+      379,
+      513,
+      539,
+      540,
+      674,
+      676,
+      689,
+      690,
+      691,
+      692,
+      699
+    ],
+    "visual_review_status": "reviewed",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and each assembled family/subtype inspected on contact sheets during development. A 2600 px plan and complex-joint sample inspected for each building. Changed connection families and layouts were sampled again after corrections. This is sampled visual review, not full-size inspection of every page or structural approval.",
+    "reviewed_by": "Codex visual inspection",
+    "full_size_samples": {
+      "pdf_sha256": "462c6248c5f4b61d1915194762b3fe73941a082fe9001db78e888e11614927cd",
+      "plan_page": 13,
+      "joint_page": 118,
+      "scale_to_px": 2600
+    },
+    "correction_samples": {
+      "pdf_sha256": "462c6248c5f4b61d1915194762b3fe73941a082fe9001db78e888e11614927cd",
+      "scale_to_px": 2600,
+      "samples": [
+        {
+          "sheet": "C305",
+          "page": 366,
+          "title": "FINAL CFS JOIST | 600S162-43",
+          "image": "extra-C305.png"
+        },
+        {
+          "sheet": "C308",
+          "page": 369,
+          "title": "FINAL GUARD | 2X600S162-54",
+          "image": "extra-C308.png"
+        },
+        {
+          "sheet": "C310",
+          "page": 371,
+          "title": "FINAL HEADER | 2X600S162-43",
+          "image": "extra-C310.png"
+        },
+        {
+          "sheet": "C313",
+          "page": 374,
+          "title": "FINAL ROOF TRANSFER | 600T150-43",
+          "image": "extra-C313.png"
+        },
+        {
+          "sheet": "C316",
+          "page": 377,
+          "title": "FINAL ROOF TRANSFER | 600T150-54",
+          "image": "extra-C316.png"
+        },
+        {
+          "sheet": "S230",
+          "page": 54,
+          "title": "Wall E240 / section and elevation",
+          "image": "extra-S230.png"
+        }
+      ]
+    },
+    "corrections_verified": [
+      "Opening labels and representative member marks are separated.",
+      "Repeated weld labels on crowded assemblies use separate annotation rails.",
+      "Joist clips and stiffener screws reach receiving material; hold-down weld labels separated.",
+      "Header jamb screw locations checked within fitted clip flanges.",
+      "Guard fasteners attach to paired blocking channels around the post.",
+      "Lower roof, roof-to-wall blocking and sheathing attachments checked; corridor clip has an explicit vertical slot and 2 in truss clearance."
+    ]
+  },
+  "cfs5": {
+    "pdf_sha256": "f5d855e26f85a9b96b8192965b65e62b242b73a4985062089bb5d2ecfa8ab8d6",
+    "rendered_pages": 423,
+    "selected_pages": [
+      9,
+      10,
+      21,
+      22,
+      36,
+      37,
+      43,
+      97,
+      98,
+      170,
+      176,
+      236,
+      308,
+      374,
+      377,
+      378,
+      389,
+      392,
+      394,
+      395,
+      396,
+      401
+    ],
+    "visual_review_status": "reviewed",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and each assembled family/subtype inspected on contact sheets during development. A 2600 px plan and complex-joint sample inspected for each building. Changed connection families and layouts were sampled again after corrections. This is sampled visual review, not full-size inspection of every page or structural approval.",
+    "reviewed_by": "Codex visual inspection",
+    "full_size_samples": {
+      "pdf_sha256": "f5d855e26f85a9b96b8192965b65e62b242b73a4985062089bb5d2ecfa8ab8d6",
+      "plan_page": 10,
+      "joint_page": 170,
+      "scale_to_px": 2600
+    },
+    "correction_samples": {
+      "pdf_sha256": "f5d855e26f85a9b96b8192965b65e62b242b73a4985062089bb5d2ecfa8ab8d6",
+      "scale_to_px": 2600,
+      "samples": [
+        {
+          "sheet": "C333",
+          "page": 375,
+          "title": "FINAL CFS JOIST | 1000S200-54",
+          "image": "extra-C333.png"
+        },
+        {
+          "sheet": "C335",
+          "page": 377,
+          "title": "FINAL GUARD | 600S162-43",
+          "image": "extra-C335.png"
+        },
+        {
+          "sheet": "C317",
+          "page": 359,
+          "title": "CFS STRAP | STRAP-8X0.0713",
+          "image": "extra-C317.png"
+        }
+      ]
+    },
+    "corrections_verified": [
+      "Opening labels and representative member marks are separated.",
+      "Repeated weld labels on crowded assemblies use separate annotation rails.",
+      "Joist clips and stiffener screws reach receiving material; hold-down weld labels separated.",
+      "Guard fasteners attach to paired blocking channels around the post.",
+      "Source strap screw counts, mil thicknesses and individual physical bays preserved."
+    ]
+  },
+  "hr1": {
+    "pdf_sha256": "e69e161310f94e964b4e6bc11fab11a1245598f50233ce6a87d6592eb8883614",
+    "rendered_pages": 78,
+    "selected_pages": [
+      4,
+      5,
+      9,
+      10,
+      13,
+      14,
+      15,
+      17,
+      52,
+      56,
+      65,
+      66,
+      68,
+      73,
+      76,
+      77
+    ],
+    "visual_review_status": "reviewed",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and each assembled family/subtype inspected on contact sheets during development. A 2600 px plan and complex-joint sample inspected for each building. Changed connection families and layouts were sampled again after corrections. This is sampled visual review, not full-size inspection of every page or structural approval.",
+    "reviewed_by": "Codex visual inspection",
+    "full_size_samples": {
+      "pdf_sha256": "e69e161310f94e964b4e6bc11fab11a1245598f50233ce6a87d6592eb8883614",
+      "plan_page": 5,
+      "joint_page": 15,
+      "scale_to_px": 2600
+    },
+    "corrections_verified": [
+      "Opening labels and representative member marks are separated.",
+      "Repeated weld labels on crowded assemblies use separate annotation rails."
+    ]
+  },
+  "hr15": {
+    "pdf_sha256": "592c4ea1e1830f6af8d7e9c8806760dfe753966d6bdb50754537b2cf4961c82d",
+    "rendered_pages": 480,
+    "selected_pages": [
+      9,
+      10,
+      29,
+      30,
+      33,
+      34,
+      35,
+      36,
+      40,
+      291,
+      329,
+      378,
+      389,
+      416,
+      464,
+      468,
+      470
+    ],
+    "visual_review_status": "reviewed",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and each assembled family/subtype inspected on contact sheets during development. A 2600 px plan and complex-joint sample inspected for each building. Changed connection families and layouts were sampled again after corrections. This is sampled visual review, not full-size inspection of every page or structural approval.",
+    "reviewed_by": "Codex visual inspection",
+    "full_size_samples": {
+      "pdf_sha256": "592c4ea1e1830f6af8d7e9c8806760dfe753966d6bdb50754537b2cf4961c82d",
+      "plan_page": 10,
+      "joint_page": 35,
+      "scale_to_px": 2600
+    },
+    "corrections_verified": [
+      "Opening labels and representative member marks are separated.",
+      "Repeated weld labels on crowded assemblies use separate annotation rails."
+    ]
+  },
+  "hr17": {
+    "pdf_sha256": "5cebe35da16aafcd7283e48238bc331e9123be32371f7a681b41c0d4795ecd90",
+    "rendered_pages": 238,
+    "selected_pages": [
+      6,
+      7,
+      16,
+      17,
+      20,
+      21,
+      22,
+      25,
+      105,
+      106,
+      107,
+      109,
+      179,
+      182,
+      189,
+      195,
+      211,
+      227,
+      230,
+      232
+    ],
+    "visual_review_status": "reviewed",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and each assembled family/subtype inspected on contact sheets during development. A 2600 px plan and complex-joint sample inspected for each building. Changed connection families and layouts were sampled again after corrections. This is sampled visual review, not full-size inspection of every page or structural approval.",
+    "reviewed_by": "Codex visual inspection",
+    "full_size_samples": {
+      "pdf_sha256": "5cebe35da16aafcd7283e48238bc331e9123be32371f7a681b41c0d4795ecd90",
+      "plan_page": 7,
+      "joint_page": 106,
+      "scale_to_px": 2600
+    },
+    "corrections_verified": [
+      "Opening labels and representative member marks are separated.",
+      "Repeated weld labels on crowded assemblies use separate annotation rails."
+    ]
+  },
+  "hr19": {
+    "pdf_sha256": "f69695fda672ce2c15464ce723407e081340ffad48976989fffb410f8fd2a35c",
+    "rendered_pages": 172,
+    "selected_pages": [
+      6,
+      7,
+      17,
+      18,
+      21,
+      22,
+      23,
+      27,
+      126,
+      127,
+      128,
+      129,
+      130,
+      162,
+      165,
+      166
+    ],
+    "visual_review_status": "reviewed",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and each assembled family/subtype inspected on contact sheets during development. A 2600 px plan and complex-joint sample inspected for each building. Changed connection families and layouts were sampled again after corrections. This is sampled visual review, not full-size inspection of every page or structural approval.",
+    "reviewed_by": "Codex visual inspection",
+    "full_size_samples": {
+      "pdf_sha256": "f69695fda672ce2c15464ce723407e081340ffad48976989fffb410f8fd2a35c",
+      "plan_page": 7,
+      "joint_page": 127,
+      "scale_to_px": 2600
+    },
+    "correction_samples": {
+      "pdf_sha256": "f69695fda672ce2c15464ce723407e081340ffad48976989fffb410f8fd2a35c",
+      "scale_to_px": 2600,
+      "samples": [
+        {
+          "sheet": "C106",
+          "page": 128,
+          "title": "PG PICKUP | W24X335 / PG84X1108",
+          "image": "extra-C106.png"
+        },
+        {
+          "sheet": "C107",
+          "page": 129,
+          "title": "PG SEAT | PG84X1108 / W36X925",
+          "image": "extra-C107.png"
+        }
+      ]
+    },
+    "corrections_verified": [
+      "Opening labels and representative member marks are separated.",
+      "Repeated weld labels on crowded assemblies use separate annotation rails.",
+      "Plate-girder pickups, source unbolted sliding seats, collar studs and hairpin fit checked in larger samples.",
+      "Repeated stud/hairpin groups have one schedule entry with quantities; collar dimensions are staggered."
+    ]
+  },
+  "hr2": {
+    "pdf_sha256": "304dd0f420b79f7dd8a9c3679cc653087ddbe4a9b858f3ccd4423b90e7e7a102",
+    "rendered_pages": 94,
+    "selected_pages": [
+      5,
+      6,
+      14,
+      15,
+      18,
+      19,
+      20,
+      21,
+      23,
+      51,
+      73,
+      78,
+      88,
+      91,
+      92
+    ],
+    "visual_review_status": "reviewed",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and each assembled family/subtype inspected on contact sheets during development. A 2600 px plan and complex-joint sample inspected for each building. Changed connection families and layouts were sampled again after corrections. This is sampled visual review, not full-size inspection of every page or structural approval.",
+    "reviewed_by": "Codex visual inspection",
+    "full_size_samples": {
+      "pdf_sha256": "304dd0f420b79f7dd8a9c3679cc653087ddbe4a9b858f3ccd4423b90e7e7a102",
+      "plan_page": 6,
+      "joint_page": 51,
+      "scale_to_px": 2600
+    },
+    "corrections_verified": [
+      "Opening labels and representative member marks are separated.",
+      "Repeated weld labels on crowded assemblies use separate annotation rails."
+    ]
+  },
+  "hr23": {
+    "pdf_sha256": "9ac15fe034260e8b913db57f438f962c630fe1d2e3b344f724d0cfed841ba7e2",
+    "rendered_pages": 249,
+    "selected_pages": [
+      7,
+      8,
+      16,
+      17,
+      20,
+      21,
+      22,
+      23,
+      26,
+      128,
+      132,
+      199,
+      206,
+      217,
+      237,
+      240,
+      242
+    ],
+    "visual_review_status": "reviewed",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and each assembled family/subtype inspected on contact sheets during development. A 2600 px plan and complex-joint sample inspected for each building. Changed connection families and layouts were sampled again after corrections. This is sampled visual review, not full-size inspection of every page or structural approval.",
+    "reviewed_by": "Codex visual inspection",
+    "full_size_samples": {
+      "pdf_sha256": "9ac15fe034260e8b913db57f438f962c630fe1d2e3b344f724d0cfed841ba7e2",
+      "plan_page": 8,
+      "joint_page": 22,
+      "scale_to_px": 2600
+    },
+    "corrections_verified": [
+      "Opening labels and representative member marks are separated.",
+      "Repeated weld labels on crowded assemblies use separate annotation rails."
+    ]
+  },
+  "hr26": {
+    "pdf_sha256": "98bb1dad4cd72b0b13180af03cf43517903dd1df3b9482be409d6e64b83cce9c",
+    "rendered_pages": 221,
+    "selected_pages": [
+      6,
+      7,
+      24,
+      25,
+      28,
+      29,
+      30,
+      32,
+      114,
+      130,
+      181,
+      184,
+      196,
+      197,
+      211,
+      214,
+      215
+    ],
+    "visual_review_status": "reviewed",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and each assembled family/subtype inspected on contact sheets during development. A 2600 px plan and complex-joint sample inspected for each building. Changed connection families and layouts were sampled again after corrections. This is sampled visual review, not full-size inspection of every page or structural approval.",
+    "reviewed_by": "Codex visual inspection",
+    "full_size_samples": {
+      "pdf_sha256": "98bb1dad4cd72b0b13180af03cf43517903dd1df3b9482be409d6e64b83cce9c",
+      "plan_page": 7,
+      "joint_page": 30,
+      "scale_to_px": 2600
+    },
+    "correction_samples": {
+      "pdf_sha256": "98bb1dad4cd72b0b13180af03cf43517903dd1df3b9482be409d6e64b83cce9c",
+      "scale_to_px": 2600,
+      "samples": [
+        {
+          "sheet": "C167",
+          "page": 196,
+          "title": "EQUIPMENT FOOT | W24X68",
+          "image": "extra-C167.png"
+        }
+      ]
+    },
+    "corrections_verified": [
+      "Opening labels and representative member marks are separated.",
+      "Repeated weld labels on crowded assemblies use separate annotation rails.",
+      "Source roof damper support and authored supplier foot checked."
+    ]
+  },
+  "hr29": {
+    "pdf_sha256": "0163a62f1b762a91120fc1d621299bb39cace3c8fa85ad4c8d7c6f6b73b5dfb3",
+    "rendered_pages": 361,
+    "selected_pages": [
+      8,
+      9,
+      28,
+      29,
+      32,
+      33,
+      34,
+      37,
+      181,
+      240,
+      278,
+      299,
+      312,
+      346,
+      349,
+      351
+    ],
+    "visual_review_status": "reviewed",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and each assembled family/subtype inspected on contact sheets during development. A 2600 px plan and complex-joint sample inspected for each building. Changed connection families and layouts were sampled again after corrections. This is sampled visual review, not full-size inspection of every page or structural approval.",
+    "reviewed_by": "Codex visual inspection",
+    "full_size_samples": {
+      "pdf_sha256": "0163a62f1b762a91120fc1d621299bb39cace3c8fa85ad4c8d7c6f6b73b5dfb3",
+      "plan_page": 9,
+      "joint_page": 34,
+      "scale_to_px": 2600
+    },
+    "corrections_verified": [
+      "Opening labels and representative member marks are separated.",
+      "Repeated weld labels on crowded assemblies use separate annotation rails."
+    ]
+  },
+  "hr3": {
+    "pdf_sha256": "742a60c32d29037cf309b2888442cbbbca7ac42558433f5aa8e0312886015e4c",
+    "rendered_pages": 118,
+    "selected_pages": [
+      5,
+      6,
+      12,
+      13,
+      16,
+      17,
+      18,
+      21,
+      58,
+      97,
+      99,
+      103,
+      104,
+      106,
+      112,
+      115,
+      116
+    ],
+    "visual_review_status": "reviewed",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and each assembled family/subtype inspected on contact sheets during development. A 2600 px plan and complex-joint sample inspected for each building. Changed connection families and layouts were sampled again after corrections. This is sampled visual review, not full-size inspection of every page or structural approval.",
+    "reviewed_by": "Codex visual inspection",
+    "full_size_samples": {
+      "pdf_sha256": "742a60c32d29037cf309b2888442cbbbca7ac42558433f5aa8e0312886015e4c",
+      "plan_page": 6,
+      "joint_page": 104,
+      "scale_to_px": 2600
+    },
+    "correction_samples": {
+      "pdf_sha256": "742a60c32d29037cf309b2888442cbbbca7ac42558433f5aa8e0312886015e4c",
+      "scale_to_px": 2600,
+      "samples": [
+        {
+          "sheet": "S201",
+          "page": 13,
+          "title": "Grid plane X=0'-0\" / section and elevation",
+          "image": "extra-S201.png"
+        }
+      ]
+    },
+    "corrections_verified": [
+      "Opening labels and representative member marks are separated.",
+      "Repeated weld labels on crowded assemblies use separate annotation rails.",
+      "Cellar columns continue to the adopted -12 ft footing datum; no false cellar framing plan."
+    ]
+  },
+  "hr34a": {
+    "pdf_sha256": "f2bae9850513f251d66f84129f2360fd589d2030df6de44d97ed36c2d8841a71",
+    "rendered_pages": 176,
+    "selected_pages": [
+      6,
+      7,
+      20,
+      21,
+      24,
+      25,
+      26,
+      29,
+      71,
+      75,
+      125,
+      127,
+      131,
+      140,
+      161,
+      164,
+      165,
+      169,
+      171
+    ],
+    "visual_review_status": "reviewed",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and each assembled family/subtype inspected on contact sheets during development. A 2600 px plan and complex-joint sample inspected for each building. Changed connection families and layouts were sampled again after corrections. This is sampled visual review, not full-size inspection of every page or structural approval.",
+    "reviewed_by": "Codex visual inspection",
+    "full_size_samples": {
+      "pdf_sha256": "f2bae9850513f251d66f84129f2360fd589d2030df6de44d97ed36c2d8841a71",
+      "plan_page": 7,
+      "joint_page": 164,
+      "scale_to_px": 2600
+    },
+    "correction_samples": {
+      "pdf_sha256": "f2bae9850513f251d66f84129f2360fd589d2030df6de44d97ed36c2d8841a71",
+      "scale_to_px": 2600,
+      "samples": [
+        {
+          "sheet": "C136",
+          "page": 161,
+          "title": "TOWER JOINT | W24X103",
+          "image": "extra-C136.png"
+        }
+      ]
+    },
+    "corrections_verified": [
+      "Opening labels and representative member marks are separated.",
+      "Repeated weld labels on crowded assemblies use separate annotation rails.",
+      "Common podium reinforcement, separate upper floors, 19 in clear joint and source movement notes checked; repeated ties/studs grouped in annotations only."
+    ]
+  },
+  "hr34b": {
+    "pdf_sha256": "4727c73365c316874f4546c7d2fcc83ff57b81fab1feb81160ed3be86fb72f25",
+    "rendered_pages": 143,
+    "selected_pages": [
+      5,
+      6,
+      15,
+      16,
+      19,
+      20,
+      21,
+      24,
+      67,
+      69,
+      105,
+      107,
+      110,
+      115,
+      130,
+      132,
+      133,
+      137,
+      139
+    ],
+    "visual_review_status": "reviewed",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and each assembled family/subtype inspected on contact sheets during development. A 2600 px plan and complex-joint sample inspected for each building. Changed connection families and layouts were sampled again after corrections. This is sampled visual review, not full-size inspection of every page or structural approval.",
+    "reviewed_by": "Codex visual inspection",
+    "full_size_samples": {
+      "pdf_sha256": "4727c73365c316874f4546c7d2fcc83ff57b81fab1feb81160ed3be86fb72f25",
+      "plan_page": 6,
+      "joint_page": 132,
+      "scale_to_px": 2600
+    },
+    "correction_samples": {
+      "pdf_sha256": "4727c73365c316874f4546c7d2fcc83ff57b81fab1feb81160ed3be86fb72f25",
+      "scale_to_px": 2600,
+      "samples": [
+        {
+          "sheet": "C110",
+          "page": 130,
+          "title": "TOWER JOINT | W24X84",
+          "image": "extra-C110.png"
+        }
+      ]
+    },
+    "corrections_verified": [
+      "Opening labels and representative member marks are separated.",
+      "Repeated weld labels on crowded assemblies use separate annotation rails.",
+      "Common podium reinforcement, separate upper floors, 19 in clear joint and source movement notes checked; repeated ties/studs grouped in annotations only."
+    ]
+  },
+  "hr4": {
+    "pdf_sha256": "eed7b377f3a8315c599206b1cf8e2ff9a93bd61a368cdd317150b306869b2f56",
+    "rendered_pages": 60,
+    "selected_pages": [
+      4,
+      5,
+      7,
+      8,
+      11,
+      12,
+      13,
+      16,
+      34,
+      35,
+      36,
+      44,
+      46,
+      49,
+      54,
+      57,
+      58
+    ],
+    "visual_review_status": "reviewed",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and each assembled family/subtype inspected on contact sheets during development. A 2600 px plan and complex-joint sample inspected for each building. Changed connection families and layouts were sampled again after corrections. This is sampled visual review, not full-size inspection of every page or structural approval.",
+    "reviewed_by": "Codex visual inspection",
+    "full_size_samples": {
+      "pdf_sha256": "eed7b377f3a8315c599206b1cf8e2ff9a93bd61a368cdd317150b306869b2f56",
+      "plan_page": 5,
+      "joint_page": 34,
+      "scale_to_px": 2600
+    },
+    "corrections_verified": [
+      "Opening labels and representative member marks are separated.",
+      "Repeated weld labels on crowded assemblies use separate annotation rails."
+    ]
+  },
+  "hr5": {
+    "pdf_sha256": "ede8603513d2ae5cd1893987d5ac9360cc3dfc4a1915bfc57ce48bd9a2b1b939",
+    "rendered_pages": 90,
+    "selected_pages": [
+      5,
+      6,
+      15,
+      16,
+      19,
+      20,
+      21,
+      23,
+      45,
+      46,
+      70,
+      75,
+      83,
+      86,
+      87
+    ],
+    "visual_review_status": "reviewed",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and each assembled family/subtype inspected on contact sheets during development. A 2600 px plan and complex-joint sample inspected for each building. Changed connection families and layouts were sampled again after corrections. This is sampled visual review, not full-size inspection of every page or structural approval.",
+    "reviewed_by": "Codex visual inspection",
+    "full_size_samples": {
+      "pdf_sha256": "ede8603513d2ae5cd1893987d5ac9360cc3dfc4a1915bfc57ce48bd9a2b1b939",
+      "plan_page": 6,
+      "joint_page": 45,
+      "scale_to_px": 2600
+    },
+    "corrections_verified": [
+      "Opening labels and representative member marks are separated.",
+      "Repeated weld labels on crowded assemblies use separate annotation rails."
+    ]
+  },
+  "hr6": {
+    "pdf_sha256": "51f4ffb7dae74896046aec090a2b615eff4f7ab14fb2ccb3ed625f526b94a62a",
+    "rendered_pages": 96,
+    "selected_pages": [
+      5,
+      6,
+      11,
+      12,
+      15,
+      16,
+      17,
+      19,
+      50,
+      51,
+      52,
+      77,
+      78,
+      81,
+      87,
+      90,
+      93,
+      94
+    ],
+    "visual_review_status": "reviewed",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and each assembled family/subtype inspected on contact sheets during development. A 2600 px plan and complex-joint sample inspected for each building. Changed connection families and layouts were sampled again after corrections. This is sampled visual review, not full-size inspection of every page or structural approval.",
+    "reviewed_by": "Codex visual inspection",
+    "full_size_samples": {
+      "pdf_sha256": "51f4ffb7dae74896046aec090a2b615eff4f7ab14fb2ccb3ed625f526b94a62a",
+      "plan_page": 6,
+      "joint_page": 17,
+      "scale_to_px": 2600
+    },
+    "corrections_verified": [
+      "Opening labels and representative member marks are separated.",
+      "Repeated weld labels on crowded assemblies use separate annotation rails."
+    ]
+  },
+  "hr7a": {
+    "pdf_sha256": "f96e8d036a4de5f7177ebbb0ec826d7e6d7511834609e435f9aca33f268ae98f",
+    "rendered_pages": 86,
+    "selected_pages": [
+      5,
+      6,
+      12,
+      13,
+      16,
+      17,
+      18,
+      20,
+      48,
+      49,
+      73,
+      74,
+      80,
+      83,
+      84
+    ],
+    "visual_review_status": "reviewed",
+    "method": "Every final PDF page rendered at 900 px. Selected plans, sections, schedules and each assembled family/subtype inspected on contact sheets during development. A 2600 px plan and complex-joint sample inspected for each building. Changed connection families and layouts were sampled again after corrections. This is sampled visual review, not full-size inspection of every page or structural approval.",
+    "reviewed_by": "Codex visual inspection",
+    "full_size_samples": {
+      "pdf_sha256": "f96e8d036a4de5f7177ebbb0ec826d7e6d7511834609e435f9aca33f268ae98f",
+      "plan_page": 6,
+      "joint_page": 48,
+      "scale_to_px": 2600
+    },
+    "corrections_verified": [
+      "Opening labels and representative member marks are separated.",
+      "Repeated weld labels on crowded assemblies use separate annotation rails."
+    ]
+  }
+}
