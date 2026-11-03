@@ -1,4 +1,6 @@
-# IFC workflow (0.8.22)
+# IFC workflow (0.8.23)
+
+Physical members with explicit rolled or HSS section labels must link to member calculation records for that same section. A record existing in the package does not by itself prove the link is correct. Custom profile aliases and built-up constituent calculations still require explicit review.
 
 HR/CFS now preserve structured architectural handoff data as a fingerprinted
 job input. Physical packages can include the optional `architectural_input`
