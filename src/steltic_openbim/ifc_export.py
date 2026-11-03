@@ -2,6 +2,7 @@
 from collections import defaultdict
 import hashlib
 import json
+import math
 from pathlib import Path
 import uuid
 
@@ -20,6 +21,35 @@ from .drawing_workflow import fingerprint
 from .pilots.geometry import member_faces,part_faces,part_lines
 
 INCH=.0254
+
+
+def opening_boundary(opening):
+    """Read recorded polygon inches or legacy lower-left plane/dimensions in feet.
+
+    This conversion does not infer a host or cut the source panel geometry.
+    """
+    vertices=opening.get('vertices')
+    if vertices is None:
+        plane=opening.get('plane','').lower()
+        if plane not in ('xy','xz','yz'):
+            raise ValueError('Opening '+str(opening.get('id'))+' has no supported boundary or plane')
+        try:
+            origin=[float(opening[k])*12 for k in ('x_ft','y_ft','z_ft')]
+            width=float(opening['width_ft'])*12;height=float(opening['height_ft'])*12
+        except (KeyError,TypeError,ValueError) as ex:
+            raise ValueError('Opening '+str(opening.get('id'))+' has incomplete dimensions') from ex
+        if width<=0 or height<=0:raise ValueError('Opening dimensions must be positive')
+        u,v=['xyz'.index(c) for c in plane]
+        vertices=[]
+        for a,b in ((0,0),(width,0),(width,height),(0,height)):
+            point=origin.copy();point[u]+=a;point[v]+=b;vertices.append(point)
+    try:
+        vertices=[[float(v) for v in point] for point in vertices]
+        if len(vertices)<3 or any(len(p)!=3 or not all(math.isfinite(v) for v in p) for p in vertices):
+            raise ValueError('Invalid opening boundary')
+    except (TypeError,ValueError) as ex:
+        raise ValueError('Opening '+str(opening.get('id'))+' has invalid boundary coordinates') from ex
+    return vertices
 
 
 def property_set(model,product,values,name='Steltic_Coordination'):
@@ -64,6 +94,7 @@ def _export_source(directory,destination,source):
     else:
         from .source_worklines import physical_view
         physical=physical_view(package);basis='Source-declared design coordination geometry'
+    physical['openings']=[dict(o,vertices=opening_boundary(o)) for o in physical.get('openings',[])]
     from .physical_review import review_physical
     physical_checks=review_physical(physical)
     model=ifcopenshell.file(schema='IFC4')
@@ -82,14 +113,47 @@ def _export_source(directory,destination,source):
     members=physical.get('members',[]);panels=physical.get('panels',[]);connections=physical.get('connections',[])
     level_of=lambda item:int(item['level']) if item.get('level') is not None else None
     levels=sorted({level_of(item) for item in members+panels+connections+physical.get('joints',[])+physical.get('openings',[]) if item.get('level') is not None})
+    # Preserve explicit source datums, including the ground datum even when no
+    # physical element is assigned to it. Do not derive them from shifted solids.
+    datum_levels={}
+    for item in physical.get('levels',[]):
+        if isinstance(item,dict) and 'level' in item and 'elevation_in' in item:
+            datum_levels[int(item['level'])]=float(item['elevation_in'])
+        elif isinstance(item,(list,tuple)) and len(item)==3:
+            datum_levels[int(item[0])]=float(item[2])
+    if not datum_levels and package.get('module')=='HR':
+        datum_levels={i:float(z) for i,z in enumerate(package.get('layout_evidence',{}).get('levels_in') or [])}
+    levels=sorted(set(levels)|set(datum_levels))
     storeys={}
     for level in levels:
         s=entity('IfcBuildingStorey','Level '+str(level),'level:'+str(level))
         points=[p[2] for m in members if level_of(m)==level for p in m['axis']]
         # Storey elevation follows the source floor framing plane, not a moved member placement.
         floor=[p[2] for m in members if level_of(m)==level and abs(m['axis'][0][2]-m['axis'][1][2])<1e-6 for p in m['axis']]
-        s.Elevation=(min(floor) if floor else min(points,default=0))*INCH
+        s.Elevation=datum_levels.get(level,min(floor) if floor else min(points,default=0))*INCH
         ifcopenshell.api.aggregate.assign_object(model,products=[s],relating_object=building);storeys[level]=s
+    source_grids=physical.get('grids')
+    grid_basis='Reviewed coordination grid' if source_grids else 'Explicit source layout grid'
+    if recovered and source_grids:grid_basis='Derived from captured column worklines; not architect-confirmed'
+    if not source_grids:
+        layout=package.get('layout_evidence',{})
+        source_grids={a:layout.get('grid_'+a+'_in') or [] for a in ('x','y')}
+    def grid_rows(axis):
+        return [(str(v[0]),float(v[1])) if isinstance(v,(list,tuple)) else (str(i+1),float(v)) for i,v in enumerate(source_grids.get(axis,[]))]
+    gx,gy=grid_rows('x'),grid_rows('y')
+    if gx and gy:
+        grid=entity('IfcGrid','Structural reference grid','source-grid');grid.PredefinedType='RECTANGULAR'
+        grid.ObjectPlacement=model.create_entity('IfcLocalPlacement',RelativePlacement=model.create_entity('IfcAxis2Placement3D',Location=model.create_entity('IfcCartesianPoint',Coordinates=(0.,0.,0.))))
+        def grid_axis(label,points):
+            curve=model.create_entity('IfcPolyline',Points=[model.create_entity('IfcCartesianPoint',Coordinates=tuple(float(v)*INCH for v in p)) for p in points])
+            return model.create_entity('IfcGridAxis',AxisTag=label,AxisCurve=curve,SameSense=True)
+        xmin,xmax=min(v for _,v in gx),max(v for _,v in gx);ymin,ymax=min(v for _,v in gy),max(v for _,v in gy)
+        if xmin<xmax and ymin<ymax:
+            grid.UAxes=[grid_axis(label,[(x,ymin,0),(x,ymax,0)]) for label,x in gx]
+            grid.VAxes=[grid_axis(label,[(xmin,y,0),(xmax,y,0)]) for label,y in gy]
+            ifcopenshell.api.spatial.assign_container(model,products=[grid],relating_structure=building)
+            property_set(model,grid,dict(Basis=grid_basis,SourceModelSHA256=state['source_model_sha256']))
+        else:model.remove(grid)
     profiles={p['id']:p for p in physical.get('profiles',[])}
     materials={};material_source={m['id']:m for m in package['physical'].get('materials',[])}
     containment=defaultdict(list);material_products=defaultdict(list)
@@ -136,6 +200,7 @@ def _export_source(directory,destination,source):
             DetailReference=item.get('detail_ref'),PartParameters=item.get('parameters'),PartKind=item.get('kind') if item.get('geometry') else None,
             ConnectionId=item.get('connection_id'),JointId=item.get('joint_id'),ConnectedMembers=item.get('connected_member_ids'),
             HostSourceId=item.get('host_id'),GeometryRole=item.get('geometry_role'),
+            AnalysisIds=item.get('analysis_ids'),AnalysisSegments=item.get('analysis_segments'),
             SourceKind=item.get('kind'),SourceLevel=None if item.get('level_basis') else item.get('level'),AssignedLevel=item.get('level'),
             SourceStorey=item.get('storey'),LevelSourceField=item.get('level_source_field'),
             StoreyAssignment=item.get('level_basis') or ('source declared' if item.get('level') is not None else 'not supplied; contained in building'),
@@ -206,7 +271,7 @@ def _export_source(directory,destination,source):
     property_set(model,project,dict(Status=physical_checks['status'],Findings=physical_checks['findings'],
         StructuralDesignApproval=False,Limits=physical_checks['limits']),name='Steltic_PhysicalChecks')
     model.header.file_name.name=destination.name
-    model.header.file_name.originating_system='Steltic openBIM 0.8.12'
+    model.header.file_name.originating_system='Steltic openBIM 0.8.13'
     model.write(str(destination));errors=schema_errors(destination)
     if errors:raise ValueError('Generated IFC failed schema validation: '+str(errors[:3]))
     reopened=ifcopenshell.open(str(destination))
