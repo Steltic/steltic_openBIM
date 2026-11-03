@@ -56,3 +56,6 @@ connections required by its schedule. Model interior joints with attachments
 and locate the real hardware at each frame. At a shared beam/brace/column
 joint, provide every applicable connection family; one base plate or one brace
 gusset does not represent all other attached members' connections.
+
+
+From 0.8.28, strict jobs also compare explicit solid-fastener counts with distinct located solids in the same local design assembly. A single block or shaft carrying `count: 4` does not produce four fasteners. Actual split arrays sharing a joint and record are supported. This lower-bound check preserves reference/delegated scope and does not certify spacing, fit or capacity.
