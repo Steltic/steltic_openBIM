@@ -34,10 +34,19 @@ def grids(model,scale):
 def top_surfaces(obj):
     """Plan polygons and their actual planes, from upward-facing mesh triangles."""
     vertices=np.asarray(obj['vertices']);groups={}
+    # A coordination panel is often a zero-thickness sheet with either winding.
+    # Normalise only a wholly coplanar mesh, never the bottom of a closed solid.
+    sheet=False
+    for face in obj['faces']:
+        a,b,c=vertices[face];normal=np.cross(b-a,c-a);length=np.linalg.norm(normal)
+        if length>1e-10:
+            sheet=bool(np.max(np.abs((vertices-a)@(normal/length)))<1e-7)
+            break
     for face in obj['faces']:
         a,b,c=vertices[face];n=np.cross(b-a,c-a);length=np.linalg.norm(n)
         if length<1e-10:continue
         n=n/length
+        if sheet and n[2]<0:n=-n
         if n[2]<.1:continue
         plane=tuple(float(v) for v in [*n,-np.dot(n,a)])
         key=tuple(round(v,8) for v in plane)

@@ -171,10 +171,10 @@ def _export_source(directory,destination,source):
     containment=defaultdict(list);material_products=defaultdict(list)
     origin=model.create_entity('IfcAxis2Placement3D',Location=model.create_entity('IfcCartesianPoint',Coordinates=(0.,0.,0.)))
     records={r['id']:r for r in package.get('design_records',[])}
-    counts=dict(members=0,member_surfaces=0,reference_axes=0,panel_surfaces=0,opening_references=0,connection_parts=0,connection_reference_parts=0,connection_references=0,unassigned_connection_parts=0,unassigned_elements=0)
+    counts=dict(members=0,member_surfaces=0,reference_axes=0,panel_surfaces=0,panel_opening_cuts=0,opening_references=0,connection_parts=0,connection_reference_parts=0,connection_references=0,unassigned_connection_parts=0,unassigned_elements=0)
     warnings=[];objects=[];unlocated_connections=[];property_pool={};mesh_templates={}
     identity_mapping=model.create_entity('IfcCartesianTransformationOperator3D',LocalOrigin=origin.Location,Scale=1.)
-    def add(cls,item,faces=(),lines=(),key=None):
+    def add(cls,item,faces=(),lines=(),key=None,face_holes=()):
         key=key or item['id'];obj=entity(cls,item.get('mark') or item['id'],key)
         obj.Description=item.get('description') or item.get('kind') or basis
         obj.ObjectPlacement=model.create_entity('IfcLocalPlacement',RelativePlacement=origin)
@@ -182,21 +182,35 @@ def _export_source(directory,destination,source):
         containment[level_of(item)].append(obj)
         if level_of(item) is None:counts['unassigned_elements']+=1
         if faces:
-            vertices=[];indices=[];lookup={}
+            vertices=[];indices=[];holes=[];lookup={}
             # Repeated members/parts share a local mesh. Only their recorded
             # translations differ; no rotation, rounding of source placement or
             # change to the section geometry is inferred.
             translation=tuple(float(v)*INCH for v in faces[0][0])
-            for face in faces:
+            def index_ring(face):
                 row=[]
                 for p in face:
                     point=tuple(round(float(v)*INCH-translation[i],9) for i,v in enumerate(p))
                     if point not in lookup:lookup[point]=len(vertices);vertices.append(point)
                     row.append(lookup[point])
-                if len(set(row))>=3:indices.append(row)
-            token=(tuple(vertices),tuple(tuple(row) for row in indices))
+                return row
+            for i,face in enumerate(faces):
+                row=index_ring(face)
+                if len(set(row))>=3:
+                    indices.append(row)
+                    holes.append([index_ring(ring) for ring in face_holes[i]] if face_holes else [])
+            token=(tuple(vertices),tuple(tuple(row) for row in indices),tuple(tuple(tuple(r) for r in rings) for rings in holes))
             if token not in mesh_templates:
-                template=ifcopenshell.api.geometry.add_mesh_representation(model,context=body_context,vertices=[vertices],faces=[indices])
+                if any(holes):
+                    points=model.create_entity('IfcCartesianPointList3D',CoordList=vertices)
+                    polygons=[]
+                    for row,rings in zip(indices,holes):
+                        boundary=tuple(i+1 for i in row)
+                        polygons.append(model.create_entity('IfcIndexedPolygonalFaceWithVoids',CoordIndex=boundary,InnerCoordIndices=[tuple(i+1 for i in r) for r in rings]) if rings else model.create_entity('IfcIndexedPolygonalFace',CoordIndex=boundary))
+                    mesh=model.create_entity('IfcPolygonalFaceSet',Coordinates=points,Closed=False,Faces=polygons)
+                    template=model.create_entity('IfcShapeRepresentation',ContextOfItems=body_context,RepresentationIdentifier='Body',RepresentationType='Tessellation',Items=[mesh])
+                else:
+                    template=ifcopenshell.api.geometry.add_mesh_representation(model,context=body_context,vertices=[vertices],faces=[indices])
                 mesh_templates[token]=model.create_entity('IfcRepresentationMap',MappingOrigin=origin,MappedRepresentation=template)
             mapped=model.create_entity('IfcMappedItem',MappingSource=mesh_templates[token],MappingTarget=identity_mapping)
             rep=model.create_entity('IfcShapeRepresentation',ContextOfItems=body_context,RepresentationIdentifier='Body',RepresentationType='MappedRepresentation',Items=[mapped])
@@ -223,6 +237,7 @@ def _export_source(directory,destination,source):
             DetailReference=item.get('detail_ref'),PartParameters=item.get('parameters'),PartKind=item.get('kind') if item.get('geometry') else None,
             ConnectionId=item.get('connection_id'),JointId=item.get('joint_id'),ConnectedMembers=item.get('connected_member_ids'),
             HostSourceId=item.get('host_id'),GeometryRole=item.get('geometry_role'),
+            AppliedOpeningIds=item.get('applied_opening_ids'),OpeningCutInHost=item.get('opening_cut_in_host'),
             AnalysisIds=item.get('analysis_ids'),AnalysisSegments=item.get('analysis_segments'),
             SourceKind=item.get('kind'),SourceLevel=None if item.get('level_basis') else item.get('level'),AssignedLevel=item.get('level'),
             SourceStorey=item.get('storey'),LevelSourceField=item.get('level_source_field'),
@@ -239,19 +254,28 @@ def _export_source(directory,destination,source):
             except (ValueError,KeyError,TypeError,ZeroDivisionError) as ex:warnings.append(dict(id=m['id'],message='Reference axis only: '+str(ex)[:160]))
         cls='IfcColumn' if m['kind'] in ('column','col','stud','post','endwall_post') else 'IfcBeam' if m['kind'] in ('beam','girder','joist','rafter','moment_beam') else 'IfcMember'
         add(cls,m,faces,[m['axis']]);counts['members']+=1;counts['member_surfaces' if faces else 'reference_axes']+=1
+    from .panel_geometry import panel_rings
+    cut_openings=set()
     for p in panels:
         vertices=p.get('vertices',[])
         if len(vertices)>=3:
             kind=p.get('kind','').lower()
             cls='IfcWall' if 'wall' in kind else 'IfcSlab' if any(token in kind for token in ('floor','roof','slab','deck')) else 'IfcBuildingElementProxy'
-            obj=add(cls,p,[vertices],key='panel:'+p['id'])
+            # Hosts are explicit. Legacy reviewed panels may list opening IDs;
+            # an opening's own host_id takes precedence over that older link.
+            related=[o for o in physical['openings'] if o.get('host_id')==p['id'] or (not o.get('host_id') and o['id'] in p.get('openings',[]))]
+            rings,applied,findings=panel_rings(p,related)
+            warnings.extend(findings);cut_openings.update(applied)
+            obj=add(cls,dict(p,applied_opening_ids=applied),[r['exterior'] for r in rings],key='panel:'+p['id'],face_holes=[r['holes'] for r in rings])
             if cls=='IfcBuildingElementProxy':obj.ObjectType='Coordination panel: '+kind
             counts['panel_surfaces']+=1
+    counts['panel_opening_cuts']=len(cut_openings)
     panel_lookup={p['id']:p for p in panels}
     for opening in physical.get('openings',[]):
         vertices=opening['vertices'];host=panel_lookup.get(opening.get('host_id'),{})
         item=dict(opening,kind=opening.get('kind') or 'opening',geometry_role='source_opening_reference',
-                  description='Source opening boundary reference only; panel/member geometry is not cut')
+                  opening_cut_in_host=opening['id'] in cut_openings,
+                  description='Source opening boundary; cut in declared host panel' if opening['id'] in cut_openings else 'Source opening boundary reference; no valid planar host cut')
         if item.get('level') is None and host.get('level') is not None:
             item['level']=host['level'];item['level_basis']='Inherited from host panel: '+str(host.get('level_basis') or 'source declared')
         add('IfcAnnotation',item,lines=[vertices+[vertices[0]]],key='opening:'+opening['id'])
@@ -291,11 +315,11 @@ def _export_source(directory,destination,source):
         UnassignedConnectionParts=counts['unassigned_connection_parts'],
         UnassignedElements=counts['unassigned_elements'],
         SourceOpenings=physical.get('openings',[]),SourceOpeningCoordinateUnits='inch',
-        Limits='Coordination surfaces omit rolled fillets and unmodelled cuts. Panels are source surfaces with thickness properties. Source opening boundaries are reference annotations, not cuts in panel/member geometry. Unlocated assembly details are not placed at guessed joints.'))
+        Limits='Coordination surfaces omit rolled fillets and unmodelled member cuts. Panels are source surfaces with thickness properties; valid coplanar openings cut their explicitly declared hosts. Opening annotations retain all source boundaries. Unlocated assembly details are not placed at guessed joints.'))
     property_set(model,project,dict(Status=physical_checks['status'],Findings=physical_checks['findings'],
         StructuralDesignApproval=False,Limits=physical_checks['limits']),name='Steltic_PhysicalChecks')
     model.header.file_name.name=destination.name
-    model.header.file_name.originating_system='Steltic openBIM 0.8.14'
+    model.header.file_name.originating_system='Steltic openBIM 0.8.15'
     model.write(str(destination));errors=schema_errors(destination)
     if errors:raise ValueError('Generated IFC failed schema validation: '+str(errors[:3]))
     reopened=ifcopenshell.open(str(destination))
@@ -303,7 +327,7 @@ def _export_source(directory,destination,source):
     return dict(schema='IFC4',source=source,**({'physical_revision':state['revision'],'source_job':state['source_job'],'source_module':state['source_module']} if structural else {'drawing_revision':state['revision']}),source_sha256=state['source_model_sha256'],
         counts=counts,objects=objects,warnings=warnings,physical_checks=physical_checks,schema_errors=errors,mesh_templates=len(mesh_templates),shared_property_values=len(property_pool),sha256=hashlib.sha256(destination.read_bytes()).hexdigest(),
         limits=['Coordination IFC, not an editable Revit family library or a fabrication issue.',
-                'Panels are surfaces; their thickness is metadata. Source opening polygons are traceable reference annotations; panels/members are not cut by these boundaries. Unconfirmed proposals remain request metadata.',
+                'Panels are surfaces; their thickness is metadata. Valid coplanar openings cut explicitly related host panels, with source boundaries retained as annotations. Members are not cut. Unconfirmed proposals remain request metadata.',
                 'Unlocated connection assemblies are metadata only. Captured worklines remain reference axes where physical set-out is unknown.',
                 'Connection reference polylines are annotations with source detail notes, not fabricated plate or weld solids.',
                 'Objects without a source-declared storey remain contained in the building, with coordinates and parent-connection identity retained; they are not silently assigned to Level 1.'])
