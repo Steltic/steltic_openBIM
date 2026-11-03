@@ -4,6 +4,8 @@ Drawing and IFC module for Steltic Hub: dimensioned engineering design drawings,
 
 ## Current status
 
+Version 0.8.1 adds an architectural IFC-to-HR brief handoff. Enter engineering requirements in IFC import, then download a source-referenced brief with the IFC grids, datums, floor/roof surfaces and opening locations for the existing HR design workflow. Three [fictional architectural video examples](docs/architect-video.md) include separately verified preliminary HR/OpenSees geometry builds.
+
 Version 0.8.0 adds **Steltic import**, **IFC import** and **IFC export** tabs. IFC2x3, IFC4 and IFC4x3 imports retain their original files, ask scope/unit questions, and build an interactive 3D review with model-data findings. Export produces a validated IFC4 from the current drawing geometry, or retains an imported IFC with review notes. Known physical geometry, reference axes and unlocated connection metadata are distinguished explicitly. [Workflow, Revit exchange and limits](docs/ifc-workflow.md).
 
 Version 0.7.1 checks occurrence geometry as well as analysis-ID coverage. Ordinary HR exports with grouped or missing physical occurrences can now produce a complete source-workline coordination set, with storey plans, grids, member marks, frame sections and non-blocking requests. Regenerating an existing job rechecks completeness while retaining answers and history. [Live-job recovery, limits and validation](docs/live-job-recovery.md).

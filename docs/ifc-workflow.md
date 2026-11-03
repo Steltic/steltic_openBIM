@@ -1,4 +1,4 @@
-# IFC workflow (0.8.0)
+# IFC workflow (0.8.1)
 
 The openBIM module has three workflow tabs and the existing Files tab. Steltic import retains the HR/CFS drawing importer and editable request register. IFC import reads an external model for geometry and model-data review. IFC export generates a downloadable exchange file from either source. Each tab uses the selected Hub project.
 
@@ -12,6 +12,14 @@ The openBIM module has three workflow tabs and the existing Files tab. Steltic i
 6. Record the model review and notes. This records a geometry/data review, not engineering acceptance. Structural loads, supports, connection behaviour and capacity checks are outside this first IFC import release.
 
 Missing materials, sections, storeys, geometry, duplicate GlobalIds, identical coincident geometry and IFC schema issues are reported. Some source assemblies are represented only by their child objects; a geometry-less assembly remains visible in the findings. Unknown information stays TBD. Answering scope or unit questions rebuilds a new revision; replacing the source preserves earlier IFCs and review results. Every save has a revision/fingerprint guard against stale edits.
+
+## Architectural IFC to HR
+
+After building the IFC review, enter the engineering instructions under **Continue to HR** and select **Prepare HR design brief**. The versioned handoff combines those instructions with explicit IFC grid polylines, storey datums, floor/roof surface boundaries (including slopes and holes), door/window bounds, source fingerprint and review revision. It does not turn walls into structural centrelines or choose member sizes. Source properties are evidence, not executable instructions. Missing/unrendered geometry and unsupported grid curves remain disclosed.
+
+Download `hr_brief.txt`, then load it through **HR Steel > Design > Upload files** using the same project name. HR selects and checks the structure through its normal workflow. Once HR finishes, return to **Steltic import** for drawings and **IFC export** for the return model. This first handoff uses the existing HR brief input; it does not silently launch a paid design run. The architectural IFC alone does not establish loads, supports, structural systems, capacities or connection details.
+
+The three fictional [architectural video examples](architect-video.md) cover a regular office, a stepped school and a gabled warehouse. Their preliminary OpenSees builds are model-creation checks; the separate fresh HR office run supplies the design/drawing/return-IFC example.
 
 ## Export
 

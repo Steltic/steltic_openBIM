@@ -18,6 +18,14 @@ def main():
     elif action=='export_import':
         from .ifc_export import export_import
         result=export_import(source,Path(output).with_name('model.ifc'),json.loads(Path(args[0]).read_text(encoding='utf-8')))
+    elif action=='handoff':
+        from .ifc_handoff import prepare
+        folder=Path(source);dest=Path(output).parent
+        read=lambda p:json.loads(p.read_text(encoding='utf-8'))
+        geometry,brief=prepare(folder/'original.ifc',read(folder/'model.json'),read(folder/'state.json'),read(Path(args[0]))['brief'])
+        (dest/'hr_brief.txt').write_text(brief,encoding='utf-8')
+        (dest/'architectural_geometry.json').write_text(json.dumps(geometry,indent=2),encoding='utf-8')
+        result=dict(source_sha256=geometry['source_sha256'],import_revision=geometry['import_revision'],warnings=geometry['warnings'])
     else:raise ValueError('Unknown IFC worker action')
     Path(output).write_text(json.dumps(result,ensure_ascii=True,allow_nan=False,separators=(',',':')),encoding='utf-8')
 
