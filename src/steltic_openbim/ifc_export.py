@@ -17,7 +17,7 @@ import ifcopenshell.api.unit
 import ifcopenshell.validate
 
 from .drawing_workflow import fingerprint
-from .pilots.geometry import member_faces,part_faces
+from .pilots.geometry import member_faces,part_faces,part_lines
 
 INCH=.0254
 
@@ -79,7 +79,7 @@ def export_drawing(directory,destination):
     containment=defaultdict(list);material_products=defaultdict(list)
     origin=model.create_entity('IfcAxis2Placement3D',Location=model.create_entity('IfcCartesianPoint',Coordinates=(0.,0.,0.)))
     records={r['id']:r for r in package.get('design_records',[])}
-    counts=dict(members=0,member_surfaces=0,reference_axes=0,panel_surfaces=0,connection_parts=0,connection_references=0)
+    counts=dict(members=0,member_surfaces=0,reference_axes=0,panel_surfaces=0,connection_parts=0,connection_reference_parts=0,connection_references=0)
     warnings=[];objects=[];unlocated_connections=[]
     def add(cls,item,faces=(),lines=(),key=None):
         key=key or item['id'];obj=entity(cls,item.get('mark') or item['id'],key)
@@ -115,7 +115,8 @@ def export_drawing(directory,destination):
             PhysicalDetails='TBD' if recovered else 'Design coordination; not fabrication geometry',
             SourceModelSHA256=state['source_model_sha256'],DrawingRevision=state['revision'],
             SectionDefinition=profiles.get(item.get('profile_id')),ThicknessIn=item.get('thickness_in',item.get('thickness')),
-            DetailReference=item.get('detail_ref'),DesignRecords=[records[r] for r in refs if r in records]))
+            DetailReference=item.get('detail_ref'),PartParameters=item.get('parameters'),PartKind=item.get('kind') if item.get('geometry') else None,
+            DesignRecords=[records[r] for r in refs if r in records]))
         objects.append(dict(source_id=item['id'],guid=obj.GlobalId,ifc_class=cls,geometry='surfaces' if faces else 'axes' if lines else 'metadata'))
         return obj
     for m in members:
@@ -131,10 +132,13 @@ def export_drawing(directory,destination):
             add('IfcWall' if 'wall' in p.get('kind','') else 'IfcSlab',p,[vertices],key='panel:'+p['id']);counts['panel_surfaces']+=1
     for c in connections:
         for i,part in enumerate(c.get('parts',[])):
-            faces=part_faces(part,profiles)
-            if not faces:warnings.append(dict(id=c['id'],message='Unsupported connection-part geometry'));continue
+            faces=part_faces(part,profiles);lines=part_lines(part)
+            if not faces and not lines:warnings.append(dict(id=c['id'],message='Unsupported connection-part geometry'));continue
             kind=part.get('kind','plate');item=dict(part,level=c.get('level',1),design_record_ids=c.get('design_record_ids',[]))
-            add('IfcMechanicalFastener' if kind in ('bolt','screw','anchor') else 'IfcPlate',item,faces,key='connection:'+c['id']+':'+str(i));counts['connection_parts']+=1
+            cls='IfcAnnotation' if lines else 'IfcMechanicalFastener' if kind in ('bolt','screw','anchor') else 'IfcPlate'
+            if lines:item['description']='Connection reference only: '+kind+'; physical part set-out remains unspecified'
+            add(cls,item,faces,lines,key='connection:'+c['id']+':'+str(i))
+            counts['connection_reference_parts' if lines else 'connection_parts']+=1
         if not c.get('parts'):
             unlocated_connections.append({k:c[k] for k in ('id','point','joint_id','member_ids','detail_ref','design_record_ids','basis') if k in c})
             counts['connection_references']+=1
@@ -145,19 +149,20 @@ def export_drawing(directory,destination):
     property_set(model,project,dict(SourceModelSHA256=state['source_model_sha256'],DrawingRevision=state['revision'],Basis=basis,
         DrawingStatus=state['drawing_status'],OpenRequests=[dict(id=r['id'],proposal=r['proposal'],confirmed=r['confirmed']) for r in state['requests']],
         ConnectionSchedules=[r for r in package.get('design_records',[]) if r['table']=='connections'],
-        UnlocatedConnectionReferences=unlocated_connections,
+        UnlocatedConnectionReferences=unlocated_connections,Interfaces=package['physical'].get('interfaces',[]),
         Limits='Coordination surfaces omit rolled fillets and unmodelled cuts. Panels are source surfaces with thickness properties. Unconfirmed openings are not cut into geometry. Unlocated assembly details are not placed at guessed joints.'))
     model.header.file_name.name=destination.name
-    model.header.file_name.originating_system='Steltic openBIM 0.8.0'
+    model.header.file_name.originating_system='Steltic openBIM 0.8.3'
     model.write(str(destination));errors=schema_errors(destination)
     if errors:raise ValueError('Generated IFC failed schema validation: '+str(errors[:3]))
     reopened=ifcopenshell.open(str(destination))
-    if len(reopened.by_type('IfcElement'))!=len(objects):raise ValueError('IFC round-trip product count changed')
+    if len(reopened.by_type('IfcElement'))+len(reopened.by_type('IfcAnnotation'))!=len(objects):raise ValueError('IFC round-trip product count changed')
     return dict(schema='IFC4',source='steltic',drawing_revision=state['revision'],source_sha256=state['source_model_sha256'],
         counts=counts,objects=objects,warnings=warnings,schema_errors=errors,sha256=hashlib.sha256(destination.read_bytes()).hexdigest(),
         limits=['Coordination IFC, not an editable Revit family library or a fabrication issue.',
                 'Panels are surfaces; their thickness is metadata. Unconfirmed openings do not cut the model.',
-                'Unlocated connection assemblies are metadata only. Captured worklines remain reference axes where physical set-out is unknown.'])
+                'Unlocated connection assemblies are metadata only. Captured worklines remain reference axes where physical set-out is unknown.',
+                'Connection reference polylines are annotations with source detail notes, not fabricated plate or weld solids.'])
 
 
 def export_import(source,destination,state):

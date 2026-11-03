@@ -29,6 +29,8 @@ Each preview was checked for connected member topology, zero-length members and 
 
 Fresh HR jobs with declared physical occurrences now use A1 source drawing sheets: dimensioned grids and levels, member marks, frame sections, connection callouts and member schedules. Supplied connection parts appear in three orthographic views and an isometric assembly view, with their source envelope dimensions. Reference-only details stay explicitly TBD. The member, connection and source-record indexes accompany the PDF; this route does not adopt a fictional review recipe or change the HR design.
 
+Source connection polylines (for example, splice references) are retained as amber dashed references in the drawings and as `IfcAnnotation` objects in the structural return. Their coordinates and detail notes survive reimport; they are counted separately from connection-part surfaces. They do not establish plate or weld solids. Connection views include members joined through an intermediate attachment as well as member ends. Declared delegated interfaces are retained in the drawing basis and IFC project properties.
+
 For video narration, call the input a **mock architect IFC**. The receiving architect can use an IFC-capable application; actual Revit import/export acceptance was not tested in this environment.
 
 ## Reproduce inputs and geometry checks
