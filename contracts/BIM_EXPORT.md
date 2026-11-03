@@ -50,7 +50,8 @@ Fabrication/shop detailing and IFC import are later work.
 
 ## New design jobs
 
-`new_activity_log` creates `design/bim_request.json` with `required: true` for a new
+`new_activity_log` creates `design/bim_request.json` with `required: true` and
+`require_connection_parts: true` for a new
 design job. Existing jobs and the separate HR build-only workflow retain their
 previous completion rules. For a new job:
 
@@ -58,7 +59,7 @@ previous completion rules. For a new job:
    and `required: True`. Record physical member axes, orientation, profiles,
    materials, panels, openings, and real secondary framing as these are selected.
 2. Run the normal design pipeline and complete its engineering checks. Put
-   connection occurrences, located parts or versioned design-detail references,
+   connection occurrences and located physical parts,
    and source-record mappings in the calculation package's top-level `bim` object.
    Both declaration objects have the same collection names. Declare a given ID in
    only one place; conflicting duplicates fail.
@@ -98,7 +99,11 @@ failed workers always return nonzero. Batch continues after an individual failur
 and writes `replay_summary.json`. Validate returns 0 for ready, 2 for any findings.
 
 Each replay runs trusted job Python in a separate process and temporary working
-directory. Known analysis/design entry points are disabled; timeout kills its owned
+directory. Tracked job inputs are staged together under the original job name,
+so ordinary relative data reads, nested helpers, `runpy.run_path` and
+`__file__`-relative paths use that staged tree. Generated relative files remain
+in scratch, and the original source fingerprints are checked before publication.
+Known analysis/design entry points are disabled; timeout kills its owned
 process tree. Python configuration execution is **not a security sandbox**. Only
 replay trusted jobs. Fingerprints detect changes to source evidence and prevent
 publication if it changes; this detects accidental writes, not malicious code.
@@ -167,6 +172,19 @@ Supported profile families/dimensions:
   non-built-up profiles. Do not substitute gross equivalent stiffness for geometry.
 - `box_envelope`: `width,depth`, only with `scope: 'delegated'` and a documented
   `basis`; it represents a declared envelope, not supplier internals.
+
+Section coordinates use local Y for width and local Z for depth. I, RHS, CHS
+and flat sections are centred; channel/Z sections use the web mid-depth centre,
+with channel flanges opening toward positive local Y. Angles use the outside
+corner. These are profile reference points, not automatically computed section
+centroids. `reference_line` describes the supplied axis; use explicit offsets
+where the intended physical profile reference point differs from that axis.
+For a built-up channel box, place the two web reference points at their actual
+separation; do not apply offsets as if each channel were centred on its bounding
+box. Every ply must occupy separate steel volume. Gross overlap of straight
+web/flange cores is reported as `physical_constituent_overlap` and prevents a
+`ready` result. This limited check excludes lips, fillets and unsupported curved
+cores; a clean result is not a complete interference or fabrication-fit check.
 
 Connection `parts` each carry ID, kind, material ID and geometry. Geometry supports
 oriented `box` (origin is its minimum local corner), `cylinder` (origin is base
@@ -261,3 +279,64 @@ Resolve the source declaration before completing a required new job. No section,
 coordinate or calculation record is automatically repaired. Legacy replay and
 coordination export may retain these findings for review. These limited screens
 do not establish capacity, architectural agreement, complete framing or fit.
+
+## Reference systems and connection geometry requirements
+
+Optional `bim.reference_system` is carried unchanged to the package root. It
+records explicit coordination datums and grid polylines in inches, independently
+of physical member offsets or simplified analysis coordinates:
+
+```json
+{
+  "basis": "Architectural reference coordinates; physical post offsets are separate",
+  "levels": [{"level": 0, "name": "Ground", "elevation_in": 0},
+             {"level": 1, "name": "Platform", "elevation_in": 144}],
+  "grids": [{"id": "A", "label": "A", "direction": "U", "points_in": [[0,0,0],[120,120,0]]},
+            {"id": "1", "label": "1", "direction": "V", "points_in": [[0,120,0],[120,0,0]]}]
+}
+```
+
+An optional `source_ifc_sha256` links the declared reference system to its IFC
+input. Grid IDs and integer level IDs must be unique; grid curves must have
+length and include both U and V families. Do not infer architectural grids from
+member bounds. Record each member/panel/joint's numeric `level` separately where
+known; grid and datum declarations do not invent object assignments. Optional
+entity `source_ifc_guid` retains the corresponding architectural source identity.
+
+The new-job request marker's `require_connection_parts` is preserved through
+consistency and replay, and copied to the package root. When true, every designed
+connection needs physical parts; detail references and reference polylines alone
+produce `connection_parts_required`. Explicit delegated interfaces still require
+a named responsible party, versioned detail and representation, and do not require
+invented supplier geometry. Older jobs without this requirement retain the prior
+controlled-reference contract. A job may explicitly opt in with
+`cfg['bim']['require_connection_parts'] = True`. This is design coordination
+geometry, not fabrication approval.
+
+## Bound architectural inputs
+
+When a design starts or resumes with an openBIM architectural handoff, the
+framework saves its original grids, named levels, IFC fingerprint and every
+door/window as `architectural_input.json`. This file is an input to the design
+and is fingerprinted by physical replay. The complete original brief, wall and
+floor/roof evidence stays in `architectural_handoff.txt`. `new_activity_log` preserves this
+binding. A later complete handoff can revise it, retaining the previous input
+in `architectural_input_history`.
+
+Read this file and copy its `reference_system` into `cfg['bim']`; use the supplied
+numeric level IDs consistently. Every architectural opening needs one physical
+opening with the exact `source_ifc_guid`, retained bounds and an explicit host.
+The exporter copies the source fingerprint directly from the saved input.
+If no reference system was declared, it carries the original architectural
+reference system without assigning any member to a storey.
+
+Coverage statements are checked against this bound input. Missing or moved
+openings, changed/missing grids or named datums, duplicate opening mappings,
+and coincident identical physical members prevent readiness. Edit the physical
+declarations to resolve these findings. The framework-owned input and its
+request marker cannot be changed with `write_file`.
+
+The optional package `architectural_input` field is supported by openBIM 0.8.17
+and later. Update the consumer together with the producers. Legacy jobs without
+a bound IFC input keep their existing contract. These checks preserve supplied
+data; they do not infer framing, connection design or omitted architectural data.
