@@ -1,8 +1,10 @@
 # steltic_openBIM
 
-Drawing and IFC module for Steltic Hub. The first release targets dimensioned engineering design drawings and IFC export. Fabrication/shop output and architectural IFC import follow later.
+Drawing and IFC module for Steltic Hub: dimensioned engineering design drawings, IFC import for model review, and IFC export. Fabrication/shop output and IFC-to-structural-analysis conversion remain later work.
 
 ## Current status
+
+Version 0.8.0 adds **Steltic import**, **IFC import** and **IFC export** tabs. IFC2x3, IFC4 and IFC4x3 imports retain their original files, ask scope/unit questions, and build an interactive 3D review with model-data findings. Export produces a validated IFC4 from the current drawing geometry, or retains an imported IFC with review notes. Known physical geometry, reference axes and unlocated connection metadata are distinguished explicitly. [Workflow, Revit exchange and limits](docs/ifc-workflow.md).
 
 Version 0.7.1 checks occurrence geometry as well as analysis-ID coverage. Ordinary HR exports with grouped or missing physical occurrences can now produce a complete source-workline coordination set, with storey plans, grids, member marks, frame sections and non-blocking requests. Regenerating an existing job rechecks completeness while retaining answers and history. [Live-job recovery, limits and validation](docs/live-job-recovery.md).
 
@@ -16,7 +18,7 @@ Hub integration mounts the same request widget inside User-designed building's Q
 
 The **Request register / answer queries** button opens the editable request form in the page. Raw data is available separately through **Download request data (JSON)**. Update/relaunch the openBIM module and refresh its tab to load the fix in an existing local Hub installation.
 
-The [Stage 3 physical-model review pilots](docs/stage3/README.md) remain source evidence, with their dimensioned development recorded in [Stage 5](docs/stage5/README.md). Authored review recipes are bound to supplied source revisions; they are not a general converter for arbitrary buildings. Stage 4 supersedes Stage 3's drawing hold policy. Wider automatic detailing and IFC export remain subsequent work.
+The [Stage 3 physical-model review pilots](docs/stage3/README.md) remain source evidence, with their dimensioned development recorded in [Stage 5](docs/stage5/README.md). Authored review recipes are bound to supplied source revisions; they are not a general converter for arbitrary buildings. Stage 4 supersedes Stage 3's drawing hold policy. Wider automatic connection detailing remains subsequent work.
 
 Stage 2 implements **HR/CFS physical-data export, legacy-job replay and an engine-independent consumer**. All **61 supplied gold-standard buildings (36 HR, 25 CFS)** exported successfully, with all 812 audited source files unchanged. Their unresolved physical details remain explicitly flagged. New source-module design jobs require physical declarations before completion.
 

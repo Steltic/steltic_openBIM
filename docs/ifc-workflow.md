@@ -1,0 +1,35 @@
+# IFC workflow (0.8.0)
+
+The openBIM module has three workflow tabs and the existing Files tab. Steltic import retains the HR/CFS drawing importer and editable request register. IFC import reads an external model for geometry and model-data review. IFC export generates a downloadable exchange file from either source. Each tab uses the selected Hub project.
+
+## Import and review
+
+1. Export an uncompressed `.ifc` STEP file from the authoring application. IFC2X3, IFC4 and IFC4X3 are supported. The first version accepts files up to 100 MB and 20,000 products.
+2. Inspect the file. The module records its fingerprint, schema, source units, storeys, classes, GlobalIds, materials, section information and schema/data findings. The original is preserved.
+3. Review the questions. The defaults retain all objects and the declared IFC units. Structural-only scope selects structural IFC classes; it does not reinterpret architectural walls as structural members. Missing length units require an explicit answer. Notes record further information; they do not invent or overwrite source properties.
+4. Build the review model. IFC geometry is evaluated using its product placements, including mapped representations, and converted to metres. Native parsing/meshing runs in a separate worker with a five-minute time limit. The preview is centred to preserve display precision; source coordinates are not moved. Map-conversion metadata is retained in the IFC but is not applied to the preview. The mesh budget is 1.5 million triangles; products beyond it are listed as unrendered, never silently dropped.
+5. Orbit, pan, zoom, filter by class/storey, and inspect object properties. Space volumes are hidden initially so they do not obscure building elements. Fit building focuses the initial camera on building elements; Fit all also includes proxy markers. Source objects, filtered objects and unrendered products are counted separately. Explicit polyline axes remain lines if no surface geometry exists.
+6. Record the model review and notes. This records a geometry/data review, not engineering acceptance. Structural loads, supports, connection behaviour and capacity checks are outside this first IFC import release.
+
+Missing materials, sections, storeys, geometry, duplicate GlobalIds, identical coincident geometry and IFC schema issues are reported. Some source assemblies are represented only by their child objects; a geometry-less assembly remains visible in the findings. Unknown information stays TBD. Answering scope or unit questions rebuilds a new revision; replacing the source preserves earlier IFCs and review results. Every save has a revision/fingerprint guard against stale edits.
+
+## Export
+
+Select a source in IFC export, click Generate IFC, then Download IFC. The export report records counts, geometry warnings, source/revision fingerprints and schema results. Outputs are retained under the project's `openbim/ifc/exports` directory, separate from drawing revisions.
+
+For a **Steltic drawing revision**, the exporter writes IFC4 in metres with a project/site/building/storey hierarchy, stable product GlobalIds, classifications, material assignments, member marks, source sections, design-record references and outstanding requests. It reopens and validates the resulting IFC and checks product counts. This is a coordination IFC, not a claim of certified MVD conformance or editable native Revit families.
+
+- Located members use the existing design meshes. Rolled fillets, bend radii and unmodelled fabrication cuts are not added.
+- Panels use source surfaces with thickness metadata. Unconfirmed openings do not cut geometry.
+- Located connection parts are exported where the physical package supplies their actual geometry. Unlocated connection specifications remain metadata. The locally drawn detail assemblies in the 61 fictional review PDFs are not automatically transformed into global placements without an occurrence transform.
+- Recovered ordinary-job source worklines remain reference axes. Unknown section orientation, physical set-out and connection geometry are not converted into invented solids. The export tab identifies this before generation. Some receiving applications may not display all curve-only representations; use the report and the openBIM review to inspect coverage.
+
+For an **imported IFC**, export retains the complete original object graph, schema, GlobalIds and geometry, including objects outside the selected preview scope, and adds review information. An explicitly chosen unit override changes the length-unit declaration without rescaling source coordinates or map-conversion metadata. Schema problems already in the source are reported; this path does not claim to repair them. It is not a selective export of the preview filter.
+
+## Revit exchange
+
+Revit exports IFC through File > Export > IFC. IFC4 Reference View is a common coordination option; IFC2x3 is also supported by the importer. A Revit file itself (`.rvt`) is not an IFC and cannot be uploaded to this tab. Linked-model inclusion, category mapping, visibility and export settings determine the content actually transferred. [Autodesk export settings](https://autodesk.ifc-manual.com/revit/ifc-export-settings-dialog).
+
+Revit can open an IFC into a new model or link it as a reference. A linked IFC can be reloaded after changes; opening does not preserve that live link. IFC exchange does not guarantee the original parametric Revit families, constraints, analytical connectivity, supports or loads. Imported geometry must still be reviewed. [Autodesk import/link guidance](https://help.autodesk.com/cloudhelp/2023/ENU/Revit-Model/files/GUID-C61C2E42-0561-48C9-8459-3EAC10EC8E16.htm).
+
+Validation uses IfcOpenShell 0.9.0.post1 and independently authored fixtures covering schema variants, mapped/rotated geometry, units, preserved object graphs, missing information and revision guards. Additional buildingSMART building samples are checked locally without committing external or private building files. Revit itself is not part of this automated test environment; compatibility is based on standard IFC representations and Autodesk's documented import/link support, not a claim of a completed native Revit acceptance test.
