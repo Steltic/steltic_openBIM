@@ -13,6 +13,9 @@ from .drawing_workflow import StaleRevision,write_json,fingerprint,initial_state
 from .job_sources import JobSources
 
 MAX_FILE=100*1024*1024
+# Detailed connection models can approach the product/triangle limits while
+# other local design jobs are running. Keep a finite deadline with headroom.
+WORKER_TIMEOUT_SECONDS=1200
 
 
 def read(path):return json.loads(Path(path).read_text(encoding='utf-8'))
@@ -21,9 +24,9 @@ def read(path):return json.loads(Path(path).read_text(encoding='utf-8'))
 def worker(action,source,output,*args):
     cmd=[sys.executable,'-m','steltic_openbim.ifc_worker',action,str(source),str(output),*[str(a) for a in args]]
     try:
-        result=subprocess.run(cmd,capture_output=True,text=True,encoding='utf-8',errors='replace',timeout=600,
+        result=subprocess.run(cmd,capture_output=True,text=True,encoding='utf-8',errors='replace',timeout=WORKER_TIMEOUT_SECONDS,
                               creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
-    except subprocess.TimeoutExpired:raise ValueError('IFC processing exceeded ten minutes. Export a smaller model or discipline.') from None
+    except subprocess.TimeoutExpired:raise ValueError('IFC processing exceeded twenty minutes. Export a smaller model or discipline.') from None
     if result.returncode:raise ValueError('IFC processing failed: '+(result.stderr or result.stdout)[-1000:])
     return read(output)
 
