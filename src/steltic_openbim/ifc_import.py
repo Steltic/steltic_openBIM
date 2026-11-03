@@ -1,6 +1,7 @@
 """IFC inspection and geometry review. Never infers structural capacity or runs a solver."""
 from collections import Counter
 import hashlib
+import json
 import math
 
 import ifcopenshell
@@ -81,6 +82,22 @@ def metadata(model):
     finding('missing_section','Linear structural products without a section definition',[r['id'] for r in rows if r['linear_structural'] and not r['sections']])
     finding('missing_global_id','Products without a GlobalId',[r['id'] for r in rows if not r['guid']])
     finding('duplicate_global_id','Duplicate GlobalIds',[r['id'] for r in rows if ids[r['guid']]>1])
+    for project in model.by_type('IfcProject'):
+        declared=element_util.get_psets(project).get('Steltic_PhysicalChecks',{})
+        if not declared:
+            continue
+        try:
+            source_findings=json.loads(declared.get('Findings','[]'))
+            if not isinstance(source_findings,list):raise ValueError('Expected a list')
+            for row in source_findings:
+                if not isinstance(row,dict) or not isinstance(row.get('title'),str) or type(row.get('count')) is not int or row['count']<0:
+                    raise ValueError('Invalid finding')
+            for row in source_findings:
+                problems.append(dict(code='declared_'+str(row.get('code','physical_finding')),
+                    title='Exported source check: '+row['title'],count=row['count'],
+                    provenance='Steltic_PhysicalChecks in source IFC; not independently recomputed by import'))
+        except (ValueError,TypeError):
+            problems.append(dict(code='physical_checks_unreadable',title='Source physical-check metadata could not be read',count=1))
     logger=ifcopenshell.validate.json_logger();ifcopenshell.validate.validate(model,logger)
     errors=[r for r in logger.statements if r.get('level')=='error']
     if errors:problems.append(dict(code='ifc_schema',title='IFC schema findings',count=len(errors),messages=[r.get('message','')[:300] for r in errors[:100]]))

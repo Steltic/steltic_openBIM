@@ -63,6 +63,7 @@ window.StelticIFC={async mount(root,project,mode){
    for(const r of state.exports){const url=base+'/export/'+r.key;box.append(card(el('h3',{},r.source==='structural'?r.source_module+' / '+r.source_job+' physical export':r.source==='steltic'?'Steltic model export':'Imported IFC with review information'),el('p',{},`${r.schema} · source revision ${r.physical_revision||r.drawing_revision||r.import_revision} · ${r.schema_errors.length?'Schema findings: '+r.schema_errors.length:'Schema validation passed'}`),
      el('p',{},Object.entries(r.counts).map(([k,v])=>k.replaceAll('_',' ')+': '+v.toLocaleString()).join(' · ')),
      el('div',{class:'ifc-row'},el('a',{href:url+'/model.ifc',class:'ifc-download'},'Download IFC'),el('a',{href:url+'/report.json',target:'_blank'},'Export report')),
+     r.physical_checks?el('div',{},el('h4',{},'Physical source checks'),el('p',{},r.physical_checks.findings.length?'Source-model review required. The IFC retains the supplied geometry.':'No findings in the limited source screens. This does not establish architectural agreement or design approval.'),el('ul',{},r.physical_checks.findings.map(f=>el('li',{},`${f.title}: ${f.count}`)))):null,
      el('ul',{},r.limits.map(t=>el('li',{},t))),r.warnings.length?el('p',{},`${r.warnings.length} geometry warnings — see export report.`):null));}
  }
  try{await refresh()}catch(e){error(e)}
