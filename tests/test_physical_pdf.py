@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 
 from pypdf import PdfReader
+import pytest
 from steltic_openbim.drawing_pdf import generate
 from steltic_openbim.drawing_workflow import initial_state, fingerprint
 
@@ -24,8 +25,14 @@ def source_frame():
     return p
 
 
-def test_declared_hr_has_grids_sections_marks_and_only_source_connection_parts(tmp_path):
-    p = source_frame(); before = fingerprint(p)
+@pytest.mark.parametrize('module',['HR','CFS'])
+def test_declared_model_has_grids_sections_marks_and_only_source_connection_parts(tmp_path,module):
+    p = source_frame()
+    p['module']=module
+    if module=='CFS':
+        for member in p['physical']['members']:
+            if member['kind']=='column':member['kind']='post'
+    before=fingerprint(p)
     report = generate(p, initial_state(p,1), tmp_path)
     assert fingerprint(p) == before
     index = json.loads((tmp_path/'member_index.json').read_text())
@@ -38,6 +45,19 @@ def test_declared_hr_has_grids_sections_marks_and_only_source_connection_parts(t
     assert len(assembly)==4 and all(v['part_ids']==['plate'] for v in assembly)
     assert len(PdfReader(tmp_path/'drawings.pdf').pages)==len(report['sheets'])
     assert not any('fictional test' in page.extract_text().lower() for page in PdfReader(tmp_path/'drawings.pdf').pages)
+
+
+def test_opening_without_optional_kind_retains_source_vertices_and_level(tmp_path):
+    p=source_frame();p['module']='CFS'
+    vertices=[[20,0,190],[56,0,190],[56,0,274],[20,0,274]]
+    p['physical']['panels']=[dict(id='wall',kind='wall',status='declared',level=1,thickness=0.5,material_id='steel',vertices=[[0,0,180],[360,0,180],[360,0,300],[0,0,300]])]
+    p['physical']['openings']=[dict(id='gate',host_id='wall',level=2,vertices=vertices,basis='source geometry')]
+    from steltic_openbim.drawing_pdf import source_openings
+    feature=source_openings(p)[0]
+    assert feature['kind']=='opening' and feature['level']==2
+    assert feature['source_vertices']==vertices and feature['confirmed']
+    report=generate(p,initial_state(p,1),tmp_path)
+    assert any(d.get('feature_id')=='SRC-gate' for d in report['dimensions'])
 
 
 def test_reference_only_connections_have_no_invented_assembly(tmp_path):

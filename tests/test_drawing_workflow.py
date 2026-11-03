@@ -40,16 +40,16 @@ def test_dimensions_hidden_then_updated_without_altering_source(warehouse,tmp_pa
     s=initial_state(warehouse,1);before=fingerprint(warehouse)
     first=generate(warehouse,s,tmp_path/'r1')
     assert not any(d['kind']=='confirmed_opening' for d in first['dimensions'])
-    page=next(x for x in first['sheets'] if x['number']=='A601')['page']-1
-    txt=PdfReader(tmp_path/'r1/drawings.pdf').pages[page].extract_text()
+    reader=PdfReader(tmp_path/'r1/drawings.pdf')
+    txt='\n'.join(reader.pages[x['page']-1].extract_text() for x in first['sheets'] if x['title'].startswith('Opening'))
     assert 'P001' in txt and 'TBD' in txt and 'resolve query' in txt
     assert 'SRC-DOOR-0' in txt and "14'-0\"" in txt
     resolved=apply_answer(warehouse,s,answer(s));after=generate(warehouse,resolved,tmp_path/'r2')
     assert resolved['revision']==2 and len(resolved['features'])==1 and resolved['features'][0]['confirmed']
     dims=[d for d in after['dimensions'] if d['kind']=='confirmed_opening']
     assert dims[0]['values_ft']['y_ft']==100 and dims[0]['values_ft']['width_ft']==3.25
-    page=next(x for x in after['sheets'] if x['number']=='A601')['page']-1
-    txt=PdfReader(tmp_path/'r2/drawings.pdf').pages[page].extract_text()
+    reader=PdfReader(tmp_path/'r2/drawings.pdf')
+    txt='\n'.join(reader.pages[x['page']-1].extract_text() for x in after['sheets'] if x['title'].startswith('Opening'))
     assert "3'-3\"" in txt and "100'-0\"" in txt
     assert first['pdf_sha256']!=after['pdf_sha256'] and fingerprint(warehouse)==before
 
