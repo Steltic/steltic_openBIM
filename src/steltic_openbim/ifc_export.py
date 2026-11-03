@@ -1,4 +1,4 @@
-"""IFC4 coordination export of the current, immutable drawing revision."""
+"""IFC4 coordination export of immutable physical-source or drawing revisions."""
 from collections import defaultdict
 import hashlib
 import json
@@ -36,14 +36,27 @@ def schema_errors(path):
 
 
 def export_drawing(directory,destination):
+    return _export_source(directory,destination,'steltic')
+
+
+def export_structural(directory,destination):
+    return _export_source(directory,destination,'structural')
+
+
+def _export_source(directory,destination,source):
     directory=Path(directory);destination=Path(destination)
     package=json.loads((directory/'source.json').read_text(encoding='utf-8'))
     state=json.loads((directory/'state.json').read_text(encoding='utf-8'))
+    structural=source=='structural'
+    if structural and state.get('schema')!='steltic.ifc_physical_source':
+        raise ValueError('Choose an immutable structural source snapshot')
+    status=state['source_status'] if structural else state['drawing_status']
+    revision_properties={'PhysicalSourceRevision' if structural else 'DrawingRevision':state['revision']}
     from .validation import inspect_package
-    if inspect_package(package)['status']=='invalid':raise ValueError('The drawing source contains invalid physical data')
-    if fingerprint(package)!=state['source_model_sha256']:raise ValueError('The drawing source fingerprint changed')
+    if inspect_package(package)['status']=='invalid':raise ValueError('The source contains invalid physical data')
+    if fingerprint(package)!=state['source_model_sha256']:raise ValueError('The source fingerprint changed')
     recovered=state.get('representation')=='captured_source_worklines'
-    if (directory/'design_model.json').is_file():
+    if not structural and (directory/'design_model.json').is_file():
         physical=json.loads((directory/'design_model.json').read_text(encoding='utf-8'));basis='Adopted fictional design geometry'
     elif recovered:
         from .source_worklines import build
@@ -113,10 +126,10 @@ def export_drawing(directory,destination):
             material_products[mat].append(obj)
         refs=item.get('design_record_ids',[])
         property_set(model,obj,dict(SourceId=item['id'],MemberMark=item.get('mark'),Section=item.get('profile_id'),
-            Basis=item.get('basis',basis),Status=item.get('status',state['drawing_status']),
+            Basis=item.get('basis',basis),Status=item.get('status',status),
             Geometry='design surfaces' if faces else 'reference axes only' if lines else 'reference metadata only',
             PhysicalDetails='TBD' if recovered else 'Design coordination; not fabrication geometry',
-            SourceModelSHA256=state['source_model_sha256'],DrawingRevision=state['revision'],
+            SourceModelSHA256=state['source_model_sha256'],**revision_properties,
             SectionDefinition=profiles.get(item.get('profile_id')),ThicknessIn=item.get('thickness_in',item.get('thickness')),
             DetailReference=item.get('detail_ref'),PartParameters=item.get('parameters'),PartKind=item.get('kind') if item.get('geometry') else None,
             ConnectionId=item.get('connection_id'),JointId=item.get('joint_id'),ConnectedMembers=item.get('connected_member_ids'),
@@ -174,8 +187,10 @@ def export_drawing(directory,destination):
         ifcopenshell.api.spatial.assign_container(model,products=items,relating_structure=storeys.get(level,building))
     for material,items in material_products.items():
         ifcopenshell.api.material.assign_material(model,products=items,material=materials[material])
-    property_set(model,project,dict(SourceModelSHA256=state['source_model_sha256'],DrawingRevision=state['revision'],Basis=basis,
-        DrawingStatus=state['drawing_status'],OpenRequests=[dict(id=r['id'],proposal=r['proposal'],confirmed=r['confirmed']) for r in state['requests']],
+    property_set(model,project,dict(SourceModelSHA256=state['source_model_sha256'],**revision_properties,Basis=basis,
+        SourceModule=state.get('source_module'),SourceJob=state.get('source_job'),
+        **({'SourceStatus':status} if structural else {'DrawingStatus':status}),
+        OpenRequests=[dict(id=r['id'],proposal=r['proposal'],confirmed=r['confirmed']) for r in state['requests']],
         ConnectionSchedules=[r for r in package.get('design_records',[]) if r['table']=='connections'],
         UnlocatedConnectionReferences=unlocated_connections,Interfaces=package['physical'].get('interfaces',[]),
         UnassignedConnectionParts=counts['unassigned_connection_parts'],
@@ -183,12 +198,12 @@ def export_drawing(directory,destination):
         SourceOpenings=physical.get('openings',[]),SourceOpeningCoordinateUnits='inch',
         Limits='Coordination surfaces omit rolled fillets and unmodelled cuts. Panels are source surfaces with thickness properties. Source opening boundaries are reference annotations, not cuts in panel/member geometry. Unlocated assembly details are not placed at guessed joints.'))
     model.header.file_name.name=destination.name
-    model.header.file_name.originating_system='Steltic openBIM 0.8.8'
+    model.header.file_name.originating_system='Steltic openBIM 0.8.9'
     model.write(str(destination));errors=schema_errors(destination)
     if errors:raise ValueError('Generated IFC failed schema validation: '+str(errors[:3]))
     reopened=ifcopenshell.open(str(destination))
     if len(reopened.by_type('IfcElement'))+len(reopened.by_type('IfcAnnotation'))!=len(objects):raise ValueError('IFC round-trip product count changed')
-    return dict(schema='IFC4',source='steltic',drawing_revision=state['revision'],source_sha256=state['source_model_sha256'],
+    return dict(schema='IFC4',source=source,**({'physical_revision':state['revision'],'source_job':state['source_job'],'source_module':state['source_module']} if structural else {'drawing_revision':state['revision']}),source_sha256=state['source_model_sha256'],
         counts=counts,objects=objects,warnings=warnings,schema_errors=errors,sha256=hashlib.sha256(destination.read_bytes()).hexdigest(),
         limits=['Coordination IFC, not an editable Revit family library or a fabrication issue.',
                 'Panels are surfaces; their thickness is metadata. Source opening polygons are traceable reference annotations; panels/members are not cut by these boundaries. Unconfirmed proposals remain request metadata.',
