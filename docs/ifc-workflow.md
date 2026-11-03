@@ -1,4 +1,4 @@
-# IFC workflow (0.8.15)
+# IFC workflow (0.8.16)
 
 The openBIM module has three workflow tabs and the existing Files tab. Steltic import retains the HR/CFS drawing importer and editable request register. IFC import reads an external model for geometry and model-data review. IFC export generates a downloadable exchange file from either source. Each tab uses the selected Hub project.
 
@@ -57,3 +57,7 @@ Validation uses IfcOpenShell 0.9.0.post1 and independently authored fixtures cov
 Legacy reviewed-model IFC exports accept both polygon opening boundaries in inches and recorded XY/XZ/YZ lower-left coordinates with dimensions in feet. Conversion preserves the recorded set-out, rejects invalid dimensions, and does not infer a host. Explicit panel opening-ID links support the same planar cuts where an opening has no canonical host ID. Export also retains explicit source grids and HR elevation datums, including an unoccupied ground datum. Grids recovered from analysis-column worklines are labeled as derived. Analysis occurrence IDs remain attached to their returned elements. These exchange checks do not promote an incomplete legacy model to physical readiness.
 
 Architectural handoff recovers a planar sheet's floor/roof boundary regardless of its triangle winding. This applies only when the whole mesh is coplanar; bottom faces of a solid are not promoted to floor surfaces.
+
+HR/CFS may declare `bim.reference_system` with named level elevations and labeled U/V/W grid polylines in inches, a basis, and an optional input IFC fingerprint. The shared v1 extension validates and preserves these at the package root; export retains their coordinates and labels without shifting members. Source CFS level elevations now receive the same fallback preservation as HR. Explicit entity `source_ifc_guid` is retained in `SourceIFCGuid`.
+
+New HR/CFS jobs request `require_connection_parts`. Their own designed connections must contain located physical parts before the job can claim completion; versioned references and reference polylines alone are insufficient. Explicit delegated interfaces remain references with a responsible party and scope. Legacy packages without this requirement keep their previous interpretation. These optional v1 extensions require matching updated HR/CFS and openBIM validators.
