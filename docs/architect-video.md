@@ -27,6 +27,8 @@ Each preview was checked for connected member topology, zero-length members and 
 5. When the HR run is complete, select its source in openBIM > Steltic import. Generate drawings and review the request register.
 6. Generate the return model in IFC export, choosing the Steltic drawing revision. The IFC report states exactly which physical geometry and connection information the HR output supplied.
 
+Fresh HR jobs with declared physical occurrences now use A1 source drawing sheets: dimensioned grids and levels, member marks, frame sections, connection callouts and member schedules. Supplied connection parts appear in three orthographic views and an isometric assembly view, with their source envelope dimensions. Reference-only details stay explicitly TBD. The member, connection and source-record indexes accompany the PDF; this route does not adopt a fictional review recipe or change the HR design.
+
 For video narration, call the input a **mock architect IFC**. The receiving architect can use an IFC-capable application; actual Revit import/export acceptance was not tested in this environment.
 
 ## Reproduce inputs and geometry checks
