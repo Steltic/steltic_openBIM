@@ -35,14 +35,42 @@ def build_model(package,state):
     else:
         from .review_cfs import build
     build(b)
+    from .review_wall_line_joists import apply as wall_line_joists
+    wall_line_joists(b,adopt_roof_wall_joists=True)
     from .review_supplements import floor_openings
     floor_openings(b)
     from .review_cfs_complements import apply
     apply(b)
+    from .review_hr_strut_bracing import apply as strut_bracing
+    strut_bracing(b)
     if key in ('cfs2','cfs4','cfs6','cfs9','cfs10','cfs12'):
         from .review_next_cfs_walls import connections
         connections(b)
     if key in ('cfs1','cfs5','cfs15'):
         from .review_final_cfs import connections
         connections(b)
+    from .review_design_bindings import apply as design_bindings
+    design_bindings(b)
+    from .review_cfs_rods import apply as rod_joints
+    rod_joints(b)
+    from .review_physical_pieces import apply as physical_pieces
+    physical_pieces(b)
+    from .review_selected_details import apply as selected_details
+    selected_details(b)
+    from .review_profile_fit import apply as profile_fit
+    profile_fit(b)
+    from .review_cfs_frame_straps import apply as frame_straps
+    frame_straps(b)
+    from .review_wall_straps import apply as wall_straps
+    wall_straps(b)
+    from .review_crossings import apply as brace_crossings
+    brace_crossings(b)
+    from .review_releases import apply as physical_releases
+    physical_releases(b)
+    from .review_column_local_checks import apply as local_checks
+    local_checks(b)
+    from .review_rbs import apply as physical_rbs
+    physical_rbs(b)
+    from .review_track_corners import apply as track_corners
+    track_corners(b)
     return b.finish()

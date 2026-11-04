@@ -34,6 +34,24 @@ def feet(value):
 def physical_axis(m): return [add(p,o) for p,o in zip(m['axis'],m['end_offsets'])]
 
 
+def compact_references(values):
+    """Compress only consecutive sheet numbers, preserving every detail ID."""
+    groups=defaultdict(set);other=set()
+    for value in values:
+        match=re.fullmatch(r'([^/]+)/([A-Za-z]+)(\d+)',value)
+        if match:groups[(match[1],match[2])].add(int(match[3]))
+        else:other.add(value)
+    result=[]
+    for (detail,prefix),numbers in sorted(groups.items()):
+        ordered=sorted(numbers);i=0
+        while i<len(ordered):
+            j=i
+            while j+1<len(ordered) and ordered[j+1]==ordered[j]+1:j+=1
+            result.append(f'{detail}/{prefix}{ordered[i]:03}'+(f'-{prefix}{ordered[j]:03}' if j>i else ''))
+            i=j+1
+    return ', '.join(result+sorted(other))
+
+
 class DesignSheets(Sheets):
     def __init__(self,package,state,dest,model):
         from reportlab.pdfgen.canvas import Canvas
@@ -86,7 +104,10 @@ class DesignSheets(Sheets):
         self.line(p,q,GREY,.55)
         for pt in (p,q):self.line((pt[0]-vx*3-nx*3,pt[1]-vy*3-ny*3),(pt[0]+vx*3+nx*3,pt[1]+vy*3+ny*3),INK,.8)
         label=label or feet(value)
-        c=self.c;c.saveState();c.translate((p[0]+q[0])/2,(p[1]+q[1])/2);c.rotate(math.degrees(math.atan2(dy,dx)))
+        angle=math.degrees(math.atan2(dy,dx))
+        if angle>90:angle-=180
+        elif angle<=-90:angle+=180
+        c=self.c;c.saveState();c.translate((p[0]+q[0])/2,(p[1]+q[1])/2);c.rotate(angle)
         self.center(0,5,label,size,ASSUMED if basis=='A' else INK);c.restoreState()
         self.dimensions.append(dict(sheet=self.current,value_in=value,text=label,basis=basis,reference=ref))
 
@@ -606,11 +627,13 @@ def generate(package,state,dest):
     queue('S303','Dimensioned interfaces and datum reconciliation',lambda:interfaces(sh),'As shown')
     for scene in assemblies:
         queue(scene['sheet'],scene['title'],lambda scene=scene:draw_assembly(sh,scene),'As shown')
+        from .assembly_legend import continuation_jobs
+        for number,title,draw in continuation_jobs(sh,scene):queue(number,title,draw)
     schedule=model['member_schedule']
     for start in range(0,len(schedule),34):
         chunk=schedule[start:start+34]
         def draw_schedule(chunk=chunk):
-            rows=[[a['mark'],a['kind'].replace('_',' '),a['profile_id'],feet(a['length_in']),str(a['count']),a['basis'],','.join(map(str,a['levels'])),', '.join(a['connection_refs'])] for a in chunk]
+            rows=[[a['mark'],a['kind'].replace('_',' '),a['profile_id'],feet(a['length_in']),str(a['count']),a['basis'],','.join(map(str,a['levels'])),compact_references(a['connection_refs'])] for a in chunk]
             table(sh,['MARK','MEMBER TYPE','SECTION','WORKLINE LENGTH','QTY','BASIS','LEVELS','END / JOINT DETAILS'],rows,[110,300,410,230,80,80,170,760],row_height=37,font=12)
             sh.text(80,180,'Repeated marks share type, profile, workline length (nearest 1/16 in), basis and connection references. Exact axes and instance positions: member_index.json.',12)
         queue(f'S{601+start//34}','Member mark schedule / '+str(start//34+1),draw_schedule)

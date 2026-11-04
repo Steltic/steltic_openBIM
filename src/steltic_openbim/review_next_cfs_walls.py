@@ -22,7 +22,13 @@ def locations(b,d,line,k,ranges):
     from .review_cfs import spaced_segments
     name=line['name'];widths=[s[0] for s in line['segments'][str(k)]];n=len(widths)
     if b.key=='cfs2' and d=='Y':
-        half=n//2;return spaced_segments(0,31,widths[:half],0)+spaced_segments(37,68,widths[half:],0)
+        # Source specifies two continuous multi-bay walls with shared
+        # interior posts. Keep each group contiguous and centre it in its wing.
+        half=n//2;result=[]
+        for lo,hi,ws in ((0,31,widths[:half]),(37,68,widths[half:])):
+            x=(lo+hi-sum(ws))/2
+            for width in ws:result.append((x,x+width));x+=width
+        return result
     if b.key=='cfs6' and name in ('Y0','YLE'):ranges=[(0,152)]
     if b.key=='cfs6' and name in ('YLC1','YLC2'):ranges=[(0,90)]
     if b.key=='cfs6' and name.startswith('P'):ranges=[(90,152)]
@@ -60,7 +66,11 @@ def floors(b,outline,levels):
     rows={r['id']:r for r in b.raw['framing']}
     def joist(mid,pid,axis,station,lo,hi,z,k,rid,spacing):
         d=b.depth(b.profile(pid));aa=[lo,station,z-d/2] if axis==0 else [station,lo,z-d/2];dd=[hi,station,z-d/2] if axis==0 else [station,hi,z-d/2]
-        m=b.member(mid,pid,'joist',aa,dd,k,'A',records=[b.record('framing',rid)]);b.ends(m,'review_cfs_joist',[b.record('framing',rid)],parameters={'spacing':spacing,'floor_depth':depth(b,k),'concrete_slab':b.key in ('cfs2','cfs4')})
+        refs=[b.record('framing',rid)]
+        checked=b.records.get('gravity_framing/'+rid)
+        if checked and section(checked['data'].get('section'),'')==pid and abs(hi-lo-12*checked['data'].get('span_ft',-1))<.01:
+            refs.append(checked['id'])
+        m=b.member(mid,pid,'joist',aa,dd,k,'A',records=refs);b.ends(m,'review_cfs_joist',refs,parameters={'spacing':spacing,'floor_depth':depth(b,k),'concrete_slab':b.key in ('cfs2','cfs4')})
     for k,z in enumerate(levels[1:],1):
         roof=k==len(levels)-1;finish=(.6 if roof else 3.5) if b.key=='cfs2' else (.75 if roof else 4) if b.key=='cfs4' else 2.4 if b.key=='cfs12' else .72 if roof else 2.22
         b.panel(f'FLOOR-{k}','roof' if roof else 'floor',[[x*12,y*12,z] for x,y in outline],finish,k,'A')

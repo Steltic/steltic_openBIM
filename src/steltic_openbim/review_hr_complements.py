@@ -23,13 +23,31 @@ def apply(b,levels):
                 par.update(gusset_thickness=t,interface_length=length,doubler_thickness=dt,source_grid=grid,source_level=level)
         if family!='review_beam':continue
         along=0 if abs(m['axis'][1][0]-m['axis'][0][0])>abs(m['axis'][1][1]-m['axis'][0][1]) else 1
-        grid=chr(65+round(pt[1]/b.config.get('SY',336))) if along==0 else str(1+round(pt[0]/b.config.get('SX',336)))
+        coords=b.config.get('YS' if along==0 else 'XS')
+        at=min(range(len(coords)),key=lambda i:abs(coords[i]-pt[1-along])) if coords else round(pt[1-along]/b.config.get('SY' if along==0 else 'SX',336))
+        grid=chr(65+at) if along==0 else str(1+at)
         support=next((lookup[i] for i in c['member_ids'][1:] if lookup[i]['kind']=='column'),None)
         if b.key=='hr10' and k==3:
             for rid in raw:
                 if rid.startswith('conn-collector-L3-'+grid+'-') and rid.endswith('-'+m['profile_id']):attach(c,rid,True)
+        if b.key=='hr10' and support and par.get('moment'):
+            top=max(q[2] for q in support['axis'])
+            terminal=abs(pt[2]-top)<.1 and not any(mm['kind']=='column' and mm['id']!=support['id'] and min(q[2] for q in mm['axis'])>=top-.1 and math.dist(mm['axis'][0][:2],pt[:2])<.1 for mm in b.members)
+            if terminal:attach(c,'conn-SMF-joint-'+support['profile_id']+'-roof')
         if b.key!='hr12':continue
         diagonal=abs(m['axis'][1][0]-m['axis'][0][0])>1 and abs(m['axis'][1][1]-m['axis'][0][1])>1
+        if k==9 and not diagonal:
+            # The separate transfer-diaphragm check selects these collectors;
+            # the legacy element CSV's collector_axial_kip is zero. Bind the
+            # explicit source grid, storey and section rather than losing it.
+            selected=b.record('members',f'collector-L9-Grid{grid}-{m["profile_id"]}')
+            if grid=='F' and max(q[0] for q in m['axis'])>336.01:selected=None # source F1-F2 only
+            if selected:
+                par['collector']=True
+                par['moment']=False # these selected end bays use the source single-plate connection
+                if selected not in m['design_record_ids']:m['design_record_ids'].append(selected)
+                b.used_records.add(selected)
+                m.setdefault('design_mapping_evidence',[]).append(dict(record_id=selected,basis='Exact source Level-9 collector grid and section; Grid F applies only to F1-F2'))
         if support and par.get('moment'):
             cp=support['profile_id'];v=[m['axis'][1][i]-m['axis'][0][i] for i in (0,1)]
             opposite=any(mm['id']!=m['id'] and mm['level']==k and mm['kind']=='moment_beam' and any(math.dist(q,pt)<.1 for q in mm['axis']) and abs(v[0]*(mm['axis'][1][1]-mm['axis'][0][1])-v[1]*(mm['axis'][1][0]-mm['axis'][0][0]))<.1 and sum((sum(q[j] for q in mm['axis'])/2-pt[j])*(sum(q[j] for q in m['axis'])/2-pt[j]) for j in (0,1))<0 for mm in b.members)
@@ -46,10 +64,12 @@ def apply(b,levels):
                 attach(c,'conn-joint-boxed-biaxial');par['boxing_t']=2.0
                 if diagonal:
                     attach(c,'conn-chamfer-corner-2A-1B');c['detail_ref']['id']='review_chamfer';par['joint']='chamfer_corner'
-        if par.get('collector'):
+        if par.get('collector') and not par.get('moment'):
             attach(c,'conn-collector-'+('XY'[along])+'-'+('roof' if k==len(levels)-1 else 'floor'),True)
             if k==9:attach(c,'conn-collector-L9-Grid'+grid,True)
             if support and k==9 and pt[:2]==[1344,672]:attach(c,'conn-collector-columns-J10');par['collector_stiffeners']=True
+        if k==9 and (diagonal or any(all(abs(q[axis]-bound)<.01 for q in m['axis']) for axis in (0,1) for bound in (0,1680))):
+            attach(c,'diaphragm-chords-L9')
     for c in b.connections:
         m=lookup[c['member_ids'][0]];family=c['detail_ref']['id'];par=c.get('parameters',{})
         if family=='review_beam' and par.get('collector') and not par.get('moment'):
@@ -76,7 +96,7 @@ def apply(b,levels):
             along=0 if abs(m['axis'][1][0]-m['axis'][0][0])>1 else 1
             grid=chr(65+round(m['axis'][0][1]/336)) if along==0 else str(1+round(m['axis'][0][0]/336))
             rid=b.record('connections','diaphragm-studs-L9-Grid'+grid)
-            if rid:b.connection(m['id']+'-STUDS','review_deck_studs',[(a+d)/2 for a,d in zip(*m['axis'])],[m],[rid,b.record('connections','diaphragm-chords-L9'),b.record('connections','diaphragm-shear-L9')])
+            if rid:b.connection(m['id']+'-STUDS','review_deck_studs',[(a+d)/2 for a,d in zip(*m['axis'])],[m],[rid,b.record('connections','diaphragm-shear-L9')])
     if b.key=='hr28':
         edge_bars(b,levels)
 

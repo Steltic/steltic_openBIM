@@ -4,7 +4,7 @@ from .review_assemblies import *
 
 def bolt_data(text):
     rows,cols,dia,pitch,gauge=4,1,.75,3,3
-    matrix=re.search(r'(\d+)\s*x\s*(\d+)\s*x\s*'+NUMBER+r'\s*in\.?\s*(?:A325|ASTM)',text,re.I)
+    matrix=re.search(r'(\d+)\s*x\s*(\d+)\s*x\s*'+NUMBER+r'\s*in\.?\s*(?:A325|A490|ASTM)',text,re.I)
     if matrix:return int(matrix[1]),int(matrix[2]),number(matrix[3]),3,3
     explicit=re.search(r'(\d+) x (\d+) = \d+ bolts '+NUMBER+r' in',text)
     if explicit:
@@ -19,8 +19,28 @@ def bolt_data(text):
     return rows,cols,dia,pitch,gauge
 
 def support(ctx,bp):
-    a,p=ctx.a,ctx.p;cp=ctx.select(('column','walkway_post','prop','endwall_post'))
-    source=next((m for m in ctx.ms if m['kind'] in ('column','walkway_post','prop')),None)
+    a,p=ctx.a,ctx.p;cp=ctx.select(('column','walkway_post','prop','endwall_post','rocking_post','transfer_vertical'))
+    core=ctx.params.get('core_face_attachment')
+    if core:
+        from .review_receiver_geometry import horizontal_frame,extract
+        beam,wall=ctx.ms[:2];origin=ctx.c['point'];far=max(beam['axis'],key=lambda q:math.dist(q,origin))
+        axes=horizontal_frame(sub(far,origin));part=extract(ctx,wall,'M1',axes,36)
+        half=core['wall_half_thickness_in'];thickness=core['embed_thickness_in'];width=core['embed_width_in'];height=core['embed_height_in']
+        bd=effective(p,bp)
+        yy=[dot(sub(q,origin),axes[1]) for q in wall['axis']]
+        wall_width=effective(p,wall['profile_id'],'width');centre=yy[0]
+        # Keep most of the patch over steel at a wall/opening edge. Its small
+        # outstand accommodates the source single plate on the beam-web face.
+        y0=max(centre-wall_width/2,min(-width/2,centre+wall_width/2-width+2))
+        a.box('EMBED',[half,y0,-height],[thickness,width,height],'A',core['basis'])
+        left=max(y0,centre-wall_width/2);right=min(y0+width,centre+wall_width/2)
+        paths=[([half,left,z],[half,right,z]) for z in (-height,0)]
+        paths += [([half,y,-height],[half,y,0]) for y in (y0,y0+width) if centre-wall_width/2<=y<=centre+wall_width/2]
+        for i,(start,end) in enumerate(paths):a.weld('WE'+str(i),start,end,['M1','EMBED'],.25,basis='A',description='A face-patch fillet only over actual wall steel; edge outstand and wall local capacity require verification')
+        ctx.support_attachment='EMBED';ctx.weak_axis_support=False
+        a.notes.append(core['basis'])
+        return wall['profile_id'],half+thickness
+    source=next((m for m in ctx.ms if m['kind'] in ('column','walkway_post','prop','rocking_post','transfer_vertical')),None)
     beam=ctx.ms[0];bd=effective(p,bp);cd=effective(p,cp);weak=False
     if source:
         axis=unit(sub(*reversed(beam['axis'])));weak=abs(dot(axis,source['local_y']))>.7
@@ -29,15 +49,33 @@ def support(ctx,bp):
     elif source or ctx.family in ('review_crane_bracket','review_pin_beam','review_existing_joint'):
         a.member('M1',cp,[0,0,-bd-14],[0,0,14],description='Receiving column '+cp);face=cd/2
     else:
-        cp=ctx.select(('girder','beam','moment_beam','walkway_edge_beam','truss_chord'),cp);cd=effective(p,cp)
-        a.member('M1',cp,[0,-24,-cd/2],[0,24,-cd/2],y=[1,0,0],description='Receiving girder '+cp);face=p[cp]['dimensions'].get('tw',p[cp]['dimensions'].get('t',.25))/2
+        receiver=next((m for m in ctx.ms[1:] if m['kind'] in ('girder','beam','moment_beam','walkway_edge_beam','truss_chord','transfer_chord')),None)
+        if receiver:
+            point=ctx.c['point'];far=max(beam['axis'],key=lambda q:math.dist(q,point));x=unit([far[0]-point[0],far[1]-point[1],0]);y=cross([0,0,1],x);axes=(x,y,[0,0,1])
+            local=lambda q:[dot(sub(q,point),v) for v in axes]
+            ends=[add(q,o) for q,o in zip(receiver['axis'],receiver['end_offsets'])];u=unit(sub(ends[1],ends[0]));length=math.dist(*ends);station=max(0,min(length,dot(sub(point,ends[0]),u)))
+            selected=[add(ends[0],mul(u,t)) for t in (max(0,station-24),min(length,station+24))]
+            cp=receiver['profile_id'];cd=effective(p,cp);width_axis=[dot(receiver['local_y'],v) for v in axes]
+            part=a.member('M1',cp,*[local(q) for q in selected],y=width_axis,description='Actual receiving girder '+cp)
+            normal=width_axis;half=p[cp]['dimensions'].get('tw',p[cp]['dimensions'].get('t',.25))/2
+            if abs(normal[0])<.01:
+                normal=cross(unit(sub(*reversed(part['member']['axis']))),normal);half=cd/2
+            if abs(normal[0])<.01:raise ValueError('A parallel beam end needs an explicit splice/continuity selection: '+ctx.c['id']+' -> '+receiver['id'])
+            centre=part['member']['axis'][0]
+            face=(dot(normal,centre)+math.copysign(half,normal[0])+normal[2]*bd/2)/normal[0]
+            ctx.support_surface=dict(normal=normal,offset=dot(normal,centre)+math.copysign(half,normal[0]))
+        else:
+            cp=ctx.select(('girder','beam','moment_beam','walkway_edge_beam','truss_chord'),cp);cd=effective(p,cp)
+            a.member('M1',cp,[0,-24,-cd/2],[0,24,-cd/2],y=[1,0,0],description='Receiving girder '+cp);face=p[cp]['dimensions'].get('tw',p[cp]['dimensions'].get('t',.25))/2
     if ctx.params.get('boxing_t'):
         t=ctx.params['boxing_t'];cw=effective(p,cp,'width')
         length=ctx.params.get('boxing_length_in',bd+28);zlo=-bd/2-length/2;zhi=-bd/2+length/2
         for j,sg in enumerate((-1,1)):
-            offset=sg*(cw+t)/2;name='BOX'+str(j);plate=flat(p,cd,t)
-            a.member(name,plate,[offset if weak else 0,0 if weak else offset,zlo],[offset if weak else 0,0 if weak else offset,zhi],y=[0,1,0] if weak else [1,0,0],basis='A',description=f'Source {str(length)+" in local" if "boxing_length_in" in ctx.params else "full-height"} column boxing; {t:g} in plate; A local edge fit')
-            a.weld('WB'+str(j),[offset if weak else cd/2,cd/2 if weak else offset,zlo],[offset if weak else cd/2,cd/2 if weak else offset,zhi],['M1',name],kind='CJP',description='Source boxing plate to column flange tips')
+            offset=sg*(cw+t)/2;name='BOX'+str(j);plate=flat(p,ctx.params.get('boxing_width_in',cd),t)
+            a.member(name,plate,[offset if weak else 0,0 if weak else offset,zlo],[offset if weak else 0,0 if weak else offset,zhi],y=[0,1,0] if weak else [1,0,0],basis='A',representation_role='assembly_component' if 'boxing_length_in' in ctx.params else None,description=f'Source {str(length)+" in local" if "boxing_length_in" in ctx.params else "full-height"} column boxing; {t:g} in plate; A local edge fit')
+            edge=ctx.params.get('boxing_width_in',cd)/2
+            for sg_edge in (-1,1):
+                a.weld('WB'+str(j)+str(sg_edge),[offset if weak else sg_edge*edge,sg_edge*edge if weak else offset,zlo],[offset if weak else sg_edge*edge,sg_edge*edge if weak else offset,zhi],['M1',name],kind='CJP',description='Source boxing plate to column flange tips')
         if weak:face=cw/2+t
     ctx.weak_axis_support=weak
     return cp,face
@@ -45,11 +83,18 @@ def support(ctx,bp):
 def draw(ctx):
     a,p,pid,txt,par,f=ctx.a,ctx.p,ctx.pid,ctx.text,ctx.params,ctx.family
     if f in ('review_beam','review_existing_joint','review_crane_bracket'):
-        bp=pid;bd=effective(p,bp);bf=effective(p,bp,'width');cp,face=support(ctx,bp);moment=par.get('moment',False) or f=='review_crane_bracket';gap=0 if moment else 1 if ctx.model['pilot']=='hr30' and par.get('paired_shear_plates') else 1.25
+        # A member-specific V-beam end selection can accompany a generic
+        # collector force check. Do not mix one record's bolt group with the
+        # other record's setback or weld. Full source evidence stays in ctx.text.
+        from .review_shear_selection import paired as paired_selection
+        bp=pid;bd=effective(p,bp);bf=effective(p,bp,'width');cp,face=support(ctx,bp)
+        txt,twin=paired_selection(txt,weak=getattr(ctx,'weak_axis_support',False),column=cp)
+        n=lambda pattern,default:findnum(pattern,txt,default)
+        moment=par.get('moment',False) or f=='review_crane_bracket';gap=0 if moment else n(r'beam end set back (?:\(web side\) )?'+NUMBER+r' in',1) if twin else 1.25
         rbs={};hit=re.search(r'RBS\s*\(?a = '+NUMBER+r'(?: in)?, b = '+NUMBER+r'(?: in)?, c = '+NUMBER,txt,re.I)
         if hit:rbs=dict(a_in=number(hit[1]),b_in=number(hit[2]),c_in=number(hit[3]),ends=[0]);moment=True;gap=0
         m=a.member('M2',bp,[face+gap,0,-bd/2],[face+gap+max(42,rbs.get('a_in',0)+rbs.get('b_in',0)+8),0,-bd/2],**({'rbs':rbs} if rbs else {}))
-        if not moment and not any(mm['kind'] in ('column','walkway_post','prop') for mm in ctx.ms):
+        if not moment and not par.get('core_face_attachment') and not any(mm['kind'] in ('column','walkway_post','prop','rocking_post','transfer_vertical') for mm in ctx.ms):
             support_width=effective(p,cp,'width');cope=max(0,support_width/2+.25-face-gap)
             if cope:
                 m['member']['cope']={'length_in':cope,'depth_in':p[cp]['dimensions'].get('tf',.5)+.5,'ends':[0]}
@@ -68,26 +113,47 @@ def draw(ctx):
             moment=False;rows,cols,dia,pitch=4,1,.875,3;t=.5
             a.notes.append('A: fictional existing joint survey answer: paired bolted web angles and flange cover/seat plates. No welding to existing A36 steel is shown; source survey and weldability requirements remain.')
         ph=(rows-1)*pitch+2*max(dia*1.5,1.5);edge=(ph-(rows-1)*pitch)/2
-        twin=re.search(r'two plates PL '+NUMBER+r' x '+NUMBER+r' in',txt) if ctx.model['pilot']=='hr30' else None
         if twin:t,ph=map(number,twin.groups());edge=(ph-(rows-1)*pitch)/2
         if ph>bd-2:
             # Preserve the source pattern; a mismatched source profile is an error.
             ph=bd-1.5;edge=(ph-(rows-1)*pitch)/2
             if edge<dia*.8:raise ValueError('Source bolt group does not fit '+ctx.model['pilot']+' '+pid+' '+str((rows,cols,dia,pitch)))
         width=ctx.n(r'bolt line '+NUMBER+r' in from the weld',3)+(cols-1)*gauge+max(2*dia,1.5);tw=p[bp]['dimensions'].get('tw',.375);z=-bd/2-ph/2
+        plate_edge=max(2*dia,1.5)
+        if twin:
+            plate_edge=n(NUMBER+r' in beam-end and plate-edge distances',2.25)
+            width=gap+plate_edge+(cols-1)*gauge+plate_edge
         pattern_basis='S' if re.search(r'\b(?:bolts|erection tab|column\(s\))\b',txt,re.I) else 'A'
         shim=.0625 if twin else 0
         a.box('P1',[face,tw/2+shim,z],[width,t,ph],pattern_basis,'Shear plate / erection tab; A fitted width where unprovided')
-        paired=par.get('paired_shear_plates',False);joins=['M2','P1']
+        paired=bool(twin) or par.get('paired_shear_plates',False);joins=['M2','P1']
         if paired:a.box('P2',[face,-tw/2-t,z],[width,t,ph],'S','Source second shear plate / double-shear joint');joins.append('P2')
         if shim:a.box('SHIM',[face+gap,tw/2,z],[width-gap,shim,ph],'S','Source 1/16 in finger shim against beam web');joins.append('SHIM')
-        a.fastener('F1',grid(rows*cols,cols,pitch,gauge,(face+width-max(2*dia,1.5)-(cols-1)*gauge,-tw/2-(t if paired else 0),z+edge)),[0,1,0],dia,tw+shim+t*(2 if paired else 1),joins,f'{rows} rows x {cols}; {dia:g} in '+('A490' if 'A490' in txt else 'A325')+'; source pretension/faying-surface requirements',pattern_basis)
+        a.fastener('F1',grid(rows*cols,cols,pitch,gauge,(face+width-plate_edge-(cols-1)*gauge,-tw/2-(t if paired else 0),z+edge)),[0,1,0],dia,tw+shim+t*(2 if paired else 1),joins,f'{rows} rows x {cols}; {dia:g} in '+('A490' if 'A490' in txt else 'A325')+'; source pretension/faying-surface requirements',pattern_basis)
         weld=ctx.n(r'\('+NUMBER+r' in fillets both sides',.25)
-        if twin:weld=ctx.n(r'with one '+NUMBER+r' in E70 fillet',.5)
-        a.weld('W1',[face,tw/2,z],[face,tw/2,z+ph],['M1','P1'],weld,description=f'{weld:g} in fillet both sides to support')
+        if twin:weld=n(r'(?:with one|\(one) '+NUMBER+r' in (?:E70 )?fillet',.5)
+        a.weld('W1',[face,tw/2,z],[face,tw/2,z+ph],[getattr(ctx,'support_attachment','M1'),'P1'],weld,description=f'{weld:g} in fillet both sides to support')
         if paired:a.weld('W2',[face,-tw/2,z],[face,-tw/2,z+ph],['M1','P2'],weld,description='Source second shear-plate support weld')
+        surface=getattr(ctx,'support_surface',None)
+        if surface:
+            normal=surface['normal'];offset=surface['offset'];sign=1 if normal[0]>0 else -1
+            x_at=lambda y,z:(offset-normal[1]*y-normal[2]*z)/normal[0]
+            for label in ('P1','P2'):
+                part=next((q for q in a.parts if q['id']==label),None)
+                if part is None:continue
+                _,yy,zz=part['geometry']['origin'];_,thick,high=part['geometry']['size']
+                start=min(x_at(y,z) for y in (yy,yy+thick) for z in (zz,zz+high))
+                outer=face+width;a.parts.remove(part)
+                made=a.box(label,[start,yy,zz],[outer-start,thick,high],part['basis'],part['description']+'; A skew support-edge cut')
+                clip_part(made,mul(normal,sign),offset*sign)
+            for w in a.welds:
+                if w['id'] in ('W1','W2'):
+                    for endpoint in ('a','b'):q=w[endpoint];q[0]=x_at(q[1],q[2])
         if twin:
-            for w in a.welds:w['description']='Source one fillet on the outer face only; inner face not welded'
+            for w in a.welds:
+                if w['id'] not in ('W1','W2'):continue
+                for q in (w['a'],w['b']):q[1]=tw/2+shim+t if w['id']=='W1' else -tw/2-t
+                w['description']='Source one fillet on the outer face only; inner face not welded'
             a.notes.append('S: paired shear plates spaced t_w + 1/16 in, source finger shim fitted at one web face before pretensioning. One-sided outer fillets only; bolted beam web restrains plate rotation.')
         if moment:
             for i,zz in enumerate((0,-bd)):a.weld('WF'+str(i),[face,-bf/2,zz],[face,bf/2,zz],['M1','M2'],kind='CJP',description='Source flange CJP; demand-critical / access-hole requirements retained')
@@ -133,6 +199,7 @@ def draw(ctx):
                 label=f'S{j}{side}';yy=tw/2 if side>0 else -bf/2+.25;a.box(label,[x-t/2,yy,-d/2+tf],[t,bf/2-tw/2-.25,d-2*tf],'A','Link full-depth web stiffener; adopted station')
                 a.weld('W'+label,[x,yy,-d/2+tf],[x,yy,d/2-tf],['M1',label],.25,basis='A')
         a.dim([-length/2,0,-d/2],[length/2,0,-d/2],f'{length:g} in protected shear link',basis='S');a.section_at=0
+        a.translate([0,0,-d/2]) # Source joint point is top of steel, not centroid.
     elif f.startswith('review_retrofit_'):retrofit(ctx)
     elif f in ('review_crane_seat','review_crane_tie','review_rail_clip','review_sliding_post','review_joist_seat'):industrial(ctx)
     else:raise ValueError(f)
@@ -162,10 +229,13 @@ def pin_beam(ctx):
 def base(ctx):
     a,p,pid,txt=ctx.a,ctx.p,ctx.pid,ctx.text;d=effective(p,pid);w=effective(p,pid,'width');existing=ctx.params.get('existing_grillage')
     if existing:
-        gp=ctx.default_w();a.member('M1',pid,[0,0,-24],[0,0,24]);a.member('M2',gp,[-30,0,-30],[30,0,-30],basis='A',description='A existing encased grillage assumption');a.box('CONC',[-36,-30,-48],[72,60,48],'A','Existing concrete context',kind='concrete');a.box('BEARING',[-d/2-3,-w/2-3,-24],[d+6,w+6,1],'A','A retained bearing plate');a.weld('W1',[-d/2,-w/2,-23],[d/2,-w/2,-23],['M1','BEARING'],.25,basis='A',description='A historic connection depiction; existing metallurgy and weld condition not verified');a.section_axis=2;a.section_at=-25;a.notes.append('No designed anchor rods in source. Existing grillage and its connections are fictional survey assumptions, not an assessed foundation.');return
-    embedded='embedded' in txt
-    if embedded:
-        le=ctx.n(r'Le = '+NUMBER+r' in',0) or ctx.n(r'embedded '+NUMBER+r' ft',6)*12
+        gp=ctx.default_w();a.member('M1',pid,[0,0,-24],[0,0,24]);a.member('M2',gp,[-30,0,-30],[30,0,-30],basis='A',representation_role='assembly_component',description='A existing encased grillage assumption');a.box('CONC',[-36,-30,-48],[72,60,48],'A','Existing concrete context',kind='concrete');a.box('BEARING',[-d/2-3,-w/2-3,-24],[d+6,w+6,1],'A','A retained bearing plate');a.weld('W1',[-d/2,-w/2,-23],[d/2,-w/2,-23],['M1','BEARING'],.25,basis='A',description='A historic connection depiction; existing metallurgy and weld condition not verified');a.section_axis=2;a.section_at=-25;a.notes.append('No designed anchor rods in source. Existing grillage and its connections are fictional survey assumptions, not an assessed foundation.');return
+    # An embedded anchor end or shear lug does not make the column embedded.
+    from .review_base_selection import embedment,rods,flange_rows,lug_arms
+    le=embedment(txt)
+    delegated=re.search(r'anchor reinforcement.*?(?:foundation engineer|foundation designer)',txt,re.I)
+    if delegated:a.notes.append('S: '+delegated[0]+'. This is delegated concrete reinforcement, not a steel box around the column.')
+    if le is not None:
         match=re.search(r'end (?:bearing )?plate\s*(?:PL\s*)?'+NUMBER+r' x '+NUMBER+r' x '+NUMBER+r' in',txt,re.I)
         t,bx,by=2,d+10,w+10
         if match:
@@ -183,16 +253,26 @@ def base(ctx):
             tf=p[pid]['dimensions']['tf']
             for j,yy in enumerate((-w/2,w/2-side)):
                 a.box('SIDE'+str(j),[-d/2+tf,yy,-le],[d-2*tf,side,le],'S','Source boxing side plate');a.weld('WS'+str(j),[-d/2+tf,yy,-le],[-d/2+tf,yy,0],['M1','SIDE'+str(j)],kind='CJP')
+        face_match=re.search(r'face bearing plates PL '+NUMBER+r' x '+NUMBER+r' in',txt,re.I)
+        face_thickness=0
+        if face_match:
+            face_thickness,face_width=map(number,face_match.groups())
+            for j,sg in enumerate((-1,1)):
+                xx=d/2 if sg>0 else -d/2-face_thickness;tag='FACE'+str(j)
+                a.box(tag,[xx,-face_width/2,-le],[face_thickness,face_width,le],'S','Source outer-flange bearing plate; full embedment')
+                a.weld('WF'+str(j),[sg*d/2,-face_width/2,-le],[sg*d/2,-face_width/2,0],['M1',tag],.5,basis='A',description='Source all-round fillet; A 1/2 in size where unquantified')
         reinforcing=re.search(r'8 PL '+NUMBER+r' x '+NUMBER+r' in',txt)
         if reinforcing:
             rt,rw=map(number,reinforcing.groups());height=ctx.n(r'to '+NUMBER+r' in above',50);clear=ctx.n(r'\('+NUMBER+r' in apart',8.25);ri=0
+            selected_weld=re.search(r'double fillets \('+NUMBER+r' in\)',txt[reinforcing.end():],re.I)
+            weld_size=number(selected_weld[1]) if selected_weld else .25
             for face in range(4):
                 axis=[1 if face==0 else -1 if face==1 else 0,1 if face==2 else -1 if face==3 else 0,0];along=[axis[1],-axis[0],0];facehalf=d/2 if face<2 else w/2
                 for sg in (-1,1):
                     ri+=1;q=add(mul(axis,facehalf),mul(along,sg*(clear/2+rw/2)));q[2]=-le;origin=add(q,mul(along,-rw/2))
                     a.box('REINF'+str(ri),origin,[rw,rt,le+height],'S','Source embedded box reinforcement',x=along,y=axis)
                     for edge in (-1,1):
-                        at=add(q,mul(along,edge*rw/2));a.weld(f'WR{ri}{edge}',at,add(at,[0,0,le+height]),['M1','REINF'+str(ri)],.75 if rt==1 else 1,description='Source double fillets; stop 1 in clear of gusset collar')
+                        at=add(q,mul(along,edge*rw/2));a.weld(f'WR{ri}{edge}',at,add(at,[0,0,le+height]),['M1','REINF'+str(ri)],weld_size,basis='S' if selected_weld else 'A',description='Source double fillets; stop 1 in clear of gusset collar' if selected_weld else 'A 1/4 in fillet proposal; source size not quantified')
         count=int(ctx.n(r'(\d+) x 7/8 in headed studs',ctx.n(r'(\d+) headed studs 7/8',0)));dia=.875
         if not count and 'two rows of 14 headed studs' in txt:count=28
         if count:
@@ -202,24 +282,75 @@ def base(ctx):
             bottom_zone=re.search(r'(\d+) rows of \d+ at 6 in.*?from 6 in above the end plate',txt)
             if bottom_zone:nlevels=int(bottom_zone[1]);rows=math.ceil(per/nlevels);first=le-6;pitch=-6
             for face in range(4):
-                normal=[1 if face==0 else -1 if face==1 else 0,1 if face==2 else -1 if face==3 else 0,0];origin=[normal[0]*d/2,normal[1]*w/2,0];along=[0,1,0] if face<2 else [1,0,0];half=(w if face<2 else d)/2
+                normal=[1 if face==0 else -1 if face==1 else 0,1 if face==2 else -1 if face==3 else 0,0];origin=[normal[0]*(d/2+face_thickness),normal[1]*w/2,0];along=[0,1,0] if face<2 else [1,0,0];half=(w if face<2 else d)/2
                 points=[]
                 for j in range(min(per,count-placed)):
                     across=ctx.n(NUMBER+r' in across the faces',min(6,2*(half-2)/max(1,rows-1)));shift=(j%rows-(rows-1)/2)*across;z=-first-(j//rows)*pitch;pt=add(origin,add(mul(along,shift),[0,0,z]));points.append(pt);placed+=1
                 if points:a.fastener('STUDS'+str(face),points,normal,dia,5,['M1','CONC'],'Source 7/8 x 5 in headed stud group; A stations / illustrative head envelope')
             a.notes.append(f'S: all {count} headed studs represented. '+('Source row count, vertical and transverse spacing retained.' if specified else 'A stations within the source embedment; exact distribution requires reconciliation.'))
+        from .review_base_selection import erection_rods
+        erection=erection_rods(txt)
+        if erection:
+            n=erection['count'];edge=erection['edge_min'];dia=erection['diameter'];grade=erection['grade']
+            points=[[sx*(bx/2-edge),sy*(by/2-edge),-le-t-12] for sx,sy in ((-1,-1),(1,-1),(1,1),(-1,1))]
+            if n!=4:raise ValueError('An explicit erection-rod layout is required for this source count')
+            selected='S' if erection['selected_size'] else 'A'
+            a.fastener('ERECTION-ANCHORS',points,[0,0,1],dia,12+t,['P1','CONC'],f'S {n} erection anchor rods; {selected} {dia:g} in {grade}; A 12 in embedment and symmetric stations at edge minimum {edge:g} in; erection only',basis=f'S count; {selected} diameter/grade; A length and set-out')
         a.section_axis=2;a.section_at=-le/2;a.dim([bx/2,0,-le],[bx/2,0,0],f'Embedment {le:g} in');return
     match=re.search(r'(?:base plate\s*(?:PL)?|moment base:\s*PL)\s*'+NUMBER+r' x '+NUMBER+r' x '+NUMBER+r' in',txt,re.I)
     t,bx,by=list(map(number,match.groups())) if match else (1,d+8,w+8)
-    n=int(ctx.n(r'(\d+) x '+NUMBER+r' in (?:ASTM )?F1554',4));dia=ctx.n(r'\d+ x '+NUMBER+r' in (?:ASTM )?F1554',.75);embed=ctx.n(r'embedment\s*(?:hef = )?'+NUMBER,18);grout=ctx.n(r'on '+NUMBER+r' in (?:non-shrink )?grout',2)
+    layout=flange_rows(txt)
+    if layout and match:
+        # The source uses DG1 B (parallel to flange) x N (depth direction).
+        # Local X is the column depth direction, not the first printed size.
+        t,by,bx=list(map(number,match.groups()))
+    selected_rods=rods(txt);n,dia,grade=selected_rods or (4,.75,'F1554 Grade 36 (A)');embed=ctx.n(r'embedment\s*(?:hef = )?'+NUMBER,18);grout=ctx.n(r'on '+NUMBER+r' in (?:non-shrink )?grout',2)
     a.box('CONC',[-bx/2-8,-by/2-8,-embed-6],[bx+16,by+16,embed+6],'A','Foundation context',kind='concrete');a.box('GROUT',[-bx/2,-by/2,0],[bx,by,grout],'S','Source grout');a.box('P1',[-bx/2,-by/2,grout],[bx,by,t],'S' if match else 'A','Base plate')
     a.member('M1',pid,[0,0,grout+t],[0,0,grout+t+32]);edge=ctx.n(r'rods '+NUMBER+r' in from the plate edges',max(1.5,1.5*dia));rows=max(2,math.ceil(n/2));points=[]
-    for i in range(n):points.append([(-1 if i%2==0 else 1)*(bx/2-edge),-by/2+edge+(i//2)*(by-2*edge)/(rows-1),-embed])
-    a.fastener('ANCH',points,[0,0,1],dia,embed+grout+t,['CONC','P1'],f'{n} x {dia:g} in source F1554 rods; A embedment where source delegates it')
+    if layout:
+        nrows,ncols,spacing,a1,pitch=layout
+        if 2*nrows*ncols!=n:raise ValueError('Source anchor count and flange layout disagree')
+        for sg in (-1,1):
+            for r in range(nrows):
+                for col in range(ncols):points.append([sg*(d/2+a1+r*spacing),(col-(ncols-1)/2)*pitch,-embed])
+        if any(abs(q[0])+dia/2>bx/2 or abs(q[1])+dia/2>by/2 for q in points):raise ValueError('Source anchor layout falls outside base plate')
+    else:
+        for i in range(n):points.append([(-1 if i%2==0 else 1)*(bx/2-edge),-by/2+edge+(i//2)*(by-2*edge)/(rows-1),-embed])
+    a.fastener('ANCH',points,[0,0,1],dia,embed+grout+t,['CONC','P1'],f'{n} x {dia:g} in {grade} anchor rods; A embedment where source delegates it',basis='S count/diameter/grade; A embedment' if selected_rods else 'A')
+    top_washer=re.search(r'top plate washers PL '+NUMBER+r' x '+NUMBER+r' x '+NUMBER+r' in',txt,re.I)
+    washer_dimensions=list(map(number,top_washer.groups())) if top_washer else None
+    if not washer_dimensions:
+        alt=re.search(r'plate washers '+NUMBER+r' x '+NUMBER+r' x '+NUMBER+r' in over the rod holes',txt,re.I)
+        if alt:
+            wx,wy,wt=map(number,alt.groups());washer_dimensions=[wt,wx,wy]
+        else:
+            alt=re.search(r'(?:with )?PL '+NUMBER+r' x '+NUMBER+r' x '+NUMBER+r' in plate washers on the base plate',txt,re.I)
+            if alt:washer_dimensions=list(map(number,alt.groups()))
+    bottom_washer=re.search(NUMBER+r' in square plate washers at the embedded end',txt,re.I)
+    for j,q in enumerate(points):
+        if washer_dimensions:
+            wt,wx,wy=washer_dimensions;wid='WASHER-TOP-'+str(j)
+            a.box(wid,[q[0]-wx/2,q[1]-wy/2,grout+t],[wx,wy,wt],'S','Source top plate washer; anchor hole represented by rod axis')
+            size=ctx.n(r'welded to the base plate with '+NUMBER+r' in fillets',.25)
+            corners=[[q[0]+sx*wx/2,q[1]+sy*wy/2,grout+t] for sx,sy in ((-1,-1),(1,-1),(1,1),(-1,1))]
+            if re.search(r'washer.*?welded to the base plate',txt,re.I):
+                for k in range(4):a.weld(wid+'-W'+str(k),corners[k],corners[(k+1)%4],[wid,'P1'],size,description='Source washer all-round fillet')
+        if bottom_washer:
+            size=number(bottom_washer[1]);a.box('WASHER-END-'+str(j),[q[0]-size/2,q[1]-size/2,-embed],[size,size,.5],'S plan size; A thickness','Source embedded-end square washer; A 1/2 in thickness, anchor hole represented by rod axis')
     a.weld('W1',[-d/2,-w/2,grout+t],[d/2,-w/2,grout+t],['M1','P1'],kind='CJP' if 'CJP' in txt else 'fillet',description='Column-to-plate weld per source flange/web specification')
     if 'lug' in txt:
-        lt=ctx.n(r'PL '+NUMBER+r' x \d+ in.*?(?:embedded|CJP)',.75);lw=min(d,16)
-        a.box('LUGX',[-lw/2,-lt/2,-4],[lw,lt,grout+4],'A','Source cruciform shear lug, A fit envelope');a.box('LUGY',[-lt/2,-lw/2,-4],[lt,lw,grout+4],'A','Crossing lug plate');a.weld('WL',[-lw/2,0,grout],[lw/2,0,grout],['LUGX','P1'],kind='CJP')
+        primary=re.search(r'shear lug:\s*(?:ASTM\s+\w+\s+)?PL '+NUMBER+r' x '+NUMBER+r' in, '+NUMBER+r' in embedded',txt,re.I)
+        secondary=re.search(r'second arm PL '+NUMBER+r' x '+NUMBER+r' in',txt,re.I)
+        arms=lug_arms(txt)
+        (lt,lw,le),(rt,rw,_)=arms or ((.75,min(d,16),4),(.75,min(d,16),4))
+        a.box('LUGX',[-lw/2,-lt/2,-le],[lw,lt,grout+le],'S' if arms else 'A','Source main shear lug; centered below base')
+        # The crossing arm is split at the main plate, avoiding duplicate steel.
+        for sg in (-1,1):
+            start=lt/2 if sg>0 else -rw/2;span=(rw-lt)/2
+            if span<=0:raise ValueError('Crossing shear-lug arm cannot fit around main plate')
+            label='LUGY'+str(sg);a.box(label,[-rt/2,start,-le],[rt,span,grout+le],'S' if arms else 'A','Source crossing lug arm, fitted to main plate')
+            a.weld('WL'+str(sg),[-rt/2,start,grout],[-rt/2,start+span,grout],[label,'P1'],kind='CJP')
+        a.weld('WL',[-lw/2,0,grout],[lw/2,0,grout],['LUGX','P1'],kind='CJP')
     a.section_axis=2;a.section_at=grout+t/2;a.dim([-bx/2,0,grout],[bx/2,0,grout],f'{bx:g} in plate');a.dim([points[0][0],0,grout+t+5],[points[1][0],0,grout+t+5],basis='A',offset=30)
 
 def splice(ctx):
@@ -234,10 +365,13 @@ def splice(ctx):
             for j,sg in enumerate((-1,1)):
                 names=[]
                 for index,(shape,z0,z1) in enumerate(((lower,-30,0),(pid,.0625,30))):
+                    actual=ctx.ms[0 if index else 1]
+                    if not actual.get('boxing_thickness_in'):continue
                     cw=effective(p,shape,'width');cd=effective(p,shape);name=f'BOX{j}{index}';names.append(name);offset=sg*(cw+boxing)/2
-                    a.member(name,flat(p,cd,boxing),[0,offset,z0],[0,offset,z1],y=[1,0,0],basis='A',description=f'Source {boxing:g} in full-height side plate; A local edge fit')
-                    for edge in (-1,1):a.weld(f'WB{j}{index}{edge}',[edge*cd/2,offset,z0],[edge*cd/2,offset,z1],['M1' if index==0 else 'M2',name],kind='CJP',description='Boxing side plate to column flange tips')
-                a.weld(f'BOX-SPLICE{j}',[-d/2,sg*(w+boxing)/2,0],[d/2,sg*(w+boxing)/2,0],names,kind='CJP',basis='S' if 'side plates spliced' in txt else 'A',description='Side-plate splice at the shaft splice datum')
+                    pw=actual.get('boxing_width_in',cd)
+                    a.member(name,flat(p,pw,boxing),[0,offset,z0],[0,offset,z1],y=[1,0,0],basis='A',description=f'Source {boxing:g} in full-height side plate; A local edge fit')
+                    for edge in (-1,1):a.weld(f'WB{j}{index}{edge}',[edge*pw/2,offset,z0],[edge*pw/2,offset,z1],['M1' if index==0 else 'M2',name],kind='CJP',description='Boxing side plate to column flange tips')
+                if len(names)==2:a.weld(f'BOX-SPLICE{j}',[-pw/2,sg*(w+boxing)/2,0],[pw/2,sg*(w+boxing)/2,0],names,kind='CJP',basis='S' if 'side plates spliced' in txt else 'A',description='Side-plate splice at the shaft splice datum')
         from .review_splice_parts import transition,erection
         transition(ctx,lower);erection(ctx,lower)
         a.section_axis=2;a.section_at=-12 if any(q['id']=='DIVISION' for q in a.parts) else 4;a.dim([-d/2,0,15],[d/2,0,15],'Upper shaft depth',basis='S',offset=-30)
@@ -291,12 +425,16 @@ def wall(ctx):
 
 def stmf(ctx):
     a,p,txt=ctx.a,ctx.p,ctx.text;point=ctx.c['point'];horizontal=0 if ctx.params.get('direction')=='X' else 1;normal=1-horizontal;ends=[]
+    sign=1 if horizontal==0 else -1
+    local=lambda q:[q[horizontal]-point[horizontal],sign*(q[normal]-point[normal]),q[2]-point[2]]
+    vector=lambda q:[q[horizontal],sign*q[normal],q[2]]
     for i,m in enumerate(ctx.ms):
         if m['kind']=='column':continue
-        far=max(m['axis'],key=lambda q:math.dist(q,point));v=unit([far[horizontal]-point[horizontal],far[normal]-point[normal],far[2]-point[2]])
-        ly=m['local_y'];local=[ly[horizontal],ly[normal],ly[2]];part=a.member('M'+str(i),m['profile_id'],mul(v,.01 if ctx.family=='review_stmf_end' else 2),mul(v,30),y=local,basis='A');ends.append((part,v,m))
+        physical=[add(q,o) for q,o in zip(m['axis'],m.get('end_offsets',[[0,0,0],[0,0,0]]))]
+        near,far=sorted(physical,key=lambda q:math.dist(q,point));v=unit(vector(sub(far,near)));origin=local(near);length=math.dist(near,far)
+        part=a.member('M'+str(i),m['profile_id'],add(origin,mul(v,min(2,length/4))),add(origin,mul(v,min(30,length))),y=vector(m['local_y']),basis='S axis/profile; A end cutback');ends.append((part,v,m))
     if ctx.family=='review_stmf_end':
-        cp=ctx.select(('column',));cd=effective(p,cp);xc=-cd/2 if sum(v[0] for _,v,_ in ends)>0 else cd/2;a.member('COLUMN',cp,[xc,0,-20],[xc,0,20]);
+        column=next(m for m in ctx.ms if m['kind']=='column');cp=column['profile_id'];q=local(column['axis'][0]);a.member('COLUMN',cp,[q[0],q[1],-20],[q[0],q[1],20],y=vector(column['local_y']))
         for i,(part,v,m) in enumerate(ends):a.weld('END'+str(i),[0,-4,-4],[0,4,4],[part['id'],'COLUMN'],kind='CJP',description='Source chord CJP / diagonal gusset interface at column')
     else:
         t=.75;coords=[(-4,-4),(4,4)]
@@ -314,6 +452,7 @@ def retrofit(ctx):
     else:
         a.member('M1',pid,[-36,0,0],[36,0,0],description='Existing beam');a.member('M2',pid,[36,0,0],[48,0,0],description='Continuous existing beam');a.box('P1',[-30,-width/2,-d/2-t],[60,width,t],'A','A bottom cover plate; shown central extract')
         a.fastener('F1',[[x,y,-d/2-t] for x in (-24,-12,0,12,24) for y in (-width/4,width/4)],[0,0,1],.75,t+p[pid]['dimensions']['tf'],['M1','P1'],'A bolted reinforcement; no weld to unverified existing steel',basis='A');a.notes.append('Plate extends over middle 60% of the actual beam workline. End rows 6 in from plate ends; intermediate pitch 12 in maximum, dimensioned as fictional retrofit input.')
+    if 'beam' in ctx.family:a.translate([0,0,-d/2])
     a.section_axis=0 if 'beam' in ctx.family else 2;a.section_at=0
 
 def industrial(ctx):

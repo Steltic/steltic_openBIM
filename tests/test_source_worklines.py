@@ -59,7 +59,7 @@ def test_old_ready_revision_gains_requests_without_losing_history(tmp_path,opera
     current=store.current('Existing');old_pdf=(current[0]/'drawings.pdf').read_bytes()
     new=store.regenerate('Existing',old) if operation=='regenerate' else store.import_package('Existing',p,1)
     assert new['revision']==2 and new['drawing_status']=='provisional' and new['source_readiness']=='needs_input'
-    assert {r['id'] for r in new['requests']}=={'MODEL-OCCURRENCES','MODEL-CONNECTIONS','MODEL-FLOORS','MODEL-OPENINGS'}
+    assert {r['id'] for r in new['requests']}=={'MODEL-OCCURRENCES','MODEL-CONNECTIONS','MODEL-FLOORS','MODEL-OPENINGS','analysis_occurrence_geometry'}
     assert all(r['accepted'] and not r['confirmed'] and r['proposal'] for r in new['requests'])
     assert (current[0]/'drawings.pdf').read_bytes()==old_pdf and fingerprint(p)==source_hash
     directory=store.current('Existing')[0];manifest=json.loads((directory/'drawing_manifest.json').read_text())

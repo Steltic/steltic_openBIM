@@ -62,6 +62,22 @@ def physical_extras(b,levels):
         for m in b.members:
             if m['profile_id']=='W14X665':
                 m['kind']='transfer_vertical' if abs(m['axis'][1][2]-m['axis'][0][2])>1 and math.dist(m['axis'][0][:2],m['axis'][1][:2])<1 else 'transfer_chord' if abs(m['axis'][1][2]-m['axis'][0][2])<1 else 'transfer_diagonal'
+        # One physical bottom chord has separate axial-truss and flexural
+        # analysis elements. The latter has A=0.001 in2, not a second W14 shaft.
+        analysis={r['id']:r for r in b.package['analysis']['elements']}
+        for m in list(b.members):
+            args=analysis.get(m['id'],{}).get('builder_arguments',[])
+            if m['kind']!='transfer_chord' or len(args)<5 or args[0]!='elasticBeamColumn' or args[4]>.01:continue
+            axial=next((q for q in b.members if q['id']!=m['id'] and q['kind']=='transfer_chord' and q['axis']==m['axis'] and q['profile_id']==m['profile_id'] and analysis.get(q['id'],{}).get('element_type')=='Truss'),None)
+            if axial is None:continue
+            import copy
+            original=copy.deepcopy(axial)
+            axial['analysis_ids']=list(dict.fromkeys(axial.get('analysis_ids',[])+m.get('analysis_ids',[])))
+            axial['analysis_component_roles']={original['id']:'axial',m['id']:'flexural'}
+            axial['design_record_ids']=list(dict.fromkeys(axial['design_record_ids']+m['design_record_ids']))
+            axial['analysis_design_evidence']=[dict(source_member_id=q['id'],source_forces=copy.deepcopy(q.get('source_forces',{})),design_record_ids=list(q['design_record_ids'])) for q in (original,m)]
+            b.members.remove(m)
+            b.changes.append(dict(kind='combined_axial_flexural_analysis_member',member_id=axial['id'],original_members=[original,m],basis='S: coincident source axial Truss and A=0.001 in2 flexural elasticBeamColumn represent one selected W14X665 physical bottom chord; both analysis identities and force/design records retained.'))
         nodes=defaultdict(list)
         for m in b.members:
             if m['kind'].startswith('transfer_'):
@@ -72,10 +88,21 @@ def physical_extras(b,levels):
             if col:refs.append(b.record('connections','conn-truss-support-C2-C5'))
             b.connection('TRANSFER-NODE-'+str(i),'review_transfer_truss',point,ms+([col] if col else []),refs,parameters={'support':bool(col),'joint':'support' if col else 'panel'})
         b.note('TRANSFER-RELEASE','S: Level-2 bottom chord is separated from slab by slip sheet and has no studs; adjacent C2-C3/C4-C5 beams have horizontal long slots at truss ends. Only Level 3 transfers the discontinuous Grid C frame shear. The drawing does not introduce a rigid diaphragm attachment at the lower nodes.')
+        # This schedule variant has no location in the final source model:
+        # the two W14X665 verticals are Level-2/3 transfer posts, followed by
+        # W14X550 columns. Do not manufacture a W14X398/W14X665 splice.
+        posts=[m for m in b.members if m['kind']=='transfer_vertical' and m['profile_id']=='W14X665']
+        above=[next((q for q in b.members if q['kind']=='column' and math.dist(q['axis'][0],m['axis'][1])<.01),None) for m in posts]
+        if len(posts)==2 and all(q and q['profile_id']=='W14X550' for q in above):
+            reason='Retained unused gold schedule variant: W14X398 over W14X665. The only two final W14X665 verticals are transfer posts at Level 2-3, followed by W14X550 at Level 3. No W14X398/W14X665 adjacent shaft pair exists in the final source geometry. Transfer-node assemblies remain separately located; no splice geometry or capacity is invented for this unused pair.'
+            b.record_dispositions=getattr(b,'record_dispositions',[])+[dict(record_id='connections/conn-lateral_col-W14X665',status='not_applicable',reason=reason,evidence_member_ids=[m['id'] for m in posts+above])]
+            b.note('UNUSED-SPLICE-VARIANT','S: '+reason)
     if b.key in ('hr16','hr25'):
         raw={r['id'] for r in b.raw['connections']}
         for col in b.members:
             if col['kind']!='column':continue
+            if b.key=='hr16':continue  # exact source boxed-column orientation is already retained
+            if b.key=='hr25' and not (col['axis'][0][0]==1008 and col['axis'][0][1] in (0,1440)):continue
             prefix='conn-two-way-'+('4A4E-' if b.key=='hr25' else '')+col['profile_id']+'-strong-'
             for beam in b.members:
                 if beam['kind'] in ('beam','moment_beam','girder') and prefix+beam['profile_id'] in raw and any(math.dist(q[:2],col['axis'][0][:2])<.1 and min(v[2] for v in col['axis'])<=q[2]<=max(v[2] for v in col['axis']) for q in beam['axis']):
@@ -135,7 +162,8 @@ def connection_extras(b,levels):
             if b.key=='hr16':
                 if support:attach(con,'conn-column-webs-collector-lines')
                 if support and support.get('source_boxed_profile'):attach(con,'conn-two-way-joint-'+support['profile_id'])
-                if k==2 and 'infill-library-W18X46' in raw and 1008<=point[0]<=1680 and 336<=point[1]<=1008:attach(con,'conn-infill-library-W18X46',True)
+                if k==1 and pid=='W18X46' and m['kind']=='infill' and 1008<=point[0]<=1344 and 336<=point[1]<=1008:attach(con,'conn-infill-library-W18X46',True)
+                if k in (1,2) and point[1] in (336,672) and 672<=point[0]<=1344:attach(con,'collector-irregularity-lines')
             if b.key in ('hr18','hr21','hr30'):
                 braces=[mm for mm in b.members if mm['kind']=='brace' and mm['level']==k and abs(mm['axis'][0][1-along]-a[1-along])<.1 and min(q[along] for q in mm['axis'])<=sum(q[along] for q in m['axis'])/2<=max(q[along] for q in mm['axis'])]
                 if braces and m['kind']!='infill':

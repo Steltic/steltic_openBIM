@@ -100,7 +100,7 @@ class CaseModel:
         ids=[m['id'] if isinstance(m,dict) else m for m in members];refs=[r for r in records if r]
         if not ids:raise ValueError('Connection without an attached physical member '+cid)
         c=dict(id=cid,point=list(point),member_ids=list(dict.fromkeys(ids)),detail_ref={'id':family},design_record_ids=refs,parts=[],basis=basis)
-        if parameters:c['parameters']=parameters
+        if parameters:c['parameters']=copy.deepcopy(parameters)
         if title:c['title']=title
         self.connections.append(c);self.used_records.update(refs);return c
 
@@ -131,7 +131,9 @@ class CaseModel:
         assumptions=[dict(id=k,answer=v,basis='A - user-authorized fictional test input') for k,v in scenario(self.key)['answers'].items()]+self.notes
         return dict(schema='steltic.design_drawing_model',version=1,pilot=self.key,title=self.case.get('drawing_title',self.case['source_building'].replace('_',' ')),fictional=True,
             source_sha256=fingerprint(self.package),scenario=copy.deepcopy(self.state['design_scenario']),members=self.members,profiles=list(self.profiles.values()),panels=self.panels,
-            materials=[dict(id='source_steel',basis='S',specification='Grades and material requirements in source records'),dict(id='assumed_test_steel',basis='A',specification='Fictional geometry supplement; no new capacity verification')],
+            materials=[dict(id='source_steel',basis='S',specification='Grades and material requirements in source records'),dict(id='assumed_test_steel',basis='A',specification='Fictional geometry supplement; no new capacity verification')]+getattr(self,'material_selections',[]),
             openings=self.openings,connections=self.connections,member_schedule=schedule,details=[],grids=self.grids,levels=self.levels,changes=self.changes,
             assumptions=assumptions,bounds=bounds,extra_views=self.views,wall_layouts=self.walls,excluded_analysis_elements=self.excluded,
+            connection_endpoint_links=getattr(self,'endpoint_links',[]),
+            record_dispositions=getattr(self,'record_dispositions',[]),
             record_coverage=dict(used=sorted(self.used_records),retained_without_physical_occurrence=sorted(set(self.records)-self.used_records)))

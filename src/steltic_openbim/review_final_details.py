@@ -10,15 +10,15 @@ def draw(ctx):
 
 def pickup(ctx):
     a,p=ctx.a,ctx.p;cp=ctx.pid;bp=ctx.ms[1]['profile_id'];cd=effective(p,cp);cw=effective(p,cp,'width');tw=p[bp]['dimensions']['tw']
-    a.box('PG-TOP',[-48,-15,-4],[96,30,4],'S','S girder top flange 30 x 4 in');a.box('PG-BOTTOM',[-48,-15,-84],[96,30,4],'S','S girder bottom flange 30 x 4 in');a.member('PG-WEB',flat(p,76,tw),[-48,0,-42],[48,0,-42],y=[0,0,1],description='S 76 x 1-1/8 in girder web');a.member('COLUMN',cp,[0,0,0],[0,0,48])
+    a.member('GIRDER',bp,[-48,0,-42],[48,0,-42],description='Actual built-up girder: 30 x 4 in flanges and 76 x 1-1/8 in web');a.member('COLUMN',cp,[0,0,0],[0,0,48])
     for j,x in enumerate((-cd/2,cd/2)):
-        a.weld('CJP-F'+str(j),[x,-cw/2,0],[x,cw/2,0],['COLUMN','PG-TOP'],kind='CJP',description='S demand-critical column flange CJP to girder top flange')
+        a.weld('CJP-F'+str(j),[x,-cw/2,0],[x,cw/2,0],['COLUMN','GIRDER'],kind='CJP',description='S demand-critical column flange CJP to girder top flange')
         for side in (-1,1):
             name=f'ST{j}{side}';y=tw/2 if side>0 else -15
             a.box(name,[x-1.25,y,-80],[2.5,15-tw/2,76],'S','S 2-1/2 in full-depth bearing stiffener, fitted to both girder flanges')
-            a.weld('W'+name,[x,side*tw/2,-80],[x,side*tw/2,-4],['PG-WEB',name],.3125,basis='A',description='A stiffener-to-web fillet fit; S fitted bearing at flanges')
-    a.weld('CJP-W',[-cd/2,0,0],[cd/2,0,0],['COLUMN','PG-TOP'],kind='CJP',description='S demand-critical column web CJP')
-    for z,flange,label in [(-80,'PG-BOTTOM','FW-BOT'),(-4,'PG-TOP','FW-TOP')]:a.weld(label,[-48,0,z],[48,0,z],['PG-WEB',flange],.3125,description='S 5/16 in girder flange-to-web fillets')
+            a.weld('W'+name,[x,side*tw/2,-80],[x,side*tw/2,-4],['GIRDER',name],.3125,basis='A',description='A stiffener-to-web fillet fit; S fitted bearing at flanges')
+    a.weld('CJP-W',[-cd/2,0,0],[cd/2,0,0],['COLUMN','GIRDER'],kind='CJP',description='S demand-critical column web CJP')
+    a.notes.append('S: built-up GIRDER fabrication requires 5/16 in flange-to-web fillets along both flange/web seams. The actual selected girder includes its two flanges and web once; this connection adds only the bearing stiffeners and column attachment welds.')
     a.dim([0,0,-84],[0,0,0],'S girder depth');a.dim([-cd/2,0,-80],[cd/2,0,-80],'S stiffener pairs below column flanges');a.section_axis=0;a.section_at=cd/2
 
 def seat(ctx):
@@ -68,6 +68,8 @@ def collar(ctx):
     for y in (-14,14):a.weld('FILLET'+str(y),[face+48,y,0],[face+84,y,0],['PG','COLLAR'],.9375,description='S 15/16 in fillet beyond 48 in free length')
     a.interfaces.append(dict(id='STUD-BOND',kind='headed_stud_fusion_and_embedment',connects=['COLLAR','SLAB']+[f'STUD{i}-{j}' for i in range(12) for j in range(6)],basis='A',description='S 72 studs with hairpins transfer collar force to slab; A source-unspecified diameter, height, set-out and reinforcement fit.'))
     for part in a.parts:
+        if part['id'].startswith('HAIR-'):
+            part['representation_role']='assembly_component';part['material_category']='reinforcement';part['description']+='; A #4 hairpin reinforcement'
         for prefix in ('STUD','HEAD','HAIR-L','HAIR-R','HAIR-U'):
             if part['id'].startswith(prefix):part['annotation_group']=prefix;break
     a.dim([face,0,0],[face+48,0,0],'S unwelded length');a.dim([face+48,0,0],[face+84,0,0],'S welded length');a.section_axis=0;a.section_at=face+9;a.front_axes=(0,1)
@@ -88,6 +90,7 @@ def tower(ctx):
         a.notes.append('S: L2 only, continuous tie across both tower lines. Collectors use 3/4 in headed studs at 12 in. No rigid bridge is introduced above the podium.')
         a.interfaces.append(dict(id='TIE-BOND',kind='reinforced_diaphragm',connects=['SLAB-1','BRIDGE','SLAB1','TIE0','TIE1','TIE2','TIE3'],basis='S',description='S continuous #4 ties at 12 in, concrete bond, collector headed-stud fusion and embedment.'))
         for part in a.parts:
+            if part['id'].startswith(('TIE','CROSS')):part['representation_role']='assembly_component'
             for prefix in ('TIE','CROSS','STUD','HEAD'):
                 if part['id'].startswith(prefix):part['annotation_group']=prefix;break
         a.dim([-18,0,6],[-6,0,6],'S bar / stud pitch')

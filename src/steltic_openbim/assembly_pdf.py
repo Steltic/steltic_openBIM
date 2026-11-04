@@ -20,14 +20,15 @@ def path_polygon(canvas,pts,fill,stroke,width=.65,edges=None):
 
 
 def projection(scene,mode):
+    depth_sign=scene.get('front_depth_sign',1)
     if mode=='front':
         axes=scene['front_axes'];missing=next(i for i in range(3) if i not in axes)
-        return lambda p:(p[axes[0]],p[axes[1]],p[missing]),axes
+        return lambda p:(p[axes[0]],p[axes[1]],depth_sign*p[missing]),axes
     if mode=='section':
         axes=[i for i in range(3) if i!=scene['section_axis']]
         return lambda p:(p[axes[0]],p[axes[1]],p[scene['section_axis']]),axes
     # View from front/right/above. Local Z remains vertical in the axonometric view.
-    return lambda p:(.8660254*(p[0]-p[1]),.5*(p[0]+p[1])+p[2],p[0]+p[1]-p[2]),None
+    return lambda p:(.8660254*(p[0]-depth_sign*p[1]),.5*(p[0]+depth_sign*p[1])+p[2],p[0]+depth_sign*p[1]-p[2]),None
 
 
 def draw_view(sh,scene,mode,rect,title):
@@ -68,6 +69,10 @@ def draw_view(sh,scene,mode,rect,title):
                 for aa,bb in zip(points,points[1:]+points[:1]):sh.line(aa,bb,'#aab5b4',.5,[5,4])
     for part,face in polys:
         fill,stroke=COLORS.get(part['kind'],COLORS['plate'])
+        if mode!='section' and part.get('drawing_style')=='outline':
+            pts=[tr(q) for q in face]
+            for aa,bb in zip(pts,pts[1:]+pts[:1]):sh.line(aa,bb,'#8da7b3',.5,[5,3])
+            continue
         path_polygon(sh.c,[tr(p) for p in face],fill,stroke,.7 if part['kind']=='member' else .6,edge_flags.get(id(face)))
     if mode=='front' and scene['family']=='review_transfer_truss':
         for part in parts:
@@ -99,7 +104,7 @@ def draw_view(sh,scene,mode,rect,title):
             if len(face)>=3:
                 points=[tr(p) for p in face];cx=sum(p[0] for p in points)/len(points);cy=sum(p[1] for p in points)/len(points)
                 sh.line((cx-2,cy-2),(cx+2,cy+2),'#677e89',.5)
-    else:sh.text(x+12,y+17,('AXONOMETRIC - NTS' if mode=='iso' else f'ASSEMBLED ELEVATION | scale 1:{denom:g}')+' | dimensions inches',11)
+    else:sh.text(x+12,y+17,('AXONOMETRIC - NTS' if mode=='iso' else f'ASSEMBLED {"PLAN" if tuple(scene["front_axes"])==(0,1) else "ELEVATION"} | scale 1:{denom:g}')+' | dimensions inches',11)
     # Labels use separate rails; one leader per component/group, no scattered text.
     visible={part['id'] for part,_ in polys};labels=[]
     labelled_groups=set()
@@ -147,44 +152,9 @@ def draw_view(sh,scene,mode,rect,title):
 def draw_assembly(sh,scene):
     sh.text(70,sh.H-160,f"{scene['reference']}  |  {scene['occurrence_count']} occurrence(s)  |  example {scene['representative_occurrence']}",13)
     sh.text(70,sh.H-183,'S = source design parameter   A = authored fictional fit/layout   |   Full source specifications remain in S7xx and source_records.json',12)
-    draw_view(sh,scene,'front',(70,855,1090,620),'1  ASSEMBLED JOINT / ELEVATION')
+    draw_view(sh,scene,'front',(70,855,1090,620),'1  ASSEMBLED JOINT / '+('PLAN' if tuple(scene['front_axes'])==(0,1) else 'ELEVATION'))
     draw_view(sh,scene,'section',(1190,855,1120,620),'2  SECTION A-A / JOINED MEMBERS AND PLIES')
     draw_view(sh,scene,'iso',(70,155,1090,675),'3  ASSEMBLY / ISOMETRIC')
-    x=1210;y=805;sh.text(x,y,'PARTS, ATTACHMENTS AND LOCAL DIMENSIONS',16,font='Helvetica-Bold');y-=31
-    entries=[];groups={};part_labels={}
-    for part in scene['parts']:
-        label=part.get('annotation_group',part['id']);groups.setdefault(label,[]).append(part);part_labels[part['id']]=label
-    def joined(ids):return ', '.join(dict.fromkeys(part_labels.get(i,i) for i in ids))
-    for label,parts in groups.items():
-        part=parts[0]
-        description=part['description']
-        if len(parts)>1 and part['kind']!='fastener':description+=f' | qty {len(parts)}; repeated group'
-        if part.get('geometry',{}).get('type')=='box':description+=' | '+ ' x '.join(f'{v:g}' for v in part['geometry']['size'])+' in'
-        if part['kind']=='fastener':
-            description+=f" | qty {sum(p['count'] for p in parts)}; grip {part['grip']:g} in"
-            if 'pattern' in part:
-                pat=part['pattern'];description+=' | grid '+ ' / '.join(f'{n} at {d:g} in' for n,d in zip(pat['counts'],pat['spacing']) if n>1 and d is not None)
-        basis=str(part['basis'])
-        if basis not in ('S','A'):
-            description+=' | Basis: '+basis
-            basis='S/A' if 'S' in basis and 'A' in basis else 'S' if basis.startswith('S') else 'A'
-        entries.append((label,basis,description))
-    entries += [(w['id'],w['basis'],w['description']+' | '+joined(w['connects'])) for w in scene['welds']]
-    entries += [(i['id'],i['basis'],i['description']+' | '+joined(i['connects'])) for i in scene.get('interfaces',[])]
-    font=11;line=15
-    estimate=sum(max(1,len(sh.lines(t,925,font)))*line+6 for _,_,t in entries)
-    if estimate>480:font=10;line=13
-    for label,basis,description in entries:
-        from reportlab.pdfbase.pdfmetrics import stringWidth
-        label_size=min(11,11*56/max(1,stringWidth(label,'Helvetica-Bold',11)))
-        sh.text(x,y,label,label_size,font='Helvetica-Bold');sh.text(x+64,y,basis,10,'#946320' if basis=='A' else '#243d49')
-        y=sh.wrap(x+98,y,description,965,font,line)-6
-    y-=9
-    for note in scene['notes']:
-        if y<220:break
-        lines=sh.lines(note,1070,10)
-        if y-len(lines)*14<190:break
-        y=sh.wrap(x,y,note,1070,10,14)-10
-    if y<155:raise ValueError('Assembly parts schedule overflow '+scene['id'])
-    # Source/occurrence linkage is retained in a dedicated complete JSON index.
-    sh.text(x,170,'Exact source variant, local assembly geometry and ALL notes: connection_assemblies.json / '+scene['id'],10)
+    sh.text(1210,805,'PARTS, ATTACHMENTS AND LOCAL DIMENSIONS',16,font='Helvetica-Bold')
+    from .assembly_legend import draw
+    draw(sh,scene)

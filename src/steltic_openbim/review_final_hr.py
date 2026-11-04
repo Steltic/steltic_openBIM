@@ -24,8 +24,8 @@ def infill(b,k,lo,hi,records,candidates):
     want=None
     if b.key=='hr4' and k<=2 and lo[0]>=370 and hi[0]<=1850 and lo[1]>=330 and hi[1]<=990:want='infill-stack-'
     if b.key=='hr15' and ((k==7 and (hi[0]>1800 or hi[1]>1440)) or (k==14 and (lo[0]<360 or lo[1]<360))):want='infill-terrace-'
-    if b.key=='hr17' and k==9:want='infill-L9-'
-    if b.key.startswith('hr34') and k==2:want='infill-L2-ext-' if b.key=='hr34b' and lo[0]>=1080 else 'infill-L2-'
+    if b.key=='hr17' and k==9:want='infill-level9-'
+    if b.key.startswith('hr34') and k==2:want='infill-L2ext-' if b.key=='hr34b' and lo[0]>=1080 else 'infill-L2-'
     if want:return [r for r in records if r.startswith(want)] or candidates
     # Typical floors must not inherit a terrace / library / podium size just because it is first.
     regular=[r for r in candidates if not any(s in r for s in ('stack','terrace','L2','L9','drift'))]
@@ -63,9 +63,20 @@ def physical_extras(b,levels):
         b.note('TRANSFER','S: continuous PG84X1108 simple-span transfer girder; columns A2/A3 bear on its top flange. End seats slide, while the separate top collar carries axial force. Brief Level 2 is model L1. Supplier bearing certification and foundation design remain delegated.')
     if b.key=='hr26':
         z=levels[-1];rid=b.record('connections','tmd-support-path')
+        b.endpoint_links=getattr(b,'endpoint_links',[]);legs={}
         for j,x in enumerate((480,600)):
-            m=b.member('TMD-SUPPORT-'+str(j),'W24X68','girder',[x,360,z+24],[x,720,z+24],18,'A',records=[rid],setout_basis='S 30 ft span and 10 ft spacing; A top-of-support datum')
-            for y in (420,660):b.connection(f'TMD-FOOT-{j}-{y}','review_equipment_foot',[x,y,z+24],[m],[rid],parameters={'joint':'tmd_supplier_base'})
+            m=b.member('TMD-SUPPORT-'+str(j),'W24X68','girder',[x,360,z+24],[x,720,z+24],18,'A',records=[rid,b.record('members','tmd-support-W24X68')],setout_basis='S 30 ft span and 10 ft spacing; A top-of-support datum')
+            for y in (420,660):
+                leg=b.member(f'TMD-LEG-{j}-{y}','HSS4X4X1/4','equipment_leg',[x,y,z+24.75],[x,y,z+48],18,'A',
+                    setout_basis='A: accepted fictional supplier support leg; damper supplier design remains delegated')
+                foot=b.connection(f'TMD-FOOT-{j}-{y}','review_equipment_foot',[x,y,z+24],[leg,m],[rid],parameters={'joint':'tmd_supplier_base'})
+                legs[j,y]=leg;b.endpoint_links.append(dict(member_id=leg['id'],end='start',connection_id=foot['id'],basis='Actual supplier leg bottom welded to its own located base plate'))
+        for y in (420,660):
+            rail=b.member('TMD-BASE-RAIL-'+str(y),'HSS6X4X1/4','equipment_base_rail',[480,y,z+51.5],[600,y,z+51.5],18,'A',records=[rid],setout_basis='A: explicit supplier base-frame rail on the four leg cap plates; no new capacity approval')
+            for j,x in enumerate((480,600)):
+                head=b.connection(f'TMD-HEAD-{j}-{y}','review_equipment_head',[x,y,z+48],[legs[j,y],rail],parameters={'rail_side':1 if j==0 else -1},basis='A: supplier cap plate and base-frame attachment; supplier verification remains required')
+                b.endpoint_links.extend([dict(member_id=legs[j,y]['id'],end='end',connection_id=head['id'],basis='Actual supplier leg head welded to its own cap plate'),dict(member_id=rail['id'],end='start' if j==0 else 'end',connection_id=head['id'],basis='Actual supplier base-frame rail bears and bolts to this same cap plate')])
+        b.changes.append(dict(kind='accepted_supplier_support_geometry',basis='A: four HSS4X4X1/4 supplier legs give the previously shown damper feet an explicit physical receiver. These legs and attachments have no new capacity approval.'))
         b.panel('TMD-ENVELOPE','equipment',[[468,408,z+24],[612,408,z+24],[612,672,z+24],[468,672,z+24]],48,18,'A',scope='A supplier mass/base-frame envelope; S 87 kip damper')
         b.note('DAMPER','S: 87 kip TMD; two W24X68 beams, 30 ft span and 10 ft apart, at third points of the core X roof struts. A: beams placed above the roof struts, 12 x 22 x 4 ft supplier envelope, base plate and bolt fit. Supplier dynamics, travel and anchorage design are not inferred.')
 
@@ -103,7 +114,12 @@ def connections(b,levels):
             if b.key=='hr3' and m['kind']!='infill':
                 braces=[mm for mm in b.members if mm['kind']=='brace' and mm['level']==k and abs(mm['axis'][0][1-along]-a[1-along])<.1 and min(q[along] for q in mm['axis'])<=sum(q[along] for q in m['axis'])/2<=max(q[along] for q in mm['axis'])]
                 if braces:attach(c,'conn-bracedbay-beam-'+direction+'-'+braces[0]['profile_id'],True);attach(c,'collector-irregularity-lines');attach(c,'conn-column-webs-collector-lines');p['collector']=True
-            if b.key=='hr19' and pid=='PG84X1108':c['detail_ref']['id']='review_pg_seat';attach(c,'conn-A1-A4-level2-hinge-zone')
+            if b.key=='hr19' and pid=='PG84X1108':
+                c['detail_ref']['id']='review_pg_seat';attach(c,'conn-A1-A4-level2-hinge-zone')
+                generic=b.record('connections','conn-collector-X-floor')
+                if generic in c['design_record_ids']:
+                    c['design_record_ids'].remove(generic);c.setdefault('source_context_records',[]).append(generic)
+                    b.changes.append(dict(kind='specific_transfer_bearing_selection',connection_id=c['id'],context_record=generic,basis='Source PG sliding seat and separate axial collar govern this transfer-girder end; the ordinary beam single-plate collector detail remains on its actual W-beam occurrences'))
         if fam=='review_splice' and len(c['member_ids'])>1:
             below=lookup[c['member_ids'][1]];pair=pid+' over '+below['profile_id'];matches=[r for r,row in raw.items() if pair+':' in row.get('components','')]
             if matches:

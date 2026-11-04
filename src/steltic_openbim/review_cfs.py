@@ -132,12 +132,26 @@ def build(b):
                 if len(locations)!=len(widths):locations=spaced_segments(lo,hi,widths)
             elif b.key in next_keys:locations=next_locations(b,d,line,k,ranges)
             elif b.key in final.KEYS:locations=final.locations(b,d,line,k,ranges)
-            else:locations=[(0,12),(48,60)] if d=='X' else [(10,22)]
+            else:
+                # CFS29's end-wall bay is 16 ft in the checked design. Keep the
+                # adopted centre at Y=16 ft, but derive its width from the actual
+                # selected segment rather than copying the 12 ft X-wall width.
+                if d=='X':
+                    if len(widths)!=2:raise ValueError('Mezzanine X wall requires its two selected bay lengths')
+                    locations=[(0,widths[0]),(60-widths[1],60)]
+                else:
+                    if len(widths)!=1:raise ValueError('Mezzanine Y wall requires its selected bay length')
+                    locations=[(16-widths[0]/2,16+widths[0]/2)]
             record=rawwalls.get(f'wall-{d}-{name}-s{k}',{});props=dict(line.get('wall_props') or {});props.update(props.get('by_story',{}).get(str(k),{}))
             floor_depth=14 if b.key=='cfs3' else (14.25 if b.key=='cfs13' else (16.25 if b.key=='cfs14' else 12))
             z0=levels[k-1];zt=levels[k]-(floor_depth if k<len(heights) or b.key=='cfs3' else 0)
             if b.key in next_keys:floor_depth=next_depth(b,k);zt=levels[k]-floor_depth
             if b.key in final.KEYS:floor_depth=final.depth(b,k);zt=levels[k]-floor_depth
+            if b.key=='cfs7':
+                from .review_cfs7 import depth as bar_depth,finish as bar_finish
+                floor_depth=bar_depth(k==len(heights));zt=levels[k]-floor_depth
+                z0=levels[k-1]-(bar_finish() if k>1 else 0)
+            if b.key=='cfs29':floor_depth=14 if name=='XM' else 12;zt=levels[k]-floor_depth
             # This line is a geometric physical wall, not its fitted tributary line.
             runs=[]
             for j,(a,dend) in enumerate(locations):
@@ -153,6 +167,7 @@ def build(b):
             elif b.key in next_keys:rstud=next_stud(b,d,name,k,props,ordinary)
             elif b.key in final.KEYS:rstud=final.stud(b,d,name,k,props,ordinary)
             studpid=b.profile(section(rstud.get('section')));spacing=float(rstud.get('spacing_in',12 if b.key=='cfs14' else 16));trackpid=b.profile('600T150-'+str(int(round(props.get('t_stud_in',.054)*1000))))
+            if b.key=='cfs29':spacing=12 if name=='XM' else 24
             if b.key=='cfs5':trackpid=b.profile('600T125-97')
             chordrec=story_value(chords.get(f'chord-{d}-{name}',{}),k);hold=story_value(holds.get(f'hd-{d}-{name}',{}),k)
             if b.key=='cfs14' and ((name in ('S','M','N') and k>=3) or (name in ('C1S','C2S') and k>=2)):
@@ -190,10 +205,12 @@ def build(b):
                             post=b.member(label+'-INTERMEDIATE',physical_pack(b,postrec['section'],f'POST-{name}-{k}'),'chord',pt(dend,z0+.1),pt(dend,zt-.1),k,'A',local_y=local_y,records=[b.record('studs',postrec['id'])]);b.ends(post,'cfs_stud');continue
                     typeii=b.key=='cfs13' and name in ('SW','SE','SEE','NB','NW','NE');is_end=not typeii or (j==0 and side==0) or (j==len(runs)-1 and side==1)
                     cp=chordpid if is_end else b.profile('2X600S162-54')
-                    chord=b.member(label+'-CH'+str(side),cp,'chord' if is_end else 'opening_jamb',pt(u,z0+.1),pt(u,zt-.1),k,'A',local_y=local_y,records=[b.record('studs',chordrec.get('id'))])
+                    chord_top=levels[k] if b.key=='cfs29' else zt-.1
+                    chord=b.member(label+'-CH'+str(side),cp,'chord' if is_end else 'opening_jamb',pt(u,z0+.1),pt(u,chord_top),k,'A',local_y=local_y,records=[b.record('studs',chordrec.get('id'))])
                     if is_end:
                         rtext=str(hold.get('rod',hold.get('selection','5/8 in.')));dia=number(re.search(NUMBER+r'\s*in',rtext)[1]) if re.search(NUMBER+r'\s*in',rtext) else .625
-                        if b.profiles[cp]['family']=='rhs' or b.key=='cfs29':b.ends(chord,'review_cfs_post',[b.record('holddowns',hold.get('id'))],parameters={'at_base':k==1 or name=='N' and k==2,'embedment':4 if b.key=='cfs29' else 12})
+                        if b.key=='cfs29':b.connection(chord['id']+':0','review_cfs_post',chord['axis'][0],[chord],[b.record('holddowns',hold.get('id'))],parameters={'at_base':True,'embedment':4})
+                        elif b.profiles[cp]['family']=='rhs':b.ends(chord,'review_cfs_post',[b.record('holddowns',hold.get('id'))],parameters={'at_base':k==1 or name=='N' and k==2,'embedment':12})
                         else:
                             if not .375<=dia<=3:raise ValueError(f'{b.key} {label}: invalid source rod diameter {dia}; use the story-specific rod record')
                             rodpid=b.custom(f'ROD-{dia:g}','round',{'d':dia},basis='S: scheduled tie rod');rod=b.member(label+'-ROD'+str(side),rodpid,'hold_down_rod',pt(u,z0-2),pt(u,zt+4),k,'A',records=[b.record('holddowns',hold.get('id'))])
@@ -218,7 +235,7 @@ def build(b):
                     strap=b.custom(f'STRAP-{w:g}X{t:g}','flat',dict(width=w,thickness=t),basis='S: source strap schedule')
                     for face in (-1,1):
                         for diagonal,(u,v) in enumerate(((a,dend),(dend,a))):
-                            aa,dd=pt(u,z0),pt(v,zt);aa[normal]+=face*3;dd[normal]+=face*3
+                            aa,dd=pt(u,z0),pt(v,zt);aa[normal]+=face*(3+(t/2 if b.key=='cfs29' else 0));dd[normal]+=face*(3+(t/2 if b.key=='cfs29' else 0))
                             m=b.member(label+f'-X{face}-{diagonal}',strap,'strap',aa,dd,k,'A',records=[wall['source_record']],local_y=local_y)
                             b.ends(m,'review_cfs_strap',[wall['source_record'],b.record('connections',f'conn-strap-{d}-{name}')],parameters={'story':k,'line':name})
                 else:
@@ -240,6 +257,9 @@ def build(b):
     complete_walls(b,outline,bystory,levels)
     if b.key in next_keys:next_floors(b,outline,levels)
     elif b.key in final.KEYS:final.floors(b,outline,levels)
+    elif b.key=='cfs7':
+        from .review_cfs7 import floors as bar_floors
+        bar_floors(b,outline,levels)
     else:floors_and_roofs(b,outline,bystory,levels)
     if b.key=='cfs11':walkways(b,levels)
     if b.key=='cfs29':mezzanine(b,levels)
@@ -268,7 +288,11 @@ def floors_and_roofs(b,outline,bystory,levels):
     cfg=b.cfg;framing=b.raw.get('framing',b.raw.get('gravity_framing',[]));records={r['id']:r for r in framing}
     for k,z in enumerate(levels[1:],1):
         poly=bystory.get(str(k),outline);roof=k==len(levels)-1
-        b.panel(f'FLOOR-{k}','floor',[[x*12,y*12,z] for x,y in poly],3 if b.key=='cfs3' else .75,k,'A')
+        finish=19/32 if b.key=='cfs3' and roof else 3 if b.key=='cfs3' else .75
+        surface=z+finish if b.key=='cfs3' and roof else z
+        refs=[rid for rid,row in b.records.items() if b.key=='cfs3' and rid.startswith('diaphragms/') and row['data'].get('level')==k]
+        b.panel(f'FLOOR-{k}','roof' if b.key=='cfs3' and roof else 'floor',[[x*12,y*12,surface] for x,y in poly],finish,k,'A',records=refs,
+                **(dict(reference_line='top surface; source roof steel datum is below by 19/32 in' if roof else 'top surface of the source 3 in concrete floor',thickness_direction='negative_global_z') if b.key=='cfs3' else {}))
         if b.key=='cfs29':continue
         if b.key in ('cfs11','cfs13','cfs14') and roof:
             # Explicit delegated roof members and interfaces, with adopted truss layout.
@@ -296,7 +320,7 @@ def floors_and_roofs(b,outline,bystory,levels):
                 for j,(a,d) in enumerate(zip(supports,supports[1:])):
                     if d-a<12:continue
                     if b.key=='cfs3':
-                        simple_truss(b,f'OW-{k}-{station}-{run}-{j}',direction,station,a,d,z-14 if roof else z-14,11.5 if roof else 8.5,k,'250S162-68','250S137-43',24,flat=True)
+                        simple_truss(b,f'OW-{k}-{station}-{run}-{j}',direction,station,a,d,z-14+1.25,11.5 if roof else 8.5,k,'250S162-68','250S137-43',24,flat=True)
                         continue
                     if b.key=='cfs11' and ((direction==0 and station>96*12) or (station<70*12 and a>=26*12)):
                         # Walkway joists span normal to their edge beam, not along the open edge.
@@ -305,6 +329,18 @@ def floors_and_roofs(b,outline,bystory,levels):
                     def pt(u):return [u,station,z-finish-b.depth(pid)/2] if direction==0 else [station,u,z-finish-b.depth(pid)/2]
                     m=b.member(f'JOIST-{k}-{station}-{run}-{j}',pid,'joist',pt(a),pt(d),k,'A',records=[b.record('framing',rec.get('id'))]);b.ends(m,'review_cfs_joist',[b.record('framing',rec.get('id'))],parameters={'spacing':spacing,'floor_depth':b.depth(pid)+.75})
     b.note('DELEGATED-ROOF','A: the pictured roof truss internals, node gussets and supplier floor-joist arrangements are explicit fictional inputs. Use the source sections where scheduled; source delegated reactions, diaphragm conditions and capacity approval requirements remain attached. The drawing is not a supplier certification.')
+    if b.key=='cfs3':
+        # Wall levels are bearing surfaces, while track geometry uses a web
+        # centreline. Account for that half-thickness rather than burying the
+        # truss bottom chord in the track. Analysis workpoints remain unchanged.
+        for m in b.members:
+            if m['kind'] not in ('top_track','bottom_track','ordinary_track','tier_track'):continue
+            if abs(m['local_y'][2])<.999:continue
+            half=b.profiles[m['profile_id']]['dimensions']['t']/2
+            for off in m['end_offsets']:off[2]+=half*m['local_y'][2]
+        b.changes.append(dict(kind='cfs3_truss_bearing_datums',chord_centre_shift_in=1.25,
+                              roof_truss_outside_depth_in=14,roof_sheathing_in=19/32,floor_topping_in=3,
+                              basis='S: 14 in roof truss and 19/32 in Structural I roof sheathing; 3 in concrete floor topping. A: retain the existing 11 in delegated floor-truss envelope, place bottom-chord underside on the wall bearing datum, and offset track web centrelines by half their actual thickness. Source analysis workpoints and selected sections retained; supplier capacity remains unverified.'))
 
 def simple_truss(b,label,along,station,start,end,base,rise,k,chord,web,panel,flat=False,heel=0):
     cp=b.profile(chord);wp=b.profile(web);span=end-start;n=max(2,math.ceil(span/panel));n=n if flat else math.ceil(n/2)*2;step=span/n
@@ -366,7 +402,7 @@ def mezzanine(b,levels):
     for x in range(0,721,144):
         for y in (0,192,384):
             if any(m['kind']=='chord' and math.dist(m['axis'][0][:2],[x,y])<.1 for m in b.members):continue
-            pid=b.pack(b.profile('600S250-97'),2,'box');m=b.member(f'MEZZPOST-{x}-{y}',pid,'column',[x,y,0],[x,y,144],1,'S');b.ends(m,'review_cfs_post',[b.record('connections','conn-post-base')],parameters={'slab_thickness':6,'embedment':4})
+            pid=b.pack(b.profile('600S250-97'),2,'box');m=b.member(f'MEZZPOST-{x}-{y}',pid,'column',[x,y,0],[x,y,144],1,'S');b.connection(m['id']+':0','review_cfs_post',m['axis'][0],[m],[b.record('connections','conn-post-base')],parameters={'slab_thickness':6,'embedment':4})
     for y in (0,192,384):
         pid=b.pack(b.profile('1400S300-118' if y==192 else '1200S300-97'),2,'box')
         for x in range(0,720,144):

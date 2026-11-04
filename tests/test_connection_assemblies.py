@@ -46,6 +46,51 @@ def test_shear_plate_dimensions_cannot_be_parsed_as_bolt_diameters(pilots):
         assert any(w['connects']==['M1','P1'] for w in s['welds'])
 
 
+def test_simple_shear_plate_draws_the_actual_column_web_or_flange(pilots):
+    from steltic_openbim.pilots.model import unit,sub,dot
+    m=pilots['hr22'];members={v['id']:v for v in m['members']};scenes={s['id']:s for s in m['connection_assemblies']}
+    profiles={p['id']:p for p in m['profiles']};seen=set()
+    for c in m['connections']:
+        if c['detail_ref']['id']!='hr_simple_shear_plate':continue
+        beam=members[c['member_ids'][0]];column=next(members[mid] for mid in c['member_ids'] if members[mid]['kind']=='column')
+        weak=abs(dot(unit(sub(*beam['axis'][::-1])),column['local_y']))>.7;seen.add(weak)
+        scene=scenes[c['assembly_id']];parts={q['id']:q for q in scene['parts']};dim=profiles[column['profile_id']]['dimensions']
+        assert parts['M1']['member']['local_y']==([1,0,0] if weak else [0,1,0])
+        assert parts['M2']['member']['axis'][0][0]==pytest.approx((dim['tw'] if weak else dim['d'])/2+1.25)
+    assert seen=={True,False}
+
+
+def test_pilot_kicker_bolts_cross_the_angle_leg_and_gusset_and_welds_reach_hosts(pilots):
+    from shapely.geometry import Point,Polygon
+    from shapely.ops import unary_union
+    from steltic_openbim.pilots.geometry import strips
+    from steltic_openbim.pilots.model import unit,sub,dot,cross,add,mul
+    m=pilots['hr22'];profiles={p['id']:p for p in m['profiles']}
+    checked=0
+    for scene in m['connection_assemblies']:
+        if scene['family']!='hr_required_bottom_flange_brace':continue
+        parts={p['id']:p for p in scene['parts']};checked+=1
+        def section_point(member,position):
+            u=unit(sub(*member['axis'][::-1]));delta=sub(position,member['axis'][0]);station=dot(delta,u)
+            assert -1e-5<=station<=sum(x*x for x in sub(*member['axis'][::-1]))**.5+1e-5
+            yz=(dot(delta,member['local_y']),dot(delta,cross(u,member['local_y'])))
+            return unary_union([Polygon(poly) for poly in strips(profiles[member['profile_id']],profiles)]),Point(yz)
+        for fastener in scene['fasteners']:
+            plate=parts[next(k for k in fastener['connects'] if k.startswith('TAB'))]
+            normal=fastener['axis'];u=unit(sub(plate['polygon'][1],plate['polygon'][0]));v=cross(normal,u)
+            poly=Polygon([(dot(sub(q,plate['polygon'][0]),u),dot(sub(q,plate['polygon'][0]),v)) for q in plate['polygon']])
+            for q in fastener['points']:
+                section,position=section_point(parts['KICKER']['member'],add(q,mul(normal,.5)))
+                assert section.covers(position),'Bolt misses the physical angle leg'
+                assert poly.covers(Point(dot(sub(q,plate['polygon'][0]),u),dot(sub(q,plate['polygon'][0]),v)))
+        for weld in scene['welds']:
+            host=parts[weld['connects'][0]]['member']
+            for position in (weld['a'],weld['b']):
+                section,point=section_point(host,position)
+                assert section.distance(point)<1e-6,'Gusset weld is detached from its actual host'
+    assert checked>1
+
+
 def test_saved_answers_do_not_resolve_new_completeness_findings():
     with zipfile.ZipFile(Path(__file__).resolve().parents[1]/'docs/stage3/pilots.zip') as z:
         package=json.loads(z.read('hr22/bim_package.json'))

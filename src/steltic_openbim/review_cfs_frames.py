@@ -185,6 +185,13 @@ def cold_storage(b,frames,span,rz,rec):
     for x in frange(0,span+.1,48):
         m=b.member(f'VEST-R-{x}','1000S250-97','rafter',[x,-144,168],[x,0,192],1,'A');b.ends(m,'review_cfs_beam_clip',[rec('endwall')],parameters={'count':2,'diameter':.5})
         s=b.member(f'VEST-S-{x}','600S200-68','stud',[x,-144,0],[x,-144,168],1,'A');b.ends(s,'cfs_stud')
+    # The 70 ft front wall is not a multiple of the 4 ft regular stud spacing.
+    # Its actual end-bay straps require both end posts, not a nearby substitute.
+    existing_stations={m['axis'][0][0] for m in b.members if m['id'].startswith('VEST-S-')}
+    for x in sorted({span-48,span}-existing_stations):
+        s=b.member(f'VEST-S-{x}','600S200-68','stud',[x,-144,0],[x,-144,168],1,'A',records=[rec('endwall')])
+        b.ends(s,'cfs_stud')
+    b.note('VEST-END-STUDS','A: vestibule end-bay chord stations include the front-wall corner and the point 4 ft from that corner, in addition to regular 4 ft studs. These actual members receive the source end-bay straps; no remote profile or nonexistent track substitutes for them.')
     for x in (0,span):
         m=b.member(f'VEST-RETURN-{x}','HSS4X4X3/16','girt',[x,-144,168],[x,0,192],1,'A');b.ends(m,'review_cfs_beam_clip',[rec('endwall')])
         for y in (-96,-48):

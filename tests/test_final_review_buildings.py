@@ -29,7 +29,9 @@ def test_strap_bays_are_not_lumped_and_rods_only_bound_continuous_wall_runs():
     scenes=prepare(m,p);strap=[s for s in scenes if s['family']=='review_cfs_strap']
     assert {r for s in strap for r in s['source_record_ids']} >= {f'connections/conn-strap-end-{w}x{mil}' for w,mil in [(3,54),(4,54),(5,54),(6,54),(6,68),(8,68)]}
     largest=next(s for s in strap if 'connections/conn-strap-end-8x68' in s['source_record_ids'])
-    assert {f['id']:f['count'] for f in largest['fasteners']}=={'FS':25,'FC':15,'FT':19}
+    assert sum(f['count'] for f in largest['fasteners'] if f['id']=='FS')==25
+    assert sum(f['count'] for f in largest['fasteners'] if f['id'].startswith('CHORD-S'))==15
+    assert sum(f['count'] for f in largest['fasteners'] if f['id'].startswith('TRACK-S'))==19
 
 def test_cfs_bearing_spans_and_stepped_hotel_roof():
     _,m=case('cfs1')
@@ -74,8 +76,9 @@ def test_tower_interface_changes_from_continuous_podium_to_clear_joint(key):
 
 def test_cellar_continuity_and_roof_damper_are_explicit_supplements():
     _,m=case('hr3')
-    cellar=[mm for mm in m['members'] if min(q[2] for q in mm['axis'])==-144]
+    cellar=[mm for mm in m['members'] if min(q[2]+mm['end_offsets'][i][2] for i,q in enumerate(mm['axis']))==-144]
     assert cellar and all(mm['basis']=='A' for mm in cellar)
+    assert all(min(q[2] for q in mm['axis'])==0 for mm in cellar)  # Analysis workline stays at grade.
     _,damper=case('hr26');beams=[mm for mm in damper['members'] if mm['id'].startswith('TMD-SUPPORT-')]
     assert len(beams)==2 and all(math.dist(*mm['axis'])==360 for mm in beams)
     assert abs(beams[0]['axis'][0][0]-beams[1]['axis'][0][0])==120

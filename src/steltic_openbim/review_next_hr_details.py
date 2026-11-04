@@ -2,7 +2,7 @@
 import math,re
 from .review_assemblies import effective,flat,rod,grid,add,sub,mul,unit,dot,cross,NUMBER,number,hull
 
-FAMILIES={'review_transfer_truss','review_transfer_slip','review_transfer_bearing','review_brace_crossing','review_column_cap','review_composite_studs','review_plan_angle','review_angle_crossing','review_equipment_foot','review_hr_gable_knee','review_hr_gable_ridge','review_rod_clevis','review_roof_step','review_diaphragm'}
+FAMILIES={'review_transfer_truss','review_transfer_slip','review_transfer_bearing','review_brace_crossing','review_column_cap','review_composite_studs','review_plan_angle','review_angle_crossing','review_equipment_foot','review_equipment_head','review_hr_gable_knee','review_hr_gable_ridge','review_rod_clevis','review_roof_step','review_diaphragm'}
 
 def draw(ctx):
     f=ctx.family
@@ -15,6 +15,7 @@ def draw(ctx):
     elif f=='review_plan_angle':plan_angle(ctx)
     elif f=='review_angle_crossing':angle_crossing(ctx)
     elif f=='review_equipment_foot':equipment_foot(ctx)
+    elif f=='review_equipment_head':equipment_head(ctx)
     elif f=='review_rod_clevis':clevis(ctx)
     elif f=='review_roof_step':roof_step(ctx)
     elif f=='review_diaphragm':diaphragm(ctx)
@@ -39,12 +40,9 @@ def transfer_truss(ctx):
     a.notes.append('S: transfer truss is not an SCBF brace. Double gussets at flange tips; chord 4 x 71 in, diagonal 4 x 76 in and support-column 4 x 42 in welds. A shared node outline and end cutbacks; source Whitmore widths and column stiffening remain required.')
 
 def roof_step(ctx):
-    a,p=ctx.a,ctx.p;cp=ctx.pid;cd=effective(p,cp);a.member('COLUMN',cp,[0,0,-42],[0,0,36])
-    for j,(z,sg) in enumerate(((0,-1),(24,1))):
-        bp=ctx.ms[j+1]['profile_id'];d=effective(p,bp);w=effective(p,bp,'width');face=sg*(cd/2+.25);seat='SEAT'+str(j);beam='EDGE'+str(j);st='ST'+str(j)
-        a.member(beam,bp,[face,0,z-d/2],[face+sg*32,0,z-d/2]);a.box(seat,[face-10 if sg<0 else face,-w/2-1,z-d-1],[10,w+2,1],'A','A 1 in seat, source stiffened bearing requirement')
-        a.polygon(st,[[face,-.375,z-d-1],[face+sg*9,-.375,z-d-1],[face,-.375,z-d-12]],.75,basis='A',description='A 3/4 in seat stiffener');a.weld('W'+seat,[face,-w/2,z-d],[face,w/2,z-d],[beam,seat],.25,basis='A');a.weld('W'+st,[face,0,z-d-12],[face,0,z-d-1],['COLUMN',st],.375,basis='A');a.weld('WS'+str(j),[face,0,z-d-1],[face+sg*9,0,z-d-1],[seat,st],.375,basis='A')
-    a.dim([0,0,0],[0,0,24],'Source 2 ft roof step');a.section_axis=2;a.section_at=-12;a.notes.append('S: continuous column at 6C/6D; separate link and gym edge members on stiffened seats. A: seat/stiffener dimensions, weld sizes and local fit; no diaphragm bridge is introduced between roof levels.')
+    from .review_hr_seats import step
+    return step(ctx)
+
 
 def diaphragm(ctx):
     a,p=ctx.a,ctx.p;transfer=ctx.params['transfer'];d=effective(p,ctx.pid);a.member('BEAM',ctx.pid,[0,0,-d/2],[216,0,-d/2]);a.box('SLAB',[0,-18,0],[216,36,6.25],'A','S 3 in deck + 3.25 in topping; A 36 in strip',kind='concrete')
@@ -57,11 +55,24 @@ def diaphragm(ctx):
     for j,y in enumerate((-spacing/2,spacing/2)):a.member('BAR-X'+str(j),rp,[0,y,4.5],[216,y,4.5],basis='S',description='S #4 at 12 in each way, 24 in laps' if transfer else 'S WWR 6x6-W4.0xW4.0; A local cover')
     for j,x in enumerate((96,96+spacing)):a.member('BAR-Y'+str(j),rp,[x,-18,5],[x,18,5],y=[1,0,0],basis='S')
     if transfer:a.member('LAP',rp,[96,spacing/2+.5,4.5],[120,spacing/2+.5,4.5],description='S #4 24 in lap, A local position');a.dim([96,0,6],[120,0,6],'Source lap')
+    for part in a.parts:
+        if part['id'].startswith(('BAR-X','BAR-Y')) or part['id']=='LAP':
+            part['representation_role']='assembly_component';part['material_category']='reinforcement'
+            part['description']+='; '+('S #4 reinforcement' if transfer else 'S welded wire reinforcement WWR')
+    if 'deck welded' in ctx.text.lower():
+        a.box('DECK',[0,-18,0],[216,36,.0359],'A','A 20 ga flat reference strip for construction-stage metal deck fastening; source composite deck requirement retained')
+        for j,x in enumerate(range(6,216,24)):
+            a.weld('DECK-W'+str(j),[x-.375,0,0],[x+.375,0,0],['DECK','BEAM'],.25,basis='A',
+                   description='A 3/4 in puddle-weld reference at 24 in; source construction-stage support attachment; deck supplier verification required')
+        a.notes.append('A: construction-stage deck attachment proposal uses 3/4 in puddle-weld references at 24 in on the actual support. Flat sheet is a reference strip, not a fabricated flute profile; supplier deck fastening review remains explicit.')
     a.interfaces.append(dict(id='BOND',kind='diaphragm_transfer',connects=['BEAM','STUDS','SLAB','BAR-X0','BAR-Y0'],basis='S',description='Source headed-stud fusion / reinforced slab bond; deck construction attachment remains specified'))
     a.dim([pitch/2,0,0],[pitch/2+pitch,0,0],'Source stud pitch');a.section_axis=0;a.section_at=pitch/2
     a.notes.append('S: typical braced-frame stud zones remain clear of gussets. Transfer detail repeats pairs at 12 in on the truss TOP chord / Grid C; Grid A/E collectors use 38 studs over 30 ft. No studs connect the lower truss chord at Level 2. A: shown cover, stud height/head and local pattern origin.')
 
 def crossing(ctx):
+    if ctx.params.get('crossing'):
+        from .review_crossings import draw
+        return draw(ctx)
     a,p=ctx.a,ctx.p;pid=ctx.pid;d=effective(p,pid);t=ctx.n(r'slotted on two opposite walls for a '+NUMBER+r' in',.5);width=ctx.n(r'gusset '+NUMBER+r' in wide',40)
     angle=math.atan2(abs(ctx.ms[0]['axis'][1][2]-ctx.ms[0]['axis'][0][2]),math.dist(ctx.ms[0]['axis'][0][:2],ctx.ms[0]['axis'][1][:2]));v=[math.cos(angle),0,math.sin(angle)];u=[-v[0],0,v[2]]
     a.member('CONT',pid,mul(v,-30),mul(v,30),description='Source continuous X diagonal; local slot for crossing gusset')
@@ -88,7 +99,7 @@ def cap(ctx):
     a,p,pid=ctx.a,ctx.p,ctx.pid;d=effective(p,pid);w=effective(p,pid,'width');t=.75;match=re.search(r'PL '+NUMBER+r' x '+NUMBER+r' x '+NUMBER+r' in (?:closure|cap)',ctx.text)
     if match:t,bx,by=map(number,match.groups())
     else:bx,by=d+2,w+2
-    a.member('COLUMN',pid,[0,0,-30],[0,0,0]);cap_pid=flat(p,bx,t);a.member('CAP',cap_pid,[0,-by/2,t/2],[0,by/2,t/2],y=[-1,0,0],basis='S' if match else 'A',description='Column closure / cap plate');a.weld('WC',[-d/2,-w/2,0],[d/2,-w/2,0],['COLUMN','CAP'],.25 if ctx.params.get('bearing_girder') else .3125,description='Source continuous cap perimeter weld')
+    a.member('COLUMN',pid,[0,0,-30],[0,0,0]);cap_pid=flat(p,bx,t);a.member('CAP',cap_pid,[0,-by/2,t/2],[0,by/2,t/2],y=[-1,0,0],basis='S' if match else 'A',representation_role='assembly_component',description='Column closure / cap plate');a.weld('WC',[-d/2,-w/2,0],[d/2,-w/2,0],['COLUMN','CAP'],.25 if ctx.params.get('bearing_girder') else .3125,description='Source continuous cap perimeter weld')
     if ctx.params.get('bearing_girder'):
         bp=ctx.ms[1]['profile_id'];bd=effective(p,bp);bt=p[bp]['dimensions']['tf'];a.member('GIRDER',bp,[-24,0,t+bd/2],[24,0,t+bd/2]);a.fastener('BG',[[0,y,t+bt] for y in (-2,2)],[0,0,-1],.75,bt+t,['GIRDER','CAP'],'S two 3/4 in A325 bearing bolts; A gauge');a.interfaces.append(dict(id='BEARING',kind='bearing',connects=['GIRDER','CAP'],basis='S',description='Source girder flange bearing on cap'))
     if ctx.params.get('stiffened'):
@@ -131,6 +142,9 @@ def slip(ctx):
     ctx.a.interfaces.append(dict(id='SLIP',kind='horizontal_slotted_connection',connects=['M2','P1'],travel_in=2,basis='A',description='Source axial release; A travel and slot dimensions'))
 
 def plan_angle(ctx):
+    if ctx.params.get('physical_plan_brace'):
+        from .review_plan_bracing import draw
+        return draw(ctx)
     a,p,pid=ctx.a,ctx.p,ctx.pid;par=ctx.params;count=par.get('count',2);h=effective(p,pid);bp=ctx.select(('beam','girder','moment_beam','equipment_beam'),ctx.default_w());bd=effective(p,bp);width=12 if count==3 or 'vessel' in ctx.text.lower() else 10
     if par.get('joint')=='column_quadrant':
         cp=ctx.select(('column',),ctx.default_w());a.member('COLUMN',cp,[0,0,-30],[0,0,20])
@@ -153,9 +167,33 @@ def plan_angle(ctx):
     a.fastener('BOLTS',[[(-count+1)*1.5+j*3,0,0] for j in range(count)],[0,0,1],.75,.375+t,['PLATE','ANGLE'],f'S {count} x 3/4 in A325; 3 in pitch; A local datum');a.weld('WP',[-width/2,-4,0],[width/2,-4,0],['SUPPORT','PLATE'],.25,description='Source plate perimeter weld / joint-gusset weld');a.front_axes=(0,1);a.section_axis=0;a.section_at=0;a.dim([-width/2,-4,0],[width/2,-4,0],basis='A')
 
 def equipment_foot(ctx):
-    a,p=ctx.a,ctx.p;bp=ctx.ms[-1]['profile_id'];d=effective(p,bp);leg=ctx.pid;a.member('BEAM',bp,[-22,0,-d/2],[22,0,-d/2]);a.box('FOOT',[-6,-6,0],[12,12,.75],'A','Fictional supplier base plate');a.member('LEG',leg,[0,0,.75],[0,0,24],basis='A');a.fastener('BOLTS',[[x,y,-p[bp]['dimensions'].get('tf',.5)] for x in (-4,4) for y in (-3,3)],[0,0,1],.75,.75+p[bp]['dimensions'].get('tf',.5),['FOOT','BEAM'],'A 4 x 3/4 in A325 supplier attachment','A');a.weld('WL',[-2,-2,.75],[2,-2,.75],['LEG','FOOT'],.25,basis='A');a.dim([-6,0,0],[6,0,0],basis='A');a.notes.append('A supplier geometry and attachments. Source vessel/skid/pump reactions and delegated supplier checks remain unchanged.')
+    a,p=ctx.a,ctx.p;bp=ctx.ms[-1]['profile_id'];d=effective(p,bp);leg=ctx.pid
+    a.member('BEAM',bp,[-22,0,-d/2],[22,0,-d/2]);a.box('FOOT',[-6,-6,0],[12,12,.75],'A','Fictional supplier base plate')
+    a.member('LEG',leg,[0,0,.75],[0,0,24],basis='A')
+    half_gauge=min(3,effective(p,bp,'width')/2-1);tf=p[bp]['dimensions'].get('tf',.5)
+    if half_gauge<=.75:raise ValueError('Supplier foot needs a wider actual flange or a different attachment proposal')
+    a.fastener('BOLTS',[[x,y,-tf] for x in (-4,4) for y in (-half_gauge,half_gauge)],[0,0,1],.75,.75+tf,['FOOT','BEAM'],
+        'A four 3/4 in A325 supplier bolts; actual flange gauge and at least 1 in flange edge distance','A')
+    lx=effective(p,leg)/2;ly=effective(p,leg,'width')/2
+    corners=[[-lx,-ly,.75],[lx,-ly,.75],[lx,ly,.75],[-lx,ly,.75]]
+    for i,(v,w) in enumerate(zip(corners,corners[1:]+corners[:1])):a.weld('WL'+str(i),v,w,['LEG','FOOT'],.25,basis='A',description='A supplier leg perimeter fillet to its foot plate')
+    a.dim([-6,0,0],[6,0,0],basis='A');a.notes.append('A supplier geometry and attachments. Source vessel/skid/pump reactions and delegated supplier checks remain unchanged.')
+
+
+def equipment_head(ctx):
+    a,p=ctx.a,ctx.p;rail=ctx.ms[1];side=ctx.params['rail_side'];depth=effective(p,rail['profile_id']);t=p[rail['profile_id']]['dimensions']['t']
+    a.member('LEG',ctx.pid,[0,0,-24],[0,0,0],basis='A')
+    a.member('RAIL',rail['profile_id'],[min(0,side*24),0,depth/2+.5],[max(0,side*24),0,depth/2+.5],basis='A')
+    a.box('CAP',[-3,-3,0],[6,6,.5],'A','A supplier leg cap plate')
+    a.fastener('BOLTS',[[side,yy,.5+t] for yy in (-1.25,1.25)],[0,0,-1],.5,.5+t,['RAIL','CAP'],'A two 1/2 in supplier rail-to-cap bolts; access holes and capacity to verify',basis='A')
+    for i,(v,w) in enumerate((([-2,-2,0],[2,-2,0]),([2,-2,0],[2,2,0]),([2,2,0],[-2,2,0]),([-2,2,0],[-2,-2,0]))):a.weld('W'+str(i),v,w,['LEG','CAP'],.25,basis='A',description='A leg-to-cap perimeter weld')
+    a.section_axis=2;a.section_at=.5+t/2
+    a.notes.append('Explicit fictional supplier base-frame rail and leg interface. Damper mass/reactions retain their source design; supplier dynamics, travel and attachment capacity remain delegated.')
 
 def angle_crossing(ctx):
+    if ctx.params.get('physical_plan_brace'):
+        from .review_plan_bracing import draw
+        return draw(ctx)
     a,p,pid=ctx.a,ctx.p,ctx.pid;t=p[pid]['dimensions']['t'];h=effective(p,pid)
     a.member('A1',pid,[-20,0,0],[20,0,0],y=[0,1,0]);a.member('A2',pid,[0,-20,t],[0,20,t],y=[-1,0,0]);a.fastener('B1',[[0,0,0]],[0,0,1],.75,2*t,['A1','A2'],'S one 3/4 in A325 crossing bolt');a.front_axes=(0,1);a.section_axis=0;a.section_at=0
     a.notes.append('S: horizontal-truss crossing bolt. A: angles occupy adjacent flange planes; flange offsets and local packer fit are coordination geometry. Grating is cut clear and does not act as a diaphragm.')
