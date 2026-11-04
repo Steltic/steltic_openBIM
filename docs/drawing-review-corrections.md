@@ -269,9 +269,13 @@ and 1.5 in deck depth. The accepted stair voids have explicit, linked boundaries
 on both layer datums, preserving their original plan locations. Source material,
 bar-count and diameter selections remain separate from accepted fictional set-out.
 
-Validation: HR BIM/physical-input suite 205 passed, 2 skipped; CFS 197 passed,
+Validation: final HR BIM/physical-input suite 212 passed, 2 skipped; CFS 204 passed,
 3 skipped; openBIM affected contract/IFC/drawing/API suite 230 passed. A further
 19 focused drawing, concrete-layer/opening and bond-IFC checks passed after the
 layer update. The native bond reference sheet was rendered and visually checked.
+The actual CFS4 model passed 1,886 variant and 16,016 occurrence fits. Whole-bar
+bond endpoint integration additionally passed 49 bond, joint-disposition and IFC
+tests: the shared assembly must cover the exact bound bar end, not a nearby
+member, shortened extract, lap-only interface or branch attachment.
 Whole-building CFS4 completeness remains subject to replay and its remaining
 diaphragm/component requirements.
