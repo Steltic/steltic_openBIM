@@ -25,6 +25,22 @@ def source_frame():
     return p
 
 
+def test_bond_detail_draws_its_declared_lap_without_an_invented_plate(tmp_path):
+    from test_bim_reinforcement_bonds import fixture
+    from steltic_openbim.physical_pdf import PhysicalSheets,drawing_model,detail
+    p=source_frame();p['physical'].update(fixture())
+    for member in p['physical']['members']:member['end_offsets']=[[0,0,0],[0,0,0]]
+    model=drawing_model(p)
+    state=dict(revision=1,source_model_sha256=fingerprint(p),drawing_status='provisional',requests=[])
+    sheet=PhysicalSheets(p,state,tmp_path,model)
+    detail(sheet,model['details'][0]);sheet.c.save()
+    text=PdfReader(tmp_path/'drawings.pdf').pages[0].extract_text()
+    assert 'Reinforcement bond' in text and 'Concrete host: floor' in text
+    assert 'No additional hardware' in text and 'Declared contact lap: 25' in text
+    assert 'No located part geometry supplied' not in text
+    assert any(d['value_in']==25 and 'bond extent' in d.get('reference','') for d in sheet.dimensions)
+
+
 @pytest.mark.parametrize('module',['HR','CFS'])
 def test_declared_model_has_grids_sections_marks_and_only_source_connection_parts(tmp_path,module):
     p = source_frame()

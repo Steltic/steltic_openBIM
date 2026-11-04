@@ -93,3 +93,26 @@ def test_embedded_bar_ends_have_their_actual_host_bond_disposition(actual):
     assert host['representation_role']=='context_only'
     assert c['parameters']['host_panel_id'] in host['description']
     assert 'capacity unverified' in scene['interfaces'][0]['description']
+
+
+def test_actual_concrete_host_excludes_the_source_deck_depth(actual):
+    m,p=actual
+    floors=[v for v in m['panels'] if v['kind']=='floor']
+    assert len(floors)==3
+    for floor in floors:
+        assert floor['thickness_in']==2.5
+        assert floor['thickness_direction']=='negative_global_z'
+        assert floor['material_id']=='CFS4-LWC'
+        deck=next(v for v in m['panels'] if v['kind']=='deck' and v['floor_stack_id']==floor['floor_stack_id'])
+        assert deck['thickness_in']==1.5 and deck['material_id']=='CFS4-DECK'
+        assert deck['vertices']==[[q[0],q[1],q[2]-2.5] for q in floor['vertices']]
+        assert deck['openings']==[oid+':DECK' for oid in floor['openings']]
+    from steltic_openbim.ifc_export import opening_boundary
+    from steltic_openbim.panel_geometry import panel_rings
+    openings={o['id']:dict(o,vertices=opening_boundary(o)) for o in m['openings']}
+    for panel in (v for v in m['panels'] if v['kind'] in ('floor','deck')):
+        related=[openings[oid] for oid in panel['openings']]
+        assert all(o['host_id']==panel['id'] for o in related)
+        rings,applied,findings=panel_rings(panel,related)
+        assert set(applied)==set(panel['openings']) and not findings
+        assert sum(len(r['holes']) for r in rings)==2
