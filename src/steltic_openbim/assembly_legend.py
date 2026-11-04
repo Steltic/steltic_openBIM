@@ -30,6 +30,11 @@ def entries(scene):
         rows.append(dict(label=label,basis=basis,note=False,text=spec+' | '+description+' | '+joined(connects)+(f' | {len(welds)} weld lines' if len(welds)>1 else '')))
     rows.extend(dict(label=i['id'],basis=i['basis'],note=False,text=i['description']+' | '+joined(i['connects'])) for i in scene.get('interfaces',[]))
     rows.extend(dict(label='',basis='',note=True,text=t) for t in scene['notes'])
+    for row in rows:
+        basis=str(row['basis'])
+        if basis not in ('S','A','S/A',''):
+            row['text']+=' | Basis: '+basis
+            row['basis']='S/A' if 'S' in basis and 'A' in basis else 'S' if basis.startswith('S') else 'A'
     return rows
 
 

@@ -139,7 +139,7 @@ def draw(ctx):
     a.section_axis = 1
     a.section_at = sy * 35
     a.dim([sx * 2, sy * 12, 0], [sx * 2, sy * (12 + tail), 0],
-          '66 in source straight lap; A corner placement', basis='S length / A placement')
+          '66 in lap', basis='S/A')
     a.notes.extend([
         'S: source bar counts and 66 in straight Class B lap. A: corner geometry, bend and vertical layering. '
         'Six corner bars lap the six X bars. First three tails also lap the three Y bars; the remaining three develop into the slab. '
