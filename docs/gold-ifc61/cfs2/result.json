@@ -1,0 +1,106 @@
+{
+  "case": "cfs2",
+  "module": "CFS",
+  "title": "Strap-braced walls",
+  "status": "passed",
+  "scope": "Gold HR/CFS model-only replay with saved physical supplements; IFC import/export transport.",
+  "native_replay": true,
+  "source_files_unchanged": true,
+  "saved_designs_match": true,
+  "llm_calls": 0,
+  "redesign": false,
+  "drawings": false,
+  "source_replay_binding_matches": true,
+  "schema_errors": [],
+  "source_coverage": {
+    "members": 81338,
+    "panels": 6,
+    "openings": 278,
+    "connection_references": 77276,
+    "connection_parts": 0,
+    "design_records": 386,
+    "member_surfaces": 81338,
+    "reference_axes": 0
+  },
+  "entities_compared": 1066879,
+  "entity_classes": {
+    "IFCPROJECT": 1,
+    "IFCSIUNIT": 1,
+    "IFCUNITASSIGNMENT": 1,
+    "IFCCARTESIANPOINT": 83037,
+    "IFCDIRECTION": 163248,
+    "IFCAXIS2PLACEMENT3D": 81625,
+    "IFCGEOMETRICREPRESENTATIONCONTEXT": 1,
+    "IFCGEOMETRICREPRESENTATIONSUBCONTEXT": 1,
+    "IFCSITE": 1,
+    "IFCBUILDING": 1,
+    "IFCRELAGGREGATES": 3,
+    "IFCBUILDINGSTOREY": 7,
+    "IFCGRID": 1,
+    "IFCPOLYLINE": 289,
+    "IFCGRIDAXIS": 11,
+    "IFCRELCONTAINEDINSPATIALSTRUCTURE": 7,
+    "IFCLOCALPLACEMENT": 162967,
+    "IFCPROPERTYSET": 81625,
+    "IFCRELDEFINESBYPROPERTIES": 81625,
+    "IFCPROPERTYSINGLEVALUE": 82114,
+    "IFCCARTESIANTRANSFORMATIONOPERATOR3D": 1,
+    "IFCMEMBER": 72668,
+    "IFCCARTESIANPOINTLIST3D": 115,
+    "IFCINDEXEDPOLYGONALFACE": 3361,
+    "IFCPOLYGONALFACESET": 115,
+    "IFCSHAPEREPRESENTATION": 81737,
+    "IFCREPRESENTATIONMAP": 115,
+    "IFCMAPPEDITEM": 81344,
+    "IFCPRODUCTDEFINITIONSHAPE": 81622,
+    "IFCMATERIAL": 1,
+    "IFCCOLUMN": 8052,
+    "IFCBEAM": 618,
+    "IFCSLAB": 6,
+    "IFCINDEXEDPOLYGONALFACEWITHVOIDS": 1,
+    "IFCANNOTATION": 278,
+    "IFCGEOMETRICCURVESET": 278,
+    "IFCRELASSOCIATESMATERIAL": 1
+  },
+  "original_entities_unchanged": true,
+  "added_review_entities": 9,
+  "products_compared": 81622,
+  "every_product_geometry_and_data_identical": true,
+  "review_counts": {
+    "source_products": 81622,
+    "selected": 81622,
+    "displayed": 81622,
+    "unrendered": 0,
+    "excluded_by_scope": 0,
+    "triangles": 4948500
+  },
+  "source_findings": [
+    {
+      "code": "missing_material",
+      "count": 6
+    },
+    {
+      "code": "coincident_geometry",
+      "count": 2112
+    }
+  ],
+  "returned_findings": [
+    {
+      "code": "missing_material",
+      "count": 6
+    },
+    {
+      "code": "coincident_geometry",
+      "count": 2112
+    }
+  ],
+  "source_sha256": "0aec152e8c265d7a0b26a7a7b9b2da02d1e0d7731837cfa5c31198b075caf2e6",
+  "returned_sha256": "54a790675332a7b35b63b5ea3f1ab5b16cf2125cda45b6b30783b8cad60f882b",
+  "source_export_seconds": 174.92203283309937,
+  "hub_seconds": 1412.77050614357,
+  "limitations": [
+    "Existing fictional coordination supplements are retained and attributed.",
+    "Source geometry/data findings remain visible; this is not a new structural design approval.",
+    "Connections without placed hardware retain complete design records and declared references; no placements are invented."
+  ]
+}

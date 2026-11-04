@@ -1,0 +1,98 @@
+{
+  "case": "hr12",
+  "module": "HR",
+  "title": "SMF",
+  "status": "passed",
+  "scope": "Gold HR/CFS model-only replay with saved physical supplements; IFC import/export transport.",
+  "native_replay": true,
+  "source_files_unchanged": true,
+  "saved_designs_match": true,
+  "llm_calls": 0,
+  "redesign": false,
+  "drawings": false,
+  "schema_errors": [],
+  "source_coverage": {
+    "members": 1816,
+    "panels": 270,
+    "openings": 28,
+    "connection_references": 3140,
+    "connection_parts": 0,
+    "design_records": 138,
+    "member_surfaces": 1816,
+    "reference_axes": 0
+  },
+  "entities_compared": 36328,
+  "entity_classes": {
+    "IFCPROJECT": 1,
+    "IFCSIUNIT": 1,
+    "IFCUNITASSIGNMENT": 1,
+    "IFCCARTESIANPOINT": 2285,
+    "IFCDIRECTION": 4232,
+    "IFCAXIS2PLACEMENT3D": 2117,
+    "IFCGEOMETRICREPRESENTATIONCONTEXT": 1,
+    "IFCGEOMETRICREPRESENTATIONSUBCONTEXT": 1,
+    "IFCSITE": 1,
+    "IFCBUILDING": 1,
+    "IFCRELAGGREGATES": 3,
+    "IFCBUILDINGSTOREY": 15,
+    "IFCGRID": 1,
+    "IFCPOLYLINE": 42,
+    "IFCGRIDAXIS": 14,
+    "IFCRELCONTAINEDINSPATIALSTRUCTURE": 15,
+    "IFCLOCALPLACEMENT": 4201,
+    "IFCPROPERTYSET": 2117,
+    "IFCRELDEFINESBYPROPERTIES": 2117,
+    "IFCPROPERTYSINGLEVALUE": 3400,
+    "IFCCARTESIANTRANSFORMATIONOPERATOR3D": 1,
+    "IFCCOLUMN": 404,
+    "IFCCARTESIANPOINTLIST3D": 62,
+    "IFCINDEXEDPOLYGONALFACE": 7052,
+    "IFCPOLYGONALFACESET": 62,
+    "IFCSHAPEREPRESENTATION": 2176,
+    "IFCREPRESENTATIONMAP": 62,
+    "IFCMAPPEDITEM": 2086,
+    "IFCPRODUCTDEFINITIONSHAPE": 2114,
+    "IFCMATERIAL": 2,
+    "IFCBEAM": 660,
+    "IFCMEMBER": 752,
+    "IFCSLAB": 270,
+    "IFCINDEXEDPOLYGONALFACEWITHVOIDS": 1,
+    "IFCANNOTATION": 28,
+    "IFCGEOMETRICCURVESET": 28,
+    "IFCRELASSOCIATESMATERIAL": 2
+  },
+  "original_entities_unchanged": true,
+  "added_review_entities": 9,
+  "products_compared": 2114,
+  "every_product_geometry_and_data_identical": true,
+  "review_counts": {
+    "source_products": 2114,
+    "selected": 2114,
+    "displayed": 2114,
+    "unrendered": 0,
+    "excluded_by_scope": 0,
+    "triangles": 219723
+  },
+  "source_findings": [
+    {
+      "code": "missing_material",
+      "count": 270
+    }
+  ],
+  "returned_findings": [
+    {
+      "code": "missing_material",
+      "count": 270
+    }
+  ],
+  "source_sha256": "71bf904c266090fde14df8a105385d73b8e278215634d5a7d9d58512154e7ac1",
+  "returned_sha256": "4976ca6df344ca163e6c8794f6a4c7824ba0e315bb89e7d5c0538bedeab3cc11",
+  "source_export_seconds": 5.182547092437744,
+  "hub_seconds": 137.28229188919067,
+  "limitations": [
+    "Existing fictional coordination supplements are retained and attributed.",
+    "Source geometry/data findings remain visible; this is not a new structural design approval.",
+    "Connections without placed hardware retain complete design records and declared references; no placements are invented."
+  ],
+  "source_replay_binding_matches": true
+}

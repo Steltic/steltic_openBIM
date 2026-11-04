@@ -1,0 +1,107 @@
+{
+  "case": "cfs1",
+  "module": "CFS",
+  "title": "ShearWall",
+  "status": "passed",
+  "scope": "Gold HR/CFS model-only replay with saved physical supplements; IFC import/export transport.",
+  "native_replay": true,
+  "source_files_unchanged": true,
+  "saved_designs_match": true,
+  "llm_calls": 0,
+  "redesign": false,
+  "drawings": false,
+  "source_replay_binding_matches": true,
+  "schema_errors": [],
+  "source_coverage": {
+    "members": 9020,
+    "panels": 304,
+    "openings": 132,
+    "connection_references": 16800,
+    "connection_parts": 0,
+    "design_records": 258,
+    "member_surfaces": 9020,
+    "reference_axes": 0
+  },
+  "entities_compared": 127979,
+  "entity_classes": {
+    "IFCPROJECT": 1,
+    "IFCSIUNIT": 1,
+    "IFCUNITASSIGNMENT": 1,
+    "IFCCARTESIANPOINT": 10139,
+    "IFCDIRECTION": 18916,
+    "IFCAXIS2PLACEMENT3D": 9459,
+    "IFCGEOMETRICREPRESENTATIONCONTEXT": 1,
+    "IFCGEOMETRICREPRESENTATIONSUBCONTEXT": 1,
+    "IFCSITE": 1,
+    "IFCBUILDING": 1,
+    "IFCRELAGGREGATES": 3,
+    "IFCBUILDINGSTOREY": 5,
+    "IFCGRID": 1,
+    "IFCPOLYLINE": 142,
+    "IFCGRIDAXIS": 10,
+    "IFCRELCONTAINEDINSPATIALSTRUCTURE": 5,
+    "IFCLOCALPLACEMENT": 18781,
+    "IFCPROPERTYSET": 9459,
+    "IFCRELDEFINESBYPROPERTIES": 9459,
+    "IFCPROPERTYSINGLEVALUE": 9834,
+    "IFCCARTESIANTRANSFORMATIONOPERATOR3D": 1,
+    "IFCMEMBER": 2384,
+    "IFCCARTESIANPOINTLIST3D": 102,
+    "IFCINDEXEDPOLYGONALFACE": 3523,
+    "IFCPOLYGONALFACESET": 102,
+    "IFCSHAPEREPRESENTATION": 9558,
+    "IFCREPRESENTATIONMAP": 102,
+    "IFCMAPPEDITEM": 9324,
+    "IFCPRODUCTDEFINITIONSHAPE": 9456,
+    "IFCMATERIAL": 1,
+    "IFCCOLUMN": 4216,
+    "IFCBEAM": 2420,
+    "IFCBUILDINGELEMENTPROXY": 300,
+    "IFCSLAB": 4,
+    "IFCINDEXEDPOLYGONALFACEWITHVOIDS": 1,
+    "IFCANNOTATION": 132,
+    "IFCGEOMETRICCURVESET": 132,
+    "IFCRELASSOCIATESMATERIAL": 1
+  },
+  "original_entities_unchanged": true,
+  "added_review_entities": 9,
+  "products_compared": 9456,
+  "every_product_geometry_and_data_identical": true,
+  "review_counts": {
+    "source_products": 9456,
+    "selected": 9456,
+    "displayed": 9456,
+    "unrendered": 0,
+    "excluded_by_scope": 0,
+    "triangles": 598184
+  },
+  "source_findings": [
+    {
+      "code": "missing_material",
+      "count": 4
+    },
+    {
+      "code": "declared_physical_constituent_overlap",
+      "count": 10
+    }
+  ],
+  "returned_findings": [
+    {
+      "code": "missing_material",
+      "count": 4
+    },
+    {
+      "code": "declared_physical_constituent_overlap",
+      "count": 10
+    }
+  ],
+  "source_sha256": "bfb7c2d0a07e53121aa1e774fd1f477111b23c8a3890a65239c8ca088dd13ea0",
+  "returned_sha256": "30d761eec1566387529df26a083edf9d01e5869884a4eb5bdc5cd77f0c89d5cf",
+  "source_export_seconds": 17.01365900039673,
+  "hub_seconds": 179.6295530796051,
+  "limitations": [
+    "Existing fictional coordination supplements are retained and attributed.",
+    "Source geometry/data findings remain visible; this is not a new structural design approval.",
+    "Connections without placed hardware retain complete design records and declared references; no placements are invented."
+  ]
+}

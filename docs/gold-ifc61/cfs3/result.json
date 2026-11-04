@@ -1,0 +1,114 @@
+{
+  "case": "cfs3",
+  "module": "CFS",
+  "title": "Steel-sheet walls",
+  "status": "passed",
+  "scope": "Gold HR/CFS model-only replay with saved physical supplements; IFC import/export transport.",
+  "native_replay": true,
+  "source_files_unchanged": true,
+  "saved_designs_match": true,
+  "llm_calls": 0,
+  "redesign": false,
+  "drawings": false,
+  "source_replay_binding_matches": true,
+  "schema_errors": [],
+  "source_coverage": {
+    "members": 76484,
+    "panels": 909,
+    "openings": 742,
+    "connection_references": 74328,
+    "connection_parts": 0,
+    "design_records": 553,
+    "member_surfaces": 76484,
+    "reference_axes": 0
+  },
+  "entities_compared": 1024081,
+  "entity_classes": {
+    "IFCPROJECT": 1,
+    "IFCSIUNIT": 1,
+    "IFCUNITASSIGNMENT": 1,
+    "IFCCARTESIANPOINT": 81874,
+    "IFCDIRECTION": 156274,
+    "IFCAXIS2PLACEMENT3D": 78138,
+    "IFCGEOMETRICREPRESENTATIONCONTEXT": 1,
+    "IFCGEOMETRICREPRESENTATIONSUBCONTEXT": 1,
+    "IFCSITE": 1,
+    "IFCBUILDING": 1,
+    "IFCRELAGGREGATES": 3,
+    "IFCBUILDINGSTOREY": 9,
+    "IFCGRID": 1,
+    "IFCPOLYLINE": 755,
+    "IFCGRIDAXIS": 13,
+    "IFCRELCONTAINEDINSPATIALSTRUCTURE": 10,
+    "IFCLOCALPLACEMENT": 155529,
+    "IFCPROPERTYSET": 78138,
+    "IFCRELDEFINESBYPROPERTIES": 78138,
+    "IFCPROPERTYSINGLEVALUE": 78776,
+    "IFCCARTESIANTRANSFORMATIONOPERATOR3D": 1,
+    "IFCMEMBER": 67176,
+    "IFCCARTESIANPOINTLIST3D": 91,
+    "IFCINDEXEDPOLYGONALFACE": 3508,
+    "IFCPOLYGONALFACESET": 91,
+    "IFCSHAPEREPRESENTATION": 78226,
+    "IFCREPRESENTATIONMAP": 91,
+    "IFCMAPPEDITEM": 77393,
+    "IFCPRODUCTDEFINITIONSHAPE": 78135,
+    "IFCMATERIAL": 1,
+    "IFCCOLUMN": 9308,
+    "IFCBUILDINGELEMENTPROXY": 901,
+    "IFCSLAB": 8,
+    "IFCINDEXEDPOLYGONALFACEWITHVOIDS": 1,
+    "IFCANNOTATION": 742,
+    "IFCGEOMETRICCURVESET": 742,
+    "IFCRELASSOCIATESMATERIAL": 1
+  },
+  "original_entities_unchanged": true,
+  "added_review_entities": 9,
+  "products_compared": 78135,
+  "every_product_geometry_and_data_identical": true,
+  "review_counts": {
+    "source_products": 78135,
+    "selected": 78135,
+    "displayed": 78135,
+    "unrendered": 0,
+    "excluded_by_scope": 0,
+    "triangles": 4910814
+  },
+  "source_findings": [
+    {
+      "code": "missing_material",
+      "count": 8
+    },
+    {
+      "code": "declared_physical_constituent_overlap",
+      "count": 8
+    },
+    {
+      "code": "coincident_geometry",
+      "count": 1176
+    }
+  ],
+  "returned_findings": [
+    {
+      "code": "missing_material",
+      "count": 8
+    },
+    {
+      "code": "declared_physical_constituent_overlap",
+      "count": 8
+    },
+    {
+      "code": "coincident_geometry",
+      "count": 1176
+    }
+  ],
+  "source_sha256": "82e1f14249a23277f0664be711bc5526e274072d3927602abdc4bc6be0f12995",
+  "returned_sha256": "ba1038f25583048e909e7e1d08bd7d75ac1ee8ff5e4581c21e6ca61b635daf10",
+  "source_export_seconds": 166.25839352607727,
+  "hub_seconds": 1490.9308233261108,
+  "limitations": [
+    "Existing fictional coordination supplements are retained and attributed.",
+    "Source geometry/data findings remain visible; this is not a new structural design approval.",
+    "Connections without placed hardware retain complete design records and declared references; no placements are invented."
+  ]
+}

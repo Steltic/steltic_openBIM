@@ -4,6 +4,8 @@ Drawing and IFC module for Steltic Hub: dimensioned engineering design drawings,
 
 ## Current status
 
+The [61-building gold IFC round-trip sweep](docs/gold-ifc61/README.md) passed for all 36 HR and 25 CFS buildings using local engine replay and saved designs, with no LLM calls, redesign or drawing runs. Every original IFC entity and every imported product’s geometry/data survived the exchange.
+
 Version 0.8.30 batches IFC geometry with a bounded native iterator while retaining every product's placement, opening cuts and fallback checks. Worker timeouts now terminate the complete owned process tree on Windows as well as other platforms. The existing model-size, triangle and time limits remain unchanged.
 
 Version 0.8.29 preserves all saved HR/CFS design records in IFC, including anchorage and schedules without modelled solids, and retains complete connection-reference parameters. The import screen now states the existing 100,000-product processing limit correctly. [IFC workflow and limits](docs/ifc-workflow.md).

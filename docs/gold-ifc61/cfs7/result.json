@@ -1,0 +1,98 @@
+{
+  "case": "cfs7",
+  "module": "CFS",
+  "title": "Steel-sheet walls",
+  "status": "passed",
+  "scope": "Gold HR/CFS model-only replay with saved physical supplements; IFC import/export transport.",
+  "native_replay": true,
+  "source_files_unchanged": true,
+  "saved_designs_match": true,
+  "llm_calls": 0,
+  "redesign": false,
+  "drawings": false,
+  "source_replay_binding_matches": true,
+  "schema_errors": [],
+  "source_coverage": {
+    "members": 30372,
+    "panels": 574,
+    "openings": 318,
+    "connection_references": 56016,
+    "connection_parts": 0,
+    "design_records": 860,
+    "member_surfaces": 30372,
+    "reference_axes": 0
+  },
+  "entities_compared": 413747,
+  "entity_classes": {
+    "IFCPROJECT": 1,
+    "IFCSIUNIT": 1,
+    "IFCUNITASSIGNMENT": 1,
+    "IFCCARTESIANPOINT": 32923,
+    "IFCDIRECTION": 62532,
+    "IFCAXIS2PLACEMENT3D": 31267,
+    "IFCGEOMETRICREPRESENTATIONCONTEXT": 1,
+    "IFCGEOMETRICREPRESENTATIONSUBCONTEXT": 1,
+    "IFCSITE": 1,
+    "IFCBUILDING": 1,
+    "IFCRELAGGREGATES": 3,
+    "IFCBUILDINGSTOREY": 7,
+    "IFCGRID": 1,
+    "IFCPOLYLINE": 351,
+    "IFCGRIDAXIS": 33,
+    "IFCRELCONTAINEDINSPATIALSTRUCTURE": 7,
+    "IFCLOCALPLACEMENT": 62211,
+    "IFCPROPERTYSET": 31267,
+    "IFCRELDEFINESBYPROPERTIES": 31267,
+    "IFCPROPERTYSINGLEVALUE": 32259,
+    "IFCCARTESIANTRANSFORMATIONOPERATOR3D": 1,
+    "IFCMEMBER": 6672,
+    "IFCCARTESIANPOINTLIST3D": 127,
+    "IFCINDEXEDPOLYGONALFACE": 4045,
+    "IFCPOLYGONALFACESET": 127,
+    "IFCSHAPEREPRESENTATION": 31391,
+    "IFCREPRESENTATIONMAP": 127,
+    "IFCMAPPEDITEM": 30946,
+    "IFCPRODUCTDEFINITIONSHAPE": 31264,
+    "IFCMATERIAL": 1,
+    "IFCCOLUMN": 14724,
+    "IFCBEAM": 8976,
+    "IFCBUILDINGELEMENTPROXY": 568,
+    "IFCSLAB": 6,
+    "IFCANNOTATION": 318,
+    "IFCGEOMETRICCURVESET": 318,
+    "IFCRELASSOCIATESMATERIAL": 1
+  },
+  "original_entities_unchanged": true,
+  "added_review_entities": 9,
+  "products_compared": 31264,
+  "every_product_geometry_and_data_identical": true,
+  "review_counts": {
+    "source_products": 31264,
+    "selected": 31264,
+    "displayed": 31264,
+    "unrendered": 0,
+    "excluded_by_scope": 0,
+    "triangles": 1951076
+  },
+  "source_findings": [
+    {
+      "code": "missing_material",
+      "count": 6
+    }
+  ],
+  "returned_findings": [
+    {
+      "code": "missing_material",
+      "count": 6
+    }
+  ],
+  "source_sha256": "7304ae6443cf85cc4c0ef036b4285e3d122755e6ef29f736a625aa82c005ebfd",
+  "returned_sha256": "cca161917583769a92054779e3c06b9f185c53b034f78cd79afb80aa1659e8ab",
+  "source_export_seconds": 58.772478103637695,
+  "hub_seconds": 565.5110375881195,
+  "limitations": [
+    "Existing fictional coordination supplements are retained and attributed.",
+    "Source geometry/data findings remain visible; this is not a new structural design approval.",
+    "Connections without placed hardware retain complete design records and declared references; no placements are invented."
+  ]
+}

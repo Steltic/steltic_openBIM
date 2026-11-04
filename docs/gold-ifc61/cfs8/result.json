@@ -1,0 +1,109 @@
+{
+  "case": "cfs8",
+  "module": "CFS",
+  "title": "Strap walls / T plan",
+  "status": "passed",
+  "scope": "Gold HR/CFS model-only replay with saved physical supplements; IFC import/export transport.",
+  "native_replay": true,
+  "source_files_unchanged": true,
+  "saved_designs_match": true,
+  "llm_calls": 0,
+  "redesign": false,
+  "drawings": false,
+  "source_replay_binding_matches": true,
+  "schema_errors": [],
+  "source_coverage": {
+    "members": 14798,
+    "panels": 148,
+    "openings": 46,
+    "connection_references": 30190,
+    "connection_parts": 424,
+    "design_records": 228,
+    "member_surfaces": 14798,
+    "reference_axes": 0
+  },
+  "entities_compared": 216725,
+  "entity_classes": {
+    "IFCPROJECT": 1,
+    "IFCSIUNIT": 1,
+    "IFCUNITASSIGNMENT": 1,
+    "IFCCARTESIANPOINT": 15693,
+    "IFCDIRECTION": 30836,
+    "IFCAXIS2PLACEMENT3D": 15419,
+    "IFCGEOMETRICREPRESENTATIONCONTEXT": 1,
+    "IFCGEOMETRICREPRESENTATIONSUBCONTEXT": 1,
+    "IFCSITE": 1,
+    "IFCBUILDING": 1,
+    "IFCRELAGGREGATES": 3,
+    "IFCBUILDINGSTOREY": 6,
+    "IFCGRID": 1,
+    "IFCPOLYLINE": 68,
+    "IFCGRIDAXIS": 22,
+    "IFCRELCONTAINEDINSPATIALSTRUCTURE": 6,
+    "IFCLOCALPLACEMENT": 30787,
+    "IFCPROPERTYSET": 15419,
+    "IFCRELDEFINESBYPROPERTIES": 15419,
+    "IFCPROPERTYSINGLEVALUE": 16252,
+    "IFCCARTESIANTRANSFORMATIONOPERATOR3D": 1,
+    "IFCMEMBER": 9175,
+    "IFCCARTESIANPOINTLIST3D": 404,
+    "IFCINDEXEDPOLYGONALFACE": 13490,
+    "IFCPOLYGONALFACESET": 404,
+    "IFCSHAPEREPRESENTATION": 15820,
+    "IFCREPRESENTATIONMAP": 404,
+    "IFCMAPPEDITEM": 15370,
+    "IFCPRODUCTDEFINITIONSHAPE": 15416,
+    "IFCMATERIAL": 8,
+    "IFCCOLUMN": 3808,
+    "IFCBEAM": 1815,
+    "IFCWALL": 88,
+    "IFCSLAB": 53,
+    "IFCBUILDINGELEMENTPROXY": 7,
+    "IFCANNOTATION": 46,
+    "IFCGEOMETRICCURVESET": 46,
+    "IFCPLATE": 300,
+    "IFCMECHANICALFASTENER": 124,
+    "IFCRELASSOCIATESMATERIAL": 8
+  },
+  "original_entities_unchanged": true,
+  "added_review_entities": 9,
+  "products_compared": 15416,
+  "every_product_geometry_and_data_identical": true,
+  "review_counts": {
+    "source_products": 15416,
+    "selected": 15416,
+    "displayed": 15416,
+    "unrendered": 0,
+    "excluded_by_scope": 0,
+    "triangles": 934768
+  },
+  "source_findings": [
+    {
+      "code": "missing_storey",
+      "count": 424
+    },
+    {
+      "code": "declared_physical_constituent_overlap",
+      "count": 1
+    }
+  ],
+  "returned_findings": [
+    {
+      "code": "missing_storey",
+      "count": 424
+    },
+    {
+      "code": "declared_physical_constituent_overlap",
+      "count": 1
+    }
+  ],
+  "source_sha256": "92e9477ba2cb46a90b9187bea200f7e1dc02fcb00d19d53b3ff83300c752f5fb",
+  "returned_sha256": "81aa16e471c749087a896ce59eaaad32f28cdbd8ae8c17c63136a11b643f0b43",
+  "source_export_seconds": 34.381165504455566,
+  "hub_seconds": 309.91724824905396,
+  "limitations": [
+    "Existing fictional coordination supplements are retained and attributed.",
+    "Source geometry/data findings remain visible; this is not a new structural design approval.",
+    "Connections without placed hardware retain complete design records and declared references; no placements are invented."
+  ]
+}

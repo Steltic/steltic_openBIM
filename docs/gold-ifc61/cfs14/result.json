@@ -1,0 +1,107 @@
+{
+  "case": "cfs14",
+  "module": "CFS",
+  "title": "Strap X + WSP Y",
+  "status": "passed",
+  "scope": "Gold HR/CFS model-only replay with saved physical supplements; IFC import/export transport.",
+  "native_replay": true,
+  "source_files_unchanged": true,
+  "saved_designs_match": true,
+  "llm_calls": 0,
+  "redesign": false,
+  "drawings": false,
+  "source_replay_binding_matches": true,
+  "schema_errors": [],
+  "source_coverage": {
+    "members": 6912,
+    "panels": 64,
+    "openings": 40,
+    "connection_references": 10924,
+    "connection_parts": 0,
+    "design_records": 367,
+    "member_surfaces": 6912,
+    "reference_axes": 0
+  },
+  "entities_compared": 95933,
+  "entity_classes": {
+    "IFCPROJECT": 1,
+    "IFCSIUNIT": 1,
+    "IFCUNITASSIGNMENT": 1,
+    "IFCCARTESIANPOINT": 7233,
+    "IFCDIRECTION": 14036,
+    "IFCAXIS2PLACEMENT3D": 7019,
+    "IFCGEOMETRICREPRESENTATIONCONTEXT": 1,
+    "IFCGEOMETRICREPRESENTATIONSUBCONTEXT": 1,
+    "IFCSITE": 1,
+    "IFCBUILDING": 1,
+    "IFCRELAGGREGATES": 3,
+    "IFCBUILDINGSTOREY": 5,
+    "IFCGRID": 1,
+    "IFCPOLYLINE": 47,
+    "IFCGRIDAXIS": 7,
+    "IFCRELCONTAINEDINSPATIALSTRUCTURE": 5,
+    "IFCLOCALPLACEMENT": 13993,
+    "IFCPROPERTYSET": 7019,
+    "IFCRELDEFINESBYPROPERTIES": 7019,
+    "IFCPROPERTYSINGLEVALUE": 7358,
+    "IFCCARTESIANTRANSFORMATIONOPERATOR3D": 1,
+    "IFCMEMBER": 3131,
+    "IFCCARTESIANPOINTLIST3D": 115,
+    "IFCINDEXEDPOLYGONALFACE": 3652,
+    "IFCPOLYGONALFACESET": 115,
+    "IFCSHAPEREPRESENTATION": 7131,
+    "IFCREPRESENTATIONMAP": 115,
+    "IFCMAPPEDITEM": 6976,
+    "IFCPRODUCTDEFINITIONSHAPE": 7016,
+    "IFCMATERIAL": 1,
+    "IFCCOLUMN": 2571,
+    "IFCBEAM": 1210,
+    "IFCBUILDINGELEMENTPROXY": 60,
+    "IFCSLAB": 4,
+    "IFCINDEXEDPOLYGONALFACEWITHVOIDS": 2,
+    "IFCANNOTATION": 40,
+    "IFCGEOMETRICCURVESET": 40,
+    "IFCRELASSOCIATESMATERIAL": 1
+  },
+  "original_entities_unchanged": true,
+  "added_review_entities": 9,
+  "products_compared": 7016,
+  "every_product_geometry_and_data_identical": true,
+  "review_counts": {
+    "source_products": 7016,
+    "selected": 7016,
+    "displayed": 7016,
+    "unrendered": 0,
+    "excluded_by_scope": 0,
+    "triangles": 523460
+  },
+  "source_findings": [
+    {
+      "code": "missing_material",
+      "count": 4
+    },
+    {
+      "code": "declared_physical_constituent_overlap",
+      "count": 4
+    }
+  ],
+  "returned_findings": [
+    {
+      "code": "missing_material",
+      "count": 4
+    },
+    {
+      "code": "declared_physical_constituent_overlap",
+      "count": 4
+    }
+  ],
+  "source_sha256": "72603fac210c55b663d86334258e4804fbdb5a3562007586181f245645bc0656",
+  "returned_sha256": "4af7110e9b82b0dc939cae47a0f64df20ddb3f41b2c0740ec50ff96c17922645",
+  "source_export_seconds": 13.060401916503906,
+  "hub_seconds": 370.3999619483948,
+  "limitations": [
+    "Existing fictional coordination supplements are retained and attributed.",
+    "Source geometry/data findings remain visible; this is not a new structural design approval.",
+    "Connections without placed hardware retain complete design records and declared references; no placements are invented."
+  ]
+}

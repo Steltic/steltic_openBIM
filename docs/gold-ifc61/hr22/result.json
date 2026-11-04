@@ -1,0 +1,107 @@
+{
+  "case": "hr22",
+  "module": "HR",
+  "title": "Hospital / SMF",
+  "status": "passed",
+  "scope": "Gold HR/CFS model-only replay with saved physical supplements; IFC import/export transport.",
+  "native_replay": true,
+  "source_files_unchanged": true,
+  "saved_designs_match": true,
+  "llm_calls": 0,
+  "redesign": false,
+  "drawings": false,
+  "schema_errors": [],
+  "source_coverage": {
+    "members": 1189,
+    "panels": 12,
+    "openings": 24,
+    "connection_references": 1870,
+    "connection_parts": 5145,
+    "design_records": 53,
+    "member_surfaces": 1189,
+    "reference_axes": 0
+  },
+  "entities_compared": 87457,
+  "entity_classes": {
+    "IFCPROJECT": 1,
+    "IFCSIUNIT": 1,
+    "IFCUNITASSIGNMENT": 1,
+    "IFCCARTESIANPOINT": 6517,
+    "IFCDIRECTION": 12744,
+    "IFCAXIS2PLACEMENT3D": 6373,
+    "IFCGEOMETRICREPRESENTATIONCONTEXT": 1,
+    "IFCGEOMETRICREPRESENTATIONSUBCONTEXT": 1,
+    "IFCSITE": 1,
+    "IFCBUILDING": 1,
+    "IFCRELAGGREGATES": 3,
+    "IFCBUILDINGSTOREY": 7,
+    "IFCGRID": 1,
+    "IFCPOLYLINE": 36,
+    "IFCGRIDAXIS": 12,
+    "IFCRELCONTAINEDINSPATIALSTRUCTURE": 7,
+    "IFCLOCALPLACEMENT": 12717,
+    "IFCPROPERTYSET": 6373,
+    "IFCRELDEFINESBYPROPERTIES": 6373,
+    "IFCPROPERTYSINGLEVALUE": 3915,
+    "IFCCARTESIANTRANSFORMATIONOPERATOR3D": 1,
+    "IFCCOLUMN": 105,
+    "IFCCARTESIANPOINTLIST3D": 106,
+    "IFCINDEXEDPOLYGONALFACE": 6455,
+    "IFCPOLYGONALFACESET": 106,
+    "IFCSHAPEREPRESENTATION": 6476,
+    "IFCREPRESENTATIONMAP": 106,
+    "IFCMAPPEDITEM": 6346,
+    "IFCPRODUCTDEFINITIONSHAPE": 6370,
+    "IFCMATERIAL": 6,
+    "IFCBEAM": 348,
+    "IFCMEMBER": 736,
+    "IFCSLAB": 12,
+    "IFCANNOTATION": 24,
+    "IFCGEOMETRICCURVESET": 24,
+    "IFCPLATE": 2121,
+    "IFCMECHANICALFASTENER": 3024,
+    "IFCRELASSOCIATESMATERIAL": 6
+  },
+  "original_entities_unchanged": true,
+  "added_review_entities": 9,
+  "products_compared": 6370,
+  "every_product_geometry_and_data_identical": true,
+  "review_counts": {
+    "source_products": 6370,
+    "selected": 6370,
+    "displayed": 6370,
+    "unrendered": 0,
+    "excluded_by_scope": 0,
+    "triangles": 339576
+  },
+  "source_findings": [
+    {
+      "code": "missing_storey",
+      "count": 5145
+    },
+    {
+      "code": "missing_material",
+      "count": 960
+    }
+  ],
+  "returned_findings": [
+    {
+      "code": "missing_storey",
+      "count": 5145
+    },
+    {
+      "code": "missing_material",
+      "count": 960
+    }
+  ],
+  "source_sha256": "52d32d18595ce6b0343f169ef8a1c69e9f9d39d0212aa6c95da310f36f987259",
+  "returned_sha256": "53012032b301487a70e649b19bf80de624f56d9363f203286c99a20bd1fbe20d",
+  "source_export_seconds": 11.382100105285645,
+  "hub_seconds": 220.06780362129211,
+  "limitations": [
+    "Existing fictional coordination supplements are retained and attributed.",
+    "Source geometry/data findings remain visible; this is not a new structural design approval.",
+    "Connections without placed hardware retain complete design records and declared references; no placements are invented."
+  ],
+  "source_replay_binding_matches": true
+}

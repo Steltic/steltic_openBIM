@@ -1,0 +1,95 @@
+{
+  "case": "hr31",
+  "module": "HR",
+  "title": "R3 gable warehouse",
+  "status": "passed",
+  "scope": "Gold HR/CFS model-only replay with saved physical supplements; IFC import/export transport.",
+  "native_replay": true,
+  "source_files_unchanged": true,
+  "saved_designs_match": true,
+  "llm_calls": 0,
+  "redesign": false,
+  "drawings": false,
+  "schema_errors": [],
+  "source_coverage": {
+    "members": 1303,
+    "panels": 6,
+    "openings": 0,
+    "connection_references": 1431,
+    "connection_parts": 0,
+    "design_records": 20,
+    "member_surfaces": 1303,
+    "reference_axes": 0
+  },
+  "entities_compared": 18106,
+  "entity_classes": {
+    "IFCPROJECT": 1,
+    "IFCSIUNIT": 1,
+    "IFCUNITASSIGNMENT": 1,
+    "IFCCARTESIANPOINT": 1338,
+    "IFCDIRECTION": 2622,
+    "IFCAXIS2PLACEMENT3D": 1312,
+    "IFCGEOMETRICREPRESENTATIONCONTEXT": 1,
+    "IFCGEOMETRICREPRESENTATIONSUBCONTEXT": 1,
+    "IFCSITE": 1,
+    "IFCBUILDING": 1,
+    "IFCRELAGGREGATES": 3,
+    "IFCBUILDINGSTOREY": 4,
+    "IFCGRID": 1,
+    "IFCPOLYLINE": 13,
+    "IFCGRIDAXIS": 13,
+    "IFCRELCONTAINEDINSPATIALSTRUCTURE": 3,
+    "IFCLOCALPLACEMENT": 2619,
+    "IFCPROPERTYSET": 1312,
+    "IFCRELDEFINESBYPROPERTIES": 1312,
+    "IFCPROPERTYSINGLEVALUE": 1407,
+    "IFCCARTESIANTRANSFORMATIONOPERATOR3D": 1,
+    "IFCCOLUMN": 34,
+    "IFCCARTESIANPOINTLIST3D": 35,
+    "IFCINDEXEDPOLYGONALFACE": 759,
+    "IFCPOLYGONALFACESET": 35,
+    "IFCSHAPEREPRESENTATION": 1344,
+    "IFCREPRESENTATIONMAP": 35,
+    "IFCMAPPEDITEM": 1309,
+    "IFCPRODUCTDEFINITIONSHAPE": 1309,
+    "IFCMATERIAL": 2,
+    "IFCBEAM": 47,
+    "IFCMEMBER": 1222,
+    "IFCSLAB": 6,
+    "IFCRELASSOCIATESMATERIAL": 2
+  },
+  "original_entities_unchanged": true,
+  "added_review_entities": 9,
+  "products_compared": 1309,
+  "every_product_geometry_and_data_identical": true,
+  "review_counts": {
+    "source_products": 1309,
+    "selected": 1309,
+    "displayed": 1309,
+    "unrendered": 0,
+    "excluded_by_scope": 0,
+    "triangles": 104976
+  },
+  "source_findings": [
+    {
+      "code": "missing_material",
+      "count": 6
+    }
+  ],
+  "returned_findings": [
+    {
+      "code": "missing_material",
+      "count": 6
+    }
+  ],
+  "source_sha256": "8d48fb140ff8807440333fd4387dfda94f9a4e4305cc9ab42f135c17534f1a07",
+  "returned_sha256": "8c18bb2290ff1c623ad243f505a0f1cc1b146cbe34665a5bb67d4e7f748a0143",
+  "source_export_seconds": 2.4672579765319824,
+  "hub_seconds": 66.0498263835907,
+  "limitations": [
+    "Existing fictional coordination supplements are retained and attributed.",
+    "Source geometry/data findings remain visible; this is not a new structural design approval.",
+    "Connections without placed hardware retain complete design records and declared references; no placements are invented."
+  ],
+  "source_replay_binding_matches": true
+}

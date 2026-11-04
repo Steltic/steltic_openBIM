@@ -1,0 +1,95 @@
+{
+  "case": "hr35",
+  "module": "HR",
+  "title": "Ch15 equipment platform",
+  "status": "passed",
+  "scope": "Gold HR/CFS model-only replay with saved physical supplements; IFC import/export transport.",
+  "native_replay": true,
+  "source_files_unchanged": true,
+  "saved_designs_match": true,
+  "llm_calls": 0,
+  "redesign": false,
+  "drawings": false,
+  "schema_errors": [],
+  "source_coverage": {
+    "members": 223,
+    "panels": 18,
+    "openings": 0,
+    "connection_references": 402,
+    "connection_parts": 0,
+    "design_records": 35,
+    "member_surfaces": 223,
+    "reference_axes": 0
+  },
+  "entities_compared": 4066,
+  "entity_classes": {
+    "IFCPROJECT": 1,
+    "IFCSIUNIT": 1,
+    "IFCUNITASSIGNMENT": 1,
+    "IFCCARTESIANPOINT": 258,
+    "IFCDIRECTION": 486,
+    "IFCAXIS2PLACEMENT3D": 244,
+    "IFCGEOMETRICREPRESENTATIONCONTEXT": 1,
+    "IFCGEOMETRICREPRESENTATIONSUBCONTEXT": 1,
+    "IFCSITE": 1,
+    "IFCBUILDING": 1,
+    "IFCRELAGGREGATES": 3,
+    "IFCBUILDINGSTOREY": 4,
+    "IFCGRID": 1,
+    "IFCPOLYLINE": 7,
+    "IFCGRIDAXIS": 7,
+    "IFCRELCONTAINEDINSPATIALSTRUCTURE": 4,
+    "IFCLOCALPLACEMENT": 483,
+    "IFCPROPERTYSET": 244,
+    "IFCRELDEFINESBYPROPERTIES": 244,
+    "IFCPROPERTYSINGLEVALUE": 446,
+    "IFCCARTESIANTRANSFORMATIONOPERATOR3D": 1,
+    "IFCCOLUMN": 36,
+    "IFCCARTESIANPOINTLIST3D": 31,
+    "IFCINDEXEDPOLYGONALFACE": 535,
+    "IFCPOLYGONALFACESET": 31,
+    "IFCSHAPEREPRESENTATION": 272,
+    "IFCREPRESENTATIONMAP": 31,
+    "IFCMAPPEDITEM": 241,
+    "IFCPRODUCTDEFINITIONSHAPE": 241,
+    "IFCMATERIAL": 2,
+    "IFCBEAM": 51,
+    "IFCMEMBER": 136,
+    "IFCSLAB": 18,
+    "IFCRELASSOCIATESMATERIAL": 2
+  },
+  "original_entities_unchanged": true,
+  "added_review_entities": 9,
+  "products_compared": 241,
+  "every_product_geometry_and_data_identical": true,
+  "review_counts": {
+    "source_products": 241,
+    "selected": 241,
+    "displayed": 241,
+    "unrendered": 0,
+    "excluded_by_scope": 0,
+    "triangles": 7896
+  },
+  "source_findings": [
+    {
+      "code": "missing_material",
+      "count": 18
+    }
+  ],
+  "returned_findings": [
+    {
+      "code": "missing_material",
+      "count": 18
+    }
+  ],
+  "source_sha256": "83669588b8b4dc89df96e6c251a20cbdd8a03694e783d0d6a8f8ceeda9c97c3c",
+  "returned_sha256": "90c472434c130728465332cc4578ddb5565af3bfb235b7293dcaa7e24788836a",
+  "source_export_seconds": 0.6642293930053711,
+  "hub_seconds": 16.076407432556152,
+  "limitations": [
+    "Existing fictional coordination supplements are retained and attributed.",
+    "Source geometry/data findings remain visible; this is not a new structural design approval.",
+    "Connections without placed hardware retain complete design records and declared references; no placements are invented."
+  ],
+  "source_replay_binding_matches": true
+}
