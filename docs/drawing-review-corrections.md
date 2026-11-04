@@ -164,7 +164,7 @@ HR9's plate-wall base now uses its actual full-width wall profile and source
 1 x 12 in embed plate. Each 28 ft panel has all 112 headed studs at four per
 foot. The 3/8 x 4 in fishplate, two 1/4 in shop fillets and both 3/16 in field
 lap edges retain their source records. The 2 in bottom clearance, fishplate
-datum, stud row and 5 in stud length are explicit A fit proposals; foundation
+datum and 5 in stud length are explicit A fit proposals; foundation
 and local capacity verification remain outstanding. The source workline is
 retained while the physical plate and panel boundary record the bottom cut.
 
@@ -178,3 +178,72 @@ by the parts legend. Every individual weld stroke and exported weld is retained.
 This prevents a 112-stud row from creating 112 leaders extending outside the
 elevation into adjacent views. The enlarged section retains the real wall,
 fishplate, embed plate and stud location.
+
+## Source stud rows and explicit bottom-track splices (0.8.45)
+
+The HR9 base component summary says four headed studs per foot. Its detailed
+capacity check specifies **two rows at 6 in pitch**. Both rows are now preserved,
+with the same 112 studs across each 28 ft panel. The 3 in edge margins and 5 in
+stud length remain explicit A proposals; the row count and pitch are S.
+
+CFS2 had 108 unconnected coincident bottom-track joints between its continuous
+wall bays. Each now has an explicit A proposal: a 1/8 in butt gap, two external
+54 mil flange straps and three No.12 screws into each track on each face.
+Actual sections, web bearing datums and original workpoints are retained.
+Existing selected connections are not replaced. These fits do not assert a
+checked collector, shear-wall transfer or anchorage capacity.
+
+All 2,996 CFS2 detail variants and 77,066 installed occurrences passed receiver
+fit. All 108 new splice details passed actual-sheet screw-contact tests. Both
+the splice and revised HR9 base sheets were rendered and visually checked.
+The full openBIM regression suite passed all 595 tests. The subsequent CFS2
+native export exceeded the harness's 600-second worker limit and must be
+retried independently; no new native completeness result is claimed.
+Native source mapping and other remaining completeness findings are tracked
+separately; this release is not a complete-case or all-61 acceptance claim.
+
+## Verified CFS wall-schedule links (0.8.46)
+
+CFS2, CFS3 and CFS12 had source wall-layout schedules without explicit links to
+their already located physical walls. Links now require every named line and
+storey, the actual segment count and length, the total wall length and, where
+specified, the grouping of continuous bays. CFS12's segment-framing links also
+require every stud and track to satisfy the minimum source sheet thickness;
+the physical thickness must agree with the section designation.
+
+CFS12's 600S162-97 studs inside braced segments now reference their specific
+segment-stud design. The ordinary party-wall check explicitly applies outside
+these segments and is removed from those studs. Geometry is unchanged. This
+does not resolve other gravity-stud selections, floor attachments, collectors
+or diaphragm components.
+
+Ten focused tests passed, including all three actual saved examples and
+negative cases for missing storeys, short or missing segments, disconnected
+continuous bays, thin tracks and incorrectly labelled thicknesses. Existing
+layout/framing links cover four CFS2, five CFS3 and 22 CFS12 schedule records;
+the CFS12 segment-stud link is additional. Native completeness remains subject
+to its separate replay checks.
+
+After integration with the stud-row and track-splice corrections, all 18
+affected source-binding, track-splice and wall-base tests passed. The underlying
+0.8.45 main branch passed the full 595-test suite.
+
+## Source concrete collector bars (0.8.47)
+
+CFS4's ten collector schedules now have their actual 2, 3 or 4 #5 Gr 60 bars
+on each of the three concrete-filled floors. They are not applied to the wood
+roof. Specific collector checks take precedence over the diaphragm summary's
+generic #4 wording, with both original records retained. The source bar counts,
+diameter and grade remain S. Stock pieces, contact laps, cover, end margins and
+vertical layering are A proposals with no new development or capacity check.
+The builder refuses a collector path that intersects a floor opening.
+
+All 924 added bond/lap occurrences passed receiver fit, and 20 focused collector,
+connection-assembly and section-geometry tests passed. The two detail sheets
+were rendered and visually checked. Concrete host context can be shown in a
+section when explicitly requested by that detail, behind its reinforcement;
+the usual steel-detail section behavior is retained.
+
+This is a partial physical-data addition. WWR, perimeter chord continuity and
+deck-to-blocking screws remain separate requirements. The diaphragm schedule
+stays unmapped, and whole-building native completeness is not asserted.

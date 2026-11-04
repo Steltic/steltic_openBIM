@@ -17,8 +17,8 @@ def prepare(builder):
         previous=list(wall['end_offsets'][end]);offset=list(previous);offset[2]=2
         wall['end_offsets'][end]=offset
         c.setdefault('parameters',{})['plate_base_fit']=dict(bottom_gap_in=2,embed_depth_in=12,
-            fishplate_height_in=4,stud_length_in=5,
-            basis='S: full-width 1 x 12 in embed plate and 3/8 x 4 in fishplate; A: 2 in wall-bottom clearance, fishplate datum and 5 in stud length. Foundation and local-fit capacity remain unverified.')
+            fishplate_height_in=4,stud_length_in=5,stud_rows=2,stud_pitch_in=6,
+            basis='S: full-width 1 x 12 in embed plate, 3/8 x 4 in fishplate and two rows of headed studs at 6 in pitch. A: 2 in wall-bottom clearance, fishplate datum, 5 in stud length and 3 in stud edge margins. Foundation and local-fit capacity remain unverified.')
         for panel in builder.panels:
             if panel['id']!=wall['id']+'-PL':continue
             bottom=min(q[2] for q in panel['vertices'])
@@ -43,14 +43,17 @@ def plate(ctx):
         description='S: full-width 1 x 12 in A572 Grade 50 embedded plate')
     a.box('FISH',[-half,fish_y,0],[width,.375,4],'S size; A datum','Source 3/8 x 4 in boundary fishplate along the full panel')
     a.box('CONC',[-half-6,-18,-20],[width+12,36,20],'A','Mat context; foundation reinforcement and anchorage verification delegated',kind='concrete')
-    count=round(width/3)
-    if count<1 or abs(count*3-width)>.001:raise ValueError('Full-width stud run needs an explicit end-spacing proposal')
-    xs=[-half+1.5+3*i for i in range(count)]
-    a.fastener('STUDS',[[x,-.5,-6] for x in xs],[0,-1,0],.875,fit['stud_length_in'],['EMBED','CONC'],
-        f'S: {count} headed studs, 7/8 in diameter at 4 per foot; A: 5 in length, one row and 1.5 in end margins',
-        basis='S diameter and count per foot; A length and stations')
-    for i,x in enumerate(xs):
-        a.weld('WS'+str(i),[x-.4375,-.5,-6],[x+.4375,-.5,-6],['EMBED','STUDS'],kind='STUD_WELD',
+    # The source check is more specific than its component summary: two rows
+    # at 6 in, not an interchangeable single row at 3 in. Preserve both.
+    per_row=round(width/6)
+    if per_row<1 or abs(per_row*6-width)>.001:raise ValueError('Full-width stud run needs an explicit end-spacing proposal')
+    xs=[-half+3+6*i for i in range(per_row)]
+    points=[[x,-.5,z] for z in (-9,-3) for x in xs];count=len(points)
+    a.fastener('STUDS',points,[0,-1,0],.875,fit['stud_length_in'],['EMBED','CONC'],
+        f'S: {count} headed studs, 7/8 in diameter, two rows at 6 in pitch (4 per foot); A: 5 in length and 3 in edge margins',
+        basis='S diameter, two rows and 6 in pitch; A length and edge margins')
+    for i,(x,y,z) in enumerate(points):
+        a.weld('WS'+str(i),[x-.4375,y,z],[x+.4375,y,z],['EMBED','STUDS'],kind='STUD_WELD',
             description='Source welded headed stud; symbolic weld line at actual embed-plate face')
     for i,y in enumerate((fish_y,fish_y+.375)):
         a.weld('WF'+str(i),[-half,y,0],[half,y,0],['FISH','EMBED'],.25,

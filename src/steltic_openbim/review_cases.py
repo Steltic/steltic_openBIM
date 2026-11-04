@@ -75,8 +75,12 @@ def build_model(package,state):
     physical_rbs(b)
     from .review_track_corners import apply as track_corners
     track_corners(b)
+    from .review_track_splices import apply as track_splices
+    track_splices(b)
     from .review_edge_chords import apply as edge_chord_corners
     edge_chord_corners(b)
+    from .review_cfs_source_bindings import apply as cfs_source_bindings
+    cfs_source_bindings(b)
     from .review_concrete_collectors import apply as concrete_collectors
     concrete_collectors(b)
     return b.finish()

@@ -27,6 +27,16 @@ def test_all_hr9_bases_keep_actual_panel_width_and_source_stud_density(hr9):
         assert parts['EMBED']['representation_role']=='assembly_component'
         assert parts['STUDS']['count']==round(width*4/12)
         assert parts['STUDS']['count']>12
+        # This row layout is explicitly selected in the source capacity check;
+        # four studs/ft alone must not permit a different single-row pattern.
+        studs=next(f for f in scene['fasteners'] if f['id']=='STUDS')
+        rows=sorted({q[2] for q in studs['points']})
+        assert rows==[-9,-3]
+        for z in rows:
+            xs=sorted(q[0] for q in studs['points'] if q[2]==z)
+            assert all(b-a==pytest.approx(6) for a,b in zip(xs,xs[1:]))
+        source=next(r['data'] for r in p['design_records'] if r['id']=='connections/conn-web-base')
+        assert any('two rows at 6 in' in check['limit_state'] for check in source['checks'])
         assert 'connections/conn-web-base' in c['design_record_ids']
         assert any(r.startswith('connections/conn-brace-') for r in c['design_record_ids'])
         for f in scene['fasteners']:
