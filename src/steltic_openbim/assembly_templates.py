@@ -453,7 +453,7 @@ def build_scene(model,package,c,subtype=''):
             if fitted:a.member('M2',fitted['profile_id'],*fitted['axis'],y=fitted['local_y'],description='Actual receiving track '+fitted['profile_id'])
             else:a.member('M2',tp,[-15,0,0],[15,0,0],y=(0,0,1),description='Receiving track '+tp)
             for i,sign in enumerate((-1,1)):
-                if c.get('parameters',{}).get('each_ply_end_screws'):
+                if c.get('parameters',{}).get('each_ply_end_screws') or fitted and p[sp]['family']=='built_up':
                     from .pilots.geometry import strips
                     positions=set()
                     for poly in strips(p[sp],p):
@@ -463,7 +463,11 @@ def build_scene(model,package,c,subtype=''):
                     trackpart=next(part for part in a.parts if part['id']=='M2');surface=trackpart['bounds'][1][i]
                     grip=abs(surface-sign*sd/2)+.125
                     fast('F'+str(i+1),[[x,surface,direction*.65] for x in sorted(positions)],[0,-sign,0],.19,grip,['M1','M2'],'A one No.10 at each exposed chord-ply flange; verify grip/attachment capacity','A',True)
-                else:fast('F'+str(i+1),[[.75 if fitted else 0,sign*sd/2,direction*.65]],[0,-sign,0],.19,.12,['M1','M2'],'1 No.10 through track leg and stud flange; A local station','S',True)
+                elif fitted:
+                    trackpart=next(part for part in a.parts if part['id']=='M2');surface=trackpart['bounds'][1][i]
+                    grip=abs(surface-sign*sd/2)+p[sp]['dimensions']['t']
+                    fast('F'+str(i+1),[[.75,surface,direction*.65]],[0,-sign,0],.19,grip,['M1','M2'],'A one No.10 through the actual track leg and stud flange; fitted station and grip','A',True)
+                else:fast('F'+str(i+1),[[0,sign*sd/2,direction*.65]],[0,-sign,0],.19,.12,['M1','M2'],'1 No.10 through track leg and stud flange; A local station','S',True)
             a.dim([0,-sd/2,0],[0,sd/2,0],'Stud/track nominal depth',view='section');note('Stud seated on track web. One screw through EACH flange; top condition mirrors this bottom condition. Track size follows the stud depth/mil variant.')
         a.section_axis=2;a.section_at=direction*.65 if not bridging else 6
 

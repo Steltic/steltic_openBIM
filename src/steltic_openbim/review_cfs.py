@@ -281,7 +281,11 @@ def floors_and_roofs(b,outline,bystory,levels):
     cfg=b.cfg;framing=b.raw.get('framing',b.raw.get('gravity_framing',[]));records={r['id']:r for r in framing}
     for k,z in enumerate(levels[1:],1):
         poly=bystory.get(str(k),outline);roof=k==len(levels)-1
-        b.panel(f'FLOOR-{k}','floor',[[x*12,y*12,z] for x,y in poly],3 if b.key=='cfs3' else .75,k,'A')
+        finish=19/32 if b.key=='cfs3' and roof else 3 if b.key=='cfs3' else .75
+        surface=z+finish if b.key=='cfs3' and roof else z
+        refs=[rid for rid,row in b.records.items() if b.key=='cfs3' and rid.startswith('diaphragms/') and row['data'].get('level')==k]
+        b.panel(f'FLOOR-{k}','roof' if b.key=='cfs3' and roof else 'floor',[[x*12,y*12,surface] for x,y in poly],finish,k,'A',records=refs,
+                **(dict(reference_line='top surface; source roof steel datum is below by 19/32 in' if roof else 'top surface of the source 3 in concrete floor',thickness_direction='negative_global_z') if b.key=='cfs3' else {}))
         if b.key=='cfs29':continue
         if b.key in ('cfs11','cfs13','cfs14') and roof:
             # Explicit delegated roof members and interfaces, with adopted truss layout.
@@ -309,7 +313,7 @@ def floors_and_roofs(b,outline,bystory,levels):
                 for j,(a,d) in enumerate(zip(supports,supports[1:])):
                     if d-a<12:continue
                     if b.key=='cfs3':
-                        simple_truss(b,f'OW-{k}-{station}-{run}-{j}',direction,station,a,d,z-14 if roof else z-14,11.5 if roof else 8.5,k,'250S162-68','250S137-43',24,flat=True)
+                        simple_truss(b,f'OW-{k}-{station}-{run}-{j}',direction,station,a,d,z-14+1.25,11.5 if roof else 8.5,k,'250S162-68','250S137-43',24,flat=True)
                         continue
                     if b.key=='cfs11' and ((direction==0 and station>96*12) or (station<70*12 and a>=26*12)):
                         # Walkway joists span normal to their edge beam, not along the open edge.
@@ -318,6 +322,18 @@ def floors_and_roofs(b,outline,bystory,levels):
                     def pt(u):return [u,station,z-finish-b.depth(pid)/2] if direction==0 else [station,u,z-finish-b.depth(pid)/2]
                     m=b.member(f'JOIST-{k}-{station}-{run}-{j}',pid,'joist',pt(a),pt(d),k,'A',records=[b.record('framing',rec.get('id'))]);b.ends(m,'review_cfs_joist',[b.record('framing',rec.get('id'))],parameters={'spacing':spacing,'floor_depth':b.depth(pid)+.75})
     b.note('DELEGATED-ROOF','A: the pictured roof truss internals, node gussets and supplier floor-joist arrangements are explicit fictional inputs. Use the source sections where scheduled; source delegated reactions, diaphragm conditions and capacity approval requirements remain attached. The drawing is not a supplier certification.')
+    if b.key=='cfs3':
+        # Wall levels are bearing surfaces, while track geometry uses a web
+        # centreline. Account for that half-thickness rather than burying the
+        # truss bottom chord in the track. Analysis workpoints remain unchanged.
+        for m in b.members:
+            if m['kind'] not in ('top_track','bottom_track','ordinary_track','tier_track'):continue
+            if abs(m['local_y'][2])<.999:continue
+            half=b.profiles[m['profile_id']]['dimensions']['t']/2
+            for off in m['end_offsets']:off[2]+=half*m['local_y'][2]
+        b.changes.append(dict(kind='cfs3_truss_bearing_datums',chord_centre_shift_in=1.25,
+                              roof_truss_outside_depth_in=14,roof_sheathing_in=19/32,floor_topping_in=3,
+                              basis='S: 14 in roof truss and 19/32 in Structural I roof sheathing; 3 in concrete floor topping. A: retain the existing 11 in delegated floor-truss envelope, place bottom-chord underside on the wall bearing datum, and offset track web centrelines by half their actual thickness. Source analysis workpoints and selected sections retained; supplier capacity remains unverified.'))
 
 def simple_truss(b,label,along,station,start,end,base,rise,k,chord,web,panel,flat=False,heel=0):
     cp=b.profile(chord);wp=b.profile(web);span=end-start;n=max(2,math.ceil(span/panel));n=n if flat else math.ceil(n/2)*2;step=span/n

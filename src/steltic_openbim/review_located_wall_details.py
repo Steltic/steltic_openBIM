@@ -117,6 +117,7 @@ def sheathing(ctx):
 
 
 def floor(ctx):
+    if ctx.params['physical_floor_stack'].get('truss_ids'):return truss_floor(ctx)
     a,p,par=ctx.a,ctx.p,ctx.params;data=par['physical_floor_stack'];parts={};by_id={};joists=[];tracks=[];studs=[]
     for index,item in enumerate(data['receivers']):
         label='R'+str(index+1);part=member(a,label,item);parts[label]=part;by_id[item['member_id']]=(label,item,part)
@@ -152,6 +153,43 @@ def floor(ctx):
             a.fastener('UPPER-S'+str(index),[[x+width_sign*.75,side*.75,up['bounds'][2][0]+.15]],[0,0,-1],.216,max(.2,gap+.2),joins,'A No.12 upper track/joist transfer screw; source diaphragm schedule remains attached',basis='A',screw=True)
     a.section_axis=1;a.section_at=1.25
     a.notes.append('Every wall, track and joist extract is bound to a real member at its actual centroid, elevation and roll. Only the connection stiffeners/packers are added components. Source selected sections and story shear/uplift requirements remain attached; A local fit and transfer fasteners are coordination proposals without new capacity verification. Stud-to-track end screws are shown on their separate located details.')
+
+
+def truss_floor(ctx):
+    """Actual open-web truss chords at the wall, without a fictitious solid joist."""
+    a,p=ctx.a,ctx.p;data=ctx.params['physical_floor_stack'];tracks=[];chords=[]
+    for index,item in enumerate(data['receivers']):
+        name='R'+str(index+1);part=member(a,name,item)
+        if item['member_id'] in data['truss_ids']:chords.append((name,item,part))
+        elif item['member_id'] in data['track_ids']:tracks.append((name,item,part))
+    for side in (-1,1):
+        group=[row for row in chords if sum(q[1] for q in row[1]['axis'])*side>0]
+        if not group:continue
+        for end in (-1,1):
+            label,m,part=(min if end<0 else max)(group,key=lambda row:row[2]['bounds'][2][0 if end<0 else 1])
+            z=part['bounds'][2][0 if end<0 else 1]
+            options=[row for row in tracks if row[1]['local_y'][2]*end>.9
+                     and (row[2]['bounds'][2][1 if end<0 else 0]-z)*end>=-.03]
+            if not options:continue
+            host,tm,tp=min(options,key=lambda row:abs(row[1]['axis'][0][2]-z))
+            surface=tp['bounds'][2][1 if end<0 else 0];gap=abs(surface-z)
+            if gap>24:raise ValueError('Truss/wall interface has no adjacent physical track')
+            x=m['axis'][0][0];yy=side*.75;joins=[label,host];suffix=f'{side}-{end}'
+            if gap>.001:
+                xl,xh=part['bounds'][0]
+                pack='PACK'+suffix;a.box(pack,[xl-.25,-3,min(z,surface)],[xh-xl+.5,6,gap],'A','A fitted steel bearing pack at the actual truss/track gap; capacity unverified');joins.append(pack)
+            tt=p[tm['profile_id']]['dimensions']['t'];hy=m['local_y'][0]
+            if abs(hy)<.999:raise ValueError('Truss chord requires a fitted web orientation')
+            for index,(face,sign,web) in enumerate(web_faces(p,m['profile_id'])):
+                xx=x+hy*(face-sign*(web+.65))
+                start=z+web if end<0 else surface+tt
+                grip=web+gap+tt
+                a.fastener('B'+suffix+'-'+str(index),[[xx,yy,start]],[0,0,-1],.375,grip,joins,
+                    'A 3/8 in predrilled through-bolt through actual chord flange, bearing pack and track; no source uplift capacity inferred',basis='A')
+            a.interfaces.append(dict(id='BEAR'+suffix,kind='compression_bearing',connects=joins,basis='A',
+                                     description='Located truss/wall bearing interface; supplier end-node and source force requirements remain attached'))
+    a.section_axis=1;a.section_at=.75
+    a.notes.append('Both actual horizontal truss chords are shown at their recorded elevations. The open web is not replaced by a full-depth solid joist. End-node gussets and webs are separate located truss details. A bearing packs and predrilled bolts close the explicit track/chord gaps; their local capacity and supplier approval remain unverified.')
 
 
 def parallel_floor(a,p,index,label,j,part,tracks,studs):

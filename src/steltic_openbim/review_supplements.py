@@ -163,7 +163,14 @@ def floor_openings(b):
                             if math.dist(nearest,c['point'])<.01:mapped.append(rid)
                     c['member_ids']=list(dict.fromkeys(mapped))
                     if c['member_ids']:
-                        if len(c['member_ids'])==1 and c['detail_ref']['id'] in ('review_truss_node','review_truss_heel'):c['detail_ref']['id']='review_roof_seat'
+                        if len(c['member_ids'])==1 and c['detail_ref']['id'] in ('review_truss_node','review_truss_heel'):
+                            # A cut exactly at a panel point can remove the web
+                            # and the next chord without creating a new cut-end
+                            # connection. Its surviving chord meets the opening
+                            # frame; it has not acquired a wall/roof seat.
+                            old_family=c['detail_ref']['id'];c['detail_ref']['id']='test_floor_opening'
+                            b.changes.append(dict(kind='opening_panel_point_attachment',connection_id=c['id'],previous_family=old_family,
+                                opening=feature['id'],basis='A: surviving truss panel-point end attaches to the actual opening header/trimmer; supplier opening redesign remains delegated'))
                         kept.append(c)
                     else:b.changes.append(dict(kind='opening_removed_connection',source=c,source_member_ids=original,opening=feature['id'],basis='Accepted fictional opening removes this station; source design remains in the record register'))
                 b.connections=kept

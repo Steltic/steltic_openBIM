@@ -27,6 +27,8 @@ def test_actual_opening_plies_datums_cut_clearance_and_screw_contact(paired,reve
     m=dict(pilot='cfs-fixture',members=[primary,support],profiles=profiles,connections=[c])
     bind(m);scene=build_scene(m,dict(design_records=[]),c);parts={p['id']:p for p in scene['parts']}
     assert c['member_ids']==['J','H'] and len(m['connection_endpoint_links'])==1
+    assert parts['JOIST']['member']['source_member_index']==0
+    assert parts['SUPPORT']['member']['source_member_index']==1
     assert parts['JOIST']['bounds'][0][0]-parts['SUPPORT']['bounds'][0][1]==pytest.approx(.125)
     assert len(scene['fasteners'])==(4 if paired else 2)
     for f in scene['fasteners']:

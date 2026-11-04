@@ -139,14 +139,14 @@ def bind(model):
                 data=dict(primary=local_member(primary,origin,axes),stud=sd,**extra)
                 c.setdefault('parameters',{})['physical_wall_attachment']=data
                 c['member_ids']=list(dict.fromkeys(c['member_ids']+[stud['id']]))
-        elif family in ('review_cfs_floor','review_cfs_sill','review_final_cfs_joist','review_cfs_joist'):
+        elif family in ('review_cfs_floor','review_cfs_sill','review_final_cfs_joist','review_cfs_joist','review_roof_seat'):
             if family=='review_cfs_sill' and primary.get('level')==1:continue
-            is_joist=primary['kind'] in ('joist','opening_trimmer')
+            is_joist=primary['kind'] in ('joist','opening_trimmer') or family=='review_roof_seat' and primary['kind']=='truss_chord'
             if not is_joist and primary['kind'] not in ('top_track','bottom_track','ordinary_track','tier_track'):continue
             if is_joist:
                 far=max(primary['axis'],key=lambda q:math.dist(q,origin));into=unit(sub(far,origin));along=cross(into,[0,0,1]);axes=horizontal_frame(along)
             else:axes=horizontal_frame(sub(b,a))
-            candidates=near.get(origin);tracks=[];joists=[];parallel=[];studs=[]
+            candidates=near.get(origin);tracks=[];joists=[];parallel=[];studs=[];truss=[]
             for m in candidates:
                 aa,bb=axis(m);local=[point(q,origin,axes) for q in (aa,bb)];u=unit(sub(bb,aa))
                 if m['kind'] in ('top_track','bottom_track','ordinary_track','tier_track') and abs(dot(u,axes[0]))>.999:
@@ -155,6 +155,8 @@ def bind(model):
                     if abs(local[0][0])<=24 and abs(local[0][2])<24 and any(abs(q[1])<.01 for q in local):joists.append(m)
                 elif m['kind'] in ('joist','rim_track','floor_rim') and abs(dot(u,axes[0]))>.999:
                     if abs(local[0][1])<.01 and abs(local[0][2])<24 and min(q[0] for q in local)-.01<=0<=max(q[0] for q in local)+.01:parallel.append(m)
+                elif m['kind']=='truss_chord' and abs(dot(u,axes[1]))>.999:
+                    if abs(local[0][0])<=24 and abs(local[0][2])<24 and any(abs(q[1])<.01 for q in local):truss.append(m)
                 elif m['kind'] in ('stud','chord','opening_jamb'):
                     if abs(local[0][1])<.01 and abs(local[0][0])<24 and min(q[2] for q in local)<30 and max(q[2] for q in local)>-30:studs.append(m)
             # Keep the closest lower and upper track. A roof has no upper wall.
@@ -168,7 +170,7 @@ def bind(model):
             for side in (-1,1):
                 options=[m for m in joists if (sum(point(q,origin,axes)[1] for q in axis(m))/2)*side>0]
                 if options:selected_joists.append(min(options,key=lambda m:(abs(point(axis(m)[0],origin,axes)[0]),abs(axis(m)[0][2]-origin[2]),m['id'])))
-            if is_joist and primary not in selected_joists:selected_joists.insert(0,primary)
+            if is_joist and primary['kind']!='truss_chord' and primary not in selected_joists:selected_joists.insert(0,primary)
             if not selected_joists and parallel:
                 # At a collinear end joint there can be a real floor member on
                 # each side. One arbitrary left-hand member cannot attach a
@@ -178,16 +180,28 @@ def bind(model):
                     if options:
                         selected=min(options,key=lambda m:(abs(axis(m)[0][2]-origin[2]),m['id']))
                         if selected not in selected_joists:selected_joists.append(selected)
+            selected_truss=[]
+            if not selected_joists and truss:
+                for side in (-1,1):
+                    options=[m for m in truss if sum(point(q,origin,axes)[1] for q in axis(m))*side>0]
+                    if not options:continue
+                    closest=min(options,key=lambda m:(abs(point(axis(m)[0],origin,axes)[0]),abs(axis(m)[0][2]-origin[2]),m['id']))
+                    prefix=closest.get('original_physical_member_id',closest['id']).rsplit('-',1)[0]
+                    selected_truss.extend(m for m in options if m.get('original_physical_member_id',m['id']).rsplit('-',1)[0]==prefix)
             selected_studs=[]
             for side in (-1,1):
                 options=[m for m in studs if (sum(q[2] for q in axis(m))/2-origin[2])*side>0]
                 if options:selected_studs.append(min(options,key=lambda m:(abs(point(axis(m)[0],origin,axes)[0]),abs(sum(q[2] for q in axis(m))/2-origin[2]),m['id'])))
-            if primary not in chosen+selected_joists:chosen.insert(0,primary)
+            if not is_joist and primary not in chosen:chosen.insert(0,primary)
             # A full floor stack requires actual floor framing. Leave unresolved
             # roof/supplier interfaces to their own recipes and fit findings.
-            if not selected_joists:continue
-            items=list(dict((m['id'],m) for m in chosen+selected_joists+selected_studs).values())
-            data=dict(receivers=[local_member(m,origin,axes,32) for m in items],joist_ids=[m['id'] for m in selected_joists],track_ids=[m['id'] for m in chosen],stud_ids=[m['id'] for m in selected_studs])
+            if not selected_joists and not selected_truss:continue
+            # Do not bind half a bearing detail when the wall track itself is
+            # absent (for example a corner outside the cut track end). Keep the
+            # unresolved occurrence visible to the fit/missing-data gate.
+            if not chosen:continue
+            items=list(dict((m['id'],m) for m in chosen+selected_joists+selected_truss+selected_studs).values())
+            data=dict(receivers=[local_member(m,origin,axes,32) for m in items],joist_ids=[m['id'] for m in selected_joists],track_ids=[m['id'] for m in chosen],stud_ids=[m['id'] for m in selected_studs],truss_ids=[m['id'] for m in selected_truss])
             c.setdefault('parameters',{})['physical_floor_stack']=data
             c['member_ids']=list(dict.fromkeys(c['member_ids']+[m['id'] for m in items]))
     model['connections'][:]=[c for c in model['connections'] if c['id'] not in remove]

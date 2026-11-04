@@ -28,7 +28,8 @@ def extract(ctx,member,label,axes,extent=36):
         if end>start:slots.append(dict(copy.deepcopy(selected),start_in=start-lo,end_in=end-lo))
     return ctx.a.member(label,member['profile_id'],*[point(q,origin,axes) for q in chosen],
                         y=vector(member['local_y'],axes),basis=member.get('basis','S'),
-                        description='Actual receiving '+member['kind']+' '+member['profile_id'],**({'slots':slots} if slots else {}))
+                        description='Actual receiving '+member['kind']+' '+member['profile_id'],
+                        source_member_index=ctx.c['member_ids'].index(member['id']),**({'slots':slots} if slots else {}))
 
 
 def nearest_beam(model,origin,exclude=()):
