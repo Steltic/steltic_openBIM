@@ -3,6 +3,7 @@ from collections import Counter
 import hashlib
 import json
 import math
+import os
 
 import ifcopenshell
 import ifcopenshell.geom
@@ -16,6 +17,7 @@ STRUCTURAL = {'IfcBeam','IfcColumn','IfcMember','IfcPlate','IfcSlab','IfcFooting
               'IfcMechanicalFastener','IfcFastener','IfcElementAssembly','IfcStructuralCurveMember'}
 MAX_PRODUCTS = 100000
 MAX_TRIANGLES = 6000000
+GEOMETRY_THREADS = min(4, os.cpu_count() or 1)
 
 
 def open_model(path):
@@ -148,19 +150,52 @@ def build_review(path,options):
     if not selected:raise ValueError('The chosen scope contains no IFC products')
     settings=ifcopenshell.geom.settings();settings.set('use-world-coords',True)
     settings.set('mesher-linear-deflection',0.002)
-    # Keep IfcOpenShell's mapping/conversion caches for repeated members and
-    # connection parts. Each product still receives its own world placement
-    # and opening cuts through the native geometry kernel.
-    kernel=ifcopenshell.geom.kernel(settings,model)
+    # The native iterator batches shared representations and uses a bounded
+    # number of geometry threads. Copy each result before advancing: native
+    # iterator buffers do not belong to the published review model.
+    def native_shapes():
+        try:
+            iterator=ifcopenshell.geom.iterator(settings,model,GEOMETRY_THREADS,
+                include=[model.by_id(int(row['id'])) for row in selected])
+            if iterator.initialize():
+                while True:
+                    yield iterator.get()
+                    if not iterator.next():break
+        except (RuntimeError,ValueError,TypeError):
+            # Missing/unsupported products still take the per-product path
+            # below; an iterator failure must never silently omit them.
+            return
+    def surfaces(shape):
+        vertices=(np.asarray(shape.geometry.verts).reshape((-1,3))*multiplier).tolist()
+        triangles=np.asarray(shape.geometry.faces,dtype=int).reshape((-1,3)).tolist()
+        if not vertices or not triangles:raise ValueError('No surface geometry')
+        if not all(math.isfinite(v) for p in vertices for v in p):raise ValueError('Non-finite geometry')
+        return vertices,triangles
+    geometry={};ambiguous=set();selected_ids={int(row['id']) for row in selected};budget=0
+    for shape in native_shapes():
+        ident=shape.id
+        if ident not in selected_ids:raise ValueError('Geometry iterator returned an unselected product')
+        if ident in ambiguous:continue
+        if ident in geometry:
+            # Preserve the old per-product interpretation if a source emits
+            # multiple native results for the same product.
+            budget-=len(geometry.pop(ident)[1]);ambiguous.add(ident);continue
+        try:vertices,triangles=surfaces(shape)
+        except (ValueError,TypeError):continue
+        budget+=len(triangles)
+        if budget>MAX_TRIANGLES:
+            raise ValueError(f'Review exceeds {MAX_TRIANGLES:,} triangles; choose a smaller scope or export a smaller model')
+        geometry[ident]=(vertices,triangles)
+    kernel=None
     objects=[];failed=[];total=0;bounds=[];duplicates=[];shapes={}
     for row in selected:
         e=model.by_id(int(row['id']));verts=[];faces=[];lines=[];reason=''
         try:
-            shape=kernel.create_shape(e)
-            verts=(np.asarray(shape.geometry.verts).reshape((-1,3))*multiplier).tolist()
-            faces=np.asarray(shape.geometry.faces,dtype=int).reshape((-1,3)).tolist()
-            if not verts or not faces:raise ValueError('No surface geometry')
-            if not all(math.isfinite(v) for p in verts for v in p):raise ValueError('Non-finite geometry')
+            cached=geometry.pop(e.id(),None)
+            if cached is not None:verts,faces=cached
+            else:
+                if kernel is None:kernel=ifcopenshell.geom.kernel(settings,model)
+                verts,faces=surfaces(kernel.create_shape(e))
         except Exception as ex:
             verts=[];faces=[];reason=str(ex)[:200]
             lines=axis_lines(model,e,scale)

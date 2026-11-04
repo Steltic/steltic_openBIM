@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 import re
 import shutil
+import signal
 import subprocess
 import sys
 import uuid
@@ -21,11 +22,36 @@ WORKER_TIMEOUT_SECONDS=1200
 def read(path):return json.loads(Path(path).read_text(encoding='utf-8'))
 
 
+def terminate_worker(proc):
+    """Stop this owned worker tree, including the Windows venv child process."""
+    try:
+        if os.name=='nt':
+            subprocess.run(['taskkill','/PID',str(proc.pid),'/T','/F'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,
+                           timeout=10,creationflags=subprocess.CREATE_NO_WINDOW)
+        else:
+            try:os.killpg(proc.pid,signal.SIGKILL)
+            except ProcessLookupError:pass
+    finally:
+        try:proc.kill()
+        except ProcessLookupError:pass
+
+
+def run_worker(cmd,timeout):
+    options={'creationflags':subprocess.CREATE_NEW_PROCESS_GROUP|subprocess.CREATE_NO_WINDOW} if os.name=='nt' else {'start_new_session':True}
+    with subprocess.Popen(cmd,stdin=subprocess.DEVNULL,stdout=subprocess.PIPE,stderr=subprocess.PIPE,
+                          text=True,encoding='utf-8',errors='replace',**options) as proc:
+        try:stdout,stderr=proc.communicate(timeout=timeout)
+        except subprocess.TimeoutExpired:
+            terminate_worker(proc)
+            proc.communicate(timeout=10)
+            raise
+        return subprocess.CompletedProcess(cmd,proc.returncode,stdout,stderr)
+
+
 def worker(action,source,output,*args):
     cmd=[sys.executable,'-m','steltic_openbim.ifc_worker',action,str(source),str(output),*[str(a) for a in args]]
     try:
-        result=subprocess.run(cmd,capture_output=True,text=True,encoding='utf-8',errors='replace',timeout=WORKER_TIMEOUT_SECONDS,
-                              creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
+        result=run_worker(cmd,WORKER_TIMEOUT_SECONDS)
     except subprocess.TimeoutExpired:raise ValueError('IFC processing exceeded twenty minutes. Export a smaller model or discipline.') from None
     if result.returncode:raise ValueError('IFC processing failed: '+(result.stderr or result.stdout)[-1000:])
     return read(output)

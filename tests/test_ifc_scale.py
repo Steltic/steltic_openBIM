@@ -33,7 +33,7 @@ def test_triangle_limit_rejects_instead_of_publishing_a_partial_model(tmp_path,m
         ifc_import.build_review(path,{'scope':'all','units':'auto'})
 
 
-def test_reused_kernel_keeps_per_product_placements_and_opening_cuts(tmp_path):
+def test_batched_geometry_keeps_per_product_placements_and_opening_cuts(tmp_path):
     path=tmp_path/'source.ifc';model=fixture_ifc(path)
     column=model.by_type('IfcColumn')[0]
     opening=ifcopenshell.api.root.create_entity(model,ifc_class='IfcOpeningElement',name='Column test cut')
@@ -56,3 +56,14 @@ def test_reused_kernel_keeps_per_product_placements_and_opening_cuts(tmp_path):
         assert obj['faces']==np.asarray(shape.geometry.faces).reshape((-1,3)).tolist()
     cut=next(o for o in review['objects'] if o['guid']==column.GlobalId)
     assert len(cut['faces'])>12
+
+
+def test_iterator_failure_falls_back_without_dropping_source_objects(tmp_path,monkeypatch):
+    path=tmp_path/'source.ifc';fixture_ifc(path)
+    expected=ifc_import.build_review(path,{'scope':'all','units':'auto'})
+    class BrokenIterator:
+        def __init__(self,*args,**kwargs):pass
+        def initialize(self):raise RuntimeError('Synthetic native iterator failure')
+    monkeypatch.setattr(ifc_import.ifcopenshell.geom,'iterator',BrokenIterator)
+    actual=ifc_import.build_review(path,{'scope':'all','units':'auto'})
+    assert actual==expected
