@@ -157,10 +157,8 @@ def deck_studs(ctx):
 
 
 def plate_base(ctx):
-    a,p=ctx.a,ctx.p;plate=flat(p,36,.1875);a.member('WALL',plate,[0,.28125,0],[0,.28125,28],y=[1,0,0]);embed=flat(p,36,1)
-    a.member('EMBED',embed,[0,0,-12],[0,0,0],y=[1,0,0]);a.box('FISH',[-18,-.1875,-2],[36,.375,4],'S','3/8 x 4 in boundary fishplate');a.box('CONC',[-24,-18,-20],[48,36,20],'A','Mat context',kind='concrete')
-    a.fastener('STUDS',[[x,-.5,-6] for x in (-16.5,-13.5,-10.5,-7.5,-4.5,-1.5,1.5,4.5,7.5,10.5,13.5,16.5)],[0,-1,0],.875,5,['EMBED','CONC'],'Source 7/8 in headed studs, 4 per foot; A longitudinal origin')
-    a.weld('WF',[-18,0,0],[18,0,0],['FISH','EMBED'],.25,description='Source fishplate-to-embedded plate shop fillets');a.weld('WW',[-18,.375,1],[18,.375,1],['WALL','FISH'],.1875,description='Source wall-panel lap welds, both edges');a.section_axis=0;a.section_at=1.5;a.dim([0,0,-12],[0,0,0],'12 in embedded plate depth')
+    from .review_wall_bases import plate
+    plate(ctx)
 
 
 def core_base(ctx):

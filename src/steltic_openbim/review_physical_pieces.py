@@ -12,6 +12,8 @@ def apply(builder):
     column_pieces(builder)
     aligned_bearing_splices(builder)
     embedded_shafts(builder)
+    from .review_wall_bases import prepare as wall_bases
+    wall_bases(builder)
     rocking_post_ends(builder)
     column_boxing(builder)
     brace_receivers(builder)
