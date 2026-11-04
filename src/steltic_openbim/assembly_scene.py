@@ -257,6 +257,25 @@ def section_polygons(part,axis,value):
         unique={tuple(round(p[i],7) for i in range(3)):p for p in hits}
         points=list(unique.values())
         if len(points)==2 and math.dist(*points)>1e-6:segments.append(points)
+        elif len(points)>2:
+            # A cap across adjacent web/flange strips may contain an interior
+            # vertex on the section line. Dropping that whole face loses the
+            # diagonal closure. Keep its actual intervals, including the shared
+            # vertex, rather than enclosing a concave face across empty space.
+            direction=max(range(3),key=lambda i:max(q[i] for q in points)-min(q[i] for q in points))
+            points.sort(key=lambda q:q[direction]);ray=sub(points[-1],points[0])
+            if dot(ray,ray)<1e-12 or any(dot(cross(sub(q,points[0]),ray),cross(sub(q,points[0]),ray))>1e-10*dot(ray,ray) for q in points):continue
+            normal=next((cross(sub(q,face[0]),sub(r,face[0])) for q,r in zip(face[1:],face[2:]) if dot(cross(sub(q,face[0]),sub(r,face[0])),cross(sub(q,face[0]),sub(r,face[0])))>1e-12),None)
+            if normal is None:continue
+            plane=[i for i in range(3) if i!=max(range(3),key=lambda i:abs(normal[i]))]
+            def inside(q):
+                x,y=[q[i] for i in plane];hit=False
+                for v,w in zip(face,face[1:]+face[:1]):
+                    ax,ay=[v[i] for i in plane];bx,by=[w[i] for i in plane]
+                    if abs((x-ax)*(by-ay)-(y-ay)*(bx-ax))<1e-8 and min(ax,bx)-1e-8<=x<=max(ax,bx)+1e-8 and min(ay,by)-1e-8<=y<=max(ay,by)+1e-8:return True
+                    if (ay>y)!=(by>y) and x<(bx-ax)*(y-ay)/(by-ay)+ax:hit=not hit
+                return hit
+            segments.extend([a,b] for a,b in zip(points,points[1:]) if math.dist(a,b)>1e-6 and inside(mul(add(a,b),.5)))
     # Stitch matching segment ends; separate strips/cylinders yield separate loops.
     loops=[]
     while segments:
