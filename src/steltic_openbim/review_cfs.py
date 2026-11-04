@@ -338,7 +338,11 @@ def floors_and_roofs(b,outline,bystory,levels):
         rec=records.get('joist-roof' if roof else 'joist-typ') or records.get('joist-unit') or records.get('joist-clinic') or records.get('joist-room-bar') or {}
         pid=b.profile(section(rec.get('section'),'1200S200-68'));spacing=float(rec.get('spacing_in',12 if b.key=='cfs14' else 16))
         if b.key=='cfs3':spacing=16 if roof else 48
-        for station in frange(low,high+.1,spacing):
+        stations=list(frange(low,high+.1,spacing))
+        if b.key=='cfs3':
+            from .review_supplements import wall_axis_framing_stations
+            stations=wall_axis_framing_stations(b,stations,direction,k,f'OW-{k}-'+'{station}-','delegated open-web truss')
+        for station in stations:
             ranges=intersections(poly,direction,station/12)
             for run,(lo,hi) in enumerate(ranges):
                 supports=sorted({lo*12,hi*12}|{x for x in bearing if lo*12<x<hi*12})

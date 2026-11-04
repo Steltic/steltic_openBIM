@@ -99,7 +99,11 @@ def floors(b,outline,levels):
             continue
         rid='joist-roof' if roof and 'joist-roof' in rows else 'joist-floor';pid=section(rows[rid]['section']);spacing=24 if roof and b.key=='cfs12' else 12 if b.key in ('cfs4','cfs12') else 16
         support_positions=[p for axis,p in bearing_lines(b) if axis==1] or [i*336 for i in range(6)]
-        for station in frange(0,max(y for x,y in outline)*12+.1,spacing):
+        stations=list(frange(0,max(y for x,y in outline)*12+.1,spacing))
+        if b.key=='cfs12':
+            from .review_supplements import wall_axis_framing_stations
+            stations=wall_axis_framing_stations(b,stations,0,k,f'J-{k}-'+'{station}-','source-family joist')
+        for station in stations:
             for run,(lo,hi) in enumerate(intersections(outline,0,station/12)):
                 supports=sorted({lo*12,hi*12}|{p for p in support_positions if lo*12<p<hi*12})
                 for j,(a,d) in enumerate(zip(supports,supports[1:])):joist(f'J-{k}-{station}-{run}-{j}',pid,0,station,a,d,z-finish,k,rid,spacing)

@@ -131,3 +131,19 @@ Section cuts retain intermediate vertices on web/flange caps and preserve gaps
 in concave faces. Focused tests check both member end orders, every screw's
 contact with the real sheets, separate short/long node variants and empty gaps.
 Whole-case and full regression verification is required before merging.
+
+## Parallel wall grid stations and roof applicability (0.8.43 candidate)
+
+In CFS3 and CFS12, an actual parallel wall can fall between the regular floor or
+roof framing stations. Additional matching trusses/joists on those wall axes are
+explicit A proposals, recorded with wall-member IDs, framing prefixes, level and
+station. Existing wall axes and regular framing remain. Added loads, bearing and
+supplier/attachment capacity are still unverified. Actual-sheet contact is
+checked at the formerly unbound CFS3 and CFS12 wall heads.
+
+At CFS13 low-roof heads with no wall above, the explicitly labelled bottom-track
+anchor/inter-storey strap schedule is retained as context. Its base/floor
+selections remain on their actual occurrences. A missing receiver or an
+unlabelled schedule does not qualify for this treatment. Eight applicability
+tests include the actual NE low-roof and foundation occurrences. Native source
+assembly mappings remain outstanding; no complete-case acceptance is asserted.
