@@ -1,0 +1,82 @@
+{
+  "scope": "RBS detail rendering correction only; complete native BIM acceptance remains a separate ongoing work package",
+  "cases_reviewed": 61,
+  "affected_cases": [
+    {
+      "id": "hr16",
+      "detail_variants": 26
+    },
+    {
+      "id": "hr12",
+      "detail_variants": 114
+    },
+    {
+      "id": "hr9",
+      "detail_variants": 17
+    },
+    {
+      "id": "hr33",
+      "detail_variants": 1
+    },
+    {
+      "id": "hr22",
+      "detail_variants": 16
+    },
+    {
+      "id": "hr25",
+      "detail_variants": 21
+    },
+    {
+      "id": "hr24",
+      "detail_variants": 18
+    },
+    {
+      "id": "hr10",
+      "detail_variants": 15
+    },
+    {
+      "id": "hr27",
+      "detail_variants": 46
+    },
+    {
+      "id": "hr2",
+      "detail_variants": 21
+    },
+    {
+      "id": "hr5",
+      "detail_variants": 22
+    },
+    {
+      "id": "hr7a",
+      "detail_variants": 18
+    },
+    {
+      "id": "hr15",
+      "detail_variants": 35
+    },
+    {
+      "id": "hr19",
+      "detail_variants": 52
+    },
+    {
+      "id": "hr23",
+      "detail_variants": 8
+    },
+    {
+      "id": "hr26",
+      "detail_variants": 15
+    },
+    {
+      "id": "hr29",
+      "detail_variants": 12
+    }
+  ],
+  "cause": "A short single-connection beam extract inherited both-end RBS geometry, creating a false second longitudinal reduction.",
+  "correction": "Explicit selected ends/cuts in member geometry; one near-end reduction in connection detail extracts; smooth display without internal tessellation lines. Full member defaults preserve both selected ends.",
+  "original_inputs_modified": false,
+  "validation": {
+    "tests": "116 passed: RBS geometry, display topology, connection assemblies and all three review-building batches",
+    "review_note": "The 61-case inventory identified 457 RBS drawing variants across 17 HR examples. This is a pattern audit, not native completeness acceptance.",
+    "saved_answers": "Known saved answers are adopted; additional current requests remain provisional and unresolved."
+  }
+}
