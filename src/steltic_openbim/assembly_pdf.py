@@ -38,9 +38,11 @@ def draw_view(sh,scene,mode,rect,title):
     if mode=='section':
         polys=[]
         for part in parts:
-            if part['kind']=='concrete':continue
+            if part['kind']=='concrete' and not part.get('show_in_section'):continue
             loops=section_polygons(part,scene['section_axis'],scene['section_at'])
             for loop in loops:polys.append((part,[(p[0],p[1],0) for p in loop]))
+        # Selected host context must sit behind its embedded reinforcement.
+        polys.sort(key=lambda row:row[0]['kind']!='concrete')
         if not polys:raise ValueError('Empty transverse section '+scene['id'])
     else:
         polys=[]

@@ -227,3 +227,24 @@ to its separate replay checks.
 After integration with the stud-row and track-splice corrections, all 18
 affected source-binding, track-splice and wall-base tests passed. The underlying
 0.8.45 main branch passed the full 595-test suite.
+
+## Source concrete collector bars (0.8.47)
+
+CFS4's ten collector schedules now have their actual 2, 3 or 4 #5 Gr 60 bars
+on each of the three concrete-filled floors. They are not applied to the wood
+roof. Specific collector checks take precedence over the diaphragm summary's
+generic #4 wording, with both original records retained. The source bar counts,
+diameter and grade remain S. Stock pieces, contact laps, cover, end margins and
+vertical layering are A proposals with no new development or capacity check.
+The builder refuses a collector path that intersects a floor opening.
+
+All 924 added bond/lap occurrences passed receiver fit, and 20 focused collector,
+connection-assembly and section-geometry tests passed. The two detail sheets
+were rendered and visually checked. Concrete host context can be shown in a
+section when explicitly requested by that detail, behind its reinforcement;
+the usual steel-detail section behavior is retained.
+All 11 collector/track-splice integration tests passed after merging current main.
+
+This is a partial physical-data addition. WWR, perimeter chord continuity and
+deck-to-blocking screws remain separate requirements. The diaphragm schedule
+stays unmapped, and whole-building native completeness is not asserted.

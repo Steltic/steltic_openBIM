@@ -81,4 +81,6 @@ def build_model(package,state):
     edge_chord_corners(b)
     from .review_cfs_source_bindings import apply as cfs_source_bindings
     cfs_source_bindings(b)
+    from .review_concrete_collectors import apply as concrete_collectors
+    concrete_collectors(b)
     return b.finish()
