@@ -99,6 +99,15 @@ both real chords of an open-web truss and each channel ply of a built-up chord.
 Short gaps at cut track ends use explicit formed returns attached to real webs;
 they do not imply direct flange overlap or verified bearing capacity. Interior
 roof-wall interfaces use the chord actually crossing or following the wall.
+On 48 in framing grids, the receiver search and track extract include the next
+member actually over the track, instead of connecting an unsupported nearer
+member outside the cut end. The local return-clip reach limit stays unchanged.
+
+Where a fictional roof wall or corridor bearing line misses the adopted framing
+grid, additional matching drag trusses/corridor joists are explicit A proposals.
+The source wall axes and regular framing grids stay unchanged. Each addition is
+listed in the model's change register; added wall loads, supplier transfer and
+connection capacity remain separately required.
 
 Drawing sections cut across parallel members to show their actual plies. Long
 component labels stay within their view, and repeated identical notes are

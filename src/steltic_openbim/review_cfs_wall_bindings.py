@@ -167,11 +167,11 @@ def bind(model):
                     allowance=6 if is_joist else .01
                     if abs(local[0][1])<.01 and min(q[0] for q in local)-allowance<=0<=max(q[0] for q in local)+allowance and abs(local[0][2])<30:tracks.append(m)
                 elif m['kind'] in ('joist','opening_trimmer') and abs(dot(u,axes[1]))>.999:
-                    if abs(local[0][0])<=24 and abs(local[0][2])<24 and any(abs(q[1])<.01 for q in local):joists.append(m)
+                    if abs(local[0][0])<=48 and abs(local[0][2])<24 and any(abs(q[1])<.01 for q in local):joists.append(m)
                 elif m['kind'] in ('joist','rim_track','floor_rim') and abs(dot(u,axes[0]))>.999:
                     if abs(local[0][1])<.01 and abs(local[0][2])<24 and min(q[0] for q in local)-.01<=0<=max(q[0] for q in local)+.01:parallel.append(m)
                 elif m['kind']=='truss_chord' and abs(dot(u,axes[1]))>.999:
-                    if abs(local[0][0])<=24 and abs(local[0][2])<24 and min(q[1] for q in local)-.01<=0<=max(q[1] for q in local)+.01:truss.append(m)
+                    if abs(local[0][0])<=48 and abs(local[0][2])<24 and min(q[1] for q in local)-.01<=0<=max(q[1] for q in local)+.01:truss.append(m)
                 elif m['kind']=='truss_chord' and abs(dot(u,axes[0]))>.999:
                     if abs(local[0][1])<.01 and abs(local[0][2])<24 and min(q[0] for q in local)-.01<=0<=max(q[0] for q in local)+.01:truss.append(m)
                 elif m['kind'] in ('stud','chord','opening_jamb'):
@@ -248,7 +248,10 @@ def bind(model):
             # unresolved occurrence visible to the fit/missing-data gate.
             if not chosen:continue
             items=list(dict((m['id'],m) for m in chosen+selected_joists+selected_truss+selected_studs).values())
-            data=dict(receivers=[local_member(m,origin,axes,32) for m in items],joist_ids=[m['id'] for m in selected_joists],track_ids=[m['id'] for m in chosen],stud_ids=[m['id'] for m in selected_studs],truss_ids=[m['id'] for m in selected_truss])
+            stations=[abs(point(axis(m)[0],origin,axes)[0]) for m in selected_joists+selected_truss
+                      if abs(dot(unit(sub(axis(m)[1],axis(m)[0])),axes[1]))>.999]
+            track_extent=max([32]+[s+8 for s in stations])
+            data=dict(receivers=[local_member(m,origin,axes,track_extent if m in chosen else 32) for m in items],joist_ids=[m['id'] for m in selected_joists],track_ids=[m['id'] for m in chosen],stud_ids=[m['id'] for m in selected_studs],truss_ids=[m['id'] for m in selected_truss])
             c.setdefault('parameters',{})['physical_floor_stack']=data
             c['member_ids']=list(dict.fromkeys(c['member_ids']+[m['id'] for m in items]))
     model['connections'][:]=[c for c in model['connections'] if c['id'] not in remove]
