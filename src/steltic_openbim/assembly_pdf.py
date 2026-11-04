@@ -120,8 +120,13 @@ def draw_view(sh,scene,mode,rect,title):
     rail_welds=mode=='front' and (len(scene['welds'])>10 or scene['family'] in (
         'review_cfs_hold_down','review_pg_seat','review_pg_pickup'))
     if rail_welds:
-        for weld in scene['welds']:
-            q=project([(a+b)/2 for a,b in zip(weld['a'],weld['b'])]);labels.append((q[1],weld['id'],tr(q),dict(kind='weld',basis=weld['basis'])))
+        from .assembly_legend import weld_groups
+        for label,_,welds in weld_groups(scene):
+            # Match the parts legend's identical-specification groups. Keep all
+            # actual weld strokes below, but one leader per group avoids rows
+            # of repeated stud-weld labels extending into adjacent views.
+            weld=welds[len(welds)//2]
+            q=project([(a+b)/2 for a,b in zip(weld['a'],weld['b'])]);labels.append((q[1],label,tr(q),dict(kind='weld',basis=weld['basis'])))
     if mode in ('front','iso'):
         from reportlab.pdfbase.pdfmetrics import stringWidth
         from .drawing_pdf import ascii_text

@@ -157,3 +157,24 @@ CFS3 passed all 3,278 variants and 80,128 installed occurrences; CFS12 passed
 all 5,259 variants and 63,308 occurrences. Two actual wall/contact regressions
 and 14 affected schedule/applicability tests passed. Native assembly entry for
 the large cases continues separately; physical fit alone does not make them ready.
+
+## Full-width plate-wall bases and repeated weld labels (0.8.44)
+
+HR9's plate-wall base now uses its actual full-width wall profile and source
+1 x 12 in embed plate. Each 28 ft panel has all 112 headed studs at four per
+foot. The 3/8 x 4 in fishplate, two 1/4 in shop fillets and both 3/16 in field
+lap edges retain their source records. The 2 in bottom clearance, fishplate
+datum, stud row and 5 in stud length are explicit A fit proposals; foundation
+and local capacity verification remain outstanding. The source workline is
+retained while the physical plate and panel boundary record the bottom cut.
+
+The full-width base passes receiver fit. Five separate HR9 plate-edge/splice
+variants remain unresolved, so this does not establish whole-building readiness.
+Twenty affected source, geometry and annotation tests passed. The actual base
+sheet was rendered and visually checked.
+
+Repeated identical weld specifications now share the same callout range used
+by the parts legend. Every individual weld stroke and exported weld is retained.
+This prevents a 112-stud row from creating 112 leaders extending outside the
+elevation into adjacent views. The enlarged section retains the real wall,
+fishplate, embed plate and stud location.

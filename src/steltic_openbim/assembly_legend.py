@@ -1,6 +1,16 @@
 """Complete, paginated parts and notes for assembled connection drawings."""
 
 
+def weld_groups(scene):
+    groups={}
+    for weld in scene['welds']:
+        key=(weld['basis'],weld['kind'],weld['size'],weld['description'],tuple(weld['connects']))
+        groups.setdefault(key,[]).append(weld)
+    for key,welds in groups.items():
+        label=welds[0]['id'] if len(welds)==1 else welds[0]['id']+'..'+welds[-1]['id']
+        yield label,key,welds
+
+
 def entries(scene):
     rows=[];groups={};part_labels={}
     for part in scene['parts']:
@@ -20,12 +30,7 @@ def entries(scene):
             description+=' | Basis: '+basis
             basis='S/A' if 'S' in basis and 'A' in basis else 'S' if basis.startswith('S') else 'A'
         rows.append(dict(label=label,basis=basis,text=description,note=False))
-    weld_groups={}
-    for weld in scene['welds']:
-        key=(weld['basis'],weld['kind'],weld['size'],weld['description'],tuple(weld['connects']))
-        weld_groups.setdefault(key,[]).append(weld)
-    for (basis,kind,size,description,connects),welds in weld_groups.items():
-        label=welds[0]['id'] if len(welds)==1 else welds[0]['id']+'..'+welds[-1]['id']
+    for label,(basis,kind,size,description,connects),welds in weld_groups(scene):
         spec=(f'{size:g} in ' if kind=='fillet' else '')+kind
         rows.append(dict(label=label,basis=basis,note=False,text=spec+' | '+description+' | '+joined(connects)+(f' | {len(welds)} weld lines' if len(welds)>1 else '')))
     rows.extend(dict(label=i['id'],basis=i['basis'],note=False,text=i['description']+' | '+joined(i['connects'])) for i in scene.get('interfaces',[]))
