@@ -137,7 +137,7 @@ dimension refinement passed all four focused tests. CFS2 passed all 2,801
 variants and 76,958 installed occurrences. A short-node sheet was rendered and
 visually checked. Native completeness remains a separate, unfinished gate.
 
-## Parallel wall grid stations and roof applicability (0.8.43 candidate)
+## Parallel wall grid stations and roof applicability (0.8.43)
 
 In CFS3 and CFS12, an actual parallel wall can fall between the regular floor or
 roof framing stations. Additional matching trusses/joists on those wall axes are
@@ -152,3 +152,8 @@ selections remain on their actual occurrences. A missing receiver or an
 unlabelled schedule does not qualify for this treatment. Eight applicability
 tests include the actual NE low-roof and foundation occurrences. Native source
 assembly mappings remain outstanding; no complete-case acceptance is asserted.
+
+CFS3 passed all 3,278 variants and 80,128 installed occurrences; CFS12 passed
+all 5,259 variants and 63,308 occurrences. Two actual wall/contact regressions
+and 14 affected schedule/applicability tests passed. Native assembly entry for
+the large cases continues separately; physical fit alone does not make them ready.
