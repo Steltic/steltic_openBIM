@@ -142,6 +142,9 @@ def slip(ctx):
     ctx.a.interfaces.append(dict(id='SLIP',kind='horizontal_slotted_connection',connects=['M2','P1'],travel_in=2,basis='A',description='Source axial release; A travel and slot dimensions'))
 
 def plan_angle(ctx):
+    if ctx.params.get('physical_plan_brace'):
+        from .review_plan_bracing import draw
+        return draw(ctx)
     a,p,pid=ctx.a,ctx.p,ctx.pid;par=ctx.params;count=par.get('count',2);h=effective(p,pid);bp=ctx.select(('beam','girder','moment_beam','equipment_beam'),ctx.default_w());bd=effective(p,bp);width=12 if count==3 or 'vessel' in ctx.text.lower() else 10
     if par.get('joint')=='column_quadrant':
         cp=ctx.select(('column',),ctx.default_w());a.member('COLUMN',cp,[0,0,-30],[0,0,20])
@@ -178,6 +181,9 @@ def equipment_head(ctx):
     a.notes.append('Explicit fictional supplier base-frame rail and leg interface. Damper mass/reactions retain their source design; supplier dynamics, travel and attachment capacity remain delegated.')
 
 def angle_crossing(ctx):
+    if ctx.params.get('physical_plan_brace'):
+        from .review_plan_bracing import draw
+        return draw(ctx)
     a,p,pid=ctx.a,ctx.p,ctx.pid;t=p[pid]['dimensions']['t'];h=effective(p,pid)
     a.member('A1',pid,[-20,0,0],[20,0,0],y=[0,1,0]);a.member('A2',pid,[0,-20,t],[0,20,t],y=[-1,0,0]);a.fastener('B1',[[0,0,0]],[0,0,1],.75,2*t,['A1','A2'],'S one 3/4 in A325 crossing bolt');a.front_axes=(0,1);a.section_axis=0;a.section_at=0
     a.notes.append('S: horizontal-truss crossing bolt. A: angles occupy adjacent flange planes; flange offsets and local packer fit are coordination geometry. Grating is cut clear and does not act as a diaphragm.')

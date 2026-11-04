@@ -46,7 +46,7 @@ def apply(builder):
                     if abs(dot(flange_normal,beam_axis))>.99:selected.append(rid)
                 continue
             if selection(text) or 'joint' in rid.lower() or 'rbs' in text.lower():continue
-            if any(w in text.lower() for w in ('single plate','shear plate','two plates','two-plate','clip angle','end connection')):selected.append(rid)
+            if any(w in text.lower().replace('-',' ') for w in ('single plate','shear plate','two plates','two plate','clip angle','end connection')):selected.append(rid)
         c['design_record_ids']=selected
         c['source_context_records']=original
         if not selected:

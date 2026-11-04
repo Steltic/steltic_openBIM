@@ -49,7 +49,7 @@ def support(ctx,bp):
     elif source or ctx.family in ('review_crane_bracket','review_pin_beam','review_existing_joint'):
         a.member('M1',cp,[0,0,-bd-14],[0,0,14],description='Receiving column '+cp);face=cd/2
     else:
-        receiver=next((m for m in ctx.ms[1:] if m['kind'] in ('girder','beam','moment_beam','walkway_edge_beam','truss_chord')),None)
+        receiver=next((m for m in ctx.ms[1:] if m['kind'] in ('girder','beam','moment_beam','walkway_edge_beam','truss_chord','transfer_chord')),None)
         if receiver:
             point=ctx.c['point'];far=max(beam['axis'],key=lambda q:math.dist(q,point));x=unit([far[0]-point[0],far[1]-point[1],0]);y=cross([0,0,1],x);axes=(x,y,[0,0,1])
             local=lambda q:[dot(sub(q,point),v) for v in axes]
@@ -288,11 +288,14 @@ def base(ctx):
                     across=ctx.n(NUMBER+r' in across the faces',min(6,2*(half-2)/max(1,rows-1)));shift=(j%rows-(rows-1)/2)*across;z=-first-(j//rows)*pitch;pt=add(origin,add(mul(along,shift),[0,0,z]));points.append(pt);placed+=1
                 if points:a.fastener('STUDS'+str(face),points,normal,dia,5,['M1','CONC'],'Source 7/8 x 5 in headed stud group; A stations / illustrative head envelope')
             a.notes.append(f'S: all {count} headed studs represented. '+('Source row count, vertical and transverse spacing retained.' if specified else 'A stations within the source embedment; exact distribution requires reconciliation.'))
-        erection=re.search(r'(\d+) erection anchor rods',txt,re.I)
+        from .review_base_selection import erection_rods
+        erection=erection_rods(txt)
         if erection:
-            n=int(erection[1]);points=[[sx*(bx/2-2),sy*(by/2-2),-le-t-12] for sx,sy in ((-1,-1),(1,-1),(1,1),(-1,1))]
+            n=erection['count'];edge=erection['edge_min'];dia=erection['diameter'];grade=erection['grade']
+            points=[[sx*(bx/2-edge),sy*(by/2-edge),-le-t-12] for sx,sy in ((-1,-1),(1,-1),(1,1),(-1,1))]
             if n!=4:raise ValueError('An explicit erection-rod layout is required for this source count')
-            a.fastener('ERECTION-ANCHORS',points,[0,0,1],.75,12+t,['P1','CONC'],f'{n} source erection anchor rods; A 3/4 in F1554 Grade 36 and 12 in embedment; erection only',basis='S count; A diameter, grade and position')
+            selected='S' if erection['selected_size'] else 'A'
+            a.fastener('ERECTION-ANCHORS',points,[0,0,1],dia,12+t,['P1','CONC'],f'S {n} erection anchor rods; {selected} {dia:g} in {grade}; A 12 in embedment and symmetric stations at edge minimum {edge:g} in; erection only',basis=f'S count; {selected} diameter/grade; A length and set-out')
         a.section_axis=2;a.section_at=-le/2;a.dim([bx/2,0,-le],[bx/2,0,0],f'Embedment {le:g} in');return
     match=re.search(r'(?:base plate\s*(?:PL)?|moment base:\s*PL)\s*'+NUMBER+r' x '+NUMBER+r' x '+NUMBER+r' in',txt,re.I)
     t,bx,by=list(map(number,match.groups())) if match else (1,d+8,w+8)

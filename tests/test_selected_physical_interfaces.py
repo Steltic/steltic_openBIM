@@ -91,3 +91,63 @@ def test_mirrored_chamfer_corners_have_compatible_upright_receiver_directions():
         direction=unit(sub(*drawn['axis'][::-1]))
         assert direction[:2]==pytest.approx(local)
         assert all(q[2]<0 for q in drawn['axis']), 'Beam centroid remains below top of steel at every corner'
+
+
+def test_transfer_collectors_use_the_explicit_saved_line_checks_when_csv_axial_is_zero():
+    p,m=building('hr12');members={v['id']:v for v in m['members']}
+    expected={r['id'] for r in p['design_records'] if r['id'].startswith('members/collector-L9-')}
+    located={r for v in m['members'] for r in v.get('design_record_ids',[])}
+    assert expected<=located
+    cs=[c for c in m['connections'] if c.get('parameters',{}).get('collector') and members[c['member_ids'][0]]['level']==9]
+    assert cs and any('connections/collector-irregularity-lines' in c['design_record_ids'] for c in cs)
+    for c in cs:
+        beam=members[c['member_ids'][0]]
+        if 'members/collector-L9-GridF-W24X62' in beam['design_record_ids']:assert max(q[0] for q in beam['axis'])<=336
+    assert all('connections/diaphragm-chords-L9' not in c['design_record_ids'] for c in m['connections'] if c['detail_ref']['id']=='review_deck_studs')
+
+
+def test_top_and_bottom_rockers_keep_beam_datum_and_clear_the_actual_post():
+    p,m=building('hr9');members={v['id']:v for v in m['members']};profiles={v['id']:v for v in m['profiles']};seen=set()
+    for c in m['connections']:
+        if c['detail_ref']['id']!='review_rocker':continue
+        upper=c['parameters']['inverted'];post,beam=[members[mid] for mid in c['member_ids'][:2]]
+        key=(upper,post['profile_id'],beam['profile_id'])
+        if key in seen:continue
+        seen.add(key);scene=build_scene(m,p,c);depth=profiles[beam['profile_id']]['dimensions']['d']
+        hbe=next(v['member'] for v in scene['parts'] if v['id']=='HBE')
+        assert all(v[2]==pytest.approx(-depth/2) for v in hbe['axis'])
+        end=1 if upper else 0;expected=-depth-10 if upper else 10
+        assert post['end_offsets'][end][2]==pytest.approx(expected)
+        local=next(v['member'] for v in scene['parts'] if v['id']=='POST')
+        assert (max(v[2] for v in local['axis']) if upper else min(v[2] for v in local['axis']))==pytest.approx(expected)
+    assert {k[0] for k in seen}=={False,True}
+
+
+def test_transfer_chord_keeps_both_analysis_components_and_receives_actual_infill_and_brace():
+    p,m=building('hr20');members={v['id']:v for v in m['members']};cs={v['id']:v for v in m['connections']}
+    assert 'hr:element:1094' not in members
+    chord=members['hr:element:1093']
+    assert set(chord['analysis_ids'])=={'hr:element:1093','hr:element:1094'}
+    assert {v['source_member_id'] for v in chord['analysis_design_evidence']}==set(chord['analysis_ids'])
+    assert chord['analysis_component_roles']=={'hr:element:1093':'axial','hr:element:1094':'flexural'}
+    c=cs['INF-FLOOR-9-840.0:1'];assert chord['id'] in c['member_ids']
+    scene=build_scene(m,p,c);support=next(q['member'] for q in scene['parts'] if q['id']=='M1')
+    assert support['profile_id']=='W14X665' and all(q[2]==pytest.approx(0) for q in support['axis'])
+    c=cs['hr:element:1021:0'];assert 'hr:element:431' in c['member_ids'] and 'hr:element:430' not in c['member_ids']
+    scene=build_scene(m,p,c);support=next(q['member'] for q in scene['parts'] if q['id']=='BEAM')
+    assert support['profile_id']=='W14X665' and all(q[2]==pytest.approx(0) for q in support['axis'])
+
+
+def test_embedded_transfer_building_bases_keep_selected_erection_anchors():
+    p,m=building('hr20');seen=set()
+    for c in m['connections']:
+        if c['detail_ref']['id']!='review_base':continue
+        if not any(r in ('connections/conn-base-lateral_col-W14X808','connections/conn-base-lateral_col-W14X873') for r in c['design_record_ids']):continue
+        seen.update(c['design_record_ids']);scene=build_scene(m,p,c)
+        f=next(v for v in scene['fasteners'] if v['id']=='ERECTION-ANCHORS')
+        assert f['diameter']==1.5 and f['count']==4
+        assert 'F1554-36' in next(v['description'] for v in scene['parts'] if v['id']=='ERECTION-ANCHORS')
+        plate=next(v for v in scene['parts'] if v['id']=='P1')
+        for point in f['points']:
+            assert min(plate['bounds'][i][1]-abs(point[i]) for i in (0,1))==pytest.approx(2.66)
+    assert len(seen)==2

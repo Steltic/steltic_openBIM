@@ -65,14 +65,21 @@ def apply(b):
             matches=[m for m in b.members if m['profile_id']==section and m['level']==1 and m['kind'] in ('beam','girder','moment_beam') and all(1008<=q[0]<=1344 and 336<=q[1]<=1008 for q in m['axis'])]
             basis='Source library floor at 12 ft, Grids 4-5/B-D; exact selected girder section'
         elif b.key.startswith('hr34') and rid in ('members/chord-L2-W21X93','members/chord-L2-Grid9-W24X76','members/floor-W27X84-Y-lines','members/infill-roof-drift-W21X44'):
+            edge=max(q[0] for m in b.members if m['kind']=='column' for q in m['axis'])
             for m in b.members:
                 if m['profile_id']!=section:continue
                 a,z=m['axis']
                 if rid=='members/chord-L2-W21X93' and m['level']==2 and a[1]==z[1] and a[1] in (0,1200):matches.append(m)
-                if rid=='members/chord-L2-Grid9-W24X76' and m['level']==2 and a[0]==z[0]==1440:matches.append(m)
+                if rid=='members/chord-L2-Grid9-W24X76' and m['level']==2 and a[0]==z[0]==edge:matches.append(m)
                 if rid=='members/floor-W27X84-Y-lines' and m['level'] in (1,2) and a[0]==z[0] and a[1]!=z[1]:matches.append(m)
                 if rid=='members/infill-roof-drift-W21X44' and m['level']==roof and m['kind']=='infill' and a[0]==z[0]==120:matches.append(m)
-            basis='Source tower local grids: A/D podium chords, Grid 9 at local X=1440, Y collectors, or first roof infill 120 in from the inter-tower face'
+            basis=f'Source tower local grids: A/D podium chords, outer Grid 9 at local X={edge:g}, Y collectors, or first roof infill 120 in from the inter-tower face'
+            if b.key=='hr34b' and rid=='members/floor-W27X84-Y-lines' and not matches:
+                actual=[m for m in b.members if m['profile_id']==section and m['kind'] in ('beam','girder','moment_beam')]
+                if len(actual)==4 and all(m['level'] in (1,2) and m['axis'][0][1]==m['axis'][1][1] and abs(m['axis'][1][0]-m['axis'][0][0]-441)<.01 for m in actual):
+                    reason='Retained unused gold Y-line check for W27X84. All four final W27X84 members run in X over the 441 in podium extension at Levels 1 and 2, with their X-line design records. No W27X84 member runs along a 400 in Y bay. Do not apply this Y-line check or invent its bottom-flange bracing on the X members.'
+                    b.record_dispositions=getattr(b,'record_dispositions',[])+[dict(record_id=rid,status='not_applicable',reason=reason,evidence_member_ids=[m['id'] for m in actual])]
+                    b.note('UNUSED-Y-COLLECTOR-VARIANT','S: '+reason)
         elif inputs.get('kind') in ('col','column'):
             demand=data.get('engine_P_comp_kip',inputs.get('P_comp_kip'))
             if not isinstance(demand,(int,float)) or demand<=0:continue

@@ -289,6 +289,10 @@ def build_model(package,state):
         connection.update(member_ids=sorted(set(related)),point=j['point'])
         kept_connections.append(connection)
     connections=kept_connections
+    endpoint_links=[]
+    if pilot=='hr22':
+        from .review_hr_kickers import bind as kicker_bind
+        endpoint_links=kicker_bind(members,connections,profiles,changes)
     # Every new cut end receives an explicit opening-frame interface reference.
     for m in members:
         if m.get('opening_id'):
@@ -329,6 +333,7 @@ def build_model(package,state):
         members=members,profiles=list(profiles.values()),materials=copy.deepcopy(ph['materials'])+[
             dict(id='assumed_test_material',basis='A',specification='Fictional supplementary framing. Geometry and connection assumptions only; no newly verified strength or capacity.')],
         panels=panels,openings=features,connections=connections,
+        connection_endpoint_links=endpoint_links,
         member_schedule=schedule,details=list(details.values()),grids=grids,levels=spec['levels'],changes=changes,
         assumptions=[dict(id=r['id'],answer=r['resolution'] if r.get('confirmed') else 'TBD - resolve query: '+r['proposal'],
                           basis='A - user-authorized fictional test input' if r.get('confirmed') else 'Provisional information request',

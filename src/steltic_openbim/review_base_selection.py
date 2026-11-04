@@ -30,6 +30,19 @@ def rods(text):
     return None
 
 
+def erection_rods(text):
+    """Keep selected rod size/grade and edge minimum; label missing lengths A."""
+    hit=re.search(r'\b(\d+|four) erection anchor rods\b',text,re.I)
+    if not hit:return None
+    count=4 if hit[1].lower()=='four' else int(hit[1])
+    tail=text[hit.end():]
+    selected=re.match(r'\s*'+NUMBER+r'\s*in\s*((?:ASTM\s+)?F1554(?:[- ](?:Grade\s*)?\d+)?)',tail,re.I)
+    edge=re.search(r'at '+NUMBER+r' in or more from the plate edges',tail,re.I)
+    return dict(count=count,diameter=number(selected[1]) if selected else .75,
+        grade=selected[2] if selected else 'F1554 Grade 36',
+        selected_size=bool(selected),edge_min=number(edge[1]) if edge else 2)
+
+
 def flange_rows(text):
     """(rows per flange, rods per row, row pitch, flange gap, rod pitch)."""
     hit=re.search(r'rod layout: (\d+) rods outside each flange in (?:(\d+) rows '+NUMBER+r' in apart of (\d+)|one row of (\d+)).*?a1 = '+NUMBER+r' in.*?rods '+NUMBER+r' in apart',text,re.I)

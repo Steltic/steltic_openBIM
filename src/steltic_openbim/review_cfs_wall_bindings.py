@@ -107,7 +107,15 @@ def bind(model):
                 delta=sub(aa,origin)
                 if abs(dot(delta,axes[1]))>.01:continue
                 distance=abs(dot(delta,axes[0]))
-                if distance<=16:candidates.append((distance,m['id'],m))
+                if distance<=16:
+                    if family=='cfs_stud_bridging':
+                        from .review_located_wall_details import section_bounds
+                        local=local_member(m,origin,axes)
+                        transverse=[v for v in section_bounds(profiles,local) if v[0][1]-v[0][0]<.3 and v[1][0]<-.5 and v[1][1]>.5]
+                        # A corner may contain both wall stud directions at the
+                        # same station. Select an actual web facing this bridge.
+                        if not transverse:continue
+                    candidates.append((distance,m['id'],m))
             if candidates:
                 stud=min(candidates)[2];sd=local_member(stud,origin,axes);extra={}
                 if family=='cfs_stud_bridging':
@@ -148,13 +156,23 @@ def bind(model):
             chosen=[]
             for direction in (-1,1):
                 options=[m for m in tracks if m['local_y'][2]*direction>.99]
-                if options:chosen.append(min(options,key=lambda m:abs(axis(m)[0][2]-origin[2])))
+                if options:
+                    distance=min(abs(axis(m)[0][2]-origin[2]) for m in options)
+                    chosen.extend(m for m in options if abs(abs(axis(m)[0][2]-origin[2])-distance)<.01)
             selected_joists=[]
             for side in (-1,1):
                 options=[m for m in joists if (sum(point(q,origin,axes)[1] for q in axis(m))/2)*side>0]
                 if options:selected_joists.append(min(options,key=lambda m:(abs(point(axis(m)[0],origin,axes)[0]),abs(axis(m)[0][2]-origin[2]),m['id'])))
             if is_joist and primary not in selected_joists:selected_joists.insert(0,primary)
-            if not selected_joists and parallel:selected_joists=[min(parallel,key=lambda m:abs(axis(m)[0][2]-origin[2]))]
+            if not selected_joists and parallel:
+                # At a collinear end joint there can be a real floor member on
+                # each side. One arbitrary left-hand member cannot attach a
+                # right-hand track which has no overlap with it.
+                for side in (-1,1):
+                    options=[m for m in parallel if max(side*point(q,origin,axes)[0] for q in axis(m))>2]
+                    if options:
+                        selected=min(options,key=lambda m:(abs(axis(m)[0][2]-origin[2]),m['id']))
+                        if selected not in selected_joists:selected_joists.append(selected)
             selected_studs=[]
             for side in (-1,1):
                 options=[m for m in studs if (sum(q[2] for q in axis(m))/2-origin[2])*side>0]

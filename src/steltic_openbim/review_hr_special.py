@@ -30,14 +30,15 @@ def edge_bars(ctx):
 def brace(ctx):
     a,p,pid,txt,par=ctx.a,ctx.p,ctx.pid,ctx.text,ctx.params;kind=par.get('joint','corner');upper=kind in ('apex','link_end');isbrb=ctx.family=='review_brb'
     full_text=txt
-    cp=ctx.select(('column',));bp=ctx.select(('beam','moment_beam','girder'));cd=effective(p,cp);bd=effective(p,bp);bf=effective(p,bp,'width')
+    cp=ctx.select(('column',));bp=ctx.select(('beam','moment_beam','girder','transfer_chord'));cd=effective(p,cp);bd=effective(p,bp);bf=effective(p,bp,'width')
+    beam_z=par.get('beam_centroid_z',-bd/2);beam_top=beam_z+bd/2;beam_bottom=beam_z-bd/2
     # The connection datum is the building work point, not the support face.
     # Keep its exact source slope; the rounded display angle is not geometry.
     bm=ctx.ms[0]
     far=max(bm['axis'],key=lambda q:math.dist(q,ctx.c['point']))
     delta=sub(far,ctx.c['point']);horizontal=math.hypot(delta[0],delta[1])
     v=unit([horizontal,0,delta[2]]);sign=1 if v[2]>=0 else -1
-    interface_z=-bd if sign<0 else 0
+    interface_z=(beam_bottom if sign<0 else beam_top) if kind!='base' else 0
     # End-specific source text can prescribe different UFM edges at the two ends.
     if par.get('upper_end') and 'upper end:' in txt and not par.get('interface_length'):
         txt=txt.split('upper end:',1)[1];ctx.text=txt
@@ -46,26 +47,26 @@ def brace(ctx):
         length=ctx.n(r'(?:both sides x|flange over) '+NUMBER+r' in',ctx.n(r'apex gusset '+NUMBER+r' in along',36))
         if kind=='link_end':length=ctx.n(r'flange over '+NUMBER+r' in',length)
         length=par.get('interface_length',length)
-        a.member('BEAM',bp,[-length/2-10,0,-bd/2],[length/2+10,0,-bd/2]);lx=length;lz=max(24,length*.65)
+        a.member('BEAM',bp,[-length/2-10,0,beam_z],[length/2+10,0,beam_z]);lx=length;lz=max(24,length*.65)
         vertices=[[-length/2,-t/2,interface_z],[length/2,-t/2,interface_z],[length/2-3,-t/2,interface_z+sign*lz*.4],[3,-t/2,interface_z+sign*lz],[-length/2+3,-t/2,interface_z+sign*lz*.4]]
         a.polygon('GUSSET',vertices,t,basis='A',description=f'Source gusset t={t:g}, beam interface L={length:g}; A free-edge outline')
         w=ctx.n(r'\('+NUMBER+r'-in fillets both sides x',.5);a.weld('WGB',[-length/2,0,interface_z],[length/2,0,interface_z],['BEAM','GUSSET'],w,description='Source apex/link-end interface weld, both sides')
         # Source web stiffeners at both brace work lines and ends.
         tw=p[bp]['dimensions'].get('tw',.4);tf=p[bp]['dimensions'].get('tf',.6)
         if par.get('doubler_thickness'):
-            dt=par['doubler_thickness'];a.box('DOUBLER',[-length/2-2,tw/2,-bd+tf+.0625],[length+4,dt,bd-2*tf-.125],'S','Source apex beam web doubler; A corner clipping envelope')
-            a.weld('WD',[-length/2-2,tw/2,-bd+tf],[length/2+2,tw/2,-bd+tf],['BEAM','DOUBLER'],max(.125,dt-.125),kind='PJP',description='Source doubler-to-flange PJP; both flanges, matching source record')
+            dt=par['doubler_thickness'];a.box('DOUBLER',[-length/2-2,tw/2,beam_bottom+tf+.0625],[length+4,dt,bd-2*tf-.125],'S','Source apex beam web doubler; A corner clipping envelope')
+            a.weld('WD',[-length/2-2,tw/2,beam_bottom+tf],[length/2+2,tw/2,beam_bottom+tf],['BEAM','DOUBLER'],max(.125,dt-.125),kind='PJP',description='Source doubler-to-flange PJP; both flanges, matching source record')
         for i,x in enumerate((-length/2+2,0,length/2-2)):
             for j,sg in enumerate((-1,1)):
                 yy=tw/2 if sg>0 else -bf/2+.25;label=f'ST{i}{j}'
-                a.box(label,[x-.25,yy,-bd+tf],[.5,bf/2-tw/2-.25,bd-2*tf],'A','Source-required stiffener, A thickness/station where unspecified');a.weld('W'+label,[x,yy,-bd+tf],[x,yy,-tf],['BEAM',label],.25,basis='A')
+                a.box(label,[x-.25,yy,beam_bottom+tf],[.5,bf/2-tw/2-.25,bd-2*tf],'A','Source-required stiffener, A thickness/station where unspecified');a.weld('W'+label,[x,yy,beam_bottom+tf],[x,yy,beam_top-tf],['BEAM',label],.25,basis='A')
     else:
         weak=par.get('weak_axis_gusset',False);column_face=p[cp]['dimensions'].get('tw',.375)/2 if weak else cd/2
         a.member('COLUMN',cp,[0,0,0 if kind=='base' else -bd-lz-24],[0,0,lz+24],y=[1,0,0] if weak else [0,1,0])
         if kind=='base':
             a.box('BASE',[-cd-4,-bf/2-6,-1.5],[cd+lx+4,bf+12,1.5],'A','A local extract of source column base plate; see separate base detail')
             a.box('CONC',[-cd-8,-bf/2-10,-12],[cd+lx+12,bf+20,10.5],'A','Foundation context',kind='concrete');host='BASE'
-        else:a.member('BEAM',bp,[column_face,0,-bd/2],[column_face+lx+24,0,-bd/2]);host='BEAM'
+        else:a.member('BEAM',bp,[column_face,0,beam_z],[column_face+lx+24,0,beam_z]);host='BEAM'
         clearance=column_face+(2*t if par.get('beam_only_gusset') else 0)
         vertices=[[clearance,-t/2,interface_z],[lx+clearance,-t/2,interface_z],[max(lx,18)+clearance,-t/2,interface_z+sign*lz*.65],[clearance,-t/2,interface_z+sign*lz]]
         a.polygon('GUSSET',vertices,t,basis='A',description=f'Source gusset t={t:g}; A fitted perimeter, source UFM edges')
@@ -188,3 +189,9 @@ def rocker(ctx):
             yy=tw/2 if sg>0 else -bf/2+.25;name=f'S{i}{j}';a.box(name,[x-.375,yy,-bd+tf],[.75,bf/2-tw/2-.25,bd-2*tf],'A','Source paired full-depth stiffeners; A thickness fit');a.weld('W'+name,[x,yy,-bd+tf],[x,yy,-tf],['HBE',name],.3125,basis='A')
     a.weld('WR',[-3.5,-(bf-.5)/2,0],[3.5,-(bf-.5)/2,0],['HBE','ROCKER'],.3125,description='Source shop fillets on long sides only');a.weld('WP',[-depth/2,-pw/2,10],[depth/2,-pw/2,10],['POST','ENDPL'],kind='CJP',description='Source demand-critical shop CJP flange/web');a.section_axis=0;a.section_at=0;a.dim([-9.5,0,10],[9.5,0,10],'19 in rod centres')
     a.notes.append('Source rocking interface, not a moment splice. Reverse for the post below. Crown geometry uses the source radius; bearing insert and metallurgy remain explicit in the source specification. A stiffener thickness and local plate fit.')
+    if ctx.params.get('inverted'):
+        from .assembly_scene import reflect_z
+        reflect_z(a)
+        # Reflection is about the bearing face. Move it from beam top to bottom
+        # while keeping the assembly origin at the saved top-of-steel datum.
+        a.translate([0,0,-bd])

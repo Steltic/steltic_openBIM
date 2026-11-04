@@ -85,9 +85,14 @@ def prepare(model,package):
             if name in shape_parameters:shape_parameters[name]=signature(shape_parameters[name])
         if 'physical_stud_support' in shape_parameters:
             shape_parameters['physical_stud_support']={k:v for k,v in shape_parameters['physical_stud_support'].items() if k!='member_id'}
+        if 'physical_hr_kicker' in shape_parameters:
+            shape_parameters['physical_hr_kicker']={k:v for k,v in shape_parameters['physical_hr_kicker'].items() if not k.endswith('_id')}
+        if shape_parameters.get('physical_plan_brace'):
+            from .review_plan_bracing import shape
+            shape_parameters['physical_plan_receivers']=shape(ms,c['point'])
         if 'core_face_attachment' in shape_parameters:
             shape_parameters['core_face_attachment']={k:v for k,v in shape_parameters['core_face_attachment'].items() if k!='wall_id'}
-        if family in ('review_beam','review_existing_joint','review_crane_bracket','review_pin_beam'):
+        if family in ('review_beam','review_existing_joint','review_crane_bracket','review_pin_beam','hr_simple_shear_plate'):
             from .pilots.model import sub,unit,dot
             column=next((m for m in ms if m['kind'] in ('column','walkway_post','prop')),None)
             if column:

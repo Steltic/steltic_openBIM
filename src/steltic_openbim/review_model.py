@@ -135,4 +135,5 @@ class CaseModel:
             openings=self.openings,connections=self.connections,member_schedule=schedule,details=[],grids=self.grids,levels=self.levels,changes=self.changes,
             assumptions=assumptions,bounds=bounds,extra_views=self.views,wall_layouts=self.walls,excluded_analysis_elements=self.excluded,
             connection_endpoint_links=getattr(self,'endpoint_links',[]),
+            record_dispositions=getattr(self,'record_dispositions',[]),
             record_coverage=dict(used=sorted(self.used_records),retained_without_physical_occurrence=sorted(set(self.records)-self.used_records)))

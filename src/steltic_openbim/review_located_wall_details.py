@@ -159,7 +159,8 @@ def parallel_floor(a,p,index,label,j,part,tracks,studs):
     jd=effective(p,j['profile_id']);z=j['axis'][0][2];low,high=z-jd/2,z+jd/2
     side=1 if j['local_y'][1]>0 else -1
     for tag,end,surface_z in (('LOW',-1,low),('UP',1,high)):
-        candidates=[v for v in tracks if abs(v[1]['axis'][0][2]-surface_z)<12 and v[1]['local_y'][2]*end>.9]
+        candidates=[v for v in tracks if abs(v[1]['axis'][0][2]-surface_z)<12 and v[1]['local_y'][2]*end>.9
+                    and min(part['bounds'][0][1],v[2]['bounds'][0][1],7)-max(part['bounds'][0][0],v[2]['bounds'][0][0],-7)>2]
         if not candidates:continue
         host,data,bounds=min(candidates,key=lambda v:abs(v[1]['axis'][0][2]-surface_z))
         trackz=bounds['bounds'][2][1 if end<0 else 0];gap=abs(trackz-surface_z);joins=[label,host]

@@ -90,6 +90,10 @@ def source_text(package,c):
 
 def build_scene(model,package,c,subtype=''):
     par=c.get('parameters',{});family=c['detail_ref']['id']
+    if par.get('physical_hr_kicker'):
+        from .review_assemblies import Context
+        from .review_hr_kickers import draw
+        ctx=Context(model,package,c);draw(ctx);return ctx.finish()
     located=None
     if par.get('physical_opening_joint'):located='header'
     elif par.get('physical_jamb_base'):located='jamb_base'
@@ -166,8 +170,13 @@ def build_scene(model,package,c,subtype=''):
                 return aa[2]+s*v[2]+offsets[0][2]+s*(offsets[1][2]-offsets[0][2])-c['point'][2]
             beam_z=physical_z(primary);support_z=physical_z(support)
         if support_is_column:
-            a.member('M1',cp,[0,0,-bd-12],[0,0,15],description='Supporting column '+cp)
-            face=cd/2
+            column=next((m for m in ms if m['kind']=='column'),None)
+            weak=False
+            if family=='hr_simple_shear_plate' and column:
+                ray=unit(sub(beam['axis'][1],beam['axis'][0]))
+                weak=abs(sum(x*y for x,y in zip(ray,column['local_y'])))>.7
+            a.member('M1',cp,[0,0,-bd-12],[0,0,15],y=[1,0,0] if weak else [0,1,0],description='Supporting column '+cp)
+            face=p[cp]['dimensions']['tw']/2 if weak else cd/2
         else:
             a.member('M1',cp,[0,-22,support_z],[0,22,support_z],y=(1,0,0),description='Supporting girder '+cp)
             face=p[cp]['dimensions'].get('tw',.375)/2
@@ -242,12 +251,19 @@ def build_scene(model,package,c,subtype=''):
             thick=3.25 if cp=='W36X395' else 2;side=47 if cp=='W36X395' else 46
             a.member('M1',cp,[0,0,-96],[0,0,18]);a.box('P1',[-side/2,-side/2,-96-thick],[side,side,thick],'S','Embedded column end plate')
             for i,sign in enumerate((-1,1)):
-                a.box(f'P{i+2}',[-cd/2,sign*cw/2-(.75 if sign>0 else 0),-96],[cd,.75,96],'S','Column boxing plate 3/4 in')
-                a.weld(f'W{i+1}',[-cd/2,sign*cw/2,-96],[-cd/2,sign*cw/2,0],['M1',f'P{i+2}'],.3125,description='Continuous boxing-plate weld to column flange edge')
-            a.box('CONC',[-side/2-8,-side/2-8,-104],[side+16,side+16,104],'A','Concrete embedment context; reinforcement by foundation design',kind='concrete')
+                a.box(f'P{i+2}',[-17,sign*cw/2-(.75 if sign>0 else 0),-96],[34,.75,96],'S','Source column boxing plate 3/4 x 34 in; local edge preparation required')
+                for edge in (-1,1):a.weld(f'W{i+1}-{edge}',[17*edge,sign*cw/2,-96],[17*edge,sign*cw/2,0],['M1',f'P{i+2}'],kind='CJP',description='Source CJP boxing-plate weld to flange tips over full embedment')
+            a.box('CONC',[-cd/2-18,-cw/2-18,-114],[cd+36,cw+36,114],'A','Source minimum concrete extent: Le+18 deep and 18 beyond boxed column; reinforcement by foundation engineer',kind='concrete')
             for i,sign in enumerate((-1,1)):
-                pts=[[x,sign*(cw/2+.75),-90+j*6] for x in (-cd/2+3,cd/2-3) for j in range(12)]
+                pts=[[x,sign*cw/2,-90+j*6] for x in (-14,14) for j in range(12)]
                 fast('ST'+str(i+1),pts,[0,sign,0],.875,5,[f'P{i+2}','CONC'],'24 headed studs, 7/8 x 5 in; four rows overall','A',True)
+            from .review_base_selection import erection_rods
+            erection=erection_rods(text)
+            if erection:
+                if erection['count']!=4:raise ValueError('Pilot embedded base requires an explicit erection-anchor layout')
+                edge=erection['edge_min'];dia=erection['diameter']
+                pts=[[x,y,-96-thick-12] for x in (-side/2+edge,side/2-edge) for y in (-side/2+edge,side/2-edge)]
+                fast('ERECTION-ANCHORS',pts,[0,0,1],dia,12+thick,['P1','CONC'],f'S: four erection-only anchors. A: {dia:g} in F1554 Grade 36, 12 in embedment and corner set-out; no contribution to source base capacity','S count; A diameter, grade, length and set-out')
             a.weld('W3',[-cd/2,0,-96],[cd/2,0,-96],['M1','P1'],.5,basis='A',description='A: continuous 1/2 in end-plate weld')
             a.section_axis=2;a.section_at=-60;a.dim([side/2,0,-96],[side/2,0,0],'96 in embedment');a.dim([0,0,-90],[0,0,-24],'11 @ 6 in stud pitch','A',offset=45)
             note('CONC is a context envelope shown transparent in views; no invented reinforcement is implied.')

@@ -68,6 +68,10 @@ def draw_view(sh,scene,mode,rect,title):
                 for aa,bb in zip(points,points[1:]+points[:1]):sh.line(aa,bb,'#aab5b4',.5,[5,4])
     for part,face in polys:
         fill,stroke=COLORS.get(part['kind'],COLORS['plate'])
+        if mode!='section' and part.get('drawing_style')=='outline':
+            pts=[tr(q) for q in face]
+            for aa,bb in zip(pts,pts[1:]+pts[:1]):sh.line(aa,bb,'#8da7b3',.5,[5,3])
+            continue
         path_polygon(sh.c,[tr(p) for p in face],fill,stroke,.7 if part['kind']=='member' else .6,edge_flags.get(id(face)))
     if mode=='front' and scene['family']=='review_transfer_truss':
         for part in parts:

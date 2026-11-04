@@ -12,6 +12,7 @@ def apply(builder):
     column_pieces(builder)
     aligned_bearing_splices(builder)
     embedded_shafts(builder)
+    rocking_post_ends(builder)
     column_boxing(builder)
     brace_receivers(builder)
     core_floor_receivers(builder)
@@ -19,6 +20,25 @@ def apply(builder):
     roof_receivers(builder)
     opening_receivers(builder)
     truss_endpoints(builder)
+    from .review_plan_bracing import apply as plan_bracing
+    plan_bracing(builder)
+
+
+def rocking_post_ends(builder):
+    """Source rocker/insert/end plate occupies a real gap at each post end."""
+    if builder.key!='hr9':return
+    members={m['id']:m for m in builder.members}
+    builder.endpoint_links=getattr(builder,'endpoint_links',[])
+    for c in builder.connections:
+        if c['detail_ref']['id']!='review_rocker':continue
+        post=members[c['member_ids'][0]];beam=members[c['member_ids'][1]]
+        top=c.get('parameters',{}).get('inverted',False);end=1 if top else 0
+        depth=builder.profiles[beam['profile_id']]['dimensions']['d']
+        previous=list(post['end_offsets'][end]);offset=[0,0,-depth-10 if top else 10]
+        post['end_offsets'][end]=offset
+        builder.endpoint_links.append(dict(member_id=post['id'],end='end' if top else 'start',connection_id=c['id'],basis='Source rocker/insert/end-plate stack at this same post end; beam reference is top of steel'))
+        builder.changes.append(dict(kind='rocking_post_face_cutback',member_id=post['id'],end=end,previous_offset=previous,offset=offset,
+            basis='S: selected rocker, 1.5 in insert and 6.5 in end plate; A: 2 in crown-height fit. Actual post terminates at its end plate; original analysis workline retained.'))
 
 
 def truss_endpoints(builder):
@@ -73,8 +93,18 @@ def beam_receivers(builder):
     """At a three-beam node, select the transverse receiver rather than a peer."""
     from .pilots.model import dot,sub,unit
     members={m['id']:m for m in builder.members}
-    beams=[m for m in builder.members if m['kind'] in ('beam','girder','moment_beam')]
+    beams=[m for m in builder.members if m['kind'] in ('beam','girder','moment_beam','transfer_chord')]
     for c in builder.connections:
+        if c['detail_ref']['id']=='review_beam' and len(c['member_ids'])==1:
+            primary=members[c['member_ids'][0]];direction=unit(sub(primary['axis'][1],primary['axis'][0]));candidates=[]
+            for m in beams:
+                if m['id']==primary['id']:continue
+                a,b=m['axis'];v=sub(b,a);length=math.dist(a,b);u=unit(v)
+                station=dot(sub(c['point'],a),u)
+                if -.01<=station<=length+.01 and abs(dot(direction,u))<.01 and math.dist([a[i]+u[i]*station for i in range(3)],c['point'])<.01:candidates.append(m)
+            if len(candidates)==1:
+                c['member_ids'].append(candidates[0]['id'])
+                builder.changes.append(dict(kind='missing_beam_receiver_binding',connection_id=c['id'],member_id=candidates[0]['id'],basis='Unique actual transverse physical member at the source workpoint, including the centroid-based transfer chord'))
         if c['detail_ref']['id'] not in ('review_beam','review_transfer_slip','review_pin_beam') or len(c['member_ids'])!=2:continue
         primary,support=[members[mid] for mid in c['member_ids']]
         if support['kind'] not in ('beam','girder','moment_beam'):continue
@@ -322,7 +352,8 @@ def brace_receivers(builder):
     """Choose the beam in the actual brace bay, not the nearest adjacent bay."""
     from .pilots.model import sub,dot,unit
     members={m['id']:m for m in builder.members}
-    beams=[m for m in builder.members if m['kind'] in ('beam','girder','moment_beam','link')]
+    beam_kinds=('beam','girder','moment_beam','link','transfer_chord')
+    beams=[m for m in builder.members if m['kind'] in beam_kinds]
     for c in builder.connections:
         if c['detail_ref']['id'] not in ('review_brace','review_brb'):continue
         primary=members[c['member_ids'][0]];point=c['point']
@@ -342,7 +373,8 @@ def brace_receivers(builder):
             if reach>.01:candidates.append((reach,m['id']))
         if not candidates:continue # A base may have no beam; preserve that case.
         chosen=members[max(candidates)[1]];old=list(c['member_ids'])
-        c['member_ids']=[mid for mid in old if members[mid]['kind'] not in ('beam','girder','moment_beam','link')]+[chosen['id']]
+        c['member_ids']=[mid for mid in old if members[mid]['kind'] not in beam_kinds]+[chosen['id']]
+        c.setdefault('parameters',{})['beam_centroid_z']=sum(q[2]+o[2] for q,o in zip(chosen['axis'],chosen['end_offsets']))/2-point[2]
         if old!=c['member_ids']:
             builder.changes.append(dict(kind='brace_support_binding',connection=c['id'],previous_member_ids=old,
                                         member_ids=list(c['member_ids']),basis='Actual checked beam extending into the brace bay at its workpoint'))
