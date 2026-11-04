@@ -79,7 +79,13 @@ def floors(b,outline,levels):
                 if 372<y<444:continue
                 for j,x in enumerate(range(0,204,17)):
                     simple_truss(b,f'OW-{k}-{y}-{j}',0,y,x*12,(x+17)*12,z-finish-10.75,9.5,k,'250S162-68','250S137-43',24,flat=True)
-            for x in frange(0,2448+.1,24):joist(f'COR-{k}-{x}','1200S162-68',1,x,372,444,z-finish,k,'joist-corridor',24)
+            stations=list(frange(0,2448+.1,24))
+            for _,position in bearing_lines(b):
+                if any(abs(position-x)<.001 for x in stations):continue
+                stations.append(position)
+                b.changes.append(dict(kind='adopted_corridor_wall_joist',level=k,station_in=position,member_id=f'COR-{k}-{position}',
+                    basis='A: additional corridor joist on the existing bearing-wall line where it misses the regular 24-in grid. Match the selected 1200S162-68 corridor section and 6-ft span, retaining the source grid. Added wall-load transfer and squash/blocking capacity remain separately required.'))
+            for x in sorted(stations):joist(f'COR-{k}-{x}','1200S162-68',1,x,372,444,z-finish,k,'joist-corridor',24)
             continue
         if b.key=='cfs6':
             regions=[(0,62,0,90,0,[0,14,28,34,48,62]),(0,180,90,152,1,[90,104,118,124,138,152])]

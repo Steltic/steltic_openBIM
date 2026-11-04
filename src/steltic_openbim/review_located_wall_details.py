@@ -168,6 +168,8 @@ def floor(ctx):
                 a.box(pack,[px[0],min(0,side*2.5),high],[px[1]-px[0],2.5,gap],'A','A separate upper-wall packer on this actual channel flange; subfloor kept outside bearing strip');joins.append(pack)
             a.fastener('UPPER-S'+str(index),[[x+width_sign*.75,side*.75,surface+tt]],[0,0,-1],.216,jt+max(0,gap)+tt,joins,'A No.12 upper track/joist transfer screw; source diaphragm schedule remains attached',basis='A',screw=True)
     a.section_axis=1;a.section_at=1.25
+    if joists and all(abs(j['axis'][1][0]-j['axis'][0][0])>abs(j['axis'][1][1]-j['axis'][0][1]) for _,j,_ in joists):
+        a.section_axis=0;a.section_at=.75*(1 if sum(q[0] for q in joists[0][1]['axis'])>0 else -1)
     a.notes.append('Every wall, track and joist extract is bound to a real member at its actual centroid, elevation and roll. Only the connection stiffeners/packers are added components. Source selected sections and story shear/uplift requirements remain attached; A local fit and transfer fasteners are coordination proposals without new capacity verification. Stud-to-track end screws are shown on their separate located details.')
 
 
@@ -228,7 +230,8 @@ def truss_floor(ctx):
         if item['member_id'] in data['truss_ids']:chords.append((name,item,part))
         elif item['member_id'] in data['track_ids']:tracks.append((name,item,part))
     for side in (-1,1):
-        group=[row for row in chords if sum(q[1] for q in row[1]['axis'])*side>0]
+        group=[row for row in chords if abs(row[1]['axis'][1][1]-row[1]['axis'][0][1])>.01
+               and (sum(q[1] for q in row[1]['axis'])>=0)==(side>0)]
         if not group:continue
         for end in (-1,1):
             label,m,part=(min if end<0 else max)(group,key=lambda row:row[2]['bounds'][2][0 if end<0 else 1])
@@ -236,41 +239,102 @@ def truss_floor(ctx):
             options=[row for row in tracks if row[1]['local_y'][2]*end>.9
                      and (row[2]['bounds'][2][1 if end<0 else 0]-z)*end>=-.03]
             if not options:continue
-            host,tm,tp=min(options,key=lambda row:abs(row[1]['axis'][0][2]-z))
-            surface=tp['bounds'][2][1 if end<0 else 0];gap=abs(surface-z)
-            if gap>24:raise ValueError('Truss/wall interface has no adjacent physical track')
-            x=m['axis'][0][0];yy=side*.75;joins=[label,host];suffix=f'{side}-{end}'
-            if gap>.001:
-                xl,xh=part['bounds'][0]
-                pack='PACK'+suffix;a.box(pack,[xl-.25,-3,min(z,surface)],[xh-xl+.5,6,gap],'A','A fitted steel bearing pack at the actual truss/track gap; capacity unverified');joins.append(pack)
-            tt=p[tm['profile_id']]['dimensions']['t'];hy=m['local_y'][0]
-            if abs(hy)<.999:raise ValueError('Truss chord requires a fitted web orientation')
-            for index,(face,sign,web) in enumerate(web_faces(p,m['profile_id'])):
-                xx=x+hy*(face-sign*(web+.65))
+            for index,ply in enumerate(channel_plies(p,m)):
+                hy=ply['local_y'][0]
+                if abs(hy)<.999:raise ValueError('Truss chord requires a fitted web orientation')
+                x=ply['axis'][0][0];xx=x+hy*.75;yy=side*.75
+                def overlaps(row):return all(lo+.25<=q<=hi-.25 for q,(lo,hi) in zip((xx,yy),row[2]['bounds'][:2]))
+                host,tm,tp=min(options,key=lambda row:(not overlaps(row),abs(row[1]['axis'][0][2]-z),abs(sum(row[2]['bounds'][0])/2-xx)))
+                suffix=f'{side}-{end}-{index}'
+                if not overlaps((host,tm,tp)):
+                    track_end_clip(a,p,'TRUSS-'+suffix,label,ply,(host,tm,tp),z,side,end)
+                    continue
+                surface=tp['bounds'][2][1 if end<0 else 0];gap=abs(surface-z);web=p[ply['profile_id']]['dimensions']['t'];joins=[label,host]
+                if gap>24:raise ValueError('Truss/wall interface has no adjacent physical track')
+                if gap>.001:
+                    xs=sorted((x-hy*web/2,x+hy*(p[ply['profile_id']]['dimensions']['b']-web/2)))
+                    pack='PACK'+suffix;a.box(pack,[xs[0],min(0,side*2.5),min(z,surface)],[xs[1]-xs[0],2.5,gap],'A','A bearing pack on this actual truss flange and track web; capacity unverified');joins.append(pack)
+                tt=p[tm['profile_id']]['dimensions']['t']
                 start=z+web if end<0 else surface+tt
                 grip=web+gap+tt
-                a.fastener('B'+suffix+'-'+str(index),[[xx,yy,start]],[0,0,-1],.375,grip,joins,
+                a.fastener('B'+suffix,[[xx,yy,start]],[0,0,-1],.375,grip,joins,
                     'A 3/8 in predrilled through-bolt through actual chord flange, bearing pack and track; no source uplift capacity inferred',basis='A')
-            a.interfaces.append(dict(id='BEAR'+suffix,kind='compression_bearing',connects=joins,basis='A',
+                a.interfaces.append(dict(id='BEAR'+suffix,kind='compression_bearing',connects=joins,basis='A',
                                      description='Located truss/wall bearing interface; supplier end-node and source force requirements remain attached'))
+    for side in (-1,1):
+        group=[row for row in chords if abs(row[1]['axis'][1][1]-row[1]['axis'][0][1])<.01
+               and (sum(q[0] for q in row[1]['axis'])>=0)==(side>0)]
+        if not group:continue
+        for end in (-1,1):
+            label,m,part=(min if end<0 else max)(group,key=lambda row:row[2]['bounds'][2][0 if end<0 else 1])
+            parallel_floor(a,p,f'TRUSS-{side}-{end}',label,m,part,tracks,[],ends=(end,))
     a.section_axis=1;a.section_at=.75
-    a.notes.append('Both actual horizontal truss chords are shown at their recorded elevations. The open web is not replaced by a full-depth solid joist. End-node gussets and webs are separate located truss details. A bearing packs and predrilled bolts close the explicit track/chord gaps; their local capacity and supplier approval remain unverified.')
+    if chords and all(abs(m['axis'][1][1]-m['axis'][0][1])<.01 for _,m,_ in chords):
+        a.section_axis=0;a.section_at=.75*(1 if sum(q[0] for q in chords[0][1]['axis'])>0 else -1)
+    a.notes.append('The actual horizontal truss chords are shown at their recorded elevations. The open web is not replaced by a full-depth solid joist. End-node gussets and webs are separate located truss details. A bearing packs and the scheduled local attachment fasteners close the explicit track/chord gaps; their local capacity and supplier approval remain unverified.')
 
 
-def parallel_floor(a,p,index,label,j,part,tracks,studs):
+def parallel_floor(a,p,index,label,j,part,tracks,studs,ends=(-1,1)):
     """Rim joist parallel to the wall: do not rotate it into a bearing joist."""
+    if p[j['profile_id']]['family']=='built_up':
+        from .pilots.geometry import strips
+        for ply_index,ply in enumerate(channel_plies(p,j)):
+            y=ply['local_y'];z=cross(unit(sub(ply['axis'][1],ply['axis'][0])),y)
+            points=[[q[k]+y[k]*v[0]+z[k]*v[1] for k in range(3)] for q in ply['axis'] for poly in strips(p[ply['profile_id']],p) for v in poly]
+            actual=dict(bounds=[[min(q[k] for q in points),max(q[k] for q in points)] for k in range(3)])
+            parallel_floor(a,p,f'{index}-P{ply_index}',label,ply,actual,tracks,studs,ends)
+        return
     jd=effective(p,j['profile_id']);z=j['axis'][0][2];low,high=z-jd/2,z+jd/2
-    side=1 if j['local_y'][1]>0 else -1
+    side=1 if j['local_y'][1]>0 else -1;jt=p[j['profile_id']]['dimensions']['t'];cy=j['axis'][0][1]
     for tag,end,surface_z in (('LOW',-1,low),('UP',1,high)):
+        if end not in ends:continue
         candidates=[v for v in tracks if abs(v[1]['axis'][0][2]-surface_z)<12 and v[1]['local_y'][2]*end>.9
                     and min(part['bounds'][0][1],v[2]['bounds'][0][1],7)-max(part['bounds'][0][0],v[2]['bounds'][0][0],-7)>2]
-        if not candidates:continue
+        if not candidates:
+            returns=[v for v in tracks if abs(v[1]['axis'][0][2]-surface_z)<12 and v[1]['local_y'][2]*end>.9
+                     and min(abs(x-y) for x in part['bounds'][0] for y in v[2]['bounds'][0])<6]
+            if returns:
+                track=min(returns,key=lambda v:(abs(v[1]['axis'][0][2]-surface_z),v[0]))
+                parallel_end_clip(a,p,index,label,j,part,track,surface_z,end)
+            continue
         host,data,bounds=min(candidates,key=lambda v:abs(v[1]['axis'][0][2]-surface_z))
         trackz=bounds['bounds'][2][1 if end<0 else 0];gap=abs(trackz-surface_z);joins=[label,host]
+        if (trackz-surface_z)*end<-.03:raise ValueError('Parallel wall/chord steel intersects the track web')
         xs=[max(part['bounds'][0][0]+1,bounds['bounds'][0][0]+1,-6),min(part['bounds'][0][1]-1,bounds['bounds'][0][1]-1,6)]
         if xs[1]<=xs[0]:raise ValueError('Parallel wall/joist has no physical attachment overlap')
-        if gap>.15:
-            name='RIM-PACK'+str(index)+tag;a.box(name,[xs[0]-.5,-2,min(trackz,surface_z)],[xs[1]-xs[0]+1,4,gap],'A','A steel rim/track packer; source local capacity remains to verify');joins.append(name)
-        top=max(trackz,surface_z)+.15
-        a.fastener('RIM-'+str(index)+tag,[[x,side*.75,top] for x in xs],[0,0,-1],.216,gap+.3,joins,'A two No.12 rim/track flange transfer screws; source full-line spacing remains attached',basis='A',screw=True)
-    a.notes.append('This wall is parallel to the actual rim joist. No transverse pair of floor joists is invented. A rim/track transfer fit is shown at this station; source diaphragm and uplift force schedules remain applicable.')
+        yy=cy+side*.75
+        if not bounds['bounds'][1][0]+.25<=yy<=bounds['bounds'][1][1]-.25:raise ValueError('Parallel chord flange misses the actual track web')
+        if gap>.02:
+            ys=sorted((cy-side*jt/2,cy+side*(p[j['profile_id']]['dimensions']['b']-jt/2)))
+            name='RIM-PACK'+str(index)+tag;a.box(name,[xs[0]-.5,ys[0],min(trackz,surface_z)],[xs[1]-xs[0]+1,ys[1]-ys[0],gap],'A','A separate steel pack beneath this actual channel flange; source local capacity remains to verify');joins.append(name)
+        tt=p[data['profile_id']]['dimensions']['t'];top=surface_z+jt if end<0 else trackz+tt
+        a.fastener('RIM-'+str(index)+tag,[[x,yy,top] for x in xs],[0,0,-1],.216,gap+jt+tt,joins,'A two No.12 rim/track flange transfer screws; source full-line spacing remains attached',basis='A',screw=True)
+        a.interfaces.append(dict(id='RIM-BEAR'+str(index)+tag,kind='compression_bearing',connects=joins,basis='A',description='Actual parallel chord/track bearing; fitted pack and transfer capacity unverified'))
+        if end<0 and not a.dimensions:a.dim([xs[0],0,surface_z],[xs[1],0,surface_z],'Screw pitch',basis='A')
+    a.notes.append('This wall is parallel to the actual floor/roof member. A flange/track transfer fit is shown at this station; source diaphragm and uplift force schedules remain applicable.')
+
+
+def parallel_end_clip(a,p,index,label,j,part,track,edge,end):
+    """Explicit formed return at a butt-ended, collinear joist/track joint."""
+    host,tm,tp=track;jt=p[j['profile_id']]['dimensions']['t'];tt=p[tm['profile_id']]['dimensions']['t'];t=.0713
+    side=1 if j['local_y'][1]>0 else -1;face=j['axis'][0][1]-side*jt/2
+    toward=1 if sum(tp['bounds'][0])>sum(part['bounds'][0]) else -1
+    je=part['bounds'][0][1 if toward>0 else 0];te=tp['bounds'][0][0 if toward>0 else 1]
+    if (te-je)*toward>6:raise ValueError('Parallel joist/track return exceeds its local fit envelope')
+    xs=sorted((je-toward*2.5,te+toward*2.5));ys=sorted((face,face-side*2))
+    yy=face-side;trackxs=sorted((te+toward*.75,te+toward*1.75));jx=je-toward*.75
+    if any(not tp['bounds'][0][0]+.25<=x<=tp['bounds'][0][1]-.25 for x in trackxs):raise ValueError('Parallel return foot misses the actual track end')
+    if not tp['bounds'][1][0]+.25<=yy<=tp['bounds'][1][1]-.25:raise ValueError('Parallel return foot misses the track web')
+    if not part['bounds'][0][0]+.25<=jx<=part['bounds'][0][1]-.25:raise ValueError('Parallel return misses the actual joist end')
+    surface=tp['bounds'][2][1 if end<0 else 0];z0,z1=(surface,edge+3) if end<0 else (edge-3,surface)
+    if z1-z0<=0:raise ValueError('Parallel return has no upright height')
+    tag=f'PAR-END-{index}-{end}';web=tag+'-WEB';foot=tag+'-FOOT'
+    a.box(web,[xs[0],min(face,face-side*t),z0],[xs[1]-xs[0],t,z1-z0],'A','A formed return attached to actual joist web at the collinear cut end')
+    a.box(foot,[xs[0],ys[0],surface if end<0 else surface-t],[xs[1]-xs[0],ys[1]-ys[0],t],'A','A formed foot on actual track web; no fictitious overlap')
+    a.fastener(tag+'-J',[[jx,face-side*t,edge-end*d] for d in (1,2)],[0,side,0],.216,t+jt,[label,web],'A two No.12 joist-web/return screws; capacity unverified',basis='A',screw=True)
+    top=surface+t if end<0 else surface+tt
+    a.fastener(tag+'-T',[[x,yy,top] for x in trackxs],[0,0,-1],.216,t+tt,[host,foot],'A two No.12 return-foot/track screws; capacity unverified',basis='A',screw=True)
+    a.weld(tag+'-BEND',[xs[0],face,surface],[xs[1],face,surface],[web,foot],kind='BEND',basis='A',description='Continuous formed return, not a weld')
+    if end<0:
+        a.dim([xs[0],0,surface],[xs[1],0,surface],'Return length',basis='A')
+    a.notes.append('A: the collinear joist and track terminate on opposite sides of this workpoint. A formed return connects their actual webs; no direct flange overlap, bearing capacity or source approval is implied.')

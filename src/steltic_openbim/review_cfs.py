@@ -45,14 +45,19 @@ def physical_pack(b,text,label):
     return b.custom(label,'built_up',{},components=comps,basis='A: explicitly spaced mixed source chord plies; source count/sections retained')
 
 def intersections(poly,axis,station):
-    other=1-axis;hits=[]
-    # An inward nudge treats exterior boundary lines consistently.
+    other=1-axis;intervals=[]
+    # A re-entrant boundary can have floor/wall material on either side at
+    # different stations. The first nonempty side alone omits the return leg.
     for offset in (1e-5,-1e-5):
         hits=[];s=station+offset
         for a,d in zip(poly,poly[1:]+poly[:1]):
             if (a[other]<=s<d[other]) or (d[other]<=s<a[other]):hits.append(a[axis]+(d[axis]-a[axis])*(s-a[other])/(d[other]-a[other]))
-        if hits:break
-    hits.sort();return list(zip(hits[::2],hits[1::2]))
+        hits.sort();intervals.extend(zip(hits[::2],hits[1::2]))
+    result=[]
+    for lo,hi in sorted(intervals):
+        if result and lo<=result[-1][1]+1e-7:result[-1]=(result[-1][0],max(result[-1][1],hi))
+        else:result.append((lo,hi))
+    return result
 
 def spaced_segments(lo,hi,widths,margin=None):
     spare=hi-lo-sum(widths)
@@ -299,7 +304,22 @@ def floors_and_roofs(b,outline,bystory,levels):
             regions=[(0,160,70,104),(0,34,0,70)] if b.key=='cfs11' else [(0,130,0,64)] if b.key=='cfs13' else [(0,120,0,70)]
             for ri,(x0,x1,y0,y1) in enumerate(regions):
                 along=0 if b.key=='cfs11' and ri==1 else 1
-                for station in frange((y0 if along==0 else x0)*12,(y1 if along==0 else x1)*12+.1,24):
+                start,stop=(y0 if along==0 else x0)*12,(y1 if along==0 else x1)*12
+                stations=list(frange(start,stop+.1,24))
+                # The source party-wall axis need not fall on the adopted
+                # 24-in supplier grid. Add a declared drag-truss proposal on
+                # that wall; never move the wall to a nearby truss silently.
+                for wall in b.walls:
+                    if wall['level']!=k or wall['direction']!=('X' if along==0 else 'Y'):continue
+                    for run in wall['runs']:
+                        station=run['position_in']
+                        if not start<=station<=stop or any(abs(station-v)<.001 for v in stations):continue
+                        lo,hi=(x0 if along==0 else y0)*12,(x1 if along==0 else y1)*12
+                        if min(run['end_in'],hi)-max(run['start_in'],lo)<.01:continue
+                        stations.append(station)
+                        b.changes.append(dict(kind='adopted_roof_wall_drag_truss',wall_line=wall['line'],level=k,station_in=station,
+                            truss_prefix=f'ROOF-{ri}-{station}',basis='A: additional delegated drag truss on the exact source wall axis, using the adopted adjacent truss sections and panel layout. Source wall and regular roof grid retained. Supplier shear transfer, gravity interaction and local capacity require verification.'))
+                for station in sorted(stations):
                     lo=(x0 if along==0 else y0)*12;hi=(x1 if along==0 else y1)*12
                     if b.key=='cfs13' and 72.5*12<station<97.5*12:lo=20*12
                     # Roof level is the wall bearing datum. The six-inch

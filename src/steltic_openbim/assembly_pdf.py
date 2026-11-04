@@ -123,11 +123,14 @@ def draw_view(sh,scene,mode,rect,title):
         for weld in scene['welds']:
             q=project([(a+b)/2 for a,b in zip(weld['a'],weld['b'])]);labels.append((q[1],weld['id'],tr(q),dict(kind='weld',basis=weld['basis'])))
     if mode in ('front','iso'):
+        from reportlab.pdfbase.pdfmetrics import stringWidth
+        from .drawing_pdf import ascii_text
         labels.sort(reverse=True)
         for i,(_,label,point,part) in enumerate(labels):
-            right=(i%2==1);idx=i//2;tx=x+w-55 if right else x+18;ty=y+h-72-idx*max(23,min(42,(h-180)/max(1,math.ceil(len(labels)/2))))
-            sh.line(point,(tx-8 if right else tx+37,ty+3),'#6d858f',.55)
-            sh.label(tx,ty,label,12,'#a54841' if part['kind']=='weld' else '#8c6022' if part['basis']=='A' else '#294e63')
+            raw_width=stringWidth(ascii_text(label),'Helvetica',12);size=min(12,210*12/max(1,raw_width));width=raw_width*size/12
+            right=(i%2==1);idx=i//2;tx=x+w-18-width if right else x+18;ty=y+h-72-idx*max(23,min(42,(h-180)/max(1,math.ceil(len(labels)/2))))
+            sh.line(point,(tx-8 if right else tx+width+8,ty+3),'#6d858f',.55)
+            sh.label(tx,ty,label,size,'#a54841' if part['kind']=='weld' else '#8c6022' if part['basis']=='A' else '#294e63')
     if mode in ('front','section'):
         for d in scene['dimensions']:
             if d['view']!=mode:continue
