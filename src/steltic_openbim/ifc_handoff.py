@@ -97,6 +97,8 @@ def prepare(source,review,state,job_brief,target_module='HR'):
     elif any(not s['top_surfaces'] for s in surfaces):warnings.append('Some floor/roof products have no recoverable upward-facing surface. Their bounds are reference data, not verified framing extents.')
     if review['counts']['unrendered']:warnings.append('The IFC review contains unrendered products. Resolve relevant geometry before structural design.')
     if options['scope']!='all':warnings.append('The handoff uses the selected review scope; architectural context may be excluded.')
+    if options.get('storey','all')!='all':warnings.append('The handoff uses only the selected storey review, including unassigned objects only when that option was selected. Other storeys remain in the original IFC but are outside this design handoff.')
+    if options.get('group','all')!='all':warnings.append('The handoff uses only the selected numbered review group. Other groups remain in the original IFC but are outside this design handoff.')
     if target_module=='CFS' and not walls:warnings.append('No wall geometry was retained. Add verified bearing/shear-wall layout where relevant; do not infer it from floor extents.')
     if target_module=='CFS' and any(not w['reference_axes_m'] for w in walls):warnings.append('Some walls have no explicit IFC Axis representation. Their surfaces and bounds are architectural envelopes, not confirmed structural centrelines.')
     geometry['warnings']=warnings
