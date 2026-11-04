@@ -4,6 +4,23 @@ from .review_model import add,sub,mul
 from .review_cfs import frange,intersections
 from .design_geometry import interval_in_rectangle
 
+def wall_axis_framing_stations(b,stations,axis,level,member_prefix,kind):
+    """Record extra fictional framing where a parallel wall misses its grid."""
+    normal=1-axis;by_station={}
+    for m in b.members:
+        if m['level']!=level or m['kind'] not in ('top_track','ordinary_track','tier_track') or m['local_y'][2]>-.9:continue
+        a,d=m['axis']
+        if abs(a[normal]-d[normal])>.001:continue
+        value=round(a[normal],6)
+        if any(abs(value-v)<.001 for v in stations):continue
+        by_station.setdefault(value,[]).append(m['id'])
+    for value,wall_ids in sorted(by_station.items()):
+        stations.append(value)
+        b.changes.append(dict(kind='adopted_parallel_wall_framing',level=level,station_in=value,axis=axis,
+            source_wall_member_ids=wall_ids,member_prefix=member_prefix.format(station=value),framing_kind=kind,
+            basis='A: additional matching floor/roof framing on the actual parallel wall axis. The source wall positions, regular grid, selected section family and supported spans remain. Added wall loads, supplier details, bearing and attachment capacity require separate verification.'))
+    return sorted(stations)
+
 def track_bearing_datums(b):
     """Keep the nominal bearing plane on the outside face of the track web."""
     if not b.key.startswith('cfs') or b.key in ('cfs3','cfs7'):return

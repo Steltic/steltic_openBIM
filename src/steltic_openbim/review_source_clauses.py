@@ -6,7 +6,22 @@ def apply(model,package):
     records={r['id']:r for r in package['design_records']};members={m['id']:m for m in model['members']}
     for c in model['connections']:
         tracks=[members[mid] for mid in c['member_ids'] if members[mid]['kind'] in ('bottom_track','ordinary_track','tier_track') and members[mid]['local_y'][2]>.9]
-        if not tracks:continue
+        if not tracks:
+            # A located roof head has no wall above it. A schedule explicitly
+            # covering bottom-track base anchors and inter-storey straps is
+            # wall context here, not an anchor selection for this roof head.
+            actual=c.get('parameters',{}).get('physical_floor_stack')
+            top=[members[mid] for mid in c['member_ids'] if members[mid]['kind'] in ('top_track','ordinary_track','tier_track') and members[mid]['local_y'][2]<-.9]
+            if c['detail_ref']['id']=='review_cfs_floor' and actual and top:
+                for rid in list(c['design_record_ids']):
+                    data=records[rid]['data']
+                    selected=next((clauses(data.get(field)) for field in ('components','selection') if clauses(data.get(field))),None)
+                    if not selected or 'bottom track' not in selected['base'].lower() or 'stud above to stud below' not in selected['floors'].lower():continue
+                    c['design_record_ids'].remove(rid)
+                    c['source_context_records']=sorted(set(c.get('source_context_records',[])+[rid]))
+                    c.setdefault('source_record_applicability',[]).append(dict(record_id=rid,application='context_only',
+                        actual_level=top[0]['level'],basis='The actual roof-head assembly has no bottom track or upper wall. This labelled schedule selects base bottom-track anchors and stud-above/stud-below floor straps; those remain on their actual wall-base/floor occurrences.'))
+            continue
         track=min(tracks,key=lambda m:abs(m['axis'][0][2]-c['point'][2]));level=track['level']
         for rid in list(c['design_record_ids']):
             data=records[rid]['data']
