@@ -1,4 +1,8 @@
-# IFC workflow (0.8.31)
+# IFC workflow (0.8.32)
+
+IFC import displays the `SourceFindings` and incomplete `SourceReadiness` exported by Steltic as attributed source information requests. These survive import/build, IFC return and reimport. A source's ready flag never clears independent import findings or contradicting source findings. Unreadable readiness metadata produces a visible finding while valid geometry remains reviewable. Import does not independently recompute native completeness from an IFC or clear the producer's original requests.
+
+If valid declared openings remove an entire panel, the IFC retains the original panel boundary as a labelled annotation and records the applied opening IDs. It creates no filled host surface or invented residual strip. These cases increment `panel_reference_boundaries`, remain provisional, and carry `GeometryWarnings` into the import review. Partial holes and notches still cut real panel surfaces; nonplanar or out-of-bounds cuts remain boundary references with warnings. Invalid source-panel geometry remains an error.
 
 Physical members with explicit rolled or HSS section labels must link to member calculation records for that same section. A record existing in the package does not by itself prove the link is correct. Custom profile aliases and built-up constituent calculations still require explicit review.
 

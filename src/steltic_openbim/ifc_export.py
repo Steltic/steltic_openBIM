@@ -181,7 +181,7 @@ def _export_source(directory,destination,source):
     containment=defaultdict(list);material_products=defaultdict(list)
     origin=model.create_entity('IfcAxis2Placement3D',Location=model.create_entity('IfcCartesianPoint',Coordinates=(0.,0.,0.)))
     records={r['id']:r for r in package.get('design_records',[])}
-    counts=dict(members=0,member_surfaces=0,reference_axes=0,panel_surfaces=0,panel_opening_cuts=0,opening_references=0,connection_parts=0,connection_reference_parts=0,connection_references=0,unassigned_connection_parts=0,unassigned_elements=0)
+    counts=dict(members=0,member_surfaces=0,reference_axes=0,panel_surfaces=0,panel_reference_boundaries=0,panel_opening_cuts=0,opening_references=0,connection_parts=0,connection_reference_parts=0,connection_references=0,unassigned_connection_parts=0,unassigned_elements=0)
     warnings=[];objects=[];unlocated_connections=[];property_pool={};mesh_templates={}
     identity_mapping=model.create_entity('IfcCartesianTransformationOperator3D',LocalOrigin=origin.Location,Scale=1.)
     def add(cls,item,faces=(),lines=(),key=None,face_holes=()):
@@ -277,6 +277,16 @@ def _export_source(directory,destination,source):
             related=[o for o in physical['openings'] if o.get('host_id')==p['id'] or (not o.get('host_id') and o['id'] in p.get('openings',[]))]
             rings,applied,findings=panel_rings(p,related)
             warnings.extend(findings);cut_openings.update(applied)
+            if not rings:
+                # A full-height/full-width opening has no remaining host mesh.
+                # Keep its original boundary as an explicit reference, never a
+                # filled wall over the opening or an invented residual strip.
+                add('IfcAnnotation',dict(p,applied_opening_ids=applied,
+                    geometry_role='source_panel_boundary_reference',
+                    description='Panel fully removed by declared openings; original boundary reference only'),
+                    lines=[vertices+[vertices[0]]],key='panel:'+p['id'])
+                counts['panel_reference_boundaries']+=1;status='provisional'
+                continue
             obj=add(cls,dict(p,applied_opening_ids=applied),[r['exterior'] for r in rings],key='panel:'+p['id'],face_holes=[r['holes'] for r in rings])
             if cls=='IfcBuildingElementProxy':obj.ObjectType='Coordination panel: '+kind
             counts['panel_surfaces']+=1
@@ -321,7 +331,7 @@ def _export_source(directory,destination,source):
     property_set(model,project,dict(SourceModelSHA256=state['source_model_sha256'],**revision_properties,Basis=basis,
         SupplementProvenance=state.get('supplement_provenance'),
         SourceModule=state.get('source_module'),SourceJob=state.get('source_job'),
-        SourceReadiness=source_validation['status'],SourceFindings=source_validation['findings'],
+        SourceReadiness=source_validation['status'],SourceFindings=source_validation['findings'],GeometryWarnings=warnings,
         SourceFreshnessChecked=state.get('source_evidence',{}).get('source_freshness_checked',False),
         ReferenceSystem=reference or None,RequireConnectionParts=package.get('require_connection_parts',False),
         **({'SourceStatus':status} if structural else {'DrawingStatus':status}),
