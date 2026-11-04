@@ -77,4 +77,6 @@ def build_model(package,state):
     track_corners(b)
     from .review_edge_chords import apply as edge_chord_corners
     edge_chord_corners(b)
+    from .review_concrete_collectors import apply as concrete_collectors
+    concrete_collectors(b)
     return b.finish()
