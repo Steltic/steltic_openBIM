@@ -1,4 +1,4 @@
-# IFC workflow (0.8.24)
+# IFC workflow (0.8.29)
 
 Physical members with explicit rolled or HSS section labels must link to member calculation records for that same section. A record existing in the package does not by itself prove the link is correct. Custom profile aliases and built-up constituent calculations still require explicit review.
 
@@ -56,6 +56,8 @@ Producer declarations using an integral numeric `storey` instead of `level` reta
 - Recovered ordinary-job source worklines remain reference axes. Unknown section orientation, physical set-out and connection geometry are not converted into invented solids. The export tab identifies this before generation. Some receiving applications may not display all curve-only representations; use the report and the openBIM review to inspect coverage.
 
 For an **imported IFC**, export retains the complete original object graph, schema, GlobalIds and geometry, including objects outside the selected preview scope, and adds review information. An explicitly chosen unit override changes the length-unit declaration without rescaling source coordinates or map-conversion metadata. Schema problems already in the source are reported; this path does not claim to repair them. It is not a selective export of the preview filter.
+
+HR/CFS exports retain the complete saved `DesignRecords` register in the project's `Steltic_Coordination` properties, including records without a corresponding solid (such as CFS anchorage, hold-downs and schedules). Product-level design links and the existing connection schedule remain available. Connections without placed parts retain their complete declared reference, including parameters, level and adopted-detail identity, under the historical `UnlocatedConnectionReferences` property. This is design metadata, not an inferred hardware placement. Import/export preserves these records with the rest of the source IFC graph.
 
 ## Revit exchange
 
