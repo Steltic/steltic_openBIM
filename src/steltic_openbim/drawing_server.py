@@ -10,7 +10,8 @@ from . import local_guard
 app=FastAPI(title='Steltic openBIM drawings')
 local_guard.install(app)
 store=DrawingStore(os.environ.get('OPENBIM_JOBS','openbim_jobs'))
-app.include_router(router(store,{'HR':os.environ.get('HR_JOBS'),'CFS':os.environ.get('CFS_JOBS')}))
+app.include_router(router(store,{'HR':os.environ.get('HR_JOBS'),'CFS':os.environ.get('CFS_JOBS')},
+    {'HR':os.environ.get('HR_URL'),'CFS':os.environ.get('CFS_URL')}))
 from .ifc_api import router as ifc_router
 app.include_router(ifc_router(store,{'HR':os.environ.get('HR_JOBS'),'CFS':os.environ.get('CFS_JOBS')}))
 

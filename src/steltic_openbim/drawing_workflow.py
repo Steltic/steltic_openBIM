@@ -251,18 +251,20 @@ class DrawingStore:
         os.replace(pointer,base/'current.json')
         return state
 
-    def import_package(self,p,package,revision=None):
+    def import_package(self,p,package,revision=None,native_source=None):
         with self.lock(p):
             current=self.current(p)
             if current and revision!=current[1]['revision']: raise StaleRevision('Refresh before replacing the source package')
             if current and current[1]['source_model_sha256']==fingerprint(package):
                 updated=reconcile_state(package,current[1])
+                if native_source:updated=dict(updated,native_source=native_source)
                 if updated==current[1]:return current[1]
                 updated['revision']+=1
                 updated['events'].append(dict(revision=updated['revision'],action='readiness_rechecked',note='Rechecked source completeness with the current validator; existing answers retained.'))
                 return self.publish(p,package,updated)
             n=current[1]['revision']+1 if current else 1
             state=initial_state(package,n)
+            if native_source:state['native_source']=native_source
             if current: state['events']=[dict(revision=n,action='source_replaced',previous_source_model_sha256=current[1]['source_model_sha256'],note='Previous answers retained in revision history; new source starts with provisional proposals.')]
             return self.publish(p,package,state)
 

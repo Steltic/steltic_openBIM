@@ -27,7 +27,7 @@ def strips(profile,profiles):
     if family in ('i','i_tapered'):
         h,b,tf,tw=[d[k] for k in ['d','bf','tf','tw']]
         if family=='i_tapered':
-            tip=max(.1,tf-b/24);root=tf+b/24
+            tip=d.get('tf_tip',max(.1,tf-b/24));root=d.get('tf_root',tf+b/24)
             return [[[-b/2,-h/2],[b/2,-h/2],[b/2,-h/2+tip],[tw/2,-h/2+root],[-tw/2,-h/2+root],[-b/2,-h/2+tip]],rect(-tw/2,-h/2+root,tw/2,h/2-root),[[-b/2,h/2],[b/2,h/2],[b/2,h/2-tip],[tw/2,h/2-root],[-tw/2,h/2-root],[-b/2,h/2-tip]]]
         return [rect(-b/2,-h/2,b/2,-h/2+tf),rect(-tw/2,-h/2+tf,tw/2,h/2-tf),rect(-b/2,h/2-tf,b/2,h/2)]
     if family in ('channel','z'):
@@ -88,6 +88,12 @@ def member_faces(member,profiles,limits=None):
     lo,hi=[v*extent for v in clip]; d=unit(vector); y=member['local_y']; profile=profiles[member['profile_id']]
     base=strips(profile,profiles); rbs=member.get('rbs'); cope=member.get('cope')
     stations={lo,hi}
+    from ..member_slots import validated,cut_sections
+    slots=validated(member.get('slots',[]),extent)
+    if slots and (rbs or cope):raise ValueError('Combined slots and flange cuts require an explicit selected solid')
+    for slot in slots:
+        for station in (slot['start_in'],slot['end_in']):
+            if lo<station<hi:stations.add(station)
     cuts=[]
     if rbs:
         cuts=rbs.get('cuts') or [dict(rbs,end=end) for end in rbs.get('ends',[0,1])]
@@ -116,6 +122,10 @@ def member_faces(member,profiles,limits=None):
         coped=cope and ((0 in cope.get('ends',[0,1]) and (s+t)/2<cope['length_in']) or (1 in cope.get('ends',[0,1]) and extent-(s+t)/2<cope['length_in']))
         for index in range(len(base)):
             if coped and index==2: continue
+            if slots:
+                for poly in cut_sections([base[index]],slots,(s+t)/2):
+                    faces.extend(extrude(poly,add(a,mul(d,s)),add(a,mul(d,t)),y))
+                continue
             rings=[]
             for at in [s,t]:
                 poly=shape(at,index)
@@ -136,6 +146,7 @@ def part_lines(part):
 
 def part_faces(part,profiles):
     g=part['geometry']; kind=g['type']; a=g.get('origin')
+    if kind=='mesh':return g['faces']
     if kind=='box':
         x,y=g['x_axis'],g['y_axis']; z=cross(x,y); sx,sy,sz=g['size']; b=add(a,mul(z,sz))
         return extrude([[0,0],[sx,0],[sx,sy],[0,sy]],a,b,x)  # local z cross x == y

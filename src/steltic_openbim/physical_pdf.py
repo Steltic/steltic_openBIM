@@ -16,6 +16,7 @@ from .drawing_workflow import write_json, fingerprint
 from .pilots.geometry import member_faces, part_faces, part_lines
 from .source_worklines import physical_view
 from .source_workline_pdf import WorklineSheets
+from . import bim_assemblies
 
 VERTICAL_KINDS = ('col', 'column', 'post', 'endwall_post', 'chord')
 
@@ -47,11 +48,16 @@ def drawing_model(package):
     families = defaultdict(list)
     for connection in model['connections']:
         key = connection.get('detail_ref', {}).get('id') or '|'.join(connection.get('design_record_ids', [])) or connection['id']
+        instance=connection.get('assembly_instance')
+        if instance:
+            # A named design family may select several physical templates.
+            # Each selected revision needs its own representative sheet.
+            key=(key,instance['template_id'],instance['revision'])
         families[key].append(connection)
     model['details'] = []
     for i, (key, occurrences) in enumerate(families.items(), 1):
         ref = f'C{i:03}'
-        model['details'].append(dict(reference=ref, family=key, connections=occurrences))
+        model['details'].append(dict(reference=ref, family=key[0] if isinstance(key,tuple) else key, connections=occurrences))
         for c in occurrences:
             c['drawing_reference'] = ref
     return model
@@ -142,13 +148,17 @@ def plot(sh, number, title, members, axes=(0, 1), features=(), z=None):
 
 
 def detail(sh, row):
-    cs = row['connections']; source = next((c for c in cs if c.get('parts')), cs[0])
-    kinds = sorted({p.get('kind', 'part').replace('_', ' ') for c in cs for p in c.get('parts', [])})
+    cs = row['connections']; templates=bim_assemblies.index(sh.m)
+    source = next((c for c in cs if c.get('parts') or c.get('assembly_instance')), cs[0])
+    # Expand only this representative, in its actual world frame. Preserve the
+    # compact native connection and template in the source/index artifacts.
+    selected_parts=bim_assemblies.parts(source,templates,world=True)
+    kinds = sorted({p.get('kind', 'part').replace('_', ' ') for p in selected_parts})
     sh.start(row['reference'], 'Connection / ' + (', '.join(kinds).capitalize() if kinds else 'Source specification'))
     joints = {j['id']: j for j in sh.m['joints']}; joint = joints.get(source.get('joint_id'), {})
     center = joint.get('point', source.get('point', [0, 0, 0]))
-    parts = [(face, True) for p in source.get('parts', []) for face in part_faces(p, sh.profiles)]
-    lines = [line for p in source.get('parts', []) for line in part_lines(p)]
+    parts = [(face, True) for p in selected_parts for face in part_faces(p, sh.profiles)]
+    lines = [line for p in selected_parts for line in part_lines(p)]
     faces = list(parts)
     linked = (set(source.get('member_ids', [])) | {e['member_id'] for e in joint.get('member_ends', [])}
               | {e['member_id'] for e in joint.get('attachments', [])})
@@ -185,7 +195,7 @@ def detail(sh, row):
                 b=list(low); b[axes[1]]=high[axes[1]]; value=high[axes[1]]-low[axes[1]]
                 sh.dim(tr(a), tr(b), 35, value=value, label=inches(value), ref='Source connection-part envelope', size=11)
             sh.views.append(dict(sheet=sh.current, kind='source_connection_assembly' if parts else 'source_connection_reference', axes=list(axes) if axes else None,
-                                 connection_id=source['id'], part_ids=[p['id'] for p in source['parts']], contextual_member_ids=sorted(linked)))
+                                 connection_id=source['id'], part_ids=[p['id'] for p in selected_parts], contextual_member_ids=sorted(linked)))
     else:
         sh.text(85, sh.H-250, 'No located part geometry supplied for this family.', 22, ASSUMED)
         sh.wrap(85, sh.H-300, 'Connection specification retained below. Part set-out and assembly views: TBD - resolve query. No geometry has been invented.', 1250, 18, 28)
@@ -196,7 +206,7 @@ def detail(sh, row):
              'Design records: ' + ', '.join(source.get('design_record_ids', []))]
     if lines: notes.insert(1, 'Amber dashed lines: source reference locations only. Physical plate/weld set-out: TBD - resolve query. No solid geometry inferred from detail notes.')
     y = sh.panel_notes(notes, x=x, y=y, width=735)-10
-    counts = Counter(p.get('kind', 'part') for p in source.get('parts', []))
+    counts = Counter(p.get('kind', 'part') for p in selected_parts)
     y = sh.wrap(x, y, 'REPRESENTATIVE PARTS: ' + (', '.join(f'{n} {k}' for k,n in counts.items()) or 'TBD'), 735, 13, 19)-28
     records = {r['id']: r for r in sh.p['design_records']}
     for ref in source.get('design_record_ids', []):
