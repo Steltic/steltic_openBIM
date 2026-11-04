@@ -71,6 +71,12 @@ def prepare(model,package):
         # equal stud layouts on different beams share a drawing detail while the
         # source-beam identity remains on every actual connection occurrence.
         shape_parameters={k:v for k,v in c.get('parameters',{}).items() if k not in ('original_physical_member_id','source_releases')}
+        if family in ('test_roof_truss','review_truss_node','review_truss_heel'):
+            from .truss_node_geometry import receivers
+            # A piece trimmed at a nearby opening cannot borrow the longer
+            # standard node's screw stations or local member extent.
+            from .review_cfs_wall_bindings import signature as receiver_shape
+            shape_parameters['physical_truss_receivers']=receiver_shape(receivers(ms,c['point']))
         if family=='review_splice':
             # Equal W designations do not imply that both actual shafts have
             # full-height boxing. This changes the receiver list itself.

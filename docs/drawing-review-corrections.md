@@ -118,3 +118,16 @@ seat and CFS13 return detail were rendered and visually checked.
 These are source geometry and accepted fit corrections. Supplier/capacity
 approvals and the remaining native completeness findings are still required;
 this release does not declare the CFS examples or the full 61-case sweep ready.
+
+## Cut truss members beside openings (0.8.42 candidate)
+
+Opening cutbacks follow a sloping member's own axis. Node details retain the
+actual remaining member length, roll and receiver identity; a short piece cannot
+reuse a longer node's screw layout. Where the usual fictional six-screw group
+does not fit, the smaller group and its outstanding supplier/engineer capacity
+check are explicit A proposals. This does not alter checked gold selections.
+
+Section cuts retain intermediate vertices on web/flange caps and preserve gaps
+in concave faces. Focused tests check both member end orders, every screw's
+contact with the real sheets, separate short/long node variants and empty gaps.
+Whole-case and full regression verification is required before merging.

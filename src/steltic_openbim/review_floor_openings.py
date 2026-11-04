@@ -8,8 +8,9 @@ from .review_receiver_geometry import point,vector,extract
 def physical_axis(m):return [add(q,o) for q,o in zip(m['axis'],m['end_offsets'])]
 
 
-def section(m,profiles,origin,axes):
+def section(m,profiles,origin,axes,station=None):
     a,b=physical_axis(m);u=unit(sub(b,a));y=m['local_y'];z=cross(u,y)
+    if station is not None:a=add(a,mul(u,(station-point(a,origin,axes)[0])/dot(u,axes[0])))
     return [[point(add(a,add(mul(y,q[0]),mul(z,q[1]))),origin,axes) for q in poly]
             for poly in strips(profiles[m['profile_id']],profiles)]
 
@@ -38,7 +39,11 @@ def bind(model):
         host=min(choices,key=lambda q:(q[0],q[1]))[2]
         face=max(q[0] for poly in section(host,profiles,origin,axes) for q in poly)
         end=min(range(2),key=lambda i:math.dist(primary['axis'][i],origin));old=list(primary['end_offsets'][end])
-        primary['end_offsets'][end]=add(old,mul(axes[0],max(0,face+.125-dot(old,axes[0]))))
+        # A sloping truss web must be shortened along its own workline. Moving
+        # only its horizontal coordinate changes the web angle at the next node.
+        direction=unit(sub(primary['axis'][1-end],primary['axis'][end]))
+        advance=max(0,face+.125-dot(old,axes[0]))/dot(direction,axes[0])
+        primary['end_offsets'][end]=add(old,mul(direction,advance))
         c['member_ids']=[primary['id'],host['id']]
         c.setdefault('parameters',{})['physical_floor_opening']=dict(cutback_in=face+.125)
         model.setdefault('connection_endpoint_links',[]).append(dict(member_id=primary['id'],end='start' if end==0 else 'end',connection_id=c['id'],
@@ -57,13 +62,17 @@ def bind(model):
 def draw(ctx):
     a,p=ctx.a,ctx.p;primary,host=ctx.ms[:2];axes=frame(primary,ctx.c['point'])
     beam=extract(ctx,primary,'JOIST',axes,28);support=extract(ctx,host,'SUPPORT',axes,28)
-    prim=section(primary,p,ctx.c['point'],axes);sec=section(host,p,ctx.c['point'],axes)
+    start=min(q[0] for q in beam['member']['axis']);bolt_x=start+1
+    prim=section(primary,p,ctx.c['point'],axes,bolt_x+.5);sec=section(host,p,ctx.c['point'],axes)
     bounds=lambda poly:[[min(q[i] for q in poly),max(q[i] for q in poly)] for i in range(3)]
     webs=[bounds(poly) for poly in prim if max(q[1] for q in poly)-min(q[1] for q in poly)<.5 and max(q[2] for q in poly)-min(q[2] for q in poly)>2]
+    # Use the common actual web depth at both screw columns. It is independent
+    # of the member's stored end order, including a descending truss web.
+    direction=sub(*physical_axis(primary)[::-1]);slope=abs(dot(direction,axes[2])/dot(direction,axes[0]))
+    for bb in webs:bb[2][0]+=slope*.5;bb[2][1]-=slope*.5
     hostwebs=[bounds(poly) for poly in sec if max(q[0] for q in poly)-min(q[0] for q in poly)<.5 and max(q[2] for q in poly)-min(q[2] for q in poly)>2]
     if not webs or not hostwebs:raise ValueError('Opening clip needs actual vertical channel webs: '+ctx.c['id'])
     t=.125;face=max(bb[0][1] for bb in hostwebs);back=min(bb[0][0] for bb in hostwebs)
-    start=min(q[0] for q in beam['member']['axis']);bolt_x=start+1
     for i,bb in enumerate(webs):
         centre=sum(bb[1])/2
         sign=1 if centre>=0 else -1

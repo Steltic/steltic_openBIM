@@ -633,28 +633,32 @@ def build_scene(model,package,c,subtype=''):
         note('Actual head-roof heel to girder-chord occurrence at Grid G. A: fabricated hanger and fastener arrangement; source/delegated roof reactions remain unverified test inputs.')
 
     elif family=='test_roof_truss':
-        point=c['point'];extent=[max(abs(q[i]-point[i]) for m in ms for q in m['axis']) for i in (0,1)];horizontal=0 if extent[0]>=extent[1] else 1;other=1-horizontal
-        def local(q):return [q[horizontal]-point[horizontal],q[other]-point[other],q[2]-point[2]]
+        from .truss_node_geometry import receivers,short_screw_layout
+        from .pilots.model import dot
         ends=[]
-        for i,m in enumerate(ms):
-            aa,bb=[local(q) for q in m['axis']];far=max((aa,bb),key=lambda q:sum(v*v for v in q));v=unit(far);far=mul(v,min(24,math.sqrt(sum(t*t for t in far))))
-            ly=m['local_y'];local_y=[ly[horizontal],ly[other],ly[2]]
-            a.member('M'+str(i+1),m['profile_id'],[0,0,0],far,y=local_y,basis='A',description=m['kind'].replace('_',' ')+' '+m['profile_id'])
+        for i,(m,receiver) in enumerate(zip(ms,receivers(ms,c['point']))):
+            near,far=receiver['axis'];v=unit(sub(far,near))
+            a.member('M'+str(i+1),m['profile_id'],near,far,y=receiver['local_y'],basis='A',
+                source_member_index=i,description=m['kind'].replace('_',' ')+' '+m['profile_id'])
             ends.append((i+1,v,m))
         if len(ends)<2:raise ValueError('Truss node has no adjoining chord/web')
         # Mitred ends share a workpoint but do not occupy the same steel volume.
         from .assembly_scene import clip_part
-        bolt_starts={}
+        bolt_layouts={};short_members=[]
         for n,v,m in ends:
             part=next(q for q in a.parts if q['id']=='M'+str(n))
-            across=[-v[2],0,v[0]];bolt_start=5
+            across=[-v[2],0,v[0]];bolt_start=5;normals=[]
             for _,other,_ in ends:
                 delta=sub(v,other)
                 if math.sqrt(sum(x*x for x in delta))>.01:
                     normal=unit(delta);clip_part(part,normal,.125)
+                    normals.append(normal)
                     along=sum(x*y for x,y in zip(normal,v));crossing=abs(sum(x*y for x,y in zip(normal,across)))
                     bolt_start=max(bolt_start,(.75*crossing+.75)/max(along,.01))
-            bolt_starts[n]=math.ceil(bolt_start*2)/2
+            last=max(dot(q,v) for q in part['member']['axis'])
+            stations,offsets,reduced=short_screw_layout(v,normals,last,math.ceil(bolt_start*2)/2)
+            bolt_layouts[n]=(stations,offsets)
+            if reduced:short_members.append('M'+str(n))
         # One node plate for EVERY actual load-carrying web plane, including all
         # four girder plies. Plate offsets are fitted to the thickest joined web.
         planes={}
@@ -667,7 +671,8 @@ def build_scene(model,package,c,subtype=''):
             coords=[(-4,-4),(4,-4),(-4,4),(4,4)]
             for n,v,_ in ends:
                 across=[-v[2],0,v[0]]
-                coords.extend((q[0],q[2]) for q in [add(mul(v,bolt_starts[n]+5),mul(across,3)),add(mul(v,bolt_starts[n]+5),mul(across,-3))])
+                tip=bolt_layouts[n][0][-1]+2
+                coords.extend((q[0],q[2]) for q in [add(mul(v,tip),mul(across,3)),add(mul(v,tip),mul(across,-3))])
             coords=sorted(set(coords));lower=[];upper=[]
             def turn(o,b,d):return (b[0]-o[0])*(d[1]-o[1])-(b[1]-o[1])*(d[0]-o[0])
             for q in coords:
@@ -680,11 +685,13 @@ def build_scene(model,package,c,subtype=''):
             for n,v,m in ends:
                 matches=[t for at,ss,t in web_faces(p,m['profile_id']) if abs(at-ss*t/2-centre)<.01]
                 if not matches:continue
-                across=[-v[2],0,v[0]];pts=[add(mul(v,bolt_starts[n]+r*1.5),add(mul(across,s),[0,yy,0])) for r in range(3) for s in (-.75,.75)]
+                across=[-v[2],0,v[0]];stations,offsets=bolt_layouts[n]
+                pts=[add(mul(v,r),add(mul(across,s),[0,yy,0])) for r in stations for s in offsets]
                 if sign>0:pts=[add(q,[0,.125,0]) for q in pts]
-                fast(f'F{face+1}-{n}',pts,[0,-sign,0],.25,.125+thick,['M'+str(n),label],'6 No.14 per actual web ply at this member end (A)','A',True)
+                fast(f'F{face+1}-{n}',pts,[0,-sign,0],.25,.125+thick,['M'+str(n),label],f'{len(pts)} No.14 per actual web ply at this member end (A)','A',True)
         direction=ends[0][1];a.section_axis=0 if abs(direction[0])>.1 else 2;a.section_at=direction[a.section_axis]*8
-        note('The node includes actual adjoining members and every built-up web ply. A: 1/8 in gussets, six No.14 per web ply, mitre fit with 1/4 in nominal gap, and matching paired/four-ply webs. No supplier capacity approval is inferred.')
+        note('The node includes actual adjoining members and every built-up web ply. A: 1/8 in gussets, screw counts as labelled for each actual web ply, mitre fit with 1/4 in nominal gap, and matching paired/four-ply webs. No supplier capacity approval is inferred.')
+        if short_members:note('A short cut-end proposal for '+', '.join(short_members)+': fewer screws fit between the actual opening cut and node mitre. The source workline is preserved. Supplier and engineer capacity verification is required; no six-screw capacity is assigned to this reduced group.')
 
     elif family in ('cfs_delegated_truss_heel_clip','hr_truss_node','hr_stmf_node'):
         cp=pick(('truss_chord','girder_truss','valley_truss'),default_c());wp=pick(('truss_web',),default_c());tp=channel(p,'ASSEMBLY-TRUSS-TRACK',6,2,.1017,0)
