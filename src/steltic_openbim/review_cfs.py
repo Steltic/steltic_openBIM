@@ -45,14 +45,19 @@ def physical_pack(b,text,label):
     return b.custom(label,'built_up',{},components=comps,basis='A: explicitly spaced mixed source chord plies; source count/sections retained')
 
 def intersections(poly,axis,station):
-    other=1-axis;hits=[]
-    # An inward nudge treats exterior boundary lines consistently.
+    other=1-axis;intervals=[]
+    # A re-entrant boundary can have floor/wall material on either side at
+    # different stations. The first nonempty side alone omits the return leg.
     for offset in (1e-5,-1e-5):
         hits=[];s=station+offset
         for a,d in zip(poly,poly[1:]+poly[:1]):
             if (a[other]<=s<d[other]) or (d[other]<=s<a[other]):hits.append(a[axis]+(d[axis]-a[axis])*(s-a[other])/(d[other]-a[other]))
-        if hits:break
-    hits.sort();return list(zip(hits[::2],hits[1::2]))
+        hits.sort();intervals.extend(zip(hits[::2],hits[1::2]))
+    result=[]
+    for lo,hi in sorted(intervals):
+        if result and lo<=result[-1][1]+1e-7:result[-1]=(result[-1][0],max(result[-1][1],hi))
+        else:result.append((lo,hi))
+    return result
 
 def spaced_segments(lo,hi,widths,margin=None):
     spare=hi-lo-sum(widths)

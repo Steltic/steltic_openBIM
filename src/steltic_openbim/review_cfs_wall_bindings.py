@@ -164,13 +164,16 @@ def bind(model):
             for m in candidates:
                 aa,bb=axis(m);local=[point(q,origin,axes) for q in (aa,bb)];u=unit(sub(bb,aa))
                 if m['kind'] in ('top_track','bottom_track','ordinary_track','tier_track') and abs(dot(u,axes[0]))>.999:
-                    if abs(local[0][1])<.01 and min(q[0] for q in local)-.01<=0<=max(q[0] for q in local)+.01 and abs(local[0][2])<30:tracks.append(m)
+                    allowance=6 if is_joist else .01
+                    if abs(local[0][1])<.01 and min(q[0] for q in local)-allowance<=0<=max(q[0] for q in local)+allowance and abs(local[0][2])<30:tracks.append(m)
                 elif m['kind'] in ('joist','opening_trimmer') and abs(dot(u,axes[1]))>.999:
                     if abs(local[0][0])<=24 and abs(local[0][2])<24 and any(abs(q[1])<.01 for q in local):joists.append(m)
                 elif m['kind'] in ('joist','rim_track','floor_rim') and abs(dot(u,axes[0]))>.999:
                     if abs(local[0][1])<.01 and abs(local[0][2])<24 and min(q[0] for q in local)-.01<=0<=max(q[0] for q in local)+.01:parallel.append(m)
                 elif m['kind']=='truss_chord' and abs(dot(u,axes[1]))>.999:
-                    if abs(local[0][0])<=24 and abs(local[0][2])<24 and any(abs(q[1])<.01 for q in local):truss.append(m)
+                    if abs(local[0][0])<=24 and abs(local[0][2])<24 and min(q[1] for q in local)-.01<=0<=max(q[1] for q in local)+.01:truss.append(m)
+                elif m['kind']=='truss_chord' and abs(dot(u,axes[0]))>.999:
+                    if abs(local[0][1])<.01 and abs(local[0][2])<24 and min(q[0] for q in local)-.01<=0<=max(q[0] for q in local)+.01:truss.append(m)
                 elif m['kind'] in ('stud','chord','opening_jamb'):
                     if abs(local[0][1])<.01 and abs(local[0][0])<24 and min(q[2] for q in local)<30 and max(q[2] for q in local)>-30:studs.append(m)
             # Keep the closest lower and upper track. A roof has no upper wall.
@@ -209,7 +212,8 @@ def bind(model):
             selected_truss=[]
             if not selected_joists and truss:
                 for side in (-1,1):
-                    options=[m for m in truss if sum(point(q,origin,axes)[1] for q in axis(m))*side>0]
+                    options=[m for m in truss if abs(dot(unit(sub(axis(m)[1],axis(m)[0])),axes[1]))>.999
+                             and (sum(point(q,origin,axes)[1] for q in axis(m))>=0)==(side>0)]
                     if not options:continue
                     # A track-end detail must use a truss actually above the
                     # track run. The closest grid station can lie outside its
@@ -219,6 +223,14 @@ def bind(model):
                     closest=min(options,key=lambda m:(abs(point(axis(m)[0],origin,axes)[0]),abs(axis(m)[0][2]-origin[2]),m['id']))
                     prefix=closest.get('original_physical_member_id',closest['id']).rsplit('-',1)[0]
                     selected_truss.extend(m for m in options if m.get('original_physical_member_id',m['id']).rsplit('-',1)[0]==prefix)
+                if not selected_truss:
+                    for side in (-1,1):
+                        options=[m for m in truss if abs(dot(unit(sub(axis(m)[1],axis(m)[0])),axes[0]))>.999
+                                 and (sum(point(q,origin,axes)[0] for q in axis(m))>=0)==(side>0)]
+                        if options:
+                            closest=min(options,key=lambda m:(abs(axis(m)[0][2]-origin[2]),m['id']))
+                            prefix=closest.get('original_physical_member_id',closest['id']).rsplit('-',1)[0]
+                            selected_truss.extend(m for m in options if m.get('original_physical_member_id',m['id']).rsplit('-',1)[0]==prefix)
             if primary['kind']=='truss_chord':
                 prefix=primary.get('original_physical_member_id',primary['id']).rsplit('-',1)[0]
                 selected_truss=[m for m in truss if m.get('original_physical_member_id',m['id']).rsplit('-',1)[0]==prefix]

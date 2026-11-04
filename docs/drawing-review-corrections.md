@@ -84,3 +84,28 @@ opening trimmer for its own truss. Actual sheet thicknesses determine screw grip
 The delegated CFS11/13/14 roof chords have their centroids above the bearing
 surface; their supplier capacity and final roof-cover geometry remain separately
 required. These changes do not close the outstanding CFS completeness findings.
+
+## Return walls and parallel floor/roof attachments (0.8.41)
+
+The boundary routine now retains both sides of a re-entrant perimeter, so the
+ordinary wall framing on a notch return is not omitted. CFS11/13/14 ordinary roof
+walls use the actual roof bearing level instead of deducting a floor-framing
+zone. Physical track web centrelines are offset by half the actual web thickness
+to keep their outside bearing faces on the recorded workpoints. Original member
+axes, sections and the accepted offset history remain available.
+
+Floor/roof details now distinguish transverse and parallel members, including
+both real chords of an open-web truss and each channel ply of a built-up chord.
+Short gaps at cut track ends use explicit formed returns attached to real webs;
+they do not imply direct flange overlap or verified bearing capacity. Interior
+roof-wall interfaces use the chord actually crossing or following the wall.
+
+Drawing sections cut across parallel members to show their actual plies. Long
+component labels stay within their view, and repeated identical notes are
+shown once. Focused regression fixtures check real screw/bolt contact, mirrored
+corners, both truss chords, notch boundaries and label extents. The CFS11 roof
+seat and CFS13 return detail were rendered and visually checked.
+
+These are source geometry and accepted fit corrections. Supplier/capacity
+approvals and the remaining native completeness findings are still required;
+this release does not declare the CFS examples or the full 61-case sweep ready.

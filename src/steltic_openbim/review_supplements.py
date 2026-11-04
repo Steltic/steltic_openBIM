@@ -4,6 +4,20 @@ from .review_model import add,sub,mul
 from .review_cfs import frange,intersections
 from .design_geometry import interval_in_rectangle
 
+def track_bearing_datums(b):
+    """Keep the nominal bearing plane on the outside face of the track web."""
+    if not b.key.startswith('cfs') or b.key in ('cfs3','cfs7'):return
+    for m in b.members:
+        if m['kind'] not in ('top_track','bottom_track','ordinary_track','tier_track'):continue
+        if abs(m['local_y'][2])<.999:continue
+        p=b.profiles[m['profile_id']]
+        if p['family']!='channel':raise ValueError('Built-up track needs an explicit bearing datum')
+        shift=p['dimensions']['t']/2*m['local_y'][2]
+        previous=[list(v) for v in m['end_offsets']]
+        for off in m['end_offsets']:off[2]+=shift
+        b.changes.append(dict(kind='track_web_bearing_surface_offset',member_id=m['id'],previous_end_offsets=previous,
+            end_offsets=[list(v) for v in m['end_offsets']],basis='A: nominal wall bearing/slab workpoint is the outside web face. Offset the physical track web centre by half its actual thickness into the wall; retain analysis axis and selected section.'))
+
 def complete_walls(b,outline,bystory,levels):
     if b.key=='cfs29':return
     for k in range(1,len(levels)):
@@ -12,11 +26,16 @@ def complete_walls(b,outline,bystory,levels):
             if w['level']!=k:continue
             axis=0 if w['direction']=='X' else 1
             for r in w['runs']:lines[axis,round(r['position_in'],4)]=w['top_z_in']
+        roof_bearing=b.key in ('cfs11','cfs13','cfs14') and k==len(levels)-1
+        ordinary_depth=0 if roof_bearing else (14 if b.key=='cfs3' else 14.25 if b.key=='cfs13' else 16.25 if b.key=='cfs14' else 12)
         for a,d in zip(poly,poly[1:]+poly[:1]):
-            axis=0 if abs(a[0]-d[0])>.01 else 1;normal=1-axis;lines[axis,round(a[normal]*12,4)]=levels[k]-(14 if b.key=='cfs3' else 14.25 if b.key=='cfs13' else 16.25 if b.key=='cfs14' else 12)
+            axis=0 if abs(a[0]-d[0])>.01 else 1;normal=1-axis;lines[axis,round(a[normal]*12,4)]=levels[k]-ordinary_depth
         if b.key=='cfs14':
             for y in (210,630):
-                if k>1 or y<420:lines[0,y]=levels[k]-16.25
+                if k>1 or y<420:lines[0,y]=levels[k]-ordinary_depth
+        if roof_bearing:
+            b.changes.append(dict(kind='ordinary_roof_wall_bearing_datum',level=k,top_z_in=levels[k],
+                basis='A: ordinary return/bearing walls terminate at the same roof bearing workpoint as the source braced walls. Do not deduct an occupied-floor joist zone beneath the delegated roof truss. Source braced-wall sections and elevations are retained.'))
         if b.key in ('cfs2','cfs4','cfs6','cfs9','cfs12'):
             from .review_next_cfs_walls import bearing_lines,depth
             lines={key:levels[k]-depth(b,k) for key in lines}

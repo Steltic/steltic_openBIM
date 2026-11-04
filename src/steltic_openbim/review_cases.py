@@ -59,6 +59,8 @@ def build_model(package,state):
     selected_details(b)
     from .review_profile_fit import apply as profile_fit
     profile_fit(b)
+    from .review_supplements import track_bearing_datums
+    track_bearing_datums(b)
     from .review_cfs_frame_straps import apply as frame_straps
     frame_straps(b)
     from .review_wall_straps import apply as wall_straps

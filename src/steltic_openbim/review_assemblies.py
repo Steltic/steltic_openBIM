@@ -61,6 +61,7 @@ class Context:
     def n(self,pattern,default):return findnum(pattern,self.text,default)
     def finish(self):
         a=self.a
+        a.notes=list(dict.fromkeys(a.notes))
         if self.params.get('released_connection_proposal'):
             for item in a.parts:
                 if item['kind']!='member':item['basis']='A'
