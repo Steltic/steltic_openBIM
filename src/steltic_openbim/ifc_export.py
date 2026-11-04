@@ -334,13 +334,19 @@ def _export_source(directory,destination,source):
             faces,lines,solid_count,curve_count=assembly_meshes[template['id']]
             item=dict(c,level=source_level,connection_id=c['id'],connected_member_ids=connected,
                       description='Located connection assembly; individual component identities and selections are retained in its versioned template')
-            obj=add('IfcElementAssembly',item,faces,key='connection:'+c['id'],local_frame=frame)
+            located=[[bim_assemblies.transformed(p,frame) for p in line] for line in lines]
+            if not faces and lines:
+                # A welded joint may contain no additional solid: the actual
+                # column and boxing plates are already exported as members.
+                # Give the assembly its recorded weld/interface curves instead
+                # of emitting an empty product plus an unattached-looking line.
+                item['geometry_role']='assembly_weld_and_interface_curves'
+            obj=add('IfcElementAssembly',item,faces,located if not faces else (),key='connection:'+c['id'],local_frame=frame)
             for mid in connected:
                 if mid not in member_objects:raise ValueError('Connection references missing exported member: '+mid)
                 rel=relation('IfcRelConnectsElements','connection:'+c['id']+':'+mid,Name='Declared structural connection',RelatingElement=obj,RelatedElement=member_objects[mid])
                 relationship_manifest.append(dict(guid=rel.GlobalId,type=rel.is_a(),source=c['id'],target=mid,role='connection_member'))
-            if lines:
-                located=[[bim_assemblies.transformed(p,frame) for p in line] for line in lines]
+            if lines and faces:
                 annotation=add('IfcAnnotation',dict(item,id=c['id']+':references',geometry_role='assembly_reference_curves'),lines=located,key='connection:'+c['id']+':references')
                 rel=relation('IfcRelAssignsToProduct','connection-references:'+c['id'],Name='Assembly weld and interface references',RelatedObjects=[annotation],RelatingProduct=obj)
                 relationship_manifest.append(dict(guid=rel.GlobalId,type=rel.is_a(),source=c['id']+':references',target=c['id'],role='assembly_references'))

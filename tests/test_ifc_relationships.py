@@ -50,3 +50,35 @@ def test_legacy_component_group_keeps_original_occurrence_and_part_membership(tm
     assert {p.is_a() for p in relation.RelatedObjects}=={'IfcPlate','IfcBeam'}
     assert json.loads(element.get_psets(group)['Steltic_Coordination']['SourceConnection'])==package['physical']['connections'][0]
     assert report['relationships'][0]['role']=='connection_group'
+
+
+def test_weld_only_native_assembly_is_visible_located_and_lossless_on_return(tmp_path):
+    folder,package,_=drawing_source(tmp_path);physical=package['physical'];member=physical['members'][0]
+    frame=dict(origin=[120,240,360],x_axis=[0,1,0],y_axis=[-1,0,0],bindings={'receiver':'beam'})
+    receiver=dict(id='receiver',kind='member',axis=copy.deepcopy(member['axis']),profile_id='TEST',local_y=member['local_y'])
+    member['axis']=[A.transformed(p,frame) for p in member['axis']]
+    member['local_y']=A.transformed(member['local_y'],frame,True)
+    for joint in physical['joints']:joint['point']=A.transformed(joint['point'],frame)
+    connection=physical['connections'][0];material=connection['parts'][0]['material_id']
+    weld=dict(id='full-height-CJP',kind='weld',material_id=material,
+              geometry=dict(type='polyline',points=[[2,3,-10],[2,3,20]]),
+              parameters=dict(weld_type='CJP',description='Source full-height boxing weld'),connects=['receiver'])
+    template=dict(id='boxing-welds',basis='Synthetic source selection',source_record_ids=connection['design_record_ids'],receivers=[receiver],parts=[weld])
+    template['revision']=A.fingerprint(template);physical['assemblies']=[template]
+    connection.update(parts=[],assembly_instance=dict(frame,template_id=template['id'],revision=template['revision']))
+    write_json(folder/'source.json',package);write_json(folder/'state.json',initial_state(package,1))
+    source=tmp_path/'welds.ifc';report=export_drawing(folder,source)
+    assert not report['schema_errors'] and report['counts']['connection_parts']==0
+    assert report['counts']['connection_reference_parts']==1
+    review=build_review(source,dict(units='auto',scope='all'));assert review['counts']['unrendered']==0
+    assembly=next(o for o in review['objects'] if o['ifc_class']=='IfcElementAssembly')
+    assert assembly['faces']==[] and np.allclose(assembly['lines'],np.array([[[117,242,350],[117,242,380]]])*.0254)
+    assert assembly['properties']['Steltic_Coordination']['GeometryRole']=='assembly_weld_and_interface_curves'
+    model=ifcopenshell.open(str(source));rel=model.by_type('IfcRelConnectsElements')[0]
+    assert rel.RelatingElement.GlobalId==assembly['guid'] and rel.RelatedElement.is_a('IfcBeam')
+    assert json.loads(element.get_psets(model.by_type('IfcProject')[0])['Steltic_Coordination']['AssemblyTemplates'])==[template]
+    graph={e.id():e.to_string() for e in model};returned=tmp_path/'returned.ifc'
+    export_import(source,returned,dict(source_sha256=report['sha256'],revision=1,status='built',options={'units':'auto'}))
+    returned_model=ifcopenshell.open(str(returned))
+    assert all(returned_model.by_id(i).to_string()==line for i,line in graph.items())
+    assert build_review(returned,dict(units='auto',scope='all'))['objects']==review['objects']

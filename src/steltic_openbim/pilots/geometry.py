@@ -106,7 +106,16 @@ def member_faces(member,profiles,limits=None):
     if cope:
         for s in [cope['length_in'],extent-cope['length_in']]:
             if lo<s<hi: stations.add(s)
-    stations=sorted(stations); faces=[]
+    # A selected end slot can differ from the computed member length by one
+    # floating-point step. Extruding that sliver at translated coordinates can
+    # produce identical endpoints. Coalesce only machine-scale stations, while
+    # retaining the exact clipped extent and leaving selected dimensions intact.
+    tolerance=8*max(math.ulp(extent),*(math.ulp(v) for p in (a,b) for v in p))
+    ordered=[lo]
+    for station in sorted(stations):
+        if station-ordered[-1]>tolerance and hi-station>tolerance:
+            ordered.append(station)
+    stations=ordered+[hi]; faces=[]
     def shape(at,index):
         poly=[p[:] for p in base[index]]
         if cuts and index in (0,2):
