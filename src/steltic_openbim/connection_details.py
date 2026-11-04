@@ -27,6 +27,10 @@ def prepare(model,package):
     """
     from .review_cfs_occurrences import bind
     if model['pilot'].startswith('cfs'):
+        # Opening face cuts change actual member endpoints. Take the floor and
+        # wall receiver extracts after those cuts, not from a stale workpiece.
+        from .review_floor_openings import bind as opening_bind
+        opening_bind(model)
         from .review_cfs_wall_bindings import bind as wall_bind
         wall_bind(model)
     bind(model)

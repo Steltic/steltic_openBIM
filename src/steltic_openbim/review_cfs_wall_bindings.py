@@ -197,7 +197,10 @@ def bind(model):
             for side in (-1,1):
                 options=[m for m in joists if (sum(point(q,origin,axes)[1] for q in axis(m))/2)*side>0]
                 supported=[m for m in options if within_each_track_tier(m)]
-                if supported:options=supported
+                # A member on the far side of a courtyard/track end belongs
+                # to its own connection. Do not pull it into this assembly
+                # merely because there is no opposing member at this station.
+                options=supported or [m for m in options if within_each_track_tier(m,-6)]
                 if options:selected_joists.append(min(options,key=lambda m:(abs(point(axis(m)[0],origin,axes)[0]),abs(axis(m)[0][2]-origin[2]),m['id'])))
             if is_joist and primary['kind']!='truss_chord' and primary not in selected_joists:selected_joists.insert(0,primary)
             if not selected_joists and parallel:
@@ -219,7 +222,8 @@ def bind(model):
                     # track run. The closest grid station can lie outside its
                     # cut end (notably at the stepped east roof in CFS15).
                     supported=[m for m in options if within_each_track_tier(m,.5)]
-                    if supported:options=supported
+                    options=supported or [m for m in options if within_each_track_tier(m,-6)]
+                    if not options:continue
                     closest=min(options,key=lambda m:(abs(point(axis(m)[0],origin,axes)[0]),abs(axis(m)[0][2]-origin[2]),m['id']))
                     prefix=closest.get('original_physical_member_id',closest['id']).rsplit('-',1)[0]
                     selected_truss.extend(m for m in options if m.get('original_physical_member_id',m['id']).rsplit('-',1)[0]==prefix)

@@ -19,7 +19,8 @@ def test_reentrant_boundary_keeps_both_floor_sides_without_filling_the_notch():
     ('cfs13','JOIST-1-16.0-0-2:1'),('cfs13','ORD-0-240.0-4-0-0-T-0'),
     ('cfs13','Y0-L4-B1-TT'),('cfs13','ROOF-0-120-SEAT0'),('cfs4','J-4-108-0-0:1'),
     ('cfs13','P28-L4-B1-TT'),('cfs13','ORD-1-339.996-4-0-0-T-0'),
-    ('cfs3','Y28-L1-B3-TT'),('cfs3','Y28-L1-B5-TT'),('cfs3','Y28-L2-B3-BT')])
+    ('cfs3','Y28-L1-B3-TT'),('cfs3','Y28-L1-B5-TT'),('cfs3','Y28-L2-B3-BT'),
+    ('cfs13','JOIST-1-192.0-0-2:1'),('cfs13','JOIST-1-192.0-1-0:0')])
 def test_real_return_wall_and_cut_track_receivers_have_actual_fastener_contact(case,cid):
     p=evidence(case)['package'];s=scenario(case)
     m=build_model(p,dict(design_scenario=dict(id=case,source_sha256=s['source_sha256'],answers_sha256=fingerprint(s['answers']))))
@@ -37,3 +38,7 @@ def test_real_return_wall_and_cut_track_receivers_have_actual_fastener_contact(c
         assert change['station_in']==339.996 and change['basis'].startswith('A:')
         truss_ids=c['parameters']['physical_floor_stack']['truss_ids']
         assert truss_ids and all(v.startswith(change['truss_prefix']) for v in truss_ids)
+    if cid=='JOIST-1-192.0-0-2:1':
+        unrelated='JOIST-1-240.0-0-3'
+        assert unrelated not in c['parameters']['physical_floor_stack']['joist_ids']
+        assert any(v['id']==unrelated for v in m['members'])
