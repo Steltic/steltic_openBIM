@@ -78,6 +78,21 @@ def test_source_replacement_is_guarded_and_export_uses_immutable_snapshot(tmp_pa
     assert again==second
 
 
+def test_one_shaft_keeps_both_coincident_solver_roles_in_ifc_return(tmp_path):
+    from test_bim_coincident_components import package as coincident
+    package,path,drawings,roots=setup(tmp_path,'HR');member=package['physical']['members'][0]
+    split=coincident();package['analysis']=split['analysis']
+    for node,q in zip(package['analysis']['nodes'],member['axis']):node['point']=q
+    member['analysis_ids']=['axial','bending'];member['analysis_component_roles']={'axial':'axial','bending':'flexural'}
+    write_json(path,package);store=IFCStore(drawings,roots);store.import_structural('Direct',dict(module='HR',job='Example'))
+    target=tmp_path/'combined.ifc';report=export_structural(store.structural_current('Direct')[0],target)
+    assert report['counts']['member_surfaces']==1 and not schema_errors(target)
+    review=build_review(target,dict(units='auto',scope='all'));beams=[r for r in review['objects'] if r['ifc_class']=='IfcBeam']
+    assert len(beams)==1
+    source=json.loads(beams[0]['properties']['Steltic_Coordination']['SourceEntity'])
+    assert source['analysis_ids']==member['analysis_ids'] and source['analysis_component_roles']==member['analysis_component_roles']
+
+
 def test_invalid_or_wrong_module_sources_do_not_replace_current(tmp_path):
     package,path,drawings,roots=setup(tmp_path,'HR');store=IFCStore(drawings,roots)
     first=store.import_structural('Direct',dict(module='HR',job='Example'))
