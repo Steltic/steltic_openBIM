@@ -19,3 +19,13 @@ def test_overflow_creates_indexable_pages_with_every_part_and_note(tmp_path):
     assert all(text.count(f'TOKEN{i:03}')==1 for i in range(100))
     assert all(text.count(f'NOTEWORD{i:03}')==1 for i in range(500)) and 'LAST_SOURCE_NOTE' in text
     assert all(r['number']==n for r,n in zip(sh.rows,['C320']+numbers))
+def test_long_weld_and_interface_bases_are_preserved_in_text_outside_the_narrow_basis_column():
+    from steltic_openbim.assembly_legend import entries
+    scene=dict(parts=[],welds=[dict(id='W',basis='S joint type; A fitted size',kind='fillet',size=.25,
+                                  description='Source weld',connects=[])],
+               interfaces=[dict(id='L',basis='S 66 in straight lap; A corner fit',description='Contact lap',connects=[])],notes=[])
+    rows=entries(scene)
+    assert [r['basis'] for r in rows]==['S/A','S/A']
+    assert 'Basis: S joint type; A fitted size' in rows[0]['text']
+    assert 'Basis: S 66 in straight lap; A corner fit' in rows[1]['text']
+

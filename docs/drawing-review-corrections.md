@@ -55,7 +55,7 @@ explicit isolated rendering fixtures and do not constitute native acceptance.
 ## Acceptance boundary
 
 The pattern audit is a targeted drawing correction check, not an all-building
-completion certificate. As of this checkpoint, 30 HR cases have individual native
+completion certificate. As of this checkpoint, 31 HR cases have individual native
 ready results and corresponding IFC export/import/return passes. No CFS case has
 completed the full native gate. The final pinned 61-case sweep, matching full PDF
 sets, reproduction register and PDF-only ZIP remain outstanding. Website changes
@@ -65,3 +65,22 @@ Machine-readable pattern results are in `drawing-review-patterns.json`. They
 retain original source-model hashes and individual case counts. The local test
 workspace retains detailed occurrence and IFC evidence; it is not bundled as
 production job data.
+
+## Follow-up geometry checks (0.8.40)
+
+HR28's source corner-bar requirement now has located same-size corner bars and
+66 in laps, with actual bent-bar solids. Its six long-edge and three short-edge
+bars remain separate, and accepted layering avoids intersecting reinforcement.
+The additional corner fit and anchorage scope remain explicitly unverified for
+capacity. Roof column terminal points refer to their actual top-chord joints.
+The corrected case passed native completeness and IFC return checks, including
+10,642 products, 14,222 relationships and all 216,456 original IFC entities.
+
+Mixed ordinary/braced track corners preserve the scheduled braced track and
+existing vertical offsets. Floor details attach to the real channel plies of
+built-up joists/trimmers and use individual flange packers. Receiver selection
+prefers framing over both track tiers; a truss seat cannot substitute a nearby
+opening trimmer for its own truss. Actual sheet thicknesses determine screw grip.
+The delegated CFS11/13/14 roof chords have their centroids above the bearing
+surface; their supplier capacity and final roof-cover geometry remain separately
+required. These changes do not close the outstanding CFS completeness findings.

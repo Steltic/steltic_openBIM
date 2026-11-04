@@ -76,6 +76,9 @@ class Context:
 
 def build_scene(model,package,c,subtype=''):
     ctx=Context(model,package,c);family=ctx.family
+    if family=='review_edge_chord_corner':
+        from .review_edge_chords import draw
+        draw(ctx);return ctx.finish()
     if family=='review_track_corner':
         from .review_track_corners import draw
         draw(ctx);return ctx.finish()

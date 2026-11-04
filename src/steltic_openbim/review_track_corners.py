@@ -14,21 +14,24 @@ def apply(b):
     if not b.key.startswith('cfs'):return
     nodes=defaultdict(list)
     for m in b.members:
-        if m['kind']!='ordinary_track':continue
+        if m['kind'] not in ('ordinary_track','top_track','bottom_track','tier_track'):continue
         p=b.profiles[m['profile_id']]
         if p['family']!='channel' or p['dimensions']['lip']:continue
         if abs(m['axis'][0][2]-m['axis'][1][2])>.001:continue
         for end,q in enumerate(m['axis']):nodes[tuple(round(v,5) for v in q)].append((m,end))
     existing={c['id'] for c in b.connections}
     for point,items in sorted(nodes.items()):
-        if len(items)!=2:continue
-        (first,ei),(second,ej)=sorted(items,key=lambda row:row[0]['id'])
+        if len(items)!=2 or not any(m['kind']=='ordinary_track' for m,_ in items):continue
+        # At the end of a braced wall, keep its scheduled track untouched and
+        # cut back only the complementary ordinary return. Two braced tracks
+        # still need their own selected collector connection.
+        (first,ei),(second,ej)=sorted(items,key=lambda row:(row[0]['kind']=='ordinary_track',row[0]['id']))
         dx=unit(sub(first['axis'][1-ei],point));dy=unit(sub(second['axis'][1-ej],point))
         if abs(dot(dx,dy))>.001 or dot(first['local_y'],second['local_y'])<.999:continue
         cid='TRACK-CORNER:'+first['id']+':'+second['id']
         if cid in existing:continue
         width=b.profiles[first['profile_id']]['dimensions']['d']
-        previous=list(second['end_offsets'][ej]);offset=mul(dy,width/2+.125)
+        previous=list(second['end_offsets'][ej]);offset=add(previous,mul(dy,width/2+.125-dot(previous,dy)))
         second['end_offsets'][ej]=offset
         # Preserve the shared workpoint. The endpoint's selected physical
         # offset is carried into the native model and every detail extract.
@@ -38,7 +41,7 @@ def apply(b):
             cutback_in=width/2+.125),title='ORDINARY TRACK CORNER / A')
         b.changes.append(dict(kind='ordinary_track_corner_fit',member_id=second['id'],end=ej,
             previous_offset=previous,end_offset=offset,connection_id=cid,
-            basis='A: butt the second ordinary track 1/8 in clear of the first track; join their actual outer flanges with the shown formed clip. No source section or checked collector detail is changed.'))
+            basis='A: butt the ordinary return track 1/8 in clear of the first track, preserving its existing vertical datum; join their actual outer flanges with the shown formed clip. The braced-wall track, source sections and checked collector details are unchanged.'))
     if any(c['detail_ref']['id']=='review_track_corner' for c in b.connections):
         b.note('ORDINARY-TRACK-CORNERS','A: ordinary-track corners use explicit face cutbacks and formed external clips. These local assembly fits retain source track sections; floor transfer, shear-wall collectors and base anchorage remain separate source-bound details. No new capacity verification.')
 
