@@ -82,10 +82,12 @@ def initial_requests(package):
             for iid,answer in scenario(key)['answers'].items()]
     from .source_worklines import required,request_items
     items=request_items(package) if required(package) else copy.deepcopy(package.get('review',{}).get('items',[]))
-    if not items:
-        for f in inspect_package(package)['findings']:
-            if f['severity']=='needs_input':
-                items.append(dict(id=f['code'],title=f['message'],kind='missing',basis=f['message'],entity_ids=f.get('entity_ids',[])))
+    # Existing coordination requests must not hide newly detected omissions.
+    represented={item['id'] for item in items}
+    for f in inspect_package(package)['findings']:
+        if f['severity']=='needs_input' and f['code'] not in represented:
+            items.append(dict(id=f['code'],title=f['message'],kind='missing',basis=f['message'],entity_ids=f.get('entity_ids',[])))
+            represented.add(f['code'])
     result=[]
     seen=set()
     for item in items:
