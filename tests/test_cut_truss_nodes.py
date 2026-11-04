@@ -40,6 +40,8 @@ def test_sloping_opening_cut_preserves_web_workline_and_all_screws_hit_real_memb
             for q in f['points']:
                 for name in f['connects']:assert contact(parts[name],f,q),(c['id'],f['id'],name,q)
         if c['id']=='NODE':
+            from steltic_openbim.assembly_scene import section_polygons
+            assert any(p.get('member') and section_polygons(p,scene['section_axis'],scene['section_at']) for p in scene['parts'])
             assert all(p['member']['source_member_index']==i for i,p in enumerate(p for p in scene['parts'] if p.get('member')))
             assert any('short cut-end proposal' in note and 'capacity verification' in note for note in scene['notes'])
             assert any(len(f['points'])<6 for f in scene['fasteners'])
