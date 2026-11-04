@@ -146,7 +146,9 @@ def build_scene(model,package,c,subtype=''):
             a.member('M1',cp,[0,-22,-cd/2],[0,22,-cd/2],y=(1,0,0),description='Supporting girder '+cp)
             face=p[cp]['dimensions'].get('tw',.375)/2
         gap=0 if family in ('hr_rbs_joint','hr_moment') else 1.25
-        rbs=beam.get('rbs');extra={'rbs':rbs} if rbs else {}
+        rbs=dict(beam['rbs'],ends=[0]) if beam.get('rbs') else None
+        if rbs:rbs.pop('cuts',None)
+        extra={'rbs':rbs} if rbs else {}
         if not support_is_column and p[bp]['family']=='i' and p[cp]['family']=='i':
             extra['cope']=dict(length_in=max(1,p[cp]['dimensions']['bf']/2+.5-face-gap),depth_in=p[cp]['dimensions']['tf']+.5)
         length=max(40,(rbs['a_in']+rbs['b_in']+8) if rbs else 40)

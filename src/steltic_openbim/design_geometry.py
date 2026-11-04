@@ -319,4 +319,6 @@ def build_model(package,state):
             dict(id='assumed_test_material',basis='A',specification='Fictional supplementary framing. Geometry and connection assumptions only; no newly verified strength or capacity.')],
         panels=panels,openings=features,connections=connections,
         member_schedule=schedule,details=list(details.values()),grids=grids,levels=spec['levels'],changes=changes,
-        assumptions=[dict(id=r['id'],answer=r['resolution'],basis='A - user-authorized fictional test input') for r in state['requests']])
+        assumptions=[dict(id=r['id'],answer=r['resolution'] if r.get('confirmed') else 'TBD - resolve query: '+r['proposal'],
+                          basis='A - user-authorized fictional test input' if r.get('confirmed') else 'Provisional information request',
+                          confirmed=bool(r.get('confirmed'))) for r in state['requests']])

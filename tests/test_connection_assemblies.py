@@ -46,6 +46,20 @@ def test_shear_plate_dimensions_cannot_be_parsed_as_bolt_diameters(pilots):
         assert any(w['connects']==['M1','P1'] for w in s['welds'])
 
 
+def test_saved_answers_do_not_resolve_new_completeness_findings():
+    with zipfile.ZipFile(Path(__file__).resolve().parents[1]/'docs/stage3/pilots.zip') as z:
+        package=json.loads(z.read('hr22/bim_package.json'))
+    state=initial_state(package,1)
+    state['requests'].append(dict(id='NEW-RECEIVER-FIT',proposal='Check the actual receiver at this joint',confirmed=False,status='provisional'))
+    updated=adopt_scenario(package,state,dict(revision=1,source_model_sha256=state['source_model_sha256'],confirm_fictional=True,author='Regression test'))
+    assert updated['drawing_status']=='provisional'
+    request=next(r for r in updated['requests'] if r['id']=='NEW-RECEIVER-FIT')
+    assert not request['confirmed'] and 'resolution' not in request
+    model=build_model(package,updated)
+    note=next(r for r in model['assumptions'] if r['id']=='NEW-RECEIVER-FIT')
+    assert not note['confirmed'] and note['answer'].startswith('TBD - resolve query:')
+
+
 def test_portal_detail_has_both_member_legs_two_continuous_brackets_and_all_bolts(pilots):
     for s in pilots['cfs16']['connection_assemblies']:
         if s['family'] not in ('cfs_knee_3x4','cfs_apex_3x3'):continue

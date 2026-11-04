@@ -88,21 +88,28 @@ def member_faces(member,profiles,limits=None):
     lo,hi=[v*extent for v in clip]; d=unit(vector); y=member['local_y']; profile=profiles[member['profile_id']]
     base=strips(profile,profiles); rbs=member.get('rbs'); cope=member.get('cope')
     stations={lo,hi}
+    cuts=[]
     if rbs:
-        aa,bb=rbs['a_in'],rbs['b_in']
-        for s in [aa+bb*i/12 for i in range(13)]:
-            for pos in [s,extent-s]:
-                if lo<pos<hi: stations.add(pos)
+        cuts=rbs.get('cuts') or [dict(rbs,end=end) for end in rbs.get('ends',[0,1])]
+        for cut in cuts:
+            if cut['end'] not in (0,1) or cut['a_in']<0 or cut['b_in']<=0 or cut['c_in']<=0:
+                raise ValueError('An RBS cut needs an explicit end and positive source cut dimensions')
+            for s in [cut['a_in']+cut['b_in']*i/12 for i in range(13)]:
+                pos=s if cut['end']==0 else extent-s
+                if lo<pos<hi:stations.add(pos)
     if cope:
         for s in [cope['length_in'],extent-cope['length_in']]:
             if lo<s<hi: stations.add(s)
     stations=sorted(stations); faces=[]
     def shape(at,index):
         poly=[p[:] for p in base[index]]
-        if rbs and index in (0,2):
-            s=min(at,extent-at)-rbs['a_in']; b0=rbs['b_in']; c=rbs['c_in']; radius=(b0*b0+4*c*c)/(8*c)
-            cut=max(0,math.sqrt(max(0,radius*radius-(s-b0/2)**2))-(radius-c)) if 0<=s<=b0 else 0
-            for p in poly: p[0]+=-cut if p[0]>0 else cut
+        if cuts and index in (0,2):
+            reduction=0.
+            for selected in cuts:
+                s=(at if selected['end']==0 else extent-at)-selected['a_in']; b0=selected['b_in']; c=selected['c_in']; radius=(b0*b0+4*c*c)/(8*c)
+                amount=max(0,math.sqrt(max(0,radius*radius-(s-b0/2)**2))-(radius-c)) if 0<=s<=b0 else 0
+                reduction=max(reduction,amount)
+            for p in poly:p[0]+=-reduction if p[0]>0 else reduction
         return poly
     z=cross(d,y)
     for s,t in zip(stations,stations[1:]):

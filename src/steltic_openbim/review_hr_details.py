@@ -47,7 +47,7 @@ def draw(ctx):
     if f in ('review_beam','review_existing_joint','review_crane_bracket'):
         bp=pid;bd=effective(p,bp);bf=effective(p,bp,'width');cp,face=support(ctx,bp);moment=par.get('moment',False) or f=='review_crane_bracket';gap=0 if moment else 1 if ctx.model['pilot']=='hr30' and par.get('paired_shear_plates') else 1.25
         rbs={};hit=re.search(r'RBS\s*\(?a = '+NUMBER+r'(?: in)?, b = '+NUMBER+r'(?: in)?, c = '+NUMBER,txt,re.I)
-        if hit:rbs=dict(a_in=number(hit[1]),b_in=number(hit[2]),c_in=number(hit[3]));moment=True;gap=0
+        if hit:rbs=dict(a_in=number(hit[1]),b_in=number(hit[2]),c_in=number(hit[3]),ends=[0]);moment=True;gap=0
         m=a.member('M2',bp,[face+gap,0,-bd/2],[face+gap+max(42,rbs.get('a_in',0)+rbs.get('b_in',0)+8),0,-bd/2],**({'rbs':rbs} if rbs else {}))
         if not moment and not any(mm['kind'] in ('column','walkway_post','prop') for mm in ctx.ms):
             support_width=effective(p,cp,'width');cope=max(0,support_width/2+.25-face-gap)
