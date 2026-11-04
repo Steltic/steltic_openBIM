@@ -243,6 +243,7 @@ connection-assembly and section-geometry tests passed. The two detail sheets
 were rendered and visually checked. Concrete host context can be shown in a
 section when explicitly requested by that detail, behind its reinforcement;
 the usual steel-detail section behavior is retained.
+All 11 collector/track-splice integration tests passed after merging current main.
 
 This is a partial physical-data addition. WWR, perimeter chord continuity and
 deck-to-blocking screws remain separate requirements. The diaphragm schedule
