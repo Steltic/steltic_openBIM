@@ -248,3 +248,30 @@ All 11 collector/track-splice integration tests passed after merging current mai
 This is a partial physical-data addition. WWR, perimeter chord continuity and
 deck-to-blocking screws remain separate requirements. The diaphragm schedule
 stays unmapped, and whole-building native completeness is not asserted.
+
+## Concrete-hosted bond interfaces (0.8.48)
+
+Located reinforcement can now declare a typed whole-bar bond or contact lap
+without fabricated steel hardware. The shared HR/CFS/openBIM contract independently
+checks actual bar identities, parallelism, surface contact, overlap length, concrete
+host thickness, outer boundaries and openings. The whole-bar declaration must
+include both physical ends. Revision and receiver-type checks remain mandatory.
+This proves declared geometric fit only; development, cover requirements, lap
+classification and structural capacity remain explicitly unverified.
+
+IFC assemblies retain separate typed relationships to the bars and concrete panel,
+including when member and panel IDs collide. Reference curves represent the bond
+extent; no plate, weld or fastener is invented. Native drawing sheets show these
+curves and the declared lap length with the same engineering-status note.
+
+CFS4's source floor stack is separated into its 2.5 in lightweight-concrete topping
+and 1.5 in deck depth. The accepted stair voids have explicit, linked boundaries
+on both layer datums, preserving their original plan locations. Source material,
+bar-count and diameter selections remain separate from accepted fictional set-out.
+
+Validation: HR BIM/physical-input suite 205 passed, 2 skipped; CFS 197 passed,
+3 skipped; openBIM affected contract/IFC/drawing/API suite 230 passed. A further
+19 focused drawing, concrete-layer/opening and bond-IFC checks passed after the
+layer update. The native bond reference sheet was rendered and visually checked.
+Whole-building CFS4 completeness remains subject to replay and its remaining
+diaphragm/component requirements.

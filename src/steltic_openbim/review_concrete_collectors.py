@@ -5,6 +5,7 @@ remain separate from adopted bar stock lengths, laps, cover and development.
 The separate diaphragm record remains unmapped until its complete reinforcement
 and deck attachment system has been represented.
 """
+import copy
 import math
 import re
 from .review_receiver_geometry import extract, horizontal_frame
@@ -51,6 +52,34 @@ def apply(b):
     b.material_selections = getattr(b, 'material_selections', [])
     b.material_selections.append(dict(id='CFS4-REBAR-GR60', basis='S',
         specification='Source Gr 60 reinforcing steel; product standard is not inferred'))
+    b.material_selections.extend([
+        dict(id='CFS4-LWC',basis='S',specification="Source lightweight concrete,110 pcf,f'c=3000 psi",
+             source_selection_text=b.records['diaphragms/diaphragm-floors']['data']['selection']),
+        dict(id='CFS4-DECK',basis='S',specification='Source ASTM A653 SS Gr33,20 ga composite steel deck,1.5 in nominal profile depth',
+             source_configuration_field='cfg.materials / Floor deck and fill')])
+    source_openings={o['id']:o for o in b.openings}
+    for panel in floors:
+        before=copy.deepcopy(panel)
+        panel.update(thickness_in=2.5,material_id='CFS4-LWC',basis='S thickness/material; A footprint/openings',
+            floor_stack_id='CFS4-FLOOR-'+str(panel['level']),reference_line='top surface of concrete topping',
+            thickness_direction='negative_global_z')
+        deck=b.panel('DECK-'+str(panel['level']),'deck',[[q[0],q[1],q[2]-2.5] for q in panel['vertices']],1.5,
+            panel['level'],'S nominal depth/material; A footprint/openings',material_id='CFS4-DECK',
+            floor_stack_id=panel['floor_stack_id'],reference_line='top of deck ribs',thickness_direction='negative_global_z',
+            openings=[],sheet_gauge=20,
+            representation='Source profile-depth envelope; rib geometry and deck attachments remain supplier/engineer requirements')
+        for oid in panel.get('openings',[]):
+            opening=source_openings[oid]
+            if opening.get('plane')!='xy' or abs(opening['z_ft']*12-panel['vertices'][0][2])>.001:
+                raise ValueError('Floor-stack opening needs its actual top-surface datum: '+oid)
+            opening['host_id']=panel['id']
+            lower=copy.deepcopy(opening)
+            lower.update(id=oid+':DECK',host_id=deck['id'],z_ft=opening['z_ft']-2.5/12,
+                parent_opening_id=oid,floor_stack_id=panel['floor_stack_id'],
+                representation='Same accepted through-floor void at the explicitly lower deck datum')
+            b.openings.append(lower);deck['openings'].append(lower['id'])
+        b.changes.append(dict(kind='source_deck_fill_layers',host_panel_id=panel['id'],deck_panel_id=deck['id'],
+            previous_panel=before,basis='Separate source2.5 in concrete topping from1.5 in deck depth below the retained finished-floor datum; no new deck capacity or rib selection.'))
     b.endpoint_links = getattr(b, 'endpoint_links', [])
     selected = [r for r in b.records.values() if r['table'] == 'collectors']
     for record in selected:
@@ -131,11 +160,15 @@ def draw(ctx):
           'Actual host '+par['host_panel_id']+'; 2.5 in lightweight-concrete topping',kind='concrete')
     a.parts[-1]['representation_role']='context_only'
     a.parts[-1]['show_in_section']=True
+    a.parts[-1]['source_panel_parameter']='host_panel_id'
     a.interfaces.append(dict(id='BOND',kind='reinforcement_bond_lap' if lap else 'reinforcement_bond_development',
         connects=[p['id'] for p in parts]+['TOPPING'],basis='A',
         description='Physical contact lap in the host topping; development/capacity unverified' if lap else
                     'Source collector bar embedded in the host topping; development/capacity unverified',
         **({'length_in':par['lap_in']} if lap else {})))
+    a.interfaces[-1]['native_bond']=dict(id='BOND',kind=a.interfaces[-1]['kind'],host_receiver='TOPPING',
+        bar_receivers=[p['id'] for p in parts],basis='Accepted fictional bond geometry; no development or capacity check',
+        engineering_status='not_verified',**({'length_in':par['lap_in']} if lap else {}))
     a.front_axes=(0,1);a.section_axis=0;a.section_at=0
     if lap:a.dim([-par['lap_in']/2,0,0],[par['lap_in']/2,0,0],'Contact lap; unverified',basis='A')
     else:a.dim([xmin,0,0],[xmax,0,0],'Bar-piece length',basis='A')

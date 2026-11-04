@@ -16,7 +16,7 @@ from .drawing_workflow import write_json, fingerprint
 from .pilots.geometry import member_faces, part_faces, part_lines
 from .source_worklines import physical_view
 from .source_workline_pdf import WorklineSheets
-from . import bim_assemblies
+from . import bim_assemblies, bim_bonds
 
 VERTICAL_KINDS = ('col', 'column', 'post', 'endwall_post', 'chord')
 
@@ -153,16 +153,22 @@ def detail(sh, row):
     # Expand only this representative, in its actual world frame. Preserve the
     # compact native connection and template in the source/index artifacts.
     selected_parts=bim_assemblies.parts(source,templates,world=True)
+    frame=source.get('assembly_instance',{})
+    template=templates.get(frame.get('template_id'),{})
+    bonds=template.get('bond_interfaces',[])
     kinds = sorted({p.get('kind', 'part').replace('_', ' ') for p in selected_parts})
-    sh.start(row['reference'], 'Connection / ' + (', '.join(kinds).capitalize() if kinds else 'Source specification'))
+    sh.start(row['reference'], 'Connection / ' + ('Reinforcement bond' if bonds else ', '.join(kinds).capitalize() if kinds else 'Source specification'))
     joints = {j['id']: j for j in sh.m['joints']}; joint = joints.get(source.get('joint_id'), {})
     center = joint.get('point', source.get('point', [0, 0, 0]))
     parts = [(face, True) for p in selected_parts for face in part_faces(p, sh.profiles)]
     lines = [line for p in selected_parts for line in part_lines(p)]
+    lines += [[bim_assemblies.transformed(q,frame) for q in line] for line in bim_bonds.reference_lines(template)]
     faces = list(parts)
     linked = (set(source.get('member_ids', [])) | {e['member_id'] for e in joint.get('member_ends', [])}
               | {e['member_id'] for e in joint.get('attachments', [])})
     crop = [(v-36, v+36) for v in center]
+    if bonds and lines:
+        crop=[(min(q[i] for line in lines for q in line)-12,max(q[i] for line in lines for q in line)+12) for i in range(3)]
     for m in sh.m['members']:
         if m['id'] in linked:
             faces += [(f, False) for f in member_faces(m, sh.profiles, crop)]
@@ -186,6 +192,14 @@ def detail(sh, row):
             for line in lines:
                 pp = [tr(p) for p in line]
                 for a, b in zip(pp, pp[1:]): sh.line(a, b, ASSUMED, 1.4, [5, 3])
+            if axes and bonds:
+                for bond in bonds:
+                    local=bim_bonds.reference_lines(dict(template,bond_interfaces=[bond]))[0]
+                    line=[bim_assemblies.transformed(q,frame) for q in local]
+                    a,b=line[0],line[-1]
+                    if math.dist(tr(a),tr(b))>1:
+                        value=math.dist(a,b)
+                        sh.dim(tr(a),tr(b),-30,value=value,label=inches(value),ref='Declared reinforcement bond extent; capacity unverified',size=11)
             if axes and parts:
                 pp = [p for f, _ in parts for p in f]
                 low = [min(p[i] for p in pp) for i in range(3)]; high = [max(p[i] for p in pp) for i in range(3)]
@@ -204,10 +218,16 @@ def detail(sh, row):
              'Blue: supplied connection parts. Grey: connected members cropped around the source joint.',
              'Dimensions identify the supplied part envelope, not hole centres or fabrication cut sizes. Only explicitly supplied parts are shown.',
              'Design records: ' + ', '.join(source.get('design_record_ids', []))]
-    if lines: notes.insert(1, 'Amber dashed lines: source reference locations only. Physical plate/weld set-out: TBD - resolve query. No solid geometry inferred from detail notes.')
+    if bonds:
+        notes.insert(1,'Amber dashed lines: declared reinforcement bond/lap centrelines. Concrete host: '+', '.join(sorted({frame['bindings'][b['host_receiver']] for b in bonds}))+'. No additional steel hardware is selected. Development, cover and capacity are not verified.')
+        for bond in bonds:
+            if bond.get('length_in'):notes.append('Declared contact lap: '+inches(bond['length_in'])+'; engineering adequacy is unverified.')
+    elif lines: notes.insert(1, 'Amber dashed lines: source reference locations only. Physical plate/weld set-out: TBD - resolve query. No solid geometry inferred from detail notes.')
     y = sh.panel_notes(notes, x=x, y=y, width=735)-10
     counts = Counter(p.get('kind', 'part') for p in selected_parts)
-    y = sh.wrap(x, y, 'REPRESENTATIVE PARTS: ' + (', '.join(f'{n} {k}' for k,n in counts.items()) or 'TBD'), 735, 13, 19)-28
+    part_summary=', '.join(f'{n} {k}' for k,n in counts.items())
+    if not part_summary:part_summary='No additional hardware; bonded bars and host are separate physical entities' if bonds else 'TBD'
+    y = sh.wrap(x, y, 'REPRESENTATIVE PARTS: ' + part_summary, 735, 13, 19)-28
     records = {r['id']: r for r in sh.p['design_records']}
     for ref in source.get('design_record_ids', []):
         record = records.get(ref, {}).get('data', {})

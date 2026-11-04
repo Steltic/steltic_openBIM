@@ -19,7 +19,7 @@ import ifcopenshell.validate
 
 from .drawing_workflow import fingerprint
 from .pilots.geometry import member_faces,part_faces,part_lines
-from . import bim_assemblies
+from . import bim_assemblies, bim_bonds
 
 INCH=.0254
 
@@ -256,6 +256,7 @@ def _export_source(directory,destination,source):
             SectionDefinition=profiles.get(item.get('profile_id')),ThicknessIn=item.get('thickness_in',item.get('thickness')),
             DetailReference=item.get('detail_ref'),PartParameters=item.get('parameters'),PartKind=item.get('kind') if item.get('geometry') else None,
             ConnectionId=item.get('connection_id'),JointId=item.get('joint_id'),ConnectedMembers=item.get('connected_member_ids'),
+            ConnectedPanels=item.get('connected_panel_ids'),
             HostSourceId=item.get('host_id'),GeometryRole=item.get('geometry_role'),
             AppliedOpeningIds=item.get('applied_opening_ids'),OpeningCutInHost=item.get('opening_cut_in_host'),
             AnalysisIds=item.get('analysis_ids'),AnalysisSegments=item.get('analysis_segments'),
@@ -322,17 +323,25 @@ def _export_source(directory,destination,source):
     counts['connection_assemblies']=0
     for c in connections:
         joint=joints.get(c.get('joint_id'),{})
-        connected=sorted(set(c.get('member_ids',[])) | set(c.get('assembly_instance',{}).get('bindings',{}).values()) | {e['member_id'] for e in joint.get('member_ends',[])+joint.get('attachments',[])})
+        connected=set(c.get('member_ids',[])) | {e['member_id'] for e in joint.get('member_ends',[])+joint.get('attachments',[])}
         source_level=c['level'] if c.get('level') is not None else joint.get('level')
         level_source=c if c.get('level') is not None else joint
         if c.get('assembly_instance'):
             frame=c['assembly_instance'];template=templates[frame['template_id']]
+            # Member and panel IDs have separate namespaces. Retain receiver
+            # types even when a member and its concrete host share an ID.
+            bound_panels=set()
+            for receiver in template.get('receivers',[]):
+                ident=frame.get('bindings',{}).get(receiver['id'])
+                if ident is not None:
+                    (bound_panels if receiver.get('kind')=='panel' else connected).add(ident)
             if template['id'] not in assembly_meshes:
                 solids=[part_faces(p,profiles) for p in template['parts']]
                 curves=[part_lines(p) for p in template['parts']]
+                curves.extend([[line] for line in bim_bonds.reference_lines(template)])
                 assembly_meshes[template['id']]=([f for fs in solids for f in fs],[line for ls in curves for line in ls],sum(bool(fs) for fs in solids),sum(bool(ls) for ls in curves))
             faces,lines,solid_count,curve_count=assembly_meshes[template['id']]
-            item=dict(c,level=source_level,connection_id=c['id'],connected_member_ids=connected,
+            item=dict(c,level=source_level,connection_id=c['id'],connected_member_ids=sorted(connected),connected_panel_ids=sorted(bound_panels),
                       description='Located connection assembly; individual component identities and selections are retained in its versioned template')
             located=[[bim_assemblies.transformed(p,frame) for p in line] for line in lines]
             if not faces and lines:
@@ -341,11 +350,18 @@ def _export_source(directory,destination,source):
                 # Give the assembly its recorded weld/interface curves instead
                 # of emitting an empty product plus an unattached-looking line.
                 item['geometry_role']='assembly_weld_and_interface_curves'
+                if template.get('bond_interfaces') and not template['parts']:
+                    item.update(geometry_role='reinforcement_bond_reference',
+                        description='Declared reinforcement bond reference; actual bars and concrete host are separate products. Development and capacity are not verified.')
             obj=add('IfcElementAssembly',item,faces,located if not faces else (),key='connection:'+c['id'],local_frame=frame)
-            for mid in connected:
+            for mid in sorted(connected):
                 if mid not in member_objects:raise ValueError('Connection references missing exported member: '+mid)
                 rel=relation('IfcRelConnectsElements','connection:'+c['id']+':'+mid,Name='Declared structural connection',RelatingElement=obj,RelatedElement=member_objects[mid])
                 relationship_manifest.append(dict(guid=rel.GlobalId,type=rel.is_a(),source=c['id'],target=mid,role='connection_member'))
+            for pid in sorted(bound_panels):
+                if pid not in panel_objects:raise ValueError('Connection references missing exported panel: '+pid)
+                rel=relation('IfcRelConnectsElements','connection-panel:'+c['id']+':'+pid,Name='Declared connection host panel',RelatingElement=obj,RelatedElement=panel_objects[pid])
+                relationship_manifest.append(dict(guid=rel.GlobalId,type=rel.is_a(),source=c['id'],target=pid,role='connection_panel'))
             if lines and faces:
                 annotation=add('IfcAnnotation',dict(item,id=c['id']+':references',geometry_role='assembly_reference_curves'),lines=located,key='connection:'+c['id']+':references')
                 rel=relation('IfcRelAssignsToProduct','connection-references:'+c['id'],Name='Assembly weld and interface references',RelatedObjects=[annotation],RelatingProduct=obj)
@@ -355,6 +371,7 @@ def _export_source(directory,destination,source):
             counts['connection_reference_parts']+=curve_count
             if source_level is None:counts['unassigned_connection_parts']+=len(template['parts'])
             continue
+        connected=sorted(connected)
         related=[member_objects[mid] for mid in connected if mid in member_objects]
         for i,part in enumerate(c.get('parts',[])):
             faces=part_faces(part,profiles);lines=part_lines(part)
