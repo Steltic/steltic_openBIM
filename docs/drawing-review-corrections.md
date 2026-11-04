@@ -178,3 +178,25 @@ by the parts legend. Every individual weld stroke and exported weld is retained.
 This prevents a 112-stud row from creating 112 leaders extending outside the
 elevation into adjacent views. The enlarged section retains the real wall,
 fishplate, embed plate and stud location.
+## Verified CFS wall-schedule links (0.8.46)
+
+CFS2, CFS3 and CFS12 had source wall-layout schedules without explicit links to
+their already located physical walls. Links now require every named line and
+storey, the actual segment count and length, the total wall length and, where
+specified, the grouping of continuous bays. CFS12's segment-framing links also
+require every stud and track to satisfy the minimum source sheet thickness;
+the physical thickness must agree with the section designation.
+
+CFS12's 600S162-97 studs inside braced segments now reference their specific
+segment-stud design. The ordinary party-wall check explicitly applies outside
+these segments and is removed from those studs. Geometry is unchanged. This
+does not resolve other gravity-stud selections, floor attachments, collectors
+or diaphragm components.
+
+Ten focused tests passed, including all three actual saved examples and
+negative cases for missing storeys, short or missing segments, disconnected
+continuous bays, thin tracks and incorrectly labelled thicknesses. Existing
+layout/framing links cover four CFS2, five CFS3 and 22 CFS12 schedule records;
+the CFS12 segment-stud link is additional. Native completeness remains subject
+to its separate replay checks.
+
