@@ -277,5 +277,9 @@ The actual CFS4 model passed 1,886 variant and 16,016 occurrence fits. Whole-bar
 bond endpoint integration additionally passed 49 bond, joint-disposition and IFC
 tests: the shared assembly must cover the exact bound bar end, not a nearby
 member, shortened extract, lap-only interface or branch attachment.
-Whole-building CFS4 completeness remains subject to replay and its remaining
-diaphragm/component requirements.
+Final native replay rebuilt the CFS4 configuration independently and retained
+175 gold design records, 8,854 physical members and 504 panels. All 924 collector
+bond/lap occurrences and 1,008 bar ends passed. Its remaining finding is the
+unmapped floor-diaphragm schedule (plus the intentionally undeclared connection
+coverage). WWR, perimeter chord continuity and deck attachment requirements remain;
+whole-building completeness is not asserted.
