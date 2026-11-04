@@ -17,6 +17,7 @@ STRUCTURAL = {'IfcBeam','IfcColumn','IfcMember','IfcPlate','IfcSlab','IfcFooting
               'IfcMechanicalFastener','IfcFastener','IfcElementAssembly','IfcStructuralCurveMember'}
 MAX_PRODUCTS = 100000
 MAX_TRIANGLES = 6000000
+REVIEW_GROUP_SIZE = 1000
 GEOMETRY_THREADS = min(4, os.cpu_count() or 1)
 
 
@@ -136,7 +137,7 @@ def metadata(model):
     logger=ifcopenshell.validate.json_logger();ifcopenshell.validate.validate(model,logger)
     errors=[r for r in logger.statements if r.get('level')=='error']
     if errors:problems.append(dict(code='ifc_schema',title='IFC schema findings',count=len(errors),messages=[r.get('message','')[:300] for r in errors[:100]]))
-    return dict(schema=model.schema,units=unit,storeys=storeys,products=rows,counts=dict(products=len(rows),
+    return dict(schema=model.schema,units=unit,storeys=storeys,products=rows,review_group_size=REVIEW_GROUP_SIZE,counts=dict(products=len(rows),
         structural=sum(r['structural'] for r in rows),classes=dict(Counter(r['ifc_class'] for r in rows))),findings=problems,
         questions=[dict(id='scope',question='Which objects should the review model include?',proposal='all',options=['all','structural'],
                         explanation='Keep the complete architectural context, or show structural IFC classes only. No class is silently reclassified.'),
@@ -153,7 +154,20 @@ def review_options(raw,meta):
     if unit not in ('auto','m','mm','ft','in'):raise ValueError('Choose a supported length unit')
     if unit=='auto' and not meta['units']['known']:raise ValueError('The IFC has no length unit; explicitly choose one before building')
     if not isinstance(note,str) or len(note)>5000:raise ValueError('Review notes must be at most 5,000 characters')
-    return dict(scope=scope,units=unit,note=note,missing_data='TBD',structural_analysis=False)
+    storey=raw.get('storey','all')
+    if not isinstance(storey,str) or storey not in {'all','unassigned',*(s['id'] for s in meta.get('storeys',[]))}:
+        raise ValueError('Choose all storeys, unassigned products, or a storey from this IFC')
+    group=raw.get('group','all')
+    if group!='all' and (type(group) is not int or group<1):raise ValueError('Choose all objects or a numbered review group')
+    result=dict(scope=scope,storey=storey,group=group,units=unit,note=note,missing_data='TBD',structural_analysis=False)
+    if group!='all' and group>math.ceil(len(_selected_products(meta,result))/REVIEW_GROUP_SIZE):
+        raise ValueError('The review group is outside the selected objects')
+    return result
+
+
+def _selected_products(meta,options):
+    return [r for r in meta['products'] if (options['scope']=='all' or r['structural'])
+            and (options['storey']=='all' or r['storey']==(None if options['storey']=='unassigned' else options['storey']))]
 
 
 def axis_lines(model,e,scale,identifiers=('Axis','Body','Annotation')):
@@ -176,10 +190,34 @@ def axis_lines(model,e,scale,identifiers=('Axis','Body','Annotation')):
 
 
 def build_review(path,options):
+    model=open_model(path);meta=metadata(model)
+    return _build_review(model,meta,options)
+
+
+def iter_storey_reviews(path,options):
+    """Review every selected product in bounded, disjoint storey batches.
+
+    The source model and inspection are shared, but callers consume one review
+    at a time. The usual per-review geometry limit remains in force. No product
+    is silently assigned a storey, and unassigned objects form their own batch.
+    """
     model=open_model(path);meta=metadata(model);options=review_options(options,meta)
+    if options['storey']!='all' or options['group']!='all':raise ValueError('The complete storey iterator requires all storeys and groups')
+    present={r['storey'] for r in meta['products'] if options['scope']=='all' or r['structural']}
+    for storey in sorted(present,key=lambda value:value or ''):
+        selection=dict(options,storey=storey or 'unassigned')
+        count=len(_selected_products(meta,selection));groups=math.ceil(count/REVIEW_GROUP_SIZE)
+        for group in range(1,groups+1):
+            yield _build_review(model,meta,dict(selection,group='all' if groups==1 else group))
+
+
+def _build_review(model,meta,options):
+    options=review_options(options,meta)
     declared=meta['units']['scale_to_m'];scale=declared if options['units']=='auto' else {'m':1.,'mm':.001,'ft':.3048,'in':.0254}[options['units']]
     multiplier=scale/declared
-    selected=[r for r in meta['products'] if options['scope']=='all' or r['structural']]
+    selected=_selected_products(meta,options);group_count=math.ceil(len(selected)/REVIEW_GROUP_SIZE)
+    if options['group']!='all':
+        start=(options['group']-1)*REVIEW_GROUP_SIZE;selected=selected[start:start+REVIEW_GROUP_SIZE]
     if not selected:raise ValueError('The chosen scope contains no IFC products')
     settings=ifcopenshell.geom.settings();settings.set('use-world-coords',True)
     settings.set('mesher-linear-deflection',0.002)
@@ -217,7 +255,7 @@ def build_review(path,options):
         except (ValueError,TypeError):continue
         budget+=len(triangles)
         if budget>MAX_TRIANGLES:
-            raise ValueError(f'Review exceeds {MAX_TRIANGLES:,} triangles; choose a smaller scope or export a smaller model')
+            raise ValueError(f'Review exceeds {MAX_TRIANGLES:,} triangles; choose one storey or a numbered review group, or export a smaller model. The complete source IFC is retained.')
         geometry[ident]=(vertices,triangles)
     kernel=None
     objects=[];failed=[];total=0;bounds=[];duplicates=[];shapes={}
@@ -235,7 +273,7 @@ def build_review(path,options):
         # A resource limit is a failed build, not a per-product meshing error.
         # Never publish a partial model or silently replace solids with axes.
         if total+len(faces)>MAX_TRIANGLES:
-            raise ValueError(f'Review exceeds {MAX_TRIANGLES:,} triangles; choose a smaller scope or export a smaller model')
+            raise ValueError(f'Review exceeds {MAX_TRIANGLES:,} triangles; choose one storey or a numbered review group, or export a smaller model. The complete source IFC is retained.')
         total+=len(faces)
         points=verts or [p for line in lines for p in line]
         if points:
@@ -255,6 +293,6 @@ def build_review(path,options):
         coordinate_basis='IFC product placements in the project coordinate system. Map-conversion metadata remains in the original IFC; it is not applied to the preview.',
         display_origin_m=[sum(v)/2 for v in bb],bounds_m=bb,storeys=[dict(s,elevation_m=s['elevation_m']*multiplier) for s in meta['storeys']],
         objects=objects,unrendered=failed,checks=checks,counts=dict(source_products=len(meta['products']),selected=len(selected),
-            displayed=len(objects),unrendered=len(failed),excluded_by_scope=len(meta['products'])-len(selected),triangles=total),
+            displayed=len(objects),unrendered=len(failed),excluded_by_scope=len(meta['products'])-len(selected),triangles=total,review_groups=group_count),
         limits=['Geometry and model-data review only; no structural analysis, capacity checks or code compliance assessment.',
                 'Unknown materials, member sections and connection behaviour remain TBD. IFC does not guarantee an analytical model.'])
