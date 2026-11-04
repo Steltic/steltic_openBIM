@@ -223,3 +223,7 @@ continuous bays, thin tracks and incorrectly labelled thicknesses. Existing
 layout/framing links cover four CFS2, five CFS3 and 22 CFS12 schedule records;
 the CFS12 segment-stud link is additional. Native completeness remains subject
 to its separate replay checks.
+
+After integration with the stud-row and track-splice corrections, all 18
+affected source-binding, track-splice and wall-base tests passed. The underlying
+0.8.45 main branch passed the full 595-test suite.
