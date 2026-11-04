@@ -78,9 +78,11 @@ def test_equipment_plan_gussets_are_notched_and_do_not_hide_primary_girder_ends(
     assert joints
     for scene in joints:
         plate=next(q for q in scene['parts'] if q['id']=='PLATE')
-        points={tuple(v[:2]) for face in plate['faces'] for v in face}
-        assert (6,6) in points and (15,15) in points and (0,0) not in points
-        assert {'COLUMN','GIRDER0','GIRDER1'}<={q['id'] for q in scene['parts']}
+        points={tuple(abs(x) for x in v[:2]) for face in plate['faces'] for v in face}
+        assert points=={(0,6),(6,6),(6,0),(15,0),(15,15),(0,15)}
+        hosts=[q for q in scene['parts'] if q['id'].startswith('HOST')]
+        assert len(hosts)==3
+        assert sorted(q['member']['profile_id'] for q in hosts)==['W10X39','W16X40','W16X40']
     for mm in (q for q in m['members'] if q['profile_id']=='W16X40'):
         ends=[c['point'] for c in m['connections'] if c['member_ids'][0]==mm['id'] and c['detail_ref']['id']=='review_beam']
         assert all(any(math.dist(point,end)<.01 for end in ends) for point in mm['axis'])

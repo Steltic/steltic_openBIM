@@ -131,7 +131,7 @@ class CaseModel:
         assumptions=[dict(id=k,answer=v,basis='A - user-authorized fictional test input') for k,v in scenario(self.key)['answers'].items()]+self.notes
         return dict(schema='steltic.design_drawing_model',version=1,pilot=self.key,title=self.case.get('drawing_title',self.case['source_building'].replace('_',' ')),fictional=True,
             source_sha256=fingerprint(self.package),scenario=copy.deepcopy(self.state['design_scenario']),members=self.members,profiles=list(self.profiles.values()),panels=self.panels,
-            materials=[dict(id='source_steel',basis='S',specification='Grades and material requirements in source records'),dict(id='assumed_test_steel',basis='A',specification='Fictional geometry supplement; no new capacity verification')],
+            materials=[dict(id='source_steel',basis='S',specification='Grades and material requirements in source records'),dict(id='assumed_test_steel',basis='A',specification='Fictional geometry supplement; no new capacity verification')]+getattr(self,'material_selections',[]),
             openings=self.openings,connections=self.connections,member_schedule=schedule,details=[],grids=self.grids,levels=self.levels,changes=self.changes,
             assumptions=assumptions,bounds=bounds,extra_views=self.views,wall_layouts=self.walls,excluded_analysis_elements=self.excluded,
             connection_endpoint_links=getattr(self,'endpoint_links',[]),

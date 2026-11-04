@@ -130,29 +130,63 @@ def floor(ctx):
             continue
         jd=effective(p,j['profile_id']);jt=p[j['profile_id']]['dimensions'].get('t',.0713);x=j['axis'][0][0];z=j['axis'][0][2];side=1 if sum(q[1] for q in j['axis'])>0 else -1
         low,high=z-jd/2,z+jd/2;lower=[v for v in tracks if v[1]['axis'][0][2]<=low+.25 and v[1]['local_y'][2]<-.9]
-        support=min(lower,key=lambda v:abs(v[1]['axis'][0][2]-low)) if lower else None
+        width_sign=1 if j['local_y'][0]>0 else -1
+        screw_xy=[x+width_sign*.75,side*.75]
+        def overlaps(row):return all(lo+.25<=q<=hi-.25 for q,(lo,hi) in zip(screw_xy,row[2]['bounds'][:2]))
+        support=min(lower,key=lambda v:(not overlaps(v),abs(v[1]['axis'][0][2]-low))) if lower else None
         upper=[v for v in tracks if v[1]['axis'][0][2]>=high-.25 and v[1]['local_y'][2]>.9]
-        upper=min(upper,key=lambda v:abs(v[1]['axis'][0][2]-high)) if upper else None
+        upper=min(upper,key=lambda v:(not overlaps(v),abs(v[1]['axis'][0][2]-high))) if upper else None
         # Source stiffener channel is an added connection component. It is not
         # falsely claimed as a pre-existing wall member in the receiver list.
         stiff=channel(p,'ASSEMBLY-STIFF362',3.625,1.625,.0566,.5);sname='STIFF'+str(index)
-        width_sign=1 if j['local_y'][0]>0 else -1
         sx=x+width_sign*(jt/2+3.625/2+.0566/2);sy=side*1.25
         a.member(sname,stiff,[sx,sy,low+.1],[sx,sy,high-.1],y=[0,side,0],basis='S scheduled section; A cut and fit',representation_role='assembly_component',description='362S162-54 bearing stiffener; A local cut length / orientation')
         a.fastener('STIFF-S'+str(index),[[x+width_sign*(jt/2+.0566),sy+side*.75,zz] for zz in (low+1.5,z,high-1.5)],[-width_sign,0,0],.19,.0566+jt,[label,sname],'A three No.10 stiffener flange to actual joist web',basis='A',screw=True)
-        if support:
+        if support and not overlaps(support):
+            track_end_clip(a,p,index,label,j,support,low,side,-1)
+        elif support:
             sl,sm,sp=support;surface=sp['bounds'][2][1];gap=low-surface;joins=[label,sname,sl]
             if gap>.02:
                 pack='PACK'+str(index);a.box(pack,[x-3,-3,surface],[6,6,gap],'A','A steel bearing packer at actual joist/track gap');joins.append(pack)
             a.interfaces.append(dict(id='BEAR'+str(index),kind='compression_bearing',connects=joins,basis='A',description='Actual joist and lower track; local packer/stiffener fit requires capacity verification'))
             a.fastener('LOWER-S'+str(index),[[x+width_sign*.75,side*.75,low+.0566]],[0,0,-1],.216,max(.15,low-surface+.15),[label,sl]+([pack] if gap>.02 else []),'A No.12 lower flange/track transfer screw; source spacing schedule remains attached',basis='A',screw=True)
-        if upper:
+        if upper and not overlaps(upper):
+            track_end_clip(a,p,index,label,j,upper,high,side,1)
+        elif upper:
             ul,um,up=upper;surface=up['bounds'][2][0];gap=surface-high;joins=[label,ul]
             if gap>.02:
                 pack='UP-PACK'+str(index);a.box(pack,[x-3,-3,high],[6,6,gap],'A','A steel upper-wall bearing packer; subfloor kept outside bearing strip');joins.append(pack)
             a.fastener('UPPER-S'+str(index),[[x+width_sign*.75,side*.75,up['bounds'][2][0]+.15]],[0,0,-1],.216,max(.2,gap+.2),joins,'A No.12 upper track/joist transfer screw; source diaphragm schedule remains attached',basis='A',screw=True)
     a.section_axis=1;a.section_at=1.25
     a.notes.append('Every wall, track and joist extract is bound to a real member at its actual centroid, elevation and roll. Only the connection stiffeners/packers are added components. Source selected sections and story shear/uplift requirements remain attached; A local fit and transfer fasteners are coordination proposals without new capacity verification. Stud-to-track end screws are shown on their separate located details.')
+
+
+def track_end_clip(a,p,index,label,j,track,edge,side,end):
+    """A declared return clip where a joist flange misses the cut track end.
+
+    The screw cannot move through empty space or extend the actual track. A
+    separate formed part connects the joist web to the available track web.
+    """
+    host,tm,tp=track;x=j['axis'][0][0];jt=p[j['profile_id']]['dimensions']['t'];tt=p[tm['profile_id']]['dimensions']['t'];t=.0713
+    surface=tp['bounds'][2][1 if end<0 else 0];direction=1 if sum(tp['bounds'][0])/2>x else -1
+    face=x+direction*jt/2;reach=3.;xs=sorted((face,face+direction*reach))
+    left=max(xs[0],tp['bounds'][0][0])+.5;right=min(xs[1],tp['bounds'][0][1])-.5
+    if right-left<.5:raise ValueError('Cut track has no room for the proposed return-clip foot')
+    ylo,yhi=sorted((side*.35,side*2.35));y=(ylo+yhi)/2
+    if not tp['bounds'][1][0]+.25<y<tp['bounds'][1][1]-.25:raise ValueError('Return clip misses the actual track web')
+    tag=f'END-{index}-'+('LOW' if end<0 else 'UP');upright=tag+'-WEB';foot=tag+'-FOOT'
+    z0,z1=(surface,edge+3) if end<0 else (edge-3,surface)
+    if z1-z0<=0:raise ValueError('Return clip has no upright height')
+    a.box(upright,[min(face,face+direction*t),ylo,z0],[t,yhi-ylo,z1-z0],'A','A 68 mil formed return at the actual cut track end; web attachment')
+    a.box(foot,[xs[0],ylo,surface if end<0 else surface-t],[reach,yhi-ylo,t],'A','A formed return foot on actual track web; no track extension')
+    zs=[edge-end*1.,edge-end*2.]
+    a.fastener(tag+'-J',[[face+direction*t,y,z] for z in zs],[-direction,0,0],.216,t+jt,[label,upright],
+               'A two No.12 web-to-return screws; local capacity unverified',basis='A',screw=True)
+    start=surface+t if end<0 else surface+tt
+    a.fastener(tag+'-T',[[q,y,start] for q in (left,right)],[0,0,-1],.216,t+tt,[host,foot],
+               'A two No.12 return-foot-to-track screws within the actual cut end',basis='A',screw=True)
+    a.weld(tag+'-BEND',[face,ylo,surface],[face,yhi,surface],[upright,foot],kind='BEND',basis='A',description='Continuous formed return, not a weld')
+    a.notes.append('A: this joist flange is outside the cut track end. A 68 mil return clip transfers through the actual joist web and track web. No direct flange screw or direct bearing capacity is implied; this added local load path requires capacity verification.')
 
 
 def truss_floor(ctx):

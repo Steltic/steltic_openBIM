@@ -1,10 +1,12 @@
 # steltic_openBIM
 
+Version 0.8.39 corrects the registered gold-example connection geometry: source-selected brace crossings, exposed versus embedded bases, actual CFS strap receivers, member end releases, and located opening/floor attachments. It also retains outstanding findings when older pilot answers are adopted and compresses long drawing references without dropping any detail. These are physical-data and drawing corrections; full 61-building native acceptance and replacement PDF sets remain in progress. [Correction scope and audit](docs/drawing-review-corrections.md).
+
 Version 0.8.32 keeps exported missing-data and geometry warnings visible on IFC import and reimport. A source panel completely consumed by its declared openings is retained as a labelled boundary reference, with no invented host surface, so it no longer blocks a provisional IFC return.
 
 Drawing and IFC module for Steltic Hub: dimensioned engineering design drawings, IFC import for model review, and IFC export. Fabrication/shop output and IFC-to-structural-analysis conversion remain later work.
 
-The separate [61-case own-output audit](docs/own-outputs61/README.md) used no physical supplements. All 27 usable primary re-exports passed IFC transport; one source was invalid and 33 lacked replayable job outputs. Only two saved producer jobs passed current completion, source-completeness and independent input checks. The [HR/CFS/Hub fix list](docs/own-outputs61/upstream-fix-list.md) is for review; those repositories were not changed.
+The historical [own-output audit](docs/own-outputs61/README.md) is superseded and excluded from current acceptance because the unfinished Hub/OpenRouter attempt is not reliable evidence. Current verification uses the original gold designs and explicit accepted engineer inputs; it makes no paid redesign calls. The old upstream fix list records that earlier checkpoint, not the current merge status.
 
 ## Current status
 
@@ -22,7 +24,7 @@ Version 0.8.0 adds **Steltic import**, **IFC import** and **IFC export** tabs. I
 
 Version 0.7.1 checks occurrence geometry as well as analysis-ID coverage. Ordinary HR exports with grouped or missing physical occurrences can now produce a complete source-workline coordination set, with storey plans, grids, member marks, frame sections and non-blocking requests. Regenerating an existing job rechecks completeness while retaining answers and history. [Live-job recovery, limits and validation](docs/live-job-recovery.md).
 
-Stage 8 completes **all 61 fictional buildings (36 HR, 25 CFS) as dimensioned A1 design sets with assembled connection details**. Each joint variant includes joined members, plates, fasteners, weld/interface callouts, a section and an isometric view. Plans, member marks and connection references link to every occurrence. [Final eighteen, verification and reproduction](docs/stage8/README.md); [previous twenty](docs/stage7/README.md); [first 23](docs/stage6/README.md).
+Stage 8 produced the initial **61 fictional building sets (36 HR, 25 CFS)** with dimensioned A1 drawings and assembled connection details. The subsequent review identified geometry and source-selection defects; the correction audit above records the affected patterns. Final replacement sets remain pending the native completeness checks. [Initial final eighteen and reproduction](docs/stage8/README.md); [previous twenty](docs/stage7/README.md); [first 23](docs/stage6/README.md).
 
 The shared Hub widget offers this development step only for the registered exact source packages, after explicit fictional-building confirmation. It never supplies fictional answers to ordinary jobs. `steltic-openbim design-test package.json --confirm-fictional --author "Test author" --output drawings` provides the same workflow from the CLI. Regeneration retains answers and revision history; reopening a request returns to provisional drawings. Source values are labelled S; authored fictional fit, layout and delegated geometry are labelled A. This does not rerun engineering or establish fabrication readiness.
 

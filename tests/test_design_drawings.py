@@ -1,4 +1,8 @@
-"""Acceptance checks for the three immutable, published fictional pilots."""
+"""Legacy pilot rendering and current information-request regressions.
+
+The archived packages predate native physical completeness. Their saved
+scenario answers must not silently resolve findings added by newer validators.
+"""
 import copy
 import json
 import math
@@ -52,9 +56,13 @@ def test_explicit_fictional_adoption_is_source_bound(sources):
 @pytest.mark.parametrize('key',PILOT_KEYS)
 def test_all_answers_marks_and_joint_references_are_traceable(sources,adopted,key):
     state,m=adopted[key]
-    assert state['drawing_status']=='design_test'
-    assert len(state['requests'])==len(SCENARIOS[key]['answers'])
-    assert all(r['confirmed'] and r['resolution_basis']=='user_authorized_fictional_assumption' for r in state['requests'])
+    assert state['drawing_status']=='provisional'
+    answered=[r for r in state['requests'] if r['id'] in SCENARIOS[key]['answers']]
+    pending=[r for r in state['requests'] if r['id'] not in SCENARIOS[key]['answers']]
+    assert len(answered)==len(SCENARIOS[key]['answers'])
+    assert all(r['confirmed'] and r['resolution_basis']=='user_authorized_fictional_assumption' for r in answered)
+    assert pending and all(not r['confirmed'] for r in pending)
+    assert {r['id'] for r in pending}=={r['id'] for r in initial_state(sources[key],1)['requests']}-set(SCENARIOS[key]['answers'])
     assert state['source_readiness']=='needs_input'
     mids={a['id'] for a in m['members']};refs={d['reference'] for d in m['details']}
     assert len(mids)==len(m['members'])
@@ -108,7 +116,15 @@ def test_feet_and_fraction_dimensions_carry_at_twelve_inches():
 
 @pytest.mark.parametrize('key',PILOT_KEYS)
 def test_drawings_have_valid_scales_refs_and_all_opening_dimensions(sources,adopted,tmp_path,key):
-    state,model=adopted[key];report=generate(sources[key],state,tmp_path/key)
+    state,model=adopted[key]
+    with pytest.raises(ValueError,match='all adopted test answers'):
+        generate(sources[key],state,tmp_path/'pending')
+    # Isolated historical rendering fixture. It exercises dimensions/indices,
+    # not current package readiness or the user-facing adoption route above.
+    rendering_state=copy.deepcopy(state)
+    rendering_state['requests']=[r for r in rendering_state['requests'] if r['id'] in SCENARIOS[key]['answers']]
+    rendering_state['drawing_status']='design_test'
+    report=generate(sources[key],rendering_state,tmp_path/key)
     pdf=PdfReader(tmp_path/key/'drawings.pdf');assert len(pdf.pages)==len(report['sheets'])
     texts=[p.extract_text() for p in pdf.pages]
     assert all('FICTIONAL TEST BUILDING' in t for t in texts)
@@ -131,8 +147,10 @@ def test_api_adopts_regenerates_and_reopens_without_silent_fiction(sources,tmp_p
     assert c.get(url).json()['available_test_scenario']=='cfs16'
     assert c.post(url+'/fictional-design',json=dict(body(s),confirm_fictional=False)).status_code==422
     result=c.post(url+'/fictional-design',json=body(s));assert result.status_code==200,result.text
-    r=result.json();assert r['revision']==2 and r['drawing_status']=='design_test'
-    assert c.get(url+'/file/design_model.json').status_code==200
+    r=result.json();assert r['revision']==2 and r['drawing_status']=='provisional'
+    assert any(not q['confirmed'] for q in r['requests'])
+    assert c.get(url+'/file/drawings.pdf').status_code==200
+    assert c.get(url+'/file/design_model.json').status_code==404
     assert c.post(url+'/fictional-design',json=body(s)).status_code==409
     r2=c.post(url+'/regenerate',json=body(r)).json();assert r2['features']==r['features'] and r2['revision']==3
     r3=c.post(url+'/answers',json=body(r2,id='CFS16-DOORS',action='reopen',note='Reconsider the door layout')).json()
@@ -148,6 +166,7 @@ def test_editing_test_openings_retains_assumed_basis_and_updates_register(source
     state,_=adopted['cfs16'];f=copy.deepcopy(state['features'][0]);f['y_ft']=140
     updated=apply_answer(sources['cfs16'],state,body(state,id='CFS16-DOORS',action='resolve_openings',features=[f],note='Fictional revision: one door at Y=140 ft.'))
     model=build_model(sources['cfs16'],updated)
-    assert updated['drawing_status']=='design_test'
+    assert updated['drawing_status']=='provisional'
+    assert {r['id'] for r in updated['requests'] if not r['confirmed']}=={r['id'] for r in state['requests'] if not r['confirmed']}
     assert '140 ft' in next(r['answer'] for r in model['assumptions'] if r['id']=='CFS16-DOORS')
     assert all(f['basis'].startswith('A') for f in updated['features'])

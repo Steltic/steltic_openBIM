@@ -32,6 +32,20 @@ def apply(b):
                     if '-diagonal-' in rid and (vertical or m['kind']!='truss_web'):continue
                 matches.append(m)
             basis='Source STMF direction, physical constituent section, member function and stated level range; equivalent truss check applies to its complete constituent assembly'
+        elif b.key=='hr30' and re.fullmatch(r'members/strut-[XY]-(?:floor|roof)-W21X68',rid):
+            direction=rid.split('-')[1];along='XY'.index(direction);normal=1-along
+            bays=b.config[direction+'BAYS'];sx,sy=b.config['SX'],b.config['SY']
+            for m in b.members:
+                if m['kind']!='beam' or m['profile_id']!=section:continue
+                if ('-roof-' in rid)!=(m['level']==roof):continue
+                a,z=m['axis']
+                for i,j in bays:
+                    start=[i*sx,j*sy];end=start.copy();end[along]+=(sx,sy)[along]
+                    if (abs(a[normal]-start[normal])<.01 and abs(z[normal]-start[normal])<.01
+                        and abs(min(a[along],z[along])-start[along])<.01
+                        and abs(max(a[along],z[along])-end[along])<.01):
+                        matches.append(m);break
+            basis='Source braced-bay beam/strut check: exact configured X/Y bay, W21X68 section and floor/roof scope. Concurrent gravity and capacity-limited axial checks retained.'
         elif b.key=='hr25' and '/boxed-col-4A4E-' in rid:
             pid=section.split(' +',1)[0];scope=re.search(r'stories (\d+)-(\d+)',inputs.get('basis',''))
             matches=[m for m in b.members if m['kind']=='column' and m['profile_id']==pid and m['axis'][0][0]==1008 and m['axis'][0][1] in (0,1440) and (not scope or int(scope[1])<=m['level']<=int(scope[2]))]

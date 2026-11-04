@@ -145,6 +145,20 @@ def bind(model):
             if not is_joist and primary['kind'] not in ('top_track','bottom_track','ordinary_track','tier_track'):continue
             if is_joist:
                 far=max(primary['axis'],key=lambda q:math.dist(q,origin));into=unit(sub(far,origin));along=cross(into,[0,0,1]);axes=horizontal_frame(along)
+                # At a mitred wall corner the perpendicular track can end
+                # short of the joist workpoint. The parallel return track is
+                # then the real bearing member. Do not invent an extension of
+                # the cut perpendicular track merely to keep a generic view.
+                def present_track(frame):
+                    for candidate in near.get(origin):
+                        if candidate['kind'] not in ('top_track','bottom_track','ordinary_track','tier_track'):continue
+                        aa,bb=axis(candidate);u=unit(sub(bb,aa));local=[point(q,origin,frame) for q in (aa,bb)]
+                        if (abs(dot(u,frame[0]))>.999 and abs(local[0][1])<.01 and abs(local[0][2])<30
+                            and min(q[0] for q in local)-.01<=0<=max(q[0] for q in local)+.01):return True
+                    return False
+                if not present_track(axes):
+                    parallel_axes=horizontal_frame(into)
+                    if present_track(parallel_axes):axes=parallel_axes
             else:axes=horizontal_frame(sub(b,a))
             candidates=near.get(origin);tracks=[];joists=[];parallel=[];studs=[];truss=[]
             for m in candidates:
@@ -169,6 +183,10 @@ def bind(model):
             selected_joists=[]
             for side in (-1,1):
                 options=[m for m in joists if (sum(point(q,origin,axes)[1] for q in axis(m))/2)*side>0]
+                supported=[m for m in options if any(
+                    min(point(q,origin,axes)[0] for q in axis(t))-.01<=point(axis(m)[0],origin,axes)[0]
+                    <=max(point(q,origin,axes)[0] for q in axis(t))+.01 for t in chosen)]
+                if supported:options=supported
                 if options:selected_joists.append(min(options,key=lambda m:(abs(point(axis(m)[0],origin,axes)[0]),abs(axis(m)[0][2]-origin[2]),m['id'])))
             if is_joist and primary['kind']!='truss_chord' and primary not in selected_joists:selected_joists.insert(0,primary)
             if not selected_joists and parallel:
@@ -185,6 +203,13 @@ def bind(model):
                 for side in (-1,1):
                     options=[m for m in truss if sum(point(q,origin,axes)[1] for q in axis(m))*side>0]
                     if not options:continue
+                    # A track-end detail must use a truss actually above the
+                    # track run. The closest grid station can lie outside its
+                    # cut end (notably at the stepped east roof in CFS15).
+                    supported=[m for m in options if any(
+                        min(point(q,origin,axes)[0] for q in axis(t))+.5<=point(axis(m)[0],origin,axes)[0]
+                        <=max(point(q,origin,axes)[0] for q in axis(t))-.5 for t in chosen)]
+                    if supported:options=supported
                     closest=min(options,key=lambda m:(abs(point(axis(m)[0],origin,axes)[0]),abs(axis(m)[0][2]-origin[2]),m['id']))
                     prefix=closest.get('original_physical_member_id',closest['id']).rsplit('-',1)[0]
                     selected_truss.extend(m for m in options if m.get('original_physical_member_id',m['id']).rsplit('-',1)[0]==prefix)

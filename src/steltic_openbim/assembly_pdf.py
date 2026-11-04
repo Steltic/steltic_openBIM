@@ -155,48 +155,6 @@ def draw_assembly(sh,scene):
     draw_view(sh,scene,'front',(70,855,1090,620),'1  ASSEMBLED JOINT / '+('PLAN' if tuple(scene['front_axes'])==(0,1) else 'ELEVATION'))
     draw_view(sh,scene,'section',(1190,855,1120,620),'2  SECTION A-A / JOINED MEMBERS AND PLIES')
     draw_view(sh,scene,'iso',(70,155,1090,675),'3  ASSEMBLY / ISOMETRIC')
-    x=1210;y=805;sh.text(x,y,'PARTS, ATTACHMENTS AND LOCAL DIMENSIONS',16,font='Helvetica-Bold');y-=31
-    entries=[];groups={};part_labels={}
-    for part in scene['parts']:
-        label=part.get('annotation_group',part['id']);groups.setdefault(label,[]).append(part);part_labels[part['id']]=label
-    def joined(ids):return ', '.join(dict.fromkeys(part_labels.get(i,i) for i in ids))
-    for label,parts in groups.items():
-        part=parts[0]
-        description=part['description']
-        if len(parts)>1 and part['kind']!='fastener':description+=f' | qty {len(parts)}; repeated group'
-        if part.get('geometry',{}).get('type')=='box':description+=' | '+ ' x '.join(f'{v:g}' for v in part['geometry']['size'])+' in'
-        if part['kind']=='fastener':
-            description+=f" | qty {sum(p['count'] for p in parts)}; grip {part['grip']:g} in"
-            if 'pattern' in part:
-                pat=part['pattern'];description+=' | grid '+ ' / '.join(f'{n} at {d:g} in' for n,d in zip(pat['counts'],pat['spacing']) if n>1 and d is not None)
-        basis=str(part['basis'])
-        if basis not in ('S','A'):
-            description+=' | Basis: '+basis
-            basis='S/A' if 'S' in basis and 'A' in basis else 'S' if basis.startswith('S') else 'A'
-        entries.append((label,basis,description))
-    weld_groups={}
-    for weld in scene['welds']:
-        key=(weld['basis'],weld['kind'],weld['size'],weld['description'],tuple(weld['connects']))
-        weld_groups.setdefault(key,[]).append(weld)
-    for (basis,kind,size,description,connects),welds in weld_groups.items():
-        label=welds[0]['id'] if len(welds)==1 else welds[0]['id']+'..'+welds[-1]['id']
-        spec=(f'{size:g} in ' if kind=='fillet' else '')+kind
-        entries.append((label,basis,spec+' | '+description+' | '+joined(connects)+(f' | {len(welds)} weld lines' if len(welds)>1 else '')))
-    entries += [(i['id'],i['basis'],i['description']+' | '+joined(i['connects'])) for i in scene.get('interfaces',[])]
-    font=11;line=15
-    estimate=sum(max(1,len(sh.lines(t,925,font)))*line+6 for _,_,t in entries)
-    if estimate>480:font=10;line=13
-    for label,basis,description in entries:
-        from reportlab.pdfbase.pdfmetrics import stringWidth
-        label_size=min(11,11*56/max(1,stringWidth(label,'Helvetica-Bold',11)))
-        sh.text(x,y,label,label_size,font='Helvetica-Bold');sh.text(x+64,y,basis,10,'#946320' if basis=='A' else '#243d49')
-        y=sh.wrap(x+98,y,description,965,font,line)-6
-    y-=9
-    for note in scene['notes']:
-        if y<220:break
-        lines=sh.lines(note,1070,10)
-        if y-len(lines)*14<190:break
-        y=sh.wrap(x,y,note,1070,10,14)-10
-    if y<155:raise ValueError('Assembly parts schedule overflow '+scene['id'])
-    # Source/occurrence linkage is retained in a dedicated complete JSON index.
-    sh.text(x,170,'Exact source variant, local assembly geometry and ALL notes: connection_assemblies.json / '+scene['id'],10)
+    sh.text(1210,805,'PARTS, ATTACHMENTS AND LOCAL DIMENSIONS',16,font='Helvetica-Bold')
+    from .assembly_legend import draw
+    draw(sh,scene)

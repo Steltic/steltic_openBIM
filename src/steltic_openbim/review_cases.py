@@ -41,6 +41,8 @@ def build_model(package,state):
     floor_openings(b)
     from .review_cfs_complements import apply
     apply(b)
+    from .review_hr_strut_bracing import apply as strut_bracing
+    strut_bracing(b)
     if key in ('cfs2','cfs4','cfs6','cfs9','cfs10','cfs12'):
         from .review_next_cfs_walls import connections
         connections(b)

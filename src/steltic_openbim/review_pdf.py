@@ -5,22 +5,12 @@ from pathlib import Path
 from .review_cases import build_model
 from .connection_details import prepare
 from .assembly_pdf import draw_assembly
-from .design_pdf import DesignSheets,feet,physical_axis,section,specifications,INK,BLUE,GREY,LIGHT,ASSUMED
+from .design_pdf import DesignSheets,feet,physical_axis,section,specifications,compact_references,INK,BLUE,GREY,LIGHT,ASSUMED
 from .drawing_workflow import write_json,fingerprint
 from .drawing_pdf import feature_vertices
 
 def refs(values):
-    groups=defaultdict(list)
-    for r in values:
-        part,sheet=r.split('/');groups[part].append(int(sheet[1:]))
-    out=[]
-    for prefix,ns in groups.items():
-        ns=sorted(set(ns));i=0
-        while i<len(ns):
-            j=i
-            while j+1<len(ns) and ns[j+1]==ns[j]+1:j+=1
-            out.append(f'{prefix}/C{ns[i]:03}'+(f'-C{ns[j]:03}' if j>i else ''));i=j+1
-    return ', '.join(out)
+    return compact_references(values)
 
 def scale_for(bounds,width=1530,height=1050):
     return max(15,math.ceil(max((bounds[0][1]-bounds[0][0])*72/width,(bounds[1][1]-bounds[1][0])*72/height)/5)*5)
@@ -168,7 +158,10 @@ def generate(package,state,dest):
     for f in m['openings']:
         opening_rows.append([f['id'],f['kind']+' / '+f.get('basis','A'),str(f['level']),f['plane'].upper(),*[feet(f[n]*12) for n in ('x_ft','y_ft','z_ft','width_ft','height_ft')]])
     tables(['ID','TYPE / BASIS','LEVEL','PLANE','X','Y','Z','WIDTH','HEIGHT'],opening_rows,[270,250,90,90,280,280,280,280,280],'S',301,'Dimensioned opening coordinate schedule')
-    for scene in assemblies:queue(scene['sheet'],scene['title'],lambda scene=scene:draw_assembly(sh,scene),'As shown')
+    from .assembly_legend import continuation_jobs
+    for scene in assemblies:
+        queue(scene['sheet'],scene['title'],lambda scene=scene:draw_assembly(sh,scene),'As shown')
+        for number,title,draw in continuation_jobs(sh,scene):queue(number,title,draw)
     schedule=m['member_schedule'];rows=[[r['mark'],r['kind'],r['profile_id'],feet(r['length_in']),str(r['count']),r['basis'],','.join(map(str,r['levels'])),refs(r['connection_refs'])] for r in schedule]
     tables(['MARK','TYPE','SECTION','WORKLINE LENGTH','QTY','BASIS','LEVELS','JOINT REFERENCES'],rows,[105,250,430,220,70,70,200,755],'S',601,'Member mark schedule')
     specs=specifications(package,m);source_blocks=[]

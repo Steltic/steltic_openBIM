@@ -147,6 +147,10 @@ def build(b):
             z0=levels[k-1];zt=levels[k]-(floor_depth if k<len(heights) or b.key=='cfs3' else 0)
             if b.key in next_keys:floor_depth=next_depth(b,k);zt=levels[k]-floor_depth
             if b.key in final.KEYS:floor_depth=final.depth(b,k);zt=levels[k]-floor_depth
+            if b.key=='cfs7':
+                from .review_cfs7 import depth as bar_depth,finish as bar_finish
+                floor_depth=bar_depth(k==len(heights));zt=levels[k]-floor_depth
+                z0=levels[k-1]-(bar_finish() if k>1 else 0)
             if b.key=='cfs29':floor_depth=14 if name=='XM' else 12;zt=levels[k]-floor_depth
             # This line is a geometric physical wall, not its fitted tributary line.
             runs=[]
@@ -253,6 +257,9 @@ def build(b):
     complete_walls(b,outline,bystory,levels)
     if b.key in next_keys:next_floors(b,outline,levels)
     elif b.key in final.KEYS:final.floors(b,outline,levels)
+    elif b.key=='cfs7':
+        from .review_cfs7 import floors as bar_floors
+        bar_floors(b,outline,levels)
     else:floors_and_roofs(b,outline,bystory,levels)
     if b.key=='cfs11':walkways(b,levels)
     if b.key=='cfs29':mezzanine(b,levels)

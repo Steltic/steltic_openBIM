@@ -88,6 +88,9 @@ def build_scene(model,package,c,subtype=''):
     if family=='review_selected_studs':
         from .review_selected_details import draw
         draw(ctx);return ctx.finish()
+    if family=='review_hr_strut_bracing':
+        from .review_hr_strut_bracing import draw
+        draw(ctx);return ctx.finish()
     from .review_final_details import FAMILIES as FINAL,draw as final
     if family in FINAL:final(ctx);return ctx.finish()
     from .review_final_cfs_details import FAMILIES as FINAL_CFS,draw as final_cfs

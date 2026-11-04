@@ -1,5 +1,5 @@
 """Source-specific geometry for the last three fictional CFS review buildings."""
-import re
+import re,math
 from .review_model import MIL
 
 KEYS={'cfs1','cfs5','cfs15'}
@@ -105,12 +105,18 @@ def floors(b,outline,levels):
         for x in frange(0,xmax+.1,16):joist(f'COR-{k}-{x}','joist-corridor',1,x,324,396,z,k,finish)
         if k==4:
             # Source lower east roof: 60 ft gable, 24 in truss spacing. A internal panels/sections.
-            for x in frange(1680,2880.1,24):simple_truss(b,f'EAST-ROOF-{x}',1,x,0,720,z-depth(b,k),90,k,'2X600S162-68','2X600S162-54',96,heel=12)
+            # The old base was a chord centroid at the wall bearing surface,
+            # burying half the chord in the track. Explicit A bearing clearance
+            # keeps the delegated truss outside the actual track section.
+            chord_shift=3.125;roof_shift=chord_shift+(3+.375)*math.sqrt(1+.25**2)
+            for x in frange(1680,2880.1,24):simple_truss(b,f'EAST-ROOF-{x}',1,x,0,720,z-depth(b,k)+chord_shift,90,k,'2X600S162-68','2X600S162-54',96,heel=12)
             for tag,ys,zs in [('S',(0,360),(z+12,z+102)),('N',(360,720),(z+102,z+12))]:
-                b.panel('EAST-ROOF-'+tag,'roof',[[1680,ys[0],zs[0]-depth(b,k)],[2880,ys[0],zs[0]-depth(b,k)],[2880,ys[1],zs[1]-depth(b,k)],[1680,ys[1],zs[1]-depth(b,k)]],.75,k,'A')
+                b.panel('EAST-ROOF-'+tag,'roof',[[1680,ys[0],zs[0]-depth(b,k)+roof_shift],[2880,ys[0],zs[0]-depth(b,k)+roof_shift],[2880,ys[1],zs[1]-depth(b,k)+roof_shift],[1680,ys[1],zs[1]-depth(b,k)+roof_shift]],.75,k,'A')
             # Drag trusses on exact source party-wall axes (not rounded to regular roof stations).
             for name,x in b.config['Y_POS'].items():
-                if 140<x<240 and abs(x*12/24-round(x*12/24))>.01:simple_truss(b,f'EAST-DRAG-{name}',1,x*12,0,720,z-depth(b,k),90,k,'2X600S162-68','2X600S162-54',96,heel=12)
+                if 140<x<240 and abs(x*12/24-round(x*12/24))>.01:simple_truss(b,f'EAST-DRAG-{name}',1,x*12,0,720,z-depth(b,k)+chord_shift,90,k,'2X600S162-68','2X600S162-54',96,heel=12)
+            b.changes.append(dict(kind='cfs15_east_roof_bearing_datum',chord_centroid_shift_in=chord_shift,roof_panel_shift_in=roof_shift,
+                basis='A: lower chord underside 1/8 in above wall reference, with fitted bearing pack to actual track web; roof sheathing underside follows the real inclined upper flange. Source truss spacing and declared slope retained. Delegated geometry and local bearing capacity remain unverified.'))
     if b.key=='cfs15':
         z=levels[-1];b.panel('TERRACE-PAVERS','finish',[[1440,0,z+6],[1680,0,z+6],[1680,720,z+6],[1440,720,z+6]],2,6,'A',scope='S terrace x=120-140 ft; A paver/pedestal height')
         b.note('STEPPED-ROOF','S: east wing stops at L4; west wing continues to L6. West terrace is x=120-140 ft. S: east gable trusses at 24 in centres; A: 3:12 roof slope, 12 in heel and displayed truss internals/sections. Source shear-transfer, vertical-slip and supplier requirements remain in the details. The lower east roof does not become a level floor.')

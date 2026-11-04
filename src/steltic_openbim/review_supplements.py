@@ -25,11 +25,16 @@ def complete_walls(b,outline,bystory,levels):
             from .review_final_cfs import bearing_lines,depth
             lines={key:levels[k]-depth(b,k) for key in lines}
             for axis,pos in bearing_lines(b):lines[axis,pos]=levels[k]-depth(b,k)
+        if b.key=='cfs7':
+            from .review_cfs7 import depth,finish,wall_ranges
+            lines={key:levels[k]-depth(k==len(levels)-1) for key in lines}
         for (axis,pos),top in lines.items():
             normal=1-axis;ranges=intersections(poly,axis,pos/12)
+            if b.key=='cfs7':ranges=wall_ranges(b,axis,pos,ranges)
             occupied=[(r['start_in']-6,r['end_in']+6) for w in b.walls if w['level']==k and w['direction']==('X' if axis==0 else 'Y') for r in w['runs'] if abs(r['position_in']-pos)<.1]
             opens=[f for f in b.openings if f['level']==k and f['plane']==('xz' if axis==0 else 'yz') and abs(f['xy'[normal]+'_ft']*12-pos)<.1]
             bottom=levels[k-1];tp=b.profile('600T150-54');sp=b.profile('600S162-54');ly=[1,0,0] if axis==0 else [0,1,0]
+            if b.key=='cfs7' and k>1:bottom-=finish()
             def pt(u,z):return [u,pos,z] if axis==0 else [pos,u,z]
             def void(u,z):return b.key=='cfs11' and k==1 and 960-1<u<1120+1 and axis==0 and 840-1<=pos<=1152+1
             for run,(lo,hi) in enumerate(ranges):
@@ -85,7 +90,8 @@ def floor_openings(b):
     for k,ps in group.items():
         if b.key=='hr14' and k==0:continue
         if b.key=='hr13' and k==4:continue  # Workshop roof is not an occupied office/mezzanine floor.
-        if not ishr and k==max(group) and b.key not in ('cfs29','cfs10','cfs18'):continue
+        top_level=max((row[0] for row in getattr(b,'levels',[])),default=max(group))
+        if not ishr and k==top_level and b.key not in ('cfs29','cfs10','cfs18'):continue
         # Choose the two most separated source floor cells / polygon corners with an interior margin.
         candidates=[]
         # Include the actual ordinary/bearing framing ABOVE this floor. Testing

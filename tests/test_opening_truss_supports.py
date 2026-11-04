@@ -37,3 +37,13 @@ def test_opening_at_existing_truss_node_attaches_surviving_chord_to_header():
     assert c['member_ids']==['OW-1-96-0-B0']
     assert c['detail_ref']['id']=='test_floor_opening'
     assert any(r['kind']=='opening_panel_point_attachment' for r in b.changes)
+
+
+def test_top_occupied_floor_keeps_its_opening_when_roof_has_its_own_kind():
+    b=object.__new__(CaseModel);b.key='cfs7';b.members=[];b.connections=[];b.panels=[];b.openings=[];b.walls=[];b.used_records=set();b.notes=[];b.changes=[];b.profiles={}
+    b.levels=[(0,'BASE',0),(1,'FLOOR',132),(2,'ROOF',246)]
+    b.panel('F1','floor',[[0,0,130.5],[204,0,130.5],[204,360,130.5],[0,360,130.5]],23/32,1,'S')
+    b.panel('R2','roof',[[0,0,246],[204,0,246],[204,360,246],[0,360,246]],19/32,2,'S')
+    floor_openings(b)
+    assert any(o['kind']=='stair' and o['level']==1 for o in b.openings)
+    assert not any(o['level']==2 for o in b.openings)
