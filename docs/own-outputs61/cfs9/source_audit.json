@@ -1,0 +1,24 @@
+{
+  "case": "cfs9",
+  "key": "cfs9",
+  "module": "CFS",
+  "title": "Podium wall building",
+  "project": "WFRESH61_cfs9_20261103",
+  "source_run_status": "error",
+  "primary": true,
+  "files": {
+    "design/bim_request.json": "8330871698f04197d11dcad8e55abda95f709b903dfc02db95465491e447ab3f",
+    "architectural_input.json": "42731ef9f94238af5fc71abddffcba1a4284ad8548283a42ce402454d5debec7",
+    "architectural_handoff.txt": "edcfdc44b0f44df34da186304edce5f5cf29995502137b5e71f633c876fd6e97"
+  },
+  "job_exists": true,
+  "completion_problems": [
+    "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+  ],
+  "current_completion_gate_passed": false,
+  "package_present": false,
+  "missing_outputs": [
+    "cfg.py",
+    "design/bim_package.json"
+  ]
+}

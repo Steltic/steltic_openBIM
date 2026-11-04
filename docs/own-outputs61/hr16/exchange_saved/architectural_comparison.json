@@ -1,0 +1,3819 @@
+{
+  "case": "hr16",
+  "module": "HR",
+  "project": "WFRESH61_hr16_20261103",
+  "variant": "saved",
+  "checked_at": 1793764831.4935167,
+  "status": "needs_resolution",
+  "checks": [
+    {
+      "code": "own_output_binding",
+      "passed": true,
+      "evidence": {
+        "physical_supplements_supplied": false,
+        "source_package_sha256": "c6e38506fa3a94f507e579fad3b7b64e2a948fc200237652215381f932464524"
+      }
+    },
+    {
+      "code": "complete_native_physical_export",
+      "passed": false,
+      "evidence": {
+        "stored_readiness": {
+          "counts": {
+            "analysis_elements": 141,
+            "design_records": 30,
+            "members": 141,
+            "panels": 45
+          },
+          "findings": [],
+          "status": "ready"
+        },
+        "current_contract_findings": [
+          {
+            "code": "connection_selected_components",
+            "message": "Located connection parts omit component categories explicitly selected in the linked design; export the actual parts/reference groups without relabelling an unrelated solid",
+            "entity_ids": [
+              "C-SPL-100101",
+              "C-SPL-100201",
+              "C-SPL-100302",
+              "C-SPL-200101",
+              "C-SPL-200201",
+              "C-SPL-200302"
+            ],
+            "severity": "needs_input",
+            "count": 6,
+            "examples": [
+              {
+                "connection_id": "C-SPL-100201",
+                "design_record_id": "connections/conn-gravity_col-W14X193",
+                "missing_component_categories": [
+                  "bolt"
+                ],
+                "selected_components": "bearing splice + 4x 3/4-in A325N erection bolts bolts",
+                "returned_part_kinds": "CJP splice weld"
+              },
+              {
+                "connection_id": "C-SPL-100302",
+                "design_record_id": "connections/conn-gravity_col-W14X120",
+                "missing_component_categories": [
+                  "bolt"
+                ],
+                "selected_components": "bearing splice + 4x 3/4-in A325N erection bolts; 1/4-in shim bolts",
+                "returned_part_kinds": "CJP splice weld"
+              },
+              {
+                "connection_id": "C-SPL-100101",
+                "design_record_id": "connections/conn-gravity_col-W14X193",
+                "missing_component_categories": [
+                  "bolt"
+                ],
+                "selected_components": "bearing splice + 4x 3/4-in A325N erection bolts bolts",
+                "returned_part_kinds": "CJP splice weld"
+              },
+              {
+                "connection_id": "C-SPL-200201",
+                "design_record_id": "connections/conn-gravity_col-W14X193",
+                "missing_component_categories": [
+                  "bolt"
+                ],
+                "selected_components": "bearing splice + 4x 3/4-in A325N erection bolts bolts",
+                "returned_part_kinds": "CJP splice weld"
+              },
+              {
+                "connection_id": "C-SPL-200302",
+                "design_record_id": "connections/conn-gravity_col-W14X120",
+                "missing_component_categories": [
+                  "bolt"
+                ],
+                "selected_components": "bearing splice + 4x 3/4-in A325N erection bolts; 1/4-in shim bolts",
+                "returned_part_kinds": "CJP splice weld"
+              },
+              {
+                "connection_id": "C-SPL-200101",
+                "design_record_id": "connections/conn-gravity_col-W14X193",
+                "missing_component_categories": [
+                  "bolt"
+                ],
+                "selected_components": "bearing splice + 4x 3/4-in A325N erection bolts bolts",
+                "returned_part_kinds": "CJP splice weld"
+              }
+            ]
+          },
+          {
+            "code": "connection_fastener_quantity",
+            "message": "A solid fastener count exceeds the distinct located fastener solids in its local design assembly; instantiate the actual checked pattern instead of multiplying a representative solid by a count label",
+            "entity_ids": [
+              "C-BASE-0",
+              "C-BASE-1",
+              "C-BASE-100",
+              "C-BASE-101",
+              "C-BASE-102",
+              "C-BASE-2",
+              "C-BASE-200",
+              "C-BASE-201",
+              "C-BASE-202",
+              "C-BASE-300",
+              "C-BASE-301",
+              "C-BASE-302",
+              "C-BASE-303",
+              "C-BASE-401",
+              "C-BASE-402",
+              "C-BASE-403",
+              "C-BASE-501",
+              "C-BASE-502",
+              "C-BASE-503",
+              "C-BASE-504",
+              "C-BASE-602",
+              "C-BASE-604",
+              "C-BASE-702",
+              "C-BASE-703",
+              "C-BASE-704",
+              "C-COLL-100300",
+              "C-COLL-100301",
+              "C-COLL-100302",
+              "C-COLL-100303",
+              "C-COLL-100501",
+              "C-COLL-100502",
+              "C-COLL-100503",
+              "C-COLL-200300",
+              "C-COLL-200301",
+              "C-COLL-200302",
+              "C-COLL-200303",
+              "C-COLL-200501",
+              "C-COLL-200502",
+              "C-COLL-200503",
+              "C-J-100000",
+              "C-J-100001",
+              "C-J-100002",
+              "C-J-100100",
+              "C-J-100101",
+              "C-J-100102",
+              "C-J-100200",
+              "C-J-100201",
+              "C-J-100202",
+              "C-J-100300",
+              "C-J-100301",
+              "C-J-100302",
+              "C-J-100303",
+              "C-J-100401",
+              "C-J-100402",
+              "C-J-100403",
+              "C-J-100501",
+              "C-J-100502",
+              "C-J-100503",
+              "C-J-200000",
+              "C-J-200001",
+              "C-J-200002",
+              "C-J-200100",
+              "C-J-200101",
+              "C-J-200102",
+              "C-J-200200",
+              "C-J-200201",
+              "C-J-200202",
+              "C-J-200300",
+              "C-J-200301",
+              "C-J-200302",
+              "C-J-200303",
+              "C-J-200401",
+              "C-J-200402",
+              "C-J-200403",
+              "C-J-200501",
+              "C-J-200502",
+              "C-J-200503",
+              "C-J-300502",
+              "C-J-300503",
+              "C-J-300504",
+              "C-J-300602",
+              "C-J-300604",
+              "C-J-300702",
+              "C-J-300703",
+              "C-J-300704",
+              "C-J-400000",
+              "C-J-400001",
+              "C-J-400002",
+              "C-J-400100",
+              "C-J-400101",
+              "C-J-400102",
+              "C-J-400200",
+              "C-J-400201",
+              "C-J-400202",
+              "C-J-400300",
+              "C-J-400301",
+              "C-J-400302",
+              "C-SPL-100502",
+              "C-SPL-100503",
+              "C-SPL-200502",
+              "C-SPL-200503"
+            ],
+            "severity": "needs_input",
+            "count": 101,
+            "examples": [
+              {
+                "connection_id": "C-J-100000",
+                "part_id": "J-100000-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100001",
+                "part_id": "J-100001-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100002",
+                "part_id": "J-100002-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100100",
+                "part_id": "J-100100-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100101",
+                "part_id": "J-100101-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100102",
+                "part_id": "J-100102-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100200",
+                "part_id": "J-100200-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100201",
+                "part_id": "J-100201-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100202",
+                "part_id": "J-100202-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100300",
+                "part_id": "J-100300-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100301",
+                "part_id": "J-100301-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100302",
+                "part_id": "J-100302-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100303",
+                "part_id": "J-100303-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100401",
+                "part_id": "J-100401-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100402",
+                "part_id": "J-100402-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100403",
+                "part_id": "J-100403-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100501",
+                "part_id": "J-100501-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100502",
+                "part_id": "J-100502-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100503",
+                "part_id": "J-100503-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200000",
+                "part_id": "J-200000-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200001",
+                "part_id": "J-200001-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200002",
+                "part_id": "J-200002-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200100",
+                "part_id": "J-200100-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200101",
+                "part_id": "J-200101-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200102",
+                "part_id": "J-200102-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200200",
+                "part_id": "J-200200-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200201",
+                "part_id": "J-200201-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200202",
+                "part_id": "J-200202-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200300",
+                "part_id": "J-200300-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200301",
+                "part_id": "J-200301-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200302",
+                "part_id": "J-200302-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200303",
+                "part_id": "J-200303-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200401",
+                "part_id": "J-200401-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200402",
+                "part_id": "J-200402-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200403",
+                "part_id": "J-200403-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200501",
+                "part_id": "J-200501-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200502",
+                "part_id": "J-200502-bolts",
+                "category": "bolt",
+                "declared_count": 5,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200503",
+                "part_id": "J-200503-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-300502",
+                "part_id": "J-300502-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-300503",
+                "part_id": "J-300503-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-300504",
+                "part_id": "J-300504-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-300602",
+                "part_id": "J-300602-webbolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-300604",
+                "part_id": "J-300604-webbolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-300702",
+                "part_id": "J-300702-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-300703",
+                "part_id": "J-300703-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-300704",
+                "part_id": "J-300704-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-400000",
+                "part_id": "J-400000-webbolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-400001",
+                "part_id": "J-400001-bolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-400002",
+                "part_id": "J-400002-webbolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-400100",
+                "part_id": "J-400100-bolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-400101",
+                "part_id": "J-400101-bolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-400102",
+                "part_id": "J-400102-bolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-400200",
+                "part_id": "J-400200-bolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-400201",
+                "part_id": "J-400201-bolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-400202",
+                "part_id": "J-400202-bolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-400300",
+                "part_id": "J-400300-webbolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-400301",
+                "part_id": "J-400301-bolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-400302",
+                "part_id": "J-400302-bolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-SPL-100502",
+                "part_id": "C-SPL-100502-erection-bolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-SPL-100503",
+                "part_id": "C-SPL-100503-erection-bolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-SPL-200502",
+                "part_id": "C-SPL-200502-erection-bolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-SPL-200503",
+                "part_id": "C-SPL-200503-erection-bolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-1",
+                "part_id": "C-BASE-1-anchors",
+                "category": "anchor",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-102",
+                "part_id": "C-BASE-102-anchors",
+                "category": "anchor",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-201",
+                "part_id": "C-BASE-201-anchors",
+                "category": "anchor",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-403",
+                "part_id": "C-BASE-403-anchors",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-301",
+                "part_id": "C-BASE-301-anchors",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-501",
+                "part_id": "C-BASE-501-anchors",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-2",
+                "part_id": "C-BASE-2-anchors",
+                "category": "anchor",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-202",
+                "part_id": "C-BASE-202-anchors",
+                "category": "anchor",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-100",
+                "part_id": "C-BASE-100-anchors",
+                "category": "anchor",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-302",
+                "part_id": "C-BASE-302-anchors",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-401",
+                "part_id": "C-BASE-401-anchors",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-502",
+                "part_id": "C-BASE-502-anchors",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-0",
+                "part_id": "C-BASE-0-anchors",
+                "category": "anchor",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-101",
+                "part_id": "C-BASE-101-anchors",
+                "category": "anchor",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-200",
+                "part_id": "C-BASE-200-anchors",
+                "category": "anchor",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-402",
+                "part_id": "C-BASE-402-anchors",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-300",
+                "part_id": "C-BASE-300-anchors",
+                "category": "anchor",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-303",
+                "part_id": "C-BASE-303-anchors",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-503",
+                "part_id": "C-BASE-503-anchors",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-704",
+                "part_id": "C-BASE-704-anchors",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-602",
+                "part_id": "C-BASE-602-anchors",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-504",
+                "part_id": "C-BASE-504-anchors",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-604",
+                "part_id": "C-BASE-604-anchors",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-703",
+                "part_id": "C-BASE-703-anchors",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-702",
+                "part_id": "C-BASE-702-anchors",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-COLL-100300",
+                "part_id": "C-COLL-100300-bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-COLL-100301",
+                "part_id": "C-COLL-100301-bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-COLL-100302",
+                "part_id": "C-COLL-100302-bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-COLL-100303",
+                "part_id": "C-COLL-100303-bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-COLL-100501",
+                "part_id": "C-COLL-100501-bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-COLL-100502",
+                "part_id": "C-COLL-100502-bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-COLL-100503",
+                "part_id": "C-COLL-100503-bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-COLL-200300",
+                "part_id": "C-COLL-200300-bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-COLL-200301",
+                "part_id": "C-COLL-200301-bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-COLL-200302",
+                "part_id": "C-COLL-200302-bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-COLL-200303",
+                "part_id": "C-COLL-200303-bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-COLL-200501",
+                "part_id": "C-COLL-200501-bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-COLL-200502",
+                "part_id": "C-COLL-200502-bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              }
+            ]
+          },
+          {
+            "code": "connection_duplicate_parts",
+            "message": "Distinct component IDs repeat identical solid geometry inside the same assembly; resolve actual placement or duplicate emission, without dropping a required component",
+            "entity_ids": [
+              "C-J-100000",
+              "C-J-100001",
+              "C-J-100002",
+              "C-J-100100",
+              "C-J-100101",
+              "C-J-100102",
+              "C-J-100200",
+              "C-J-100201",
+              "C-J-100202",
+              "C-J-100300",
+              "C-J-100301",
+              "C-J-100302",
+              "C-J-100303",
+              "C-J-100401",
+              "C-J-100402",
+              "C-J-100403",
+              "C-J-100501",
+              "C-J-100502",
+              "C-J-100503",
+              "C-J-200000",
+              "C-J-200001",
+              "C-J-200002",
+              "C-J-200100",
+              "C-J-200101",
+              "C-J-200102",
+              "C-J-200200",
+              "C-J-200201",
+              "C-J-200202",
+              "C-J-200300",
+              "C-J-200301",
+              "C-J-200302",
+              "C-J-200303",
+              "C-J-200401",
+              "C-J-200402",
+              "C-J-200403",
+              "C-J-200501",
+              "C-J-200503",
+              "C-J-300502",
+              "C-J-300503",
+              "C-J-300504",
+              "C-J-300602",
+              "C-J-300604",
+              "C-J-300702",
+              "C-J-300703",
+              "C-J-300704",
+              "C-J-400000",
+              "C-J-400002",
+              "C-J-400300"
+            ],
+            "severity": "needs_input",
+            "count": 96,
+            "examples": [
+              {
+                "connection_id": "C-J-100000",
+                "part_ids": [
+                  "J-100000-cjp-top",
+                  "J-100000-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100000",
+                "part_ids": [
+                  "J-100000-cont-top",
+                  "J-100000-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100001",
+                "part_ids": [
+                  "J-100001-cjp-top",
+                  "J-100001-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100001",
+                "part_ids": [
+                  "J-100001-cont-top",
+                  "J-100001-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100002",
+                "part_ids": [
+                  "J-100002-cjp-top",
+                  "J-100002-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100002",
+                "part_ids": [
+                  "J-100002-cont-top",
+                  "J-100002-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100100",
+                "part_ids": [
+                  "J-100100-cjp-top",
+                  "J-100100-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100100",
+                "part_ids": [
+                  "J-100100-cont-top",
+                  "J-100100-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100101",
+                "part_ids": [
+                  "J-100101-cjp-top",
+                  "J-100101-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100101",
+                "part_ids": [
+                  "J-100101-cont-top",
+                  "J-100101-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100102",
+                "part_ids": [
+                  "J-100102-cjp-top",
+                  "J-100102-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100102",
+                "part_ids": [
+                  "J-100102-cont-top",
+                  "J-100102-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100200",
+                "part_ids": [
+                  "J-100200-cjp-top",
+                  "J-100200-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100200",
+                "part_ids": [
+                  "J-100200-cont-top",
+                  "J-100200-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100201",
+                "part_ids": [
+                  "J-100201-cjp-top",
+                  "J-100201-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100201",
+                "part_ids": [
+                  "J-100201-cont-top",
+                  "J-100201-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100202",
+                "part_ids": [
+                  "J-100202-cjp-top",
+                  "J-100202-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100202",
+                "part_ids": [
+                  "J-100202-cont-top",
+                  "J-100202-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100300",
+                "part_ids": [
+                  "J-100300-cjp-top",
+                  "J-100300-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100300",
+                "part_ids": [
+                  "J-100300-cont-top",
+                  "J-100300-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100301",
+                "part_ids": [
+                  "J-100301-cjp-top",
+                  "J-100301-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100301",
+                "part_ids": [
+                  "J-100301-cont-top",
+                  "J-100301-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100302",
+                "part_ids": [
+                  "J-100302-cjp-top",
+                  "J-100302-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100302",
+                "part_ids": [
+                  "J-100302-cont-top",
+                  "J-100302-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100303",
+                "part_ids": [
+                  "J-100303-cjp-top",
+                  "J-100303-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100303",
+                "part_ids": [
+                  "J-100303-cont-top",
+                  "J-100303-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100401",
+                "part_ids": [
+                  "J-100401-cjp-top",
+                  "J-100401-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100401",
+                "part_ids": [
+                  "J-100401-cont-top",
+                  "J-100401-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100402",
+                "part_ids": [
+                  "J-100402-cjp-top",
+                  "J-100402-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100402",
+                "part_ids": [
+                  "J-100402-cont-top",
+                  "J-100402-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100403",
+                "part_ids": [
+                  "J-100403-cjp-top",
+                  "J-100403-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100403",
+                "part_ids": [
+                  "J-100403-cont-top",
+                  "J-100403-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100501",
+                "part_ids": [
+                  "J-100501-cjp-top",
+                  "J-100501-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100501",
+                "part_ids": [
+                  "J-100501-cont-top",
+                  "J-100501-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100502",
+                "part_ids": [
+                  "J-100502-cjp-top",
+                  "J-100502-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100502",
+                "part_ids": [
+                  "J-100502-cont-top",
+                  "J-100502-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100503",
+                "part_ids": [
+                  "J-100503-cjp-top",
+                  "J-100503-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100503",
+                "part_ids": [
+                  "J-100503-cont-top",
+                  "J-100503-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200000",
+                "part_ids": [
+                  "J-200000-cjp-top",
+                  "J-200000-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200000",
+                "part_ids": [
+                  "J-200000-cont-top",
+                  "J-200000-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200001",
+                "part_ids": [
+                  "J-200001-cjp-top",
+                  "J-200001-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200001",
+                "part_ids": [
+                  "J-200001-cont-top",
+                  "J-200001-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200002",
+                "part_ids": [
+                  "J-200002-cjp-top",
+                  "J-200002-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200002",
+                "part_ids": [
+                  "J-200002-cont-top",
+                  "J-200002-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200100",
+                "part_ids": [
+                  "J-200100-cjp-top",
+                  "J-200100-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200100",
+                "part_ids": [
+                  "J-200100-cont-top",
+                  "J-200100-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200101",
+                "part_ids": [
+                  "J-200101-cjp-top",
+                  "J-200101-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200101",
+                "part_ids": [
+                  "J-200101-cont-top",
+                  "J-200101-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200102",
+                "part_ids": [
+                  "J-200102-cjp-top",
+                  "J-200102-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200102",
+                "part_ids": [
+                  "J-200102-cont-top",
+                  "J-200102-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200200",
+                "part_ids": [
+                  "J-200200-cjp-top",
+                  "J-200200-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200200",
+                "part_ids": [
+                  "J-200200-cont-top",
+                  "J-200200-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200201",
+                "part_ids": [
+                  "J-200201-cjp-top",
+                  "J-200201-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200201",
+                "part_ids": [
+                  "J-200201-cont-top",
+                  "J-200201-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200202",
+                "part_ids": [
+                  "J-200202-cjp-top",
+                  "J-200202-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200202",
+                "part_ids": [
+                  "J-200202-cont-top",
+                  "J-200202-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200300",
+                "part_ids": [
+                  "J-200300-cjp-top",
+                  "J-200300-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200300",
+                "part_ids": [
+                  "J-200300-cont-top",
+                  "J-200300-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200301",
+                "part_ids": [
+                  "J-200301-cjp-top",
+                  "J-200301-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200301",
+                "part_ids": [
+                  "J-200301-cont-top",
+                  "J-200301-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200302",
+                "part_ids": [
+                  "J-200302-cjp-top",
+                  "J-200302-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200302",
+                "part_ids": [
+                  "J-200302-cont-top",
+                  "J-200302-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200303",
+                "part_ids": [
+                  "J-200303-cjp-top",
+                  "J-200303-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200303",
+                "part_ids": [
+                  "J-200303-cont-top",
+                  "J-200303-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200401",
+                "part_ids": [
+                  "J-200401-cjp-top",
+                  "J-200401-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200401",
+                "part_ids": [
+                  "J-200401-cont-top",
+                  "J-200401-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200402",
+                "part_ids": [
+                  "J-200402-cjp-top",
+                  "J-200402-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200402",
+                "part_ids": [
+                  "J-200402-cont-top",
+                  "J-200402-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200403",
+                "part_ids": [
+                  "J-200403-cjp-top",
+                  "J-200403-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200403",
+                "part_ids": [
+                  "J-200403-cont-top",
+                  "J-200403-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200501",
+                "part_ids": [
+                  "J-200501-cjp-top",
+                  "J-200501-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200501",
+                "part_ids": [
+                  "J-200501-cont-top",
+                  "J-200501-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200503",
+                "part_ids": [
+                  "J-200503-cjp-top",
+                  "J-200503-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200503",
+                "part_ids": [
+                  "J-200503-cont-top",
+                  "J-200503-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-300502",
+                "part_ids": [
+                  "J-300502-cjp-top",
+                  "J-300502-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-300502",
+                "part_ids": [
+                  "J-300502-cont-top",
+                  "J-300502-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-300503",
+                "part_ids": [
+                  "J-300503-cjp-top",
+                  "J-300503-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-300503",
+                "part_ids": [
+                  "J-300503-cont-top",
+                  "J-300503-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-300504",
+                "part_ids": [
+                  "J-300504-cjp-top",
+                  "J-300504-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-300504",
+                "part_ids": [
+                  "J-300504-cont-top",
+                  "J-300504-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-300602",
+                "part_ids": [
+                  "J-300602-cjp-top",
+                  "J-300602-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-300602",
+                "part_ids": [
+                  "J-300602-cont-top",
+                  "J-300602-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-300604",
+                "part_ids": [
+                  "J-300604-cjp-top",
+                  "J-300604-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-300604",
+                "part_ids": [
+                  "J-300604-cont-top",
+                  "J-300604-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-300702",
+                "part_ids": [
+                  "J-300702-cjp-top",
+                  "J-300702-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-300702",
+                "part_ids": [
+                  "J-300702-cont-top",
+                  "J-300702-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-300703",
+                "part_ids": [
+                  "J-300703-cjp-top",
+                  "J-300703-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-300703",
+                "part_ids": [
+                  "J-300703-cont-top",
+                  "J-300703-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-300704",
+                "part_ids": [
+                  "J-300704-cjp-top",
+                  "J-300704-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-300704",
+                "part_ids": [
+                  "J-300704-cont-top",
+                  "J-300704-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-400000",
+                "part_ids": [
+                  "J-400000-cjp-top",
+                  "J-400000-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-400000",
+                "part_ids": [
+                  "J-400000-cont-top",
+                  "J-400000-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-400002",
+                "part_ids": [
+                  "J-400002-cjp-top",
+                  "J-400002-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-400002",
+                "part_ids": [
+                  "J-400002-cont-top",
+                  "J-400002-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-400300",
+                "part_ids": [
+                  "J-400300-cjp-top",
+                  "J-400300-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-400300",
+                "part_ids": [
+                  "J-400300-cont-top",
+                  "J-400300-cont-bot"
+                ],
+                "kind": "continuity plate"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "code": "return_fully_rendered",
+      "passed": true,
+      "evidence": {
+        "source_products": 673,
+        "selected": 673,
+        "displayed": 673,
+        "unrendered": 0,
+        "excluded_by_scope": 0,
+        "triangles": 13894
+      }
+    },
+    {
+      "code": "architectural_opening_export_geometry",
+      "passed": true,
+      "evidence": {
+        "unresolved_opening_warnings": []
+      }
+    },
+    {
+      "code": "recoverable_input_surface_15Jb3kUgnJHOa_Oxyep$Hh",
+      "passed": true,
+      "evidence": {
+        "name": "Classroom FLOOR 12 ft"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_0N_vXYdVLUm9vXmokTBw6G",
+      "passed": true,
+      "evidence": {
+        "name": "Classroom FLOOR 24 ft"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_0ugIepQUPQf8Aj_uuitteX",
+      "passed": true,
+      "evidence": {
+        "name": "Classroom ROOF 36 ft"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_1P3_J7N7bU$8OZhXuIW1Mo",
+      "passed": true,
+      "evidence": {
+        "name": "Link FLOOR 12 ft"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_1NhrWSm6jR$80J9uHSbLDl",
+      "passed": true,
+      "evidence": {
+        "name": "Link ROOF 24 ft"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_1LzJuZP5rVVOye_VxLOGSi",
+      "passed": true,
+      "evidence": {
+        "name": "Gym ROOF 26 ft"
+      }
+    },
+    {
+      "code": "floor_roof_panel_classification",
+      "passed": true,
+      "evidence": {
+        "untyped_horizontal_or_sloped_panels": [],
+        "method": "Panel geometry is compared even when the source did not declare its floor/roof role; role omission is reported separately."
+      }
+    },
+    {
+      "code": "floor_roof_planes_footprints_voids",
+      "passed": true,
+      "evidence": {
+        "required_plane_groups": 4,
+        "returned_plane_groups": 5,
+        "differences": [],
+        "plane_distance_tolerance_m": 0.005
+      }
+    },
+    {
+      "code": "no_unrequested_floor_roof_planes",
+      "passed": true,
+      "evidence": {
+        "extra_planes": []
+      }
+    },
+    {
+      "code": "structural_datums_retained",
+      "passed": true,
+      "evidence": {
+        "required": [
+          {
+            "id": "24xBciG0vOYRAHDD2MgjXr",
+            "name": "Ground",
+            "elevation_m": 0.0
+          },
+          {
+            "id": "3yreycI05RBgOG4RbTu1K4",
+            "name": "Datum 12 ft",
+            "elevation_m": 3.6576000000000004
+          },
+          {
+            "id": "1o20plspPNZwppUvjdVpFf",
+            "name": "Datum 24 ft",
+            "elevation_m": 7.315200000000001
+          },
+          {
+            "id": "3UNKg3VXbJ$gbdkVu0V9eC",
+            "name": "Datum 26 ft",
+            "elevation_m": 7.9248
+          },
+          {
+            "id": "2$qVTelGbTWf7RQRuu5nGo",
+            "name": "Datum 36 ft",
+            "elevation_m": 10.972800000000001
+          }
+        ],
+        "returned": [
+          {
+            "id": "02Pik1dObOKwboxVg3nnt8",
+            "name": "Ground",
+            "elevation_m": 0.0
+          },
+          {
+            "id": "3fCVEtk$TVX8aLpMqyWkfL",
+            "name": "Datum 12 ft",
+            "elevation_m": 3.6576000000000004
+          },
+          {
+            "id": "1S_UaUuD1QyeV0QpuO_EV3",
+            "name": "Datum 24 ft",
+            "elevation_m": 7.315200000000001
+          },
+          {
+            "id": "2zipIXBjPNofH_XrmLivCT",
+            "name": "Datum 26 ft",
+            "elevation_m": 7.924799999999999
+          },
+          {
+            "id": "2wgxXzXlPNRwUTruW1L3Mm",
+            "name": "Datum 36 ft",
+            "elevation_m": 10.972800000000001
+          }
+        ],
+        "missing": []
+      }
+    },
+    {
+      "code": "architectural_grid_locations",
+      "passed": true,
+      "evidence": {
+        "source_axes": 13,
+        "returned_axes": 13,
+        "missing_or_changed": [],
+        "checks": "labels, U/V/W family and full 3D polyline"
+      }
+    },
+    {
+      "code": "architectural_source_identity",
+      "passed": true,
+      "evidence": {
+        "expected": "d6c0c74e0cd923ac7fa7b89bb8b87b33338b9a871dbb9b89e9fcd5b8a8fe6a2e",
+        "declared": "d6c0c74e0cd923ac7fa7b89bb8b87b33338b9a871dbb9b89e9fcd5b8a8fe6a2e"
+      }
+    },
+    {
+      "code": "physical_member_placement_defined",
+      "passed": true,
+      "evidence": {
+        "unknown_member_ids": [],
+        "method": "Null offsets or orientation remain unknown; no zero offsets or local axes are invented for these checks."
+      }
+    },
+    {
+      "code": "door_window_boundaries",
+      "passed": true,
+      "evidence": {
+        "source_count": 54,
+        "physical_count": 54,
+        "changed": []
+      }
+    },
+    {
+      "code": "door_window_workline_clearance",
+      "passed": true,
+      "evidence": {
+        "count": 0,
+        "examples": [],
+        "method": "Strict opening bounds against physical worklines; separate from a solid clash or fabrication-fit check"
+      }
+    },
+    {
+      "code": "door_window_solid_clearance",
+      "passed": true,
+      "evidence": {
+        "checked_solids": 574,
+        "clashes": [],
+        "method": "Returned IFC mesh triangles against source axis-aligned opening volumes, with 5 mm tolerance at jamb/sill/head. All door/window fixtures in this sweep have axis-aligned hosts or are axis-aligned freestanding reservations."
+      }
+    },
+    {
+      "code": "connection_part_dimensions",
+      "passed": true,
+      "evidence": {
+        "checked": 197,
+        "mismatches": [],
+        "method": "Explicit plate/gusset thickness or cylindrical shaft diameter versus solid dimensions; tolerance max(0.005 in, 2%). Resolve against actual completed design records, not by relabelling an arbitrary solid."
+      }
+    },
+    {
+      "code": "member_design_record_sections",
+      "passed": true,
+      "evidence": {
+        "checked_links": 141,
+        "links_requiring_other_review": 0,
+        "mismatches": [],
+        "method": "Actual physical catalogue section label versus every linked member record with an explicit inputs.section. Custom profile aliases and built-up constituent calculations are outside this exact-label screen."
+      }
+    },
+    {
+      "code": "gravity_profile_orientation",
+      "passed": true,
+      "evidence": {
+        "checked": 83,
+        "suspect_members": [],
+        "method": "Deep gravity-framing profiles: detect depth axis nearly perpendicular to projected gravity; inspect intentional weak-axis designs separately.",
+        "unknown_placement_members_not_screened": []
+      }
+    },
+    {
+      "code": "built_up_constituents_separate",
+      "passed": true,
+      "evidence": {
+        "checked_profiles": 0,
+        "overlaps": [],
+        "method": "Separate built-up constituents must not substantially occupy the same section area; threshold >0.005 in2 and >5% of a constituent, allowing preview fillet simplifications."
+      }
+    },
+    {
+      "code": "no_duplicate_physical_occurrences",
+      "passed": true,
+      "evidence": {
+        "count": 0,
+        "examples": []
+      }
+    },
+    {
+      "code": "located_connection_occurrences",
+      "passed": true,
+      "evidence": {
+        "connections": 130,
+        "designed_without_parts": [],
+        "delegated_interfaces": []
+      }
+    },
+    {
+      "code": "connection_occurrence_coverage",
+      "passed": true,
+      "evidence": {
+        "checked_exemptions": 0,
+        "problems": [],
+        "method": "Explicit hardware notes and column bases lacking any connection-part bounds within six feet; continuous-subdivision claims must have opposing collinear member ends. Checks returned solid and reference-part bounds. Nearness alone is not connection completeness, fit or capacity certification.",
+        "unknown_placement_members_not_screened": []
+      }
+    },
+    {
+      "code": "school_gym_clear_volume",
+      "passed": true,
+      "evidence": {
+        "interior_members": []
+      }
+    }
+  ],
+  "issues": [
+    {
+      "code": "complete_native_physical_export",
+      "evidence": {
+        "stored_readiness": {
+          "counts": {
+            "analysis_elements": 141,
+            "design_records": 30,
+            "members": 141,
+            "panels": 45
+          },
+          "findings": [],
+          "status": "ready"
+        },
+        "current_contract_findings": [
+          {
+            "code": "connection_selected_components",
+            "message": "Located connection parts omit component categories explicitly selected in the linked design; export the actual parts/reference groups without relabelling an unrelated solid",
+            "entity_ids": [
+              "C-SPL-100101",
+              "C-SPL-100201",
+              "C-SPL-100302",
+              "C-SPL-200101",
+              "C-SPL-200201",
+              "C-SPL-200302"
+            ],
+            "severity": "needs_input",
+            "count": 6,
+            "examples": [
+              {
+                "connection_id": "C-SPL-100201",
+                "design_record_id": "connections/conn-gravity_col-W14X193",
+                "missing_component_categories": [
+                  "bolt"
+                ],
+                "selected_components": "bearing splice + 4x 3/4-in A325N erection bolts bolts",
+                "returned_part_kinds": "CJP splice weld"
+              },
+              {
+                "connection_id": "C-SPL-100302",
+                "design_record_id": "connections/conn-gravity_col-W14X120",
+                "missing_component_categories": [
+                  "bolt"
+                ],
+                "selected_components": "bearing splice + 4x 3/4-in A325N erection bolts; 1/4-in shim bolts",
+                "returned_part_kinds": "CJP splice weld"
+              },
+              {
+                "connection_id": "C-SPL-100101",
+                "design_record_id": "connections/conn-gravity_col-W14X193",
+                "missing_component_categories": [
+                  "bolt"
+                ],
+                "selected_components": "bearing splice + 4x 3/4-in A325N erection bolts bolts",
+                "returned_part_kinds": "CJP splice weld"
+              },
+              {
+                "connection_id": "C-SPL-200201",
+                "design_record_id": "connections/conn-gravity_col-W14X193",
+                "missing_component_categories": [
+                  "bolt"
+                ],
+                "selected_components": "bearing splice + 4x 3/4-in A325N erection bolts bolts",
+                "returned_part_kinds": "CJP splice weld"
+              },
+              {
+                "connection_id": "C-SPL-200302",
+                "design_record_id": "connections/conn-gravity_col-W14X120",
+                "missing_component_categories": [
+                  "bolt"
+                ],
+                "selected_components": "bearing splice + 4x 3/4-in A325N erection bolts; 1/4-in shim bolts",
+                "returned_part_kinds": "CJP splice weld"
+              },
+              {
+                "connection_id": "C-SPL-200101",
+                "design_record_id": "connections/conn-gravity_col-W14X193",
+                "missing_component_categories": [
+                  "bolt"
+                ],
+                "selected_components": "bearing splice + 4x 3/4-in A325N erection bolts bolts",
+                "returned_part_kinds": "CJP splice weld"
+              }
+            ]
+          },
+          {
+            "code": "connection_fastener_quantity",
+            "message": "A solid fastener count exceeds the distinct located fastener solids in its local design assembly; instantiate the actual checked pattern instead of multiplying a representative solid by a count label",
+            "entity_ids": [
+              "C-BASE-0",
+              "C-BASE-1",
+              "C-BASE-100",
+              "C-BASE-101",
+              "C-BASE-102",
+              "C-BASE-2",
+              "C-BASE-200",
+              "C-BASE-201",
+              "C-BASE-202",
+              "C-BASE-300",
+              "C-BASE-301",
+              "C-BASE-302",
+              "C-BASE-303",
+              "C-BASE-401",
+              "C-BASE-402",
+              "C-BASE-403",
+              "C-BASE-501",
+              "C-BASE-502",
+              "C-BASE-503",
+              "C-BASE-504",
+              "C-BASE-602",
+              "C-BASE-604",
+              "C-BASE-702",
+              "C-BASE-703",
+              "C-BASE-704",
+              "C-COLL-100300",
+              "C-COLL-100301",
+              "C-COLL-100302",
+              "C-COLL-100303",
+              "C-COLL-100501",
+              "C-COLL-100502",
+              "C-COLL-100503",
+              "C-COLL-200300",
+              "C-COLL-200301",
+              "C-COLL-200302",
+              "C-COLL-200303",
+              "C-COLL-200501",
+              "C-COLL-200502",
+              "C-COLL-200503",
+              "C-J-100000",
+              "C-J-100001",
+              "C-J-100002",
+              "C-J-100100",
+              "C-J-100101",
+              "C-J-100102",
+              "C-J-100200",
+              "C-J-100201",
+              "C-J-100202",
+              "C-J-100300",
+              "C-J-100301",
+              "C-J-100302",
+              "C-J-100303",
+              "C-J-100401",
+              "C-J-100402",
+              "C-J-100403",
+              "C-J-100501",
+              "C-J-100502",
+              "C-J-100503",
+              "C-J-200000",
+              "C-J-200001",
+              "C-J-200002",
+              "C-J-200100",
+              "C-J-200101",
+              "C-J-200102",
+              "C-J-200200",
+              "C-J-200201",
+              "C-J-200202",
+              "C-J-200300",
+              "C-J-200301",
+              "C-J-200302",
+              "C-J-200303",
+              "C-J-200401",
+              "C-J-200402",
+              "C-J-200403",
+              "C-J-200501",
+              "C-J-200502",
+              "C-J-200503",
+              "C-J-300502",
+              "C-J-300503",
+              "C-J-300504",
+              "C-J-300602",
+              "C-J-300604",
+              "C-J-300702",
+              "C-J-300703",
+              "C-J-300704",
+              "C-J-400000",
+              "C-J-400001",
+              "C-J-400002",
+              "C-J-400100",
+              "C-J-400101",
+              "C-J-400102",
+              "C-J-400200",
+              "C-J-400201",
+              "C-J-400202",
+              "C-J-400300",
+              "C-J-400301",
+              "C-J-400302",
+              "C-SPL-100502",
+              "C-SPL-100503",
+              "C-SPL-200502",
+              "C-SPL-200503"
+            ],
+            "severity": "needs_input",
+            "count": 101,
+            "examples": [
+              {
+                "connection_id": "C-J-100000",
+                "part_id": "J-100000-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100001",
+                "part_id": "J-100001-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100002",
+                "part_id": "J-100002-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100100",
+                "part_id": "J-100100-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100101",
+                "part_id": "J-100101-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100102",
+                "part_id": "J-100102-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100200",
+                "part_id": "J-100200-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100201",
+                "part_id": "J-100201-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100202",
+                "part_id": "J-100202-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100300",
+                "part_id": "J-100300-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100301",
+                "part_id": "J-100301-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100302",
+                "part_id": "J-100302-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100303",
+                "part_id": "J-100303-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100401",
+                "part_id": "J-100401-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100402",
+                "part_id": "J-100402-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100403",
+                "part_id": "J-100403-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100501",
+                "part_id": "J-100501-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100502",
+                "part_id": "J-100502-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-100503",
+                "part_id": "J-100503-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200000",
+                "part_id": "J-200000-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200001",
+                "part_id": "J-200001-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200002",
+                "part_id": "J-200002-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200100",
+                "part_id": "J-200100-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200101",
+                "part_id": "J-200101-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200102",
+                "part_id": "J-200102-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200200",
+                "part_id": "J-200200-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200201",
+                "part_id": "J-200201-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200202",
+                "part_id": "J-200202-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200300",
+                "part_id": "J-200300-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200301",
+                "part_id": "J-200301-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200302",
+                "part_id": "J-200302-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200303",
+                "part_id": "J-200303-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200401",
+                "part_id": "J-200401-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200402",
+                "part_id": "J-200402-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200403",
+                "part_id": "J-200403-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200501",
+                "part_id": "J-200501-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200502",
+                "part_id": "J-200502-bolts",
+                "category": "bolt",
+                "declared_count": 5,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-200503",
+                "part_id": "J-200503-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-300502",
+                "part_id": "J-300502-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-300503",
+                "part_id": "J-300503-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-300504",
+                "part_id": "J-300504-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-300602",
+                "part_id": "J-300602-webbolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-300604",
+                "part_id": "J-300604-webbolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-300702",
+                "part_id": "J-300702-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-300703",
+                "part_id": "J-300703-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-300704",
+                "part_id": "J-300704-webbolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-400000",
+                "part_id": "J-400000-webbolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-400001",
+                "part_id": "J-400001-bolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-400002",
+                "part_id": "J-400002-webbolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-400100",
+                "part_id": "J-400100-bolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-400101",
+                "part_id": "J-400101-bolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-400102",
+                "part_id": "J-400102-bolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-400200",
+                "part_id": "J-400200-bolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-400201",
+                "part_id": "J-400201-bolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-400202",
+                "part_id": "J-400202-bolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-400300",
+                "part_id": "J-400300-webbolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-400301",
+                "part_id": "J-400301-bolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-400302",
+                "part_id": "J-400302-bolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-SPL-100502",
+                "part_id": "C-SPL-100502-erection-bolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-SPL-100503",
+                "part_id": "C-SPL-100503-erection-bolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-SPL-200502",
+                "part_id": "C-SPL-200502-erection-bolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-SPL-200503",
+                "part_id": "C-SPL-200503-erection-bolts",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-1",
+                "part_id": "C-BASE-1-anchors",
+                "category": "anchor",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-102",
+                "part_id": "C-BASE-102-anchors",
+                "category": "anchor",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-201",
+                "part_id": "C-BASE-201-anchors",
+                "category": "anchor",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-403",
+                "part_id": "C-BASE-403-anchors",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-301",
+                "part_id": "C-BASE-301-anchors",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-501",
+                "part_id": "C-BASE-501-anchors",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-2",
+                "part_id": "C-BASE-2-anchors",
+                "category": "anchor",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-202",
+                "part_id": "C-BASE-202-anchors",
+                "category": "anchor",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-100",
+                "part_id": "C-BASE-100-anchors",
+                "category": "anchor",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-302",
+                "part_id": "C-BASE-302-anchors",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-401",
+                "part_id": "C-BASE-401-anchors",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-502",
+                "part_id": "C-BASE-502-anchors",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-0",
+                "part_id": "C-BASE-0-anchors",
+                "category": "anchor",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-101",
+                "part_id": "C-BASE-101-anchors",
+                "category": "anchor",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-200",
+                "part_id": "C-BASE-200-anchors",
+                "category": "anchor",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-402",
+                "part_id": "C-BASE-402-anchors",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-300",
+                "part_id": "C-BASE-300-anchors",
+                "category": "anchor",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-303",
+                "part_id": "C-BASE-303-anchors",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-503",
+                "part_id": "C-BASE-503-anchors",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-704",
+                "part_id": "C-BASE-704-anchors",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-602",
+                "part_id": "C-BASE-602-anchors",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-504",
+                "part_id": "C-BASE-504-anchors",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-604",
+                "part_id": "C-BASE-604-anchors",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-703",
+                "part_id": "C-BASE-703-anchors",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-BASE-702",
+                "part_id": "C-BASE-702-anchors",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-COLL-100300",
+                "part_id": "C-COLL-100300-bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-COLL-100301",
+                "part_id": "C-COLL-100301-bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-COLL-100302",
+                "part_id": "C-COLL-100302-bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-COLL-100303",
+                "part_id": "C-COLL-100303-bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-COLL-100501",
+                "part_id": "C-COLL-100501-bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-COLL-100502",
+                "part_id": "C-COLL-100502-bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-COLL-100503",
+                "part_id": "C-COLL-100503-bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-COLL-200300",
+                "part_id": "C-COLL-200300-bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-COLL-200301",
+                "part_id": "C-COLL-200301-bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-COLL-200302",
+                "part_id": "C-COLL-200302-bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-COLL-200303",
+                "part_id": "C-COLL-200303-bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-COLL-200501",
+                "part_id": "C-COLL-200501-bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-COLL-200502",
+                "part_id": "C-COLL-200502-bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              }
+            ]
+          },
+          {
+            "code": "connection_duplicate_parts",
+            "message": "Distinct component IDs repeat identical solid geometry inside the same assembly; resolve actual placement or duplicate emission, without dropping a required component",
+            "entity_ids": [
+              "C-J-100000",
+              "C-J-100001",
+              "C-J-100002",
+              "C-J-100100",
+              "C-J-100101",
+              "C-J-100102",
+              "C-J-100200",
+              "C-J-100201",
+              "C-J-100202",
+              "C-J-100300",
+              "C-J-100301",
+              "C-J-100302",
+              "C-J-100303",
+              "C-J-100401",
+              "C-J-100402",
+              "C-J-100403",
+              "C-J-100501",
+              "C-J-100502",
+              "C-J-100503",
+              "C-J-200000",
+              "C-J-200001",
+              "C-J-200002",
+              "C-J-200100",
+              "C-J-200101",
+              "C-J-200102",
+              "C-J-200200",
+              "C-J-200201",
+              "C-J-200202",
+              "C-J-200300",
+              "C-J-200301",
+              "C-J-200302",
+              "C-J-200303",
+              "C-J-200401",
+              "C-J-200402",
+              "C-J-200403",
+              "C-J-200501",
+              "C-J-200503",
+              "C-J-300502",
+              "C-J-300503",
+              "C-J-300504",
+              "C-J-300602",
+              "C-J-300604",
+              "C-J-300702",
+              "C-J-300703",
+              "C-J-300704",
+              "C-J-400000",
+              "C-J-400002",
+              "C-J-400300"
+            ],
+            "severity": "needs_input",
+            "count": 96,
+            "examples": [
+              {
+                "connection_id": "C-J-100000",
+                "part_ids": [
+                  "J-100000-cjp-top",
+                  "J-100000-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100000",
+                "part_ids": [
+                  "J-100000-cont-top",
+                  "J-100000-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100001",
+                "part_ids": [
+                  "J-100001-cjp-top",
+                  "J-100001-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100001",
+                "part_ids": [
+                  "J-100001-cont-top",
+                  "J-100001-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100002",
+                "part_ids": [
+                  "J-100002-cjp-top",
+                  "J-100002-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100002",
+                "part_ids": [
+                  "J-100002-cont-top",
+                  "J-100002-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100100",
+                "part_ids": [
+                  "J-100100-cjp-top",
+                  "J-100100-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100100",
+                "part_ids": [
+                  "J-100100-cont-top",
+                  "J-100100-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100101",
+                "part_ids": [
+                  "J-100101-cjp-top",
+                  "J-100101-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100101",
+                "part_ids": [
+                  "J-100101-cont-top",
+                  "J-100101-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100102",
+                "part_ids": [
+                  "J-100102-cjp-top",
+                  "J-100102-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100102",
+                "part_ids": [
+                  "J-100102-cont-top",
+                  "J-100102-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100200",
+                "part_ids": [
+                  "J-100200-cjp-top",
+                  "J-100200-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100200",
+                "part_ids": [
+                  "J-100200-cont-top",
+                  "J-100200-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100201",
+                "part_ids": [
+                  "J-100201-cjp-top",
+                  "J-100201-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100201",
+                "part_ids": [
+                  "J-100201-cont-top",
+                  "J-100201-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100202",
+                "part_ids": [
+                  "J-100202-cjp-top",
+                  "J-100202-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100202",
+                "part_ids": [
+                  "J-100202-cont-top",
+                  "J-100202-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100300",
+                "part_ids": [
+                  "J-100300-cjp-top",
+                  "J-100300-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100300",
+                "part_ids": [
+                  "J-100300-cont-top",
+                  "J-100300-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100301",
+                "part_ids": [
+                  "J-100301-cjp-top",
+                  "J-100301-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100301",
+                "part_ids": [
+                  "J-100301-cont-top",
+                  "J-100301-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100302",
+                "part_ids": [
+                  "J-100302-cjp-top",
+                  "J-100302-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100302",
+                "part_ids": [
+                  "J-100302-cont-top",
+                  "J-100302-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100303",
+                "part_ids": [
+                  "J-100303-cjp-top",
+                  "J-100303-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100303",
+                "part_ids": [
+                  "J-100303-cont-top",
+                  "J-100303-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100401",
+                "part_ids": [
+                  "J-100401-cjp-top",
+                  "J-100401-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100401",
+                "part_ids": [
+                  "J-100401-cont-top",
+                  "J-100401-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100402",
+                "part_ids": [
+                  "J-100402-cjp-top",
+                  "J-100402-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100402",
+                "part_ids": [
+                  "J-100402-cont-top",
+                  "J-100402-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100403",
+                "part_ids": [
+                  "J-100403-cjp-top",
+                  "J-100403-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100403",
+                "part_ids": [
+                  "J-100403-cont-top",
+                  "J-100403-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100501",
+                "part_ids": [
+                  "J-100501-cjp-top",
+                  "J-100501-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100501",
+                "part_ids": [
+                  "J-100501-cont-top",
+                  "J-100501-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100502",
+                "part_ids": [
+                  "J-100502-cjp-top",
+                  "J-100502-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100502",
+                "part_ids": [
+                  "J-100502-cont-top",
+                  "J-100502-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-100503",
+                "part_ids": [
+                  "J-100503-cjp-top",
+                  "J-100503-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-100503",
+                "part_ids": [
+                  "J-100503-cont-top",
+                  "J-100503-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200000",
+                "part_ids": [
+                  "J-200000-cjp-top",
+                  "J-200000-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200000",
+                "part_ids": [
+                  "J-200000-cont-top",
+                  "J-200000-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200001",
+                "part_ids": [
+                  "J-200001-cjp-top",
+                  "J-200001-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200001",
+                "part_ids": [
+                  "J-200001-cont-top",
+                  "J-200001-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200002",
+                "part_ids": [
+                  "J-200002-cjp-top",
+                  "J-200002-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200002",
+                "part_ids": [
+                  "J-200002-cont-top",
+                  "J-200002-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200100",
+                "part_ids": [
+                  "J-200100-cjp-top",
+                  "J-200100-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200100",
+                "part_ids": [
+                  "J-200100-cont-top",
+                  "J-200100-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200101",
+                "part_ids": [
+                  "J-200101-cjp-top",
+                  "J-200101-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200101",
+                "part_ids": [
+                  "J-200101-cont-top",
+                  "J-200101-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200102",
+                "part_ids": [
+                  "J-200102-cjp-top",
+                  "J-200102-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200102",
+                "part_ids": [
+                  "J-200102-cont-top",
+                  "J-200102-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200200",
+                "part_ids": [
+                  "J-200200-cjp-top",
+                  "J-200200-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200200",
+                "part_ids": [
+                  "J-200200-cont-top",
+                  "J-200200-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200201",
+                "part_ids": [
+                  "J-200201-cjp-top",
+                  "J-200201-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200201",
+                "part_ids": [
+                  "J-200201-cont-top",
+                  "J-200201-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200202",
+                "part_ids": [
+                  "J-200202-cjp-top",
+                  "J-200202-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200202",
+                "part_ids": [
+                  "J-200202-cont-top",
+                  "J-200202-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200300",
+                "part_ids": [
+                  "J-200300-cjp-top",
+                  "J-200300-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200300",
+                "part_ids": [
+                  "J-200300-cont-top",
+                  "J-200300-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200301",
+                "part_ids": [
+                  "J-200301-cjp-top",
+                  "J-200301-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200301",
+                "part_ids": [
+                  "J-200301-cont-top",
+                  "J-200301-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200302",
+                "part_ids": [
+                  "J-200302-cjp-top",
+                  "J-200302-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200302",
+                "part_ids": [
+                  "J-200302-cont-top",
+                  "J-200302-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200303",
+                "part_ids": [
+                  "J-200303-cjp-top",
+                  "J-200303-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200303",
+                "part_ids": [
+                  "J-200303-cont-top",
+                  "J-200303-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200401",
+                "part_ids": [
+                  "J-200401-cjp-top",
+                  "J-200401-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200401",
+                "part_ids": [
+                  "J-200401-cont-top",
+                  "J-200401-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200402",
+                "part_ids": [
+                  "J-200402-cjp-top",
+                  "J-200402-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200402",
+                "part_ids": [
+                  "J-200402-cont-top",
+                  "J-200402-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200403",
+                "part_ids": [
+                  "J-200403-cjp-top",
+                  "J-200403-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200403",
+                "part_ids": [
+                  "J-200403-cont-top",
+                  "J-200403-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200501",
+                "part_ids": [
+                  "J-200501-cjp-top",
+                  "J-200501-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200501",
+                "part_ids": [
+                  "J-200501-cont-top",
+                  "J-200501-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-200503",
+                "part_ids": [
+                  "J-200503-cjp-top",
+                  "J-200503-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-200503",
+                "part_ids": [
+                  "J-200503-cont-top",
+                  "J-200503-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-300502",
+                "part_ids": [
+                  "J-300502-cjp-top",
+                  "J-300502-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-300502",
+                "part_ids": [
+                  "J-300502-cont-top",
+                  "J-300502-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-300503",
+                "part_ids": [
+                  "J-300503-cjp-top",
+                  "J-300503-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-300503",
+                "part_ids": [
+                  "J-300503-cont-top",
+                  "J-300503-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-300504",
+                "part_ids": [
+                  "J-300504-cjp-top",
+                  "J-300504-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-300504",
+                "part_ids": [
+                  "J-300504-cont-top",
+                  "J-300504-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-300602",
+                "part_ids": [
+                  "J-300602-cjp-top",
+                  "J-300602-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-300602",
+                "part_ids": [
+                  "J-300602-cont-top",
+                  "J-300602-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-300604",
+                "part_ids": [
+                  "J-300604-cjp-top",
+                  "J-300604-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-300604",
+                "part_ids": [
+                  "J-300604-cont-top",
+                  "J-300604-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-300702",
+                "part_ids": [
+                  "J-300702-cjp-top",
+                  "J-300702-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-300702",
+                "part_ids": [
+                  "J-300702-cont-top",
+                  "J-300702-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-300703",
+                "part_ids": [
+                  "J-300703-cjp-top",
+                  "J-300703-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-300703",
+                "part_ids": [
+                  "J-300703-cont-top",
+                  "J-300703-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-300704",
+                "part_ids": [
+                  "J-300704-cjp-top",
+                  "J-300704-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-300704",
+                "part_ids": [
+                  "J-300704-cont-top",
+                  "J-300704-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-400000",
+                "part_ids": [
+                  "J-400000-cjp-top",
+                  "J-400000-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-400000",
+                "part_ids": [
+                  "J-400000-cont-top",
+                  "J-400000-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-400002",
+                "part_ids": [
+                  "J-400002-cjp-top",
+                  "J-400002-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-400002",
+                "part_ids": [
+                  "J-400002-cont-top",
+                  "J-400002-cont-bot"
+                ],
+                "kind": "continuity plate"
+              },
+              {
+                "connection_id": "C-J-400300",
+                "part_ids": [
+                  "J-400300-cjp-top",
+                  "J-400300-cjp-bot"
+                ],
+                "kind": "CJP flange weld"
+              },
+              {
+                "connection_id": "C-J-400300",
+                "part_ids": [
+                  "J-400300-cont-top",
+                  "J-400300-cont-bot"
+                ],
+                "kind": "continuity plate"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "input_scope": [
+    {
+      "guid": "0_PlW_y6LVefuIhg4tyyGO",
+      "name": "Classroom BASESLAB 0 ft",
+      "role": "architectural_context",
+      "reason": "Ground/host slab outside elevated steel framing comparison"
+    },
+    {
+      "guid": "15Jb3kUgnJHOa_Oxyep$Hh",
+      "name": "Classroom FLOOR 12 ft",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "0N_vXYdVLUm9vXmokTBw6G",
+      "name": "Classroom FLOOR 24 ft",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "0ugIepQUPQf8Aj_uuitteX",
+      "name": "Classroom ROOF 36 ft",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "1cWM35LPnVrQ$zB4XZOCUw",
+      "name": "Link BASESLAB 0 ft",
+      "role": "architectural_context",
+      "reason": "Ground/host slab outside elevated steel framing comparison"
+    },
+    {
+      "guid": "1P3_J7N7bU$8OZhXuIW1Mo",
+      "name": "Link FLOOR 12 ft",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "1NhrWSm6jR$80J9uHSbLDl",
+      "name": "Link ROOF 24 ft",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "2Y2lAiOLPOHO6bEzvPppNu",
+      "name": "Gym BASESLAB 0 ft",
+      "role": "architectural_context",
+      "reason": "Ground/host slab outside elevated steel framing comparison"
+    },
+    {
+      "guid": "1LzJuZP5rVVOye_VxLOGSi",
+      "name": "Gym ROOF 26 ft",
+      "role": "required_structural_coordination"
+    }
+  ],
+  "architectural_sha256": "d6c0c74e0cd923ac7fa7b89bb8b87b33338b9a871dbb9b89e9fcd5b8a8fe6a2e",
+  "architectural_handoff_sha256": "37a0583c0188a06cf440fb86dcc62ae924b1317a064815ddf60280ce67288ff7",
+  "physical_package_sha256": "c6e38506fa3a94f507e579fad3b7b64e2a948fc200237652215381f932464524",
+  "return_ifc_sha256": "cbc6d5f1af206a4138c64ba5e721e7459e89e83707d1fb364d1a0a432d413177",
+  "counts": {
+    "analysis_only": 0,
+    "connections": 130,
+    "interfaces": 2,
+    "joint_dispositions": 0,
+    "joints": 83,
+    "materials": 7,
+    "members": 141,
+    "openings": 54,
+    "panels": 45,
+    "profiles": 9,
+    "record_dispositions": 1
+  },
+  "limits": [
+    "Existing own-output package with independent geometry/data checks; not a fresh analysis, engineering certification or fabrication acceptance.",
+    "Base slabs and explicitly existing host context are outside the new elevated steel design comparison and remain in the original architectural IFC.",
+    "Input fixtures are synthetic; no native Revit application acceptance is claimed."
+  ],
+  "key": "hr16",
+  "check_binding": {
+    "checker": "72bc7bb6c45509ef76ab60a17ace2f500637d5e358138bceece3d15121a72278",
+    "algorithms": "972e237fce8421ffa6b4be2f39cba5420bedfe1eed870a3f83934780b1eb33c4",
+    "returned_ifc": "cbc6d5f1af206a4138c64ba5e721e7459e89e83707d1fb364d1a0a432d413177"
+  }
+}

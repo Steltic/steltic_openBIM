@@ -1,0 +1,24 @@
+{
+  "case": "hr30",
+  "key": "hr30",
+  "module": "HR",
+  "title": "Composite SCBF",
+  "project": "WFRESH61_hr30_20261103",
+  "source_run_status": "error",
+  "primary": true,
+  "files": {
+    "design/bim_request.json": "5256344051c76ab7e2945b2254bedf7da52e4d0d5b0aa881bcc420a1d8ede605",
+    "architectural_input.json": "7ef0794c15d3dfce3e6f635587f410fb218f7d99efe104fb2955092d333d9ee4",
+    "architectural_handoff.txt": "04d620a7b04127e1b796019247dd830d20a7a36e69d632700bdd46743f7efac5"
+  },
+  "job_exists": true,
+  "completion_problems": [
+    "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+  ],
+  "current_completion_gate_passed": false,
+  "package_present": false,
+  "missing_outputs": [
+    "cfg.py",
+    "design/bim_package.json"
+  ]
+}

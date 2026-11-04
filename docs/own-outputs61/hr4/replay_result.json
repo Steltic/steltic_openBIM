@@ -1,0 +1,62 @@
+{
+  "key": "hr4",
+  "case": "hr4",
+  "status": "exported",
+  "producer": "343e0ad6cca528ecb30d07408224dca3597451c6",
+  "package_sha256": "472315e03667570d34c1cba192045babf937a34db93864d6898c9e804a190a9f",
+  "source_files_unchanged": true,
+  "original_recorded_package_unchanged": true,
+  "stored_readiness": "needs_input",
+  "findings": [
+    {
+      "code": "connection_selected_family",
+      "count": 1,
+      "entity_ids": [
+        "connections/conn-roof-W27X94"
+      ],
+      "examples": [
+        {
+          "bound_entity_ids": [
+            "C-10",
+            "C-15",
+            "C-19",
+            "C-2",
+            "C-21",
+            "C-4",
+            "C-6",
+            "C-8"
+          ],
+          "design_record_id": "connections/conn-roof-W27X94",
+          "missing_component_categories": [
+            "weld"
+          ],
+          "returned_part_kinds": "plate bolt bolt bolt bolt bolt plate bolt bolt bolt bolt bolt plate bolt bolt bolt bolt bolt plate bolt bolt bolt bolt bolt plate bolt bolt bolt bolt bolt plate bolt bolt bolt bolt bolt plate bolt bolt bolt bolt bolt plate bolt bolt bolt bolt bolt",
+          "selected_components": "Shear tab: 4-3/4-in A325X; PL 3/8x10. Collector: 2-PL 8x1/2 A572 Gr50 (Ag=8), 1/2 fillet E70 (L=32 in) + CJP."
+        }
+      ],
+      "message": "A selected connection family has no corresponding located component categories in its bound entities; a typical coverage note alone does not place its hardware",
+      "severity": "needs_input"
+    }
+  ],
+  "physical_counts": {
+    "analysis_only": 0,
+    "connections": 258,
+    "interfaces": 3,
+    "joint_dispositions": 0,
+    "joints": 140,
+    "materials": 7,
+    "members": 291,
+    "openings": 66,
+    "panels": 16,
+    "profiles": 11,
+    "record_dispositions": 8
+  },
+  "connection_parts": 1547,
+  "design_records": 24,
+  "seconds": 1.9646332263946533,
+  "llm_calls": 0,
+  "redesign": false,
+  "analysis_solve": false,
+  "drawings": false,
+  "supplements": false
+}

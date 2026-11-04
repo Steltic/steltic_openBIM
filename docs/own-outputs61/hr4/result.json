@@ -1,0 +1,72 @@
+{
+  "case": "hr4",
+  "key": "hr4",
+  "title": "BRBF",
+  "module": "HR",
+  "primary": true,
+  "source_run_status": "error",
+  "original_package_present": true,
+  "original_native_completion_passed": false,
+  "producer_completion_problems": [
+    "BIM export is stale; rerun consistency.check or BIM replay"
+  ],
+  "saved_readiness": "ready",
+  "original_validation": "needs_input",
+  "original_freshness": "invalid",
+  "changed_recorded_files": [
+    "workflow_review.json"
+  ],
+  "native_reexport": "exported",
+  "native_reexport_readiness": "needs_input",
+  "native_reexport_finding_codes": [
+    "connection_selected_family"
+  ],
+  "exporter_revision": "343e0ad6cca528ecb30d07408224dca3597451c6",
+  "original_producer_revision": null,
+  "variants": {
+    "saved": {
+      "transport": "blocked_source",
+      "source_validation": "invalid",
+      "source_finding_codes": [
+        "connection_selected_family",
+        "source_stale"
+      ],
+      "architectural_comparison": "not_tested",
+      "comparison_issue_codes": [],
+      "products_compared": 0,
+      "entities_compared": 0,
+      "package_sha256": "0eec9f19fdbf8b93761b3921922b6e46ee22a26c19da1cd1a01c2cb23ed76075",
+      "source_ifc_sha256": null,
+      "returned_ifc_sha256": null,
+      "source_files_unchanged": null,
+      "schema_errors": null,
+      "import_readiness_verified": false,
+      "error": null,
+      "stage": null
+    },
+    "replay": {
+      "transport": "passed",
+      "source_validation": "needs_input",
+      "source_finding_codes": [
+        "connection_selected_family"
+      ],
+      "architectural_comparison": "needs_resolution",
+      "comparison_issue_codes": [
+        "complete_native_physical_export"
+      ],
+      "products_compared": 1920,
+      "entities_compared": 25767,
+      "package_sha256": "472315e03667570d34c1cba192045babf937a34db93864d6898c9e804a190a9f",
+      "source_ifc_sha256": "6224be581f800be1d289f4dfdc6daf5f2bdba9dbd0026510abca0c501af18553",
+      "returned_ifc_sha256": "4d145ed97e611458b55f277b4a4efcd6115743bd4cc355465ab7da63e0e60547",
+      "source_files_unchanged": true,
+      "schema_errors": [],
+      "import_readiness_verified": true,
+      "error": null,
+      "stage": null
+    }
+  },
+  "status": "transport_passed_source_needs_resolution",
+  "saved_job_acceptance": false,
+  "reexport_model_checks_passed": false
+}

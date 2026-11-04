@@ -1,0 +1,24 @@
+{
+  "case": "hr35",
+  "key": "hr35",
+  "module": "HR",
+  "title": "Ch15 equipment platform",
+  "project": "WFRESH61_hr35_20261103",
+  "source_run_status": "paused",
+  "primary": true,
+  "files": {
+    "design/bim_request.json": "9cd2136672745b13a87deaac409a4ae5fdd2250cb8d4057b04115111fcb372f4",
+    "architectural_input.json": "cd7cbc1f50d7c4f4ff352a543a4c5b7295944326421145d5b682779b1c47b441",
+    "architectural_handoff.txt": "81ee9949529640866eeaa19632508e1cef7f58526c6ee8911d63dfb401dffa0f"
+  },
+  "job_exists": true,
+  "completion_problems": [
+    "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+  ],
+  "current_completion_gate_passed": false,
+  "package_present": false,
+  "missing_outputs": [
+    "cfg.py",
+    "design/bim_package.json"
+  ]
+}

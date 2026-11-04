@@ -1,0 +1,32 @@
+{
+  "key": "hr22",
+  "case": "hr22",
+  "status": "exported",
+  "producer": "343e0ad6cca528ecb30d07408224dca3597451c6",
+  "package_sha256": "9132e5e4b4cfd5979c7ffc7f3776342eaba3ee04e0121a4253723eb36dfed25a",
+  "source_files_unchanged": true,
+  "original_recorded_package_unchanged": true,
+  "stored_readiness": "ready",
+  "findings": [],
+  "physical_counts": {
+    "analysis_only": 0,
+    "connections": 455,
+    "interfaces": 2,
+    "joint_dispositions": 0,
+    "joints": 455,
+    "materials": 8,
+    "members": 558,
+    "openings": 0,
+    "panels": 6,
+    "profiles": 12,
+    "record_dispositions": 0
+  },
+  "connection_parts": 2055,
+  "design_records": 26,
+  "seconds": 2.1822028160095215,
+  "llm_calls": 0,
+  "redesign": false,
+  "analysis_solve": false,
+  "drawings": false,
+  "supplements": false
+}

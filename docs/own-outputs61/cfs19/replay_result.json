@@ -1,0 +1,1074 @@
+{
+  "key": "cfs19",
+  "case": "cfs19",
+  "status": "exported",
+  "producer": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+  "package_sha256": "520db1aadcb0e0f0b72df9725fed82cfa19819e9863721974c8f64400eeb20c9",
+  "source_files_unchanged": true,
+  "original_recorded_package_unchanged": true,
+  "stored_readiness": "needs_input",
+  "findings": [
+    {
+      "code": "connection_selected_components",
+      "count": 22,
+      "entity_ids": [
+        "conn-j-post-N-0-base",
+        "conn-j-post-N-0-top",
+        "conn-j-post-N-120-base",
+        "conn-j-post-N-120-top",
+        "conn-j-post-N-240-base",
+        "conn-j-post-N-240-top",
+        "conn-j-post-N-360-base",
+        "conn-j-post-N-360-top",
+        "conn-j-post-N-480-base",
+        "conn-j-post-N-480-top",
+        "conn-j-post-S-0-base",
+        "conn-j-post-S-0-top",
+        "conn-j-post-S-120-base",
+        "conn-j-post-S-120-top",
+        "conn-j-post-S-160-base",
+        "conn-j-post-S-160-top",
+        "conn-j-post-S-320-base",
+        "conn-j-post-S-320-top",
+        "conn-j-post-S-360-base",
+        "conn-j-post-S-360-top",
+        "conn-j-post-S-480-base",
+        "conn-j-post-S-480-top"
+      ],
+      "examples": [
+        {
+          "connection_id": "conn-j-post-S-0-base",
+          "design_record_id": "schedules/sched-girt",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "plate bolt group anchor",
+          "selected_components": "800Z250-68 Gr50 girts at 6 ft o.c. (S/N walls above OH-1 head at 188/216/252 in only), 2x No.14 screws per flange per frame (S100 J4, phi=0.50 S2-20); OH-1 reframed with jamb posts at x=160/320 (clear of 168-312 opening) plus single-1400S250-97 header at z=176 (faces 169-183, clear of 168 head) with 4x No.14 screws per end"
+        },
+        {
+          "connection_id": "conn-j-post-S-0-top",
+          "design_record_id": "schedules/sched-girt",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "clip",
+          "selected_components": "800Z250-68 Gr50 girts at 6 ft o.c. (S/N walls above OH-1 head at 188/216/252 in only), 2x No.14 screws per flange per frame (S100 J4, phi=0.50 S2-20); OH-1 reframed with jamb posts at x=160/320 (clear of 168-312 opening) plus single-1400S250-97 header at z=176 (faces 169-183, clear of 168 head) with 4x No.14 screws per end"
+        },
+        {
+          "connection_id": "conn-j-post-S-120-base",
+          "design_record_id": "schedules/sched-girt",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "plate bolt group anchor",
+          "selected_components": "800Z250-68 Gr50 girts at 6 ft o.c. (S/N walls above OH-1 head at 188/216/252 in only), 2x No.14 screws per flange per frame (S100 J4, phi=0.50 S2-20); OH-1 reframed with jamb posts at x=160/320 (clear of 168-312 opening) plus single-1400S250-97 header at z=176 (faces 169-183, clear of 168 head) with 4x No.14 screws per end"
+        },
+        {
+          "connection_id": "conn-j-post-S-120-top",
+          "design_record_id": "schedules/sched-girt",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "clip",
+          "selected_components": "800Z250-68 Gr50 girts at 6 ft o.c. (S/N walls above OH-1 head at 188/216/252 in only), 2x No.14 screws per flange per frame (S100 J4, phi=0.50 S2-20); OH-1 reframed with jamb posts at x=160/320 (clear of 168-312 opening) plus single-1400S250-97 header at z=176 (faces 169-183, clear of 168 head) with 4x No.14 screws per end"
+        },
+        {
+          "connection_id": "conn-j-post-S-360-base",
+          "design_record_id": "schedules/sched-girt",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "plate bolt group anchor",
+          "selected_components": "800Z250-68 Gr50 girts at 6 ft o.c. (S/N walls above OH-1 head at 188/216/252 in only), 2x No.14 screws per flange per frame (S100 J4, phi=0.50 S2-20); OH-1 reframed with jamb posts at x=160/320 (clear of 168-312 opening) plus single-1400S250-97 header at z=176 (faces 169-183, clear of 168 head) with 4x No.14 screws per end"
+        },
+        {
+          "connection_id": "conn-j-post-S-360-top",
+          "design_record_id": "schedules/sched-girt",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "clip",
+          "selected_components": "800Z250-68 Gr50 girts at 6 ft o.c. (S/N walls above OH-1 head at 188/216/252 in only), 2x No.14 screws per flange per frame (S100 J4, phi=0.50 S2-20); OH-1 reframed with jamb posts at x=160/320 (clear of 168-312 opening) plus single-1400S250-97 header at z=176 (faces 169-183, clear of 168 head) with 4x No.14 screws per end"
+        },
+        {
+          "connection_id": "conn-j-post-S-480-base",
+          "design_record_id": "schedules/sched-girt",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "plate bolt group anchor",
+          "selected_components": "800Z250-68 Gr50 girts at 6 ft o.c. (S/N walls above OH-1 head at 188/216/252 in only), 2x No.14 screws per flange per frame (S100 J4, phi=0.50 S2-20); OH-1 reframed with jamb posts at x=160/320 (clear of 168-312 opening) plus single-1400S250-97 header at z=176 (faces 169-183, clear of 168 head) with 4x No.14 screws per end"
+        },
+        {
+          "connection_id": "conn-j-post-S-480-top",
+          "design_record_id": "schedules/sched-girt",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "clip",
+          "selected_components": "800Z250-68 Gr50 girts at 6 ft o.c. (S/N walls above OH-1 head at 188/216/252 in only), 2x No.14 screws per flange per frame (S100 J4, phi=0.50 S2-20); OH-1 reframed with jamb posts at x=160/320 (clear of 168-312 opening) plus single-1400S250-97 header at z=176 (faces 169-183, clear of 168 head) with 4x No.14 screws per end"
+        },
+        {
+          "connection_id": "conn-j-post-N-0-base",
+          "design_record_id": "schedules/sched-girt",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "plate bolt group anchor",
+          "selected_components": "800Z250-68 Gr50 girts at 6 ft o.c. (S/N walls above OH-1 head at 188/216/252 in only), 2x No.14 screws per flange per frame (S100 J4, phi=0.50 S2-20); OH-1 reframed with jamb posts at x=160/320 (clear of 168-312 opening) plus single-1400S250-97 header at z=176 (faces 169-183, clear of 168 head) with 4x No.14 screws per end"
+        },
+        {
+          "connection_id": "conn-j-post-N-0-top",
+          "design_record_id": "schedules/sched-girt",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "clip",
+          "selected_components": "800Z250-68 Gr50 girts at 6 ft o.c. (S/N walls above OH-1 head at 188/216/252 in only), 2x No.14 screws per flange per frame (S100 J4, phi=0.50 S2-20); OH-1 reframed with jamb posts at x=160/320 (clear of 168-312 opening) plus single-1400S250-97 header at z=176 (faces 169-183, clear of 168 head) with 4x No.14 screws per end"
+        },
+        {
+          "connection_id": "conn-j-post-N-120-base",
+          "design_record_id": "schedules/sched-girt",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "plate bolt group anchor",
+          "selected_components": "800Z250-68 Gr50 girts at 6 ft o.c. (S/N walls above OH-1 head at 188/216/252 in only), 2x No.14 screws per flange per frame (S100 J4, phi=0.50 S2-20); OH-1 reframed with jamb posts at x=160/320 (clear of 168-312 opening) plus single-1400S250-97 header at z=176 (faces 169-183, clear of 168 head) with 4x No.14 screws per end"
+        },
+        {
+          "connection_id": "conn-j-post-N-120-top",
+          "design_record_id": "schedules/sched-girt",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "clip",
+          "selected_components": "800Z250-68 Gr50 girts at 6 ft o.c. (S/N walls above OH-1 head at 188/216/252 in only), 2x No.14 screws per flange per frame (S100 J4, phi=0.50 S2-20); OH-1 reframed with jamb posts at x=160/320 (clear of 168-312 opening) plus single-1400S250-97 header at z=176 (faces 169-183, clear of 168 head) with 4x No.14 screws per end"
+        },
+        {
+          "connection_id": "conn-j-post-N-240-base",
+          "design_record_id": "schedules/sched-girt",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "plate bolt group anchor",
+          "selected_components": "800Z250-68 Gr50 girts at 6 ft o.c. (S/N walls above OH-1 head at 188/216/252 in only), 2x No.14 screws per flange per frame (S100 J4, phi=0.50 S2-20); OH-1 reframed with jamb posts at x=160/320 (clear of 168-312 opening) plus single-1400S250-97 header at z=176 (faces 169-183, clear of 168 head) with 4x No.14 screws per end"
+        },
+        {
+          "connection_id": "conn-j-post-N-240-top",
+          "design_record_id": "schedules/sched-girt",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "clip",
+          "selected_components": "800Z250-68 Gr50 girts at 6 ft o.c. (S/N walls above OH-1 head at 188/216/252 in only), 2x No.14 screws per flange per frame (S100 J4, phi=0.50 S2-20); OH-1 reframed with jamb posts at x=160/320 (clear of 168-312 opening) plus single-1400S250-97 header at z=176 (faces 169-183, clear of 168 head) with 4x No.14 screws per end"
+        },
+        {
+          "connection_id": "conn-j-post-N-360-base",
+          "design_record_id": "schedules/sched-girt",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "plate bolt group anchor",
+          "selected_components": "800Z250-68 Gr50 girts at 6 ft o.c. (S/N walls above OH-1 head at 188/216/252 in only), 2x No.14 screws per flange per frame (S100 J4, phi=0.50 S2-20); OH-1 reframed with jamb posts at x=160/320 (clear of 168-312 opening) plus single-1400S250-97 header at z=176 (faces 169-183, clear of 168 head) with 4x No.14 screws per end"
+        },
+        {
+          "connection_id": "conn-j-post-N-360-top",
+          "design_record_id": "schedules/sched-girt",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "clip",
+          "selected_components": "800Z250-68 Gr50 girts at 6 ft o.c. (S/N walls above OH-1 head at 188/216/252 in only), 2x No.14 screws per flange per frame (S100 J4, phi=0.50 S2-20); OH-1 reframed with jamb posts at x=160/320 (clear of 168-312 opening) plus single-1400S250-97 header at z=176 (faces 169-183, clear of 168 head) with 4x No.14 screws per end"
+        },
+        {
+          "connection_id": "conn-j-post-N-480-base",
+          "design_record_id": "schedules/sched-girt",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "plate bolt group anchor",
+          "selected_components": "800Z250-68 Gr50 girts at 6 ft o.c. (S/N walls above OH-1 head at 188/216/252 in only), 2x No.14 screws per flange per frame (S100 J4, phi=0.50 S2-20); OH-1 reframed with jamb posts at x=160/320 (clear of 168-312 opening) plus single-1400S250-97 header at z=176 (faces 169-183, clear of 168 head) with 4x No.14 screws per end"
+        },
+        {
+          "connection_id": "conn-j-post-N-480-top",
+          "design_record_id": "schedules/sched-girt",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "clip",
+          "selected_components": "800Z250-68 Gr50 girts at 6 ft o.c. (S/N walls above OH-1 head at 188/216/252 in only), 2x No.14 screws per flange per frame (S100 J4, phi=0.50 S2-20); OH-1 reframed with jamb posts at x=160/320 (clear of 168-312 opening) plus single-1400S250-97 header at z=176 (faces 169-183, clear of 168 head) with 4x No.14 screws per end"
+        },
+        {
+          "connection_id": "conn-j-post-S-160-base",
+          "design_record_id": "schedules/sched-girt",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "plate bolt group anchor",
+          "selected_components": "800Z250-68 Gr50 girts at 6 ft o.c. (S/N walls above OH-1 head at 188/216/252 in only), 2x No.14 screws per flange per frame (S100 J4, phi=0.50 S2-20); OH-1 reframed with jamb posts at x=160/320 (clear of 168-312 opening) plus single-1400S250-97 header at z=176 (faces 169-183, clear of 168 head) with 4x No.14 screws per end"
+        },
+        {
+          "connection_id": "conn-j-post-S-160-top",
+          "design_record_id": "schedules/sched-girt",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "clip",
+          "selected_components": "800Z250-68 Gr50 girts at 6 ft o.c. (S/N walls above OH-1 head at 188/216/252 in only), 2x No.14 screws per flange per frame (S100 J4, phi=0.50 S2-20); OH-1 reframed with jamb posts at x=160/320 (clear of 168-312 opening) plus single-1400S250-97 header at z=176 (faces 169-183, clear of 168 head) with 4x No.14 screws per end"
+        },
+        {
+          "connection_id": "conn-j-post-S-320-base",
+          "design_record_id": "schedules/sched-girt",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "plate bolt group anchor",
+          "selected_components": "800Z250-68 Gr50 girts at 6 ft o.c. (S/N walls above OH-1 head at 188/216/252 in only), 2x No.14 screws per flange per frame (S100 J4, phi=0.50 S2-20); OH-1 reframed with jamb posts at x=160/320 (clear of 168-312 opening) plus single-1400S250-97 header at z=176 (faces 169-183, clear of 168 head) with 4x No.14 screws per end"
+        },
+        {
+          "connection_id": "conn-j-post-S-320-top",
+          "design_record_id": "schedules/sched-girt",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "clip",
+          "selected_components": "800Z250-68 Gr50 girts at 6 ft o.c. (S/N walls above OH-1 head at 188/216/252 in only), 2x No.14 screws per flange per frame (S100 J4, phi=0.50 S2-20); OH-1 reframed with jamb posts at x=160/320 (clear of 168-312 opening) plus single-1400S250-97 header at z=176 (faces 169-183, clear of 168 head) with 4x No.14 screws per end"
+        }
+      ],
+      "message": "Located connection parts omit component categories explicitly selected in the linked design; export the actual parts/reference groups without relabelling an unrelated solid",
+      "severity": "needs_input"
+    },
+    {
+      "code": "connection_fastener_quantity",
+      "count": 101,
+      "entity_ids": [
+        "conn-apex-1",
+        "conn-apex-10",
+        "conn-apex-11",
+        "conn-apex-12",
+        "conn-apex-13",
+        "conn-apex-14",
+        "conn-apex-15",
+        "conn-apex-16",
+        "conn-apex-17",
+        "conn-apex-18",
+        "conn-apex-2",
+        "conn-apex-3",
+        "conn-apex-4",
+        "conn-apex-5",
+        "conn-apex-6",
+        "conn-apex-7",
+        "conn-apex-8",
+        "conn-apex-9",
+        "conn-base-L-1",
+        "conn-base-L-10",
+        "conn-base-L-11",
+        "conn-base-L-12",
+        "conn-base-L-13",
+        "conn-base-L-14",
+        "conn-base-L-15",
+        "conn-base-L-16",
+        "conn-base-L-17",
+        "conn-base-L-18",
+        "conn-base-L-2",
+        "conn-base-L-3",
+        "conn-base-L-4",
+        "conn-base-L-5",
+        "conn-base-L-6",
+        "conn-base-L-7",
+        "conn-base-L-8",
+        "conn-base-L-9",
+        "conn-base-R-1",
+        "conn-base-R-10",
+        "conn-base-R-11",
+        "conn-base-R-12",
+        "conn-base-R-13",
+        "conn-base-R-14",
+        "conn-base-R-15",
+        "conn-base-R-16",
+        "conn-base-R-17",
+        "conn-base-R-18",
+        "conn-base-R-2",
+        "conn-base-R-3",
+        "conn-base-R-4",
+        "conn-base-R-5",
+        "conn-base-R-6",
+        "conn-base-R-7",
+        "conn-base-R-8",
+        "conn-base-R-9",
+        "conn-j-post-N-0-base",
+        "conn-j-post-N-120-base",
+        "conn-j-post-N-240-base",
+        "conn-j-post-N-360-base",
+        "conn-j-post-N-480-base",
+        "conn-j-post-S-0-base",
+        "conn-j-post-S-120-base",
+        "conn-j-post-S-160-base",
+        "conn-j-post-S-320-base",
+        "conn-j-post-S-360-base",
+        "conn-j-post-S-480-base",
+        "conn-knee-L-1",
+        "conn-knee-L-10",
+        "conn-knee-L-11",
+        "conn-knee-L-12",
+        "conn-knee-L-13",
+        "conn-knee-L-14",
+        "conn-knee-L-15",
+        "conn-knee-L-16",
+        "conn-knee-L-17",
+        "conn-knee-L-18",
+        "conn-knee-L-2",
+        "conn-knee-L-3",
+        "conn-knee-L-4",
+        "conn-knee-L-5",
+        "conn-knee-L-6",
+        "conn-knee-L-7",
+        "conn-knee-L-8",
+        "conn-knee-L-9",
+        "conn-knee-R-1",
+        "conn-knee-R-10",
+        "conn-knee-R-11",
+        "conn-knee-R-12",
+        "conn-knee-R-13",
+        "conn-knee-R-14",
+        "conn-knee-R-15",
+        "conn-knee-R-16",
+        "conn-knee-R-17",
+        "conn-knee-R-18",
+        "conn-knee-R-2",
+        "conn-knee-R-3",
+        "conn-knee-R-4",
+        "conn-knee-R-5",
+        "conn-knee-R-6",
+        "conn-knee-R-7",
+        "conn-knee-R-8",
+        "conn-knee-R-9"
+      ],
+      "examples": [
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-L-1",
+          "declared_count": 16,
+          "part_id": "bolts-knee-L-1"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-R-1",
+          "declared_count": 16,
+          "part_id": "bolts-knee-R-1"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-apex-1",
+          "declared_count": 16,
+          "part_id": "bolts-apex-1"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-L-1",
+          "declared_count": 4,
+          "part_id": "anchors-base-L-1"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-R-1",
+          "declared_count": 4,
+          "part_id": "anchors-base-R-1"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-L-2",
+          "declared_count": 16,
+          "part_id": "bolts-knee-L-2"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-R-2",
+          "declared_count": 16,
+          "part_id": "bolts-knee-R-2"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-apex-2",
+          "declared_count": 16,
+          "part_id": "bolts-apex-2"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-L-2",
+          "declared_count": 4,
+          "part_id": "anchors-base-L-2"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-R-2",
+          "declared_count": 4,
+          "part_id": "anchors-base-R-2"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-L-3",
+          "declared_count": 16,
+          "part_id": "bolts-knee-L-3"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-R-3",
+          "declared_count": 16,
+          "part_id": "bolts-knee-R-3"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-apex-3",
+          "declared_count": 16,
+          "part_id": "bolts-apex-3"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-L-3",
+          "declared_count": 4,
+          "part_id": "anchors-base-L-3"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-R-3",
+          "declared_count": 4,
+          "part_id": "anchors-base-R-3"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-L-4",
+          "declared_count": 16,
+          "part_id": "bolts-knee-L-4"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-R-4",
+          "declared_count": 16,
+          "part_id": "bolts-knee-R-4"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-apex-4",
+          "declared_count": 16,
+          "part_id": "bolts-apex-4"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-L-4",
+          "declared_count": 4,
+          "part_id": "anchors-base-L-4"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-R-4",
+          "declared_count": 4,
+          "part_id": "anchors-base-R-4"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-L-5",
+          "declared_count": 16,
+          "part_id": "bolts-knee-L-5"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-R-5",
+          "declared_count": 16,
+          "part_id": "bolts-knee-R-5"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-apex-5",
+          "declared_count": 16,
+          "part_id": "bolts-apex-5"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-L-5",
+          "declared_count": 4,
+          "part_id": "anchors-base-L-5"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-R-5",
+          "declared_count": 4,
+          "part_id": "anchors-base-R-5"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-L-6",
+          "declared_count": 16,
+          "part_id": "bolts-knee-L-6"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-R-6",
+          "declared_count": 16,
+          "part_id": "bolts-knee-R-6"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-apex-6",
+          "declared_count": 16,
+          "part_id": "bolts-apex-6"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-L-6",
+          "declared_count": 4,
+          "part_id": "anchors-base-L-6"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-R-6",
+          "declared_count": 4,
+          "part_id": "anchors-base-R-6"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-L-7",
+          "declared_count": 16,
+          "part_id": "bolts-knee-L-7"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-R-7",
+          "declared_count": 16,
+          "part_id": "bolts-knee-R-7"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-apex-7",
+          "declared_count": 16,
+          "part_id": "bolts-apex-7"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-L-7",
+          "declared_count": 4,
+          "part_id": "anchors-base-L-7"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-R-7",
+          "declared_count": 4,
+          "part_id": "anchors-base-R-7"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-L-8",
+          "declared_count": 16,
+          "part_id": "bolts-knee-L-8"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-R-8",
+          "declared_count": 16,
+          "part_id": "bolts-knee-R-8"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-apex-8",
+          "declared_count": 16,
+          "part_id": "bolts-apex-8"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-L-8",
+          "declared_count": 4,
+          "part_id": "anchors-base-L-8"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-R-8",
+          "declared_count": 4,
+          "part_id": "anchors-base-R-8"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-L-9",
+          "declared_count": 16,
+          "part_id": "bolts-knee-L-9"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-R-9",
+          "declared_count": 16,
+          "part_id": "bolts-knee-R-9"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-apex-9",
+          "declared_count": 16,
+          "part_id": "bolts-apex-9"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-L-9",
+          "declared_count": 4,
+          "part_id": "anchors-base-L-9"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-R-9",
+          "declared_count": 4,
+          "part_id": "anchors-base-R-9"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-L-10",
+          "declared_count": 16,
+          "part_id": "bolts-knee-L-10"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-R-10",
+          "declared_count": 16,
+          "part_id": "bolts-knee-R-10"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-apex-10",
+          "declared_count": 16,
+          "part_id": "bolts-apex-10"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-L-10",
+          "declared_count": 4,
+          "part_id": "anchors-base-L-10"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-R-10",
+          "declared_count": 4,
+          "part_id": "anchors-base-R-10"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-L-11",
+          "declared_count": 16,
+          "part_id": "bolts-knee-L-11"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-R-11",
+          "declared_count": 16,
+          "part_id": "bolts-knee-R-11"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-apex-11",
+          "declared_count": 16,
+          "part_id": "bolts-apex-11"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-L-11",
+          "declared_count": 4,
+          "part_id": "anchors-base-L-11"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-R-11",
+          "declared_count": 4,
+          "part_id": "anchors-base-R-11"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-L-12",
+          "declared_count": 16,
+          "part_id": "bolts-knee-L-12"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-R-12",
+          "declared_count": 16,
+          "part_id": "bolts-knee-R-12"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-apex-12",
+          "declared_count": 16,
+          "part_id": "bolts-apex-12"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-L-12",
+          "declared_count": 4,
+          "part_id": "anchors-base-L-12"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-R-12",
+          "declared_count": 4,
+          "part_id": "anchors-base-R-12"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-L-13",
+          "declared_count": 16,
+          "part_id": "bolts-knee-L-13"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-R-13",
+          "declared_count": 16,
+          "part_id": "bolts-knee-R-13"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-apex-13",
+          "declared_count": 16,
+          "part_id": "bolts-apex-13"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-L-13",
+          "declared_count": 4,
+          "part_id": "anchors-base-L-13"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-R-13",
+          "declared_count": 4,
+          "part_id": "anchors-base-R-13"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-L-14",
+          "declared_count": 16,
+          "part_id": "bolts-knee-L-14"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-R-14",
+          "declared_count": 16,
+          "part_id": "bolts-knee-R-14"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-apex-14",
+          "declared_count": 16,
+          "part_id": "bolts-apex-14"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-L-14",
+          "declared_count": 4,
+          "part_id": "anchors-base-L-14"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-R-14",
+          "declared_count": 4,
+          "part_id": "anchors-base-R-14"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-L-15",
+          "declared_count": 16,
+          "part_id": "bolts-knee-L-15"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-R-15",
+          "declared_count": 16,
+          "part_id": "bolts-knee-R-15"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-apex-15",
+          "declared_count": 16,
+          "part_id": "bolts-apex-15"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-L-15",
+          "declared_count": 4,
+          "part_id": "anchors-base-L-15"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-R-15",
+          "declared_count": 4,
+          "part_id": "anchors-base-R-15"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-L-16",
+          "declared_count": 16,
+          "part_id": "bolts-knee-L-16"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-R-16",
+          "declared_count": 16,
+          "part_id": "bolts-knee-R-16"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-apex-16",
+          "declared_count": 16,
+          "part_id": "bolts-apex-16"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-L-16",
+          "declared_count": 4,
+          "part_id": "anchors-base-L-16"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-R-16",
+          "declared_count": 4,
+          "part_id": "anchors-base-R-16"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-L-17",
+          "declared_count": 16,
+          "part_id": "bolts-knee-L-17"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-R-17",
+          "declared_count": 16,
+          "part_id": "bolts-knee-R-17"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-apex-17",
+          "declared_count": 16,
+          "part_id": "bolts-apex-17"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-L-17",
+          "declared_count": 4,
+          "part_id": "anchors-base-L-17"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-R-17",
+          "declared_count": 4,
+          "part_id": "anchors-base-R-17"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-L-18",
+          "declared_count": 16,
+          "part_id": "bolts-knee-L-18"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-knee-R-18",
+          "declared_count": 16,
+          "part_id": "bolts-knee-R-18"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-apex-18",
+          "declared_count": 16,
+          "part_id": "bolts-apex-18"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-L-18",
+          "declared_count": 4,
+          "part_id": "anchors-base-L-18"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-base-R-18",
+          "declared_count": 4,
+          "part_id": "anchors-base-R-18"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-j-post-S-0-base",
+          "declared_count": 2,
+          "part_id": "postbolts-j-post-S-0-base"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-j-post-S-120-base",
+          "declared_count": 2,
+          "part_id": "postbolts-j-post-S-120-base"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-j-post-S-360-base",
+          "declared_count": 2,
+          "part_id": "postbolts-j-post-S-360-base"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-j-post-S-480-base",
+          "declared_count": 2,
+          "part_id": "postbolts-j-post-S-480-base"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-j-post-N-0-base",
+          "declared_count": 2,
+          "part_id": "postbolts-j-post-N-0-base"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-j-post-N-120-base",
+          "declared_count": 2,
+          "part_id": "postbolts-j-post-N-120-base"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-j-post-N-240-base",
+          "declared_count": 2,
+          "part_id": "postbolts-j-post-N-240-base"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-j-post-N-360-base",
+          "declared_count": 2,
+          "part_id": "postbolts-j-post-N-360-base"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-j-post-N-480-base",
+          "declared_count": 2,
+          "part_id": "postbolts-j-post-N-480-base"
+        },
+        {
+          "actual_distinct_solids": 1,
+          "category": "bolt",
+          "connection_id": "conn-j-post-S-160-base",
+          "declared_count": 2,
+          "part_id": "postbolts-j-post-S-160-base"
+        }
+      ],
+      "message": "A solid fastener count exceeds the distinct located fastener solids in its local design assembly; instantiate the actual checked pattern instead of multiplying a representative solid by a count label",
+      "severity": "needs_input"
+    }
+  ],
+  "physical_counts": {
+    "analysis_only": 0,
+    "connections": 647,
+    "interfaces": 1,
+    "joint_dispositions": 0,
+    "joints": 647,
+    "materials": 7,
+    "members": 164,
+    "openings": 3,
+    "panels": 6,
+    "profiles": 7,
+    "record_dispositions": 9
+  },
+  "connection_parts": 2945,
+  "design_records": 150,
+  "seconds": 2.1482341289520264,
+  "llm_calls": 0,
+  "redesign": false,
+  "analysis_solve": false,
+  "drawings": false,
+  "supplements": false
+}

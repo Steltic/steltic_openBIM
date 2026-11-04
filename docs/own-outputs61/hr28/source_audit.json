@@ -1,0 +1,24 @@
+{
+  "case": "hr28",
+  "key": "hr28",
+  "module": "HR",
+  "title": "STMF",
+  "project": "WFRESH61_hr28_20261103",
+  "source_run_status": "error",
+  "primary": true,
+  "files": {
+    "design/bim_request.json": "a6629cfca7ff642b796c93f32505eb1a775874f580892252e37e50b525b725e8",
+    "architectural_input.json": "ca5ebbe8ddbb2103a877f48fe77a8b01151287a733a122a5175881ab9a332d36",
+    "architectural_handoff.txt": "5faf1d8946d767bfc9621ae4af92fcb696c60328a06ea03a7b14271482ee768b"
+  },
+  "job_exists": true,
+  "completion_problems": [
+    "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+  ],
+  "current_completion_gate_passed": false,
+  "package_present": false,
+  "missing_outputs": [
+    "cfg.py",
+    "design/bim_package.json"
+  ]
+}

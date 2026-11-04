@@ -1,0 +1,10 @@
+{
+  "key": "cfs29_earlier",
+  "status": "unverifiable_input",
+  "reason": "No original architectural handoff matches the source package identity.",
+  "check_binding": {
+    "checker": "72bc7bb6c45509ef76ab60a17ace2f500637d5e358138bceece3d15121a72278",
+    "algorithms": "972e237fce8421ffa6b4be2f39cba5420bedfe1eed870a3f83934780b1eb33c4",
+    "returned_ifc": "ab2de4f45dfc7138cefcc20e36bef04d478619df6ba4f68ea6389ab151c39e2f"
+  }
+}

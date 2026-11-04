@@ -1,0 +1,969 @@
+{
+  "key": "hr13",
+  "case": "hr13",
+  "status": "exported",
+  "producer": "343e0ad6cca528ecb30d07408224dca3597451c6",
+  "package_sha256": "711cb73de810ddf33ce4aeae77639348a0ab96a242936962e6a45c4a5df81e8a",
+  "source_files_unchanged": true,
+  "original_recorded_package_unchanged": true,
+  "stored_readiness": "needs_input",
+  "findings": [
+    {
+      "code": "connection_duplicate_parts",
+      "count": 246,
+      "entity_ids": [
+        "C-100000",
+        "C-100001",
+        "C-100002",
+        "C-100003",
+        "C-100100",
+        "C-100101",
+        "C-100102",
+        "C-100103",
+        "C-100200",
+        "C-100201",
+        "C-100202",
+        "C-100203",
+        "C-100300",
+        "C-100301",
+        "C-100302",
+        "C-100303",
+        "C-100400",
+        "C-100401",
+        "C-100402",
+        "C-200400",
+        "C-200401",
+        "C-200402",
+        "C-200500",
+        "C-200501",
+        "C-200502",
+        "C-200600",
+        "C-200601",
+        "C-200602",
+        "C-200700",
+        "C-200701",
+        "C-200702",
+        "C-200800",
+        "C-200801",
+        "C-200802",
+        "C-300000",
+        "C-300001",
+        "C-300002",
+        "C-300003",
+        "C-300100",
+        "C-300101",
+        "C-300102",
+        "C-300103",
+        "C-300200",
+        "C-300201",
+        "C-300202",
+        "C-300203",
+        "C-300300",
+        "C-300301",
+        "C-300302",
+        "C-300303",
+        "C-300400",
+        "C-300401",
+        "C-300402",
+        "C-400400",
+        "C-400401",
+        "C-400402",
+        "C-400500",
+        "C-400501",
+        "C-400502",
+        "C-400600",
+        "C-400601",
+        "C-400602",
+        "C-400700",
+        "C-400701",
+        "C-400702",
+        "C-400800",
+        "C-400801",
+        "C-400802",
+        "C-500000",
+        "C-500001",
+        "C-500002",
+        "C-500003",
+        "C-500100",
+        "C-500101",
+        "C-500102",
+        "C-500103",
+        "C-500200",
+        "C-500201",
+        "C-500202",
+        "C-500203",
+        "C-500300",
+        "C-500301",
+        "C-500302",
+        "C-500303",
+        "C-500400",
+        "C-500401",
+        "C-500402",
+        "C-600000",
+        "C-600001",
+        "C-600002",
+        "C-600003",
+        "C-600100",
+        "C-600101",
+        "C-600102",
+        "C-600103",
+        "C-600200",
+        "C-600201",
+        "C-600202",
+        "C-600203",
+        "C-600300",
+        "C-600301",
+        "C-600302",
+        "C-600303",
+        "C-600400",
+        "C-600401",
+        "C-600402",
+        "C-8000000",
+        "C-8000001",
+        "C-8000002",
+        "C-8000003",
+        "C-8000004",
+        "C-8000005",
+        "C-8000006",
+        "C-8000007",
+        "C-8000008",
+        "C-8000009",
+        "C-8000010",
+        "C-8000011",
+        "C-8000012",
+        "C-8000013",
+        "C-8000014",
+        "C-8000015",
+        "C-8000016",
+        "C-8000017",
+        "C-8000018",
+        "C-8000019"
+      ],
+      "examples": [
+        {
+          "connection_id": "C-100000",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-307",
+            "P-316"
+          ]
+        },
+        {
+          "connection_id": "C-100001",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-328",
+            "P-337"
+          ]
+        },
+        {
+          "connection_id": "C-100002",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-360",
+            "P-369"
+          ]
+        },
+        {
+          "connection_id": "C-100003",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-389",
+            "P-398"
+          ]
+        },
+        {
+          "connection_id": "C-100100",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-410",
+            "P-419"
+          ]
+        },
+        {
+          "connection_id": "C-100101",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-439",
+            "P-448"
+          ]
+        },
+        {
+          "connection_id": "C-100101",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-439",
+            "P-457"
+          ]
+        },
+        {
+          "connection_id": "C-100101",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-439",
+            "P-466"
+          ]
+        },
+        {
+          "connection_id": "C-100102",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-475",
+            "P-484"
+          ]
+        },
+        {
+          "connection_id": "C-100102",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-475",
+            "P-493"
+          ]
+        },
+        {
+          "connection_id": "C-100102",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-475",
+            "P-502"
+          ]
+        },
+        {
+          "connection_id": "C-100103",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-511",
+            "P-520"
+          ]
+        },
+        {
+          "connection_id": "C-100103",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-511",
+            "P-529"
+          ]
+        },
+        {
+          "connection_id": "C-100200",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-541",
+            "P-550"
+          ]
+        },
+        {
+          "connection_id": "C-100201",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-570",
+            "P-579"
+          ]
+        },
+        {
+          "connection_id": "C-100201",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-570",
+            "P-588"
+          ]
+        },
+        {
+          "connection_id": "C-100201",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-570",
+            "P-597"
+          ]
+        },
+        {
+          "connection_id": "C-100202",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-606",
+            "P-615"
+          ]
+        },
+        {
+          "connection_id": "C-100202",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-606",
+            "P-624"
+          ]
+        },
+        {
+          "connection_id": "C-100202",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-606",
+            "P-633"
+          ]
+        },
+        {
+          "connection_id": "C-100203",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-645",
+            "P-654"
+          ]
+        },
+        {
+          "connection_id": "C-100300",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-674",
+            "P-683"
+          ]
+        },
+        {
+          "connection_id": "C-100300",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-674",
+            "P-692"
+          ]
+        },
+        {
+          "connection_id": "C-100301",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-701",
+            "P-710"
+          ]
+        },
+        {
+          "connection_id": "C-100301",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-701",
+            "P-719"
+          ]
+        },
+        {
+          "connection_id": "C-100301",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-701",
+            "P-728"
+          ]
+        },
+        {
+          "connection_id": "C-100302",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-737",
+            "P-746"
+          ]
+        },
+        {
+          "connection_id": "C-100302",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-737",
+            "P-755"
+          ]
+        },
+        {
+          "connection_id": "C-100302",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-737",
+            "P-764"
+          ]
+        },
+        {
+          "connection_id": "C-100303",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-776",
+            "P-785"
+          ]
+        },
+        {
+          "connection_id": "C-100400",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-805",
+            "P-814"
+          ]
+        },
+        {
+          "connection_id": "C-100401",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-823",
+            "P-832"
+          ]
+        },
+        {
+          "connection_id": "C-100401",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-823",
+            "P-841"
+          ]
+        },
+        {
+          "connection_id": "C-100402",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-853",
+            "P-862"
+          ]
+        },
+        {
+          "connection_id": "C-200400",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-905",
+            "P-914"
+          ]
+        },
+        {
+          "connection_id": "C-200401",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-923",
+            "P-932"
+          ]
+        },
+        {
+          "connection_id": "C-200401",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-923",
+            "P-941"
+          ]
+        },
+        {
+          "connection_id": "C-200402",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-950",
+            "P-959"
+          ]
+        },
+        {
+          "connection_id": "C-200500",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-971",
+            "P-980"
+          ]
+        },
+        {
+          "connection_id": "C-200500",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-971",
+            "P-989"
+          ]
+        },
+        {
+          "connection_id": "C-200501",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1002",
+            "P-1011"
+          ]
+        },
+        {
+          "connection_id": "C-200501",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1002",
+            "P-1020"
+          ]
+        },
+        {
+          "connection_id": "C-200501",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1002",
+            "P-1029"
+          ]
+        },
+        {
+          "connection_id": "C-200502",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1042",
+            "P-1051"
+          ]
+        },
+        {
+          "connection_id": "C-200600",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1074",
+            "P-1083"
+          ]
+        },
+        {
+          "connection_id": "C-200601",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1103",
+            "P-1112"
+          ]
+        },
+        {
+          "connection_id": "C-200601",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1103",
+            "P-1121"
+          ]
+        },
+        {
+          "connection_id": "C-200601",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1103",
+            "P-1130"
+          ]
+        },
+        {
+          "connection_id": "C-200602",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1142",
+            "P-1151"
+          ]
+        },
+        {
+          "connection_id": "C-200700",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1174",
+            "P-1183"
+          ]
+        },
+        {
+          "connection_id": "C-200701",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1203",
+            "P-1212"
+          ]
+        },
+        {
+          "connection_id": "C-200701",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1203",
+            "P-1221"
+          ]
+        },
+        {
+          "connection_id": "C-200701",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1203",
+            "P-1230"
+          ]
+        },
+        {
+          "connection_id": "C-200702",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1239",
+            "P-1248"
+          ]
+        },
+        {
+          "connection_id": "C-200702",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1239",
+            "P-1257"
+          ]
+        },
+        {
+          "connection_id": "C-200800",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1266",
+            "P-1275"
+          ]
+        },
+        {
+          "connection_id": "C-200801",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1287",
+            "P-1296"
+          ]
+        },
+        {
+          "connection_id": "C-200801",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1287",
+            "P-1305"
+          ]
+        },
+        {
+          "connection_id": "C-200802",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1318",
+            "P-1327"
+          ]
+        },
+        {
+          "connection_id": "C-300000",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1342",
+            "P-1351"
+          ]
+        },
+        {
+          "connection_id": "C-300001",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1364",
+            "P-1373"
+          ]
+        },
+        {
+          "connection_id": "C-300002",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1397",
+            "P-1406"
+          ]
+        },
+        {
+          "connection_id": "C-300003",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1431",
+            "P-1440"
+          ]
+        },
+        {
+          "connection_id": "C-300100",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1453",
+            "P-1462"
+          ]
+        },
+        {
+          "connection_id": "C-300101",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1487",
+            "P-1496"
+          ]
+        },
+        {
+          "connection_id": "C-300101",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1487",
+            "P-1505"
+          ]
+        },
+        {
+          "connection_id": "C-300101",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1487",
+            "P-1514"
+          ]
+        },
+        {
+          "connection_id": "C-300102",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1528",
+            "P-1537"
+          ]
+        },
+        {
+          "connection_id": "C-300102",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1528",
+            "P-1546"
+          ]
+        },
+        {
+          "connection_id": "C-300102",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1528",
+            "P-1555"
+          ]
+        },
+        {
+          "connection_id": "C-300103",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1569",
+            "P-1578"
+          ]
+        },
+        {
+          "connection_id": "C-300103",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1569",
+            "P-1587"
+          ]
+        },
+        {
+          "connection_id": "C-300200",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1600",
+            "P-1609"
+          ]
+        },
+        {
+          "connection_id": "C-300201",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1634",
+            "P-1643"
+          ]
+        },
+        {
+          "connection_id": "C-300201",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1634",
+            "P-1652"
+          ]
+        },
+        {
+          "connection_id": "C-300201",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1634",
+            "P-1661"
+          ]
+        },
+        {
+          "connection_id": "C-300202",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1675",
+            "P-1684"
+          ]
+        },
+        {
+          "connection_id": "C-300202",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1675",
+            "P-1693"
+          ]
+        },
+        {
+          "connection_id": "C-300202",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1675",
+            "P-1702"
+          ]
+        },
+        {
+          "connection_id": "C-300203",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1715",
+            "P-1724"
+          ]
+        },
+        {
+          "connection_id": "C-300300",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1749",
+            "P-1758"
+          ]
+        },
+        {
+          "connection_id": "C-300300",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1749",
+            "P-1767"
+          ]
+        },
+        {
+          "connection_id": "C-300301",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1781",
+            "P-1790"
+          ]
+        },
+        {
+          "connection_id": "C-300301",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1781",
+            "P-1799"
+          ]
+        },
+        {
+          "connection_id": "C-300301",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1781",
+            "P-1808"
+          ]
+        },
+        {
+          "connection_id": "C-300302",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1822",
+            "P-1831"
+          ]
+        },
+        {
+          "connection_id": "C-300302",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1822",
+            "P-1840"
+          ]
+        },
+        {
+          "connection_id": "C-300302",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1822",
+            "P-1849"
+          ]
+        },
+        {
+          "connection_id": "C-300303",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1862",
+            "P-1871"
+          ]
+        },
+        {
+          "connection_id": "C-300400",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1896",
+            "P-1905"
+          ]
+        },
+        {
+          "connection_id": "C-300401",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1919",
+            "P-1928"
+          ]
+        },
+        {
+          "connection_id": "C-300401",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1919",
+            "P-1937"
+          ]
+        },
+        {
+          "connection_id": "C-300402",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-1950",
+            "P-1959"
+          ]
+        },
+        {
+          "connection_id": "C-400400",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-2003",
+            "P-2012"
+          ]
+        },
+        {
+          "connection_id": "C-400401",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-2021",
+            "P-2030"
+          ]
+        },
+        {
+          "connection_id": "C-400401",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-2021",
+            "P-2039"
+          ]
+        },
+        {
+          "connection_id": "C-400402",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-2048",
+            "P-2057"
+          ]
+        },
+        {
+          "connection_id": "C-400500",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-2066",
+            "P-2075"
+          ]
+        },
+        {
+          "connection_id": "C-400500",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-2066",
+            "P-2084"
+          ]
+        },
+        {
+          "connection_id": "C-400501",
+          "kind": "fillet weld tab to support",
+          "part_ids": [
+            "P-2096",
+            "P-2105"
+          ]
+        }
+      ],
+      "message": "Distinct component IDs repeat identical solid geometry inside the same assembly; resolve actual placement or duplicate emission, without dropping a required component",
+      "severity": "needs_input"
+    }
+  ],
+  "physical_counts": {
+    "analysis_only": 0,
+    "connections": 162,
+    "interfaces": 0,
+    "joint_dispositions": 0,
+    "joints": 162,
+    "materials": 7,
+    "members": 342,
+    "openings": 102,
+    "panels": 38,
+    "profiles": 11,
+    "record_dispositions": 15
+  },
+  "connection_parts": 3544,
+  "design_records": 35,
+  "seconds": 2.345982789993286,
+  "llm_calls": 0,
+  "redesign": false,
+  "analysis_solve": false,
+  "drawings": false,
+  "supplements": false
+}

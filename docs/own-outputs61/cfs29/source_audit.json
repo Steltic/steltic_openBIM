@@ -1,0 +1,2100 @@
+{
+  "case": "cfs29",
+  "key": "cfs29",
+  "module": "CFS",
+  "title": "Strap-braced mezzanine",
+  "project": "WFRESH61_cfs29_20261103",
+  "source_run_status": "error",
+  "primary": true,
+  "files": {
+    "cfg.py": "757717d24eb9f747f3bbc3109baeb6a0ca55ebcda18f089d086f96c8bc52c5c8",
+    "design/calc_package_cfs.json": "b3611b5210131ab659489488296940c4f85bf94fde37a940e66b8e0e88c6b5bf",
+    "design/bim_package.json": "64a8ca91f358e8712abb85b37a8d10f306f36fe60dc6400678f10a450155912d",
+    "design/consistency_result.json": "28b85b057793726ebd8f71451904b8d6979ac5711167410e7ed766c47c42ff40",
+    "design/bim_request.json": "3e606cb63102eb460a9ddc66c27e05e35427f320977104e3555ce659bf0e861c",
+    "architectural_input.json": "301e48eb6059493c4e3653c4b9d5ab27ac93809e506a0aa162a34afe11dac962",
+    "architectural_handoff.txt": "a7137d0c6134f98df0f660771c3ccced9c831739c08a9efde7ab200f5c35ea79"
+  },
+  "job_exists": true,
+  "completion_problems": [
+    "BIM export is stale; rerun consistency.check or BIM replay"
+  ],
+  "current_completion_gate_passed": false,
+  "package_present": true,
+  "stored_readiness": "ready",
+  "provenance": {
+    "analysis_executed": false,
+    "engine_files": {
+      "aisc_shapes.csv": "fbb655067c9e7e77c9ade032f917b5af4a95f8ee6660f7db47573bccd07727d0",
+      "architectural_input.py": "66636d505e963da6e98963af37d0850092e17a14dd92de4dca4512471abdf5aa",
+      "bim_adapter.py": "ed75c91a71618a49fe99a0cb88108e8d81a2ffad30bc00198a15abcd661b3190",
+      "bim_contract.py": "5256ab28fff573951934740ebbf71a15a83132ad51880cb4df0b7c4938dc2081",
+      "bim_export.py": "396e079986ba4171986e26a4414580f802c52fbd7c9d4d891f980141232bf69d",
+      "bim_package.schema.json": "fc77621224e0aef4d75cccbcca2820c0be48710b6c6dbe131a0ebcb62db85b4e",
+      "build_cfs_models.py": "85670ba24dc97c4a046771be2034d1fe190a1a8e7036267899b6c54b91df00ec",
+      "cfs_engine.py": "d71558210d2333d8c47b943e4588b5fd8be2940ced82ad2dbe5a82985c1fefde",
+      "cfs_frame.py": "4ac5df87a55492c84e8591bd5640b7f87477e1a3d667c6372844e80d2c842d28",
+      "cfs_gates.py": "4df390650c78fc67c65bd84c7f31a45b723c6c0665065ba4a64ae6cf1206c8d2",
+      "cfs_pipeline.py": "167ce20c4d752db9920ee2c7f7ca769b677b97e957152191296d5b0fa4f680fd",
+      "cfs_sections.py": "f0502b4621636c0b899a29f0221d297611f4dc9de6617c33c9456a35dae69fce",
+      "cfs_shapes.csv": "c43f2ce3bc10f3feb5a54d9025f6a3cf9c772723c69e85a95025867cf7384a41",
+      "cfs_systems.py": "f83d3da5b7405b7b09ff774de7b4a44c278badc37b39839f89905701093a8eeb",
+      "cfs_viewer3d.py": "76e237bbc09a3bd517511cdeaf11bcd0706ebcdce59f71cc3b434347af032ea7",
+      "consistency.py": "b575eec3688c324453a79d646849a60c224e5ef0f781edf2925b1ba15eb3830d",
+      "design_pipeline.py": "1c0980b14ba06f1a2bf75f9afa58ab62d8cc6c1a8952c160b67f9bc733894d1e",
+      "design_post.py": "0fdcca4600fd9b40fd5841e22412566cdd2fdb38c8ef77e7e7852ba2363617f0",
+      "eff_stiffness.py": "0807a2f9196b5317eb635faa14a4837da71dccb1d1fba16cbbd337aa5cd357e2",
+      "engine3d.py": "6f2573e4f787e5c1b6ecabe19b30ba291ec2a5acd866328ad8b639cd44eac149",
+      "example_build.py": "20b2d5c66e129f7f421945078bda743e093aad8d1a8384931efc5a907adbd00a",
+      "extract_sfia.py": "96a6a12dd369e6a97ea1985ea630c6badbd1891ae02640e75de4a34308c27cc2",
+      "frame_diagram.py": "f516fd69637a180ee1b89a53769774905bfd0bf30f964c02575bedfa03e9a8c3",
+      "pipeline.py": "6dc646b73cf3eb865e7e90b3de181b4f3e70271131190d7ca4202987afb0638d",
+      "plot_model.py": "aa6ad976d994a08e12c26eb7683d5b08ae746aed8d31c66bb995cb18ce3f4ed9",
+      "preflight.py": "9097f278c742b10bd620de270538e3b824a5b1a8d460cdbba7349be13fd55831",
+      "report.py": "a0e370350bc4a8f51a72ab2e2bb1a7adcac17280b12834d7336a8dc0f0825485",
+      "sections.py": "11df74a1d20ba7dd84866d6c940eac7d64d9695658695ebd28efdd8c43f21c58",
+      "sfia_oracle_axial_lateral.csv": "2cd74c1b805f63be32e2909bd7b0fbb7bca9b644544e4c98c7841b820253d4b8",
+      "sfia_oracle_headers.csv": "c84aa6d04e5b1fc60857c156baca272cd7aa264a26171bae4dea03e685f1296a",
+      "sfia_oracle_joist_spans.csv": "fd2f96be9c04d6997a20ebef2ea1add6dd1d5a9de1eb06beda396124baf6d6e8",
+      "sfia_oracle_limiting_heights.csv": "cff2c38e80249654c686c9e196681964a98549be718fdcdb5fcd98aea24e1d09",
+      "sfia_oracle_web_crippling.csv": "94f78d4898b8826bdac1cc1c430cdc0e62a24206d6a5a4f2aafde06f2c8ef34c",
+      "static_model.py": "f1fc1faaa353aca1ec19eb6ca411e8fad30c240c0e2756d3f6cd578f97c1f8d6",
+      "test_span_tables.py": "6e28bc4eef0fcbcfd1def0b89ddbd8a059c7832669b70f01f9bec15250ccb3f5",
+      "viewer3d.py": "8dffc664cf6de99835670c5d1b5dc87aaec66803cb7d837563e79b3014abfb79",
+      "viz3d.py": "d2ec83cd959a5e04b84c2ecaad8779a0998680ebd8488b8ffc3c67fefe8fe602",
+      "wall_line.py": "8e77c9968f22ef2419c504414554c2208119a443c71e5e2f092d061f37e9b9aa"
+    },
+    "engine_version": "wall_line physical declarations; no spring solve",
+    "exporter_revision": null,
+    "mode": "model_only_replay",
+    "module": "CFS",
+    "package_file": "calc_package_cfs.json",
+    "producer_revision": null
+  },
+  "declared_source_files": {
+    "architectural_handoff.txt": "a7137d0c6134f98df0f660771c3ccced9c831739c08a9efde7ab200f5c35ea79",
+    "architectural_input.json": "301e48eb6059493c4e3653c4b9d5ab27ac93809e506a0aa162a34afe11dac962",
+    "bim_gen.py": "f0eb350503d4955f01de76c7153db858824883146188dcdada9931a2a14923b6",
+    "bim_inputs.json": "b90a549fff8dab748e020faca4033f54437d9172c7f75f5a3a0d7616c8faa4b5",
+    "bim_model.py": "118e9726cbdc66660e113f192ba44fb088a9537fd6965be6d869fd79b532072a",
+    "cfg.py": "757717d24eb9f747f3bbc3109baeb6a0ca55ebcda18f089d086f96c8bc52c5c8",
+    "design/bim_request.json": "3e606cb63102eb460a9ddc66c27e05e35427f320977104e3555ce659bf0e861c",
+    "design/calc_package_cfs.json": "b3611b5210131ab659489488296940c4f85bf94fde37a940e66b8e0e88c6b5bf",
+    "design/consistency_result.json": "28b85b057793726ebd8f71451904b8d6979ac5711167410e7ed766c47c42ff40",
+    "physical_layout.json": "e0f5478e240a073852acda85c93367a8d91dfea263b3d6913f2996f785938f5a",
+    "verify_clear.py": "fa2f297aa7954349f63c05b19a4bf824295ef04252db2102a2442f59902d8d58",
+    "viewer_3d.html": "bf5057a6f4264dd1003c036d9522020942d874075b528ad31da34c255c4d9e0c"
+  },
+  "physical_counts": {
+    "analysis_only": 0,
+    "connections": 291,
+    "interfaces": 2,
+    "joint_dispositions": 33,
+    "joints": 305,
+    "materials": 7,
+    "members": 203,
+    "openings": 1,
+    "panels": 23,
+    "profiles": 7,
+    "record_dispositions": 38
+  },
+  "design_records": 77,
+  "source_kind": "CFS",
+  "require_connection_parts": true,
+  "current_validation": {
+    "status": "needs_input",
+    "source_freshness_checked": false,
+    "findings": [
+      {
+        "code": "joint_disposition_kind",
+        "message": "Classify this unconnected joint as free_end, continuous_member, bearing_interface or shared_connection; a typical-detail note is not a located occurrence",
+        "entity_ids": [
+          "joint-guard-G1-top",
+          "joint-guard-G10-top",
+          "joint-guard-G11-top",
+          "joint-guard-G12-top",
+          "joint-guard-G13-top",
+          "joint-guard-G14-top",
+          "joint-guard-G15-top",
+          "joint-guard-G16-top",
+          "joint-guard-G17-top",
+          "joint-guard-G18-top",
+          "joint-guard-G19-top",
+          "joint-guard-G2-top",
+          "joint-guard-G20-top",
+          "joint-guard-G21-top",
+          "joint-guard-G22-top",
+          "joint-guard-G23-top",
+          "joint-guard-G24-top",
+          "joint-guard-G25-top",
+          "joint-guard-G26-top",
+          "joint-guard-G27-top",
+          "joint-guard-G28-top",
+          "joint-guard-G29-top",
+          "joint-guard-G3-top",
+          "joint-guard-G30-top",
+          "joint-guard-G31-top",
+          "joint-guard-G32-top",
+          "joint-guard-G33-top",
+          "joint-guard-G4-top",
+          "joint-guard-G5-top",
+          "joint-guard-G6-top",
+          "joint-guard-G7-top",
+          "joint-guard-G8-top",
+          "joint-guard-G9-top"
+        ],
+        "severity": "needs_input"
+      },
+      {
+        "code": "connection_fastener_quantity",
+        "message": "A solid fastener count exceeds the distinct located fastener solids in its local design assembly; instantiate the actual checked pattern instead of multiplying a representative solid by a count label",
+        "entity_ids": [
+          "cx-base-post-P1",
+          "cx-base-post-P10",
+          "cx-base-post-P11",
+          "cx-base-post-P12",
+          "cx-base-post-P13",
+          "cx-base-post-P14",
+          "cx-base-post-P15",
+          "cx-base-post-P16",
+          "cx-base-post-P17",
+          "cx-base-post-P18",
+          "cx-base-post-P2",
+          "cx-base-post-P3",
+          "cx-base-post-P4",
+          "cx-base-post-P5",
+          "cx-base-post-P6",
+          "cx-base-post-P7",
+          "cx-base-post-P8",
+          "cx-base-post-P9",
+          "cx-base-post-stair",
+          "cx-guard-G1-base",
+          "cx-guard-G10-base",
+          "cx-guard-G11-base",
+          "cx-guard-G12-base",
+          "cx-guard-G13-base",
+          "cx-guard-G14-base",
+          "cx-guard-G15-base",
+          "cx-guard-G16-base",
+          "cx-guard-G17-base",
+          "cx-guard-G18-base",
+          "cx-guard-G19-base",
+          "cx-guard-G2-base",
+          "cx-guard-G20-base",
+          "cx-guard-G21-base",
+          "cx-guard-G22-base",
+          "cx-guard-G23-base",
+          "cx-guard-G24-base",
+          "cx-guard-G25-base",
+          "cx-guard-G26-base",
+          "cx-guard-G27-base",
+          "cx-guard-G28-base",
+          "cx-guard-G29-base",
+          "cx-guard-G3-base",
+          "cx-guard-G30-base",
+          "cx-guard-G31-base",
+          "cx-guard-G32-base",
+          "cx-guard-G33-base",
+          "cx-guard-G4-base",
+          "cx-guard-G5-base",
+          "cx-guard-G6-base",
+          "cx-guard-G7-base",
+          "cx-guard-G8-base",
+          "cx-guard-G9-base",
+          "cx-joist-J1-end",
+          "cx-joist-J1-start",
+          "cx-joist-J10-end",
+          "cx-joist-J10-start",
+          "cx-joist-J11-end",
+          "cx-joist-J11-start",
+          "cx-joist-J12-end",
+          "cx-joist-J12-start",
+          "cx-joist-J13-end",
+          "cx-joist-J13-start",
+          "cx-joist-J14-end",
+          "cx-joist-J14-start",
+          "cx-joist-J15-end",
+          "cx-joist-J15-start",
+          "cx-joist-J16-end",
+          "cx-joist-J16-start",
+          "cx-joist-J17-end",
+          "cx-joist-J17-start",
+          "cx-joist-J18-end",
+          "cx-joist-J18-start",
+          "cx-joist-J19-end",
+          "cx-joist-J19-start",
+          "cx-joist-J2-end",
+          "cx-joist-J2-start",
+          "cx-joist-J20-end",
+          "cx-joist-J20-start",
+          "cx-joist-J21-end",
+          "cx-joist-J21-start",
+          "cx-joist-J22-end",
+          "cx-joist-J22-start",
+          "cx-joist-J23-end",
+          "cx-joist-J23-start",
+          "cx-joist-J24-end",
+          "cx-joist-J24-start",
+          "cx-joist-J25-end",
+          "cx-joist-J25-start",
+          "cx-joist-J26-end",
+          "cx-joist-J26-start",
+          "cx-joist-J27-end",
+          "cx-joist-J27-start",
+          "cx-joist-J28-end",
+          "cx-joist-J28-start",
+          "cx-joist-J29-end",
+          "cx-joist-J29-start",
+          "cx-joist-J3-end",
+          "cx-joist-J3-start",
+          "cx-joist-J30-end",
+          "cx-joist-J30-start",
+          "cx-joist-J31-end",
+          "cx-joist-J31-start",
+          "cx-joist-J32-end",
+          "cx-joist-J32-start",
+          "cx-joist-J33-end",
+          "cx-joist-J33-start",
+          "cx-joist-J34-end",
+          "cx-joist-J34-start",
+          "cx-joist-J35-end",
+          "cx-joist-J35-start",
+          "cx-joist-J36-end",
+          "cx-joist-J36-start",
+          "cx-joist-J37-end",
+          "cx-joist-J37-start",
+          "cx-joist-J38-end",
+          "cx-joist-J38-start",
+          "cx-joist-J39-end",
+          "cx-joist-J39-start",
+          "cx-joist-J4-end",
+          "cx-joist-J4-start",
+          "cx-joist-J40-end",
+          "cx-joist-J40-start",
+          "cx-joist-J41-end",
+          "cx-joist-J41-start",
+          "cx-joist-J42-end",
+          "cx-joist-J42-start",
+          "cx-joist-J43-end",
+          "cx-joist-J43-start",
+          "cx-joist-J44-end",
+          "cx-joist-J44-start",
+          "cx-joist-J45-end",
+          "cx-joist-J45-start",
+          "cx-joist-J46-end",
+          "cx-joist-J46-start",
+          "cx-joist-J47-end",
+          "cx-joist-J47-start",
+          "cx-joist-J48-end",
+          "cx-joist-J48-start",
+          "cx-joist-J49-end",
+          "cx-joist-J49-start",
+          "cx-joist-J5-end",
+          "cx-joist-J5-start",
+          "cx-joist-J50-end",
+          "cx-joist-J50-start",
+          "cx-joist-J51-end",
+          "cx-joist-J51-start",
+          "cx-joist-J52-end",
+          "cx-joist-J52-start",
+          "cx-joist-J53-end",
+          "cx-joist-J53-start",
+          "cx-joist-J54-end",
+          "cx-joist-J54-start",
+          "cx-joist-J55-end",
+          "cx-joist-J55-start",
+          "cx-joist-J56-end",
+          "cx-joist-J56-start",
+          "cx-joist-J57-end",
+          "cx-joist-J57-start",
+          "cx-joist-J58-end",
+          "cx-joist-J58-start",
+          "cx-joist-J59-end",
+          "cx-joist-J59-start",
+          "cx-joist-J6-end",
+          "cx-joist-J6-start",
+          "cx-joist-J60-end",
+          "cx-joist-J60-start",
+          "cx-joist-J61-end",
+          "cx-joist-J61-start",
+          "cx-joist-J62-end",
+          "cx-joist-J62-start",
+          "cx-joist-J63-end",
+          "cx-joist-J63-start",
+          "cx-joist-J64-end",
+          "cx-joist-J64-start",
+          "cx-joist-J65-end",
+          "cx-joist-J65-start",
+          "cx-joist-J66-end",
+          "cx-joist-J66-start",
+          "cx-joist-J67-end",
+          "cx-joist-J67-start",
+          "cx-joist-J68-end",
+          "cx-joist-J68-start",
+          "cx-joist-J69-end",
+          "cx-joist-J69-start",
+          "cx-joist-J7-end",
+          "cx-joist-J7-start",
+          "cx-joist-J70-end",
+          "cx-joist-J70-start",
+          "cx-joist-J71-end",
+          "cx-joist-J71-start",
+          "cx-joist-J72-end",
+          "cx-joist-J72-start",
+          "cx-joist-J73-end",
+          "cx-joist-J73-start",
+          "cx-joist-J74-end",
+          "cx-joist-J74-start",
+          "cx-joist-J75-end",
+          "cx-joist-J75-start",
+          "cx-joist-J76-end",
+          "cx-joist-J76-start",
+          "cx-joist-J77-end",
+          "cx-joist-J77-start",
+          "cx-joist-J78-end",
+          "cx-joist-J78-start",
+          "cx-joist-J79-end",
+          "cx-joist-J79-start",
+          "cx-joist-J8-end",
+          "cx-joist-J8-start",
+          "cx-joist-J80-end",
+          "cx-joist-J80-start",
+          "cx-joist-J81-end",
+          "cx-joist-J81-start",
+          "cx-joist-J82-end",
+          "cx-joist-J82-start",
+          "cx-joist-J83-end",
+          "cx-joist-J83-start",
+          "cx-joist-J84-end",
+          "cx-joist-J84-start",
+          "cx-joist-J85-end",
+          "cx-joist-J85-start",
+          "cx-joist-J86-end",
+          "cx-joist-J86-start",
+          "cx-joist-J87-end",
+          "cx-joist-J87-start",
+          "cx-joist-J88-end",
+          "cx-joist-J88-start",
+          "cx-joist-J9-end",
+          "cx-joist-J9-start"
+        ],
+        "severity": "needs_input",
+        "count": 247,
+        "examples": [
+          {
+            "connection_id": "cx-base-post-P1",
+            "part_id": "cx-base-post-P1-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P1",
+            "part_id": "cx-base-post-P1-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P2",
+            "part_id": "cx-base-post-P2-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P2",
+            "part_id": "cx-base-post-P2-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P3",
+            "part_id": "cx-base-post-P3-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P3",
+            "part_id": "cx-base-post-P3-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P4",
+            "part_id": "cx-base-post-P4-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P4",
+            "part_id": "cx-base-post-P4-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P5",
+            "part_id": "cx-base-post-P5-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P5",
+            "part_id": "cx-base-post-P5-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P6",
+            "part_id": "cx-base-post-P6-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P6",
+            "part_id": "cx-base-post-P6-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P7",
+            "part_id": "cx-base-post-P7-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P7",
+            "part_id": "cx-base-post-P7-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P8",
+            "part_id": "cx-base-post-P8-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P8",
+            "part_id": "cx-base-post-P8-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P9",
+            "part_id": "cx-base-post-P9-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P9",
+            "part_id": "cx-base-post-P9-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P10",
+            "part_id": "cx-base-post-P10-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P10",
+            "part_id": "cx-base-post-P10-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P11",
+            "part_id": "cx-base-post-P11-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P11",
+            "part_id": "cx-base-post-P11-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P12",
+            "part_id": "cx-base-post-P12-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P12",
+            "part_id": "cx-base-post-P12-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P13",
+            "part_id": "cx-base-post-P13-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P13",
+            "part_id": "cx-base-post-P13-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P14",
+            "part_id": "cx-base-post-P14-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P14",
+            "part_id": "cx-base-post-P14-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P15",
+            "part_id": "cx-base-post-P15-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P15",
+            "part_id": "cx-base-post-P15-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P16",
+            "part_id": "cx-base-post-P16-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P16",
+            "part_id": "cx-base-post-P16-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P17",
+            "part_id": "cx-base-post-P17-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P17",
+            "part_id": "cx-base-post-P17-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P18",
+            "part_id": "cx-base-post-P18-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P18",
+            "part_id": "cx-base-post-P18-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-stair",
+            "part_id": "cx-base-post-stair-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-stair",
+            "part_id": "cx-base-post-stair-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-joist-J1-start",
+            "part_id": "cx-joist-J1-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J1-end",
+            "part_id": "cx-joist-J1-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J2-start",
+            "part_id": "cx-joist-J2-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J2-end",
+            "part_id": "cx-joist-J2-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J3-start",
+            "part_id": "cx-joist-J3-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J3-end",
+            "part_id": "cx-joist-J3-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J4-start",
+            "part_id": "cx-joist-J4-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J4-end",
+            "part_id": "cx-joist-J4-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J5-start",
+            "part_id": "cx-joist-J5-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J5-end",
+            "part_id": "cx-joist-J5-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J6-start",
+            "part_id": "cx-joist-J6-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J6-end",
+            "part_id": "cx-joist-J6-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J7-start",
+            "part_id": "cx-joist-J7-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J7-end",
+            "part_id": "cx-joist-J7-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J8-start",
+            "part_id": "cx-joist-J8-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J8-end",
+            "part_id": "cx-joist-J8-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J9-start",
+            "part_id": "cx-joist-J9-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J9-end",
+            "part_id": "cx-joist-J9-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J10-start",
+            "part_id": "cx-joist-J10-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J10-end",
+            "part_id": "cx-joist-J10-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J11-start",
+            "part_id": "cx-joist-J11-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J11-end",
+            "part_id": "cx-joist-J11-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J12-start",
+            "part_id": "cx-joist-J12-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J12-end",
+            "part_id": "cx-joist-J12-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J13-start",
+            "part_id": "cx-joist-J13-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J13-end",
+            "part_id": "cx-joist-J13-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J14-start",
+            "part_id": "cx-joist-J14-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J14-end",
+            "part_id": "cx-joist-J14-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J15-start",
+            "part_id": "cx-joist-J15-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J15-end",
+            "part_id": "cx-joist-J15-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J16-start",
+            "part_id": "cx-joist-J16-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J16-end",
+            "part_id": "cx-joist-J16-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J17-start",
+            "part_id": "cx-joist-J17-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J17-end",
+            "part_id": "cx-joist-J17-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J18-start",
+            "part_id": "cx-joist-J18-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J18-end",
+            "part_id": "cx-joist-J18-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J19-start",
+            "part_id": "cx-joist-J19-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J19-end",
+            "part_id": "cx-joist-J19-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J20-start",
+            "part_id": "cx-joist-J20-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J20-end",
+            "part_id": "cx-joist-J20-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J21-start",
+            "part_id": "cx-joist-J21-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J21-end",
+            "part_id": "cx-joist-J21-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J22-start",
+            "part_id": "cx-joist-J22-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J22-end",
+            "part_id": "cx-joist-J22-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J23-start",
+            "part_id": "cx-joist-J23-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J23-end",
+            "part_id": "cx-joist-J23-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J24-start",
+            "part_id": "cx-joist-J24-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J24-end",
+            "part_id": "cx-joist-J24-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J25-start",
+            "part_id": "cx-joist-J25-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J25-end",
+            "part_id": "cx-joist-J25-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J26-start",
+            "part_id": "cx-joist-J26-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J26-end",
+            "part_id": "cx-joist-J26-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J27-start",
+            "part_id": "cx-joist-J27-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J27-end",
+            "part_id": "cx-joist-J27-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J28-start",
+            "part_id": "cx-joist-J28-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J28-end",
+            "part_id": "cx-joist-J28-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J29-start",
+            "part_id": "cx-joist-J29-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J29-end",
+            "part_id": "cx-joist-J29-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J30-start",
+            "part_id": "cx-joist-J30-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J30-end",
+            "part_id": "cx-joist-J30-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J31-start",
+            "part_id": "cx-joist-J31-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J31-end",
+            "part_id": "cx-joist-J31-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          }
+        ]
+      }
+    ]
+  },
+  "source_freshness": {
+    "status": "invalid",
+    "source_freshness_checked": true,
+    "findings": [
+      {
+        "code": "joint_disposition_kind",
+        "message": "Classify this unconnected joint as free_end, continuous_member, bearing_interface or shared_connection; a typical-detail note is not a located occurrence",
+        "entity_ids": [
+          "joint-guard-G1-top",
+          "joint-guard-G10-top",
+          "joint-guard-G11-top",
+          "joint-guard-G12-top",
+          "joint-guard-G13-top",
+          "joint-guard-G14-top",
+          "joint-guard-G15-top",
+          "joint-guard-G16-top",
+          "joint-guard-G17-top",
+          "joint-guard-G18-top",
+          "joint-guard-G19-top",
+          "joint-guard-G2-top",
+          "joint-guard-G20-top",
+          "joint-guard-G21-top",
+          "joint-guard-G22-top",
+          "joint-guard-G23-top",
+          "joint-guard-G24-top",
+          "joint-guard-G25-top",
+          "joint-guard-G26-top",
+          "joint-guard-G27-top",
+          "joint-guard-G28-top",
+          "joint-guard-G29-top",
+          "joint-guard-G3-top",
+          "joint-guard-G30-top",
+          "joint-guard-G31-top",
+          "joint-guard-G32-top",
+          "joint-guard-G33-top",
+          "joint-guard-G4-top",
+          "joint-guard-G5-top",
+          "joint-guard-G6-top",
+          "joint-guard-G7-top",
+          "joint-guard-G8-top",
+          "joint-guard-G9-top"
+        ],
+        "severity": "needs_input"
+      },
+      {
+        "code": "connection_fastener_quantity",
+        "message": "A solid fastener count exceeds the distinct located fastener solids in its local design assembly; instantiate the actual checked pattern instead of multiplying a representative solid by a count label",
+        "entity_ids": [
+          "cx-base-post-P1",
+          "cx-base-post-P10",
+          "cx-base-post-P11",
+          "cx-base-post-P12",
+          "cx-base-post-P13",
+          "cx-base-post-P14",
+          "cx-base-post-P15",
+          "cx-base-post-P16",
+          "cx-base-post-P17",
+          "cx-base-post-P18",
+          "cx-base-post-P2",
+          "cx-base-post-P3",
+          "cx-base-post-P4",
+          "cx-base-post-P5",
+          "cx-base-post-P6",
+          "cx-base-post-P7",
+          "cx-base-post-P8",
+          "cx-base-post-P9",
+          "cx-base-post-stair",
+          "cx-guard-G1-base",
+          "cx-guard-G10-base",
+          "cx-guard-G11-base",
+          "cx-guard-G12-base",
+          "cx-guard-G13-base",
+          "cx-guard-G14-base",
+          "cx-guard-G15-base",
+          "cx-guard-G16-base",
+          "cx-guard-G17-base",
+          "cx-guard-G18-base",
+          "cx-guard-G19-base",
+          "cx-guard-G2-base",
+          "cx-guard-G20-base",
+          "cx-guard-G21-base",
+          "cx-guard-G22-base",
+          "cx-guard-G23-base",
+          "cx-guard-G24-base",
+          "cx-guard-G25-base",
+          "cx-guard-G26-base",
+          "cx-guard-G27-base",
+          "cx-guard-G28-base",
+          "cx-guard-G29-base",
+          "cx-guard-G3-base",
+          "cx-guard-G30-base",
+          "cx-guard-G31-base",
+          "cx-guard-G32-base",
+          "cx-guard-G33-base",
+          "cx-guard-G4-base",
+          "cx-guard-G5-base",
+          "cx-guard-G6-base",
+          "cx-guard-G7-base",
+          "cx-guard-G8-base",
+          "cx-guard-G9-base",
+          "cx-joist-J1-end",
+          "cx-joist-J1-start",
+          "cx-joist-J10-end",
+          "cx-joist-J10-start",
+          "cx-joist-J11-end",
+          "cx-joist-J11-start",
+          "cx-joist-J12-end",
+          "cx-joist-J12-start",
+          "cx-joist-J13-end",
+          "cx-joist-J13-start",
+          "cx-joist-J14-end",
+          "cx-joist-J14-start",
+          "cx-joist-J15-end",
+          "cx-joist-J15-start",
+          "cx-joist-J16-end",
+          "cx-joist-J16-start",
+          "cx-joist-J17-end",
+          "cx-joist-J17-start",
+          "cx-joist-J18-end",
+          "cx-joist-J18-start",
+          "cx-joist-J19-end",
+          "cx-joist-J19-start",
+          "cx-joist-J2-end",
+          "cx-joist-J2-start",
+          "cx-joist-J20-end",
+          "cx-joist-J20-start",
+          "cx-joist-J21-end",
+          "cx-joist-J21-start",
+          "cx-joist-J22-end",
+          "cx-joist-J22-start",
+          "cx-joist-J23-end",
+          "cx-joist-J23-start",
+          "cx-joist-J24-end",
+          "cx-joist-J24-start",
+          "cx-joist-J25-end",
+          "cx-joist-J25-start",
+          "cx-joist-J26-end",
+          "cx-joist-J26-start",
+          "cx-joist-J27-end",
+          "cx-joist-J27-start",
+          "cx-joist-J28-end",
+          "cx-joist-J28-start",
+          "cx-joist-J29-end",
+          "cx-joist-J29-start",
+          "cx-joist-J3-end",
+          "cx-joist-J3-start",
+          "cx-joist-J30-end",
+          "cx-joist-J30-start",
+          "cx-joist-J31-end",
+          "cx-joist-J31-start",
+          "cx-joist-J32-end",
+          "cx-joist-J32-start",
+          "cx-joist-J33-end",
+          "cx-joist-J33-start",
+          "cx-joist-J34-end",
+          "cx-joist-J34-start",
+          "cx-joist-J35-end",
+          "cx-joist-J35-start",
+          "cx-joist-J36-end",
+          "cx-joist-J36-start",
+          "cx-joist-J37-end",
+          "cx-joist-J37-start",
+          "cx-joist-J38-end",
+          "cx-joist-J38-start",
+          "cx-joist-J39-end",
+          "cx-joist-J39-start",
+          "cx-joist-J4-end",
+          "cx-joist-J4-start",
+          "cx-joist-J40-end",
+          "cx-joist-J40-start",
+          "cx-joist-J41-end",
+          "cx-joist-J41-start",
+          "cx-joist-J42-end",
+          "cx-joist-J42-start",
+          "cx-joist-J43-end",
+          "cx-joist-J43-start",
+          "cx-joist-J44-end",
+          "cx-joist-J44-start",
+          "cx-joist-J45-end",
+          "cx-joist-J45-start",
+          "cx-joist-J46-end",
+          "cx-joist-J46-start",
+          "cx-joist-J47-end",
+          "cx-joist-J47-start",
+          "cx-joist-J48-end",
+          "cx-joist-J48-start",
+          "cx-joist-J49-end",
+          "cx-joist-J49-start",
+          "cx-joist-J5-end",
+          "cx-joist-J5-start",
+          "cx-joist-J50-end",
+          "cx-joist-J50-start",
+          "cx-joist-J51-end",
+          "cx-joist-J51-start",
+          "cx-joist-J52-end",
+          "cx-joist-J52-start",
+          "cx-joist-J53-end",
+          "cx-joist-J53-start",
+          "cx-joist-J54-end",
+          "cx-joist-J54-start",
+          "cx-joist-J55-end",
+          "cx-joist-J55-start",
+          "cx-joist-J56-end",
+          "cx-joist-J56-start",
+          "cx-joist-J57-end",
+          "cx-joist-J57-start",
+          "cx-joist-J58-end",
+          "cx-joist-J58-start",
+          "cx-joist-J59-end",
+          "cx-joist-J59-start",
+          "cx-joist-J6-end",
+          "cx-joist-J6-start",
+          "cx-joist-J60-end",
+          "cx-joist-J60-start",
+          "cx-joist-J61-end",
+          "cx-joist-J61-start",
+          "cx-joist-J62-end",
+          "cx-joist-J62-start",
+          "cx-joist-J63-end",
+          "cx-joist-J63-start",
+          "cx-joist-J64-end",
+          "cx-joist-J64-start",
+          "cx-joist-J65-end",
+          "cx-joist-J65-start",
+          "cx-joist-J66-end",
+          "cx-joist-J66-start",
+          "cx-joist-J67-end",
+          "cx-joist-J67-start",
+          "cx-joist-J68-end",
+          "cx-joist-J68-start",
+          "cx-joist-J69-end",
+          "cx-joist-J69-start",
+          "cx-joist-J7-end",
+          "cx-joist-J7-start",
+          "cx-joist-J70-end",
+          "cx-joist-J70-start",
+          "cx-joist-J71-end",
+          "cx-joist-J71-start",
+          "cx-joist-J72-end",
+          "cx-joist-J72-start",
+          "cx-joist-J73-end",
+          "cx-joist-J73-start",
+          "cx-joist-J74-end",
+          "cx-joist-J74-start",
+          "cx-joist-J75-end",
+          "cx-joist-J75-start",
+          "cx-joist-J76-end",
+          "cx-joist-J76-start",
+          "cx-joist-J77-end",
+          "cx-joist-J77-start",
+          "cx-joist-J78-end",
+          "cx-joist-J78-start",
+          "cx-joist-J79-end",
+          "cx-joist-J79-start",
+          "cx-joist-J8-end",
+          "cx-joist-J8-start",
+          "cx-joist-J80-end",
+          "cx-joist-J80-start",
+          "cx-joist-J81-end",
+          "cx-joist-J81-start",
+          "cx-joist-J82-end",
+          "cx-joist-J82-start",
+          "cx-joist-J83-end",
+          "cx-joist-J83-start",
+          "cx-joist-J84-end",
+          "cx-joist-J84-start",
+          "cx-joist-J85-end",
+          "cx-joist-J85-start",
+          "cx-joist-J86-end",
+          "cx-joist-J86-start",
+          "cx-joist-J87-end",
+          "cx-joist-J87-start",
+          "cx-joist-J88-end",
+          "cx-joist-J88-start",
+          "cx-joist-J9-end",
+          "cx-joist-J9-start"
+        ],
+        "severity": "needs_input",
+        "count": 247,
+        "examples": [
+          {
+            "connection_id": "cx-base-post-P1",
+            "part_id": "cx-base-post-P1-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P1",
+            "part_id": "cx-base-post-P1-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P2",
+            "part_id": "cx-base-post-P2-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P2",
+            "part_id": "cx-base-post-P2-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P3",
+            "part_id": "cx-base-post-P3-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P3",
+            "part_id": "cx-base-post-P3-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P4",
+            "part_id": "cx-base-post-P4-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P4",
+            "part_id": "cx-base-post-P4-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P5",
+            "part_id": "cx-base-post-P5-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P5",
+            "part_id": "cx-base-post-P5-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P6",
+            "part_id": "cx-base-post-P6-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P6",
+            "part_id": "cx-base-post-P6-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P7",
+            "part_id": "cx-base-post-P7-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P7",
+            "part_id": "cx-base-post-P7-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P8",
+            "part_id": "cx-base-post-P8-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P8",
+            "part_id": "cx-base-post-P8-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P9",
+            "part_id": "cx-base-post-P9-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P9",
+            "part_id": "cx-base-post-P9-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P10",
+            "part_id": "cx-base-post-P10-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P10",
+            "part_id": "cx-base-post-P10-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P11",
+            "part_id": "cx-base-post-P11-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P11",
+            "part_id": "cx-base-post-P11-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P12",
+            "part_id": "cx-base-post-P12-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P12",
+            "part_id": "cx-base-post-P12-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P13",
+            "part_id": "cx-base-post-P13-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P13",
+            "part_id": "cx-base-post-P13-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P14",
+            "part_id": "cx-base-post-P14-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P14",
+            "part_id": "cx-base-post-P14-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P15",
+            "part_id": "cx-base-post-P15-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P15",
+            "part_id": "cx-base-post-P15-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P16",
+            "part_id": "cx-base-post-P16-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P16",
+            "part_id": "cx-base-post-P16-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P17",
+            "part_id": "cx-base-post-P17-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P17",
+            "part_id": "cx-base-post-P17-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P18",
+            "part_id": "cx-base-post-P18-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-P18",
+            "part_id": "cx-base-post-P18-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-stair",
+            "part_id": "cx-base-post-stair-s1",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-base-post-stair",
+            "part_id": "cx-base-post-stair-s2",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "cx-joist-J1-start",
+            "part_id": "cx-joist-J1-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J1-end",
+            "part_id": "cx-joist-J1-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J2-start",
+            "part_id": "cx-joist-J2-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J2-end",
+            "part_id": "cx-joist-J2-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J3-start",
+            "part_id": "cx-joist-J3-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J3-end",
+            "part_id": "cx-joist-J3-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J4-start",
+            "part_id": "cx-joist-J4-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J4-end",
+            "part_id": "cx-joist-J4-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J5-start",
+            "part_id": "cx-joist-J5-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J5-end",
+            "part_id": "cx-joist-J5-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J6-start",
+            "part_id": "cx-joist-J6-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J6-end",
+            "part_id": "cx-joist-J6-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J7-start",
+            "part_id": "cx-joist-J7-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J7-end",
+            "part_id": "cx-joist-J7-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J8-start",
+            "part_id": "cx-joist-J8-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J8-end",
+            "part_id": "cx-joist-J8-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J9-start",
+            "part_id": "cx-joist-J9-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J9-end",
+            "part_id": "cx-joist-J9-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J10-start",
+            "part_id": "cx-joist-J10-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J10-end",
+            "part_id": "cx-joist-J10-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J11-start",
+            "part_id": "cx-joist-J11-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J11-end",
+            "part_id": "cx-joist-J11-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J12-start",
+            "part_id": "cx-joist-J12-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J12-end",
+            "part_id": "cx-joist-J12-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J13-start",
+            "part_id": "cx-joist-J13-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J13-end",
+            "part_id": "cx-joist-J13-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J14-start",
+            "part_id": "cx-joist-J14-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J14-end",
+            "part_id": "cx-joist-J14-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J15-start",
+            "part_id": "cx-joist-J15-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J15-end",
+            "part_id": "cx-joist-J15-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J16-start",
+            "part_id": "cx-joist-J16-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J16-end",
+            "part_id": "cx-joist-J16-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J17-start",
+            "part_id": "cx-joist-J17-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J17-end",
+            "part_id": "cx-joist-J17-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J18-start",
+            "part_id": "cx-joist-J18-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J18-end",
+            "part_id": "cx-joist-J18-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J19-start",
+            "part_id": "cx-joist-J19-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J19-end",
+            "part_id": "cx-joist-J19-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J20-start",
+            "part_id": "cx-joist-J20-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J20-end",
+            "part_id": "cx-joist-J20-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J21-start",
+            "part_id": "cx-joist-J21-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J21-end",
+            "part_id": "cx-joist-J21-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J22-start",
+            "part_id": "cx-joist-J22-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J22-end",
+            "part_id": "cx-joist-J22-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J23-start",
+            "part_id": "cx-joist-J23-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J23-end",
+            "part_id": "cx-joist-J23-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J24-start",
+            "part_id": "cx-joist-J24-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J24-end",
+            "part_id": "cx-joist-J24-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J25-start",
+            "part_id": "cx-joist-J25-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J25-end",
+            "part_id": "cx-joist-J25-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J26-start",
+            "part_id": "cx-joist-J26-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J26-end",
+            "part_id": "cx-joist-J26-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J27-start",
+            "part_id": "cx-joist-J27-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J27-end",
+            "part_id": "cx-joist-J27-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J28-start",
+            "part_id": "cx-joist-J28-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J28-end",
+            "part_id": "cx-joist-J28-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J29-start",
+            "part_id": "cx-joist-J29-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J29-end",
+            "part_id": "cx-joist-J29-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J30-start",
+            "part_id": "cx-joist-J30-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J30-end",
+            "part_id": "cx-joist-J30-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J31-start",
+            "part_id": "cx-joist-J31-start-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "cx-joist-J31-end",
+            "part_id": "cx-joist-J31-end-s1",
+            "category": "screw",
+            "declared_count": 2,
+            "actual_distinct_solids": 1
+          }
+        ]
+      },
+      {
+        "code": "source_stale",
+        "message": "Source evidence changed after export",
+        "entity_ids": [
+          "bim_gen.py"
+        ],
+        "severity": "error"
+      }
+    ]
+  },
+  "captured_worklines_required": false,
+  "current_tracked_source_files": {
+    "architectural_handoff.txt": "a7137d0c6134f98df0f660771c3ccced9c831739c08a9efde7ab200f5c35ea79",
+    "architectural_input.json": "301e48eb6059493c4e3653c4b9d5ab27ac93809e506a0aa162a34afe11dac962",
+    "bim_gen.py": "55094b37fea38bb99e813fb997d23a6e163a475d14d46c4dc548f5ac916819ea",
+    "bim_inputs.json": "b90a549fff8dab748e020faca4033f54437d9172c7f75f5a3a0d7616c8faa4b5",
+    "bim_model.py": "118e9726cbdc66660e113f192ba44fb088a9537fd6965be6d869fd79b532072a",
+    "cfg.py": "757717d24eb9f747f3bbc3109baeb6a0ca55ebcda18f089d086f96c8bc52c5c8",
+    "design/bim_request.json": "3e606cb63102eb460a9ddc66c27e05e35427f320977104e3555ce659bf0e861c",
+    "design/calc_package_cfs.json": "b3611b5210131ab659489488296940c4f85bf94fde37a940e66b8e0e88c6b5bf",
+    "design/consistency_result.json": "28b85b057793726ebd8f71451904b8d6979ac5711167410e7ed766c47c42ff40",
+    "physical_layout.json": "e0f5478e240a073852acda85c93367a8d91dfea263b3d6913f2996f785938f5a",
+    "verify_clear.py": "fa2f297aa7954349f63c05b19a4bf824295ef04252db2102a2442f59902d8d58",
+    "viewer_3d.html": "bf5057a6f4264dd1003c036d9522020942d874075b528ad31da34c255c4d9e0c",
+    "workflow_quantity_review.json": "d3904fa1e12f2c51f23aa12be5be765b72e6a688b2a51ede2fa85cace0a05303",
+    "workflow_review.json": "4d24d1a94da2ddca3ddeffcc6b7e40aacf9e4c0e87fe2bcf33aef23beed67d35"
+  },
+  "source_file_set_matches": false,
+  "own_output_only": true,
+  "physical_supplements_used": false
+}

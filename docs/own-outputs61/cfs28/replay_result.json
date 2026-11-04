@@ -1,0 +1,463 @@
+{
+  "key": "cfs28",
+  "case": "cfs28",
+  "status": "exported",
+  "producer": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+  "package_sha256": "3abd516596d59a4df49a892aed64ee1a3dd96338151e7cfbcdee4ff79603ed83",
+  "source_files_unchanged": true,
+  "original_recorded_package_unchanged": true,
+  "stored_readiness": "needs_input",
+  "findings": [
+    {
+      "code": "connection_selected_components",
+      "count": 42,
+      "entity_ids": [
+        "CONN-EAVE-L-1",
+        "CONN-EAVE-L-2",
+        "CONN-EAVE-L-3",
+        "CONN-EAVE-L-4",
+        "CONN-EAVE-L-5",
+        "CONN-EAVE-L-6",
+        "CONN-EAVE-L-7",
+        "CONN-EAVE-L-8",
+        "CONN-EAVE-L-9",
+        "CONN-EAVE-R-1",
+        "CONN-EAVE-R-2",
+        "CONN-EAVE-R-3",
+        "CONN-EAVE-R-4",
+        "CONN-EAVE-R-5",
+        "CONN-EAVE-R-6",
+        "CONN-EAVE-R-7",
+        "CONN-EAVE-R-8",
+        "CONN-EAVE-R-9",
+        "CONN-STRAP-R-0-A-end",
+        "CONN-STRAP-R-0-A-start",
+        "CONN-STRAP-R-0-B-end",
+        "CONN-STRAP-R-0-B-start",
+        "CONN-STRAP-R-1848-A-end",
+        "CONN-STRAP-R-1848-A-start",
+        "CONN-STRAP-R-1848-B-end",
+        "CONN-STRAP-R-1848-B-start",
+        "CONN-STRAP-RF-L-0-A-end",
+        "CONN-STRAP-RF-L-0-A-start",
+        "CONN-STRAP-RF-L-0-B-end",
+        "CONN-STRAP-RF-L-0-B-start",
+        "CONN-STRAP-RF-L-1848-A-end",
+        "CONN-STRAP-RF-L-1848-A-start",
+        "CONN-STRAP-RF-L-1848-B-end",
+        "CONN-STRAP-RF-L-1848-B-start",
+        "CONN-STRAP-RF-R-0-A-end",
+        "CONN-STRAP-RF-R-0-A-start",
+        "CONN-STRAP-RF-R-0-B-end",
+        "CONN-STRAP-RF-R-0-B-start",
+        "CONN-STRAP-RF-R-1848-A-end",
+        "CONN-STRAP-RF-R-1848-A-start",
+        "CONN-STRAP-RF-R-1848-B-end",
+        "CONN-STRAP-RF-R-1848-B-start"
+      ],
+      "examples": [
+        {
+          "connection_id": "CONN-EAVE-L-1",
+          "design_record_id": "connections/conn-knee",
+          "missing_component_categories": [
+            "weld"
+          ],
+          "returned_part_kinds": "end plate gusset plate bolt bolt bolt bolt bolt bolt",
+          "selected_components": "Eave: shop-welded end plates (3/8 in) on column + rafter, field-bolted with 6x 3/4-in F3125 bolts per joint face + 3/8-in gusset; knee-brace gusset separate (2x 3/4-in bolts each end). 6x 3/4-in F3125 bolts per face (2 rows x 3) on 10-in deep end plate, t=3/8 in: bolt-group phiMn=420 kip-in (elastic, outer bolt 78 kip < bearing 2x0.85*... ); bearing per 118-mil ply: Pnb=C(3.0) mf(1.0) d t Fu=3.0*0.75*0.1242*65=18.2 kip/ply/bolt, 6 plies x 0.60 = 65.4 kip/bolt >= 78/6? per-bolt shear 13 kip; net section 6x(An*Fu)*0.75 >= 40 kip; gusset 3/8-in Whitmore phiPn=95 kip; D/C=max(314.9/420, 27.9/65.4x? )=0.75/0.85"
+        },
+        {
+          "connection_id": "CONN-EAVE-R-1",
+          "design_record_id": "connections/conn-knee",
+          "missing_component_categories": [
+            "weld"
+          ],
+          "returned_part_kinds": "end plate gusset plate bolt bolt bolt bolt bolt bolt",
+          "selected_components": "Eave: shop-welded end plates (3/8 in) on column + rafter, field-bolted with 6x 3/4-in F3125 bolts per joint face + 3/8-in gusset; knee-brace gusset separate (2x 3/4-in bolts each end). 6x 3/4-in F3125 bolts per face (2 rows x 3) on 10-in deep end plate, t=3/8 in: bolt-group phiMn=420 kip-in (elastic, outer bolt 78 kip < bearing 2x0.85*... ); bearing per 118-mil ply: Pnb=C(3.0) mf(1.0) d t Fu=3.0*0.75*0.1242*65=18.2 kip/ply/bolt, 6 plies x 0.60 = 65.4 kip/bolt >= 78/6? per-bolt shear 13 kip; net section 6x(An*Fu)*0.75 >= 40 kip; gusset 3/8-in Whitmore phiPn=95 kip; D/C=max(314.9/420, 27.9/65.4x? )=0.75/0.85"
+        },
+        {
+          "connection_id": "CONN-EAVE-L-2",
+          "design_record_id": "connections/conn-knee",
+          "missing_component_categories": [
+            "weld"
+          ],
+          "returned_part_kinds": "end plate gusset plate bolt bolt bolt bolt bolt bolt",
+          "selected_components": "Eave: shop-welded end plates (3/8 in) on column + rafter, field-bolted with 6x 3/4-in F3125 bolts per joint face + 3/8-in gusset; knee-brace gusset separate (2x 3/4-in bolts each end). 6x 3/4-in F3125 bolts per face (2 rows x 3) on 10-in deep end plate, t=3/8 in: bolt-group phiMn=420 kip-in (elastic, outer bolt 78 kip < bearing 2x0.85*... ); bearing per 118-mil ply: Pnb=C(3.0) mf(1.0) d t Fu=3.0*0.75*0.1242*65=18.2 kip/ply/bolt, 6 plies x 0.60 = 65.4 kip/bolt >= 78/6? per-bolt shear 13 kip; net section 6x(An*Fu)*0.75 >= 40 kip; gusset 3/8-in Whitmore phiPn=95 kip; D/C=max(314.9/420, 27.9/65.4x? )=0.75/0.85"
+        },
+        {
+          "connection_id": "CONN-EAVE-R-2",
+          "design_record_id": "connections/conn-knee",
+          "missing_component_categories": [
+            "weld"
+          ],
+          "returned_part_kinds": "end plate gusset plate bolt bolt bolt bolt bolt bolt",
+          "selected_components": "Eave: shop-welded end plates (3/8 in) on column + rafter, field-bolted with 6x 3/4-in F3125 bolts per joint face + 3/8-in gusset; knee-brace gusset separate (2x 3/4-in bolts each end). 6x 3/4-in F3125 bolts per face (2 rows x 3) on 10-in deep end plate, t=3/8 in: bolt-group phiMn=420 kip-in (elastic, outer bolt 78 kip < bearing 2x0.85*... ); bearing per 118-mil ply: Pnb=C(3.0) mf(1.0) d t Fu=3.0*0.75*0.1242*65=18.2 kip/ply/bolt, 6 plies x 0.60 = 65.4 kip/bolt >= 78/6? per-bolt shear 13 kip; net section 6x(An*Fu)*0.75 >= 40 kip; gusset 3/8-in Whitmore phiPn=95 kip; D/C=max(314.9/420, 27.9/65.4x? )=0.75/0.85"
+        },
+        {
+          "connection_id": "CONN-EAVE-L-3",
+          "design_record_id": "connections/conn-knee",
+          "missing_component_categories": [
+            "weld"
+          ],
+          "returned_part_kinds": "end plate gusset plate bolt bolt bolt bolt bolt bolt",
+          "selected_components": "Eave: shop-welded end plates (3/8 in) on column + rafter, field-bolted with 6x 3/4-in F3125 bolts per joint face + 3/8-in gusset; knee-brace gusset separate (2x 3/4-in bolts each end). 6x 3/4-in F3125 bolts per face (2 rows x 3) on 10-in deep end plate, t=3/8 in: bolt-group phiMn=420 kip-in (elastic, outer bolt 78 kip < bearing 2x0.85*... ); bearing per 118-mil ply: Pnb=C(3.0) mf(1.0) d t Fu=3.0*0.75*0.1242*65=18.2 kip/ply/bolt, 6 plies x 0.60 = 65.4 kip/bolt >= 78/6? per-bolt shear 13 kip; net section 6x(An*Fu)*0.75 >= 40 kip; gusset 3/8-in Whitmore phiPn=95 kip; D/C=max(314.9/420, 27.9/65.4x? )=0.75/0.85"
+        },
+        {
+          "connection_id": "CONN-EAVE-R-3",
+          "design_record_id": "connections/conn-knee",
+          "missing_component_categories": [
+            "weld"
+          ],
+          "returned_part_kinds": "end plate gusset plate bolt bolt bolt bolt bolt bolt",
+          "selected_components": "Eave: shop-welded end plates (3/8 in) on column + rafter, field-bolted with 6x 3/4-in F3125 bolts per joint face + 3/8-in gusset; knee-brace gusset separate (2x 3/4-in bolts each end). 6x 3/4-in F3125 bolts per face (2 rows x 3) on 10-in deep end plate, t=3/8 in: bolt-group phiMn=420 kip-in (elastic, outer bolt 78 kip < bearing 2x0.85*... ); bearing per 118-mil ply: Pnb=C(3.0) mf(1.0) d t Fu=3.0*0.75*0.1242*65=18.2 kip/ply/bolt, 6 plies x 0.60 = 65.4 kip/bolt >= 78/6? per-bolt shear 13 kip; net section 6x(An*Fu)*0.75 >= 40 kip; gusset 3/8-in Whitmore phiPn=95 kip; D/C=max(314.9/420, 27.9/65.4x? )=0.75/0.85"
+        },
+        {
+          "connection_id": "CONN-EAVE-L-4",
+          "design_record_id": "connections/conn-knee",
+          "missing_component_categories": [
+            "weld"
+          ],
+          "returned_part_kinds": "end plate gusset plate bolt bolt bolt bolt bolt bolt",
+          "selected_components": "Eave: shop-welded end plates (3/8 in) on column + rafter, field-bolted with 6x 3/4-in F3125 bolts per joint face + 3/8-in gusset; knee-brace gusset separate (2x 3/4-in bolts each end). 6x 3/4-in F3125 bolts per face (2 rows x 3) on 10-in deep end plate, t=3/8 in: bolt-group phiMn=420 kip-in (elastic, outer bolt 78 kip < bearing 2x0.85*... ); bearing per 118-mil ply: Pnb=C(3.0) mf(1.0) d t Fu=3.0*0.75*0.1242*65=18.2 kip/ply/bolt, 6 plies x 0.60 = 65.4 kip/bolt >= 78/6? per-bolt shear 13 kip; net section 6x(An*Fu)*0.75 >= 40 kip; gusset 3/8-in Whitmore phiPn=95 kip; D/C=max(314.9/420, 27.9/65.4x? )=0.75/0.85"
+        },
+        {
+          "connection_id": "CONN-EAVE-R-4",
+          "design_record_id": "connections/conn-knee",
+          "missing_component_categories": [
+            "weld"
+          ],
+          "returned_part_kinds": "end plate gusset plate bolt bolt bolt bolt bolt bolt",
+          "selected_components": "Eave: shop-welded end plates (3/8 in) on column + rafter, field-bolted with 6x 3/4-in F3125 bolts per joint face + 3/8-in gusset; knee-brace gusset separate (2x 3/4-in bolts each end). 6x 3/4-in F3125 bolts per face (2 rows x 3) on 10-in deep end plate, t=3/8 in: bolt-group phiMn=420 kip-in (elastic, outer bolt 78 kip < bearing 2x0.85*... ); bearing per 118-mil ply: Pnb=C(3.0) mf(1.0) d t Fu=3.0*0.75*0.1242*65=18.2 kip/ply/bolt, 6 plies x 0.60 = 65.4 kip/bolt >= 78/6? per-bolt shear 13 kip; net section 6x(An*Fu)*0.75 >= 40 kip; gusset 3/8-in Whitmore phiPn=95 kip; D/C=max(314.9/420, 27.9/65.4x? )=0.75/0.85"
+        },
+        {
+          "connection_id": "CONN-EAVE-L-5",
+          "design_record_id": "connections/conn-knee",
+          "missing_component_categories": [
+            "weld"
+          ],
+          "returned_part_kinds": "end plate gusset plate bolt bolt bolt bolt bolt bolt",
+          "selected_components": "Eave: shop-welded end plates (3/8 in) on column + rafter, field-bolted with 6x 3/4-in F3125 bolts per joint face + 3/8-in gusset; knee-brace gusset separate (2x 3/4-in bolts each end). 6x 3/4-in F3125 bolts per face (2 rows x 3) on 10-in deep end plate, t=3/8 in: bolt-group phiMn=420 kip-in (elastic, outer bolt 78 kip < bearing 2x0.85*... ); bearing per 118-mil ply: Pnb=C(3.0) mf(1.0) d t Fu=3.0*0.75*0.1242*65=18.2 kip/ply/bolt, 6 plies x 0.60 = 65.4 kip/bolt >= 78/6? per-bolt shear 13 kip; net section 6x(An*Fu)*0.75 >= 40 kip; gusset 3/8-in Whitmore phiPn=95 kip; D/C=max(314.9/420, 27.9/65.4x? )=0.75/0.85"
+        },
+        {
+          "connection_id": "CONN-EAVE-R-5",
+          "design_record_id": "connections/conn-knee",
+          "missing_component_categories": [
+            "weld"
+          ],
+          "returned_part_kinds": "end plate gusset plate bolt bolt bolt bolt bolt bolt",
+          "selected_components": "Eave: shop-welded end plates (3/8 in) on column + rafter, field-bolted with 6x 3/4-in F3125 bolts per joint face + 3/8-in gusset; knee-brace gusset separate (2x 3/4-in bolts each end). 6x 3/4-in F3125 bolts per face (2 rows x 3) on 10-in deep end plate, t=3/8 in: bolt-group phiMn=420 kip-in (elastic, outer bolt 78 kip < bearing 2x0.85*... ); bearing per 118-mil ply: Pnb=C(3.0) mf(1.0) d t Fu=3.0*0.75*0.1242*65=18.2 kip/ply/bolt, 6 plies x 0.60 = 65.4 kip/bolt >= 78/6? per-bolt shear 13 kip; net section 6x(An*Fu)*0.75 >= 40 kip; gusset 3/8-in Whitmore phiPn=95 kip; D/C=max(314.9/420, 27.9/65.4x? )=0.75/0.85"
+        },
+        {
+          "connection_id": "CONN-EAVE-L-6",
+          "design_record_id": "connections/conn-knee",
+          "missing_component_categories": [
+            "weld"
+          ],
+          "returned_part_kinds": "end plate gusset plate bolt bolt bolt bolt bolt bolt",
+          "selected_components": "Eave: shop-welded end plates (3/8 in) on column + rafter, field-bolted with 6x 3/4-in F3125 bolts per joint face + 3/8-in gusset; knee-brace gusset separate (2x 3/4-in bolts each end). 6x 3/4-in F3125 bolts per face (2 rows x 3) on 10-in deep end plate, t=3/8 in: bolt-group phiMn=420 kip-in (elastic, outer bolt 78 kip < bearing 2x0.85*... ); bearing per 118-mil ply: Pnb=C(3.0) mf(1.0) d t Fu=3.0*0.75*0.1242*65=18.2 kip/ply/bolt, 6 plies x 0.60 = 65.4 kip/bolt >= 78/6? per-bolt shear 13 kip; net section 6x(An*Fu)*0.75 >= 40 kip; gusset 3/8-in Whitmore phiPn=95 kip; D/C=max(314.9/420, 27.9/65.4x? )=0.75/0.85"
+        },
+        {
+          "connection_id": "CONN-EAVE-R-6",
+          "design_record_id": "connections/conn-knee",
+          "missing_component_categories": [
+            "weld"
+          ],
+          "returned_part_kinds": "end plate gusset plate bolt bolt bolt bolt bolt bolt",
+          "selected_components": "Eave: shop-welded end plates (3/8 in) on column + rafter, field-bolted with 6x 3/4-in F3125 bolts per joint face + 3/8-in gusset; knee-brace gusset separate (2x 3/4-in bolts each end). 6x 3/4-in F3125 bolts per face (2 rows x 3) on 10-in deep end plate, t=3/8 in: bolt-group phiMn=420 kip-in (elastic, outer bolt 78 kip < bearing 2x0.85*... ); bearing per 118-mil ply: Pnb=C(3.0) mf(1.0) d t Fu=3.0*0.75*0.1242*65=18.2 kip/ply/bolt, 6 plies x 0.60 = 65.4 kip/bolt >= 78/6? per-bolt shear 13 kip; net section 6x(An*Fu)*0.75 >= 40 kip; gusset 3/8-in Whitmore phiPn=95 kip; D/C=max(314.9/420, 27.9/65.4x? )=0.75/0.85"
+        },
+        {
+          "connection_id": "CONN-EAVE-L-7",
+          "design_record_id": "connections/conn-knee",
+          "missing_component_categories": [
+            "weld"
+          ],
+          "returned_part_kinds": "end plate gusset plate bolt bolt bolt bolt bolt bolt",
+          "selected_components": "Eave: shop-welded end plates (3/8 in) on column + rafter, field-bolted with 6x 3/4-in F3125 bolts per joint face + 3/8-in gusset; knee-brace gusset separate (2x 3/4-in bolts each end). 6x 3/4-in F3125 bolts per face (2 rows x 3) on 10-in deep end plate, t=3/8 in: bolt-group phiMn=420 kip-in (elastic, outer bolt 78 kip < bearing 2x0.85*... ); bearing per 118-mil ply: Pnb=C(3.0) mf(1.0) d t Fu=3.0*0.75*0.1242*65=18.2 kip/ply/bolt, 6 plies x 0.60 = 65.4 kip/bolt >= 78/6? per-bolt shear 13 kip; net section 6x(An*Fu)*0.75 >= 40 kip; gusset 3/8-in Whitmore phiPn=95 kip; D/C=max(314.9/420, 27.9/65.4x? )=0.75/0.85"
+        },
+        {
+          "connection_id": "CONN-EAVE-R-7",
+          "design_record_id": "connections/conn-knee",
+          "missing_component_categories": [
+            "weld"
+          ],
+          "returned_part_kinds": "end plate gusset plate bolt bolt bolt bolt bolt bolt",
+          "selected_components": "Eave: shop-welded end plates (3/8 in) on column + rafter, field-bolted with 6x 3/4-in F3125 bolts per joint face + 3/8-in gusset; knee-brace gusset separate (2x 3/4-in bolts each end). 6x 3/4-in F3125 bolts per face (2 rows x 3) on 10-in deep end plate, t=3/8 in: bolt-group phiMn=420 kip-in (elastic, outer bolt 78 kip < bearing 2x0.85*... ); bearing per 118-mil ply: Pnb=C(3.0) mf(1.0) d t Fu=3.0*0.75*0.1242*65=18.2 kip/ply/bolt, 6 plies x 0.60 = 65.4 kip/bolt >= 78/6? per-bolt shear 13 kip; net section 6x(An*Fu)*0.75 >= 40 kip; gusset 3/8-in Whitmore phiPn=95 kip; D/C=max(314.9/420, 27.9/65.4x? )=0.75/0.85"
+        },
+        {
+          "connection_id": "CONN-EAVE-L-8",
+          "design_record_id": "connections/conn-knee",
+          "missing_component_categories": [
+            "weld"
+          ],
+          "returned_part_kinds": "end plate gusset plate bolt bolt bolt bolt bolt bolt",
+          "selected_components": "Eave: shop-welded end plates (3/8 in) on column + rafter, field-bolted with 6x 3/4-in F3125 bolts per joint face + 3/8-in gusset; knee-brace gusset separate (2x 3/4-in bolts each end). 6x 3/4-in F3125 bolts per face (2 rows x 3) on 10-in deep end plate, t=3/8 in: bolt-group phiMn=420 kip-in (elastic, outer bolt 78 kip < bearing 2x0.85*... ); bearing per 118-mil ply: Pnb=C(3.0) mf(1.0) d t Fu=3.0*0.75*0.1242*65=18.2 kip/ply/bolt, 6 plies x 0.60 = 65.4 kip/bolt >= 78/6? per-bolt shear 13 kip; net section 6x(An*Fu)*0.75 >= 40 kip; gusset 3/8-in Whitmore phiPn=95 kip; D/C=max(314.9/420, 27.9/65.4x? )=0.75/0.85"
+        },
+        {
+          "connection_id": "CONN-EAVE-R-8",
+          "design_record_id": "connections/conn-knee",
+          "missing_component_categories": [
+            "weld"
+          ],
+          "returned_part_kinds": "end plate gusset plate bolt bolt bolt bolt bolt bolt",
+          "selected_components": "Eave: shop-welded end plates (3/8 in) on column + rafter, field-bolted with 6x 3/4-in F3125 bolts per joint face + 3/8-in gusset; knee-brace gusset separate (2x 3/4-in bolts each end). 6x 3/4-in F3125 bolts per face (2 rows x 3) on 10-in deep end plate, t=3/8 in: bolt-group phiMn=420 kip-in (elastic, outer bolt 78 kip < bearing 2x0.85*... ); bearing per 118-mil ply: Pnb=C(3.0) mf(1.0) d t Fu=3.0*0.75*0.1242*65=18.2 kip/ply/bolt, 6 plies x 0.60 = 65.4 kip/bolt >= 78/6? per-bolt shear 13 kip; net section 6x(An*Fu)*0.75 >= 40 kip; gusset 3/8-in Whitmore phiPn=95 kip; D/C=max(314.9/420, 27.9/65.4x? )=0.75/0.85"
+        },
+        {
+          "connection_id": "CONN-EAVE-L-9",
+          "design_record_id": "connections/conn-knee",
+          "missing_component_categories": [
+            "weld"
+          ],
+          "returned_part_kinds": "end plate gusset plate bolt bolt bolt bolt bolt bolt",
+          "selected_components": "Eave: shop-welded end plates (3/8 in) on column + rafter, field-bolted with 6x 3/4-in F3125 bolts per joint face + 3/8-in gusset; knee-brace gusset separate (2x 3/4-in bolts each end). 6x 3/4-in F3125 bolts per face (2 rows x 3) on 10-in deep end plate, t=3/8 in: bolt-group phiMn=420 kip-in (elastic, outer bolt 78 kip < bearing 2x0.85*... ); bearing per 118-mil ply: Pnb=C(3.0) mf(1.0) d t Fu=3.0*0.75*0.1242*65=18.2 kip/ply/bolt, 6 plies x 0.60 = 65.4 kip/bolt >= 78/6? per-bolt shear 13 kip; net section 6x(An*Fu)*0.75 >= 40 kip; gusset 3/8-in Whitmore phiPn=95 kip; D/C=max(314.9/420, 27.9/65.4x? )=0.75/0.85"
+        },
+        {
+          "connection_id": "CONN-EAVE-R-9",
+          "design_record_id": "connections/conn-knee",
+          "missing_component_categories": [
+            "weld"
+          ],
+          "returned_part_kinds": "end plate gusset plate bolt bolt bolt bolt bolt bolt",
+          "selected_components": "Eave: shop-welded end plates (3/8 in) on column + rafter, field-bolted with 6x 3/4-in F3125 bolts per joint face + 3/8-in gusset; knee-brace gusset separate (2x 3/4-in bolts each end). 6x 3/4-in F3125 bolts per face (2 rows x 3) on 10-in deep end plate, t=3/8 in: bolt-group phiMn=420 kip-in (elastic, outer bolt 78 kip < bearing 2x0.85*... ); bearing per 118-mil ply: Pnb=C(3.0) mf(1.0) d t Fu=3.0*0.75*0.1242*65=18.2 kip/ply/bolt, 6 plies x 0.60 = 65.4 kip/bolt >= 78/6? per-bolt shear 13 kip; net section 6x(An*Fu)*0.75 >= 40 kip; gusset 3/8-in Whitmore phiPn=95 kip; D/C=max(314.9/420, 27.9/65.4x? )=0.75/0.85"
+        },
+        {
+          "connection_id": "CONN-STRAP-R-0-A-start",
+          "design_record_id": "schedules/sched-strap",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "gusset plate bolt bolt bolt",
+          "selected_components": "Revised: 8-in x 68-mil A1008 Gr.50 X-straps (Ag=0.570 in2) each braced bay, 3x 3/4-in bolts per end with 3/8-in gusset (connection phi >= 22.1 kip strap net strength); turnbuckle/tensioner + take-up noted. Ag=6x0.0713=0.428 in2: phiTn(gross)=0.9x0.428x50=19.3 kip; An (2x 3/4-in bolts: 0.428-2x0.8125x0.0713=0.312): phiTn(net)=0.75x0.312x65=15.2 kip -> CONTROLS; D/C=18.8/15.2=1.24 NG -> upsize to 8-in x 68-mil (Ag=0.570, An=0.454, phiTn=22.1) D/C=0.85. Connection: 4x #14 screws? No - bolts: 3x 3/4-in F3125 per end (bearing 3x0.60x... >= 22.1 kip)."
+        },
+        {
+          "connection_id": "CONN-STRAP-R-0-A-end",
+          "design_record_id": "schedules/sched-strap",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "gusset plate bolt bolt bolt",
+          "selected_components": "Revised: 8-in x 68-mil A1008 Gr.50 X-straps (Ag=0.570 in2) each braced bay, 3x 3/4-in bolts per end with 3/8-in gusset (connection phi >= 22.1 kip strap net strength); turnbuckle/tensioner + take-up noted. Ag=6x0.0713=0.428 in2: phiTn(gross)=0.9x0.428x50=19.3 kip; An (2x 3/4-in bolts: 0.428-2x0.8125x0.0713=0.312): phiTn(net)=0.75x0.312x65=15.2 kip -> CONTROLS; D/C=18.8/15.2=1.24 NG -> upsize to 8-in x 68-mil (Ag=0.570, An=0.454, phiTn=22.1) D/C=0.85. Connection: 4x #14 screws? No - bolts: 3x 3/4-in F3125 per end (bearing 3x0.60x... >= 22.1 kip)."
+        },
+        {
+          "connection_id": "CONN-STRAP-R-0-B-start",
+          "design_record_id": "schedules/sched-strap",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "gusset plate bolt bolt bolt",
+          "selected_components": "Revised: 8-in x 68-mil A1008 Gr.50 X-straps (Ag=0.570 in2) each braced bay, 3x 3/4-in bolts per end with 3/8-in gusset (connection phi >= 22.1 kip strap net strength); turnbuckle/tensioner + take-up noted. Ag=6x0.0713=0.428 in2: phiTn(gross)=0.9x0.428x50=19.3 kip; An (2x 3/4-in bolts: 0.428-2x0.8125x0.0713=0.312): phiTn(net)=0.75x0.312x65=15.2 kip -> CONTROLS; D/C=18.8/15.2=1.24 NG -> upsize to 8-in x 68-mil (Ag=0.570, An=0.454, phiTn=22.1) D/C=0.85. Connection: 4x #14 screws? No - bolts: 3x 3/4-in F3125 per end (bearing 3x0.60x... >= 22.1 kip)."
+        },
+        {
+          "connection_id": "CONN-STRAP-R-0-B-end",
+          "design_record_id": "schedules/sched-strap",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "gusset plate bolt bolt bolt",
+          "selected_components": "Revised: 8-in x 68-mil A1008 Gr.50 X-straps (Ag=0.570 in2) each braced bay, 3x 3/4-in bolts per end with 3/8-in gusset (connection phi >= 22.1 kip strap net strength); turnbuckle/tensioner + take-up noted. Ag=6x0.0713=0.428 in2: phiTn(gross)=0.9x0.428x50=19.3 kip; An (2x 3/4-in bolts: 0.428-2x0.8125x0.0713=0.312): phiTn(net)=0.75x0.312x65=15.2 kip -> CONTROLS; D/C=18.8/15.2=1.24 NG -> upsize to 8-in x 68-mil (Ag=0.570, An=0.454, phiTn=22.1) D/C=0.85. Connection: 4x #14 screws? No - bolts: 3x 3/4-in F3125 per end (bearing 3x0.60x... >= 22.1 kip)."
+        },
+        {
+          "connection_id": "CONN-STRAP-R-1848-A-start",
+          "design_record_id": "schedules/sched-strap",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "gusset plate bolt bolt bolt",
+          "selected_components": "Revised: 8-in x 68-mil A1008 Gr.50 X-straps (Ag=0.570 in2) each braced bay, 3x 3/4-in bolts per end with 3/8-in gusset (connection phi >= 22.1 kip strap net strength); turnbuckle/tensioner + take-up noted. Ag=6x0.0713=0.428 in2: phiTn(gross)=0.9x0.428x50=19.3 kip; An (2x 3/4-in bolts: 0.428-2x0.8125x0.0713=0.312): phiTn(net)=0.75x0.312x65=15.2 kip -> CONTROLS; D/C=18.8/15.2=1.24 NG -> upsize to 8-in x 68-mil (Ag=0.570, An=0.454, phiTn=22.1) D/C=0.85. Connection: 4x #14 screws? No - bolts: 3x 3/4-in F3125 per end (bearing 3x0.60x... >= 22.1 kip)."
+        },
+        {
+          "connection_id": "CONN-STRAP-R-1848-A-end",
+          "design_record_id": "schedules/sched-strap",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "gusset plate bolt bolt bolt",
+          "selected_components": "Revised: 8-in x 68-mil A1008 Gr.50 X-straps (Ag=0.570 in2) each braced bay, 3x 3/4-in bolts per end with 3/8-in gusset (connection phi >= 22.1 kip strap net strength); turnbuckle/tensioner + take-up noted. Ag=6x0.0713=0.428 in2: phiTn(gross)=0.9x0.428x50=19.3 kip; An (2x 3/4-in bolts: 0.428-2x0.8125x0.0713=0.312): phiTn(net)=0.75x0.312x65=15.2 kip -> CONTROLS; D/C=18.8/15.2=1.24 NG -> upsize to 8-in x 68-mil (Ag=0.570, An=0.454, phiTn=22.1) D/C=0.85. Connection: 4x #14 screws? No - bolts: 3x 3/4-in F3125 per end (bearing 3x0.60x... >= 22.1 kip)."
+        },
+        {
+          "connection_id": "CONN-STRAP-R-1848-B-start",
+          "design_record_id": "schedules/sched-strap",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "gusset plate bolt bolt bolt",
+          "selected_components": "Revised: 8-in x 68-mil A1008 Gr.50 X-straps (Ag=0.570 in2) each braced bay, 3x 3/4-in bolts per end with 3/8-in gusset (connection phi >= 22.1 kip strap net strength); turnbuckle/tensioner + take-up noted. Ag=6x0.0713=0.428 in2: phiTn(gross)=0.9x0.428x50=19.3 kip; An (2x 3/4-in bolts: 0.428-2x0.8125x0.0713=0.312): phiTn(net)=0.75x0.312x65=15.2 kip -> CONTROLS; D/C=18.8/15.2=1.24 NG -> upsize to 8-in x 68-mil (Ag=0.570, An=0.454, phiTn=22.1) D/C=0.85. Connection: 4x #14 screws? No - bolts: 3x 3/4-in F3125 per end (bearing 3x0.60x... >= 22.1 kip)."
+        },
+        {
+          "connection_id": "CONN-STRAP-R-1848-B-end",
+          "design_record_id": "schedules/sched-strap",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "gusset plate bolt bolt bolt",
+          "selected_components": "Revised: 8-in x 68-mil A1008 Gr.50 X-straps (Ag=0.570 in2) each braced bay, 3x 3/4-in bolts per end with 3/8-in gusset (connection phi >= 22.1 kip strap net strength); turnbuckle/tensioner + take-up noted. Ag=6x0.0713=0.428 in2: phiTn(gross)=0.9x0.428x50=19.3 kip; An (2x 3/4-in bolts: 0.428-2x0.8125x0.0713=0.312): phiTn(net)=0.75x0.312x65=15.2 kip -> CONTROLS; D/C=18.8/15.2=1.24 NG -> upsize to 8-in x 68-mil (Ag=0.570, An=0.454, phiTn=22.1) D/C=0.85. Connection: 4x #14 screws? No - bolts: 3x 3/4-in F3125 per end (bearing 3x0.60x... >= 22.1 kip)."
+        },
+        {
+          "connection_id": "CONN-STRAP-RF-L-0-A-start",
+          "design_record_id": "schedules/sched-strap",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "gusset plate bolt bolt bolt",
+          "selected_components": "Revised: 8-in x 68-mil A1008 Gr.50 X-straps (Ag=0.570 in2) each braced bay, 3x 3/4-in bolts per end with 3/8-in gusset (connection phi >= 22.1 kip strap net strength); turnbuckle/tensioner + take-up noted. Ag=6x0.0713=0.428 in2: phiTn(gross)=0.9x0.428x50=19.3 kip; An (2x 3/4-in bolts: 0.428-2x0.8125x0.0713=0.312): phiTn(net)=0.75x0.312x65=15.2 kip -> CONTROLS; D/C=18.8/15.2=1.24 NG -> upsize to 8-in x 68-mil (Ag=0.570, An=0.454, phiTn=22.1) D/C=0.85. Connection: 4x #14 screws? No - bolts: 3x 3/4-in F3125 per end (bearing 3x0.60x... >= 22.1 kip)."
+        },
+        {
+          "connection_id": "CONN-STRAP-RF-L-0-A-end",
+          "design_record_id": "schedules/sched-strap",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "gusset plate bolt bolt bolt",
+          "selected_components": "Revised: 8-in x 68-mil A1008 Gr.50 X-straps (Ag=0.570 in2) each braced bay, 3x 3/4-in bolts per end with 3/8-in gusset (connection phi >= 22.1 kip strap net strength); turnbuckle/tensioner + take-up noted. Ag=6x0.0713=0.428 in2: phiTn(gross)=0.9x0.428x50=19.3 kip; An (2x 3/4-in bolts: 0.428-2x0.8125x0.0713=0.312): phiTn(net)=0.75x0.312x65=15.2 kip -> CONTROLS; D/C=18.8/15.2=1.24 NG -> upsize to 8-in x 68-mil (Ag=0.570, An=0.454, phiTn=22.1) D/C=0.85. Connection: 4x #14 screws? No - bolts: 3x 3/4-in F3125 per end (bearing 3x0.60x... >= 22.1 kip)."
+        },
+        {
+          "connection_id": "CONN-STRAP-RF-L-0-B-start",
+          "design_record_id": "schedules/sched-strap",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "gusset plate bolt bolt bolt",
+          "selected_components": "Revised: 8-in x 68-mil A1008 Gr.50 X-straps (Ag=0.570 in2) each braced bay, 3x 3/4-in bolts per end with 3/8-in gusset (connection phi >= 22.1 kip strap net strength); turnbuckle/tensioner + take-up noted. Ag=6x0.0713=0.428 in2: phiTn(gross)=0.9x0.428x50=19.3 kip; An (2x 3/4-in bolts: 0.428-2x0.8125x0.0713=0.312): phiTn(net)=0.75x0.312x65=15.2 kip -> CONTROLS; D/C=18.8/15.2=1.24 NG -> upsize to 8-in x 68-mil (Ag=0.570, An=0.454, phiTn=22.1) D/C=0.85. Connection: 4x #14 screws? No - bolts: 3x 3/4-in F3125 per end (bearing 3x0.60x... >= 22.1 kip)."
+        },
+        {
+          "connection_id": "CONN-STRAP-RF-L-0-B-end",
+          "design_record_id": "schedules/sched-strap",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "gusset plate bolt bolt bolt",
+          "selected_components": "Revised: 8-in x 68-mil A1008 Gr.50 X-straps (Ag=0.570 in2) each braced bay, 3x 3/4-in bolts per end with 3/8-in gusset (connection phi >= 22.1 kip strap net strength); turnbuckle/tensioner + take-up noted. Ag=6x0.0713=0.428 in2: phiTn(gross)=0.9x0.428x50=19.3 kip; An (2x 3/4-in bolts: 0.428-2x0.8125x0.0713=0.312): phiTn(net)=0.75x0.312x65=15.2 kip -> CONTROLS; D/C=18.8/15.2=1.24 NG -> upsize to 8-in x 68-mil (Ag=0.570, An=0.454, phiTn=22.1) D/C=0.85. Connection: 4x #14 screws? No - bolts: 3x 3/4-in F3125 per end (bearing 3x0.60x... >= 22.1 kip)."
+        },
+        {
+          "connection_id": "CONN-STRAP-RF-R-0-A-start",
+          "design_record_id": "schedules/sched-strap",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "gusset plate bolt bolt bolt",
+          "selected_components": "Revised: 8-in x 68-mil A1008 Gr.50 X-straps (Ag=0.570 in2) each braced bay, 3x 3/4-in bolts per end with 3/8-in gusset (connection phi >= 22.1 kip strap net strength); turnbuckle/tensioner + take-up noted. Ag=6x0.0713=0.428 in2: phiTn(gross)=0.9x0.428x50=19.3 kip; An (2x 3/4-in bolts: 0.428-2x0.8125x0.0713=0.312): phiTn(net)=0.75x0.312x65=15.2 kip -> CONTROLS; D/C=18.8/15.2=1.24 NG -> upsize to 8-in x 68-mil (Ag=0.570, An=0.454, phiTn=22.1) D/C=0.85. Connection: 4x #14 screws? No - bolts: 3x 3/4-in F3125 per end (bearing 3x0.60x... >= 22.1 kip)."
+        },
+        {
+          "connection_id": "CONN-STRAP-RF-R-0-A-end",
+          "design_record_id": "schedules/sched-strap",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "gusset plate bolt bolt bolt",
+          "selected_components": "Revised: 8-in x 68-mil A1008 Gr.50 X-straps (Ag=0.570 in2) each braced bay, 3x 3/4-in bolts per end with 3/8-in gusset (connection phi >= 22.1 kip strap net strength); turnbuckle/tensioner + take-up noted. Ag=6x0.0713=0.428 in2: phiTn(gross)=0.9x0.428x50=19.3 kip; An (2x 3/4-in bolts: 0.428-2x0.8125x0.0713=0.312): phiTn(net)=0.75x0.312x65=15.2 kip -> CONTROLS; D/C=18.8/15.2=1.24 NG -> upsize to 8-in x 68-mil (Ag=0.570, An=0.454, phiTn=22.1) D/C=0.85. Connection: 4x #14 screws? No - bolts: 3x 3/4-in F3125 per end (bearing 3x0.60x... >= 22.1 kip)."
+        },
+        {
+          "connection_id": "CONN-STRAP-RF-R-0-B-start",
+          "design_record_id": "schedules/sched-strap",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "gusset plate bolt bolt bolt",
+          "selected_components": "Revised: 8-in x 68-mil A1008 Gr.50 X-straps (Ag=0.570 in2) each braced bay, 3x 3/4-in bolts per end with 3/8-in gusset (connection phi >= 22.1 kip strap net strength); turnbuckle/tensioner + take-up noted. Ag=6x0.0713=0.428 in2: phiTn(gross)=0.9x0.428x50=19.3 kip; An (2x 3/4-in bolts: 0.428-2x0.8125x0.0713=0.312): phiTn(net)=0.75x0.312x65=15.2 kip -> CONTROLS; D/C=18.8/15.2=1.24 NG -> upsize to 8-in x 68-mil (Ag=0.570, An=0.454, phiTn=22.1) D/C=0.85. Connection: 4x #14 screws? No - bolts: 3x 3/4-in F3125 per end (bearing 3x0.60x... >= 22.1 kip)."
+        },
+        {
+          "connection_id": "CONN-STRAP-RF-R-0-B-end",
+          "design_record_id": "schedules/sched-strap",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "gusset plate bolt bolt bolt",
+          "selected_components": "Revised: 8-in x 68-mil A1008 Gr.50 X-straps (Ag=0.570 in2) each braced bay, 3x 3/4-in bolts per end with 3/8-in gusset (connection phi >= 22.1 kip strap net strength); turnbuckle/tensioner + take-up noted. Ag=6x0.0713=0.428 in2: phiTn(gross)=0.9x0.428x50=19.3 kip; An (2x 3/4-in bolts: 0.428-2x0.8125x0.0713=0.312): phiTn(net)=0.75x0.312x65=15.2 kip -> CONTROLS; D/C=18.8/15.2=1.24 NG -> upsize to 8-in x 68-mil (Ag=0.570, An=0.454, phiTn=22.1) D/C=0.85. Connection: 4x #14 screws? No - bolts: 3x 3/4-in F3125 per end (bearing 3x0.60x... >= 22.1 kip)."
+        },
+        {
+          "connection_id": "CONN-STRAP-RF-L-1848-A-start",
+          "design_record_id": "schedules/sched-strap",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "gusset plate bolt bolt bolt",
+          "selected_components": "Revised: 8-in x 68-mil A1008 Gr.50 X-straps (Ag=0.570 in2) each braced bay, 3x 3/4-in bolts per end with 3/8-in gusset (connection phi >= 22.1 kip strap net strength); turnbuckle/tensioner + take-up noted. Ag=6x0.0713=0.428 in2: phiTn(gross)=0.9x0.428x50=19.3 kip; An (2x 3/4-in bolts: 0.428-2x0.8125x0.0713=0.312): phiTn(net)=0.75x0.312x65=15.2 kip -> CONTROLS; D/C=18.8/15.2=1.24 NG -> upsize to 8-in x 68-mil (Ag=0.570, An=0.454, phiTn=22.1) D/C=0.85. Connection: 4x #14 screws? No - bolts: 3x 3/4-in F3125 per end (bearing 3x0.60x... >= 22.1 kip)."
+        },
+        {
+          "connection_id": "CONN-STRAP-RF-L-1848-A-end",
+          "design_record_id": "schedules/sched-strap",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "gusset plate bolt bolt bolt",
+          "selected_components": "Revised: 8-in x 68-mil A1008 Gr.50 X-straps (Ag=0.570 in2) each braced bay, 3x 3/4-in bolts per end with 3/8-in gusset (connection phi >= 22.1 kip strap net strength); turnbuckle/tensioner + take-up noted. Ag=6x0.0713=0.428 in2: phiTn(gross)=0.9x0.428x50=19.3 kip; An (2x 3/4-in bolts: 0.428-2x0.8125x0.0713=0.312): phiTn(net)=0.75x0.312x65=15.2 kip -> CONTROLS; D/C=18.8/15.2=1.24 NG -> upsize to 8-in x 68-mil (Ag=0.570, An=0.454, phiTn=22.1) D/C=0.85. Connection: 4x #14 screws? No - bolts: 3x 3/4-in F3125 per end (bearing 3x0.60x... >= 22.1 kip)."
+        },
+        {
+          "connection_id": "CONN-STRAP-RF-L-1848-B-start",
+          "design_record_id": "schedules/sched-strap",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "gusset plate bolt bolt bolt",
+          "selected_components": "Revised: 8-in x 68-mil A1008 Gr.50 X-straps (Ag=0.570 in2) each braced bay, 3x 3/4-in bolts per end with 3/8-in gusset (connection phi >= 22.1 kip strap net strength); turnbuckle/tensioner + take-up noted. Ag=6x0.0713=0.428 in2: phiTn(gross)=0.9x0.428x50=19.3 kip; An (2x 3/4-in bolts: 0.428-2x0.8125x0.0713=0.312): phiTn(net)=0.75x0.312x65=15.2 kip -> CONTROLS; D/C=18.8/15.2=1.24 NG -> upsize to 8-in x 68-mil (Ag=0.570, An=0.454, phiTn=22.1) D/C=0.85. Connection: 4x #14 screws? No - bolts: 3x 3/4-in F3125 per end (bearing 3x0.60x... >= 22.1 kip)."
+        },
+        {
+          "connection_id": "CONN-STRAP-RF-L-1848-B-end",
+          "design_record_id": "schedules/sched-strap",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "gusset plate bolt bolt bolt",
+          "selected_components": "Revised: 8-in x 68-mil A1008 Gr.50 X-straps (Ag=0.570 in2) each braced bay, 3x 3/4-in bolts per end with 3/8-in gusset (connection phi >= 22.1 kip strap net strength); turnbuckle/tensioner + take-up noted. Ag=6x0.0713=0.428 in2: phiTn(gross)=0.9x0.428x50=19.3 kip; An (2x 3/4-in bolts: 0.428-2x0.8125x0.0713=0.312): phiTn(net)=0.75x0.312x65=15.2 kip -> CONTROLS; D/C=18.8/15.2=1.24 NG -> upsize to 8-in x 68-mil (Ag=0.570, An=0.454, phiTn=22.1) D/C=0.85. Connection: 4x #14 screws? No - bolts: 3x 3/4-in F3125 per end (bearing 3x0.60x... >= 22.1 kip)."
+        },
+        {
+          "connection_id": "CONN-STRAP-RF-R-1848-A-start",
+          "design_record_id": "schedules/sched-strap",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "gusset plate bolt bolt bolt",
+          "selected_components": "Revised: 8-in x 68-mil A1008 Gr.50 X-straps (Ag=0.570 in2) each braced bay, 3x 3/4-in bolts per end with 3/8-in gusset (connection phi >= 22.1 kip strap net strength); turnbuckle/tensioner + take-up noted. Ag=6x0.0713=0.428 in2: phiTn(gross)=0.9x0.428x50=19.3 kip; An (2x 3/4-in bolts: 0.428-2x0.8125x0.0713=0.312): phiTn(net)=0.75x0.312x65=15.2 kip -> CONTROLS; D/C=18.8/15.2=1.24 NG -> upsize to 8-in x 68-mil (Ag=0.570, An=0.454, phiTn=22.1) D/C=0.85. Connection: 4x #14 screws? No - bolts: 3x 3/4-in F3125 per end (bearing 3x0.60x... >= 22.1 kip)."
+        },
+        {
+          "connection_id": "CONN-STRAP-RF-R-1848-A-end",
+          "design_record_id": "schedules/sched-strap",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "gusset plate bolt bolt bolt",
+          "selected_components": "Revised: 8-in x 68-mil A1008 Gr.50 X-straps (Ag=0.570 in2) each braced bay, 3x 3/4-in bolts per end with 3/8-in gusset (connection phi >= 22.1 kip strap net strength); turnbuckle/tensioner + take-up noted. Ag=6x0.0713=0.428 in2: phiTn(gross)=0.9x0.428x50=19.3 kip; An (2x 3/4-in bolts: 0.428-2x0.8125x0.0713=0.312): phiTn(net)=0.75x0.312x65=15.2 kip -> CONTROLS; D/C=18.8/15.2=1.24 NG -> upsize to 8-in x 68-mil (Ag=0.570, An=0.454, phiTn=22.1) D/C=0.85. Connection: 4x #14 screws? No - bolts: 3x 3/4-in F3125 per end (bearing 3x0.60x... >= 22.1 kip)."
+        },
+        {
+          "connection_id": "CONN-STRAP-RF-R-1848-B-start",
+          "design_record_id": "schedules/sched-strap",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "gusset plate bolt bolt bolt",
+          "selected_components": "Revised: 8-in x 68-mil A1008 Gr.50 X-straps (Ag=0.570 in2) each braced bay, 3x 3/4-in bolts per end with 3/8-in gusset (connection phi >= 22.1 kip strap net strength); turnbuckle/tensioner + take-up noted. Ag=6x0.0713=0.428 in2: phiTn(gross)=0.9x0.428x50=19.3 kip; An (2x 3/4-in bolts: 0.428-2x0.8125x0.0713=0.312): phiTn(net)=0.75x0.312x65=15.2 kip -> CONTROLS; D/C=18.8/15.2=1.24 NG -> upsize to 8-in x 68-mil (Ag=0.570, An=0.454, phiTn=22.1) D/C=0.85. Connection: 4x #14 screws? No - bolts: 3x 3/4-in F3125 per end (bearing 3x0.60x... >= 22.1 kip)."
+        },
+        {
+          "connection_id": "CONN-STRAP-RF-R-1848-B-end",
+          "design_record_id": "schedules/sched-strap",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "gusset plate bolt bolt bolt",
+          "selected_components": "Revised: 8-in x 68-mil A1008 Gr.50 X-straps (Ag=0.570 in2) each braced bay, 3x 3/4-in bolts per end with 3/8-in gusset (connection phi >= 22.1 kip strap net strength); turnbuckle/tensioner + take-up noted. Ag=6x0.0713=0.428 in2: phiTn(gross)=0.9x0.428x50=19.3 kip; An (2x 3/4-in bolts: 0.428-2x0.8125x0.0713=0.312): phiTn(net)=0.75x0.312x65=15.2 kip -> CONTROLS; D/C=18.8/15.2=1.24 NG -> upsize to 8-in x 68-mil (Ag=0.570, An=0.454, phiTn=22.1) D/C=0.85. Connection: 4x #14 screws? No - bolts: 3x 3/4-in F3125 per end (bearing 3x0.60x... >= 22.1 kip)."
+        }
+      ],
+      "message": "Located connection parts omit component categories explicitly selected in the linked design; export the actual parts/reference groups without relabelling an unrelated solid",
+      "severity": "needs_input"
+    }
+  ],
+  "physical_counts": {
+    "analysis_only": 0,
+    "connections": 389,
+    "interfaces": 0,
+    "joint_dispositions": 0,
+    "joints": 389,
+    "materials": 6,
+    "members": 216,
+    "openings": 2,
+    "panels": 7,
+    "profiles": 11,
+    "record_dispositions": 0
+  },
+  "connection_parts": 1056,
+  "design_records": 115,
+  "seconds": 1.802844524383545,
+  "llm_calls": 0,
+  "redesign": false,
+  "analysis_solve": false,
+  "drawings": false,
+  "supplements": false
+}

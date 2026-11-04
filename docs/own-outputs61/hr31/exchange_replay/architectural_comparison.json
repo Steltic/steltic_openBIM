@@ -1,0 +1,327 @@
+{
+  "case": "hr31",
+  "module": "HR",
+  "project": "WFRESH61_hr31_20261103",
+  "variant": "replay",
+  "checked_at": 1793764837.0568702,
+  "status": "passed",
+  "checks": [
+    {
+      "code": "own_output_binding",
+      "passed": true,
+      "evidence": {
+        "physical_supplements_supplied": false,
+        "source_package_sha256": "225cc82f426534f652955de84611bccaf7014315c6a15ea945c7f3573fe91599"
+      }
+    },
+    {
+      "code": "complete_native_physical_export",
+      "passed": true,
+      "evidence": {
+        "stored_readiness": {
+          "counts": {
+            "analysis_elements": 90,
+            "design_records": 25,
+            "members": 120,
+            "panels": 19
+          },
+          "findings": [],
+          "status": "ready"
+        },
+        "current_contract_findings": []
+      }
+    },
+    {
+      "code": "return_fully_rendered",
+      "passed": true,
+      "evidence": {
+        "source_products": 1225,
+        "selected": 1225,
+        "displayed": 1225,
+        "unrendered": 0,
+        "excluded_by_scope": 0,
+        "triangles": 36606
+      }
+    },
+    {
+      "code": "architectural_opening_export_geometry",
+      "passed": true,
+      "evidence": {
+        "unresolved_opening_warnings": []
+      }
+    },
+    {
+      "code": "recoverable_input_surface_3P7T5s7sHRXAg9s5gZUiFn",
+      "passed": true,
+      "evidence": {
+        "name": "Shipping office ROOF 16 ft"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_1n621wLBXPDOslfCiIBtxa",
+      "passed": true,
+      "evidence": {
+        "name": "Hall south roof slope 3:12"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_1wyTI3LM9JiAQil2Gm$SfB",
+      "passed": true,
+      "evidence": {
+        "name": "Hall north roof slope 3:12"
+      }
+    },
+    {
+      "code": "floor_roof_panel_classification",
+      "passed": true,
+      "evidence": {
+        "untyped_horizontal_or_sloped_panels": [],
+        "method": "Panel geometry is compared even when the source did not declare its floor/roof role; role omission is reported separately."
+      }
+    },
+    {
+      "code": "floor_roof_planes_footprints_voids",
+      "passed": true,
+      "evidence": {
+        "required_plane_groups": 3,
+        "returned_plane_groups": 4,
+        "differences": [],
+        "plane_distance_tolerance_m": 0.005
+      }
+    },
+    {
+      "code": "no_unrequested_floor_roof_planes",
+      "passed": true,
+      "evidence": {
+        "extra_planes": []
+      }
+    },
+    {
+      "code": "structural_datums_retained",
+      "passed": true,
+      "evidence": {
+        "required": [
+          {
+            "id": "20KJhvCsHLSe5Qdg3vl47L",
+            "name": "Ground",
+            "elevation_m": 0.0
+          },
+          {
+            "id": "1j_rHn0r5RqBQjTFDb6sCi",
+            "name": "Datum 16 ft",
+            "elevation_m": 4.8768
+          },
+          {
+            "id": "1c7igT3BTNxgLqKwwrVNuT",
+            "name": "Datum 26 ft",
+            "elevation_m": 7.9248
+          },
+          {
+            "id": "1hsGFAfObLUASwE$JY03kt",
+            "name": "Datum 36 ft",
+            "elevation_m": 10.972800000000001
+          }
+        ],
+        "returned": [
+          {
+            "id": "0KlSFp0XrLpgmQ4xRRiG$7",
+            "name": "Ground",
+            "elevation_m": 0.0
+          },
+          {
+            "id": "00XIqKnA5IYQynMZXohCPI",
+            "name": "Datum 16 ft",
+            "elevation_m": 4.8768
+          },
+          {
+            "id": "1cDJQX_YDPo9ntSzcHF1ip",
+            "name": "Datum 26 ft",
+            "elevation_m": 7.924799999999999
+          },
+          {
+            "id": "1b3xv6_gzK5v7GEN0yVMG2",
+            "name": "Datum 36 ft",
+            "elevation_m": 10.972800000000001
+          }
+        ],
+        "missing": []
+      }
+    },
+    {
+      "code": "architectural_grid_locations",
+      "passed": true,
+      "evidence": {
+        "source_axes": 13,
+        "returned_axes": 13,
+        "missing_or_changed": [],
+        "checks": "labels, U/V/W family and full 3D polyline"
+      }
+    },
+    {
+      "code": "architectural_source_identity",
+      "passed": true,
+      "evidence": {
+        "expected": "e7225fba3a803b98fa3aa13d9d8719426c2340dc220c671f47b3289e2252f96d",
+        "declared": "e7225fba3a803b98fa3aa13d9d8719426c2340dc220c671f47b3289e2252f96d"
+      }
+    },
+    {
+      "code": "physical_member_placement_defined",
+      "passed": true,
+      "evidence": {
+        "unknown_member_ids": [],
+        "method": "Null offsets or orientation remain unknown; no zero offsets or local axes are invented for these checks."
+      }
+    },
+    {
+      "code": "door_window_boundaries",
+      "passed": true,
+      "evidence": {
+        "source_count": 20,
+        "physical_count": 20,
+        "changed": []
+      }
+    },
+    {
+      "code": "door_window_workline_clearance",
+      "passed": true,
+      "evidence": {
+        "count": 0,
+        "examples": [],
+        "method": "Strict opening bounds against physical worklines; separate from a solid clash or fabrication-fit check"
+      }
+    },
+    {
+      "code": "door_window_solid_clearance",
+      "passed": true,
+      "evidence": {
+        "checked_solids": 1186,
+        "clashes": [],
+        "method": "Returned IFC mesh triangles against source axis-aligned opening volumes, with 5 mm tolerance at jamb/sill/head. All door/window fixtures in this sweep have axis-aligned hosts or are axis-aligned freestanding reservations."
+      }
+    },
+    {
+      "code": "connection_part_dimensions",
+      "passed": true,
+      "evidence": {
+        "checked": 27,
+        "mismatches": [],
+        "method": "Explicit plate/gusset thickness or cylindrical shaft diameter versus solid dimensions; tolerance max(0.005 in, 2%). Resolve against actual completed design records, not by relabelling an arbitrary solid."
+      }
+    },
+    {
+      "code": "member_design_record_sections",
+      "passed": true,
+      "evidence": {
+        "checked_links": 82,
+        "links_requiring_other_review": 8,
+        "mismatches": [],
+        "method": "Actual physical catalogue section label versus every linked member record with an explicit inputs.section. Custom profile aliases and built-up constituent calculations are outside this exact-label screen."
+      }
+    },
+    {
+      "code": "gravity_profile_orientation",
+      "passed": true,
+      "evidence": {
+        "checked": 56,
+        "suspect_members": [],
+        "method": "Deep gravity-framing profiles: detect depth axis nearly perpendicular to projected gravity; inspect intentional weak-axis designs separately.",
+        "unknown_placement_members_not_screened": []
+      }
+    },
+    {
+      "code": "built_up_constituents_separate",
+      "passed": true,
+      "evidence": {
+        "checked_profiles": 0,
+        "overlaps": [],
+        "method": "Separate built-up constituents must not substantially occupy the same section area; threshold >0.005 in2 and >5% of a constituent, allowing preview fillet simplifications."
+      }
+    },
+    {
+      "code": "no_duplicate_physical_occurrences",
+      "passed": true,
+      "evidence": {
+        "count": 0,
+        "examples": []
+      }
+    },
+    {
+      "code": "located_connection_occurrences",
+      "passed": true,
+      "evidence": {
+        "connections": 217,
+        "designed_without_parts": [],
+        "delegated_interfaces": []
+      }
+    },
+    {
+      "code": "connection_occurrence_coverage",
+      "passed": true,
+      "evidence": {
+        "checked_exemptions": 0,
+        "problems": [],
+        "method": "Explicit hardware notes and column bases lacking any connection-part bounds within six feet; continuous-subdivision claims must have opposing collinear member ends. Checks returned solid and reference-part bounds. Nearness alone is not connection completeness, fit or capacity certification.",
+        "unknown_placement_members_not_screened": []
+      }
+    }
+  ],
+  "issues": [],
+  "input_scope": [
+    {
+      "guid": "0icqIiYPfSbulmheS7sSdH",
+      "name": "Hall BASESLAB 0 ft",
+      "role": "architectural_context",
+      "reason": "Ground/host slab outside elevated steel framing comparison"
+    },
+    {
+      "guid": "1Gv6M79YjGY8H0FKEgdRg3",
+      "name": "Shipping office BASESLAB 0 ft",
+      "role": "architectural_context",
+      "reason": "Ground/host slab outside elevated steel framing comparison"
+    },
+    {
+      "guid": "3P7T5s7sHRXAg9s5gZUiFn",
+      "name": "Shipping office ROOF 16 ft",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "1n621wLBXPDOslfCiIBtxa",
+      "name": "Hall south roof slope 3:12",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "1wyTI3LM9JiAQil2Gm$SfB",
+      "name": "Hall north roof slope 3:12",
+      "role": "required_structural_coordination"
+    }
+  ],
+  "architectural_sha256": "e7225fba3a803b98fa3aa13d9d8719426c2340dc220c671f47b3289e2252f96d",
+  "architectural_handoff_sha256": "211997ee89f7d7f87be13e19c139397f865170e123fa19217c52fce93b86eac8",
+  "physical_package_sha256": "225cc82f426534f652955de84611bccaf7014315c6a15ea945c7f3573fe91599",
+  "return_ifc_sha256": "60eb53c59b96e815e26616512295b4d1cc5f94f588a9d7610556349d4e3c7420",
+  "counts": {
+    "analysis_only": 0,
+    "connections": 217,
+    "interfaces": 3,
+    "joint_dispositions": 0,
+    "joints": 217,
+    "materials": 6,
+    "members": 120,
+    "openings": 20,
+    "panels": 19,
+    "profiles": 11,
+    "record_dispositions": 2
+  },
+  "limits": [
+    "Existing own-output package with independent geometry/data checks; not a fresh analysis, engineering certification or fabrication acceptance.",
+    "Base slabs and explicitly existing host context are outside the new elevated steel design comparison and remain in the original architectural IFC.",
+    "Input fixtures are synthetic; no native Revit application acceptance is claimed."
+  ],
+  "key": "hr31",
+  "check_binding": {
+    "checker": "72bc7bb6c45509ef76ab60a17ace2f500637d5e358138bceece3d15121a72278",
+    "algorithms": "972e237fce8421ffa6b4be2f39cba5420bedfe1eed870a3f83934780b1eb33c4",
+    "returned_ifc": "60eb53c59b96e815e26616512295b4d1cc5f94f588a9d7610556349d4e3c7420"
+  }
+}

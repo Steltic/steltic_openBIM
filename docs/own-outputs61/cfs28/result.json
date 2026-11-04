@@ -1,0 +1,77 @@
+{
+  "case": "cfs28",
+  "key": "cfs28",
+  "title": "Agricultural portal",
+  "module": "CFS",
+  "primary": true,
+  "source_run_status": "error",
+  "original_package_present": true,
+  "original_native_completion_passed": false,
+  "producer_completion_problems": [
+    "BIM export is stale; rerun consistency.check or BIM replay"
+  ],
+  "saved_readiness": "ready",
+  "original_validation": "needs_input",
+  "original_freshness": "needs_input",
+  "changed_recorded_files": [],
+  "native_reexport": "exported",
+  "native_reexport_readiness": "needs_input",
+  "native_reexport_finding_codes": [
+    "connection_selected_components"
+  ],
+  "exporter_revision": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+  "original_producer_revision": null,
+  "variants": {
+    "saved": {
+      "transport": "passed",
+      "source_validation": "needs_input",
+      "source_finding_codes": [
+        "connection_selected_components"
+      ],
+      "architectural_comparison": "needs_resolution",
+      "comparison_issue_codes": [
+        "complete_native_physical_export",
+        "floor_roof_panel_classification",
+        "door_window_solid_clearance",
+        "gravity_profile_orientation"
+      ],
+      "products_compared": 1281,
+      "entities_compared": 18233,
+      "package_sha256": "98e36a890cc40f63c509fa6b6846bbde225844ad620fc5fdb6493b76cb58bb17",
+      "source_ifc_sha256": "bcb0b0e3e1565b9277a604090e5dddc17c4e0d7542b7fc767b162a1475428886",
+      "returned_ifc_sha256": "97c542ec905652fa88d5203f1173582e3d1f32d5904d35fbba891efdd3fed822",
+      "source_files_unchanged": true,
+      "schema_errors": [],
+      "import_readiness_verified": true,
+      "error": null,
+      "stage": null
+    },
+    "replay": {
+      "transport": "passed",
+      "source_validation": "needs_input",
+      "source_finding_codes": [
+        "connection_selected_components"
+      ],
+      "architectural_comparison": "needs_resolution",
+      "comparison_issue_codes": [
+        "complete_native_physical_export",
+        "floor_roof_panel_classification",
+        "door_window_solid_clearance",
+        "gravity_profile_orientation"
+      ],
+      "products_compared": 1281,
+      "entities_compared": 18233,
+      "package_sha256": "3abd516596d59a4df49a892aed64ee1a3dd96338151e7cfbcdee4ff79603ed83",
+      "source_ifc_sha256": "113ab90df6664f168f2a492825d4f9781bbd634b21b8c3d4f1235c36d7a801d3",
+      "returned_ifc_sha256": "7e825310d8d290bfa913a9afb82891a141fc06dbc1f4cbc46c034a621cc5fd10",
+      "source_files_unchanged": true,
+      "schema_errors": [],
+      "import_readiness_verified": true,
+      "error": null,
+      "stage": null
+    }
+  },
+  "status": "transport_passed_source_needs_resolution",
+  "saved_job_acceptance": false,
+  "reexport_model_checks_passed": false
+}

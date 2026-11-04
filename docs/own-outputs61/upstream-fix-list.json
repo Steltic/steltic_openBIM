@@ -1,0 +1,264 @@
+{
+  "policy": "Review only. No HR, CFS or Hub edits, PRs, merges or runtime pin updates.",
+  "native_findings": {
+    "connection_selected_family": [
+      "cfs16",
+      "cfs3",
+      "cfs6",
+      "cfs7",
+      "hr4",
+      "hr8"
+    ],
+    "connection_selected_components": [
+      "cfs17",
+      "cfs19",
+      "cfs28",
+      "hr16"
+    ],
+    "connection_fastener_quantity": [
+      "cfs17",
+      "cfs19",
+      "cfs26",
+      "cfs29",
+      "hr1",
+      "hr11",
+      "hr12",
+      "hr16",
+      "hr25"
+    ],
+    "physical_ply_count": [
+      "cfs17_earlier",
+      "cfs29_earlier"
+    ],
+    "physical_opening_host": [
+      "cfs17_earlier"
+    ],
+    "physical_remote_part": [
+      "cfs17_earlier",
+      "cfs1_earlier",
+      "hr16_earlier"
+    ],
+    "physical_constituent_overlap": [
+      "cfs1_earlier"
+    ],
+    "physical_opening_workline": [
+      "cfs1_earlier",
+      "cfs29_earlier",
+      "hr16_earlier"
+    ],
+    "connection_duplicate_parts": [
+      "cfs2",
+      "cfs27",
+      "hr13",
+      "hr16",
+      "hr8"
+    ],
+    "joint_disposition_kind": [
+      "cfs29"
+    ],
+    "architectural_opening_bounds": [
+      "hr11"
+    ],
+    "member_placement": [
+      "hr24",
+      "hr9"
+    ],
+    "connection_mapping": [
+      "hr24",
+      "hr9"
+    ],
+    "assembly_mapping": [
+      "hr24",
+      "hr9"
+    ],
+    "coverage_primary_members": [
+      "hr24",
+      "hr9"
+    ],
+    "coverage_secondary_members": [
+      "hr24",
+      "hr9"
+    ],
+    "coverage_openings": [
+      "hr24",
+      "hr9"
+    ],
+    "coverage_connections": [
+      "hr24",
+      "hr9"
+    ],
+    "design_provenance": [
+      "hr24",
+      "hr9"
+    ],
+    "physical_idealization": [
+      "hr9"
+    ]
+  },
+  "feedback_fingerprint_cases": [
+    "cfs1",
+    "cfs16",
+    "cfs17",
+    "cfs18",
+    "cfs19",
+    "cfs2",
+    "cfs26",
+    "cfs27",
+    "cfs3",
+    "cfs6",
+    "hr1",
+    "hr12",
+    "hr13",
+    "hr22",
+    "hr25",
+    "hr4",
+    "hr8"
+  ],
+  "genuine_changed_inputs": [
+    {
+      "case": "cfs16",
+      "file": "bim_build3.py"
+    },
+    {
+      "case": "cfs29",
+      "file": "bim_gen.py"
+    }
+  ],
+  "independent_geometry_findings": [
+    {
+      "case": "cfs18",
+      "code": "door_window_solid_clearance",
+      "evidence_file": "cfs18\\exchange_replay\\architectural_comparison.json"
+    },
+    {
+      "case": "cfs27",
+      "code": "door_window_solid_clearance",
+      "evidence_file": "cfs27\\exchange_replay\\architectural_comparison.json"
+    },
+    {
+      "case": "cfs28",
+      "code": "floor_roof_panel_classification",
+      "evidence_file": "cfs28\\exchange_replay\\architectural_comparison.json"
+    },
+    {
+      "case": "cfs28",
+      "code": "door_window_solid_clearance",
+      "evidence_file": "cfs28\\exchange_replay\\architectural_comparison.json"
+    },
+    {
+      "case": "cfs28",
+      "code": "gravity_profile_orientation",
+      "evidence_file": "cfs28\\exchange_replay\\architectural_comparison.json"
+    },
+    {
+      "case": "cfs6",
+      "code": "floor_roof_panel_classification",
+      "evidence_file": "cfs6\\exchange_replay\\architectural_comparison.json"
+    },
+    {
+      "case": "cfs6",
+      "code": "no_unrequested_floor_roof_planes",
+      "evidence_file": "cfs6\\exchange_replay\\architectural_comparison.json"
+    },
+    {
+      "case": "cfs7",
+      "code": "floor_roof_planes_footprints_voids",
+      "evidence_file": "cfs7\\exchange_replay\\architectural_comparison.json"
+    },
+    {
+      "case": "hr11",
+      "code": "floor_roof_planes_footprints_voids",
+      "evidence_file": "hr11\\exchange_replay\\architectural_comparison.json"
+    },
+    {
+      "case": "hr11",
+      "code": "door_window_boundaries",
+      "evidence_file": "hr11\\exchange_replay\\architectural_comparison.json"
+    },
+    {
+      "case": "hr11",
+      "code": "door_window_workline_clearance",
+      "evidence_file": "hr11\\exchange_replay\\architectural_comparison.json"
+    },
+    {
+      "case": "hr11",
+      "code": "door_window_solid_clearance",
+      "evidence_file": "hr11\\exchange_replay\\architectural_comparison.json"
+    },
+    {
+      "case": "hr22",
+      "code": "floor_roof_planes_footprints_voids",
+      "evidence_file": "hr22\\exchange_replay\\architectural_comparison.json"
+    },
+    {
+      "case": "hr24",
+      "code": "floor_roof_planes_footprints_voids",
+      "evidence_file": "hr24\\exchange_replay\\architectural_comparison.json"
+    },
+    {
+      "case": "hr24",
+      "code": "physical_member_placement_defined",
+      "evidence_file": "hr24\\exchange_replay\\architectural_comparison.json"
+    },
+    {
+      "case": "hr24",
+      "code": "located_connection_occurrences",
+      "evidence_file": "hr24\\exchange_replay\\architectural_comparison.json"
+    },
+    {
+      "case": "hr25",
+      "code": "floor_roof_planes_footprints_voids",
+      "evidence_file": "hr25\\exchange_replay\\architectural_comparison.json"
+    },
+    {
+      "case": "hr9",
+      "code": "floor_roof_planes_footprints_voids",
+      "evidence_file": "hr9\\exchange_replay\\architectural_comparison.json"
+    },
+    {
+      "case": "hr9",
+      "code": "physical_member_placement_defined",
+      "evidence_file": "hr9\\exchange_replay\\architectural_comparison.json"
+    },
+    {
+      "case": "hr9",
+      "code": "located_connection_occurrences",
+      "evidence_file": "hr9\\exchange_replay\\architectural_comparison.json"
+    }
+  ],
+  "unavailable_primary_jobs": [
+    "cfs10",
+    "cfs11",
+    "cfs12",
+    "cfs13",
+    "cfs14",
+    "cfs15",
+    "cfs25",
+    "cfs30",
+    "cfs4",
+    "cfs5",
+    "cfs9",
+    "hr10",
+    "hr14",
+    "hr15",
+    "hr17",
+    "hr18",
+    "hr19",
+    "hr2",
+    "hr20",
+    "hr23",
+    "hr26",
+    "hr27",
+    "hr28",
+    "hr29",
+    "hr3",
+    "hr30",
+    "hr32",
+    "hr34a",
+    "hr34b",
+    "hr35",
+    "hr5",
+    "hr6",
+    "hr7a"
+  ]
+}

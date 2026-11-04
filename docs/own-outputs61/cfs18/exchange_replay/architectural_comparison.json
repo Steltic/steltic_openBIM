@@ -1,0 +1,498 @@
+{
+  "case": "cfs18",
+  "module": "CFS",
+  "project": "WFRESH61_cfs18_20261103",
+  "variant": "replay",
+  "checked_at": 1793764727.9420557,
+  "status": "needs_resolution",
+  "checks": [
+    {
+      "code": "own_output_binding",
+      "passed": true,
+      "evidence": {
+        "physical_supplements_supplied": false,
+        "source_package_sha256": "0e3a951d5d29ecac3211d5cc5b4ed1c32597b175c548c7112e5fc1073e768b61"
+      }
+    },
+    {
+      "code": "complete_native_physical_export",
+      "passed": true,
+      "evidence": {
+        "stored_readiness": {
+          "counts": {
+            "analysis_elements": 324,
+            "design_records": 156,
+            "members": 1096,
+            "panels": 8
+          },
+          "findings": [],
+          "status": "ready"
+        },
+        "current_contract_findings": []
+      }
+    },
+    {
+      "code": "return_fully_rendered",
+      "passed": true,
+      "evidence": {
+        "source_products": 8012,
+        "selected": 8012,
+        "displayed": 8012,
+        "unrendered": 0,
+        "excluded_by_scope": 0,
+        "triangles": 330284
+      }
+    },
+    {
+      "code": "architectural_opening_export_geometry",
+      "passed": true,
+      "evidence": {
+        "unresolved_opening_warnings": []
+      }
+    },
+    {
+      "code": "recoverable_input_surface_1E2Vpn9UzLiwSEUZ7899y_",
+      "passed": true,
+      "evidence": {
+        "name": "Mezzanine floor"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_3fsekA8TzO2vHzmUV55WnA",
+      "passed": true,
+      "evidence": {
+        "name": "Mezzanine ceiling roof"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_069nCv7Z9VEvpDZw1FWv5g",
+      "passed": true,
+      "evidence": {
+        "name": "West portal roof slope"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_3rO90addzQAhnC2PMx8mhF",
+      "passed": true,
+      "evidence": {
+        "name": "East portal roof slope"
+      }
+    },
+    {
+      "code": "floor_roof_panel_classification",
+      "passed": true,
+      "evidence": {
+        "untyped_horizontal_or_sloped_panels": [],
+        "method": "Panel geometry is compared even when the source did not declare its floor/roof role; role omission is reported separately."
+      }
+    },
+    {
+      "code": "floor_roof_planes_footprints_voids",
+      "passed": true,
+      "evidence": {
+        "required_plane_groups": 4,
+        "returned_plane_groups": 4,
+        "differences": [],
+        "plane_distance_tolerance_m": 0.005
+      }
+    },
+    {
+      "code": "no_unrequested_floor_roof_planes",
+      "passed": true,
+      "evidence": {
+        "extra_planes": []
+      }
+    },
+    {
+      "code": "structural_datums_retained",
+      "passed": true,
+      "evidence": {
+        "required": [
+          {
+            "id": "1a3PJ8dsHIwQYw_NHT$kvC",
+            "name": "Ground",
+            "elevation_m": 0.0
+          },
+          {
+            "id": "3nCOaoTwLPp9h44QFCZ5au",
+            "name": "Datum 10 ft",
+            "elevation_m": 3.048
+          },
+          {
+            "id": "2EqegKQzDQKuQ5B$PZbErR",
+            "name": "Datum 20 ft",
+            "elevation_m": 6.096
+          },
+          {
+            "id": "2yZtXJea5UGhJPNeYyBCN0",
+            "name": "Datum 24 ft",
+            "elevation_m": 7.315200000000001
+          },
+          {
+            "id": "21ts6LTCXI685$ujJpf9$I",
+            "name": "Datum 29 ft",
+            "elevation_m": 8.839200000000002
+          }
+        ],
+        "returned": [
+          {
+            "id": "0ZEvNCndHLYxBXUjlOQptV",
+            "name": "Ground",
+            "elevation_m": 0.0
+          },
+          {
+            "id": "2n7SPruuXKSw_fKSvtfxiJ",
+            "name": "Datum 10 ft",
+            "elevation_m": 3.048
+          },
+          {
+            "id": "2XQFhSIjXVPfSMkNFqbb63",
+            "name": "Datum 20 ft",
+            "elevation_m": 6.096
+          },
+          {
+            "id": "39njqrR4TKXBea8Jk3ttUi",
+            "name": "Datum 24 ft",
+            "elevation_m": 7.3152
+          },
+          {
+            "id": "1AdybnqPbJwesAbKyehkdR",
+            "name": "Datum 29 ft",
+            "elevation_m": 8.8392
+          }
+        ],
+        "missing": []
+      }
+    },
+    {
+      "code": "architectural_grid_locations",
+      "passed": true,
+      "evidence": {
+        "source_axes": 14,
+        "returned_axes": 14,
+        "missing_or_changed": [],
+        "checks": "labels, U/V/W family and full 3D polyline"
+      }
+    },
+    {
+      "code": "architectural_source_identity",
+      "passed": true,
+      "evidence": {
+        "expected": "40726a07a767af6fbd2e311fbaebfdc4a0fdd8596f0861a01265579ce565eea1",
+        "declared": "40726a07a767af6fbd2e311fbaebfdc4a0fdd8596f0861a01265579ce565eea1"
+      }
+    },
+    {
+      "code": "physical_member_placement_defined",
+      "passed": true,
+      "evidence": {
+        "unknown_member_ids": [],
+        "method": "Null offsets or orientation remain unknown; no zero offsets or local axes are invented for these checks."
+      }
+    },
+    {
+      "code": "door_window_boundaries",
+      "passed": true,
+      "evidence": {
+        "source_count": 3,
+        "physical_count": 3,
+        "changed": []
+      }
+    },
+    {
+      "code": "door_window_workline_clearance",
+      "passed": true,
+      "evidence": {
+        "count": 0,
+        "examples": [],
+        "method": "Strict opening bounds against physical worklines; separate from a solid clash or fabrication-fit check"
+      }
+    },
+    {
+      "code": "door_window_solid_clearance",
+      "passed": false,
+      "evidence": {
+        "checked_solids": 8001,
+        "clashes": [
+          {
+            "opening_guid": "1296VWF05PcPvbOA0Y4tzs",
+            "opening_name": "Main overhead door",
+            "product_guid": "2Kg$5ULmPQ5RH_aIHAzsOu",
+            "source_id": "SILL-anch-X-BLDG-S-384-0-A0-W",
+            "ifc_class": "IfcPlate",
+            "connection_id": "CONN-SILL-anch-X-BLDG-S-G384",
+            "joint_id": "J-DOORJAMB-X384-base"
+          },
+          {
+            "opening_guid": "1296VWF05PcPvbOA0Y4tzs",
+            "opening_name": "Main overhead door",
+            "product_guid": "2tQHO_wmDQAQv33dzAufqf",
+            "source_id": "SILL-anch-X-BLDG-S-384-0-C0-V",
+            "ifc_class": "IfcPlate",
+            "connection_id": "CONN-SILL-anch-X-BLDG-S-G384",
+            "joint_id": "J-DOORJAMB-X384-base"
+          },
+          {
+            "opening_guid": "1296VWF05PcPvbOA0Y4tzs",
+            "opening_name": "Main overhead door",
+            "product_guid": "3f_ZfX8XPSPRzVoQAq7hjZ",
+            "source_id": "SILL-anch-X-BLDG-S-384-0-C0-H",
+            "ifc_class": "IfcPlate",
+            "connection_id": "CONN-SILL-anch-X-BLDG-S-G384",
+            "joint_id": "J-DOORJAMB-X384-base"
+          },
+          {
+            "opening_guid": "1296VWF05PcPvbOA0Y4tzs",
+            "opening_name": "Main overhead door",
+            "product_guid": "12nPyveVnVBx0_GJ9ElS9Q",
+            "source_id": "SILL-anch-X-BLDG-S-384-0-A0-A",
+            "ifc_class": "IfcMechanicalFastener",
+            "connection_id": "CONN-SILL-anch-X-BLDG-S-G384",
+            "joint_id": "J-DOORJAMB-X384-base"
+          },
+          {
+            "opening_guid": "3NOdljHZLMgPVDtTAa78Z0",
+            "opening_name": "Personnel entrance",
+            "product_guid": "2gZfiZ4v1NhuhoXIAggjf3",
+            "source_id": "SILL-anch-Y-BLDG-W-1632-0-A0-W",
+            "ifc_class": "IfcPlate",
+            "connection_id": "CONN-SILL-anch-Y-BLDG-W-G1632",
+            "joint_id": "J-FR13-COL-L-base"
+          },
+          {
+            "opening_guid": "3NOdljHZLMgPVDtTAa78Z0",
+            "opening_name": "Personnel entrance",
+            "product_guid": "0ppWRP4SfQAAA4J0K4WDfT",
+            "source_id": "SILL-anch-Y-BLDG-W-1632-0-A0-A",
+            "ifc_class": "IfcMechanicalFastener",
+            "connection_id": "CONN-SILL-anch-Y-BLDG-W-G1632",
+            "joint_id": "J-FR13-COL-L-base"
+          },
+          {
+            "opening_guid": "1mqkspNpjRdv0Y1eqjBZ7h",
+            "opening_name": "Personnel entrance",
+            "product_guid": "2IACBjEOLOp90S2ZB496PJ",
+            "source_id": "SILL-anch-Y-BLDG-E-1632-0-A0-W",
+            "ifc_class": "IfcPlate",
+            "connection_id": "CONN-SILL-anch-Y-BLDG-E-G1632",
+            "joint_id": "J-FR13-COL-R-base"
+          },
+          {
+            "opening_guid": "1mqkspNpjRdv0Y1eqjBZ7h",
+            "opening_name": "Personnel entrance",
+            "product_guid": "3ygSMGnPPLMwaSPAxrwMy$",
+            "source_id": "SILL-anch-Y-BLDG-E-1632-0-A0-A",
+            "ifc_class": "IfcMechanicalFastener",
+            "connection_id": "CONN-SILL-anch-Y-BLDG-E-G1632",
+            "joint_id": "J-FR13-COL-R-base"
+          }
+        ],
+        "method": "Returned IFC mesh triangles against source axis-aligned opening volumes, with 5 mm tolerance at jamb/sill/head. All door/window fixtures in this sweep have axis-aligned hosts or are axis-aligned freestanding reservations."
+      }
+    },
+    {
+      "code": "connection_part_dimensions",
+      "passed": true,
+      "evidence": {
+        "checked": 719,
+        "mismatches": [],
+        "method": "Explicit plate/gusset thickness or cylindrical shaft diameter versus solid dimensions; tolerance max(0.005 in, 2%). Resolve against actual completed design records, not by relabelling an arbitrary solid."
+      }
+    },
+    {
+      "code": "member_design_record_sections",
+      "passed": true,
+      "evidence": {
+        "checked_links": 0,
+        "links_requiring_other_review": 72,
+        "mismatches": [],
+        "method": "Actual physical catalogue section label versus every linked member record with an explicit inputs.section. Custom profile aliases and built-up constituent calculations are outside this exact-label screen."
+      }
+    },
+    {
+      "code": "gravity_profile_orientation",
+      "passed": true,
+      "evidence": {
+        "checked": 449,
+        "suspect_members": [],
+        "method": "Deep gravity-framing profiles: detect depth axis nearly perpendicular to projected gravity; inspect intentional weak-axis designs separately.",
+        "unknown_placement_members_not_screened": []
+      }
+    },
+    {
+      "code": "built_up_constituents_separate",
+      "passed": true,
+      "evidence": {
+        "checked_profiles": 3,
+        "overlaps": [],
+        "method": "Separate built-up constituents must not substantially occupy the same section area; threshold >0.005 in2 and >5% of a constituent, allowing preview fillet simplifications."
+      }
+    },
+    {
+      "code": "no_duplicate_physical_occurrences",
+      "passed": true,
+      "evidence": {
+        "count": 0,
+        "examples": []
+      }
+    },
+    {
+      "code": "located_connection_occurrences",
+      "passed": true,
+      "evidence": {
+        "connections": 2304,
+        "designed_without_parts": [],
+        "delegated_interfaces": []
+      }
+    },
+    {
+      "code": "connection_occurrence_coverage",
+      "passed": true,
+      "evidence": {
+        "checked_exemptions": 54,
+        "problems": [],
+        "method": "Explicit hardware notes and column bases lacking any connection-part bounds within six feet; continuous-subdivision claims must have opposing collinear member ends. Checks returned solid and reference-part bounds. Nearness alone is not connection completeness, fit or capacity certification.",
+        "unknown_placement_members_not_screened": []
+      }
+    }
+  ],
+  "issues": [
+    {
+      "code": "door_window_solid_clearance",
+      "evidence": {
+        "checked_solids": 8001,
+        "clashes": [
+          {
+            "opening_guid": "1296VWF05PcPvbOA0Y4tzs",
+            "opening_name": "Main overhead door",
+            "product_guid": "2Kg$5ULmPQ5RH_aIHAzsOu",
+            "source_id": "SILL-anch-X-BLDG-S-384-0-A0-W",
+            "ifc_class": "IfcPlate",
+            "connection_id": "CONN-SILL-anch-X-BLDG-S-G384",
+            "joint_id": "J-DOORJAMB-X384-base"
+          },
+          {
+            "opening_guid": "1296VWF05PcPvbOA0Y4tzs",
+            "opening_name": "Main overhead door",
+            "product_guid": "2tQHO_wmDQAQv33dzAufqf",
+            "source_id": "SILL-anch-X-BLDG-S-384-0-C0-V",
+            "ifc_class": "IfcPlate",
+            "connection_id": "CONN-SILL-anch-X-BLDG-S-G384",
+            "joint_id": "J-DOORJAMB-X384-base"
+          },
+          {
+            "opening_guid": "1296VWF05PcPvbOA0Y4tzs",
+            "opening_name": "Main overhead door",
+            "product_guid": "3f_ZfX8XPSPRzVoQAq7hjZ",
+            "source_id": "SILL-anch-X-BLDG-S-384-0-C0-H",
+            "ifc_class": "IfcPlate",
+            "connection_id": "CONN-SILL-anch-X-BLDG-S-G384",
+            "joint_id": "J-DOORJAMB-X384-base"
+          },
+          {
+            "opening_guid": "1296VWF05PcPvbOA0Y4tzs",
+            "opening_name": "Main overhead door",
+            "product_guid": "12nPyveVnVBx0_GJ9ElS9Q",
+            "source_id": "SILL-anch-X-BLDG-S-384-0-A0-A",
+            "ifc_class": "IfcMechanicalFastener",
+            "connection_id": "CONN-SILL-anch-X-BLDG-S-G384",
+            "joint_id": "J-DOORJAMB-X384-base"
+          },
+          {
+            "opening_guid": "3NOdljHZLMgPVDtTAa78Z0",
+            "opening_name": "Personnel entrance",
+            "product_guid": "2gZfiZ4v1NhuhoXIAggjf3",
+            "source_id": "SILL-anch-Y-BLDG-W-1632-0-A0-W",
+            "ifc_class": "IfcPlate",
+            "connection_id": "CONN-SILL-anch-Y-BLDG-W-G1632",
+            "joint_id": "J-FR13-COL-L-base"
+          },
+          {
+            "opening_guid": "3NOdljHZLMgPVDtTAa78Z0",
+            "opening_name": "Personnel entrance",
+            "product_guid": "0ppWRP4SfQAAA4J0K4WDfT",
+            "source_id": "SILL-anch-Y-BLDG-W-1632-0-A0-A",
+            "ifc_class": "IfcMechanicalFastener",
+            "connection_id": "CONN-SILL-anch-Y-BLDG-W-G1632",
+            "joint_id": "J-FR13-COL-L-base"
+          },
+          {
+            "opening_guid": "1mqkspNpjRdv0Y1eqjBZ7h",
+            "opening_name": "Personnel entrance",
+            "product_guid": "2IACBjEOLOp90S2ZB496PJ",
+            "source_id": "SILL-anch-Y-BLDG-E-1632-0-A0-W",
+            "ifc_class": "IfcPlate",
+            "connection_id": "CONN-SILL-anch-Y-BLDG-E-G1632",
+            "joint_id": "J-FR13-COL-R-base"
+          },
+          {
+            "opening_guid": "1mqkspNpjRdv0Y1eqjBZ7h",
+            "opening_name": "Personnel entrance",
+            "product_guid": "3ygSMGnPPLMwaSPAxrwMy$",
+            "source_id": "SILL-anch-Y-BLDG-E-1632-0-A0-A",
+            "ifc_class": "IfcMechanicalFastener",
+            "connection_id": "CONN-SILL-anch-Y-BLDG-E-G1632",
+            "joint_id": "J-FR13-COL-R-base"
+          }
+        ],
+        "method": "Returned IFC mesh triangles against source axis-aligned opening volumes, with 5 mm tolerance at jamb/sill/head. All door/window fixtures in this sweep have axis-aligned hosts or are axis-aligned freestanding reservations."
+      }
+    }
+  ],
+  "input_scope": [
+    {
+      "guid": "3z9LBGAXPJBvbuoWW1ajxd",
+      "name": "Slab on grade",
+      "role": "architectural_context",
+      "reason": "Ground/host slab outside elevated steel framing comparison"
+    },
+    {
+      "guid": "1E2Vpn9UzLiwSEUZ7899y_",
+      "name": "Mezzanine floor",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "3fsekA8TzO2vHzmUV55WnA",
+      "name": "Mezzanine ceiling roof",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "069nCv7Z9VEvpDZw1FWv5g",
+      "name": "West portal roof slope",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "3rO90addzQAhnC2PMx8mhF",
+      "name": "East portal roof slope",
+      "role": "required_structural_coordination"
+    }
+  ],
+  "architectural_sha256": "40726a07a767af6fbd2e311fbaebfdc4a0fdd8596f0861a01265579ce565eea1",
+  "architectural_handoff_sha256": "c32bae6ebb8f75438a3a11ff0bd6dd29e76bd11e4aee89fc22ebadafa491ae30",
+  "physical_package_sha256": "0e3a951d5d29ecac3211d5cc5b4ed1c32597b175c548c7112e5fc1073e768b61",
+  "return_ifc_sha256": "0479680e057e08737f9a40f421bb31395246d7b249ff54f222669874525f6f4e",
+  "counts": {
+    "analysis_only": 0,
+    "connections": 2304,
+    "interfaces": 2,
+    "joint_dispositions": 54,
+    "joints": 2192,
+    "materials": 9,
+    "members": 1096,
+    "openings": 3,
+    "panels": 8,
+    "profiles": 19,
+    "record_dispositions": 19
+  },
+  "limits": [
+    "Existing own-output package with independent geometry/data checks; not a fresh analysis, engineering certification or fabrication acceptance.",
+    "Base slabs and explicitly existing host context are outside the new elevated steel design comparison and remain in the original architectural IFC.",
+    "Input fixtures are synthetic; no native Revit application acceptance is claimed."
+  ],
+  "key": "cfs18",
+  "check_binding": {
+    "checker": "72bc7bb6c45509ef76ab60a17ace2f500637d5e358138bceece3d15121a72278",
+    "algorithms": "972e237fce8421ffa6b4be2f39cba5420bedfe1eed870a3f83934780b1eb33c4",
+    "returned_ifc": "0479680e057e08737f9a40f421bb31395246d7b249ff54f222669874525f6f4e"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "case": "cfs12",
+  "key": "cfs12",
+  "module": "CFS",
+  "title": "Steel-sheet walls",
+  "project": "WFRESH61_cfs12_20261103",
+  "source_run_status": "error",
+  "primary": true,
+  "files": {
+    "design/bim_request.json": "8a823f86dec85b8e5c31f592c059916e2d9a53b52e2d46b2b2a3a96123dbe13b",
+    "architectural_input.json": "40098826099a43655602b2383c345b0b1307dbe8506f3494af27d115f2fd061b",
+    "architectural_handoff.txt": "aff216517d595b9aa8d8f948a13e23b93815dc0a9df252bebb585de7f2e6a8f0"
+  },
+  "job_exists": true,
+  "completion_problems": [
+    "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+  ],
+  "current_completion_gate_passed": false,
+  "package_present": false,
+  "missing_outputs": [
+    "cfg.py",
+    "design/bim_package.json"
+  ]
+}

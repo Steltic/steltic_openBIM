@@ -1,0 +1,24 @@
+{
+  "case": "hr3",
+  "key": "hr3",
+  "module": "HR",
+  "title": "BracedMoment",
+  "project": "WFRESH61_hr3_20261103",
+  "source_run_status": "error",
+  "primary": true,
+  "files": {
+    "design/bim_request.json": "30c83250a432406cb2f0ef76b4ddb35f900a2e1c5c76578d6ce6386550e50e75",
+    "architectural_input.json": "9c3cd0a9a46c8fd124ee013013ea534b8e7f347d3f3839c7cd07da295ac9cc2f",
+    "architectural_handoff.txt": "444a5d327a563c8ca480b3be5467cfcc238327807ded0dd961d1e895b1f1229c"
+  },
+  "job_exists": true,
+  "completion_problems": [
+    "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+  ],
+  "current_completion_gate_passed": false,
+  "package_present": false,
+  "missing_outputs": [
+    "cfg.py",
+    "design/bim_package.json"
+  ]
+}

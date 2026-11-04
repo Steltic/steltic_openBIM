@@ -1,0 +1,61 @@
+{
+  "case": "hr28",
+  "key": "hr28",
+  "title": "STMF",
+  "module": "HR",
+  "primary": true,
+  "source_run_status": "error",
+  "original_package_present": false,
+  "original_native_completion_passed": false,
+  "producer_completion_problems": [
+    "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+  ],
+  "saved_readiness": null,
+  "original_validation": null,
+  "original_freshness": null,
+  "changed_recorded_files": [],
+  "native_reexport": "unavailable",
+  "native_reexport_readiness": null,
+  "native_reexport_finding_codes": [],
+  "exporter_revision": null,
+  "original_producer_revision": null,
+  "variants": {
+    "saved": {
+      "transport": "unavailable",
+      "source_validation": null,
+      "source_finding_codes": [],
+      "architectural_comparison": "not_tested",
+      "comparison_issue_codes": [],
+      "products_compared": 0,
+      "entities_compared": 0,
+      "package_sha256": null,
+      "source_ifc_sha256": null,
+      "returned_ifc_sha256": null,
+      "source_files_unchanged": null,
+      "schema_errors": null,
+      "import_readiness_verified": false,
+      "error": null,
+      "stage": null
+    },
+    "replay": {
+      "transport": "unavailable",
+      "source_validation": null,
+      "source_finding_codes": [],
+      "architectural_comparison": "not_tested",
+      "comparison_issue_codes": [],
+      "products_compared": 0,
+      "entities_compared": 0,
+      "package_sha256": null,
+      "source_ifc_sha256": null,
+      "returned_ifc_sha256": null,
+      "source_files_unchanged": null,
+      "schema_errors": null,
+      "import_readiness_verified": false,
+      "error": null,
+      "stage": null
+    }
+  },
+  "status": "no_own_package",
+  "saved_job_acceptance": false,
+  "reexport_model_checks_passed": false
+}

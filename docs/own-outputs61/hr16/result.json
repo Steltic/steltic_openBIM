@@ -1,0 +1,77 @@
+{
+  "case": "hr16",
+  "key": "hr16",
+  "title": "SMF (completed source design)",
+  "module": "HR",
+  "primary": true,
+  "source_run_status": "error",
+  "original_package_present": true,
+  "original_native_completion_passed": false,
+  "producer_completion_problems": [
+    "BIM export is stale; rerun consistency.check or BIM replay"
+  ],
+  "saved_readiness": "ready",
+  "original_validation": "needs_input",
+  "original_freshness": "needs_input",
+  "changed_recorded_files": [],
+  "native_reexport": "exported",
+  "native_reexport_readiness": "needs_input",
+  "native_reexport_finding_codes": [
+    "connection_duplicate_parts",
+    "connection_fastener_quantity",
+    "connection_selected_components"
+  ],
+  "exporter_revision": "343e0ad6cca528ecb30d07408224dca3597451c6",
+  "original_producer_revision": null,
+  "variants": {
+    "saved": {
+      "transport": "passed",
+      "source_validation": "needs_input",
+      "source_finding_codes": [
+        "connection_duplicate_parts",
+        "connection_fastener_quantity",
+        "connection_selected_components"
+      ],
+      "architectural_comparison": "needs_resolution",
+      "comparison_issue_codes": [
+        "complete_native_physical_export"
+      ],
+      "products_compared": 673,
+      "entities_compared": 10671,
+      "package_sha256": "c6e38506fa3a94f507e579fad3b7b64e2a948fc200237652215381f932464524",
+      "source_ifc_sha256": "cafd03915c21aa13260a9647e3f20f3bf35ece60b7108a3a9d609a92b240d963",
+      "returned_ifc_sha256": "cbc6d5f1af206a4138c64ba5e721e7459e89e83707d1fb364d1a0a432d413177",
+      "source_files_unchanged": true,
+      "schema_errors": [],
+      "import_readiness_verified": true,
+      "error": null,
+      "stage": null
+    },
+    "replay": {
+      "transport": "passed",
+      "source_validation": "needs_input",
+      "source_finding_codes": [
+        "connection_duplicate_parts",
+        "connection_fastener_quantity",
+        "connection_selected_components"
+      ],
+      "architectural_comparison": "needs_resolution",
+      "comparison_issue_codes": [
+        "complete_native_physical_export"
+      ],
+      "products_compared": 673,
+      "entities_compared": 10671,
+      "package_sha256": "5976f7a2a45decd42d1cfd806113df97402b7c40c586b99e81910de2781edf8f",
+      "source_ifc_sha256": "50950cd0e40a48792ca7f7117e0dbbdd5bc142295537606ab8949c6d6ef3349f",
+      "returned_ifc_sha256": "006e0bc57bade88f8ee7ab24e28b84f652249e5b9825b15be06e16b94fe24487",
+      "source_files_unchanged": true,
+      "schema_errors": [],
+      "import_readiness_verified": true,
+      "error": null,
+      "stage": null
+    }
+  },
+  "status": "transport_passed_source_needs_resolution",
+  "saved_job_acceptance": false,
+  "reexport_model_checks_passed": false
+}

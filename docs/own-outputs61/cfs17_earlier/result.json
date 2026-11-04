@@ -1,0 +1,75 @@
+{
+  "case": "cfs17",
+  "key": "cfs17_earlier",
+  "title": "Unequal twin-gable CFS garage with valley snow",
+  "module": "CFS",
+  "primary": false,
+  "source_run_status": "done",
+  "original_package_present": true,
+  "original_native_completion_passed": false,
+  "producer_completion_problems": [
+    "BIM physical_ply_count: Built-up section labels disagree with constituent counts; resolve the physical declaration before claiming readiness",
+    "BIM physical_opening_host: Opening boundaries extend outside their declared host bounds; resolve the physical declaration before claiming readiness",
+    "BIM physical_remote_part: Connection box parts are over six feet from their assigned joint; resolve the physical declaration before claiming readiness"
+  ],
+  "saved_readiness": "ready",
+  "original_validation": "needs_input",
+  "original_freshness": "needs_input",
+  "changed_recorded_files": [],
+  "native_reexport": "exported",
+  "native_reexport_readiness": "needs_input",
+  "native_reexport_finding_codes": [
+    "physical_opening_host",
+    "physical_ply_count",
+    "physical_remote_part"
+  ],
+  "exporter_revision": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+  "original_producer_revision": null,
+  "variants": {
+    "saved": {
+      "transport": "passed",
+      "source_validation": "needs_input",
+      "source_finding_codes": [
+        "physical_opening_host",
+        "physical_ply_count",
+        "physical_remote_part"
+      ],
+      "architectural_comparison": "unverifiable_input",
+      "comparison_issue_codes": [],
+      "products_compared": 2530,
+      "entities_compared": 37143,
+      "package_sha256": "635b19294863860ef73f7b0a9af98bfd9386418afbedf12f96feb715d857ca6d",
+      "source_ifc_sha256": "1642c9042b1f0c5baf13bdae6604e5dce4994cb77903d2824fe24cd34469b853",
+      "returned_ifc_sha256": "02455f093be559388a7158ad7a947ea213bd9639a1868c7371da542c9401f5bf",
+      "source_files_unchanged": true,
+      "schema_errors": [],
+      "import_readiness_verified": true,
+      "error": null,
+      "stage": null
+    },
+    "replay": {
+      "transport": "passed",
+      "source_validation": "needs_input",
+      "source_finding_codes": [
+        "physical_opening_host",
+        "physical_ply_count",
+        "physical_remote_part"
+      ],
+      "architectural_comparison": "unverifiable_input",
+      "comparison_issue_codes": [],
+      "products_compared": 2530,
+      "entities_compared": 37143,
+      "package_sha256": "4fe036471e6f7e9e51c33b0a9296a25f714258fcc82d0dfae5e8a7b9b64cf73a",
+      "source_ifc_sha256": "af47df7c89590b3ae8fbbfec2eaaacffc48d8dad6df9ea403f8659810b91c71a",
+      "returned_ifc_sha256": "5bd8355f9f9739bb206bb96b0a94fa59225e1f1a5738a829b4e68a682824b540",
+      "source_files_unchanged": true,
+      "schema_errors": [],
+      "import_readiness_verified": true,
+      "error": null,
+      "stage": null
+    }
+  },
+  "status": "transport_passed_source_needs_resolution",
+  "saved_job_acceptance": false,
+  "reexport_model_checks_passed": false
+}

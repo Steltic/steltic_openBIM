@@ -1,0 +1,861 @@
+{
+  "case": "cfs6",
+  "module": "CFS",
+  "project": "WFRESH61_cfs6_20261103",
+  "variant": "replay",
+  "checked_at": 1793764814.6038883,
+  "status": "needs_resolution",
+  "checks": [
+    {
+      "code": "own_output_binding",
+      "passed": true,
+      "evidence": {
+        "physical_supplements_supplied": false,
+        "source_package_sha256": "553c11c69f3d5c143937c0ca667bd987807317dedab440a9628ff8b14f580c6d"
+      }
+    },
+    {
+      "code": "complete_native_physical_export",
+      "passed": false,
+      "evidence": {
+        "stored_readiness": {
+          "counts": {
+            "analysis_elements": 0,
+            "design_records": 214,
+            "members": 4195,
+            "panels": 505
+          },
+          "findings": [
+            {
+              "code": "connection_selected_family",
+              "count": 1,
+              "entity_ids": [
+                "connections/conn-collector-splice"
+              ],
+              "examples": [
+                {
+                  "bound_entity_ids": [
+                    "conn-hd-X-X_LEG_M1",
+                    "conn-hd-X-X_LEG_S"
+                  ],
+                  "design_record_id": "connections/conn-collector-splice",
+                  "missing_component_categories": [
+                    "bolt",
+                    "screw"
+                  ],
+                  "returned_part_kinds": "rod anchor plate rod anchor plate",
+                  "selected_components": "3/4-in. gusset plates with (12) No.12 screws per side + 7/8-in. through bolt"
+                }
+              ],
+              "message": "A selected connection family has no corresponding located component categories in its bound entities; a typical coverage note alone does not place its hardware",
+              "severity": "needs_input"
+            }
+          ],
+          "status": "needs_input"
+        },
+        "current_contract_findings": [
+          {
+            "code": "connection_selected_family",
+            "message": "A selected connection family has no corresponding located component categories in its bound entities; a typical coverage note alone does not place its hardware",
+            "entity_ids": [
+              "connections/conn-collector-splice"
+            ],
+            "severity": "needs_input",
+            "count": 1,
+            "examples": [
+              {
+                "design_record_id": "connections/conn-collector-splice",
+                "missing_component_categories": [
+                  "bolt",
+                  "screw"
+                ],
+                "selected_components": "3/4-in. gusset plates with (12) No.12 screws per side + 7/8-in. through bolt",
+                "returned_part_kinds": "rod anchor plate rod anchor plate",
+                "bound_entity_ids": [
+                  "conn-hd-X-X_LEG_M1",
+                  "conn-hd-X-X_LEG_S"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "code": "return_fully_rendered",
+      "passed": true,
+      "evidence": {
+        "source_products": 19031,
+        "selected": 19031,
+        "displayed": 19031,
+        "unrendered": 0,
+        "excluded_by_scope": 0,
+        "triangles": 337934
+      }
+    },
+    {
+      "code": "architectural_opening_export_geometry",
+      "passed": true,
+      "evidence": {
+        "unresolved_opening_warnings": []
+      }
+    },
+    {
+      "code": "recoverable_input_surface_2kPnnJuZHSpxODReQznKWT",
+      "passed": true,
+      "evidence": {
+        "name": "North bar floor reservation"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_2C9CQTmobUtwDxqZwN$pbz",
+      "passed": true,
+      "evidence": {
+        "name": "West leg floor reservation"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_0s2b3V1cbNMeFG64s0a8jT",
+      "passed": true,
+      "evidence": {
+        "name": "North bar floor reservation"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_2PSk$4QvPQOBHxiDyJhNm4",
+      "passed": true,
+      "evidence": {
+        "name": "West leg floor reservation"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_0TWb1wXS5Lcuboay9iQuGU",
+      "passed": true,
+      "evidence": {
+        "name": "North bar floor reservation"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_0SrQKw5E9TAh2DniVRpr4P",
+      "passed": true,
+      "evidence": {
+        "name": "West leg floor reservation"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_23$T$FRfDNngllKOhiYMOC",
+      "passed": true,
+      "evidence": {
+        "name": "North bar floor reservation"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_2k0OMuwTLO$Ae16qVu$PWi",
+      "passed": true,
+      "evidence": {
+        "name": "West leg floor reservation"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_3DDtoxQEXUvvaPUwZjZg_t",
+      "passed": true,
+      "evidence": {
+        "name": "West leg floor reservation"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_0HW$EtcbTSjOdwTpmUY6xb",
+      "passed": true,
+      "evidence": {
+        "name": "North bar south roof slope"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_1S1D239d1SfwHbRJ7O8bHI",
+      "passed": true,
+      "evidence": {
+        "name": "North bar north roof slope"
+      }
+    },
+    {
+      "code": "floor_roof_panel_classification",
+      "passed": false,
+      "evidence": {
+        "untyped_horizontal_or_sloped_panels": [
+          {
+            "source_id": "panel-foot-X-X_LEG_S",
+            "ifc_class": "IfcBuildingElementProxy"
+          },
+          {
+            "source_id": "panel-foot-X-X_LEG_M1",
+            "ifc_class": "IfcBuildingElementProxy"
+          },
+          {
+            "source_id": "panel-foot-X-X_LEG_M2",
+            "ifc_class": "IfcBuildingElementProxy"
+          },
+          {
+            "source_id": "panel-foot-X-X_BAR_S",
+            "ifc_class": "IfcBuildingElementProxy"
+          },
+          {
+            "source_id": "panel-foot-X-X_BAR_C1",
+            "ifc_class": "IfcBuildingElementProxy"
+          },
+          {
+            "source_id": "panel-foot-X-X_BAR_C2",
+            "ifc_class": "IfcBuildingElementProxy"
+          },
+          {
+            "source_id": "panel-foot-X-X_BAR_N",
+            "ifc_class": "IfcBuildingElementProxy"
+          },
+          {
+            "source_id": "panel-foot-Y-Y_W",
+            "ifc_class": "IfcBuildingElementProxy"
+          },
+          {
+            "source_id": "panel-foot-Y-Y_CTR",
+            "ifc_class": "IfcBuildingElementProxy"
+          },
+          {
+            "source_id": "panel-foot-Y-Y_E_LEG60",
+            "ifc_class": "IfcBuildingElementProxy"
+          },
+          {
+            "source_id": "panel-foot-Y-Y_P90",
+            "ifc_class": "IfcBuildingElementProxy"
+          },
+          {
+            "source_id": "panel-foot-Y-Y_P120",
+            "ifc_class": "IfcBuildingElementProxy"
+          },
+          {
+            "source_id": "panel-foot-Y-Y_P150",
+            "ifc_class": "IfcBuildingElementProxy"
+          },
+          {
+            "source_id": "panel-foot-Y-Y_E",
+            "ifc_class": "IfcBuildingElementProxy"
+          }
+        ],
+        "method": "Panel geometry is compared even when the source did not declare its floor/roof role; role omission is reported separately."
+      }
+    },
+    {
+      "code": "floor_roof_planes_footprints_voids",
+      "passed": true,
+      "evidence": {
+        "required_plane_groups": 7,
+        "returned_plane_groups": 16,
+        "differences": [],
+        "plane_distance_tolerance_m": 0.005
+      }
+    },
+    {
+      "code": "no_unrequested_floor_roof_planes",
+      "passed": false,
+      "evidence": {
+        "extra_planes": [
+          {
+            "plane": [
+              -0.0,
+              -0.4472135954999577,
+              0.894427190999916,
+              -12.131652647846451
+            ],
+            "area_m2": 11.519976960000006
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.44721359549995815,
+              0.8944271909999156,
+              -8.042331530594847
+            ],
+            "area_m2": 11.891589120000008
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.4472135954999573,
+              0.8944271909999161,
+              -3.9530104133432222
+            ],
+            "area_m2": 11.891589120000008
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.447213595499958,
+              0.894427190999916,
+              0.1363107039083872
+            ],
+            "area_m2": 33.4450944
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.4472135954999575,
+              0.8944271909999161,
+              3.9530104133432244
+            ],
+            "area_m2": 33.445094400000016
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.447213595499959,
+              0.8944271909999153,
+              4.770874636793562
+            ],
+            "area_m2": 33.445094399999924
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.4472135954999572,
+              0.8944271909999163,
+              8.58757434622838
+            ],
+            "area_m2": 33.445094400000016
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.00657880499623851,
+              0.9999783594282535,
+              0.12432362529691687
+            ],
+            "area_m2": 84.72757248000003
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.016126934718260127,
+              0.9998699525321246,
+              0.3047603615317916
+            ],
+            "area_m2": 46.079907840000025
+          }
+        ]
+      }
+    },
+    {
+      "code": "structural_datums_retained",
+      "passed": true,
+      "evidence": {
+        "required": [
+          {
+            "id": "02L2VuA9fMw9SC0MAxVk60",
+            "name": "Ground",
+            "elevation_m": 0.0
+          },
+          {
+            "id": "0wfrKDE29JbPMYCuPZjN0T",
+            "name": "Datum 10 ft",
+            "elevation_m": 3.048
+          },
+          {
+            "id": "3avCODYFnPf9_cfGnGHRko",
+            "name": "Datum 19.5 ft",
+            "elevation_m": 5.943600000000001
+          },
+          {
+            "id": "1SzE0q5eDPLvOtUvKajrlt",
+            "name": "Datum 29 ft",
+            "elevation_m": 8.839200000000002
+          },
+          {
+            "id": "0NaDsQq5zPXATVcJfYYuy9",
+            "name": "Datum 38.5 ft",
+            "elevation_m": 11.734800000000002
+          },
+          {
+            "id": "1fySlbvHfJrfAIQJhemdmP",
+            "name": "Datum 48 ft",
+            "elevation_m": 14.630400000000002
+          },
+          {
+            "id": "1YlD6b9M5NhP1AuoITz9Ie",
+            "name": "Datum 58.333333333333336 ft",
+            "elevation_m": 17.78
+          }
+        ],
+        "returned": [
+          {
+            "id": "1Oq_6AUu1O$fL$3sFk_F87",
+            "name": "Ground",
+            "elevation_m": 0.0
+          },
+          {
+            "id": "2L$WZLL0nGovu5oP67Y6KV",
+            "name": "Datum 10 ft",
+            "elevation_m": 3.048
+          },
+          {
+            "id": "3_0gRVzXbLOenDRg8sQrY6",
+            "name": "Datum 19.5 ft",
+            "elevation_m": 5.943600000000001
+          },
+          {
+            "id": "22LFONNWnMjwdGiANQwPYa",
+            "name": "Datum 29 ft",
+            "elevation_m": 8.839200000000002
+          },
+          {
+            "id": "0v9LIOpxLK3x7yjNjAaG_v",
+            "name": "Datum 38.5 ft",
+            "elevation_m": 11.734800000000002
+          },
+          {
+            "id": "1XKsW3Hq5M9eOVBSqZaNab",
+            "name": "Datum 48 ft",
+            "elevation_m": 14.630400000000002
+          },
+          {
+            "id": "1zwI3gAiLVl8EnjDDYOi$V",
+            "name": "Datum 58.333333333333336 ft",
+            "elevation_m": 17.78
+          }
+        ],
+        "missing": []
+      }
+    },
+    {
+      "code": "architectural_grid_locations",
+      "passed": true,
+      "evidence": {
+        "source_axes": 16,
+        "returned_axes": 16,
+        "missing_or_changed": [],
+        "checks": "labels, U/V/W family and full 3D polyline"
+      }
+    },
+    {
+      "code": "architectural_source_identity",
+      "passed": true,
+      "evidence": {
+        "expected": "8c7adfada748e74ebada9b01d4decfed9fc3ddbe0138b4fd6f6d774a8659593e",
+        "declared": "8c7adfada748e74ebada9b01d4decfed9fc3ddbe0138b4fd6f6d774a8659593e"
+      }
+    },
+    {
+      "code": "physical_member_placement_defined",
+      "passed": true,
+      "evidence": {
+        "unknown_member_ids": [],
+        "method": "Null offsets or orientation remain unknown; no zero offsets or local axes are invented for these checks."
+      }
+    },
+    {
+      "code": "door_window_boundaries",
+      "passed": true,
+      "evidence": {
+        "source_count": 145,
+        "physical_count": 145,
+        "changed": []
+      }
+    },
+    {
+      "code": "door_window_workline_clearance",
+      "passed": true,
+      "evidence": {
+        "count": 0,
+        "examples": [],
+        "method": "Strict opening bounds against physical worklines; separate from a solid clash or fabrication-fit check"
+      }
+    },
+    {
+      "code": "door_window_solid_clearance",
+      "passed": true,
+      "evidence": {
+        "checked_solids": 11309,
+        "clashes": [],
+        "method": "Returned IFC mesh triangles against source axis-aligned opening volumes, with 5 mm tolerance at jamb/sill/head. All door/window fixtures in this sweep have axis-aligned hosts or are axis-aligned freestanding reservations."
+      }
+    },
+    {
+      "code": "connection_part_dimensions",
+      "passed": true,
+      "evidence": {
+        "checked": 0,
+        "mismatches": [],
+        "method": "Explicit plate/gusset thickness or cylindrical shaft diameter versus solid dimensions; tolerance max(0.005 in, 2%). Resolve against actual completed design records, not by relabelling an arbitrary solid."
+      }
+    },
+    {
+      "code": "member_design_record_sections",
+      "passed": true,
+      "evidence": {
+        "checked_links": 0,
+        "links_requiring_other_review": 0,
+        "mismatches": [],
+        "method": "Actual physical catalogue section label versus every linked member record with an explicit inputs.section. Custom profile aliases and built-up constituent calculations are outside this exact-label screen."
+      }
+    },
+    {
+      "code": "gravity_profile_orientation",
+      "passed": true,
+      "evidence": {
+        "checked": 3536,
+        "suspect_members": [],
+        "method": "Deep gravity-framing profiles: detect depth axis nearly perpendicular to projected gravity; inspect intentional weak-axis designs separately.",
+        "unknown_placement_members_not_screened": []
+      }
+    },
+    {
+      "code": "built_up_constituents_separate",
+      "passed": true,
+      "evidence": {
+        "checked_profiles": 0,
+        "overlaps": [],
+        "method": "Separate built-up constituents must not substantially occupy the same section area; threshold >0.005 in2 and >5% of a constituent, allowing preview fillet simplifications."
+      }
+    },
+    {
+      "code": "no_duplicate_physical_occurrences",
+      "passed": true,
+      "evidence": {
+        "count": 0,
+        "examples": []
+      }
+    },
+    {
+      "code": "located_connection_occurrences",
+      "passed": true,
+      "evidence": {
+        "connections": 7100,
+        "designed_without_parts": [],
+        "delegated_interfaces": []
+      }
+    },
+    {
+      "code": "connection_occurrence_coverage",
+      "passed": true,
+      "evidence": {
+        "checked_exemptions": 1290,
+        "problems": [],
+        "method": "Explicit hardware notes and column bases lacking any connection-part bounds within six feet; continuous-subdivision claims must have opposing collinear member ends. Checks returned solid and reference-part bounds. Nearness alone is not connection completeness, fit or capacity certification.",
+        "unknown_placement_members_not_screened": []
+      }
+    }
+  ],
+  "issues": [
+    {
+      "code": "complete_native_physical_export",
+      "evidence": {
+        "stored_readiness": {
+          "counts": {
+            "analysis_elements": 0,
+            "design_records": 214,
+            "members": 4195,
+            "panels": 505
+          },
+          "findings": [
+            {
+              "code": "connection_selected_family",
+              "count": 1,
+              "entity_ids": [
+                "connections/conn-collector-splice"
+              ],
+              "examples": [
+                {
+                  "bound_entity_ids": [
+                    "conn-hd-X-X_LEG_M1",
+                    "conn-hd-X-X_LEG_S"
+                  ],
+                  "design_record_id": "connections/conn-collector-splice",
+                  "missing_component_categories": [
+                    "bolt",
+                    "screw"
+                  ],
+                  "returned_part_kinds": "rod anchor plate rod anchor plate",
+                  "selected_components": "3/4-in. gusset plates with (12) No.12 screws per side + 7/8-in. through bolt"
+                }
+              ],
+              "message": "A selected connection family has no corresponding located component categories in its bound entities; a typical coverage note alone does not place its hardware",
+              "severity": "needs_input"
+            }
+          ],
+          "status": "needs_input"
+        },
+        "current_contract_findings": [
+          {
+            "code": "connection_selected_family",
+            "message": "A selected connection family has no corresponding located component categories in its bound entities; a typical coverage note alone does not place its hardware",
+            "entity_ids": [
+              "connections/conn-collector-splice"
+            ],
+            "severity": "needs_input",
+            "count": 1,
+            "examples": [
+              {
+                "design_record_id": "connections/conn-collector-splice",
+                "missing_component_categories": [
+                  "bolt",
+                  "screw"
+                ],
+                "selected_components": "3/4-in. gusset plates with (12) No.12 screws per side + 7/8-in. through bolt",
+                "returned_part_kinds": "rod anchor plate rod anchor plate",
+                "bound_entity_ids": [
+                  "conn-hd-X-X_LEG_M1",
+                  "conn-hd-X-X_LEG_S"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "code": "floor_roof_panel_classification",
+      "evidence": {
+        "untyped_horizontal_or_sloped_panels": [
+          {
+            "source_id": "panel-foot-X-X_LEG_S",
+            "ifc_class": "IfcBuildingElementProxy"
+          },
+          {
+            "source_id": "panel-foot-X-X_LEG_M1",
+            "ifc_class": "IfcBuildingElementProxy"
+          },
+          {
+            "source_id": "panel-foot-X-X_LEG_M2",
+            "ifc_class": "IfcBuildingElementProxy"
+          },
+          {
+            "source_id": "panel-foot-X-X_BAR_S",
+            "ifc_class": "IfcBuildingElementProxy"
+          },
+          {
+            "source_id": "panel-foot-X-X_BAR_C1",
+            "ifc_class": "IfcBuildingElementProxy"
+          },
+          {
+            "source_id": "panel-foot-X-X_BAR_C2",
+            "ifc_class": "IfcBuildingElementProxy"
+          },
+          {
+            "source_id": "panel-foot-X-X_BAR_N",
+            "ifc_class": "IfcBuildingElementProxy"
+          },
+          {
+            "source_id": "panel-foot-Y-Y_W",
+            "ifc_class": "IfcBuildingElementProxy"
+          },
+          {
+            "source_id": "panel-foot-Y-Y_CTR",
+            "ifc_class": "IfcBuildingElementProxy"
+          },
+          {
+            "source_id": "panel-foot-Y-Y_E_LEG60",
+            "ifc_class": "IfcBuildingElementProxy"
+          },
+          {
+            "source_id": "panel-foot-Y-Y_P90",
+            "ifc_class": "IfcBuildingElementProxy"
+          },
+          {
+            "source_id": "panel-foot-Y-Y_P120",
+            "ifc_class": "IfcBuildingElementProxy"
+          },
+          {
+            "source_id": "panel-foot-Y-Y_P150",
+            "ifc_class": "IfcBuildingElementProxy"
+          },
+          {
+            "source_id": "panel-foot-Y-Y_E",
+            "ifc_class": "IfcBuildingElementProxy"
+          }
+        ],
+        "method": "Panel geometry is compared even when the source did not declare its floor/roof role; role omission is reported separately."
+      }
+    },
+    {
+      "code": "no_unrequested_floor_roof_planes",
+      "evidence": {
+        "extra_planes": [
+          {
+            "plane": [
+              -0.0,
+              -0.4472135954999577,
+              0.894427190999916,
+              -12.131652647846451
+            ],
+            "area_m2": 11.519976960000006
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.44721359549995815,
+              0.8944271909999156,
+              -8.042331530594847
+            ],
+            "area_m2": 11.891589120000008
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.4472135954999573,
+              0.8944271909999161,
+              -3.9530104133432222
+            ],
+            "area_m2": 11.891589120000008
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.447213595499958,
+              0.894427190999916,
+              0.1363107039083872
+            ],
+            "area_m2": 33.4450944
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.4472135954999575,
+              0.8944271909999161,
+              3.9530104133432244
+            ],
+            "area_m2": 33.445094400000016
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.447213595499959,
+              0.8944271909999153,
+              4.770874636793562
+            ],
+            "area_m2": 33.445094399999924
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.4472135954999572,
+              0.8944271909999163,
+              8.58757434622838
+            ],
+            "area_m2": 33.445094400000016
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.00657880499623851,
+              0.9999783594282535,
+              0.12432362529691687
+            ],
+            "area_m2": 84.72757248000003
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.016126934718260127,
+              0.9998699525321246,
+              0.3047603615317916
+            ],
+            "area_m2": 46.079907840000025
+          }
+        ]
+      }
+    }
+  ],
+  "input_scope": [
+    {
+      "guid": "3TFZTNM2fGoec_XZXUgiB7",
+      "name": "North bar floor reservation",
+      "role": "architectural_context",
+      "reason": "Ground/host slab outside elevated steel framing comparison"
+    },
+    {
+      "guid": "2mHAM0_mHI8O7zYizwe12Z",
+      "name": "West leg floor reservation",
+      "role": "architectural_context",
+      "reason": "Ground/host slab outside elevated steel framing comparison"
+    },
+    {
+      "guid": "2kPnnJuZHSpxODReQznKWT",
+      "name": "North bar floor reservation",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "2C9CQTmobUtwDxqZwN$pbz",
+      "name": "West leg floor reservation",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "0s2b3V1cbNMeFG64s0a8jT",
+      "name": "North bar floor reservation",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "2PSk$4QvPQOBHxiDyJhNm4",
+      "name": "West leg floor reservation",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "0TWb1wXS5Lcuboay9iQuGU",
+      "name": "North bar floor reservation",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "0SrQKw5E9TAh2DniVRpr4P",
+      "name": "West leg floor reservation",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "23$T$FRfDNngllKOhiYMOC",
+      "name": "North bar floor reservation",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "2k0OMuwTLO$Ae16qVu$PWi",
+      "name": "West leg floor reservation",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "3DDtoxQEXUvvaPUwZjZg_t",
+      "name": "West leg floor reservation",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "0HW$EtcbTSjOdwTpmUY6xb",
+      "name": "North bar south roof slope",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "1S1D239d1SfwHbRJ7O8bHI",
+      "name": "North bar north roof slope",
+      "role": "required_structural_coordination"
+    }
+  ],
+  "architectural_sha256": "8c7adfada748e74ebada9b01d4decfed9fc3ddbe0138b4fd6f6d774a8659593e",
+  "architectural_handoff_sha256": "9134838a836acf1f0dfaa71b3ca18ced959fb85d7d9b5284bb3e909f64926a4f",
+  "physical_package_sha256": "553c11c69f3d5c143937c0ca667bd987807317dedab440a9628ff8b14f580c6d",
+  "return_ifc_sha256": "21900282a00e8c7caf301528db85329d5b17c02dd80b5b176618a86269ba0e24",
+  "counts": {
+    "analysis_only": 0,
+    "connections": 7100,
+    "interfaces": 1,
+    "joint_dispositions": 8362,
+    "joints": 8390,
+    "materials": 6,
+    "members": 4195,
+    "openings": 145,
+    "panels": 505,
+    "profiles": 5,
+    "record_dispositions": 92
+  },
+  "limits": [
+    "Existing own-output package with independent geometry/data checks; not a fresh analysis, engineering certification or fabrication acceptance.",
+    "Base slabs and explicitly existing host context are outside the new elevated steel design comparison and remain in the original architectural IFC.",
+    "Input fixtures are synthetic; no native Revit application acceptance is claimed."
+  ],
+  "key": "cfs6",
+  "check_binding": {
+    "checker": "72bc7bb6c45509ef76ab60a17ace2f500637d5e358138bceece3d15121a72278",
+    "algorithms": "972e237fce8421ffa6b4be2f39cba5420bedfe1eed870a3f83934780b1eb33c4",
+    "returned_ifc": "21900282a00e8c7caf301528db85329d5b17c02dd80b5b176618a86269ba0e24"
+  }
+}

@@ -1,0 +1,1897 @@
+{
+  "key": "cfs17",
+  "case": "cfs17",
+  "module": "CFS",
+  "primary": true,
+  "variant": "saved",
+  "code_sha256": {
+    "steltic_openbim\\__init__.py": "47ba4cfead2cbfaf732ee3cc1541b26451054c29973f49a744669f8ba76a9b2d",
+    "steltic_openbim\\__main__.py": "fe9d6e6bc874e82f86479f83760029bbe75b6b17a25813d129a6b69ae19e5bd5",
+    "steltic_openbim\\assembly_pdf.py": "5fd464c17aba45ef80db9028892c2340b205af2cafb56385c11f1beafbdaeb8a",
+    "steltic_openbim\\assembly_scene.py": "1328be367f3680204df5fa78e9b4b4d3155c8ff503e5de9c658b7f7242a7e879",
+    "steltic_openbim\\assembly_templates.py": "9c7afae66515cc97c0b241aa3ce5ef40aa067e4aa90edda7a04efe05d3ca7067",
+    "steltic_openbim\\bim_contract.py": "6ba410e3c8199c30380cca23267c37388c16e82454974574da71204f7692c10e",
+    "steltic_openbim\\bim_package.schema.json": "77ab0cfaea34af4a64c29bccd1aaf1d6a6c9fbb942a582727d8fac5c7cd8e265",
+    "steltic_openbim\\connection_details.py": "de3cee740516bd58f86db95728e92d3ae3225756a1674d5496803bd5818ba8ac",
+    "steltic_openbim\\design_geometry.py": "e068501545469db3317ffc83929acbd3cc84cc0749aa17813e73cba5c8e2e682",
+    "steltic_openbim\\design_pdf.py": "d704f8f58395bb64790afc676f4e8a98d9364d6b864b31826233c1eda1b957ca",
+    "steltic_openbim\\design_scenarios.py": "2be47a5020b6cb6e643fd663adb6fedcc9957ed9576341fd03dc2a4f32c5545e",
+    "steltic_openbim\\drawing_api.py": "19b265b56d5f361f16c4a32f17872350b764bf889eee2b4a5074fcac6313e466",
+    "steltic_openbim\\drawing_pdf.py": "eabfbbb9cdd42247aa2ebf2e757c051dae800901756e2f860026d9c3ff98d493",
+    "steltic_openbim\\drawing_server.py": "222c32fda9a411d8616cffdd77dab6d8401352acc9dd7e7a424e2f553959f335",
+    "steltic_openbim\\drawing_ui.js": "3f51d00345c81a5174981655fa33f9cabdb4334a2057f9fd6d9b35b2731abd56",
+    "steltic_openbim\\drawing_workflow.py": "cefb57d59136352a6bad3edf61f5c96ea47584d6e133ca0d09b44a5f4b919c65",
+    "steltic_openbim\\ifc_api.py": "a31cb462cc0e379665b43adf534151878d007f35e3dcfcf3548263b358cc63bb",
+    "steltic_openbim\\ifc_export.py": "177785a2859633b79578ae035cf7888ae7d144a8816966d149abad6fa87d5f2a",
+    "steltic_openbim\\ifc_handoff.py": "6dc2d8ca3eb01d1adca489410f5786bcf2c465e798e8bc81990067f0db7f3e6d",
+    "steltic_openbim\\ifc_import.py": "4169aab7033504dfd17d7fd917599831692083be2762a4dc63c3532bacc50dc4",
+    "steltic_openbim\\ifc_store.py": "b9f0c53a57843b63904cc9bcf113219cdd2b722ca99fd574478a62037957167f",
+    "steltic_openbim\\ifc_ui.js": "08c6373055eb3067d6a952cdd0394e907ed83b97034ade9dd4a1c25ba6bc963e",
+    "steltic_openbim\\ifc_viewer.js": "d4a2b57ba62658e59365c1732b21a831832a45cbca410a0f99e004a8d40b807a",
+    "steltic_openbim\\ifc_worker.py": "67f405f44df5b1e1d9301fb6868737f057e795fd12f2eb19b1649d3791a0cf85",
+    "steltic_openbim\\job_sources.py": "0b6e6a0ad8f37dc98fac23c99d83b414567a5193be5d501c5bde951338b97389",
+    "steltic_openbim\\local_guard.py": "47661ae216ae26be6839e21dd891e1f4fd7fb91557d4f11c03bc019baf29ec7a",
+    "steltic_openbim\\panel_geometry.py": "5cef4a848504aac4ea6d21f489f2a49ac652e50e5ec5f9210fc1482752689550",
+    "steltic_openbim\\physical_pdf.py": "70c745f044e28d3beeaecbc23effbe2bfe260cb4ec06af00142b6b73c97e9172",
+    "steltic_openbim\\physical_review.py": "1b4d73f7260c44c8d49ab70c778cf5380cb193f63fc89f3d8ebeb58d07521e6f",
+    "steltic_openbim\\pilots\\__init__.py": "d094937227af6b57efc31ae9af2310686f59e7cd4fb953b38b28504c8549f742",
+    "steltic_openbim\\pilots\\catalog.json": "a3e1518ecb8ff62a1e13aa117e575203bed04387aa4613757fe0f6c11e3bcb6e",
+    "steltic_openbim\\pilots\\cfs16.py": "815abb2c7abe43330a3f8bb38467161a92a73f60a0f66b13131007214c29ba1c",
+    "steltic_openbim\\pilots\\cfs8.py": "3cbc748cb0bdf0f372452de233ada86357aa678ceaa1554c7ba0135066035f0d",
+    "steltic_openbim\\pilots\\checks.py": "db2ff2980599df5915306750ba546467e8cccaaa13dd46ada0ee29e18918fbc7",
+    "steltic_openbim\\pilots\\geometry.py": "ea35dedc08dbaa836da02c7a98fd9f97b3dc22b1ca2807d25737766f1e9c2b72",
+    "steltic_openbim\\pilots\\hr22.py": "3678c12a95197e41ad61eea6090d44f939636ed0011252fd5e2efcb9b5f54385",
+    "steltic_openbim\\pilots\\inputs.lock.json": "652bb4d5040001d685d9c8d0cb6a221575ebdceb435e307a00be59790d032a92",
+    "steltic_openbim\\pilots\\model.py": "c2e5fd68ec2fbe3b7edd26ad1862c54b38fd9c2b3089e31b8f2b33dbb012b048",
+    "steltic_openbim\\pilots\\presentation.py": "02152bb36a091864363560541b9662e87acf83451080967295122b2c48dbcce1",
+    "steltic_openbim\\review.py": "bcd4b88bf84afe6d99ccdc8dceabb2012e8a1d7bfbed97d6b96b2dafa8343f4b",
+    "steltic_openbim\\review_assemblies.py": "da5382781d8706ec713fa57ea2dcf48dc6512c3cffbdb521a098e8aa90a6fb47",
+    "steltic_openbim\\review_cases.py": "be1fea9e2a84e654e676829b7fa5398beea596f78fd97dc783a5eb287a846755",
+    "steltic_openbim\\review_cfs.py": "6ddd4922da7250dac5fecc1ccc0766b2527ee26191978c757f6beafe23edd237",
+    "steltic_openbim\\review_cfs_complements.py": "8df8956000f6aa9d9eb515a3965d9c4b6093e1045a93718752e406357f7d78e6",
+    "steltic_openbim\\review_cfs_details.py": "8966fd3edc98a1cfb97aec5262d30af2380af4560a17f8a67a6351c0222692d8",
+    "steltic_openbim\\review_cfs_frames.py": "5f77c0c5edd4ff0f5b47a686be005cdc76c46708b586a2ad7ebcf8f3f53d3f1a",
+    "steltic_openbim\\review_data\\cases.json": "dbd44a757212c4e4b8eaf87550db24aa8e43fc562d726f3747d3a1f5a49e653b",
+    "steltic_openbim\\review_detail_extras.py": "1343d142bffb739c62ad9d0ca878aef9b1c0de9d5bc4401a215d867253409fa9",
+    "steltic_openbim\\review_final_cfs.py": "d1afe264fc150c308ee829647569946572e509cb59c58292f6332a0228ea20e3",
+    "steltic_openbim\\review_final_cfs_details.py": "262bc77c08a23e54ea40701dbeed32470b950e651d528053939653f0319c0254",
+    "steltic_openbim\\review_final_details.py": "16980ddf30b84a3ef882b36917cb04eae2c643a89585e2aedd5563c0d9ba8b7f",
+    "steltic_openbim\\review_final_hr.py": "96166aad541c20c540abff407c886a97c5e88eca8af8037edb3ea74e3b680adf",
+    "steltic_openbim\\review_floor_layout.py": "f16b3dbd7ce516c864fa5af899e361a5612921ee3ac206ca5a78bec63b53dd33",
+    "steltic_openbim\\review_hr.py": "f93e914a503d9f70bb1e01828f07dd8e5a6e4ba0a778d22a43c892510c35e061",
+    "steltic_openbim\\review_hr_complements.py": "3b1f8923804e70ccb081771be84d91af81db3b9f0458eb8b67e42fed2eca8196",
+    "steltic_openbim\\review_hr_details.py": "996daf195a08dc921efdea0c0fd54b0eb963c6f44a133e7fe5b6c9d29e82b08d",
+    "steltic_openbim\\review_hr_special.py": "30676ca482d4ff4704cb5c7f4eb9ef3b5fc338958037a8aeaee22355d66b4a79",
+    "steltic_openbim\\review_model.py": "4cf08ae541f4da192ce2beec653624caa414195220bc238b89f52f776f6287ff",
+    "steltic_openbim\\review_next_cfs_details.py": "8c0040b5bfeca386e62abd4017963c91af3ed9507265ab3b6722cd0e9990de5d",
+    "steltic_openbim\\review_next_cfs_frames.py": "4a5eaf9de2868cea2c13e10da6a244071a40ad5edc9eae165c58345bd9950341",
+    "steltic_openbim\\review_next_cfs_walls.py": "0c95a175ddb1798b25a31ed2fc1ca9c1c13fecd94e0aa7a65db4a3c72fd398f2",
+    "steltic_openbim\\review_next_hr.py": "6f3c8465b70502deadc5973056421c3313ef683ba4834ace0f53589f9959ab6e",
+    "steltic_openbim\\review_next_hr_details.py": "5078bf5425e0e6642dcca93dd56233acec5dc624a2b0a8620390ff575c8da0b6",
+    "steltic_openbim\\review_next_hr_industrial.py": "fcd5b4f98a1787d945918daccf8505537e88efa9cc430eb8ee8f5340a8746b09",
+    "steltic_openbim\\review_next_sbmf.py": "97c2c0cb086dc1d81cbbacec5d8849e92ed4245cc5dc40a8237afaee59adc5b8",
+    "steltic_openbim\\review_pdf.py": "8172a52a7490f498a1cd4a202b22f14a5f0fae98bc1f96db3e9372104bc0aa9c",
+    "steltic_openbim\\review_provisional.py": "28f86ace80e36f030b10968baf91661d56fbbed426eaf3c7b08bdb41c95ca551",
+    "steltic_openbim\\review_splice_parts.py": "309b5a8328c81361fe7613d8a24e5fa4d5a3705efc3f312f21c4ac12f2d67588",
+    "steltic_openbim\\review_supplements.py": "236945524d52ac782cd0ed0d86c467d5426bfd9b35a7682258ed0c30b1a07621",
+    "steltic_openbim\\review_wall_details.py": "c9d8cd6fbacd629ce4a2a635369e1e66d304844625d8d5b246248c2526a809a8",
+    "steltic_openbim\\source_workline_pdf.py": "8cc0ced6f0de74833a32ddd7b47b1cbdb033ef784eafeea3111d2f08c6a40f6a",
+    "steltic_openbim\\source_worklines.py": "5cbc1eb0cae86d4d0f81c949b48ed3fb58d6734cdd5019f9f4b7487d3245416d",
+    "steltic_openbim\\validation.py": "dbe2e7042edb42bff62ff21ec295c4bac22361549e5ac8b00fcc5078c24bf26b"
+  },
+  "llm_calls": 0,
+  "redesign": false,
+  "analysis_solve": false,
+  "drawings": false,
+  "supplements": false,
+  "package_sha256": "af002f7852dc26d39fc916efea44314b31485b1d5291227c6a5f42d84b8179b0",
+  "validation": {
+    "status": "invalid",
+    "source_freshness_checked": true,
+    "findings": [
+      {
+        "code": "connection_selected_components",
+        "message": "Located connection parts omit component categories explicitly selected in the linked design; export the actual parts/reference groups without relabelling an unrelated solid",
+        "entity_ids": [
+          "C-STRAP-0001",
+          "C-STRAP-0002",
+          "C-STRAP-0003",
+          "C-STRAP-0004",
+          "C-STRAP-0005",
+          "C-STRAP-0006",
+          "C-STRAP-0007",
+          "C-STRAP-0008",
+          "C-STRAP-0009",
+          "C-STRAP-0010",
+          "C-STRAP-0011",
+          "C-STRAP-0012",
+          "C-STRAP-0013",
+          "C-STRAP-0014",
+          "C-STRAP-0015",
+          "C-STRAP-0016",
+          "C-STRAP-0017",
+          "C-STRAP-0018",
+          "C-STRAP-0019",
+          "C-STRAP-0020",
+          "C-STRAP-0021",
+          "C-STRAP-0022",
+          "C-STRAP-0023",
+          "C-STRAP-0024",
+          "C-STRAP-0025",
+          "C-STRAP-0026",
+          "C-STRAP-0027",
+          "C-STRAP-0028",
+          "C-STRAP-0029",
+          "C-STRAP-0030",
+          "C-STRAP-0031",
+          "C-STRAP-0032",
+          "C-STRAP-0033",
+          "C-STRAP-0034",
+          "C-STRAP-0035",
+          "C-STRAP-0036",
+          "C-STRAP-0037",
+          "C-STRAP-0038",
+          "C-STRAP-0039",
+          "C-STRAP-0040"
+        ],
+        "severity": "needs_input",
+        "count": 40,
+        "examples": [
+          {
+            "connection_id": "C-STRAP-0001",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0002",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0003",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0004",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0005",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0006",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0007",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0008",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0009",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0010",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0011",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0012",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0013",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0014",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0015",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0016",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0017",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0018",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0019",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0020",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0021",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0022",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0023",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0024",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0025",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0026",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0027",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0028",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0029",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0030",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0031",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0032",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0033",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0034",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0035",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0036",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0037",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0038",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0039",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          },
+          {
+            "connection_id": "C-STRAP-0040",
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "weld"
+            ],
+            "selected_components": "6x0.075-in. flat straps in X at alternate bays on both side walls and interior valley line; No.14 screw groups plus weld to gusset, connection at least strap strength per J4/J2 (phi=0.50 screws)",
+            "returned_part_kinds": "strap gusset screw group"
+          }
+        ]
+      },
+      {
+        "code": "connection_fastener_quantity",
+        "message": "A solid fastener count exceeds the distinct located fastener solids in its local design assembly; instantiate the actual checked pattern instead of multiplying a representative solid by a count label",
+        "entity_ids": [
+          "C-F01-apexE",
+          "C-F01-apexW",
+          "C-F01-baseE",
+          "C-F01-baseI",
+          "C-F01-baseW",
+          "C-F01-kneeE",
+          "C-F01-kneeW",
+          "C-F01-valley",
+          "C-F02-apexE",
+          "C-F02-apexW",
+          "C-F02-baseE",
+          "C-F02-baseI",
+          "C-F02-baseW",
+          "C-F02-kneeE",
+          "C-F02-kneeW",
+          "C-F02-valley",
+          "C-F03-apexE",
+          "C-F03-apexW",
+          "C-F03-baseE",
+          "C-F03-baseI",
+          "C-F03-baseW",
+          "C-F03-kneeE",
+          "C-F03-kneeW",
+          "C-F03-valley",
+          "C-F04-apexE",
+          "C-F04-apexW",
+          "C-F04-baseE",
+          "C-F04-baseI",
+          "C-F04-baseW",
+          "C-F04-kneeE",
+          "C-F04-kneeW",
+          "C-F04-valley",
+          "C-F05-apexE",
+          "C-F05-apexW",
+          "C-F05-baseE",
+          "C-F05-baseI",
+          "C-F05-baseW",
+          "C-F05-kneeE",
+          "C-F05-kneeW",
+          "C-F05-valley",
+          "C-F06-apexE",
+          "C-F06-apexW",
+          "C-F06-baseE",
+          "C-F06-baseI",
+          "C-F06-baseW",
+          "C-F06-kneeE",
+          "C-F06-kneeW",
+          "C-F06-valley",
+          "C-F07-apexE",
+          "C-F07-apexW",
+          "C-F07-baseE",
+          "C-F07-baseI",
+          "C-F07-baseW",
+          "C-F07-kneeE",
+          "C-F07-kneeW",
+          "C-F07-valley",
+          "C-F08-apexE",
+          "C-F08-apexW",
+          "C-F08-baseE",
+          "C-F08-baseI",
+          "C-F08-baseW",
+          "C-F08-kneeE",
+          "C-F08-kneeW",
+          "C-F08-valley",
+          "C-F09-apexE",
+          "C-F09-apexW",
+          "C-F09-baseE",
+          "C-F09-baseI",
+          "C-F09-baseW",
+          "C-F09-kneeE",
+          "C-F09-kneeW",
+          "C-F09-valley",
+          "C-F10-apexE",
+          "C-F10-apexW",
+          "C-F10-baseE",
+          "C-F10-baseI",
+          "C-F10-baseW",
+          "C-F10-kneeE",
+          "C-F10-kneeW",
+          "C-F10-valley",
+          "C-F11-apexE",
+          "C-F11-apexW",
+          "C-F11-baseE",
+          "C-F11-baseI",
+          "C-F11-baseW",
+          "C-F11-kneeE",
+          "C-F11-kneeW",
+          "C-F11-valley",
+          "C-F12-apexE",
+          "C-F12-apexW",
+          "C-F12-baseE",
+          "C-F12-baseI",
+          "C-F12-baseW",
+          "C-F12-kneeE",
+          "C-F12-kneeW",
+          "C-F12-valley",
+          "C-F13-apexE",
+          "C-F13-apexW",
+          "C-F13-baseE",
+          "C-F13-baseI",
+          "C-F13-baseW",
+          "C-F13-kneeE",
+          "C-F13-kneeW",
+          "C-F13-valley",
+          "C-F14-apexE",
+          "C-F14-apexW",
+          "C-F14-baseE",
+          "C-F14-baseI",
+          "C-F14-baseW",
+          "C-F14-kneeE",
+          "C-F14-kneeW",
+          "C-F14-valley",
+          "C-F15-apexE",
+          "C-F15-apexW",
+          "C-F15-baseE",
+          "C-F15-baseI",
+          "C-F15-baseW",
+          "C-F15-kneeE",
+          "C-F15-kneeW",
+          "C-F15-valley",
+          "C-F16-apexE",
+          "C-F16-apexW",
+          "C-F16-baseE",
+          "C-F16-baseI",
+          "C-F16-baseW",
+          "C-F16-kneeE",
+          "C-F16-kneeW",
+          "C-F16-valley",
+          "C-F17-apexE",
+          "C-F17-apexW",
+          "C-F17-baseE",
+          "C-F17-baseI",
+          "C-F17-baseW",
+          "C-F17-kneeE",
+          "C-F17-kneeW",
+          "C-F17-valley",
+          "C-F18-apexE",
+          "C-F18-apexW",
+          "C-F18-baseE",
+          "C-F18-baseI",
+          "C-F18-baseW",
+          "C-F18-kneeE",
+          "C-F18-kneeW",
+          "C-F18-valley",
+          "C-F19-apexE",
+          "C-F19-apexW",
+          "C-F19-baseE",
+          "C-F19-baseI",
+          "C-F19-baseW",
+          "C-F19-kneeE",
+          "C-F19-kneeW",
+          "C-F19-valley",
+          "C-F20-apexE",
+          "C-F20-apexW",
+          "C-F20-baseE",
+          "C-F20-baseI",
+          "C-F20-baseW",
+          "C-F20-kneeE",
+          "C-F20-kneeW",
+          "C-F20-valley",
+          "C-F21-apexE",
+          "C-F21-apexW",
+          "C-F21-baseE",
+          "C-F21-baseI",
+          "C-F21-baseW",
+          "C-F21-kneeE",
+          "C-F21-kneeW",
+          "C-F21-valley",
+          "C-GIRT-0001",
+          "C-GIRT-0002",
+          "C-GIRT-0003",
+          "C-GIRT-0004",
+          "C-GIRT-0005",
+          "C-GIRT-0006",
+          "C-GIRT-0007",
+          "C-GIRT-0008",
+          "C-GIRT-0009",
+          "C-GIRT-0010",
+          "C-GIRT-0011",
+          "C-GIRT-0012",
+          "C-GIRT-0013",
+          "C-GIRT-0014",
+          "C-GIRT-0015",
+          "C-GIRT-0016",
+          "C-GIRT-0017",
+          "C-GIRT-0018",
+          "C-GIRT-0019",
+          "C-GIRT-0020",
+          "C-GIRT-0021",
+          "C-GIRT-0022",
+          "C-GIRT-0023",
+          "C-GIRT-0024",
+          "C-GIRT-0025",
+          "C-GIRT-0026",
+          "C-GIRT-0027",
+          "C-GIRT-0028",
+          "C-GIRT-0029",
+          "C-GIRT-0030",
+          "C-GIRT-0031",
+          "C-GIRT-0032",
+          "C-GIRT-0033",
+          "C-GIRT-0034",
+          "C-GIRT-0035",
+          "C-GIRT-0036",
+          "C-GIRT-0037",
+          "C-GIRT-0038",
+          "C-GIRT-0039",
+          "C-GIRT-0040",
+          "C-GIRT-0041",
+          "C-GIRT-0042",
+          "C-GIRT-0043",
+          "C-GIRT-0044",
+          "C-GIRT-0045",
+          "C-GIRT-0046",
+          "C-GIRT-0047",
+          "C-GIRT-0048",
+          "C-GIRT-0049",
+          "C-GIRT-0050",
+          "C-GIRT-0051",
+          "C-GIRT-0052",
+          "C-GIRT-0053",
+          "C-GIRT-0054",
+          "C-GIRT-0055",
+          "C-GIRT-0056",
+          "C-GIRT-0057",
+          "C-GIRT-0058",
+          "C-GIRT-0059",
+          "C-GIRT-0060",
+          "C-GIRT-0061",
+          "C-GIRT-0062",
+          "C-GIRT-0063",
+          "C-GIRT-0064",
+          "C-GIRT-0065",
+          "C-GIRT-0066",
+          "C-GIRT-0067",
+          "C-GIRT-0068",
+          "C-GIRT-0069",
+          "C-GIRT-0070",
+          "C-GIRT-0071",
+          "C-GIRT-0072",
+          "C-GIRT-0073",
+          "C-GIRT-0074",
+          "C-GIRT-0075",
+          "C-GIRT-0076",
+          "C-GIRT-0077",
+          "C-GIRT-0078",
+          "C-GIRT-0079",
+          "C-GIRT-0080",
+          "C-GIRT-0081",
+          "C-GIRT-0082",
+          "C-GIRT-0083",
+          "C-GIRT-0084",
+          "C-HDR-0001",
+          "C-HDR-0002",
+          "C-HDR-0003",
+          "C-HDR-0004",
+          "C-HDR-0005",
+          "C-HDR-0006",
+          "C-HDR-0007",
+          "C-HDR-0008",
+          "C-HDR-0009",
+          "C-HDR-0010",
+          "C-PURL-END-0001",
+          "C-PURL-END-0021",
+          "C-PURL-END-0022",
+          "C-PURL-END-0042",
+          "C-PURL-END-0043",
+          "C-PURL-END-0063",
+          "C-PURL-END-0064",
+          "C-PURL-END-0084",
+          "C-PURL-END-0085",
+          "C-PURL-END-0105",
+          "C-PURL-END-0106",
+          "C-PURL-END-0126",
+          "C-PURL-END-0127",
+          "C-PURL-END-0147",
+          "C-PURL-END-0148",
+          "C-PURL-END-0168",
+          "C-PURL-END-0169",
+          "C-PURL-END-0189",
+          "C-PURL-END-0190",
+          "C-PURL-END-0210",
+          "C-PURL-END-0211",
+          "C-PURL-END-0231",
+          "C-PURL-END-0232",
+          "C-PURL-END-0252",
+          "C-PURL-END-0253",
+          "C-PURL-END-0273",
+          "C-PURL-END-0274",
+          "C-PURL-END-0294",
+          "C-PURL-END-0295",
+          "C-PURL-END-0315",
+          "C-PURL-END-0316",
+          "C-PURL-END-0336",
+          "C-PURL-END-0337",
+          "C-PURL-END-0357",
+          "C-PURL-SPL-0002",
+          "C-PURL-SPL-0003",
+          "C-PURL-SPL-0004",
+          "C-PURL-SPL-0005",
+          "C-PURL-SPL-0006",
+          "C-PURL-SPL-0007",
+          "C-PURL-SPL-0008",
+          "C-PURL-SPL-0009",
+          "C-PURL-SPL-0010",
+          "C-PURL-SPL-0011",
+          "C-PURL-SPL-0012",
+          "C-PURL-SPL-0013",
+          "C-PURL-SPL-0014",
+          "C-PURL-SPL-0015",
+          "C-PURL-SPL-0016",
+          "C-PURL-SPL-0017",
+          "C-PURL-SPL-0018",
+          "C-PURL-SPL-0019",
+          "C-PURL-SPL-0020",
+          "C-PURL-SPL-0023",
+          "C-PURL-SPL-0024",
+          "C-PURL-SPL-0025",
+          "C-PURL-SPL-0026",
+          "C-PURL-SPL-0027",
+          "C-PURL-SPL-0028",
+          "C-PURL-SPL-0029",
+          "C-PURL-SPL-0030",
+          "C-PURL-SPL-0031",
+          "C-PURL-SPL-0032",
+          "C-PURL-SPL-0033",
+          "C-PURL-SPL-0034",
+          "C-PURL-SPL-0035",
+          "C-PURL-SPL-0036",
+          "C-PURL-SPL-0037",
+          "C-PURL-SPL-0038",
+          "C-PURL-SPL-0039",
+          "C-PURL-SPL-0040",
+          "C-PURL-SPL-0041",
+          "C-PURL-SPL-0044",
+          "C-PURL-SPL-0045",
+          "C-PURL-SPL-0046",
+          "C-PURL-SPL-0047",
+          "C-PURL-SPL-0048",
+          "C-PURL-SPL-0049",
+          "C-PURL-SPL-0050",
+          "C-PURL-SPL-0051",
+          "C-PURL-SPL-0052",
+          "C-PURL-SPL-0053",
+          "C-PURL-SPL-0054",
+          "C-PURL-SPL-0055",
+          "C-PURL-SPL-0056",
+          "C-PURL-SPL-0057",
+          "C-PURL-SPL-0058",
+          "C-PURL-SPL-0059",
+          "C-PURL-SPL-0060",
+          "C-PURL-SPL-0061",
+          "C-PURL-SPL-0062",
+          "C-PURL-SPL-0065",
+          "C-PURL-SPL-0066",
+          "C-PURL-SPL-0067",
+          "C-PURL-SPL-0068",
+          "C-PURL-SPL-0069",
+          "C-PURL-SPL-0070",
+          "C-PURL-SPL-0071",
+          "C-PURL-SPL-0072",
+          "C-PURL-SPL-0073",
+          "C-PURL-SPL-0074",
+          "C-PURL-SPL-0075",
+          "C-PURL-SPL-0076",
+          "C-PURL-SPL-0077",
+          "C-PURL-SPL-0078",
+          "C-PURL-SPL-0079",
+          "C-PURL-SPL-0080",
+          "C-PURL-SPL-0081",
+          "C-PURL-SPL-0082",
+          "C-PURL-SPL-0083",
+          "C-PURL-SPL-0086",
+          "C-PURL-SPL-0087",
+          "C-PURL-SPL-0088",
+          "C-PURL-SPL-0089",
+          "C-PURL-SPL-0090",
+          "C-PURL-SPL-0091",
+          "C-PURL-SPL-0092",
+          "C-PURL-SPL-0093",
+          "C-PURL-SPL-0094",
+          "C-PURL-SPL-0095",
+          "C-PURL-SPL-0096",
+          "C-PURL-SPL-0097",
+          "C-PURL-SPL-0098",
+          "C-PURL-SPL-0099",
+          "C-PURL-SPL-0100",
+          "C-PURL-SPL-0101",
+          "C-PURL-SPL-0102",
+          "C-PURL-SPL-0103",
+          "C-PURL-SPL-0104",
+          "C-PURL-SPL-0107",
+          "C-PURL-SPL-0108",
+          "C-PURL-SPL-0109",
+          "C-PURL-SPL-0110",
+          "C-PURL-SPL-0111",
+          "C-PURL-SPL-0112",
+          "C-PURL-SPL-0113",
+          "C-PURL-SPL-0114",
+          "C-PURL-SPL-0115",
+          "C-PURL-SPL-0116",
+          "C-PURL-SPL-0117",
+          "C-PURL-SPL-0118",
+          "C-PURL-SPL-0119",
+          "C-PURL-SPL-0120",
+          "C-PURL-SPL-0121",
+          "C-PURL-SPL-0122",
+          "C-PURL-SPL-0123",
+          "C-PURL-SPL-0124",
+          "C-PURL-SPL-0125",
+          "C-PURL-SPL-0128",
+          "C-PURL-SPL-0129",
+          "C-PURL-SPL-0130",
+          "C-PURL-SPL-0131",
+          "C-PURL-SPL-0132",
+          "C-PURL-SPL-0133",
+          "C-PURL-SPL-0134",
+          "C-PURL-SPL-0135",
+          "C-PURL-SPL-0136",
+          "C-PURL-SPL-0137",
+          "C-PURL-SPL-0138",
+          "C-PURL-SPL-0139",
+          "C-PURL-SPL-0140",
+          "C-PURL-SPL-0141",
+          "C-PURL-SPL-0142",
+          "C-PURL-SPL-0143",
+          "C-PURL-SPL-0144",
+          "C-PURL-SPL-0145",
+          "C-PURL-SPL-0146",
+          "C-PURL-SPL-0149",
+          "C-PURL-SPL-0150",
+          "C-PURL-SPL-0151",
+          "C-PURL-SPL-0152",
+          "C-PURL-SPL-0153",
+          "C-PURL-SPL-0154",
+          "C-PURL-SPL-0155",
+          "C-PURL-SPL-0156",
+          "C-PURL-SPL-0157",
+          "C-PURL-SPL-0158",
+          "C-PURL-SPL-0159",
+          "C-PURL-SPL-0160",
+          "C-PURL-SPL-0161",
+          "C-PURL-SPL-0162",
+          "C-PURL-SPL-0163",
+          "C-PURL-SPL-0164",
+          "C-PURL-SPL-0165",
+          "C-PURL-SPL-0166",
+          "C-PURL-SPL-0167",
+          "C-PURL-SPL-0170",
+          "C-PURL-SPL-0171",
+          "C-PURL-SPL-0172",
+          "C-PURL-SPL-0173",
+          "C-PURL-SPL-0174",
+          "C-PURL-SPL-0175",
+          "C-PURL-SPL-0176",
+          "C-PURL-SPL-0177",
+          "C-PURL-SPL-0178",
+          "C-PURL-SPL-0179",
+          "C-PURL-SPL-0180",
+          "C-PURL-SPL-0181",
+          "C-PURL-SPL-0182",
+          "C-PURL-SPL-0183",
+          "C-PURL-SPL-0184",
+          "C-PURL-SPL-0185",
+          "C-PURL-SPL-0186",
+          "C-PURL-SPL-0187",
+          "C-PURL-SPL-0188",
+          "C-PURL-SPL-0191",
+          "C-PURL-SPL-0192",
+          "C-PURL-SPL-0193",
+          "C-PURL-SPL-0194",
+          "C-PURL-SPL-0195",
+          "C-PURL-SPL-0196",
+          "C-PURL-SPL-0197",
+          "C-PURL-SPL-0198",
+          "C-PURL-SPL-0199",
+          "C-PURL-SPL-0200",
+          "C-PURL-SPL-0201",
+          "C-PURL-SPL-0202",
+          "C-PURL-SPL-0203",
+          "C-PURL-SPL-0204",
+          "C-PURL-SPL-0205",
+          "C-PURL-SPL-0206",
+          "C-PURL-SPL-0207",
+          "C-PURL-SPL-0208",
+          "C-PURL-SPL-0209",
+          "C-PURL-SPL-0212",
+          "C-PURL-SPL-0213",
+          "C-PURL-SPL-0214",
+          "C-PURL-SPL-0215",
+          "C-PURL-SPL-0216",
+          "C-PURL-SPL-0217",
+          "C-PURL-SPL-0218",
+          "C-PURL-SPL-0219",
+          "C-PURL-SPL-0220",
+          "C-PURL-SPL-0221",
+          "C-PURL-SPL-0222",
+          "C-PURL-SPL-0223",
+          "C-PURL-SPL-0224",
+          "C-PURL-SPL-0225",
+          "C-PURL-SPL-0226",
+          "C-PURL-SPL-0227",
+          "C-PURL-SPL-0228",
+          "C-PURL-SPL-0229",
+          "C-PURL-SPL-0230",
+          "C-PURL-SPL-0233",
+          "C-PURL-SPL-0234",
+          "C-PURL-SPL-0235",
+          "C-PURL-SPL-0236",
+          "C-PURL-SPL-0237",
+          "C-PURL-SPL-0238",
+          "C-PURL-SPL-0239",
+          "C-PURL-SPL-0240",
+          "C-PURL-SPL-0241",
+          "C-PURL-SPL-0242",
+          "C-PURL-SPL-0243",
+          "C-PURL-SPL-0244",
+          "C-PURL-SPL-0245",
+          "C-PURL-SPL-0246",
+          "C-PURL-SPL-0247",
+          "C-PURL-SPL-0248",
+          "C-PURL-SPL-0249",
+          "C-PURL-SPL-0250",
+          "C-PURL-SPL-0251",
+          "C-PURL-SPL-0254",
+          "C-PURL-SPL-0255",
+          "C-PURL-SPL-0256",
+          "C-PURL-SPL-0257",
+          "C-PURL-SPL-0258",
+          "C-PURL-SPL-0259",
+          "C-PURL-SPL-0260",
+          "C-PURL-SPL-0261",
+          "C-PURL-SPL-0262",
+          "C-PURL-SPL-0263",
+          "C-PURL-SPL-0264",
+          "C-PURL-SPL-0265",
+          "C-PURL-SPL-0266",
+          "C-PURL-SPL-0267",
+          "C-PURL-SPL-0268",
+          "C-PURL-SPL-0269",
+          "C-PURL-SPL-0270",
+          "C-PURL-SPL-0271",
+          "C-PURL-SPL-0272",
+          "C-PURL-SPL-0275",
+          "C-PURL-SPL-0276",
+          "C-PURL-SPL-0277",
+          "C-PURL-SPL-0278",
+          "C-PURL-SPL-0279",
+          "C-PURL-SPL-0280",
+          "C-PURL-SPL-0281",
+          "C-PURL-SPL-0282",
+          "C-PURL-SPL-0283",
+          "C-PURL-SPL-0284",
+          "C-PURL-SPL-0285",
+          "C-PURL-SPL-0286",
+          "C-PURL-SPL-0287",
+          "C-PURL-SPL-0288",
+          "C-PURL-SPL-0289",
+          "C-PURL-SPL-0290",
+          "C-PURL-SPL-0291",
+          "C-PURL-SPL-0292",
+          "C-PURL-SPL-0293",
+          "C-PURL-SPL-0296",
+          "C-PURL-SPL-0297",
+          "C-PURL-SPL-0298",
+          "C-PURL-SPL-0299",
+          "C-PURL-SPL-0300",
+          "C-PURL-SPL-0301",
+          "C-PURL-SPL-0302",
+          "C-PURL-SPL-0303",
+          "C-PURL-SPL-0304",
+          "C-PURL-SPL-0305",
+          "C-PURL-SPL-0306",
+          "C-PURL-SPL-0307",
+          "C-PURL-SPL-0308",
+          "C-PURL-SPL-0309",
+          "C-PURL-SPL-0310",
+          "C-PURL-SPL-0311",
+          "C-PURL-SPL-0312",
+          "C-PURL-SPL-0313",
+          "C-PURL-SPL-0314",
+          "C-PURL-SPL-0317",
+          "C-PURL-SPL-0318",
+          "C-PURL-SPL-0319",
+          "C-PURL-SPL-0320",
+          "C-PURL-SPL-0321",
+          "C-PURL-SPL-0322",
+          "C-PURL-SPL-0323",
+          "C-PURL-SPL-0324",
+          "C-PURL-SPL-0325",
+          "C-PURL-SPL-0326",
+          "C-PURL-SPL-0327",
+          "C-PURL-SPL-0328",
+          "C-PURL-SPL-0329",
+          "C-PURL-SPL-0330",
+          "C-PURL-SPL-0331",
+          "C-PURL-SPL-0332",
+          "C-PURL-SPL-0333",
+          "C-PURL-SPL-0334",
+          "C-PURL-SPL-0335",
+          "C-PURL-SPL-0338",
+          "C-PURL-SPL-0339",
+          "C-PURL-SPL-0340",
+          "C-PURL-SPL-0341",
+          "C-PURL-SPL-0342",
+          "C-PURL-SPL-0343",
+          "C-PURL-SPL-0344",
+          "C-PURL-SPL-0345",
+          "C-PURL-SPL-0346",
+          "C-PURL-SPL-0347",
+          "C-PURL-SPL-0348",
+          "C-PURL-SPL-0349",
+          "C-PURL-SPL-0350",
+          "C-PURL-SPL-0351",
+          "C-PURL-SPL-0352",
+          "C-PURL-SPL-0353",
+          "C-PURL-SPL-0354",
+          "C-PURL-SPL-0355",
+          "C-PURL-SPL-0356",
+          "C-STRAP-0001",
+          "C-STRAP-0002",
+          "C-STRAP-0003",
+          "C-STRAP-0004",
+          "C-STRAP-0005",
+          "C-STRAP-0006",
+          "C-STRAP-0007",
+          "C-STRAP-0008",
+          "C-STRAP-0009",
+          "C-STRAP-0010",
+          "C-STRAP-0011",
+          "C-STRAP-0012",
+          "C-STRAP-0013",
+          "C-STRAP-0014",
+          "C-STRAP-0015",
+          "C-STRAP-0016",
+          "C-STRAP-0017",
+          "C-STRAP-0018",
+          "C-STRAP-0019",
+          "C-STRAP-0020",
+          "C-STRAP-0021",
+          "C-STRAP-0022",
+          "C-STRAP-0023",
+          "C-STRAP-0024",
+          "C-STRAP-0025",
+          "C-STRAP-0026",
+          "C-STRAP-0027",
+          "C-STRAP-0028",
+          "C-STRAP-0029",
+          "C-STRAP-0030",
+          "C-STRAP-0031",
+          "C-STRAP-0032",
+          "C-STRAP-0033",
+          "C-STRAP-0034",
+          "C-STRAP-0035",
+          "C-STRAP-0036",
+          "C-STRAP-0037",
+          "C-STRAP-0038",
+          "C-STRAP-0039",
+          "C-STRAP-0040"
+        ],
+        "severity": "needs_input",
+        "count": 743,
+        "examples": [
+          {
+            "connection_id": "C-F01-kneeW",
+            "part_id": "bolts-W",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F01-kneeW",
+            "part_id": "stitch-W-col",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F01-kneeW",
+            "part_id": "stitch-W-raf",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F01-kneeE",
+            "part_id": "bolts-E",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F01-kneeE",
+            "part_id": "stitch-E-col",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F01-kneeE",
+            "part_id": "stitch-E-raf",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F01-valley",
+            "part_id": "bolts-V",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F01-apexW",
+            "part_id": "bolts-AW",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F01-apexE",
+            "part_id": "bolts-AE",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F01-baseW",
+            "part_id": "anchors-baseW",
+            "category": "anchor",
+            "declared_count": 4,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F01-baseI",
+            "part_id": "anchors-baseI",
+            "category": "anchor",
+            "declared_count": 4,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F01-baseE",
+            "part_id": "anchors-baseE",
+            "category": "anchor",
+            "declared_count": 4,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F02-kneeW",
+            "part_id": "bolts-W",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F02-kneeW",
+            "part_id": "stitch-W-col",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F02-kneeW",
+            "part_id": "stitch-W-raf",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F02-kneeE",
+            "part_id": "bolts-E",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F02-kneeE",
+            "part_id": "stitch-E-col",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F02-kneeE",
+            "part_id": "stitch-E-raf",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F02-valley",
+            "part_id": "bolts-V",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F02-apexW",
+            "part_id": "bolts-AW",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F02-apexE",
+            "part_id": "bolts-AE",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F02-baseW",
+            "part_id": "anchors-baseW",
+            "category": "anchor",
+            "declared_count": 4,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F02-baseI",
+            "part_id": "anchors-baseI",
+            "category": "anchor",
+            "declared_count": 4,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F02-baseE",
+            "part_id": "anchors-baseE",
+            "category": "anchor",
+            "declared_count": 4,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F03-kneeW",
+            "part_id": "bolts-W",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F03-kneeW",
+            "part_id": "stitch-W-col",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F03-kneeW",
+            "part_id": "stitch-W-raf",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F03-kneeE",
+            "part_id": "bolts-E",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F03-kneeE",
+            "part_id": "stitch-E-col",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F03-kneeE",
+            "part_id": "stitch-E-raf",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F03-valley",
+            "part_id": "bolts-V",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F03-apexW",
+            "part_id": "bolts-AW",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F03-apexE",
+            "part_id": "bolts-AE",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F03-baseW",
+            "part_id": "anchors-baseW",
+            "category": "anchor",
+            "declared_count": 4,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F03-baseI",
+            "part_id": "anchors-baseI",
+            "category": "anchor",
+            "declared_count": 4,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F03-baseE",
+            "part_id": "anchors-baseE",
+            "category": "anchor",
+            "declared_count": 4,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F04-kneeW",
+            "part_id": "bolts-W",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F04-kneeW",
+            "part_id": "stitch-W-col",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F04-kneeW",
+            "part_id": "stitch-W-raf",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F04-kneeE",
+            "part_id": "bolts-E",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F04-kneeE",
+            "part_id": "stitch-E-col",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F04-kneeE",
+            "part_id": "stitch-E-raf",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F04-valley",
+            "part_id": "bolts-V",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F04-apexW",
+            "part_id": "bolts-AW",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F04-apexE",
+            "part_id": "bolts-AE",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F04-baseW",
+            "part_id": "anchors-baseW",
+            "category": "anchor",
+            "declared_count": 4,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F04-baseI",
+            "part_id": "anchors-baseI",
+            "category": "anchor",
+            "declared_count": 4,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F04-baseE",
+            "part_id": "anchors-baseE",
+            "category": "anchor",
+            "declared_count": 4,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F05-kneeW",
+            "part_id": "bolts-W",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F05-kneeW",
+            "part_id": "stitch-W-col",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F05-kneeW",
+            "part_id": "stitch-W-raf",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F05-kneeE",
+            "part_id": "bolts-E",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F05-kneeE",
+            "part_id": "stitch-E-col",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F05-kneeE",
+            "part_id": "stitch-E-raf",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F05-valley",
+            "part_id": "bolts-V",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F05-apexW",
+            "part_id": "bolts-AW",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F05-apexE",
+            "part_id": "bolts-AE",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F05-baseW",
+            "part_id": "anchors-baseW",
+            "category": "anchor",
+            "declared_count": 4,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F05-baseI",
+            "part_id": "anchors-baseI",
+            "category": "anchor",
+            "declared_count": 4,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F05-baseE",
+            "part_id": "anchors-baseE",
+            "category": "anchor",
+            "declared_count": 4,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F06-kneeW",
+            "part_id": "bolts-W",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F06-kneeW",
+            "part_id": "stitch-W-col",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F06-kneeW",
+            "part_id": "stitch-W-raf",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F06-kneeE",
+            "part_id": "bolts-E",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F06-kneeE",
+            "part_id": "stitch-E-col",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F06-kneeE",
+            "part_id": "stitch-E-raf",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F06-valley",
+            "part_id": "bolts-V",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F06-apexW",
+            "part_id": "bolts-AW",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F06-apexE",
+            "part_id": "bolts-AE",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F06-baseW",
+            "part_id": "anchors-baseW",
+            "category": "anchor",
+            "declared_count": 4,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F06-baseI",
+            "part_id": "anchors-baseI",
+            "category": "anchor",
+            "declared_count": 4,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F06-baseE",
+            "part_id": "anchors-baseE",
+            "category": "anchor",
+            "declared_count": 4,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F07-kneeW",
+            "part_id": "bolts-W",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F07-kneeW",
+            "part_id": "stitch-W-col",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F07-kneeW",
+            "part_id": "stitch-W-raf",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F07-kneeE",
+            "part_id": "bolts-E",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F07-kneeE",
+            "part_id": "stitch-E-col",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F07-kneeE",
+            "part_id": "stitch-E-raf",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F07-valley",
+            "part_id": "bolts-V",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F07-apexW",
+            "part_id": "bolts-AW",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F07-apexE",
+            "part_id": "bolts-AE",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F07-baseW",
+            "part_id": "anchors-baseW",
+            "category": "anchor",
+            "declared_count": 4,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F07-baseI",
+            "part_id": "anchors-baseI",
+            "category": "anchor",
+            "declared_count": 4,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F07-baseE",
+            "part_id": "anchors-baseE",
+            "category": "anchor",
+            "declared_count": 4,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F08-kneeW",
+            "part_id": "bolts-W",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F08-kneeW",
+            "part_id": "stitch-W-col",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F08-kneeW",
+            "part_id": "stitch-W-raf",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F08-kneeE",
+            "part_id": "bolts-E",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F08-kneeE",
+            "part_id": "stitch-E-col",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F08-kneeE",
+            "part_id": "stitch-E-raf",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F08-valley",
+            "part_id": "bolts-V",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F08-apexW",
+            "part_id": "bolts-AW",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F08-apexE",
+            "part_id": "bolts-AE",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F08-baseW",
+            "part_id": "anchors-baseW",
+            "category": "anchor",
+            "declared_count": 4,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F08-baseI",
+            "part_id": "anchors-baseI",
+            "category": "anchor",
+            "declared_count": 4,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F08-baseE",
+            "part_id": "anchors-baseE",
+            "category": "anchor",
+            "declared_count": 4,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F09-kneeW",
+            "part_id": "bolts-W",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          },
+          {
+            "connection_id": "C-F09-kneeW",
+            "part_id": "stitch-W-col",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F09-kneeW",
+            "part_id": "stitch-W-raf",
+            "category": "screw",
+            "declared_count": 4,
+            "actual_distinct_solids": 2
+          },
+          {
+            "connection_id": "C-F09-kneeE",
+            "part_id": "bolts-E",
+            "category": "bolt",
+            "declared_count": 8,
+            "actual_distinct_solids": 1
+          }
+        ]
+      },
+      {
+        "code": "source_stale",
+        "message": "Source evidence changed after export",
+        "entity_ids": [
+          "workflow_review.json"
+        ],
+        "severity": "error"
+      }
+    ]
+  },
+  "copied_source_files": {
+    "viewer_3d.html": "8fae8d9cc586148f9ec209d87509df0199e729284c4ca79936466bc35c2664fd",
+    "bim_helper.py": "d10894598ce92a0b6ab983567457601b9362aa14c0ebbf67ea0534f073bd51bf",
+    "workflow_review.json": "6f5000c1d7402006b72e8c88e3240317b983d126159c6371f561361563a80aca",
+    "design/consistency_result.json": "5c65592cdc92c14477ee25bee06d2aad34bf1b391c1c66f02dd582a4a75fa856",
+    "architectural_input.json": "606297c5f817f935634c7d28fc8a8d083e4273d48fdb933548631c1a724d6d12",
+    "design/calc_package_cfs.json": "ae3cb0ce9f5991f651bb9e48a080b2cdad3ec3be2df903d6f9df6028f57b7d07",
+    "architectural_handoff.txt": "b5778c21d0168a5e1ce1c13886bb341c4dba21963d9c5a49d18eba56799c94dc",
+    "cfg.py": "5a15604221a5328f226165c737eff1944809d2a0551180762359d0a00e72ecc7",
+    "bim_conn_helper.py": "262ecd02be63f86ee26c221d787791ea75c0d56be69bc66976ac32c2aeaf372f",
+    "workflow_quantity_review.json": "77b923fa554ef8677d80cb889cc6c8652907cee4d023ec959481addc34e849f5",
+    "design/bim_request.json": "34c41dea64c6c1c7556ae60e253f23bccdcc778f9af9f5adbc4d08c188a56572"
+  },
+  "status": "blocked_source",
+  "guard_passed": true,
+  "reason": "source_stale: Source evidence changed after export"
+}

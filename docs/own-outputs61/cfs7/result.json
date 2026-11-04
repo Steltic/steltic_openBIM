@@ -1,0 +1,73 @@
+{
+  "case": "cfs7",
+  "key": "cfs7",
+  "title": "Steel-sheet walls",
+  "module": "CFS",
+  "primary": true,
+  "source_run_status": "error",
+  "original_package_present": true,
+  "original_native_completion_passed": false,
+  "producer_completion_problems": [
+    "BIM export is stale; rerun consistency.check or BIM replay"
+  ],
+  "saved_readiness": "ready",
+  "original_validation": "needs_input",
+  "original_freshness": "needs_input",
+  "changed_recorded_files": [],
+  "native_reexport": "exported",
+  "native_reexport_readiness": "needs_input",
+  "native_reexport_finding_codes": [
+    "connection_selected_family"
+  ],
+  "exporter_revision": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+  "original_producer_revision": null,
+  "variants": {
+    "saved": {
+      "transport": "passed",
+      "source_validation": "needs_input",
+      "source_finding_codes": [
+        "connection_selected_family"
+      ],
+      "architectural_comparison": "needs_resolution",
+      "comparison_issue_codes": [
+        "complete_native_physical_export",
+        "floor_roof_planes_footprints_voids"
+      ],
+      "products_compared": 2688,
+      "entities_compared": 38988,
+      "package_sha256": "37efe11985217f377d54db0adb86c475503cfdc55fefd9f7cdf85c4b5e5a1b1c",
+      "source_ifc_sha256": "1899d6185b47e3bfb09b76a41827642bddf3ec4ea95a76fc3aa9638d06183d0c",
+      "returned_ifc_sha256": "9e0a2b5c3d3f8e7fb6291cbaaa7906a55d371925b526bfb9358c5a0bb83a6bb1",
+      "source_files_unchanged": true,
+      "schema_errors": [],
+      "import_readiness_verified": true,
+      "error": null,
+      "stage": null
+    },
+    "replay": {
+      "transport": "passed",
+      "source_validation": "needs_input",
+      "source_finding_codes": [
+        "connection_selected_family"
+      ],
+      "architectural_comparison": "needs_resolution",
+      "comparison_issue_codes": [
+        "complete_native_physical_export",
+        "floor_roof_planes_footprints_voids"
+      ],
+      "products_compared": 2688,
+      "entities_compared": 38988,
+      "package_sha256": "5d95ec9561d95fb4514d5857dcb23d0ef95b8e1206865e2ff7f9e8da5f5513b4",
+      "source_ifc_sha256": "24028d89c6ea156ff42625cfeac51f60e32ecb5dfc590329cc13fa919b1aa720",
+      "returned_ifc_sha256": "01687859392d52ab257def08d28bf943d9cd27dc16c12653b99a0ad6bcf71102",
+      "source_files_unchanged": true,
+      "schema_errors": [],
+      "import_readiness_verified": true,
+      "error": null,
+      "stage": null
+    }
+  },
+  "status": "transport_passed_source_needs_resolution",
+  "saved_job_acceptance": false,
+  "reexport_model_checks_passed": false
+}

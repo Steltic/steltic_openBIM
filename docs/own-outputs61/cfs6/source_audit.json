@@ -1,0 +1,216 @@
+{
+  "case": "cfs6",
+  "key": "cfs6",
+  "module": "CFS",
+  "title": "WSP walls",
+  "project": "WFRESH61_cfs6_20261103",
+  "source_run_status": "error",
+  "primary": true,
+  "files": {
+    "cfg.py": "081403f82bd94fbd32c6427afc0b8029fa2d9fd96782b9237c57e1f19ac24611",
+    "design/calc_package_cfs.json": "96aff6a913643fb0264f08435a223e8a38106e6355fe9500cab37f19a3e1df13",
+    "design/bim_package.json": "c793e4ceb9721cfba5d0eba853f84408d3ab13b56e886809cea89ea1c7f6b1d6",
+    "design/consistency_result.json": "efaeb43ff520ae94d16e92a76572cab090590a3e61e15dbf92668652ca61e4bc",
+    "design/bim_request.json": "11412227fe697d9870bdda69b9982a1c9a61a78b04a612bae6a8125eaa6d2ca1",
+    "architectural_input.json": "47b177b508ec08c4841b94ca4b02ad0397f7e94fc8243cd5cb0907e206c52b2c",
+    "architectural_handoff.txt": "b594f7159d81cf3b72b9caca6fd18bb71c523334d6c94988747c8b92b5defb45"
+  },
+  "job_exists": true,
+  "completion_problems": [
+    "BIM export is stale; rerun consistency.check or BIM replay"
+  ],
+  "current_completion_gate_passed": false,
+  "package_present": true,
+  "stored_readiness": "ready",
+  "provenance": {
+    "analysis_executed": false,
+    "engine_files": {
+      "aisc_shapes.csv": "fbb655067c9e7e77c9ade032f917b5af4a95f8ee6660f7db47573bccd07727d0",
+      "architectural_input.py": "1b00359fd6e1470198beac88c84f88254f2be6f34c4c5c299795a3e285f38c7d",
+      "bim_adapter.py": "ed75c91a71618a49fe99a0cb88108e8d81a2ffad30bc00198a15abcd661b3190",
+      "bim_contract.py": "8807a15cf85c09f148e44a4b51051ab2acd3e7ada6feedf2f5e519f4ce56d86d",
+      "bim_export.py": "a5782357a2b2609b9a99c67e3ae5a53213321ef7b3710606164a8430161e9516",
+      "bim_package.schema.json": "77ab0cfaea34af4a64c29bccd1aaf1d6a6c9fbb942a582727d8fac5c7cd8e265",
+      "build_cfs_models.py": "85670ba24dc97c4a046771be2034d1fe190a1a8e7036267899b6c54b91df00ec",
+      "cfs_engine.py": "d71558210d2333d8c47b943e4588b5fd8be2940ced82ad2dbe5a82985c1fefde",
+      "cfs_frame.py": "4ac5df87a55492c84e8591bd5640b7f87477e1a3d667c6372844e80d2c842d28",
+      "cfs_gates.py": "4df390650c78fc67c65bd84c7f31a45b723c6c0665065ba4a64ae6cf1206c8d2",
+      "cfs_pipeline.py": "167ce20c4d752db9920ee2c7f7ca769b677b97e957152191296d5b0fa4f680fd",
+      "cfs_sections.py": "f0502b4621636c0b899a29f0221d297611f4dc9de6617c33c9456a35dae69fce",
+      "cfs_shapes.csv": "c43f2ce3bc10f3feb5a54d9025f6a3cf9c772723c69e85a95025867cf7384a41",
+      "cfs_systems.py": "f83d3da5b7405b7b09ff774de7b4a44c278badc37b39839f89905701093a8eeb",
+      "cfs_viewer3d.py": "76e237bbc09a3bd517511cdeaf11bcd0706ebcdce59f71cc3b434347af032ea7",
+      "consistency.py": "b575eec3688c324453a79d646849a60c224e5ef0f781edf2925b1ba15eb3830d",
+      "design_pipeline.py": "1c0980b14ba06f1a2bf75f9afa58ab62d8cc6c1a8952c160b67f9bc733894d1e",
+      "design_post.py": "0fdcca4600fd9b40fd5841e22412566cdd2fdb38c8ef77e7e7852ba2363617f0",
+      "eff_stiffness.py": "0807a2f9196b5317eb635faa14a4837da71dccb1d1fba16cbbd337aa5cd357e2",
+      "engine3d.py": "6f2573e4f787e5c1b6ecabe19b30ba291ec2a5acd866328ad8b639cd44eac149",
+      "example_build.py": "20b2d5c66e129f7f421945078bda743e093aad8d1a8384931efc5a907adbd00a",
+      "extract_sfia.py": "96a6a12dd369e6a97ea1985ea630c6badbd1891ae02640e75de4a34308c27cc2",
+      "frame_diagram.py": "f516fd69637a180ee1b89a53769774905bfd0bf30f964c02575bedfa03e9a8c3",
+      "pipeline.py": "6dc646b73cf3eb865e7e90b3de181b4f3e70271131190d7ca4202987afb0638d",
+      "plot_model.py": "aa6ad976d994a08e12c26eb7683d5b08ae746aed8d31c66bb995cb18ce3f4ed9",
+      "preflight.py": "9097f278c742b10bd620de270538e3b824a5b1a8d460cdbba7349be13fd55831",
+      "report.py": "a0e370350bc4a8f51a72ab2e2bb1a7adcac17280b12834d7336a8dc0f0825485",
+      "sections.py": "11df74a1d20ba7dd84866d6c940eac7d64d9695658695ebd28efdd8c43f21c58",
+      "sfia_oracle_axial_lateral.csv": "2cd74c1b805f63be32e2909bd7b0fbb7bca9b644544e4c98c7841b820253d4b8",
+      "sfia_oracle_headers.csv": "c84aa6d04e5b1fc60857c156baca272cd7aa264a26171bae4dea03e685f1296a",
+      "sfia_oracle_joist_spans.csv": "fd2f96be9c04d6997a20ebef2ea1add6dd1d5a9de1eb06beda396124baf6d6e8",
+      "sfia_oracle_limiting_heights.csv": "cff2c38e80249654c686c9e196681964a98549be718fdcdb5fcd98aea24e1d09",
+      "sfia_oracle_web_crippling.csv": "94f78d4898b8826bdac1cc1c430cdc0e62a24206d6a5a4f2aafde06f2c8ef34c",
+      "static_model.py": "f1fc1faaa353aca1ec19eb6ca411e8fad30c240c0e2756d3f6cd578f97c1f8d6",
+      "test_span_tables.py": "6e28bc4eef0fcbcfd1def0b89ddbd8a059c7832669b70f01f9bec15250ccb3f5",
+      "viewer3d.py": "8dffc664cf6de99835670c5d1b5dc87aaec66803cb7d837563e79b3014abfb79",
+      "viz3d.py": "d2ec83cd959a5e04b84c2ecaad8779a0998680ebd8488b8ffc3c67fefe8fe602",
+      "wall_line.py": "8e77c9968f22ef2419c504414554c2208119a443c71e5e2f092d061f37e9b9aa"
+    },
+    "engine_version": "wall_line physical declarations; no spring solve",
+    "exporter_revision": null,
+    "mode": "model_only_replay",
+    "module": "CFS",
+    "package_file": "calc_package_cfs.json",
+    "producer_revision": null
+  },
+  "declared_source_files": {
+    "architectural_handoff.txt": "b594f7159d81cf3b72b9caca6fd18bb71c523334d6c94988747c8b92b5defb45",
+    "architectural_input.json": "47b177b508ec08c4841b94ca4b02ad0397f7e94fc8243cd5cb0907e206c52b2c",
+    "bim_members.json": "028ec0707ef28fd155b3fcb8b7f2d1151cbcf5ccab08b1444fdad156016d5a5e",
+    "bim_phys.json": "85321774296d93c2c796eba8cc241f411da2b4cc9d5f65e383c755e424fba600",
+    "cfg.py": "081403f82bd94fbd32c6427afc0b8029fa2d9fd96782b9237c57e1f19ac24611",
+    "design/bim_request.json": "11412227fe697d9870bdda69b9982a1c9a61a78b04a612bae6a8125eaa6d2ca1",
+    "design/calc_package_cfs.json": "96aff6a913643fb0264f08435a223e8a38106e6355fe9500cab37f19a3e1df13",
+    "design/consistency_result.json": "efaeb43ff520ae94d16e92a76572cab090590a3e61e15dbf92668652ca61e4bc",
+    "fill_pkg.py": "b6762c244d02f87d266a6902f94ad003ef3a0ae38dcd86f45ee5417fd9147870",
+    "fix2.py": "2019bc04190804e1635d34dcfe9f71b693789a00d022cde726227c4f2cef1115",
+    "fix_joints.py": "87eba6abfa7708178a569b53989824f542f98a5388f2f0f6db7e23ec928ef354",
+    "fix_rims.py": "f9e0448172bfbdd5e9caa801f0fc0acd6bbe1b5e387ef8290ff018fddd8aeb79",
+    "fix_studs.py": "34c020d19b3390a975581c5efd1d4e03cc643d283353b6f094cc6ee8227b12dc",
+    "fix_supports.py": "ed97259f5c2627dac5e317ec5cbd228c55c4f53a88c30afa1df71c34de8e6f93",
+    "gen_clips.py": "21b9e3e2671b62332df7efea28f35d5e885f1f5550557be2559b330d652a1cd7",
+    "gen_deck.py": "f6096397f9ccf8aef92191efe03a39008facbf24d68365c3c94eda491330c212",
+    "gen_phys1.py": "a83157e25418f1319ba58a0951e7ba0384a6c5d5b4fdc874f06414303f19addb",
+    "gen_phys2.py": "6b845719e8dbb75a058025adff612fa183f4f13b5e35bf28688ef62267aab4bf",
+    "gen_phys3.py": "2e2f0b9a0e9ff92f8065551781a99b0f977db416a9ec98d9fcbae9461fcad540",
+    "gen_phys4.py": "97d85b95fc9719ed43b0ad2bb74853c99c2e730e4060f2eb8fa3169f3859363b",
+    "gen_phys5.py": "3eaabdeef7ae7bfa9df11bd62c732df525ff1c1e86073c726835a731a480ac28",
+    "grav_design.py": "28f6b38d8d0dd72bc55b2ce362eb4eeee049e2fcc9aeb99f557a281627fc6fef",
+    "viewer_3d.html": "1c42c66821c50662c00e0d62b1601a7da7ad11bbd236ce5ca10ef04b3821de67",
+    "wall_cap.py": "83cd56cddfb8259c0889227fbf9dcf937afbd25ba5f34f31c408615a3a7caf90",
+    "workflow_review.json": "fb493e4d1920fcf9f0e4007767cba477698fbf4af13c4286d0133d179f9fae51"
+  },
+  "physical_counts": {
+    "analysis_only": 0,
+    "connections": 7100,
+    "interfaces": 1,
+    "joint_dispositions": 8362,
+    "joints": 8390,
+    "materials": 6,
+    "members": 4195,
+    "openings": 145,
+    "panels": 505,
+    "profiles": 5,
+    "record_dispositions": 92
+  },
+  "design_records": 214,
+  "source_kind": "CFS",
+  "require_connection_parts": true,
+  "current_validation": {
+    "status": "needs_input",
+    "source_freshness_checked": false,
+    "findings": [
+      {
+        "code": "connection_selected_family",
+        "message": "A selected connection family has no corresponding located component categories in its bound entities; a typical coverage note alone does not place its hardware",
+        "entity_ids": [
+          "connections/conn-collector-splice"
+        ],
+        "severity": "needs_input",
+        "count": 1,
+        "examples": [
+          {
+            "design_record_id": "connections/conn-collector-splice",
+            "missing_component_categories": [
+              "bolt",
+              "screw"
+            ],
+            "selected_components": "3/4-in. gusset plates with (12) No.12 screws per side + 7/8-in. through bolt",
+            "returned_part_kinds": "rod anchor plate rod anchor plate",
+            "bound_entity_ids": [
+              "conn-hd-X-X_LEG_M1",
+              "conn-hd-X-X_LEG_S"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "source_freshness": {
+    "status": "invalid",
+    "source_freshness_checked": true,
+    "findings": [
+      {
+        "code": "connection_selected_family",
+        "message": "A selected connection family has no corresponding located component categories in its bound entities; a typical coverage note alone does not place its hardware",
+        "entity_ids": [
+          "connections/conn-collector-splice"
+        ],
+        "severity": "needs_input",
+        "count": 1,
+        "examples": [
+          {
+            "design_record_id": "connections/conn-collector-splice",
+            "missing_component_categories": [
+              "bolt",
+              "screw"
+            ],
+            "selected_components": "3/4-in. gusset plates with (12) No.12 screws per side + 7/8-in. through bolt",
+            "returned_part_kinds": "rod anchor plate rod anchor plate",
+            "bound_entity_ids": [
+              "conn-hd-X-X_LEG_M1",
+              "conn-hd-X-X_LEG_S"
+            ]
+          }
+        ]
+      },
+      {
+        "code": "source_stale",
+        "message": "Source evidence changed after export",
+        "entity_ids": [
+          "workflow_review.json"
+        ],
+        "severity": "error"
+      }
+    ]
+  },
+  "captured_worklines_required": false,
+  "current_tracked_source_files": {
+    "architectural_handoff.txt": "b594f7159d81cf3b72b9caca6fd18bb71c523334d6c94988747c8b92b5defb45",
+    "architectural_input.json": "47b177b508ec08c4841b94ca4b02ad0397f7e94fc8243cd5cb0907e206c52b2c",
+    "bim_members.json": "028ec0707ef28fd155b3fcb8b7f2d1151cbcf5ccab08b1444fdad156016d5a5e",
+    "bim_phys.json": "85321774296d93c2c796eba8cc241f411da2b4cc9d5f65e383c755e424fba600",
+    "cfg.py": "081403f82bd94fbd32c6427afc0b8029fa2d9fd96782b9237c57e1f19ac24611",
+    "design/bim_request.json": "11412227fe697d9870bdda69b9982a1c9a61a78b04a612bae6a8125eaa6d2ca1",
+    "design/calc_package_cfs.json": "96aff6a913643fb0264f08435a223e8a38106e6355fe9500cab37f19a3e1df13",
+    "design/consistency_result.json": "efaeb43ff520ae94d16e92a76572cab090590a3e61e15dbf92668652ca61e4bc",
+    "fill_pkg.py": "b6762c244d02f87d266a6902f94ad003ef3a0ae38dcd86f45ee5417fd9147870",
+    "fix2.py": "2019bc04190804e1635d34dcfe9f71b693789a00d022cde726227c4f2cef1115",
+    "fix_joints.py": "87eba6abfa7708178a569b53989824f542f98a5388f2f0f6db7e23ec928ef354",
+    "fix_rims.py": "f9e0448172bfbdd5e9caa801f0fc0acd6bbe1b5e387ef8290ff018fddd8aeb79",
+    "fix_studs.py": "34c020d19b3390a975581c5efd1d4e03cc643d283353b6f094cc6ee8227b12dc",
+    "fix_supports.py": "ed97259f5c2627dac5e317ec5cbd228c55c4f53a88c30afa1df71c34de8e6f93",
+    "gen_clips.py": "21b9e3e2671b62332df7efea28f35d5e885f1f5550557be2559b330d652a1cd7",
+    "gen_deck.py": "f6096397f9ccf8aef92191efe03a39008facbf24d68365c3c94eda491330c212",
+    "gen_phys1.py": "a83157e25418f1319ba58a0951e7ba0384a6c5d5b4fdc874f06414303f19addb",
+    "gen_phys2.py": "6b845719e8dbb75a058025adff612fa183f4f13b5e35bf28688ef62267aab4bf",
+    "gen_phys3.py": "2e2f0b9a0e9ff92f8065551781a99b0f977db416a9ec98d9fcbae9461fcad540",
+    "gen_phys4.py": "97d85b95fc9719ed43b0ad2bb74853c99c2e730e4060f2eb8fa3169f3859363b",
+    "gen_phys5.py": "3eaabdeef7ae7bfa9df11bd62c732df525ff1c1e86073c726835a731a480ac28",
+    "grav_design.py": "28f6b38d8d0dd72bc55b2ce362eb4eeee049e2fcc9aeb99f557a281627fc6fef",
+    "viewer_3d.html": "1c42c66821c50662c00e0d62b1601a7da7ad11bbd236ce5ca10ef04b3821de67",
+    "wall_cap.py": "83cd56cddfb8259c0889227fbf9dcf937afbd25ba5f34f31c408615a3a7caf90",
+    "workflow_review.json": "af5058caa688be50577a3d77a9c9551a69f97acd05958be609231deb3fba520b"
+  },
+  "source_file_set_matches": false,
+  "own_output_only": true,
+  "physical_supplements_used": false
+}

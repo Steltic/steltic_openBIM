@@ -1,0 +1,652 @@
+{
+  "status": "passed",
+  "variants_checked": 46,
+  "geometry_builder_unchanged": true,
+  "exporter_unchanged": false,
+  "results": [
+    {
+      "key": "cfs1",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "cb9651315f2aef97259f0edd0e19b645ff43d7d4938719e773bd97fee1ff4a71",
+        "returned_ifc_sha256": "0ce94ae43c15ed656e83e890b8945b2bf319166c93d823bfb6f8510c0cae2461"
+      },
+      "declared_findings_retained": 0,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "cfs16",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "de6bd032f8fb03c4da15bdb17e0ac9f918cff114d641cb69b6d6c718a6024297",
+        "returned_ifc_sha256": "6dba5351c7ede9f5886d9a709a06d999f44db5e60bb98314912f994e72f14a33"
+      },
+      "declared_findings_retained": 1,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "cfs17",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "f2f60aeecd18732b6300c9a9287eae788c9d92d8f517a48f716c4e264d2a418b",
+        "returned_ifc_sha256": "832bc0b1fbe73b3e2cade47521d4ccfd2fa478dc34b80f97041b7e6740ec7ce2"
+      },
+      "declared_findings_retained": 2,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "cfs17_earlier",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "af47df7c89590b3ae8fbbfec2eaaacffc48d8dad6df9ea403f8659810b91c71a",
+        "returned_ifc_sha256": "5bd8355f9f9739bb206bb96b0a94fa59225e1f1a5738a829b4e68a682824b540"
+      },
+      "declared_findings_retained": 3,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "cfs17_earlier",
+      "variant": "saved",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "1642c9042b1f0c5baf13bdae6604e5dce4994cb77903d2824fe24cd34469b853",
+        "returned_ifc_sha256": "02455f093be559388a7158ad7a947ea213bd9639a1868c7371da542c9401f5bf"
+      },
+      "declared_findings_retained": 3,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "cfs18",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "242a337eccd54a28f87571aa5c2c9199a8de4f4208ebf4f1a21c37a22c5a9b3b",
+        "returned_ifc_sha256": "0479680e057e08737f9a40f421bb31395246d7b249ff54f222669874525f6f4e"
+      },
+      "declared_findings_retained": 0,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "cfs19",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "436e74087ed4d15b7fd2e42b7d2cafd7858d93b37a086383e05c7c97581a59b6",
+        "returned_ifc_sha256": "8ee821ada061212b46b2e5d7662efd2186fc04bb61dd727b8e1e7677f6722150"
+      },
+      "declared_findings_retained": 2,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "cfs1_earlier",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "5aa9948d36b607e637c26005d86765645a0431415932c8a9482fc4288ee7d2b6",
+        "returned_ifc_sha256": "a6fd14fb4e793fa2e7cf8a6b44f7bf9fe63743c96ee7e311356a8465a4266e66"
+      },
+      "declared_findings_retained": 3,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "cfs1_earlier",
+      "variant": "saved",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "dcf2cffa55a9d9ef85c840b89435a61ae459372ddf164e8d9faf7b948fcc8693",
+        "returned_ifc_sha256": "fe09e3f1034f6584470d52716779018a01970ecf9f9bc4c4a0e3e7e5f13fd883"
+      },
+      "declared_findings_retained": 3,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "cfs2",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "e956904fa7bb6966f4b84fa8c1effac38b97222be227806d9b47be9fbaa89b59",
+        "returned_ifc_sha256": "aeb8613d20daa7d448929dd6c314a9d9c59c35f61e7c827baf881788d13f6d68"
+      },
+      "declared_findings_retained": 1,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "cfs26",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "2b2d4f4586cfb431b9dbd09f151ccf68a88da46af294f8922b56e9e47f5d866d",
+        "returned_ifc_sha256": "030bdd525e13f39f2260780baf2e19e1fa60cbc69a30ccfabc74f8f3b67d41ad"
+      },
+      "declared_findings_retained": 1,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "cfs27",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "7944ec8688970513ea781aa1840156cee517c9b333086bdf8f860d3e3a3a815c",
+        "returned_ifc_sha256": "c1699c0d3fc45326402d69ada876747c815f58d8280300b99c06896dab4a457e"
+      },
+      "declared_findings_retained": 1,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "cfs28",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "113ab90df6664f168f2a492825d4f9781bbd634b21b8c3d4f1235c36d7a801d3",
+        "returned_ifc_sha256": "7e825310d8d290bfa913a9afb82891a141fc06dbc1f4cbc46c034a621cc5fd10"
+      },
+      "declared_findings_retained": 1,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "cfs28",
+      "variant": "saved",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "bcb0b0e3e1565b9277a604090e5dddc17c4e0d7542b7fc767b162a1475428886",
+        "returned_ifc_sha256": "97c542ec905652fa88d5203f1173582e3d1f32d5904d35fbba891efdd3fed822"
+      },
+      "declared_findings_retained": 1,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "cfs29",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "71ca88bd24a79216d85ac3527d6f41f0bcd425a6f1be85458d70136ffa9a24a6",
+        "returned_ifc_sha256": "b67bbc2ddab8f22765e6dcf18f6ef7f9e146b32449724d7f116bedad7ecd73c2"
+      },
+      "declared_findings_retained": 2,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "cfs29_earlier",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "ad8e67a4bc46635ddecceac7eb1e530a3584146278e0fb6e1fda4a19080ff869",
+        "returned_ifc_sha256": "ab2de4f45dfc7138cefcc20e36bef04d478619df6ba4f68ea6389ab151c39e2f"
+      },
+      "declared_findings_retained": 2,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "cfs29_earlier",
+      "variant": "saved",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "3b675694507943a7d589fa50830407dfcc7787e82787e88ce3c96e3d08eeb8a5",
+        "returned_ifc_sha256": "42846635b17fd702570eb41061d63b902b8033991a8c4688e719465115efea4a"
+      },
+      "declared_findings_retained": 2,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "cfs3",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "782a4ff40040b2109f9030079a55c36e7e2b4ad1dbbdda25a3240a3e1f6fc0f5",
+        "returned_ifc_sha256": "5420a49d350c2589937083dc8234cc5e14d1e393cb54225453e75546a1f6611d"
+      },
+      "declared_findings_retained": 1,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "cfs6",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "2264c039fa1a5c9dd19e4f27c4fa955bc73eab514c7302b29ce850e0378d0037",
+        "returned_ifc_sha256": "21900282a00e8c7caf301528db85329d5b17c02dd80b5b176618a86269ba0e24"
+      },
+      "declared_findings_retained": 1,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "cfs7",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "24028d89c6ea156ff42625cfeac51f60e32ecb5dfc590329cc13fa919b1aa720",
+        "returned_ifc_sha256": "01687859392d52ab257def08d28bf943d9cd27dc16c12653b99a0ad6bcf71102"
+      },
+      "declared_findings_retained": 1,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "cfs7",
+      "variant": "saved",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "1899d6185b47e3bfb09b76a41827642bddf3ec4ea95a76fc3aa9638d06183d0c",
+        "returned_ifc_sha256": "9e0a2b5c3d3f8e7fb6291cbaaa7906a55d371925b526bfb9358c5a0bb83a6bb1"
+      },
+      "declared_findings_retained": 1,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "hr1",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "280b23fc3ef935f8795ee9dea823f6b4ef8a153ad0dcfdeab0d659e566465412",
+        "returned_ifc_sha256": "e9cddf2998aa00968f04877af0d4618b8804b16bae91f121e0aad76f7fbc43e5"
+      },
+      "declared_findings_retained": 1,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "hr11",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "06c6b9193de543cd6152f7e92c9c5b7a07b944e81277133637b1c04b8e239ab6",
+        "returned_ifc_sha256": "9fa7c5ee4c2d0f3de3a88dcb57109cec476990f893221ec1f547cf2cdf6cdd9e"
+      },
+      "declared_findings_retained": 14,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "hr11",
+      "variant": "saved",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "495dee4e17eacccbf3e99871b6ec1552772997986078b68069c88140a8dc08df",
+        "returned_ifc_sha256": "2cd7e9d1db831250c7e3e815e3ada75992e979e99d821727917415e72a985305"
+      },
+      "declared_findings_retained": 14,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "hr12",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "690edd78c127440fc2aab983beab52846d1b1902a51c81733c0b5978aa4e61f4",
+        "returned_ifc_sha256": "14f8301b003003bdcc7355a3db3bdd55dc86fba1c1ff26fdb3f4d8486fed5b9c"
+      },
+      "declared_findings_retained": 1,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "hr13",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "5933d274b512085435930b8af9a43d8f8bb2a9e3c4d974232c2a7fbc04e495eb",
+        "returned_ifc_sha256": "de1330177d5034c3dfdcb3c61e161a43d4b2e4bb4c55684ac66b68926cb4a877"
+      },
+      "declared_findings_retained": 1,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "hr16",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "50950cd0e40a48792ca7f7117e0dbbdd5bc142295537606ab8949c6d6ef3349f",
+        "returned_ifc_sha256": "006e0bc57bade88f8ee7ab24e28b84f652249e5b9825b15be06e16b94fe24487"
+      },
+      "declared_findings_retained": 3,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "hr16",
+      "variant": "saved",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "cafd03915c21aa13260a9647e3f20f3bf35ece60b7108a3a9d609a92b240d963",
+        "returned_ifc_sha256": "cbc6d5f1af206a4138c64ba5e721e7459e89e83707d1fb364d1a0a432d413177"
+      },
+      "declared_findings_retained": 3,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "hr16_earlier",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "1737510fdcdfce76c0f4bb92ac156b97eea24d8d2402fdfe622b97135132d0f8",
+        "returned_ifc_sha256": "dc09add9df7f035f39aaea97229bd70ea9cc2f857f65909b2c25efd5fb89c80b"
+      },
+      "declared_findings_retained": 2,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "hr16_earlier",
+      "variant": "saved",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "8f659f648f1be7ea99e33dfa8afdbc044715c82700de31eb9fe9d7b056cdf74b",
+        "returned_ifc_sha256": "47a4e56a1a79d0db88e324c97c502c8d1f9df2b795c9961bed4898c38a5a99c1"
+      },
+      "declared_findings_retained": 2,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "hr1_earlier",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "8f9c42e598e1dca05a77610322f683e05df1e8f499f082e5485e2ad77c987fba",
+        "returned_ifc_sha256": "a066a229dd4ced1bf7d8aa06157bc89230bf520f2cc84a851c8defb22d69157c"
+      },
+      "declared_findings_retained": 0,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "hr1_earlier",
+      "variant": "saved",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "f6f446201e9beca2927239e7e40fe7e308938f5447125e4c59844e34db88e6d0",
+        "returned_ifc_sha256": "e5a8f943b9a92ccf770d193d294675ba4a773ee87989e363ad163e5cd1580448"
+      },
+      "declared_findings_retained": 0,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "hr21",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "5473a49796b6c1c2d129e7d6eb0db05e098bdd437fdffe2873f379f70f200aac",
+        "returned_ifc_sha256": "c41aca837530e5b64aed8762ec11a9f404d442c5e0d4b27b98b1fcdc43a99154"
+      },
+      "declared_findings_retained": 0,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "hr21",
+      "variant": "saved",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "541c0765956696b059088df88ce06acd74f66d56651204f8e5048b0b05eaaae7",
+        "returned_ifc_sha256": "a2e62bbe2a5be96f2c00132001e6c64e908f71e089f36e7ce32aee183e235e5c"
+      },
+      "declared_findings_retained": 0,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "hr22",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "13c64cbac4b8fdc8c50ad0013be8e0114057aca7832038271b90be72edb81e10",
+        "returned_ifc_sha256": "13c57db52c05fb70214a201d8e4a16d7b8fcc696e55172444ca0469c284deb5a"
+      },
+      "declared_findings_retained": 0,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "hr24",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "25428066e694d298987af7f35763d0d8fa0d209bfc78eedd887c3148c5fa7793",
+        "returned_ifc_sha256": "17404638ec84d14b8c607c77aa219286d21c7fcfdd504d91e335b8df07171d26"
+      },
+      "declared_findings_retained": 8,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "hr25",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "0b1fc61e8ba2b02cfa101463a0528703bf048a5bf23d000abef6300ff3900bff",
+        "returned_ifc_sha256": "614c6001b398c7bac8bb033dd54fa117c2e44a4b4da0612210ed2c7983a65362"
+      },
+      "declared_findings_retained": 1,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "hr31",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "cc065ccb45a4f16ebe65ac719bb91cb51d7019c3d59bb0eda2f115e96592b838",
+        "returned_ifc_sha256": "60eb53c59b96e815e26616512295b4d1cc5f94f588a9d7610556349d4e3c7420"
+      },
+      "declared_findings_retained": 0,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "hr31",
+      "variant": "saved",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "99dfeba83d973f5dce3508de0fb508e4abb95f1e643f2e63e966f144184876b1",
+        "returned_ifc_sha256": "10312dc60e19e2841ae25ab0fecc04556d436e1026b95a79b8453f62933467fe"
+      },
+      "declared_findings_retained": 0,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "hr31_earlier",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "5b459ffe72881c94ec1c2e2068722431893bfe20845fb1760bd8361bfccd8046",
+        "returned_ifc_sha256": "44588da8962d8b249237bb3e688300204b1f0f21c149aa600ce4bd8c69af0338"
+      },
+      "declared_findings_retained": 0,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "hr31_earlier",
+      "variant": "saved",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "bbae80efa23aa406fe2631995bb973aa9a294a70d72ed26da924801383d73b3c",
+        "returned_ifc_sha256": "780ca5e8b8d481fe9da96a607f22ada6be9751eb5df59d5c24366f2b9bd273c0"
+      },
+      "declared_findings_retained": 0,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "hr33",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "41f4b07c5165f3ce69fac8768d8f87a0b92f96ed8ceb0246b772ef1a00d480a8",
+        "returned_ifc_sha256": "6ea05214d6dedd5252cee683247c42e32c6cad68eb8a4d96928d0ddb57eb6252"
+      },
+      "declared_findings_retained": 0,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "hr33",
+      "variant": "saved",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "658e1428c2af46e48e0762c4169486af78f6bb2d0e1e42fd075513e8c6785ecb",
+        "returned_ifc_sha256": "6005580c5f66b69b7a512d0f3e15889ac47304f8dfe4b12686b515c2cebd0b6d"
+      },
+      "declared_findings_retained": 0,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "hr4",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "6224be581f800be1d289f4dfdc6daf5f2bdba9dbd0026510abca0c501af18553",
+        "returned_ifc_sha256": "4d145ed97e611458b55f277b4a4efcd6115743bd4cc355465ab7da63e0e60547"
+      },
+      "declared_findings_retained": 1,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "hr8",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "7aab149111c1c4ca520c91bc01d51cdf26c5ffab12a8d65031663f09500bfa56",
+        "returned_ifc_sha256": "07fdc06ba6a09729af7f4d25366cdc8b9253caa712aa059d2385bac496309887"
+      },
+      "declared_findings_retained": 2,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    },
+    {
+      "key": "hr9",
+      "variant": "replay",
+      "status": "passed",
+      "binding": {
+        "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+        "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+        "source_ifc_sha256": "f83052dc9770505e59ee2011141f32ff437ae0fe31d2b7e05fc8f727a8b18e0c",
+        "returned_ifc_sha256": "88afe2295e37c9852fa8dc1b9479dc301730d82bfef78928b2ef441fb54239d9"
+      },
+      "declared_findings_retained": 9,
+      "geometry_builder_unchanged": true,
+      "exporter_unchanged": false
+    }
+  ]
+}

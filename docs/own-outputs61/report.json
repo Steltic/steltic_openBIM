@@ -1,0 +1,4547 @@
+{
+  "scope": "Completed/partial updated-producer jobs: own saved outputs and read-only native re-export only. No supplements or legacy gold substitution.",
+  "complete_audit": true,
+  "counts": {
+    "cases": 61,
+    "modules": {
+      "CFS": 25,
+      "HR": 36
+    },
+    "original_packages": 26,
+    "original_packages_absent": 35,
+    "recorded_run_status": {
+      "done": 7,
+      "error": 39,
+      "paused": 6,
+      "not_started": 9
+    },
+    "native_completion_passes": 2,
+    "native_reexport": {
+      "exported": 27,
+      "failed": 1,
+      "unavailable": 33
+    },
+    "saved_transport": {
+      "blocked_source": 19,
+      "passed": 7,
+      "unavailable": 35
+    },
+    "replay_transport": {
+      "passed": 27,
+      "blocked_source": 1,
+      "unavailable": 33
+    },
+    "saved_job_acceptance": 2,
+    "reexport_model_checks_passed": 4,
+    "status": {
+      "reexport_checks_passed_producer_not_complete": 2,
+      "transport_passed_source_needs_resolution": 23,
+      "saved_job_passed": 2,
+      "invalid_source": 1,
+      "no_own_package": 33
+    },
+    "replay_products_compared": 148696,
+    "replay_entities_compared": 2090030,
+    "earlier_control_runs": 6,
+    "earlier_control_transport": {
+      "passed": 6
+    }
+  },
+  "cases": [
+    {
+      "case": "cfs1",
+      "key": "cfs1",
+      "title": "ShearWall",
+      "module": "CFS",
+      "primary": true,
+      "source_run_status": "done",
+      "original_package_present": true,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "BIM export is stale; rerun consistency.check or BIM replay"
+      ],
+      "saved_readiness": "ready",
+      "original_validation": "ready",
+      "original_freshness": "invalid",
+      "changed_recorded_files": [
+        "workflow_review.json"
+      ],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "ready",
+      "native_reexport_finding_codes": [],
+      "exporter_revision": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "blocked_source",
+          "source_validation": "invalid",
+          "source_finding_codes": [
+            "source_stale"
+          ],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": "21d769d3828d3fe68bad59e31b0cb3438394869f1383ad095a74a28e277a862c",
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "ready",
+          "source_finding_codes": [],
+          "architectural_comparison": "passed",
+          "comparison_issue_codes": [],
+          "products_compared": 3099,
+          "entities_compared": 42176,
+          "package_sha256": "d08e05a926d293c81869b8cdbd2bb5afffe1ffff873f008d707212558b3ab891",
+          "source_ifc_sha256": "cb9651315f2aef97259f0edd0e19b645ff43d7d4938719e773bd97fee1ff4a71",
+          "returned_ifc_sha256": "0ce94ae43c15ed656e83e890b8945b2bf319166c93d823bfb6f8510c0cae2461",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "reexport_checks_passed_producer_not_complete",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": true
+    },
+    {
+      "case": "cfs17",
+      "key": "cfs17",
+      "title": "CFS portal",
+      "module": "CFS",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": true,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "BIM export is stale; rerun consistency.check or BIM replay"
+      ],
+      "saved_readiness": "ready",
+      "original_validation": "needs_input",
+      "original_freshness": "invalid",
+      "changed_recorded_files": [
+        "workflow_review.json"
+      ],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "needs_input",
+      "native_reexport_finding_codes": [
+        "connection_fastener_quantity",
+        "connection_selected_components"
+      ],
+      "exporter_revision": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "blocked_source",
+          "source_validation": "invalid",
+          "source_finding_codes": [
+            "connection_fastener_quantity",
+            "connection_selected_components",
+            "source_stale"
+          ],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": "af002f7852dc26d39fc916efea44314b31485b1d5291227c6a5f42d84b8179b0",
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "connection_fastener_quantity",
+            "connection_selected_components"
+          ],
+          "architectural_comparison": "needs_resolution",
+          "comparison_issue_codes": [
+            "complete_native_physical_export"
+          ],
+          "products_compared": 2082,
+          "entities_compared": 29664,
+          "package_sha256": "d3a13d209513badf8a8a0e0f6c384780d618f436396c62304d59eea42da79647",
+          "source_ifc_sha256": "f2f60aeecd18732b6300c9a9287eae788c9d92d8f517a48f716c4e264d2a418b",
+          "returned_ifc_sha256": "832bc0b1fbe73b3e2cade47521d4ccfd2fa478dc34b80f97041b7e6740ec7ce2",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "transport_passed_source_needs_resolution",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "cfs29",
+      "key": "cfs29",
+      "title": "Strap-braced mezzanine",
+      "module": "CFS",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": true,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "BIM export is stale; rerun consistency.check or BIM replay"
+      ],
+      "saved_readiness": "ready",
+      "original_validation": "needs_input",
+      "original_freshness": "invalid",
+      "changed_recorded_files": [
+        "bim_gen.py"
+      ],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "needs_input",
+      "native_reexport_finding_codes": [
+        "connection_fastener_quantity",
+        "joint_disposition_kind"
+      ],
+      "exporter_revision": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "blocked_source",
+          "source_validation": "invalid",
+          "source_finding_codes": [
+            "connection_fastener_quantity",
+            "joint_disposition_kind",
+            "source_stale"
+          ],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": "64a8ca91f358e8712abb85b37a8d10f306f36fe60dc6400678f10a450155912d",
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "connection_fastener_quantity",
+            "joint_disposition_kind"
+          ],
+          "architectural_comparison": "needs_resolution",
+          "comparison_issue_codes": [
+            "complete_native_physical_export"
+          ],
+          "products_compared": 834,
+          "entities_compared": 12446,
+          "package_sha256": "617061cbd07093746f7c9c076a27d03b10e84eb1595bb234b875f491e069d796",
+          "source_ifc_sha256": "71ca88bd24a79216d85ac3527d6f41f0bcd425a6f1be85458d70136ffa9a24a6",
+          "returned_ifc_sha256": "b67bbc2ddab8f22765e6dcf18f6ef7f9e146b32449724d7f116bedad7ecd73c2",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "transport_passed_source_needs_resolution",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr1",
+      "key": "hr1",
+      "title": "SCBF",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "done",
+      "original_package_present": true,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "BIM export is stale; rerun consistency.check or BIM replay"
+      ],
+      "saved_readiness": "ready",
+      "original_validation": "needs_input",
+      "original_freshness": "invalid",
+      "changed_recorded_files": [
+        "workflow_review.json"
+      ],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "needs_input",
+      "native_reexport_finding_codes": [
+        "connection_fastener_quantity"
+      ],
+      "exporter_revision": "343e0ad6cca528ecb30d07408224dca3597451c6",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "blocked_source",
+          "source_validation": "invalid",
+          "source_finding_codes": [
+            "connection_fastener_quantity",
+            "source_stale"
+          ],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": "9ae0abf18d862be17c7a2d3f1c678e8f4062e217199ae780d6a32817661d6fee",
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "connection_fastener_quantity"
+          ],
+          "architectural_comparison": "needs_resolution",
+          "comparison_issue_codes": [
+            "complete_native_physical_export"
+          ],
+          "products_compared": 2125,
+          "entities_compared": 30111,
+          "package_sha256": "179a8dc73106826310eb2193ed96b57d153161c6f59258e5ff4b21a8902a2ad7",
+          "source_ifc_sha256": "280b23fc3ef935f8795ee9dea823f6b4ef8a153ad0dcfdeab0d659e566465412",
+          "returned_ifc_sha256": "e9cddf2998aa00968f04877af0d4618b8804b16bae91f121e0aad76f7fbc43e5",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "transport_passed_source_needs_resolution",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr16",
+      "key": "hr16",
+      "title": "SMF (completed source design)",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": true,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "BIM export is stale; rerun consistency.check or BIM replay"
+      ],
+      "saved_readiness": "ready",
+      "original_validation": "needs_input",
+      "original_freshness": "needs_input",
+      "changed_recorded_files": [],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "needs_input",
+      "native_reexport_finding_codes": [
+        "connection_duplicate_parts",
+        "connection_fastener_quantity",
+        "connection_selected_components"
+      ],
+      "exporter_revision": "343e0ad6cca528ecb30d07408224dca3597451c6",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "connection_duplicate_parts",
+            "connection_fastener_quantity",
+            "connection_selected_components"
+          ],
+          "architectural_comparison": "needs_resolution",
+          "comparison_issue_codes": [
+            "complete_native_physical_export"
+          ],
+          "products_compared": 673,
+          "entities_compared": 10671,
+          "package_sha256": "c6e38506fa3a94f507e579fad3b7b64e2a948fc200237652215381f932464524",
+          "source_ifc_sha256": "cafd03915c21aa13260a9647e3f20f3bf35ece60b7108a3a9d609a92b240d963",
+          "returned_ifc_sha256": "cbc6d5f1af206a4138c64ba5e721e7459e89e83707d1fb364d1a0a432d413177",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "connection_duplicate_parts",
+            "connection_fastener_quantity",
+            "connection_selected_components"
+          ],
+          "architectural_comparison": "needs_resolution",
+          "comparison_issue_codes": [
+            "complete_native_physical_export"
+          ],
+          "products_compared": 673,
+          "entities_compared": 10671,
+          "package_sha256": "5976f7a2a45decd42d1cfd806113df97402b7c40c586b99e81910de2781edf8f",
+          "source_ifc_sha256": "50950cd0e40a48792ca7f7117e0dbbdd5bc142295537606ab8949c6d6ef3349f",
+          "returned_ifc_sha256": "006e0bc57bade88f8ee7ab24e28b84f652249e5b9825b15be06e16b94fe24487",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "transport_passed_source_needs_resolution",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr31",
+      "key": "hr31",
+      "title": "R3 gable warehouse",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "done",
+      "original_package_present": true,
+      "original_native_completion_passed": true,
+      "producer_completion_problems": [],
+      "saved_readiness": "ready",
+      "original_validation": "ready",
+      "original_freshness": "ready",
+      "changed_recorded_files": [],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "ready",
+      "native_reexport_finding_codes": [],
+      "exporter_revision": "343e0ad6cca528ecb30d07408224dca3597451c6",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "passed",
+          "source_validation": "ready",
+          "source_finding_codes": [],
+          "architectural_comparison": "passed",
+          "comparison_issue_codes": [],
+          "products_compared": 1225,
+          "entities_compared": 17573,
+          "package_sha256": "0e6eeeb5c66e500b8fa45d9d52d22de4194aa325d781e4cbef7c9191a52679db",
+          "source_ifc_sha256": "99dfeba83d973f5dce3508de0fb508e4abb95f1e643f2e63e966f144184876b1",
+          "returned_ifc_sha256": "10312dc60e19e2841ae25ab0fecc04556d436e1026b95a79b8453f62933467fe",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "ready",
+          "source_finding_codes": [],
+          "architectural_comparison": "passed",
+          "comparison_issue_codes": [],
+          "products_compared": 1225,
+          "entities_compared": 17573,
+          "package_sha256": "225cc82f426534f652955de84611bccaf7014315c6a15ea945c7f3573fe91599",
+          "source_ifc_sha256": "cc065ccb45a4f16ebe65ac719bb91cb51d7019c3d59bb0eda2f115e96592b838",
+          "returned_ifc_sha256": "60eb53c59b96e815e26616512295b4d1cc5f94f588a9d7610556349d4e3c7420",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "saved_job_passed",
+      "saved_job_acceptance": true,
+      "reexport_model_checks_passed": true
+    },
+    {
+      "case": "cfs16",
+      "key": "cfs16",
+      "title": "Portal warehouse",
+      "module": "CFS",
+      "primary": true,
+      "source_run_status": "paused",
+      "original_package_present": true,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "BIM export is stale; rerun consistency.check or BIM replay"
+      ],
+      "saved_readiness": "ready",
+      "original_validation": "needs_input",
+      "original_freshness": "invalid",
+      "changed_recorded_files": [
+        "bim_build3.py",
+        "workflow_review.json"
+      ],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "needs_input",
+      "native_reexport_finding_codes": [
+        "connection_selected_family"
+      ],
+      "exporter_revision": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "blocked_source",
+          "source_validation": "invalid",
+          "source_finding_codes": [
+            "connection_selected_family",
+            "source_stale"
+          ],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": "552b141781b8e73596c8237caa6c233108af09c0156984b46955fbf72c8d3acc",
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "connection_selected_family"
+          ],
+          "architectural_comparison": "needs_resolution",
+          "comparison_issue_codes": [
+            "complete_native_physical_export"
+          ],
+          "products_compared": 1307,
+          "entities_compared": 18178,
+          "package_sha256": "d52b891ccbc9dd04b878980e418a41e7ab2249ce1d09224dc62dd08e7184443e",
+          "source_ifc_sha256": "de6bd032f8fb03c4da15bdb17e0ac9f918cff114d641cb69b6d6c718a6024297",
+          "returned_ifc_sha256": "6dba5351c7ede9f5886d9a709a06d999f44db5e60bb98314912f994e72f14a33",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "transport_passed_source_needs_resolution",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "cfs2",
+      "key": "cfs2",
+      "title": "Strap-braced walls",
+      "module": "CFS",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": true,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "BIM export is stale; rerun consistency.check or BIM replay"
+      ],
+      "saved_readiness": "ready",
+      "original_validation": "needs_input",
+      "original_freshness": "invalid",
+      "changed_recorded_files": [
+        "workflow_review.json"
+      ],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "needs_input",
+      "native_reexport_finding_codes": [
+        "connection_duplicate_parts"
+      ],
+      "exporter_revision": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "blocked_source",
+          "source_validation": "invalid",
+          "source_finding_codes": [
+            "connection_duplicate_parts",
+            "source_stale"
+          ],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": "362a43655a08203a1ff82cde0a92240c0f26337aa118dc0aaa720ce967f10f22",
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "connection_duplicate_parts"
+          ],
+          "architectural_comparison": "needs_resolution",
+          "comparison_issue_codes": [
+            "complete_native_physical_export"
+          ],
+          "products_compared": 61011,
+          "entities_compared": 797817,
+          "package_sha256": "81ad12b1ec4632b43da5a6d4ea103d6896df534817eea0c94195819d01f9ae61",
+          "source_ifc_sha256": "e956904fa7bb6966f4b84fa8c1effac38b97222be227806d9b47be9fbaa89b59",
+          "returned_ifc_sha256": "aeb8613d20daa7d448929dd6c314a9d9c59c35f61e7c827baf881788d13f6d68",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "transport_passed_source_needs_resolution",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr4",
+      "key": "hr4",
+      "title": "BRBF",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": true,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "BIM export is stale; rerun consistency.check or BIM replay"
+      ],
+      "saved_readiness": "ready",
+      "original_validation": "needs_input",
+      "original_freshness": "invalid",
+      "changed_recorded_files": [
+        "workflow_review.json"
+      ],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "needs_input",
+      "native_reexport_finding_codes": [
+        "connection_selected_family"
+      ],
+      "exporter_revision": "343e0ad6cca528ecb30d07408224dca3597451c6",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "blocked_source",
+          "source_validation": "invalid",
+          "source_finding_codes": [
+            "connection_selected_family",
+            "source_stale"
+          ],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": "0eec9f19fdbf8b93761b3921922b6e46ee22a26c19da1cd1a01c2cb23ed76075",
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "connection_selected_family"
+          ],
+          "architectural_comparison": "needs_resolution",
+          "comparison_issue_codes": [
+            "complete_native_physical_export"
+          ],
+          "products_compared": 1920,
+          "entities_compared": 25767,
+          "package_sha256": "472315e03667570d34c1cba192045babf937a34db93864d6898c9e804a190a9f",
+          "source_ifc_sha256": "6224be581f800be1d289f4dfdc6daf5f2bdba9dbd0026510abca0c501af18553",
+          "returned_ifc_sha256": "4d145ed97e611458b55f277b4a4efcd6115743bd4cc355465ab7da63e0e60547",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "transport_passed_source_needs_resolution",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr8",
+      "key": "hr8",
+      "title": "EBF",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": true,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "BIM export is stale; rerun consistency.check or BIM replay"
+      ],
+      "saved_readiness": "ready",
+      "original_validation": "needs_input",
+      "original_freshness": "invalid",
+      "changed_recorded_files": [
+        "workflow_review.json"
+      ],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "needs_input",
+      "native_reexport_finding_codes": [
+        "connection_duplicate_parts",
+        "connection_selected_family"
+      ],
+      "exporter_revision": "343e0ad6cca528ecb30d07408224dca3597451c6",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "blocked_source",
+          "source_validation": "invalid",
+          "source_finding_codes": [
+            "connection_duplicate_parts",
+            "connection_selected_family",
+            "source_stale"
+          ],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": "3460c578c08c0decbb9c13ca2136c021a02eeaf388dd3c36f35ced65aa57e227",
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "connection_duplicate_parts",
+            "connection_selected_family"
+          ],
+          "architectural_comparison": "needs_resolution",
+          "comparison_issue_codes": [
+            "complete_native_physical_export"
+          ],
+          "products_compared": 4790,
+          "entities_compared": 69530,
+          "package_sha256": "d94949e00c9c970050047342dae3c9df43d0a3e8317daaa3fc789967c884e50e",
+          "source_ifc_sha256": "7aab149111c1c4ca520c91bc01d51cdf26c5ffab12a8d65031663f09500bfa56",
+          "returned_ifc_sha256": "07fdc06ba6a09729af7f4d25366cdc8b9253caa712aa059d2385bac496309887",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "transport_passed_source_needs_resolution",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "cfs18",
+      "key": "cfs18",
+      "title": "Portal with mezzanine",
+      "module": "CFS",
+      "primary": true,
+      "source_run_status": "paused",
+      "original_package_present": true,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "BIM export is stale; rerun consistency.check or BIM replay"
+      ],
+      "saved_readiness": "ready",
+      "original_validation": "ready",
+      "original_freshness": "invalid",
+      "changed_recorded_files": [
+        "workflow_review.json"
+      ],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "ready",
+      "native_reexport_finding_codes": [],
+      "exporter_revision": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "blocked_source",
+          "source_validation": "invalid",
+          "source_finding_codes": [
+            "source_stale"
+          ],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": "528a271a169d9598c7d8da7a3636bc0dc0c474eb79475351474a36b869d56c21",
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "ready",
+          "source_finding_codes": [],
+          "architectural_comparison": "needs_resolution",
+          "comparison_issue_codes": [
+            "door_window_solid_clearance"
+          ],
+          "products_compared": 8012,
+          "entities_compared": 112119,
+          "package_sha256": "0e3a951d5d29ecac3211d5cc5b4ed1c32597b175c548c7112e5fc1073e768b61",
+          "source_ifc_sha256": "242a337eccd54a28f87571aa5c2c9199a8de4f4208ebf4f1a21c37a22c5a9b3b",
+          "returned_ifc_sha256": "0479680e057e08737f9a40f421bb31395246d7b249ff54f222669874525f6f4e",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "transport_passed_source_needs_resolution",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "cfs6",
+      "key": "cfs6",
+      "title": "WSP walls",
+      "module": "CFS",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": true,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "BIM export is stale; rerun consistency.check or BIM replay"
+      ],
+      "saved_readiness": "ready",
+      "original_validation": "needs_input",
+      "original_freshness": "invalid",
+      "changed_recorded_files": [
+        "workflow_review.json"
+      ],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "needs_input",
+      "native_reexport_finding_codes": [
+        "connection_selected_family"
+      ],
+      "exporter_revision": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "blocked_source",
+          "source_validation": "invalid",
+          "source_finding_codes": [
+            "connection_selected_family",
+            "source_stale"
+          ],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": "c793e4ceb9721cfba5d0eba853f84408d3ab13b56e886809cea89ea1c7f6b1d6",
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "connection_selected_family"
+          ],
+          "architectural_comparison": "needs_resolution",
+          "comparison_issue_codes": [
+            "complete_native_physical_export",
+            "floor_roof_panel_classification",
+            "no_unrequested_floor_roof_planes"
+          ],
+          "products_compared": 19031,
+          "entities_compared": 323848,
+          "package_sha256": "553c11c69f3d5c143937c0ca667bd987807317dedab440a9628ff8b14f580c6d",
+          "source_ifc_sha256": "2264c039fa1a5c9dd19e4f27c4fa955bc73eab514c7302b29ce850e0378d0037",
+          "returned_ifc_sha256": "21900282a00e8c7caf301528db85329d5b17c02dd80b5b176618a86269ba0e24",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "transport_passed_source_needs_resolution",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr11",
+      "key": "hr11",
+      "title": "BRBF",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "paused",
+      "original_package_present": true,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "BIM export is stale; rerun consistency.check or BIM replay"
+      ],
+      "saved_readiness": "needs_input",
+      "original_validation": "needs_input",
+      "original_freshness": "needs_input",
+      "changed_recorded_files": [],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "needs_input",
+      "native_reexport_finding_codes": [
+        "architectural_opening_bounds",
+        "connection_fastener_quantity"
+      ],
+      "exporter_revision": "343e0ad6cca528ecb30d07408224dca3597451c6",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "architectural_opening_bounds",
+            "connection_fastener_quantity"
+          ],
+          "architectural_comparison": "needs_resolution",
+          "comparison_issue_codes": [
+            "complete_native_physical_export",
+            "floor_roof_planes_footprints_voids",
+            "door_window_boundaries",
+            "door_window_workline_clearance",
+            "door_window_solid_clearance"
+          ],
+          "products_compared": 5572,
+          "entities_compared": 80143,
+          "package_sha256": "c33bf85d844790c673f4668e0d7f9217e70b3221f30794639e308fae85c9b097",
+          "source_ifc_sha256": "495dee4e17eacccbf3e99871b6ec1552772997986078b68069c88140a8dc08df",
+          "returned_ifc_sha256": "2cd7e9d1db831250c7e3e815e3ada75992e979e99d821727917415e72a985305",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "architectural_opening_bounds",
+            "connection_fastener_quantity"
+          ],
+          "architectural_comparison": "needs_resolution",
+          "comparison_issue_codes": [
+            "complete_native_physical_export",
+            "floor_roof_planes_footprints_voids",
+            "door_window_boundaries",
+            "door_window_workline_clearance",
+            "door_window_solid_clearance"
+          ],
+          "products_compared": 5572,
+          "entities_compared": 80143,
+          "package_sha256": "b5e6ec0d42e243aa0e8e9c556fd3e1a5425899ddf72b98c6f438b02dedb47941",
+          "source_ifc_sha256": "06c6b9193de543cd6152f7e92c9c5b7a07b944e81277133637b1c04b8e239ab6",
+          "returned_ifc_sha256": "9fa7c5ee4c2d0f3de3a88dcb57109cec476990f893221ec1f547cf2cdf6cdd9e",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "transport_passed_source_needs_resolution",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr13",
+      "key": "hr13",
+      "title": "OCBF",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": true,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "BIM export is stale; rerun consistency.check or BIM replay"
+      ],
+      "saved_readiness": "ready",
+      "original_validation": "needs_input",
+      "original_freshness": "invalid",
+      "changed_recorded_files": [
+        "workflow_review.json"
+      ],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "needs_input",
+      "native_reexport_finding_codes": [
+        "connection_duplicate_parts"
+      ],
+      "exporter_revision": "343e0ad6cca528ecb30d07408224dca3597451c6",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "blocked_source",
+          "source_validation": "invalid",
+          "source_finding_codes": [
+            "connection_duplicate_parts",
+            "source_stale"
+          ],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": "cc6c95a48db893aebdb947ddf12e2c4e69d663c088691fc90b2f305077346014",
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "connection_duplicate_parts"
+          ],
+          "architectural_comparison": "needs_resolution",
+          "comparison_issue_codes": [
+            "complete_native_physical_export"
+          ],
+          "products_compared": 4026,
+          "entities_compared": 55754,
+          "package_sha256": "711cb73de810ddf33ce4aeae77639348a0ab96a242936962e6a45c4a5df81e8a",
+          "source_ifc_sha256": "5933d274b512085435930b8af9a43d8f8bb2a9e3c4d974232c2a7fbc04e495eb",
+          "returned_ifc_sha256": "de1330177d5034c3dfdcb3c61e161a43d4b2e4bb4c55684ac66b68926cb4a877",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "transport_passed_source_needs_resolution",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "cfs26",
+      "key": "cfs26",
+      "title": "Cantilever-column canopy",
+      "module": "CFS",
+      "primary": true,
+      "source_run_status": "done",
+      "original_package_present": true,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "BIM export is stale; rerun consistency.check or BIM replay"
+      ],
+      "saved_readiness": "ready",
+      "original_validation": "needs_input",
+      "original_freshness": "invalid",
+      "changed_recorded_files": [
+        "workflow_review.json"
+      ],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "needs_input",
+      "native_reexport_finding_codes": [
+        "connection_fastener_quantity"
+      ],
+      "exporter_revision": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "blocked_source",
+          "source_validation": "invalid",
+          "source_finding_codes": [
+            "connection_fastener_quantity",
+            "source_stale"
+          ],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": "0430be670ee69f8453d1cb97c15bf55a23bf20be62416196c0f230e71f25a5e2",
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "connection_fastener_quantity"
+          ],
+          "architectural_comparison": "needs_resolution",
+          "comparison_issue_codes": [
+            "complete_native_physical_export"
+          ],
+          "products_compared": 435,
+          "entities_compared": 6741,
+          "package_sha256": "80829438d0f350eb1d6070d1123dbab318b3a508e86bce403a5a71eccbad351b",
+          "source_ifc_sha256": "2b2d4f4586cfb431b9dbd09f151ccf68a88da46af294f8922b56e9e47f5d866d",
+          "returned_ifc_sha256": "030bdd525e13f39f2260780baf2e19e1fa60cbc69a30ccfabc74f8f3b67d41ad",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "transport_passed_source_needs_resolution",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "cfs3",
+      "key": "cfs3",
+      "title": "Steel-sheet walls",
+      "module": "CFS",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": true,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "BIM export is stale; rerun consistency.check or BIM replay"
+      ],
+      "saved_readiness": "ready",
+      "original_validation": "needs_input",
+      "original_freshness": "invalid",
+      "changed_recorded_files": [
+        "workflow_review.json"
+      ],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "needs_input",
+      "native_reexport_finding_codes": [
+        "connection_selected_family"
+      ],
+      "exporter_revision": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "blocked_source",
+          "source_validation": "invalid",
+          "source_finding_codes": [
+            "connection_selected_family",
+            "source_stale"
+          ],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": "fcb7e21e740ccc6630683c43227759f6bf5a4a97685fff438516dfb444d12e17",
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "connection_selected_family"
+          ],
+          "architectural_comparison": "needs_resolution",
+          "comparison_issue_codes": [
+            "complete_native_physical_export"
+          ],
+          "products_compared": 5936,
+          "entities_compared": 85058,
+          "package_sha256": "38e7e4b8314e1d733043b035dac58e5618f55642e0fadf037dd543d0ad613cfe",
+          "source_ifc_sha256": "782a4ff40040b2109f9030079a55c36e7e2b4ad1dbbdda25a3240a3e1f6fc0f5",
+          "returned_ifc_sha256": "5420a49d350c2589937083dc8234cc5e14d1e393cb54225453e75546a1f6611d",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "transport_passed_source_needs_resolution",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr12",
+      "key": "hr12",
+      "title": "SMF",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "done",
+      "original_package_present": true,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "BIM export is stale; rerun consistency.check or BIM replay"
+      ],
+      "saved_readiness": "ready",
+      "original_validation": "needs_input",
+      "original_freshness": "invalid",
+      "changed_recorded_files": [
+        "workflow_review.json"
+      ],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "needs_input",
+      "native_reexport_finding_codes": [
+        "connection_fastener_quantity"
+      ],
+      "exporter_revision": "343e0ad6cca528ecb30d07408224dca3597451c6",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "blocked_source",
+          "source_validation": "invalid",
+          "source_finding_codes": [
+            "connection_fastener_quantity",
+            "source_stale"
+          ],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": "cea473721d4ff54b47e6d95d7fee0b0351c451bb16cf38145719f18c3e19907d",
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "connection_fastener_quantity"
+          ],
+          "architectural_comparison": "needs_resolution",
+          "comparison_issue_codes": [
+            "complete_native_physical_export"
+          ],
+          "products_compared": 9321,
+          "entities_compared": 124906,
+          "package_sha256": "3fb2b4f7669e0411524ba319153edba7fd0672198453efc0533337f50f8df99e",
+          "source_ifc_sha256": "690edd78c127440fc2aab983beab52846d1b1902a51c81733c0b5978aa4e61f4",
+          "returned_ifc_sha256": "14f8301b003003bdcc7355a3db3bdd55dc86fba1c1ff26fdb3f4d8486fed5b9c",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "transport_passed_source_needs_resolution",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr9",
+      "key": "hr9",
+      "title": "SPSW",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "'roof-W21X44' has no numeric D/C (top-level or in checks) and no waiver",
+        "'roof-W21X44' has no cited AISC clause",
+        "'floor-W24X104' has no numeric D/C (top-level or in checks) and no waiver",
+        "'floor-W24X104' has no cited AISC clause",
+        "'floor-W24X207' has no numeric D/C (top-level or in checks) and no waiver",
+        "'floor-W24X207' has no cited AISC clause",
+        "'floor-W24X76' has no numeric D/C (top-level or in checks) and no waiver",
+        "'floor-W24X76' has no cited AISC clause",
+        "'floor-W24X84' has no numeric D/C (top-level or in checks) and no waiver",
+        "'floor-W24X84' has no cited AISC clause",
+        "'floor-W33X201' has no numeric D/C (top-level or in checks) and no waiver",
+        "... and 201 more problem(s) -- see consistency.check / the sanity suite output"
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "needs_input",
+      "native_reexport_finding_codes": [
+        "assembly_mapping",
+        "connection_mapping",
+        "coverage_connections",
+        "coverage_openings",
+        "coverage_primary_members",
+        "coverage_secondary_members",
+        "design_provenance",
+        "member_placement",
+        "physical_idealization"
+      ],
+      "exporter_revision": "343e0ad6cca528ecb30d07408224dca3597451c6",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "assembly_mapping",
+            "connection_mapping",
+            "coverage_connections",
+            "coverage_openings",
+            "coverage_primary_members",
+            "coverage_secondary_members",
+            "design_provenance",
+            "member_placement",
+            "physical_idealization"
+          ],
+          "architectural_comparison": "needs_resolution",
+          "comparison_issue_codes": [
+            "complete_native_physical_export",
+            "floor_roof_planes_footprints_voids",
+            "physical_member_placement_defined",
+            "located_connection_occurrences"
+          ],
+          "products_compared": 997,
+          "entities_compared": 16175,
+          "package_sha256": "ae0d52364918880c6ad8f17a3628b87cfbb2e83eb0f04b082449455508945ad3",
+          "source_ifc_sha256": "f83052dc9770505e59ee2011141f32ff437ae0fe31d2b7e05fc8f727a8b18e0c",
+          "returned_ifc_sha256": "88afe2295e37c9852fa8dc1b9479dc301730d82bfef78928b2ef441fb54239d9",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "transport_passed_source_needs_resolution",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "cfs19",
+      "key": "cfs19",
+      "title": "CFS portal / monorail",
+      "module": "CFS",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": true,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "BIM export is stale; rerun consistency.check or BIM replay"
+      ],
+      "saved_readiness": "ready",
+      "original_validation": "needs_input",
+      "original_freshness": "invalid",
+      "changed_recorded_files": [
+        "workflow_review.json"
+      ],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "needs_input",
+      "native_reexport_finding_codes": [
+        "connection_fastener_quantity",
+        "connection_selected_components"
+      ],
+      "exporter_revision": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "blocked_source",
+          "source_validation": "invalid",
+          "source_finding_codes": [
+            "connection_fastener_quantity",
+            "connection_selected_components",
+            "source_stale"
+          ],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": "d0bc25cb271bcacca95167c9fc522c1dbce0251830f4bc676d15a9fdf17393ee",
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "connection_fastener_quantity",
+            "connection_selected_components"
+          ],
+          "architectural_comparison": "needs_resolution",
+          "comparison_issue_codes": [
+            "complete_native_physical_export"
+          ],
+          "products_compared": 3118,
+          "entities_compared": 43443,
+          "package_sha256": "520db1aadcb0e0f0b72df9725fed82cfa19819e9863721974c8f64400eeb20c9",
+          "source_ifc_sha256": "436e74087ed4d15b7fd2e42b7d2cafd7858d93b37a086383e05c7c97581a59b6",
+          "returned_ifc_sha256": "8ee821ada061212b46b2e5d7662efd2186fc04bb61dd727b8e1e7677f6722150",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "transport_passed_source_needs_resolution",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "cfs7",
+      "key": "cfs7",
+      "title": "Steel-sheet walls",
+      "module": "CFS",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": true,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "BIM export is stale; rerun consistency.check or BIM replay"
+      ],
+      "saved_readiness": "ready",
+      "original_validation": "needs_input",
+      "original_freshness": "needs_input",
+      "changed_recorded_files": [],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "needs_input",
+      "native_reexport_finding_codes": [
+        "connection_selected_family"
+      ],
+      "exporter_revision": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "connection_selected_family"
+          ],
+          "architectural_comparison": "needs_resolution",
+          "comparison_issue_codes": [
+            "complete_native_physical_export",
+            "floor_roof_planes_footprints_voids"
+          ],
+          "products_compared": 2688,
+          "entities_compared": 38988,
+          "package_sha256": "37efe11985217f377d54db0adb86c475503cfdc55fefd9f7cdf85c4b5e5a1b1c",
+          "source_ifc_sha256": "1899d6185b47e3bfb09b76a41827642bddf3ec4ea95a76fc3aa9638d06183d0c",
+          "returned_ifc_sha256": "9e0a2b5c3d3f8e7fb6291cbaaa7906a55d371925b526bfb9358c5a0bb83a6bb1",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "connection_selected_family"
+          ],
+          "architectural_comparison": "needs_resolution",
+          "comparison_issue_codes": [
+            "complete_native_physical_export",
+            "floor_roof_planes_footprints_voids"
+          ],
+          "products_compared": 2688,
+          "entities_compared": 38988,
+          "package_sha256": "5d95ec9561d95fb4514d5857dcb23d0ef95b8e1206865e2ff7f9e8da5f5513b4",
+          "source_ifc_sha256": "24028d89c6ea156ff42625cfeac51f60e32ecb5dfc590329cc13fa919b1aa720",
+          "returned_ifc_sha256": "01687859392d52ab257def08d28bf943d9cd27dc16c12653b99a0ad6bcf71102",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "transport_passed_source_needs_resolution",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr21",
+      "key": "hr21",
+      "title": "OCBF",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "done",
+      "original_package_present": true,
+      "original_native_completion_passed": true,
+      "producer_completion_problems": [],
+      "saved_readiness": "ready",
+      "original_validation": "ready",
+      "original_freshness": "ready",
+      "changed_recorded_files": [],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "ready",
+      "native_reexport_finding_codes": [],
+      "exporter_revision": "343e0ad6cca528ecb30d07408224dca3597451c6",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "passed",
+          "source_validation": "ready",
+          "source_finding_codes": [],
+          "architectural_comparison": "passed",
+          "comparison_issue_codes": [],
+          "products_compared": 580,
+          "entities_compared": 8365,
+          "package_sha256": "d147136b869fd6507922749a175cc1f4c14691b42d7d15ff0650f72a8e570067",
+          "source_ifc_sha256": "541c0765956696b059088df88ce06acd74f66d56651204f8e5048b0b05eaaae7",
+          "returned_ifc_sha256": "a2e62bbe2a5be96f2c00132001e6c64e908f71e089f36e7ce32aee183e235e5c",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "ready",
+          "source_finding_codes": [],
+          "architectural_comparison": "passed",
+          "comparison_issue_codes": [],
+          "products_compared": 580,
+          "entities_compared": 8365,
+          "package_sha256": "155f848a081ead8029744537b205ea736e899bcf57fb5303718b0117b2047cff",
+          "source_ifc_sha256": "5473a49796b6c1c2d129e7d6eb0db05e098bdd437fdffe2873f379f70f200aac",
+          "returned_ifc_sha256": "c41aca837530e5b64aed8762ec11a9f404d442c5e0d4b27b98b1fcdc43a99154",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "saved_job_passed",
+      "saved_job_acceptance": true,
+      "reexport_model_checks_passed": true
+    },
+    {
+      "case": "hr33",
+      "key": "hr33",
+      "title": "IMF / OCBF crane bay",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": true,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "the sanity results are STALE: cfg.py changed after the last pipeline.design_and_report run -- re-run it so drift/theta/model checks reflect the delivered model"
+      ],
+      "saved_readiness": "ready",
+      "original_validation": "ready",
+      "original_freshness": "ready",
+      "changed_recorded_files": [],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "ready",
+      "native_reexport_finding_codes": [],
+      "exporter_revision": "343e0ad6cca528ecb30d07408224dca3597451c6",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "passed",
+          "source_validation": "ready",
+          "source_finding_codes": [],
+          "architectural_comparison": "passed",
+          "comparison_issue_codes": [],
+          "products_compared": 466,
+          "entities_compared": 6257,
+          "package_sha256": "e0f025fc9eca5eb76203afdf2326dabaa893f4d5bf22d351db44cca8bdf48fcb",
+          "source_ifc_sha256": "658e1428c2af46e48e0762c4169486af78f6bb2d0e1e42fd075513e8c6785ecb",
+          "returned_ifc_sha256": "6005580c5f66b69b7a512d0f3e15889ac47304f8dfe4b12686b515c2cebd0b6d",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "ready",
+          "source_finding_codes": [],
+          "architectural_comparison": "passed",
+          "comparison_issue_codes": [],
+          "products_compared": 466,
+          "entities_compared": 6257,
+          "package_sha256": "256113ccd6c9b14a564e7ca4fc539faba2b821a8e73b00cc91ffbc7d2b5e2d27",
+          "source_ifc_sha256": "41f4b07c5165f3ce69fac8768d8f87a0b92f96ed8ceb0246b772ef1a00d480a8",
+          "returned_ifc_sha256": "6ea05214d6dedd5252cee683247c42e32c6cad68eb8a4d96928d0ddb57eb6252",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "reexport_checks_passed_producer_not_complete",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": true
+    },
+    {
+      "case": "cfs27",
+      "key": "cfs27",
+      "title": "Single-channel portal",
+      "module": "CFS",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": true,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "BIM export is stale; rerun consistency.check or BIM replay"
+      ],
+      "saved_readiness": "ready",
+      "original_validation": "needs_input",
+      "original_freshness": "invalid",
+      "changed_recorded_files": [
+        "workflow_review.json"
+      ],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "needs_input",
+      "native_reexport_finding_codes": [
+        "connection_duplicate_parts"
+      ],
+      "exporter_revision": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "blocked_source",
+          "source_validation": "invalid",
+          "source_finding_codes": [
+            "connection_duplicate_parts",
+            "source_stale"
+          ],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": "c0b4f64ab57ddf96f0a35d9416cc00db170f3e2f71c7af6831bec5eaaa1b6f39",
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "connection_duplicate_parts"
+          ],
+          "architectural_comparison": "needs_resolution",
+          "comparison_issue_codes": [
+            "complete_native_physical_export",
+            "door_window_solid_clearance"
+          ],
+          "products_compared": 2338,
+          "entities_compared": 32985,
+          "package_sha256": "29483f13567805401593088b6f482ea4eb2a69787f970ed5d4ad2fde4e30f9fd",
+          "source_ifc_sha256": "7944ec8688970513ea781aa1840156cee517c9b333086bdf8f860d3e3a3a815c",
+          "returned_ifc_sha256": "c1699c0d3fc45326402d69ada876747c815f58d8280300b99c06896dab4a457e",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "transport_passed_source_needs_resolution",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "cfs8",
+      "key": "cfs8",
+      "title": "Strap walls / T plan",
+      "module": "CFS",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": true,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "the package changed after the last consistency.check -- re-run consistency.check(name) on the final calc_package_cfs.json",
+        "report.html is older than the package -- re-render with report.build_report(name) so the deliverable shows the final values",
+        "BIM export is stale; rerun consistency.check or BIM replay"
+      ],
+      "saved_readiness": "invalid",
+      "original_validation": "invalid",
+      "original_freshness": "invalid",
+      "changed_recorded_files": [],
+      "native_reexport": "failed",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "blocked_source",
+          "source_validation": "invalid",
+          "source_finding_codes": [
+            "connection_fastener_quantity",
+            "connection_joint",
+            "joint_connection",
+            "physical_constituent_overlap",
+            "profile_geometry"
+          ],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": "8febdd626e9cd678ddf7569132ca4a1d93fe31681f51913671ea2f9b690cc41c",
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "blocked_source",
+          "source_validation": "invalid",
+          "source_finding_codes": [
+            "schema"
+          ],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": "e4cb53ef642946aa2da0acfd75e561404dd3d0420e85b816d5cc72f507e3589d",
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "invalid_source",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr22",
+      "key": "hr22",
+      "title": "Hospital / SMF",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "paused",
+      "original_package_present": true,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "BIM export is stale; rerun consistency.check or BIM replay"
+      ],
+      "saved_readiness": "ready",
+      "original_validation": "ready",
+      "original_freshness": "invalid",
+      "changed_recorded_files": [
+        "workflow_review.json"
+      ],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "ready",
+      "native_reexport_finding_codes": [],
+      "exporter_revision": "343e0ad6cca528ecb30d07408224dca3597451c6",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "blocked_source",
+          "source_validation": "invalid",
+          "source_finding_codes": [
+            "source_stale"
+          ],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": "f6a48f51dc2cd4e78083f23f50105f20d4c5ddab5f174eff7c6a6628efbe59dc",
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "ready",
+          "source_finding_codes": [],
+          "architectural_comparison": "needs_resolution",
+          "comparison_issue_codes": [
+            "floor_roof_planes_footprints_voids"
+          ],
+          "products_compared": 2619,
+          "entities_compared": 36519,
+          "package_sha256": "9132e5e4b4cfd5979c7ffc7f3776342eaba3ee04e0121a4253723eb36dfed25a",
+          "source_ifc_sha256": "13c64cbac4b8fdc8c50ad0013be8e0114057aca7832038271b90be72edb81e10",
+          "returned_ifc_sha256": "13c57db52c05fb70214a201d8e4a16d7b8fcc696e55172444ca0469c284deb5a",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "transport_passed_source_needs_resolution",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr25",
+      "key": "hr25",
+      "title": "SMF",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "done",
+      "original_package_present": true,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "BIM export is stale; rerun consistency.check or BIM replay"
+      ],
+      "saved_readiness": "ready",
+      "original_validation": "needs_input",
+      "original_freshness": "invalid",
+      "changed_recorded_files": [
+        "workflow_review.json"
+      ],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "needs_input",
+      "native_reexport_finding_codes": [
+        "connection_fastener_quantity"
+      ],
+      "exporter_revision": "343e0ad6cca528ecb30d07408224dca3597451c6",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "blocked_source",
+          "source_validation": "invalid",
+          "source_finding_codes": [
+            "connection_fastener_quantity",
+            "source_stale"
+          ],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": "9aafca6329acd573d41db5ce3618bd73044ae791725f12aeee6220bc21a31869",
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "connection_fastener_quantity"
+          ],
+          "architectural_comparison": "needs_resolution",
+          "comparison_issue_codes": [
+            "complete_native_physical_export",
+            "floor_roof_planes_footprints_voids"
+          ],
+          "products_compared": 2450,
+          "entities_compared": 34184,
+          "package_sha256": "4d83b4b1a1d6f7879e1151366af547b96bee572e2e3bad2b2fc07331f7e23578",
+          "source_ifc_sha256": "0b1fc61e8ba2b02cfa101463a0528703bf048a5bf23d000abef6300ff3900bff",
+          "returned_ifc_sha256": "614c6001b398c7bac8bb033dd54fa117c2e44a4b4da0612210ed2c7983a65362",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "transport_passed_source_needs_resolution",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "cfs28",
+      "key": "cfs28",
+      "title": "Agricultural portal",
+      "module": "CFS",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": true,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "BIM export is stale; rerun consistency.check or BIM replay"
+      ],
+      "saved_readiness": "ready",
+      "original_validation": "needs_input",
+      "original_freshness": "needs_input",
+      "changed_recorded_files": [],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "needs_input",
+      "native_reexport_finding_codes": [
+        "connection_selected_components"
+      ],
+      "exporter_revision": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "connection_selected_components"
+          ],
+          "architectural_comparison": "needs_resolution",
+          "comparison_issue_codes": [
+            "complete_native_physical_export",
+            "floor_roof_panel_classification",
+            "door_window_solid_clearance",
+            "gravity_profile_orientation"
+          ],
+          "products_compared": 1281,
+          "entities_compared": 18233,
+          "package_sha256": "98e36a890cc40f63c509fa6b6846bbde225844ad620fc5fdb6493b76cb58bb17",
+          "source_ifc_sha256": "bcb0b0e3e1565b9277a604090e5dddc17c4e0d7542b7fc767b162a1475428886",
+          "returned_ifc_sha256": "97c542ec905652fa88d5203f1173582e3d1f32d5904d35fbba891efdd3fed822",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "connection_selected_components"
+          ],
+          "architectural_comparison": "needs_resolution",
+          "comparison_issue_codes": [
+            "complete_native_physical_export",
+            "floor_roof_panel_classification",
+            "door_window_solid_clearance",
+            "gravity_profile_orientation"
+          ],
+          "products_compared": 1281,
+          "entities_compared": 18233,
+          "package_sha256": "3abd516596d59a4df49a892aed64ee1a3dd96338151e7cfbcdee4ff79603ed83",
+          "source_ifc_sha256": "113ab90df6664f168f2a492825d4f9781bbd634b21b8c3d4f1235c36d7a801d3",
+          "returned_ifc_sha256": "7e825310d8d290bfa913a9afb82891a141fc06dbc1f4cbc46c034a621cc5fd10",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "transport_passed_source_needs_resolution",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "cfs4",
+      "key": "cfs4",
+      "title": "SBSW",
+      "module": "CFS",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr24",
+      "key": "hr24",
+      "title": "SMF X / SCBF Y (completed source design)",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "'roof-W18X50' has no numeric D/C (top-level or in checks) and no waiver",
+        "'roof-W18X50' has no cited AISC clause",
+        "'floor-W21X62' has no numeric D/C (top-level or in checks) and no waiver",
+        "'floor-W21X62' has no cited AISC clause",
+        "'roof-W21X62' has no numeric D/C (top-level or in checks) and no waiver",
+        "'roof-W21X62' has no cited AISC clause",
+        "'floor-W24X62' has no numeric D/C (top-level or in checks) and no waiver",
+        "'floor-W24X62' has no cited AISC clause",
+        "'floor-W24X68' has no numeric D/C (top-level or in checks) and no waiver",
+        "'floor-W24X68' has no cited AISC clause",
+        "'floor-W27X94' has no numeric D/C (top-level or in checks) and no waiver",
+        "... and 238 more problem(s) -- see consistency.check / the sanity suite output"
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "needs_input",
+      "native_reexport_finding_codes": [
+        "assembly_mapping",
+        "connection_mapping",
+        "coverage_connections",
+        "coverage_openings",
+        "coverage_primary_members",
+        "coverage_secondary_members",
+        "design_provenance",
+        "member_placement"
+      ],
+      "exporter_revision": "343e0ad6cca528ecb30d07408224dca3597451c6",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "assembly_mapping",
+            "connection_mapping",
+            "coverage_connections",
+            "coverage_openings",
+            "coverage_primary_members",
+            "coverage_secondary_members",
+            "design_provenance",
+            "member_placement"
+          ],
+          "architectural_comparison": "needs_resolution",
+          "comparison_issue_codes": [
+            "complete_native_physical_export",
+            "floor_roof_planes_footprints_voids",
+            "physical_member_placement_defined",
+            "located_connection_occurrences"
+          ],
+          "products_compared": 760,
+          "entities_compared": 12379,
+          "package_sha256": "26bf8def7cb9b1c82a8cbbbca54eb9afde49f1fd72ae8a481206b6c1082a0b2d",
+          "source_ifc_sha256": "25428066e694d298987af7f35763d0d8fa0d209bfc78eedd887c3148c5fa7793",
+          "returned_ifc_sha256": "17404638ec84d14b8c607c77aa219286d21c7fcfdd504d91e335b8df07171d26",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "transport_passed_source_needs_resolution",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr3",
+      "key": "hr3",
+      "title": "BracedMoment",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "cfs30",
+      "key": "cfs30",
+      "title": "Propped CFS portal",
+      "module": "CFS",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "cfs9",
+      "key": "cfs9",
+      "title": "Podium wall building",
+      "module": "CFS",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr10",
+      "key": "hr10",
+      "title": "Dual SMF + SCBF",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr14",
+      "key": "hr14",
+      "title": "EBF",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "cfs10",
+      "key": "cfs10",
+      "title": "SBMF",
+      "module": "CFS",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "cfs25",
+      "key": "cfs25",
+      "title": "Purlin/girt retrofit",
+      "module": "CFS",
+      "primary": true,
+      "source_run_status": "paused",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr27",
+      "key": "hr27",
+      "title": "CC-PSW/CF + SMF",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr28",
+      "key": "hr28",
+      "title": "STMF",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "cfs11",
+      "key": "cfs11",
+      "title": "Gypsum shear walls",
+      "module": "CFS",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "cfs13",
+      "key": "cfs13",
+      "title": "Type II WSP walls",
+      "module": "CFS",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr30",
+      "key": "hr30",
+      "title": "Composite SCBF",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr32",
+      "key": "hr32",
+      "title": "Existing + addition",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "cfs12",
+      "key": "cfs12",
+      "title": "Steel-sheet walls",
+      "module": "CFS",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "cfs14",
+      "key": "cfs14",
+      "title": "Strap X + WSP Y",
+      "module": "CFS",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr18",
+      "key": "hr18",
+      "title": "R3 not specifically detailed",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr35",
+      "key": "hr35",
+      "title": "Ch15 equipment platform",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "paused",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "cfs15",
+      "key": "cfs15",
+      "title": "WSP",
+      "module": "CFS",
+      "primary": true,
+      "source_run_status": "not_started",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "No production job exists for this case."
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "cfs5",
+      "key": "cfs5",
+      "title": "StrapBraced",
+      "module": "CFS",
+      "primary": true,
+      "source_run_status": "not_started",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "No production job exists for this case."
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr17",
+      "key": "hr17",
+      "title": "SCBF",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr20",
+      "key": "hr20",
+      "title": "SCBF",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr2",
+      "key": "hr2",
+      "title": "SMF",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr5",
+      "key": "hr5",
+      "title": "SMF",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr6",
+      "key": "hr6",
+      "title": "SCBF",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr7a",
+      "key": "hr7a",
+      "title": "SMF",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "error",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr15",
+      "key": "hr15",
+      "title": "Dual",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "not_started",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "No production job exists for this case."
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr19",
+      "key": "hr19",
+      "title": "SMF",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "not_started",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "No production job exists for this case."
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr23",
+      "key": "hr23",
+      "title": "Dual",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "not_started",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "No production job exists for this case."
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr26",
+      "key": "hr26",
+      "title": "Dual",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "not_started",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "No production job exists for this case."
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr29",
+      "key": "hr29",
+      "title": "Dual",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "not_started",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "No production job exists for this case."
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr34a",
+      "key": "hr34a",
+      "title": "Twin",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "not_started",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "No production job exists for this case."
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr34b",
+      "key": "hr34b",
+      "title": "Twin",
+      "module": "HR",
+      "primary": true,
+      "source_run_status": "not_started",
+      "original_package_present": false,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "No production job exists for this case."
+      ],
+      "saved_readiness": null,
+      "original_validation": null,
+      "original_freshness": null,
+      "changed_recorded_files": [],
+      "native_reexport": "unavailable",
+      "native_reexport_readiness": null,
+      "native_reexport_finding_codes": [],
+      "exporter_revision": null,
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "unavailable",
+          "source_validation": null,
+          "source_finding_codes": [],
+          "architectural_comparison": "not_tested",
+          "comparison_issue_codes": [],
+          "products_compared": 0,
+          "entities_compared": 0,
+          "package_sha256": null,
+          "source_ifc_sha256": null,
+          "returned_ifc_sha256": null,
+          "source_files_unchanged": null,
+          "schema_errors": null,
+          "import_readiness_verified": false,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "no_own_package",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    }
+  ],
+  "earlier_controls": [
+    {
+      "case": "cfs1",
+      "key": "cfs1_earlier",
+      "title": "Four-storey CFS bearing/shear-wall residential building",
+      "module": "CFS",
+      "primary": false,
+      "source_run_status": "done",
+      "original_package_present": true,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "BIM physical_constituent_overlap: Built-up constituents substantially overlap; channel offsets use the web centre, not a bounding-box centre; resolve the physical declaration before claiming readiness",
+        "BIM physical_opening_workline: Member worklines cross a declared opening; coordinate the framing and then check full section and connection clearance; resolve the physical declaration before claiming readiness",
+        "BIM physical_remote_part: Connection box parts are over six feet from their assigned joint; resolve the physical declaration before claiming readiness"
+      ],
+      "saved_readiness": "ready",
+      "original_validation": "needs_input",
+      "original_freshness": "needs_input",
+      "changed_recorded_files": [],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "needs_input",
+      "native_reexport_finding_codes": [
+        "physical_constituent_overlap",
+        "physical_opening_workline",
+        "physical_remote_part"
+      ],
+      "exporter_revision": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "physical_constituent_overlap",
+            "physical_opening_workline",
+            "physical_remote_part"
+          ],
+          "architectural_comparison": "unverifiable_input",
+          "comparison_issue_codes": [],
+          "products_compared": 6637,
+          "entities_compared": 88223,
+          "package_sha256": "1aff061768b1251856f4df395e988ff6b0a9a4506098cc88a0e53c9b016bf4b9",
+          "source_ifc_sha256": "dcf2cffa55a9d9ef85c840b89435a61ae459372ddf164e8d9faf7b948fcc8693",
+          "returned_ifc_sha256": "fe09e3f1034f6584470d52716779018a01970ecf9f9bc4c4a0e3e7e5f13fd883",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "physical_constituent_overlap",
+            "physical_opening_workline",
+            "physical_remote_part"
+          ],
+          "architectural_comparison": "unverifiable_input",
+          "comparison_issue_codes": [],
+          "products_compared": 6637,
+          "entities_compared": 88223,
+          "package_sha256": "5b7348dad64f4adb0aa94ced58ed306c6d63626d8297f7903a122c7dbf2da9a8",
+          "source_ifc_sha256": "5aa9948d36b607e637c26005d86765645a0431415932c8a9482fc4288ee7d2b6",
+          "returned_ifc_sha256": "a6fd14fb4e793fa2e7cf8a6b44f7bf9fe63743c96ee7e311356a8465a4266e66",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "transport_passed_source_needs_resolution",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "cfs17",
+      "key": "cfs17_earlier",
+      "title": "Unequal twin-gable CFS garage with valley snow",
+      "module": "CFS",
+      "primary": false,
+      "source_run_status": "done",
+      "original_package_present": true,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "BIM physical_ply_count: Built-up section labels disagree with constituent counts; resolve the physical declaration before claiming readiness",
+        "BIM physical_opening_host: Opening boundaries extend outside their declared host bounds; resolve the physical declaration before claiming readiness",
+        "BIM physical_remote_part: Connection box parts are over six feet from their assigned joint; resolve the physical declaration before claiming readiness"
+      ],
+      "saved_readiness": "ready",
+      "original_validation": "needs_input",
+      "original_freshness": "needs_input",
+      "changed_recorded_files": [],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "needs_input",
+      "native_reexport_finding_codes": [
+        "physical_opening_host",
+        "physical_ply_count",
+        "physical_remote_part"
+      ],
+      "exporter_revision": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "physical_opening_host",
+            "physical_ply_count",
+            "physical_remote_part"
+          ],
+          "architectural_comparison": "unverifiable_input",
+          "comparison_issue_codes": [],
+          "products_compared": 2530,
+          "entities_compared": 37143,
+          "package_sha256": "635b19294863860ef73f7b0a9af98bfd9386418afbedf12f96feb715d857ca6d",
+          "source_ifc_sha256": "1642c9042b1f0c5baf13bdae6604e5dce4994cb77903d2824fe24cd34469b853",
+          "returned_ifc_sha256": "02455f093be559388a7158ad7a947ea213bd9639a1868c7371da542c9401f5bf",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "physical_opening_host",
+            "physical_ply_count",
+            "physical_remote_part"
+          ],
+          "architectural_comparison": "unverifiable_input",
+          "comparison_issue_codes": [],
+          "products_compared": 2530,
+          "entities_compared": 37143,
+          "package_sha256": "4fe036471e6f7e9e51c33b0a9296a25f714258fcc82d0dfae5e8a7b9b64cf73a",
+          "source_ifc_sha256": "af47df7c89590b3ae8fbbfec2eaaacffc48d8dad6df9ea403f8659810b91c71a",
+          "returned_ifc_sha256": "5bd8355f9f9739bb206bb96b0a94fa59225e1f1a5738a829b4e68a682824b540",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "transport_passed_source_needs_resolution",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "cfs29",
+      "key": "cfs29_earlier",
+      "title": "Independent CFS mezzanine in an existing host",
+      "module": "CFS",
+      "primary": false,
+      "source_run_status": "done",
+      "original_package_present": true,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "BIM physical_ply_count: Built-up section labels disagree with constituent counts; resolve the physical declaration before claiming readiness",
+        "BIM physical_opening_workline: Member worklines cross a declared opening; coordinate the framing and then check full section and connection clearance; resolve the physical declaration before claiming readiness"
+      ],
+      "saved_readiness": "ready",
+      "original_validation": "needs_input",
+      "original_freshness": "needs_input",
+      "changed_recorded_files": [],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "needs_input",
+      "native_reexport_finding_codes": [
+        "physical_opening_workline",
+        "physical_ply_count"
+      ],
+      "exporter_revision": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "physical_opening_workline",
+            "physical_ply_count"
+          ],
+          "architectural_comparison": "unverifiable_input",
+          "comparison_issue_codes": [],
+          "products_compared": 135,
+          "entities_compared": 2369,
+          "package_sha256": "5d1a44e452697482f52aaa373983f6317159bba64d68b3ceafe6eec7789ef3fa",
+          "source_ifc_sha256": "3b675694507943a7d589fa50830407dfcc7787e82787e88ce3c96e3d08eeb8a5",
+          "returned_ifc_sha256": "42846635b17fd702570eb41061d63b902b8033991a8c4688e719465115efea4a",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "physical_opening_workline",
+            "physical_ply_count"
+          ],
+          "architectural_comparison": "unverifiable_input",
+          "comparison_issue_codes": [],
+          "products_compared": 135,
+          "entities_compared": 2369,
+          "package_sha256": "7bcbdfb981bfa3f3ddf3b453c6702909eaa42d500b205a06cae74d59ddda2524",
+          "source_ifc_sha256": "ad8e67a4bc46635ddecceac7eb1e530a3584146278e0fb6e1fda4a19080ff869",
+          "returned_ifc_sha256": "ab2de4f45dfc7138cefcc20e36bef04d478619df6ba4f68ea6389ab151c39e2f",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "transport_passed_source_needs_resolution",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr1",
+      "key": "hr1_earlier",
+      "title": "Five-storey SCBF office",
+      "module": "HR",
+      "primary": false,
+      "source_run_status": "done",
+      "original_package_present": true,
+      "original_native_completion_passed": true,
+      "producer_completion_problems": [],
+      "saved_readiness": "ready",
+      "original_validation": "ready",
+      "original_freshness": "ready",
+      "changed_recorded_files": [],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "ready",
+      "native_reexport_finding_codes": [],
+      "exporter_revision": "343e0ad6cca528ecb30d07408224dca3597451c6",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "passed",
+          "source_validation": "ready",
+          "source_finding_codes": [],
+          "architectural_comparison": "unverifiable_input",
+          "comparison_issue_codes": [],
+          "products_compared": 1133,
+          "entities_compared": 18857,
+          "package_sha256": "5b7282ecbaf0ee9eae87732cd5613ab61d50a96dd2d71972852715c3eb096767",
+          "source_ifc_sha256": "f6f446201e9beca2927239e7e40fe7e308938f5447125e4c59844e34db88e6d0",
+          "returned_ifc_sha256": "e5a8f943b9a92ccf770d193d294675ba4a773ee87989e363ad163e5cd1580448",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "ready",
+          "source_finding_codes": [],
+          "architectural_comparison": "unverifiable_input",
+          "comparison_issue_codes": [],
+          "products_compared": 1133,
+          "entities_compared": 18857,
+          "package_sha256": "a2a5c97f571a040f27e2b06ff785643afc6c2d9c98b8a60e7c4d1419ae38e988",
+          "source_ifc_sha256": "8f9c42e598e1dca05a77610322f683e05df1e8f499f082e5485e2ad77c987fba",
+          "returned_ifc_sha256": "a066a229dd4ced1bf7d8aa06157bc89230bf520f2cc84a851c8defb22d69157c",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "transport_passed_source_needs_resolution",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr16",
+      "key": "hr16_earlier",
+      "title": "Z-plan school with stepped roof levels",
+      "module": "HR",
+      "primary": false,
+      "source_run_status": "done",
+      "original_package_present": true,
+      "original_native_completion_passed": false,
+      "producer_completion_problems": [
+        "BIM physical_opening_workline: Member worklines cross a declared opening; coordinate the framing and then check full section and connection clearance; resolve the physical declaration before claiming readiness",
+        "BIM physical_remote_part: Connection box parts are over six feet from their assigned joint; resolve the physical declaration before claiming readiness"
+      ],
+      "saved_readiness": "ready",
+      "original_validation": "needs_input",
+      "original_freshness": "needs_input",
+      "changed_recorded_files": [],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "needs_input",
+      "native_reexport_finding_codes": [
+        "physical_opening_workline",
+        "physical_remote_part"
+      ],
+      "exporter_revision": "343e0ad6cca528ecb30d07408224dca3597451c6",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "physical_opening_workline",
+            "physical_remote_part"
+          ],
+          "architectural_comparison": "unverifiable_input",
+          "comparison_issue_codes": [],
+          "products_compared": 149,
+          "entities_compared": 2559,
+          "package_sha256": "bb34d15145370e1fe701e910a458519492ba202258cc30d90d44ad5e22fa9941",
+          "source_ifc_sha256": "8f659f648f1be7ea99e33dfa8afdbc044715c82700de31eb9fe9d7b056cdf74b",
+          "returned_ifc_sha256": "47a4e56a1a79d0db88e324c97c502c8d1f9df2b795c9961bed4898c38a5a99c1",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "needs_input",
+          "source_finding_codes": [
+            "physical_opening_workline",
+            "physical_remote_part"
+          ],
+          "architectural_comparison": "unverifiable_input",
+          "comparison_issue_codes": [],
+          "products_compared": 149,
+          "entities_compared": 2559,
+          "package_sha256": "925edc565ba8d4196767c0dc696f524d3d321024ea92cfa4274cbc510dbe2ea7",
+          "source_ifc_sha256": "1737510fdcdfce76c0f4bb92ac156b97eea24d8d2402fdfe622b97135132d0f8",
+          "returned_ifc_sha256": "dc09add9df7f035f39aaea97229bd70ea9cc2f857f65909b2c25efd5fb89c80b",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "transport_passed_source_needs_resolution",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    },
+    {
+      "case": "hr31",
+      "key": "hr31_earlier",
+      "title": "Gabled warehouse and low office",
+      "module": "HR",
+      "primary": false,
+      "source_run_status": "done",
+      "original_package_present": true,
+      "original_native_completion_passed": true,
+      "producer_completion_problems": [],
+      "saved_readiness": "ready",
+      "original_validation": "ready",
+      "original_freshness": "ready",
+      "changed_recorded_files": [],
+      "native_reexport": "exported",
+      "native_reexport_readiness": "ready",
+      "native_reexport_finding_codes": [],
+      "exporter_revision": "343e0ad6cca528ecb30d07408224dca3597451c6",
+      "original_producer_revision": null,
+      "variants": {
+        "saved": {
+          "transport": "passed",
+          "source_validation": "ready",
+          "source_finding_codes": [],
+          "architectural_comparison": "unverifiable_input",
+          "comparison_issue_codes": [],
+          "products_compared": 74,
+          "entities_compared": 1403,
+          "package_sha256": "a29bfde7022d92b0662e60590fd08abd0a2cb2a075126408c3ab16135ffb07cc",
+          "source_ifc_sha256": "bbae80efa23aa406fe2631995bb973aa9a294a70d72ed26da924801383d73b3c",
+          "returned_ifc_sha256": "780ca5e8b8d481fe9da96a607f22ada6be9751eb5df59d5c24366f2b9bd273c0",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        },
+        "replay": {
+          "transport": "passed",
+          "source_validation": "ready",
+          "source_finding_codes": [],
+          "architectural_comparison": "unverifiable_input",
+          "comparison_issue_codes": [],
+          "products_compared": 74,
+          "entities_compared": 1403,
+          "package_sha256": "4960b0e5d23d3987d118bccef3293949a74cd3dc343c968779c358fdcb05874f",
+          "source_ifc_sha256": "5b459ffe72881c94ec1c2e2068722431893bfe20845fb1760bd8361bfccd8046",
+          "returned_ifc_sha256": "44588da8962d8b249237bb3e688300204b1f0f21c149aa600ce4bd8c69af0338",
+          "source_files_unchanged": true,
+          "schema_errors": [],
+          "import_readiness_verified": true,
+          "error": null,
+          "stage": null
+        }
+      },
+      "status": "transport_passed_source_needs_resolution",
+      "saved_job_acceptance": false,
+      "reexport_model_checks_passed": false
+    }
+  ],
+  "openbim_fix": {
+    "version": "0.8.32",
+    "commit": "b3a50f068a5b0401f47f1bd3ce958d009ef8e6db",
+    "prs": [
+      "https://github.com/Steltic/steltic_openBIM/pull/41",
+      "https://github.com/Steltic/steltic_openBIM/pull/42"
+    ]
+  },
+  "upstream_mutation_policy": "HR/CFS/Hub: review-only fix list; no changes, PRs or merges.",
+  "llm_calls": 0,
+  "redesign": false,
+  "analysis_solve": false,
+  "drawings": false,
+  "supplements": false,
+  "limitations": [
+    "All 61 identities are audited; missing or invalid job outputs cannot become successful IFC round trips.",
+    "A local own-input re-export is recovery evidence, not proof that the saved production job automatically exported complete data.",
+    "The previous gold sweep used physical supplements and is not counted here.",
+    "Original producer revisions were not recorded. Existing source/engine hashes are preserved; replay exporter revisions are recorded separately.",
+    "Geometry/data checks and IFC transport do not recheck structural capacity, fabrication fit, engineering approval or native Revit operation.",
+    "Input comparisons flag unexplained differences for review. Architectural finished surfaces, physical reference planes/thickness and legitimately added structural panels need explicit correspondence; a difference is not automatically a structural defect.",
+    "The production openBIM API was tested in isolated local projects; the Hub embedded dependency remains unchanged pending review."
+  ]
+}

@@ -4,6 +4,8 @@ Version 0.8.32 keeps exported missing-data and geometry warnings visible on IFC 
 
 Drawing and IFC module for Steltic Hub: dimensioned engineering design drawings, IFC import for model review, and IFC export. Fabrication/shop output and IFC-to-structural-analysis conversion remain later work.
 
+The separate [61-case own-output audit](docs/own-outputs61/README.md) used no physical supplements. All 27 usable primary re-exports passed IFC transport; one source was invalid and 33 lacked replayable job outputs. Only two saved producer jobs passed current completion, source-completeness and independent input checks. The [HR/CFS/Hub fix list](docs/own-outputs61/upstream-fix-list.md) is for review; those repositories were not changed.
+
 ## Current status
 
 The [61-building gold IFC round-trip sweep](docs/gold-ifc61/README.md) passed for all 36 HR and 25 CFS buildings using local engine replay and saved designs, with no LLM calls, redesign or drawing runs. Every original IFC entity and every imported product’s geometry/data survived the exchange.

@@ -1,0 +1,343 @@
+{
+  "case": "cfs1",
+  "module": "CFS",
+  "project": "WFRESH61_cfs1_20261103",
+  "variant": "replay",
+  "checked_at": 1793764720.6054208,
+  "status": "passed",
+  "checks": [
+    {
+      "code": "own_output_binding",
+      "passed": true,
+      "evidence": {
+        "physical_supplements_supplied": false,
+        "source_package_sha256": "d08e05a926d293c81869b8cdbd2bb5afffe1ffff873f008d707212558b3ab891"
+      }
+    },
+    {
+      "code": "complete_native_physical_export",
+      "passed": true,
+      "evidence": {
+        "stored_readiness": {
+          "counts": {
+            "analysis_elements": 0,
+            "design_records": 133,
+            "members": 442,
+            "panels": 197
+          },
+          "findings": [],
+          "status": "ready"
+        },
+        "current_contract_findings": []
+      }
+    },
+    {
+      "code": "return_fully_rendered",
+      "passed": true,
+      "evidence": {
+        "source_products": 3099,
+        "selected": 3099,
+        "displayed": 3099,
+        "unrendered": 0,
+        "excluded_by_scope": 0,
+        "triangles": 176654
+      }
+    },
+    {
+      "code": "architectural_opening_export_geometry",
+      "passed": true,
+      "evidence": {
+        "unresolved_opening_warnings": []
+      }
+    },
+    {
+      "code": "recoverable_input_surface_3l2TGWK$nGce3hOTrvDjMZ",
+      "passed": true,
+      "evidence": {
+        "name": "Residential floor"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_06WoZz7afK1OJd7nPzfmK5",
+      "passed": true,
+      "evidence": {
+        "name": "Residential floor"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_3lyjafoHjVX8rslrMC1RF_",
+      "passed": true,
+      "evidence": {
+        "name": "Residential floor"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_0CL1s1vMrRVg1o$1ZsGVgw",
+      "passed": true,
+      "evidence": {
+        "name": "Roof"
+      }
+    },
+    {
+      "code": "floor_roof_panel_classification",
+      "passed": true,
+      "evidence": {
+        "untyped_horizontal_or_sloped_panels": [],
+        "method": "Panel geometry is compared even when the source did not declare its floor/roof role; role omission is reported separately."
+      }
+    },
+    {
+      "code": "floor_roof_planes_footprints_voids",
+      "passed": true,
+      "evidence": {
+        "required_plane_groups": 4,
+        "returned_plane_groups": 5,
+        "differences": [],
+        "plane_distance_tolerance_m": 0.005
+      }
+    },
+    {
+      "code": "no_unrequested_floor_roof_planes",
+      "passed": true,
+      "evidence": {
+        "extra_planes": []
+      }
+    },
+    {
+      "code": "structural_datums_retained",
+      "passed": true,
+      "evidence": {
+        "required": [
+          {
+            "id": "16MpPb7OnKEQaafFnS2cgJ",
+            "name": "Ground",
+            "elevation_m": 0.0
+          },
+          {
+            "id": "0UDb1XQCHRNAx4Th$xCYLG",
+            "name": "Datum 10.666666666666666 ft",
+            "elevation_m": 3.2512
+          },
+          {
+            "id": "2OjqzyexLLC9QUedCwaskJ",
+            "name": "Datum 20.166666666666668 ft",
+            "elevation_m": 6.146800000000001
+          },
+          {
+            "id": "3tl9eYPFPVER13xDEeIyAe",
+            "name": "Datum 29.666666666666668 ft",
+            "elevation_m": 9.042400000000002
+          },
+          {
+            "id": "2x_LPESfvMpABbqPivKzki",
+            "name": "Datum 39.166666666666664 ft",
+            "elevation_m": 11.938
+          }
+        ],
+        "returned": [
+          {
+            "id": "3aSqGCxE1LuOlT57E03v1O",
+            "name": "Ground",
+            "elevation_m": 0.0
+          },
+          {
+            "id": "1uvDtuEJ5VCfJztJ2jDTXW",
+            "name": "Datum 10.666666666666666 ft",
+            "elevation_m": 3.2512
+          },
+          {
+            "id": "1b7k$IdBPPrxwbTS0Zilbw",
+            "name": "Datum 20.166666666666668 ft",
+            "elevation_m": 6.146800000000001
+          },
+          {
+            "id": "3mP3$dfyLIJwQDPyrYa9QG",
+            "name": "Datum 29.666666666666668 ft",
+            "elevation_m": 9.042400000000002
+          },
+          {
+            "id": "3wFPkgtLrTH95S1F5E7mOW",
+            "name": "Datum 39.166666666666664 ft",
+            "elevation_m": 11.938
+          }
+        ],
+        "missing": []
+      }
+    },
+    {
+      "code": "architectural_grid_locations",
+      "passed": true,
+      "evidence": {
+        "source_axes": 12,
+        "returned_axes": 12,
+        "missing_or_changed": [],
+        "checks": "labels, U/V/W family and full 3D polyline"
+      }
+    },
+    {
+      "code": "architectural_source_identity",
+      "passed": true,
+      "evidence": {
+        "expected": "9b5ec0a54d35caa5001f4ccb797e9b88fcfd326eefcef46661e0b607d545256c",
+        "declared": "9b5ec0a54d35caa5001f4ccb797e9b88fcfd326eefcef46661e0b607d545256c"
+      }
+    },
+    {
+      "code": "physical_member_placement_defined",
+      "passed": true,
+      "evidence": {
+        "unknown_member_ids": [],
+        "method": "Null offsets or orientation remain unknown; no zero offsets or local axes are invented for these checks."
+      }
+    },
+    {
+      "code": "door_window_boundaries",
+      "passed": true,
+      "evidence": {
+        "source_count": 64,
+        "physical_count": 64,
+        "changed": []
+      }
+    },
+    {
+      "code": "door_window_workline_clearance",
+      "passed": true,
+      "evidence": {
+        "count": 0,
+        "examples": [],
+        "method": "Strict opening bounds against physical worklines; separate from a solid clash or fabrication-fit check"
+      }
+    },
+    {
+      "code": "door_window_solid_clearance",
+      "passed": true,
+      "evidence": {
+        "checked_solids": 2838,
+        "clashes": [],
+        "method": "Returned IFC mesh triangles against source axis-aligned opening volumes, with 5 mm tolerance at jamb/sill/head. All door/window fixtures in this sweep have axis-aligned hosts or are axis-aligned freestanding reservations."
+      }
+    },
+    {
+      "code": "connection_part_dimensions",
+      "passed": true,
+      "evidence": {
+        "checked": 1136,
+        "mismatches": [],
+        "method": "Explicit plate/gusset thickness or cylindrical shaft diameter versus solid dimensions; tolerance max(0.005 in, 2%). Resolve against actual completed design records, not by relabelling an arbitrary solid."
+      }
+    },
+    {
+      "code": "member_design_record_sections",
+      "passed": true,
+      "evidence": {
+        "checked_links": 0,
+        "links_requiring_other_review": 0,
+        "mismatches": [],
+        "method": "Actual physical catalogue section label versus every linked member record with an explicit inputs.section. Custom profile aliases and built-up constituent calculations are outside this exact-label screen."
+      }
+    },
+    {
+      "code": "gravity_profile_orientation",
+      "passed": true,
+      "evidence": {
+        "checked": 18,
+        "suspect_members": [],
+        "method": "Deep gravity-framing profiles: detect depth axis nearly perpendicular to projected gravity; inspect intentional weak-axis designs separately.",
+        "unknown_placement_members_not_screened": []
+      }
+    },
+    {
+      "code": "built_up_constituents_separate",
+      "passed": true,
+      "evidence": {
+        "checked_profiles": 2,
+        "overlaps": [],
+        "method": "Separate built-up constituents must not substantially occupy the same section area; threshold >0.005 in2 and >5% of a constituent, allowing preview fillet simplifications."
+      }
+    },
+    {
+      "code": "no_duplicate_physical_occurrences",
+      "passed": true,
+      "evidence": {
+        "count": 0,
+        "examples": []
+      }
+    },
+    {
+      "code": "located_connection_occurrences",
+      "passed": true,
+      "evidence": {
+        "connections": 636,
+        "designed_without_parts": [],
+        "delegated_interfaces": []
+      }
+    },
+    {
+      "code": "connection_occurrence_coverage",
+      "passed": true,
+      "evidence": {
+        "checked_exemptions": 520,
+        "problems": [],
+        "method": "Explicit hardware notes and column bases lacking any connection-part bounds within six feet; continuous-subdivision claims must have opposing collinear member ends. Checks returned solid and reference-part bounds. Nearness alone is not connection completeness, fit or capacity certification.",
+        "unknown_placement_members_not_screened": []
+      }
+    }
+  ],
+  "issues": [],
+  "input_scope": [
+    {
+      "guid": "0ERPLA081LZPkZV5Ia8UJU",
+      "name": "Ground slab",
+      "role": "architectural_context",
+      "reason": "Ground/host slab outside elevated steel framing comparison"
+    },
+    {
+      "guid": "3l2TGWK$nGce3hOTrvDjMZ",
+      "name": "Residential floor",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "06WoZz7afK1OJd7nPzfmK5",
+      "name": "Residential floor",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "3lyjafoHjVX8rslrMC1RF_",
+      "name": "Residential floor",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "0CL1s1vMrRVg1o$1ZsGVgw",
+      "name": "Roof",
+      "role": "required_structural_coordination"
+    }
+  ],
+  "architectural_sha256": "9b5ec0a54d35caa5001f4ccb797e9b88fcfd326eefcef46661e0b607d545256c",
+  "architectural_handoff_sha256": "7e11d60aa14bfe4bca9d2df5d122efd7893a4587f0e1a4580842e1cae4ab925b",
+  "physical_package_sha256": "d08e05a926d293c81869b8cdbd2bb5afffe1ffff873f008d707212558b3ab891",
+  "return_ifc_sha256": "0ce94ae43c15ed656e83e890b8945b2bf319166c93d823bfb6f8510c0cae2461",
+  "counts": {
+    "analysis_only": 0,
+    "connections": 636,
+    "interfaces": 0,
+    "joint_dispositions": 520,
+    "joints": 1156,
+    "materials": 7,
+    "members": 442,
+    "openings": 64,
+    "panels": 197,
+    "profiles": 8,
+    "record_dispositions": 0
+  },
+  "limits": [
+    "Existing own-output package with independent geometry/data checks; not a fresh analysis, engineering certification or fabrication acceptance.",
+    "Base slabs and explicitly existing host context are outside the new elevated steel design comparison and remain in the original architectural IFC.",
+    "Input fixtures are synthetic; no native Revit application acceptance is claimed."
+  ],
+  "key": "cfs1",
+  "check_binding": {
+    "checker": "72bc7bb6c45509ef76ab60a17ace2f500637d5e358138bceece3d15121a72278",
+    "algorithms": "972e237fce8421ffa6b4be2f39cba5420bedfe1eed870a3f83934780b1eb33c4",
+    "returned_ifc": "0ce94ae43c15ed656e83e890b8945b2bf319166c93d823bfb6f8510c0cae2461"
+  }
+}

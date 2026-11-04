@@ -1,0 +1,24 @@
+{
+  "case": "cfs13",
+  "key": "cfs13",
+  "module": "CFS",
+  "title": "Type II WSP walls",
+  "project": "WFRESH61_cfs13_20261103",
+  "source_run_status": "error",
+  "primary": true,
+  "files": {
+    "design/bim_request.json": "2d36da9031763acae05ac408c39d8c83c0acf7bf394b5d292da87f6d06e7a9cf",
+    "architectural_input.json": "7c22cc4b3600064fe35e0c236e1f9a6429db3a3065882460a30538b4aaddaf8d",
+    "architectural_handoff.txt": "23ca350bae5f86e2a3d308a063aa316438a4b8f63382e06daedfa309bd7eeb9e"
+  },
+  "job_exists": true,
+  "completion_problems": [
+    "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+  ],
+  "current_completion_gate_passed": false,
+  "package_present": false,
+  "missing_outputs": [
+    "cfg.py",
+    "design/bim_package.json"
+  ]
+}

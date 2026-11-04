@@ -1,0 +1,14 @@
+{
+  "key": "hr31",
+  "variant": "saved",
+  "status": "passed",
+  "binding": {
+    "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+    "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+    "source_ifc_sha256": "99dfeba83d973f5dce3508de0fb508e4abb95f1e643f2e63e966f144184876b1",
+    "returned_ifc_sha256": "10312dc60e19e2841ae25ab0fecc04556d436e1026b95a79b8453f62933467fe"
+  },
+  "declared_findings_retained": 0,
+  "geometry_builder_unchanged": true,
+  "exporter_unchanged": false
+}

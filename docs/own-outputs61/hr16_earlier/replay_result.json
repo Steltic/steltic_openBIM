@@ -1,0 +1,62 @@
+{
+  "key": "hr16_earlier",
+  "case": "hr16",
+  "status": "exported",
+  "producer": "343e0ad6cca528ecb30d07408224dca3597451c6",
+  "package_sha256": "925edc565ba8d4196767c0dc696f524d3d321024ea92cfa4274cbc510dbe2ea7",
+  "source_files_unchanged": true,
+  "original_recorded_package_unchanged": true,
+  "stored_readiness": "needs_input",
+  "findings": [
+    {
+      "code": "physical_opening_workline",
+      "entity_ids": [
+        "M-123",
+        "OPEN-gym-clear",
+        "SLAB-L3"
+      ],
+      "message": "Member worklines cross a declared opening; coordinate the framing and then check full section and connection clearance; resolve the physical declaration before claiming readiness",
+      "severity": "needs_input"
+    },
+    {
+      "code": "physical_remote_part",
+      "entity_ids": [
+        "C-BASE-W14X132",
+        "C-BASE-W14X132-plate",
+        "C-BASE-W14X176",
+        "C-BASE-W14X176-plate",
+        "C-BASE-W14X257",
+        "C-BASE-W14X257-plate",
+        "C-SH-W21",
+        "C-SH-W21-plate",
+        "J-1",
+        "J-2",
+        "J-41",
+        "J-56"
+      ],
+      "message": "Connection box parts are over six feet from their assigned joint; resolve the physical declaration before claiming readiness",
+      "severity": "needs_input"
+    }
+  ],
+  "physical_counts": {
+    "analysis_only": 0,
+    "connections": 13,
+    "interfaces": 2,
+    "joint_dispositions": 75,
+    "joints": 83,
+    "materials": 5,
+    "members": 140,
+    "openings": 1,
+    "panels": 4,
+    "profiles": 16,
+    "record_dispositions": 6
+  },
+  "connection_parts": 4,
+  "design_records": 28,
+  "seconds": 1.378591537475586,
+  "llm_calls": 0,
+  "redesign": false,
+  "analysis_solve": false,
+  "drawings": false,
+  "supplements": false
+}

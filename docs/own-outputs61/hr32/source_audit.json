@@ -1,0 +1,24 @@
+{
+  "case": "hr32",
+  "key": "hr32",
+  "module": "HR",
+  "title": "Existing + addition",
+  "project": "WFRESH61_hr32_20261103",
+  "source_run_status": "error",
+  "primary": true,
+  "files": {
+    "design/bim_request.json": "bec10f384b56e9256bedfcc3e04a63b0da92e0f2f98cfe7731d9db3ae53856f9",
+    "architectural_input.json": "ab4e1ae3563ea1b237af7c3a6612827391ec0359081f99c5257e4097f6e2a8db",
+    "architectural_handoff.txt": "392eebb64e707bbdc359afe99b7d2c3579ca2f2bceae5f9ca2c89c2a6146130c"
+  },
+  "job_exists": true,
+  "completion_problems": [
+    "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+  ],
+  "current_completion_gate_passed": false,
+  "package_present": false,
+  "missing_outputs": [
+    "cfg.py",
+    "design/bim_package.json"
+  ]
+}

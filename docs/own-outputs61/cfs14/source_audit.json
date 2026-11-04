@@ -1,0 +1,24 @@
+{
+  "case": "cfs14",
+  "key": "cfs14",
+  "module": "CFS",
+  "title": "Strap X + WSP Y",
+  "project": "WFRESH61_cfs14_20261103",
+  "source_run_status": "error",
+  "primary": true,
+  "files": {
+    "design/bim_request.json": "b70605d3c0adc876592e8d14eda9410090cd1cee23dc0e209779e58af780a92a",
+    "architectural_input.json": "27c3f9161eab0f59dbf37eca2d3f7b9775928818aa805974bfbc69cc439f5560",
+    "architectural_handoff.txt": "b2baf7851555c03274a33924be0a9789773b0c83685b49fa2150b1af157754a7"
+  },
+  "job_exists": true,
+  "completion_problems": [
+    "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+  ],
+  "current_completion_gate_passed": false,
+  "package_present": false,
+  "missing_outputs": [
+    "cfg.py",
+    "design/bim_package.json"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "key": "hr31_earlier",
+  "status": "unverifiable_input",
+  "reason": "No original architectural handoff matches the source package identity.",
+  "check_binding": {
+    "checker": "72bc7bb6c45509ef76ab60a17ace2f500637d5e358138bceece3d15121a72278",
+    "algorithms": "972e237fce8421ffa6b4be2f39cba5420bedfe1eed870a3f83934780b1eb33c4",
+    "returned_ifc": "780ca5e8b8d481fe9da96a607f22ada6be9751eb5df59d5c24366f2b9bd273c0"
+  }
+}

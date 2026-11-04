@@ -1,0 +1,57 @@
+{
+  "key": "cfs6",
+  "case": "cfs6",
+  "status": "exported",
+  "producer": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+  "package_sha256": "553c11c69f3d5c143937c0ca667bd987807317dedab440a9628ff8b14f580c6d",
+  "source_files_unchanged": true,
+  "original_recorded_package_unchanged": true,
+  "stored_readiness": "needs_input",
+  "findings": [
+    {
+      "code": "connection_selected_family",
+      "count": 1,
+      "entity_ids": [
+        "connections/conn-collector-splice"
+      ],
+      "examples": [
+        {
+          "bound_entity_ids": [
+            "conn-hd-X-X_LEG_M1",
+            "conn-hd-X-X_LEG_S"
+          ],
+          "design_record_id": "connections/conn-collector-splice",
+          "missing_component_categories": [
+            "bolt",
+            "screw"
+          ],
+          "returned_part_kinds": "rod anchor plate rod anchor plate",
+          "selected_components": "3/4-in. gusset plates with (12) No.12 screws per side + 7/8-in. through bolt"
+        }
+      ],
+      "message": "A selected connection family has no corresponding located component categories in its bound entities; a typical coverage note alone does not place its hardware",
+      "severity": "needs_input"
+    }
+  ],
+  "physical_counts": {
+    "analysis_only": 0,
+    "connections": 7100,
+    "interfaces": 1,
+    "joint_dispositions": 8362,
+    "joints": 8390,
+    "materials": 6,
+    "members": 4195,
+    "openings": 145,
+    "panels": 505,
+    "profiles": 5,
+    "record_dispositions": 92
+  },
+  "connection_parts": 14186,
+  "design_records": 214,
+  "seconds": 18.563751935958862,
+  "llm_calls": 0,
+  "redesign": false,
+  "analysis_solve": false,
+  "drawings": false,
+  "supplements": false
+}

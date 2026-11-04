@@ -1,0 +1,24 @@
+{
+  "case": "cfs30",
+  "key": "cfs30",
+  "module": "CFS",
+  "title": "Propped CFS portal",
+  "project": "WFRESH61_cfs30_20261103",
+  "source_run_status": "error",
+  "primary": true,
+  "files": {
+    "design/bim_request.json": "8ac7d4d4f3ec521fa284d8410ff9156e886c88813d81bb6f3d328cdf0363fe80",
+    "architectural_input.json": "ef81f1fc014445b85df8514f6d29dd055d29806b26c55c16b0c5444d8fd24367",
+    "architectural_handoff.txt": "bdd95653b407e9ac533e987c1e970a58683b1e71db96b8d907b280eb551cde74"
+  },
+  "job_exists": true,
+  "completion_problems": [
+    "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+  ],
+  "current_completion_gate_passed": false,
+  "package_present": false,
+  "missing_outputs": [
+    "cfg.py",
+    "design/bim_package.json"
+  ]
+}

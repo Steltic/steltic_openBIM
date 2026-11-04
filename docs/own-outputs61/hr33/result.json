@@ -1,0 +1,61 @@
+{
+  "case": "hr33",
+  "key": "hr33",
+  "title": "IMF / OCBF crane bay",
+  "module": "HR",
+  "primary": true,
+  "source_run_status": "error",
+  "original_package_present": true,
+  "original_native_completion_passed": false,
+  "producer_completion_problems": [
+    "the sanity results are STALE: cfg.py changed after the last pipeline.design_and_report run -- re-run it so drift/theta/model checks reflect the delivered model"
+  ],
+  "saved_readiness": "ready",
+  "original_validation": "ready",
+  "original_freshness": "ready",
+  "changed_recorded_files": [],
+  "native_reexport": "exported",
+  "native_reexport_readiness": "ready",
+  "native_reexport_finding_codes": [],
+  "exporter_revision": "343e0ad6cca528ecb30d07408224dca3597451c6",
+  "original_producer_revision": null,
+  "variants": {
+    "saved": {
+      "transport": "passed",
+      "source_validation": "ready",
+      "source_finding_codes": [],
+      "architectural_comparison": "passed",
+      "comparison_issue_codes": [],
+      "products_compared": 466,
+      "entities_compared": 6257,
+      "package_sha256": "e0f025fc9eca5eb76203afdf2326dabaa893f4d5bf22d351db44cca8bdf48fcb",
+      "source_ifc_sha256": "658e1428c2af46e48e0762c4169486af78f6bb2d0e1e42fd075513e8c6785ecb",
+      "returned_ifc_sha256": "6005580c5f66b69b7a512d0f3e15889ac47304f8dfe4b12686b515c2cebd0b6d",
+      "source_files_unchanged": true,
+      "schema_errors": [],
+      "import_readiness_verified": true,
+      "error": null,
+      "stage": null
+    },
+    "replay": {
+      "transport": "passed",
+      "source_validation": "ready",
+      "source_finding_codes": [],
+      "architectural_comparison": "passed",
+      "comparison_issue_codes": [],
+      "products_compared": 466,
+      "entities_compared": 6257,
+      "package_sha256": "256113ccd6c9b14a564e7ca4fc539faba2b821a8e73b00cc91ffbc7d2b5e2d27",
+      "source_ifc_sha256": "41f4b07c5165f3ce69fac8768d8f87a0b92f96ed8ceb0246b772ef1a00d480a8",
+      "returned_ifc_sha256": "6ea05214d6dedd5252cee683247c42e32c6cad68eb8a4d96928d0ddb57eb6252",
+      "source_files_unchanged": true,
+      "schema_errors": [],
+      "import_readiness_verified": true,
+      "error": null,
+      "stage": null
+    }
+  },
+  "status": "reexport_checks_passed_producer_not_complete",
+  "saved_job_acceptance": false,
+  "reexport_model_checks_passed": true
+}

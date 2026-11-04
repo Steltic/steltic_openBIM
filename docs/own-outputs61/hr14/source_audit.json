@@ -1,0 +1,24 @@
+{
+  "case": "hr14",
+  "key": "hr14",
+  "module": "HR",
+  "title": "EBF",
+  "project": "WFRESH61_hr14_20261103",
+  "source_run_status": "error",
+  "primary": true,
+  "files": {
+    "design/bim_request.json": "6333a7c14c982010f32bf8fff6449969053aab41b87513318888ffba278d5b3e",
+    "architectural_input.json": "9c0134661fd5185c981644c3a23bacd84b01f62b9f48738b83d41f8cfbde2761",
+    "architectural_handoff.txt": "8ad029c8581bf02713184fd81bc3a3455a563942010dd841e76e3f09075aa1b6"
+  },
+  "job_exists": true,
+  "completion_problems": [
+    "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+  ],
+  "current_completion_gate_passed": false,
+  "package_present": false,
+  "missing_outputs": [
+    "cfg.py",
+    "design/bim_package.json"
+  ]
+}

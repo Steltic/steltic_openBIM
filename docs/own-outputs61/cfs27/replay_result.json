@@ -1,0 +1,1291 @@
+{
+  "key": "cfs27",
+  "case": "cfs27",
+  "status": "exported",
+  "producer": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+  "package_sha256": "29483f13567805401593088b6f482ea4eb2a69787f970ed5d4ad2fde4e30f9fd",
+  "source_files_unchanged": true,
+  "original_recorded_package_unchanged": true,
+  "stored_readiness": "needs_input",
+  "findings": [
+    {
+      "code": "connection_duplicate_parts",
+      "count": 1190,
+      "entity_ids": [
+        "conn-brace-col-frame-01-kb-L",
+        "conn-brace-col-frame-01-kb-R",
+        "conn-brace-col-frame-02-kb-L",
+        "conn-brace-col-frame-02-kb-R",
+        "conn-brace-col-frame-03-kb-L",
+        "conn-brace-col-frame-03-kb-R",
+        "conn-brace-col-frame-04-kb-L",
+        "conn-brace-col-frame-04-kb-R",
+        "conn-brace-col-frame-05-kb-L",
+        "conn-brace-col-frame-05-kb-R",
+        "conn-brace-col-frame-06-kb-L",
+        "conn-brace-col-frame-06-kb-R",
+        "conn-brace-col-frame-07-kb-L",
+        "conn-brace-col-frame-07-kb-R",
+        "conn-brace-col-frame-08-kb-L",
+        "conn-brace-col-frame-08-kb-R",
+        "conn-brace-col-frame-09-kb-L",
+        "conn-brace-col-frame-09-kb-R",
+        "conn-brace-col-frame-10-kb-L",
+        "conn-brace-col-frame-10-kb-R",
+        "conn-brace-col-frame-11-kb-L",
+        "conn-brace-col-frame-11-kb-R",
+        "conn-brace-col-frame-12-kb-L",
+        "conn-brace-col-frame-12-kb-R",
+        "conn-brace-col-frame-13-kb-L",
+        "conn-brace-col-frame-13-kb-R",
+        "conn-brace-col-frame-14-kb-L",
+        "conn-brace-col-frame-14-kb-R",
+        "conn-brace-raf-frame-01-kb-L",
+        "conn-brace-raf-frame-01-kb-R",
+        "conn-brace-raf-frame-02-kb-L",
+        "conn-brace-raf-frame-02-kb-R",
+        "conn-brace-raf-frame-03-kb-L",
+        "conn-brace-raf-frame-03-kb-R",
+        "conn-brace-raf-frame-04-kb-L",
+        "conn-brace-raf-frame-04-kb-R",
+        "conn-brace-raf-frame-05-kb-L",
+        "conn-brace-raf-frame-05-kb-R",
+        "conn-brace-raf-frame-06-kb-L",
+        "conn-brace-raf-frame-06-kb-R",
+        "conn-brace-raf-frame-07-kb-L",
+        "conn-brace-raf-frame-07-kb-R",
+        "conn-brace-raf-frame-08-kb-L",
+        "conn-brace-raf-frame-08-kb-R",
+        "conn-brace-raf-frame-09-kb-L",
+        "conn-brace-raf-frame-09-kb-R",
+        "conn-brace-raf-frame-10-kb-L",
+        "conn-brace-raf-frame-10-kb-R",
+        "conn-brace-raf-frame-11-kb-L",
+        "conn-brace-raf-frame-11-kb-R",
+        "conn-brace-raf-frame-12-kb-L",
+        "conn-brace-raf-frame-12-kb-R",
+        "conn-brace-raf-frame-13-kb-L",
+        "conn-brace-raf-frame-13-kb-R",
+        "conn-brace-raf-frame-14-kb-L",
+        "conn-brace-raf-frame-14-kb-R",
+        "conn-f01-L",
+        "conn-f01-R",
+        "conn-f01-apex",
+        "conn-f01-base-L",
+        "conn-f01-base-R",
+        "conn-f02-L",
+        "conn-f02-R",
+        "conn-f02-apex",
+        "conn-f02-base-L",
+        "conn-f02-base-R",
+        "conn-f03-L",
+        "conn-f03-R",
+        "conn-f03-apex",
+        "conn-f03-base-L",
+        "conn-f03-base-R",
+        "conn-f04-L",
+        "conn-f04-R",
+        "conn-f04-apex",
+        "conn-f04-base-L",
+        "conn-f04-base-R",
+        "conn-f05-L",
+        "conn-f05-R",
+        "conn-f05-apex",
+        "conn-f05-base-L",
+        "conn-f05-base-R",
+        "conn-f06-L",
+        "conn-f06-R",
+        "conn-f06-apex",
+        "conn-f06-base-L",
+        "conn-f06-base-R",
+        "conn-f07-L",
+        "conn-f07-R",
+        "conn-f07-apex",
+        "conn-f07-base-L",
+        "conn-f07-base-R",
+        "conn-f08-L",
+        "conn-f08-R",
+        "conn-f08-apex",
+        "conn-f08-base-L",
+        "conn-f08-base-R",
+        "conn-f09-L",
+        "conn-f09-R",
+        "conn-f09-apex",
+        "conn-f09-base-L",
+        "conn-f09-base-R",
+        "conn-f10-L",
+        "conn-f10-R",
+        "conn-f10-apex",
+        "conn-f10-base-L",
+        "conn-f10-base-R",
+        "conn-f11-L",
+        "conn-f11-R",
+        "conn-f11-apex",
+        "conn-f11-base-L",
+        "conn-f11-base-R",
+        "conn-f12-L",
+        "conn-f12-R",
+        "conn-f12-apex",
+        "conn-f12-base-L",
+        "conn-f12-base-R",
+        "conn-f13-L",
+        "conn-f13-R",
+        "conn-f13-apex",
+        "conn-f13-base-L",
+        "conn-f13-base-R",
+        "conn-f14-L",
+        "conn-f14-R",
+        "conn-f14-apex",
+        "conn-f14-base-L",
+        "conn-f14-base-R",
+        "conn-girt-end-j-0006",
+        "conn-girt-end-j-0085",
+        "conn-girt-end-j-0149",
+        "conn-girt-end-j-0150",
+        "conn-girt-end-j-0151",
+        "conn-girt-end-j-0154",
+        "conn-girt-end-j-0155",
+        "conn-girt-end-j-0156",
+        "conn-girt-end-j-0291",
+        "conn-girt-end-j-0292",
+        "conn-girt-end-j-0293",
+        "conn-girt-end-j-0296",
+        "conn-girt-end-j-0297",
+        "conn-girt-end-j-0298",
+        "conn-girt-end-j-0368",
+        "conn-girt-end-j-0447",
+        "conn-jamb-header-j-0152",
+        "conn-jamb-header-j-0157",
+        "conn-jamb-header-j-0294",
+        "conn-jamb-header-j-0299",
+        "conn-lap-j-0091",
+        "conn-lap-j-0092",
+        "conn-lap-j-0093",
+        "conn-lap-j-0094",
+        "conn-lap-j-0095",
+        "conn-lap-j-0096",
+        "conn-lap-j-0097",
+        "conn-lap-j-0098",
+        "conn-lap-j-0099",
+        "conn-lap-j-0100",
+        "conn-lap-j-0101",
+        "conn-lap-j-0102",
+        "conn-lap-j-0113",
+        "conn-lap-j-0114",
+        "conn-lap-j-0115",
+        "conn-lap-j-0116",
+        "conn-lap-j-0117",
+        "conn-lap-j-0118",
+        "conn-lap-j-0119",
+        "conn-lap-j-0120",
+        "conn-lap-j-0121",
+        "conn-lap-j-0122",
+        "conn-lap-j-0123",
+        "conn-lap-j-0124",
+        "conn-lap-j-0133",
+        "conn-lap-j-0134",
+        "conn-lap-j-0135",
+        "conn-lap-j-0136",
+        "conn-lap-j-0137",
+        "conn-lap-j-0138",
+        "conn-lap-j-0139",
+        "conn-lap-j-0140",
+        "conn-lap-j-0141",
+        "conn-lap-j-0142",
+        "conn-lap-j-0143",
+        "conn-lap-j-0144",
+        "conn-lap-j-0177",
+        "conn-lap-j-0178",
+        "conn-lap-j-0179",
+        "conn-lap-j-0180",
+        "conn-lap-j-0181",
+        "conn-lap-j-0182",
+        "conn-lap-j-0183",
+        "conn-lap-j-0184",
+        "conn-lap-j-0185",
+        "conn-lap-j-0186",
+        "conn-lap-j-0187",
+        "conn-lap-j-0188",
+        "conn-lap-j-0199",
+        "conn-lap-j-0200",
+        "conn-lap-j-0201",
+        "conn-lap-j-0202",
+        "conn-lap-j-0203",
+        "conn-lap-j-0204",
+        "conn-lap-j-0205",
+        "conn-lap-j-0206",
+        "conn-lap-j-0207",
+        "conn-lap-j-0208",
+        "conn-lap-j-0209",
+        "conn-lap-j-0210",
+        "conn-lap-j-0237",
+        "conn-lap-j-0238",
+        "conn-lap-j-0239",
+        "conn-lap-j-0240",
+        "conn-lap-j-0241",
+        "conn-lap-j-0242",
+        "conn-lap-j-0243",
+        "conn-lap-j-0244",
+        "conn-lap-j-0245",
+        "conn-lap-j-0246",
+        "conn-lap-j-0247",
+        "conn-lap-j-0248",
+        "conn-lap-j-0259",
+        "conn-lap-j-0260",
+        "conn-lap-j-0261",
+        "conn-lap-j-0262",
+        "conn-lap-j-0263",
+        "conn-lap-j-0264",
+        "conn-lap-j-0265",
+        "conn-lap-j-0266",
+        "conn-lap-j-0267",
+        "conn-lap-j-0268",
+        "conn-lap-j-0269",
+        "conn-lap-j-0270",
+        "conn-lap-j-0303",
+        "conn-lap-j-0304",
+        "conn-lap-j-0305",
+        "conn-lap-j-0306",
+        "conn-lap-j-0307",
+        "conn-lap-j-0308",
+        "conn-lap-j-0309",
+        "conn-lap-j-0310",
+        "conn-lap-j-0311",
+        "conn-lap-j-0312",
+        "conn-lap-j-0313",
+        "conn-lap-j-0314",
+        "conn-lap-j-0323",
+        "conn-lap-j-0324",
+        "conn-lap-j-0325",
+        "conn-lap-j-0326",
+        "conn-lap-j-0327",
+        "conn-lap-j-0328",
+        "conn-lap-j-0329",
+        "conn-lap-j-0330",
+        "conn-lap-j-0331",
+        "conn-lap-j-0332",
+        "conn-lap-j-0333",
+        "conn-lap-j-0334",
+        "conn-lap-j-0345",
+        "conn-lap-j-0346",
+        "conn-lap-j-0347",
+        "conn-lap-j-0348",
+        "conn-lap-j-0349",
+        "conn-lap-j-0350",
+        "conn-lap-j-0351",
+        "conn-lap-j-0352",
+        "conn-lap-j-0353",
+        "conn-lap-j-0354",
+        "conn-lap-j-0355",
+        "conn-lap-j-0356",
+        "conn-post-base-j-0148",
+        "conn-post-base-j-0153",
+        "conn-post-base-j-0216",
+        "conn-post-base-j-0230",
+        "conn-post-base-j-0290",
+        "conn-post-base-j-0295",
+        "conn-purlin-end-j-0090",
+        "conn-purlin-end-j-0103",
+        "conn-purlin-end-j-0112",
+        "conn-purlin-end-j-0125",
+        "conn-purlin-end-j-0132",
+        "conn-purlin-end-j-0147",
+        "conn-purlin-end-j-0176",
+        "conn-purlin-end-j-0189",
+        "conn-purlin-end-j-0198",
+        "conn-purlin-end-j-0211",
+        "conn-purlin-end-j-0236",
+        "conn-purlin-end-j-0249",
+        "conn-purlin-end-j-0258",
+        "conn-purlin-end-j-0271",
+        "conn-purlin-end-j-0302",
+        "conn-purlin-end-j-0317",
+        "conn-purlin-end-j-0322",
+        "conn-purlin-end-j-0335",
+        "conn-purlin-end-j-0344",
+        "conn-purlin-end-j-0357",
+        "conn-splice-j-0001",
+        "conn-splice-j-0003",
+        "conn-splice-j-0004",
+        "conn-splice-j-0008",
+        "conn-splice-j-0010",
+        "conn-splice-j-0011",
+        "conn-splice-j-0014",
+        "conn-splice-j-0016",
+        "conn-splice-j-0017",
+        "conn-splice-j-0020",
+        "conn-splice-j-0022",
+        "conn-splice-j-0023",
+        "conn-splice-j-0026",
+        "conn-splice-j-0028",
+        "conn-splice-j-0029",
+        "conn-splice-j-0032",
+        "conn-splice-j-0034",
+        "conn-splice-j-0035",
+        "conn-splice-j-0038",
+        "conn-splice-j-0040",
+        "conn-splice-j-0041",
+        "conn-splice-j-0044",
+        "conn-splice-j-0046",
+        "conn-splice-j-0047",
+        "conn-splice-j-0050",
+        "conn-splice-j-0052",
+        "conn-splice-j-0053",
+        "conn-splice-j-0056",
+        "conn-splice-j-0058",
+        "conn-splice-j-0059",
+        "conn-splice-j-0062",
+        "conn-splice-j-0064",
+        "conn-splice-j-0065",
+        "conn-splice-j-0068",
+        "conn-splice-j-0070",
+        "conn-splice-j-0071",
+        "conn-splice-j-0074",
+        "conn-splice-j-0076",
+        "conn-splice-j-0077",
+        "conn-splice-j-0080",
+        "conn-splice-j-0082",
+        "conn-splice-j-0083",
+        "conn-splice-j-0363",
+        "conn-splice-j-0365",
+        "conn-splice-j-0366",
+        "conn-splice-j-0370",
+        "conn-splice-j-0372",
+        "conn-splice-j-0373",
+        "conn-splice-j-0376",
+        "conn-splice-j-0378",
+        "conn-splice-j-0379",
+        "conn-splice-j-0382",
+        "conn-splice-j-0384",
+        "conn-splice-j-0385",
+        "conn-splice-j-0388",
+        "conn-splice-j-0390",
+        "conn-splice-j-0391",
+        "conn-splice-j-0394",
+        "conn-splice-j-0396",
+        "conn-splice-j-0397",
+        "conn-splice-j-0400",
+        "conn-splice-j-0402",
+        "conn-splice-j-0403",
+        "conn-splice-j-0406",
+        "conn-splice-j-0408",
+        "conn-splice-j-0409",
+        "conn-splice-j-0412",
+        "conn-splice-j-0414",
+        "conn-splice-j-0415",
+        "conn-splice-j-0418",
+        "conn-splice-j-0420",
+        "conn-splice-j-0421",
+        "conn-splice-j-0424",
+        "conn-splice-j-0426",
+        "conn-splice-j-0427",
+        "conn-splice-j-0430",
+        "conn-splice-j-0432",
+        "conn-splice-j-0433",
+        "conn-splice-j-0436",
+        "conn-splice-j-0438",
+        "conn-splice-j-0439",
+        "conn-splice-j-0442",
+        "conn-splice-j-0444",
+        "conn-splice-j-0445",
+        "conn-stud-j-0086",
+        "conn-stud-j-0087",
+        "conn-stud-j-0088",
+        "conn-stud-j-0089",
+        "conn-stud-j-0104",
+        "conn-stud-j-0105",
+        "conn-stud-j-0106",
+        "conn-stud-j-0107",
+        "conn-stud-j-0108",
+        "conn-stud-j-0109",
+        "conn-stud-j-0110",
+        "conn-stud-j-0111",
+        "conn-stud-j-0126",
+        "conn-stud-j-0127",
+        "conn-stud-j-0128",
+        "conn-stud-j-0129",
+        "conn-stud-j-0130",
+        "conn-stud-j-0131",
+        "conn-stud-j-0145",
+        "conn-stud-j-0146",
+        "conn-stud-j-0158",
+        "conn-stud-j-0159",
+        "conn-stud-j-0160",
+        "conn-stud-j-0161",
+        "conn-stud-j-0190",
+        "conn-stud-j-0191",
+        "conn-stud-j-0192",
+        "conn-stud-j-0193",
+        "conn-stud-j-0194",
+        "conn-stud-j-0195",
+        "conn-stud-j-0196",
+        "conn-stud-j-0197",
+        "conn-stud-j-0212",
+        "conn-stud-j-0213",
+        "conn-stud-j-0214",
+        "conn-stud-j-0215",
+        "conn-stud-j-0232",
+        "conn-stud-j-0233",
+        "conn-stud-j-0234",
+        "conn-stud-j-0235",
+        "conn-stud-j-0250",
+        "conn-stud-j-0251",
+        "conn-stud-j-0252",
+        "conn-stud-j-0253",
+        "conn-stud-j-0254",
+        "conn-stud-j-0255",
+        "conn-stud-j-0256",
+        "conn-stud-j-0257",
+        "conn-stud-j-0286",
+        "conn-stud-j-0287",
+        "conn-stud-j-0288",
+        "conn-stud-j-0289",
+        "conn-stud-j-0300",
+        "conn-stud-j-0301",
+        "conn-stud-j-0315",
+        "conn-stud-j-0316",
+        "conn-stud-j-0318",
+        "conn-stud-j-0319",
+        "conn-stud-j-0320",
+        "conn-stud-j-0321",
+        "conn-stud-j-0336",
+        "conn-stud-j-0337",
+        "conn-stud-j-0338",
+        "conn-stud-j-0339",
+        "conn-stud-j-0340",
+        "conn-stud-j-0341",
+        "conn-stud-j-0342",
+        "conn-stud-j-0343",
+        "conn-stud-j-0358",
+        "conn-stud-j-0359",
+        "conn-stud-j-0360",
+        "conn-stud-j-0361"
+      ],
+      "examples": [
+        {
+          "connection_id": "conn-f01-L",
+          "kind": "gusset_plate",
+          "part_ids": [
+            "f01-L-gus-A",
+            "f01-L-gus-B"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-L",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-L-bolt-01",
+            "f01-L-bolt-02"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-L",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-L-bolt-01",
+            "f01-L-bolt-03"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-L",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-L-bolt-01",
+            "f01-L-bolt-04"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-L",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-L-bolt-01",
+            "f01-L-bolt-05"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-L",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-L-bolt-01",
+            "f01-L-bolt-06"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-L",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-L-bolt-01",
+            "f01-L-bolt-07"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-L",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-L-bolt-01",
+            "f01-L-bolt-08"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-L",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-L-bolt-01",
+            "f01-L-bolt-09"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-L",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-L-bolt-01",
+            "f01-L-bolt-10"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-L",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-L-bolt-01",
+            "strap-strap-W-1-B-b1"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-L",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-L-bolt-01",
+            "strap-strap-W-1-B-b2"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-L",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-L-bolt-01",
+            "strap-strap-W-1-B-b3"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-L",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-L-bolt-01",
+            "strap-strap-W-1-B-b4"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-L",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-L-bolt-01",
+            "strap-strap-W-1-B-b5"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-L",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-L-bolt-01",
+            "strap-strap-W-1-B-b6"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-R",
+          "kind": "gusset_plate",
+          "part_ids": [
+            "f01-R-gus-A",
+            "f01-R-gus-B"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-R",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-R-bolt-01",
+            "f01-R-bolt-02"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-R",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-R-bolt-01",
+            "f01-R-bolt-03"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-R",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-R-bolt-01",
+            "f01-R-bolt-04"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-R",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-R-bolt-01",
+            "f01-R-bolt-05"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-R",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-R-bolt-01",
+            "f01-R-bolt-06"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-R",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-R-bolt-01",
+            "f01-R-bolt-07"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-R",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-R-bolt-01",
+            "f01-R-bolt-08"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-R",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-R-bolt-01",
+            "f01-R-bolt-09"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-R",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-R-bolt-01",
+            "f01-R-bolt-10"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-R",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-R-bolt-01",
+            "strap-strap-E-1-B-b1"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-R",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-R-bolt-01",
+            "strap-strap-E-1-B-b2"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-R",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-R-bolt-01",
+            "strap-strap-E-1-B-b3"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-R",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-R-bolt-01",
+            "strap-strap-E-1-B-b4"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-R",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-R-bolt-01",
+            "strap-strap-E-1-B-b5"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-R",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-R-bolt-01",
+            "strap-strap-E-1-B-b6"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-apex",
+          "kind": "gusset_plate",
+          "part_ids": [
+            "f01-apex-gus-A",
+            "f01-apex-gus-B"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-apex",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-apex-bolt-01",
+            "f01-apex-bolt-02"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-apex",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-apex-bolt-01",
+            "f01-apex-bolt-03"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-apex",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-apex-bolt-01",
+            "f01-apex-bolt-04"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-apex",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-apex-bolt-01",
+            "f01-apex-bolt-05"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-apex",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-apex-bolt-01",
+            "f01-apex-bolt-06"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-apex",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-apex-bolt-01",
+            "f01-apex-bolt-07"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-apex",
+          "kind": "bolt",
+          "part_ids": [
+            "f01-apex-bolt-01",
+            "f01-apex-bolt-08"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-base-L",
+          "kind": "anchor_rod",
+          "part_ids": [
+            "f01-L-rod-1",
+            "f01-L-rod-2"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-base-L",
+          "kind": "bolt",
+          "part_ids": [
+            "strap-strap-W-1-A-b1",
+            "strap-strap-W-1-A-b2"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-base-L",
+          "kind": "bolt",
+          "part_ids": [
+            "strap-strap-W-1-A-b1",
+            "strap-strap-W-1-A-b3"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-base-L",
+          "kind": "bolt",
+          "part_ids": [
+            "strap-strap-W-1-A-b1",
+            "strap-strap-W-1-A-b4"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-base-L",
+          "kind": "bolt",
+          "part_ids": [
+            "strap-strap-W-1-A-b1",
+            "strap-strap-W-1-A-b5"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-base-L",
+          "kind": "bolt",
+          "part_ids": [
+            "strap-strap-W-1-A-b1",
+            "strap-strap-W-1-A-b6"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-base-R",
+          "kind": "anchor_rod",
+          "part_ids": [
+            "f01-R-rod-1",
+            "f01-R-rod-2"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-base-R",
+          "kind": "bolt",
+          "part_ids": [
+            "strap-strap-E-1-A-b1",
+            "strap-strap-E-1-A-b2"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-base-R",
+          "kind": "bolt",
+          "part_ids": [
+            "strap-strap-E-1-A-b1",
+            "strap-strap-E-1-A-b3"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-base-R",
+          "kind": "bolt",
+          "part_ids": [
+            "strap-strap-E-1-A-b1",
+            "strap-strap-E-1-A-b4"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-base-R",
+          "kind": "bolt",
+          "part_ids": [
+            "strap-strap-E-1-A-b1",
+            "strap-strap-E-1-A-b5"
+          ]
+        },
+        {
+          "connection_id": "conn-f01-base-R",
+          "kind": "bolt",
+          "part_ids": [
+            "strap-strap-E-1-A-b1",
+            "strap-strap-E-1-A-b6"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-L",
+          "kind": "gusset_plate",
+          "part_ids": [
+            "f02-L-gus-A",
+            "f02-L-gus-B"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-L",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-L-bolt-01",
+            "f02-L-bolt-02"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-L",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-L-bolt-01",
+            "f02-L-bolt-03"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-L",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-L-bolt-01",
+            "f02-L-bolt-04"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-L",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-L-bolt-01",
+            "f02-L-bolt-05"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-L",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-L-bolt-01",
+            "f02-L-bolt-06"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-L",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-L-bolt-01",
+            "f02-L-bolt-07"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-L",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-L-bolt-01",
+            "f02-L-bolt-08"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-L",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-L-bolt-01",
+            "f02-L-bolt-09"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-L",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-L-bolt-01",
+            "f02-L-bolt-10"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-L",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-L-bolt-01",
+            "strap-strap-W-1-A-b1"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-L",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-L-bolt-01",
+            "strap-strap-W-1-A-b2"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-L",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-L-bolt-01",
+            "strap-strap-W-1-A-b3"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-L",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-L-bolt-01",
+            "strap-strap-W-1-A-b4"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-L",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-L-bolt-01",
+            "strap-strap-W-1-A-b5"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-L",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-L-bolt-01",
+            "strap-strap-W-1-A-b6"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-R",
+          "kind": "gusset_plate",
+          "part_ids": [
+            "f02-R-gus-A",
+            "f02-R-gus-B"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-R",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-R-bolt-01",
+            "f02-R-bolt-02"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-R",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-R-bolt-01",
+            "f02-R-bolt-03"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-R",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-R-bolt-01",
+            "f02-R-bolt-04"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-R",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-R-bolt-01",
+            "f02-R-bolt-05"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-R",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-R-bolt-01",
+            "f02-R-bolt-06"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-R",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-R-bolt-01",
+            "f02-R-bolt-07"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-R",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-R-bolt-01",
+            "f02-R-bolt-08"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-R",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-R-bolt-01",
+            "f02-R-bolt-09"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-R",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-R-bolt-01",
+            "f02-R-bolt-10"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-R",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-R-bolt-01",
+            "strap-strap-E-1-A-b1"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-R",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-R-bolt-01",
+            "strap-strap-E-1-A-b2"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-R",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-R-bolt-01",
+            "strap-strap-E-1-A-b3"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-R",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-R-bolt-01",
+            "strap-strap-E-1-A-b4"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-R",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-R-bolt-01",
+            "strap-strap-E-1-A-b5"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-R",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-R-bolt-01",
+            "strap-strap-E-1-A-b6"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-apex",
+          "kind": "gusset_plate",
+          "part_ids": [
+            "f02-apex-gus-A",
+            "f02-apex-gus-B"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-apex",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-apex-bolt-01",
+            "f02-apex-bolt-02"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-apex",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-apex-bolt-01",
+            "f02-apex-bolt-03"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-apex",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-apex-bolt-01",
+            "f02-apex-bolt-04"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-apex",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-apex-bolt-01",
+            "f02-apex-bolt-05"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-apex",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-apex-bolt-01",
+            "f02-apex-bolt-06"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-apex",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-apex-bolt-01",
+            "f02-apex-bolt-07"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-apex",
+          "kind": "bolt",
+          "part_ids": [
+            "f02-apex-bolt-01",
+            "f02-apex-bolt-08"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-base-L",
+          "kind": "anchor_rod",
+          "part_ids": [
+            "f02-L-rod-1",
+            "f02-L-rod-2"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-base-L",
+          "kind": "bolt",
+          "part_ids": [
+            "strap-strap-W-1-B-b1",
+            "strap-strap-W-1-B-b2"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-base-L",
+          "kind": "bolt",
+          "part_ids": [
+            "strap-strap-W-1-B-b1",
+            "strap-strap-W-1-B-b3"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-base-L",
+          "kind": "bolt",
+          "part_ids": [
+            "strap-strap-W-1-B-b1",
+            "strap-strap-W-1-B-b4"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-base-L",
+          "kind": "bolt",
+          "part_ids": [
+            "strap-strap-W-1-B-b1",
+            "strap-strap-W-1-B-b5"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-base-L",
+          "kind": "bolt",
+          "part_ids": [
+            "strap-strap-W-1-B-b1",
+            "strap-strap-W-1-B-b6"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-base-R",
+          "kind": "anchor_rod",
+          "part_ids": [
+            "f02-R-rod-1",
+            "f02-R-rod-2"
+          ]
+        },
+        {
+          "connection_id": "conn-f02-base-R",
+          "kind": "bolt",
+          "part_ids": [
+            "strap-strap-E-1-B-b1",
+            "strap-strap-E-1-B-b2"
+          ]
+        }
+      ],
+      "message": "Distinct component IDs repeat identical solid geometry inside the same assembly; resolve actual placement or duplicate emission, without dropping a required component",
+      "severity": "needs_input"
+    }
+  ],
+  "physical_counts": {
+    "analysis_only": 0,
+    "connections": 448,
+    "interfaces": 1,
+    "joint_dispositions": 0,
+    "joints": 448,
+    "materials": 5,
+    "members": 370,
+    "openings": 2,
+    "panels": 6,
+    "profiles": 10,
+    "record_dispositions": 0
+  },
+  "connection_parts": 1960,
+  "design_records": 106,
+  "seconds": 1.9264686107635498,
+  "llm_calls": 0,
+  "redesign": false,
+  "analysis_solve": false,
+  "drawings": false,
+  "supplements": false
+}

@@ -1,0 +1,24 @@
+{
+  "case": "hr10",
+  "key": "hr10",
+  "module": "HR",
+  "title": "Dual SMF + SCBF",
+  "project": "WFRESH61_hr10_20261103",
+  "source_run_status": "error",
+  "primary": true,
+  "files": {
+    "design/bim_request.json": "62373635b0e3ddb9d921da7d469e245b18edfb868d756a650474b0ce80dff041",
+    "architectural_input.json": "55c663e0d9c63708311d607e85c05f53d0fa881b1768f5fbd22874039b691fb0",
+    "architectural_handoff.txt": "f9143d861c624ae05e6104479f8ecc9366a1007791c71c7918d97706e97f81dd"
+  },
+  "job_exists": true,
+  "completion_problems": [
+    "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+  ],
+  "current_completion_gate_passed": false,
+  "package_present": false,
+  "missing_outputs": [
+    "cfg.py",
+    "design/bim_package.json"
+  ]
+}
