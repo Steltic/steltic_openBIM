@@ -95,7 +95,9 @@ def _export_source(directory,destination,source):
     status=state['source_status'] if structural else state['drawing_status']
     revision_properties={'PhysicalSourceRevision' if structural else 'DrawingRevision':state['revision']}
     from .validation import inspect_package
-    if inspect_package(package)['status']=='invalid':raise ValueError('The source contains invalid physical data')
+    source_validation=inspect_package(package)
+    if source_validation['status']=='invalid':raise ValueError('The source contains invalid physical data')
+    if structural and source_validation['status']=='needs_input':status='provisional'
     if fingerprint(package)!=state['source_model_sha256']:raise ValueError('The source fingerprint changed')
     recovered=state.get('representation')=='captured_source_worklines'
     if not structural and (directory/'design_model.json').is_file():
@@ -319,6 +321,8 @@ def _export_source(directory,destination,source):
     property_set(model,project,dict(SourceModelSHA256=state['source_model_sha256'],**revision_properties,Basis=basis,
         SupplementProvenance=state.get('supplement_provenance'),
         SourceModule=state.get('source_module'),SourceJob=state.get('source_job'),
+        SourceReadiness=source_validation['status'],SourceFindings=source_validation['findings'],
+        SourceFreshnessChecked=state.get('source_evidence',{}).get('source_freshness_checked',False),
         ReferenceSystem=reference or None,RequireConnectionParts=package.get('require_connection_parts',False),
         **({'SourceStatus':status} if structural else {'DrawingStatus':status}),
         OpenRequests=[dict(id=r['id'],proposal=r['proposal'],confirmed=r['confirmed']) for r in state['requests']],
@@ -340,7 +344,8 @@ def _export_source(directory,destination,source):
     reopened=ifcopenshell.open(str(destination))
     if len(reopened.by_type('IfcElement'))+len(reopened.by_type('IfcAnnotation'))!=len(objects):raise ValueError('IFC round-trip product count changed')
     return dict(schema='IFC4',source=source,**({'physical_revision':state['revision'],'source_job':state['source_job'],'source_module':state['source_module']} if structural else {'drawing_revision':state['revision']}),source_sha256=state['source_model_sha256'],
-        counts=counts,objects=objects,warnings=warnings,physical_checks=physical_checks,schema_errors=errors,mesh_templates=len(mesh_templates),shared_property_values=len(property_pool),sha256=hashlib.sha256(destination.read_bytes()).hexdigest(),
+        counts=counts,objects=objects,warnings=warnings,physical_checks=physical_checks,source_validation=source_validation,
+        source_evidence=state.get('source_evidence'),source_status=status,schema_errors=errors,mesh_templates=len(mesh_templates),shared_property_values=len(property_pool),sha256=hashlib.sha256(destination.read_bytes()).hexdigest(),
         limits=['Coordination IFC, not an editable Revit family library or a fabrication issue.',
                 'Panels are surfaces; their thickness is metadata. Valid coplanar openings cut explicitly related host panels, with source boundaries retained as annotations. Members are not cut. Unconfirmed proposals remain request metadata.',
                 'Unlocated connection assemblies are metadata only. Captured worklines remain reference axes where physical set-out is unknown.',

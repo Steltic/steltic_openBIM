@@ -77,16 +77,16 @@ class IFCStore:
             if old and body.get('revision')!=old[1]['revision']:
                 raise StaleRevision('The structural source changed. Refresh before importing.')
             module,job=body.get('module'),body.get('job')
-            package=read(self.jobs.path(module,job))
-            if not isinstance(package,dict) or package.get('module')!=module:
-                raise ValueError('The physical export does not match the selected module')
+            package,source_evidence=self.jobs.load_current(module,job)
             initial=initial_state(package,old[1]['revision']+1 if old else 1)
             if (old and old[1]['source_model_sha256']==fingerprint(package) and old[1]['source_job']==job and old[1]['source_module']==module
-                    and old[1]['source_readiness']==initial['source_readiness'] and old[1]['requests']==initial['requests']):
+                    and old[1]['source_readiness']==initial['source_readiness'] and old[1]['requests']==initial['requests']
+                    and old[1].get('source_evidence')==source_evidence):
                 return old[1]
             from .source_worklines import required
             state={k:initial[k] for k in ('revision','building_id','source_model_sha256','source_readiness','requests')}
             state.update(schema='steltic.ifc_physical_source',source_module=module,source_job=job,
+                         source_evidence=source_evidence,
                          source_status=initial['drawing_status'],
                          representation='captured_source_worklines' if required(package) else 'physical_geometry',
                          counts={k:len(v) for k,v in package['physical'].items() if isinstance(v,list)})

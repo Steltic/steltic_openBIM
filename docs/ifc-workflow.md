@@ -1,4 +1,4 @@
-# IFC workflow (0.8.30)
+# IFC workflow (0.8.31)
 
 Physical members with explicit rolled or HSS section labels must link to member calculation records for that same section. A record existing in the package does not by itself prove the link is correct. Custom profile aliases and built-up constituent calculations still require explicit review.
 
@@ -33,6 +33,10 @@ Download `hr_brief.txt` or `cfs_brief.txt`, then load it through the chosen modu
 The three fictional [architectural video examples](architect-video.md) cover a regular office, a stepped school and a gabled warehouse. Their preliminary OpenSees builds are model-creation checks; the separate fresh HR office run supplies the design/drawing/return-IFC example.
 
 ## Export
+
+Loading an HR/CFS job checks each source-file hash recorded by its exporter against that job's current files. Changed, missing or out-of-directory evidence rejects the new import without replacing an accepted revision. Re-export the physical package in its producer when inputs have changed; do not edit recorded hashes or use an old package as proof of the current job. Historical accepted snapshots stay exportable as historical revisions. Empty recorded-file lists are explicitly unverified.
+
+The export screen separates source completeness from IFC schema validity. Current `needs_input` findings appear alongside existing coordination requests and allow a provisional export of the supplied geometry. `SourceReadiness`, `SourceFindings` and `SourceFreshnessChecked` are retained on the IFC project's `Steltic_Coordination` property set. Export recomputes source readiness even for an older snapshot labelled ready. These checks do not run HR/CFS analysis or assert producer completion; original architectural agreement remains a separate comparison.
 
 Select a source in IFC export, click Generate IFC, then Download IFC. The export report records counts, geometry warnings, source/revision fingerprints and schema results. Outputs are retained under the project's `openbim/ifc/exports` directory, separate from drawing revisions.
 
