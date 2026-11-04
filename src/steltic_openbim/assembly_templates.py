@@ -689,7 +689,11 @@ def build_scene(model,package,c,subtype=''):
                 pts=[add(mul(v,r),add(mul(across,s),[0,yy,0])) for r in stations for s in offsets]
                 if sign>0:pts=[add(q,[0,.125,0]) for q in pts]
                 fast(f'F{face+1}-{n}',pts,[0,-sign,0],.25,.125+thick,['M'+str(n),label],f'{len(pts)} No.14 per actual web ply at this member end (A)','A',True)
-        direction=ends[0][1];a.section_axis=0 if abs(direction[0])>.1 else 2;a.section_at=direction[a.section_axis]*8
+        direction=ends[0][1];stations=bolt_layouts[ends[0][0]][0]
+        a.section_axis=0 if abs(direction[0])>.1 else 2
+        a.section_at=direction[a.section_axis]*stations[len(stations)//2]
+        gusset=next(part for part in a.parts if part['id']=='P1')['bounds']
+        a.dim([gusset[0][0],0,gusset[2][0]],[gusset[0][1],0,gusset[2][0]],'Gusset extent (A)','A',offset=-28)
         note('The node includes actual adjoining members and every built-up web ply. A: 1/8 in gussets, screw counts as labelled for each actual web ply, mitre fit with 1/4 in nominal gap, and matching paired/four-ply webs. No supplier capacity approval is inferred.')
         if short_members:note('A short cut-end proposal for '+', '.join(short_members)+': fewer screws fit between the actual opening cut and node mitre. The source workline is preserved. Supplier and engineer capacity verification is required; no six-screw capacity is assigned to this reduced group.')
 
