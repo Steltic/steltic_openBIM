@@ -164,7 +164,7 @@ HR9's plate-wall base now uses its actual full-width wall profile and source
 1 x 12 in embed plate. Each 28 ft panel has all 112 headed studs at four per
 foot. The 3/8 x 4 in fishplate, two 1/4 in shop fillets and both 3/16 in field
 lap edges retain their source records. The 2 in bottom clearance, fishplate
-datum, stud row and 5 in stud length are explicit A fit proposals; foundation
+datum and 5 in stud length are explicit A fit proposals; foundation
 and local capacity verification remain outstanding. The source workline is
 retained while the physical plate and panel boundary record the bottom cut.
 
@@ -178,3 +178,26 @@ by the parts legend. Every individual weld stroke and exported weld is retained.
 This prevents a 112-stud row from creating 112 leaders extending outside the
 elevation into adjacent views. The enlarged section retains the real wall,
 fishplate, embed plate and stud location.
+
+## Source stud rows and explicit bottom-track splices (0.8.45)
+
+The HR9 base component summary says four headed studs per foot. Its detailed
+capacity check specifies **two rows at 6 in pitch**. Both rows are now preserved,
+with the same 112 studs across each 28 ft panel. The 3 in edge margins and 5 in
+stud length remain explicit A proposals; the row count and pitch are S.
+
+CFS2 had 108 unconnected coincident bottom-track joints between its continuous
+wall bays. Each now has an explicit A proposal: a 1/8 in butt gap, two external
+54 mil flange straps and three No.12 screws into each track on each face.
+Actual sections, web bearing datums and original workpoints are retained.
+Existing selected connections are not replaced. These fits do not assert a
+checked collector, shear-wall transfer or anchorage capacity.
+
+All 2,996 CFS2 detail variants and 77,066 installed occurrences passed receiver
+fit. All 108 new splice details passed actual-sheet screw-contact tests. Both
+the splice and revised HR9 base sheets were rendered and visually checked.
+The full openBIM regression suite passed all 595 tests. The subsequent CFS2
+native export exceeded the harness's 600-second worker limit and must be
+retried independently; no new native completeness result is claimed.
+Native source mapping and other remaining completeness findings are tracked
+separately; this release is not a complete-case or all-61 acceptance claim.
