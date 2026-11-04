@@ -1,0 +1,24 @@
+{
+  "case": "cfs11",
+  "key": "cfs11",
+  "module": "CFS",
+  "title": "Gypsum shear walls",
+  "project": "WFRESH61_cfs11_20261103",
+  "source_run_status": "error",
+  "primary": true,
+  "files": {
+    "design/bim_request.json": "71fde7251f74c52f842dae3ed0986827060c113486d769792a449278e5ebff80",
+    "architectural_input.json": "9b9ea0ff677d9eae4ef9222ee32560994e2d09d4c7feb05d14d6f48345819152",
+    "architectural_handoff.txt": "bc8039038661718c952a09a1a1d49146d5ef8af273ee72470126b88dbf0f6da3"
+  },
+  "job_exists": true,
+  "completion_problems": [
+    "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+  ],
+  "current_completion_gate_passed": false,
+  "package_present": false,
+  "missing_outputs": [
+    "cfg.py",
+    "design/bim_package.json"
+  ]
+}

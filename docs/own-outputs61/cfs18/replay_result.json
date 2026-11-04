@@ -1,0 +1,32 @@
+{
+  "key": "cfs18",
+  "case": "cfs18",
+  "status": "exported",
+  "producer": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+  "package_sha256": "0e3a951d5d29ecac3211d5cc5b4ed1c32597b175c548c7112e5fc1073e768b61",
+  "source_files_unchanged": true,
+  "original_recorded_package_unchanged": true,
+  "stored_readiness": "ready",
+  "findings": [],
+  "physical_counts": {
+    "analysis_only": 0,
+    "connections": 2304,
+    "interfaces": 2,
+    "joint_dispositions": 54,
+    "joints": 2192,
+    "materials": 9,
+    "members": 1096,
+    "openings": 3,
+    "panels": 8,
+    "profiles": 19,
+    "record_dispositions": 19
+  },
+  "connection_parts": 6905,
+  "design_records": 156,
+  "seconds": 3.9673469066619873,
+  "llm_calls": 0,
+  "redesign": false,
+  "analysis_solve": false,
+  "drawings": false,
+  "supplements": false
+}

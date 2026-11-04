@@ -1,0 +1,32 @@
+{
+  "key": "hr21",
+  "case": "hr21",
+  "status": "exported",
+  "producer": "343e0ad6cca528ecb30d07408224dca3597451c6",
+  "package_sha256": "155f848a081ead8029744537b205ea736e899bcf57fb5303718b0117b2047cff",
+  "source_files_unchanged": true,
+  "original_recorded_package_unchanged": true,
+  "stored_readiness": "ready",
+  "findings": [],
+  "physical_counts": {
+    "analysis_only": 0,
+    "connections": 94,
+    "interfaces": 2,
+    "joint_dispositions": 0,
+    "joints": 70,
+    "materials": 4,
+    "members": 109,
+    "openings": 0,
+    "panels": 1,
+    "profiles": 6,
+    "record_dispositions": 2
+  },
+  "connection_parts": 470,
+  "design_records": 10,
+  "seconds": 1.4456918239593506,
+  "llm_calls": 0,
+  "redesign": false,
+  "analysis_solve": false,
+  "drawings": false,
+  "supplements": false
+}

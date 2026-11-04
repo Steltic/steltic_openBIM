@@ -1,0 +1,24 @@
+{
+  "case": "hr6",
+  "key": "hr6",
+  "module": "HR",
+  "title": "SCBF",
+  "project": "WFRESH61_hr6_20261103",
+  "source_run_status": "error",
+  "primary": true,
+  "files": {
+    "design/bim_request.json": "55b0c38a592806ea7bba6a2ca77eccde2da610f8dd93b3fc2bc733bbf783926e",
+    "architectural_input.json": "92072bb185a952516a3b94ddb5014d567d6a3d08a43dc9e9950144c19682438f",
+    "architectural_handoff.txt": "f0400bdfc8789e1c4d30198e77788c988d4260a6b18de1a99cc1f57ecb318716"
+  },
+  "job_exists": true,
+  "completion_problems": [
+    "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+  ],
+  "current_completion_gate_passed": false,
+  "package_present": false,
+  "missing_outputs": [
+    "cfg.py",
+    "design/bim_package.json"
+  ]
+}

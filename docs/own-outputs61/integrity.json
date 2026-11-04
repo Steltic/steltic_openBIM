@@ -1,0 +1,37 @@
+{
+  "status": "passed",
+  "candidate_runs_checked": 67,
+  "original_files_checked": 635,
+  "problems": [],
+  "repos": {
+    "steltic": {
+      "head": "343e0ad6cca528ecb30d07408224dca3597451c6",
+      "status": "",
+      "head_unchanged": true,
+      "worktree_unchanged": true
+    },
+    "steltic_cfs": {
+      "head": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+      "status": "",
+      "head_unchanged": true,
+      "worktree_unchanged": true
+    },
+    "steltic_hub": {
+      "head": "a4e6d1396a678083c3f64e0810c0452c07647c6d",
+      "status": "",
+      "head_unchanged": true,
+      "worktree_unchanged": true
+    },
+    "steltic_openBIM": {
+      "head": "b3a50f068a5b0401f47f1bd3ce958d009ef8e6db",
+      "status": "",
+      "head_unchanged": false,
+      "worktree_unchanged": true
+    }
+  },
+  "paid_queue_still_stopped": true,
+  "analysis_solves": 0,
+  "llm_calls": 0,
+  "drawings": 0,
+  "physical_supplements_used": false
+}

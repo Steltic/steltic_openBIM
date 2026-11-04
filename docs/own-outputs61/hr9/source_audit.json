@@ -1,0 +1,38 @@
+{
+  "case": "hr9",
+  "key": "hr9",
+  "module": "HR",
+  "title": "SPSW",
+  "project": "WFRESH61_hr9_20261103",
+  "source_run_status": "error",
+  "primary": true,
+  "files": {
+    "cfg.py": "dfdf315ac9518b428f32109dac1821edbed6be1995a1501a6a72e2c2faa8233d",
+    "design/calc_package.json": "321099706865988e98f820304854d7c5392e01c0fe21f2714f35f8693feae92f",
+    "design/consistency_result.json": "7b356d462d9c7d38245bce464f988457e928df75846752d8f52572b5d41a56d2",
+    "design/pipeline_results.json": "fa15028cd152a9966aac16a2fdd9e6566aca7b602e8a3604e3bcde380b430a52",
+    "design/bim_request.json": "0b3457421c3df1050eb3a77ffc0218e2a6cc80a3fcf89aef99e379e94d1c77fa",
+    "architectural_input.json": "d1100418b2363a13262fd24722d357b6b8055639ba261d274640554d953506f8",
+    "architectural_handoff.txt": "5e201645e809fa4be3c6cef32814ebe7bb478bb4758ecf72215d693a5a03e7fc"
+  },
+  "job_exists": true,
+  "completion_problems": [
+    "'roof-W21X44' has no numeric D/C (top-level or in checks) and no waiver",
+    "'roof-W21X44' has no cited AISC clause",
+    "'floor-W24X104' has no numeric D/C (top-level or in checks) and no waiver",
+    "'floor-W24X104' has no cited AISC clause",
+    "'floor-W24X207' has no numeric D/C (top-level or in checks) and no waiver",
+    "'floor-W24X207' has no cited AISC clause",
+    "'floor-W24X76' has no numeric D/C (top-level or in checks) and no waiver",
+    "'floor-W24X76' has no cited AISC clause",
+    "'floor-W24X84' has no numeric D/C (top-level or in checks) and no waiver",
+    "'floor-W24X84' has no cited AISC clause",
+    "'floor-W33X201' has no numeric D/C (top-level or in checks) and no waiver",
+    "... and 201 more problem(s) -- see consistency.check / the sanity suite output"
+  ],
+  "current_completion_gate_passed": false,
+  "package_present": false,
+  "missing_outputs": [
+    "design/bim_package.json"
+  ]
+}

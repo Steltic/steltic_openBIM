@@ -1,0 +1,19 @@
+{
+  "version": "0.8.32",
+  "consumer_commit": "b3a50f068a5b0401f47f1bd3ce958d009ef8e6db",
+  "ifc_regressions": {
+    "passed": 74,
+    "failed": 0,
+    "seconds": 20.4
+  },
+  "export_ui": {
+    "passed": 1,
+    "failed": 0
+  },
+  "warning": "Starlette TestClient reports an httpx deprecation warning; tests passed.",
+  "source_integrity": {
+    "original_files_checked": 635,
+    "protected_repos_unchanged": true
+  },
+  "excluded": "No PDF/drawing engines or HR/CFS design/analysis solves were run."
+}

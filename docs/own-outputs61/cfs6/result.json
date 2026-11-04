@@ -1,0 +1,74 @@
+{
+  "case": "cfs6",
+  "key": "cfs6",
+  "title": "WSP walls",
+  "module": "CFS",
+  "primary": true,
+  "source_run_status": "error",
+  "original_package_present": true,
+  "original_native_completion_passed": false,
+  "producer_completion_problems": [
+    "BIM export is stale; rerun consistency.check or BIM replay"
+  ],
+  "saved_readiness": "ready",
+  "original_validation": "needs_input",
+  "original_freshness": "invalid",
+  "changed_recorded_files": [
+    "workflow_review.json"
+  ],
+  "native_reexport": "exported",
+  "native_reexport_readiness": "needs_input",
+  "native_reexport_finding_codes": [
+    "connection_selected_family"
+  ],
+  "exporter_revision": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+  "original_producer_revision": null,
+  "variants": {
+    "saved": {
+      "transport": "blocked_source",
+      "source_validation": "invalid",
+      "source_finding_codes": [
+        "connection_selected_family",
+        "source_stale"
+      ],
+      "architectural_comparison": "not_tested",
+      "comparison_issue_codes": [],
+      "products_compared": 0,
+      "entities_compared": 0,
+      "package_sha256": "c793e4ceb9721cfba5d0eba853f84408d3ab13b56e886809cea89ea1c7f6b1d6",
+      "source_ifc_sha256": null,
+      "returned_ifc_sha256": null,
+      "source_files_unchanged": null,
+      "schema_errors": null,
+      "import_readiness_verified": false,
+      "error": null,
+      "stage": null
+    },
+    "replay": {
+      "transport": "passed",
+      "source_validation": "needs_input",
+      "source_finding_codes": [
+        "connection_selected_family"
+      ],
+      "architectural_comparison": "needs_resolution",
+      "comparison_issue_codes": [
+        "complete_native_physical_export",
+        "floor_roof_panel_classification",
+        "no_unrequested_floor_roof_planes"
+      ],
+      "products_compared": 19031,
+      "entities_compared": 323848,
+      "package_sha256": "553c11c69f3d5c143937c0ca667bd987807317dedab440a9628ff8b14f580c6d",
+      "source_ifc_sha256": "2264c039fa1a5c9dd19e4f27c4fa955bc73eab514c7302b29ce850e0378d0037",
+      "returned_ifc_sha256": "21900282a00e8c7caf301528db85329d5b17c02dd80b5b176618a86269ba0e24",
+      "source_files_unchanged": true,
+      "schema_errors": [],
+      "import_readiness_verified": true,
+      "error": null,
+      "stage": null
+    }
+  },
+  "status": "transport_passed_source_needs_resolution",
+  "saved_job_acceptance": false,
+  "reexport_model_checks_passed": false
+}

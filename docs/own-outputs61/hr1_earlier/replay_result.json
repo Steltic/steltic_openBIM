@@ -1,0 +1,32 @@
+{
+  "key": "hr1_earlier",
+  "case": "hr1",
+  "status": "exported",
+  "producer": "343e0ad6cca528ecb30d07408224dca3597451c6",
+  "package_sha256": "a2a5c97f571a040f27e2b06ff785643afc6c2d9c98b8a60e7c4d1419ae38e988",
+  "source_files_unchanged": true,
+  "original_recorded_package_unchanged": true,
+  "stored_readiness": "ready",
+  "findings": [],
+  "physical_counts": {
+    "analysis_only": 0,
+    "connections": 392,
+    "interfaces": 1,
+    "joint_dispositions": 0,
+    "joints": 392,
+    "materials": 8,
+    "members": 452,
+    "openings": 0,
+    "panels": 5,
+    "profiles": 17,
+    "record_dispositions": 0
+  },
+  "connection_parts": 676,
+  "design_records": 38,
+  "seconds": 1.586256980895996,
+  "llm_calls": 0,
+  "redesign": false,
+  "analysis_solve": false,
+  "drawings": false,
+  "supplements": false
+}

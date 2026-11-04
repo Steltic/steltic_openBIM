@@ -1,0 +1,24 @@
+{
+  "case": "cfs10",
+  "key": "cfs10",
+  "module": "CFS",
+  "title": "SBMF",
+  "project": "WFRESH61_cfs10_20261103",
+  "source_run_status": "error",
+  "primary": true,
+  "files": {
+    "design/bim_request.json": "6af52da3c9ccb6566a7f57b1cc826065e8fdd5a8994af834d3f2445b8c6e5995",
+    "architectural_input.json": "62bb2651582d5bf532eb612299830e1ff8782781bf68760cc19c29c55bcc3127",
+    "architectural_handoff.txt": "4699c190de0f7c8b9735702b2336a043ea8bdbbef6119d05c49c34af5ee91142"
+  },
+  "job_exists": true,
+  "completion_problems": [
+    "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+  ],
+  "current_completion_gate_passed": false,
+  "package_present": false,
+  "missing_outputs": [
+    "cfg.py",
+    "design/bim_package.json"
+  ]
+}

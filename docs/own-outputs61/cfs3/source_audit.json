@@ -1,0 +1,250 @@
+{
+  "case": "cfs3",
+  "key": "cfs3",
+  "module": "CFS",
+  "title": "Steel-sheet walls",
+  "project": "WFRESH61_cfs3_20261103",
+  "source_run_status": "error",
+  "primary": true,
+  "files": {
+    "cfg.py": "30ccd6e8d350a0e6bbbaf836d74b733af4836e08b57052efefa5e18264ff571b",
+    "design/calc_package_cfs.json": "8c1a4c085f29fdeb981fb685fb17852c75aa1d63fd1f97260ec046d70a07a7a3",
+    "design/bim_package.json": "fcb7e21e740ccc6630683c43227759f6bf5a4a97685fff438516dfb444d12e17",
+    "design/consistency_result.json": "85bdc4259b535722282fee9382fdf5e892ec85198ae69d87222060ca4270e792",
+    "design/bim_request.json": "5a10507312129e184c94982aa5780bb504fa8846dc251665e76c52acd6ee0c0a",
+    "architectural_input.json": "024f6c5641589eabc42ae014f4227afc931b1cc332d493f83f2694485b0dac86",
+    "architectural_handoff.txt": "fd323e9a5e37e1e95167d26dc19000be96460b16201330e7d0abfe9191b31efe"
+  },
+  "job_exists": true,
+  "completion_problems": [
+    "BIM export is stale; rerun consistency.check or BIM replay"
+  ],
+  "current_completion_gate_passed": false,
+  "package_present": true,
+  "stored_readiness": "ready",
+  "provenance": {
+    "analysis_executed": false,
+    "engine_files": {
+      "aisc_shapes.csv": "fbb655067c9e7e77c9ade032f917b5af4a95f8ee6660f7db47573bccd07727d0",
+      "architectural_input.py": "1b00359fd6e1470198beac88c84f88254f2be6f34c4c5c299795a3e285f38c7d",
+      "bim_adapter.py": "ed75c91a71618a49fe99a0cb88108e8d81a2ffad30bc00198a15abcd661b3190",
+      "bim_contract.py": "4907163a6f33c494dbe58847dda8946df884be6f6c467004130bb684699eead9",
+      "bim_export.py": "a5782357a2b2609b9a99c67e3ae5a53213321ef7b3710606164a8430161e9516",
+      "bim_package.schema.json": "77ab0cfaea34af4a64c29bccd1aaf1d6a6c9fbb942a582727d8fac5c7cd8e265",
+      "build_cfs_models.py": "85670ba24dc97c4a046771be2034d1fe190a1a8e7036267899b6c54b91df00ec",
+      "cfs_engine.py": "d71558210d2333d8c47b943e4588b5fd8be2940ced82ad2dbe5a82985c1fefde",
+      "cfs_frame.py": "4ac5df87a55492c84e8591bd5640b7f87477e1a3d667c6372844e80d2c842d28",
+      "cfs_gates.py": "4df390650c78fc67c65bd84c7f31a45b723c6c0665065ba4a64ae6cf1206c8d2",
+      "cfs_pipeline.py": "167ce20c4d752db9920ee2c7f7ca769b677b97e957152191296d5b0fa4f680fd",
+      "cfs_sections.py": "f0502b4621636c0b899a29f0221d297611f4dc9de6617c33c9456a35dae69fce",
+      "cfs_shapes.csv": "c43f2ce3bc10f3feb5a54d9025f6a3cf9c772723c69e85a95025867cf7384a41",
+      "cfs_systems.py": "f83d3da5b7405b7b09ff774de7b4a44c278badc37b39839f89905701093a8eeb",
+      "cfs_viewer3d.py": "76e237bbc09a3bd517511cdeaf11bcd0706ebcdce59f71cc3b434347af032ea7",
+      "consistency.py": "b575eec3688c324453a79d646849a60c224e5ef0f781edf2925b1ba15eb3830d",
+      "design_pipeline.py": "1c0980b14ba06f1a2bf75f9afa58ab62d8cc6c1a8952c160b67f9bc733894d1e",
+      "design_post.py": "0fdcca4600fd9b40fd5841e22412566cdd2fdb38c8ef77e7e7852ba2363617f0",
+      "eff_stiffness.py": "0807a2f9196b5317eb635faa14a4837da71dccb1d1fba16cbbd337aa5cd357e2",
+      "engine3d.py": "6f2573e4f787e5c1b6ecabe19b30ba291ec2a5acd866328ad8b639cd44eac149",
+      "example_build.py": "20b2d5c66e129f7f421945078bda743e093aad8d1a8384931efc5a907adbd00a",
+      "extract_sfia.py": "96a6a12dd369e6a97ea1985ea630c6badbd1891ae02640e75de4a34308c27cc2",
+      "frame_diagram.py": "f516fd69637a180ee1b89a53769774905bfd0bf30f964c02575bedfa03e9a8c3",
+      "pipeline.py": "6dc646b73cf3eb865e7e90b3de181b4f3e70271131190d7ca4202987afb0638d",
+      "plot_model.py": "aa6ad976d994a08e12c26eb7683d5b08ae746aed8d31c66bb995cb18ce3f4ed9",
+      "preflight.py": "9097f278c742b10bd620de270538e3b824a5b1a8d460cdbba7349be13fd55831",
+      "report.py": "a0e370350bc4a8f51a72ab2e2bb1a7adcac17280b12834d7336a8dc0f0825485",
+      "sections.py": "11df74a1d20ba7dd84866d6c940eac7d64d9695658695ebd28efdd8c43f21c58",
+      "sfia_oracle_axial_lateral.csv": "2cd74c1b805f63be32e2909bd7b0fbb7bca9b644544e4c98c7841b820253d4b8",
+      "sfia_oracle_headers.csv": "c84aa6d04e5b1fc60857c156baca272cd7aa264a26171bae4dea03e685f1296a",
+      "sfia_oracle_joist_spans.csv": "fd2f96be9c04d6997a20ebef2ea1add6dd1d5a9de1eb06beda396124baf6d6e8",
+      "sfia_oracle_limiting_heights.csv": "cff2c38e80249654c686c9e196681964a98549be718fdcdb5fcd98aea24e1d09",
+      "sfia_oracle_web_crippling.csv": "94f78d4898b8826bdac1cc1c430cdc0e62a24206d6a5a4f2aafde06f2c8ef34c",
+      "static_model.py": "f1fc1faaa353aca1ec19eb6ca411e8fad30c240c0e2756d3f6cd578f97c1f8d6",
+      "test_span_tables.py": "6e28bc4eef0fcbcfd1def0b89ddbd8a059c7832669b70f01f9bec15250ccb3f5",
+      "viewer3d.py": "8dffc664cf6de99835670c5d1b5dc87aaec66803cb7d837563e79b3014abfb79",
+      "viz3d.py": "d2ec83cd959a5e04b84c2ecaad8779a0998680ebd8488b8ffc3c67fefe8fe602",
+      "wall_line.py": "8e77c9968f22ef2419c504414554c2208119a443c71e5e2f092d061f37e9b9aa"
+    },
+    "engine_version": "wall_line physical declarations; no spring solve",
+    "exporter_revision": null,
+    "mode": "model_only_replay",
+    "module": "CFS",
+    "package_file": "calc_package_cfs.json",
+    "producer_revision": null
+  },
+  "declared_source_files": {
+    "architectural_handoff.txt": "fd323e9a5e37e1e95167d26dc19000be96460b16201330e7d0abfe9191b31efe",
+    "architectural_input.json": "024f6c5641589eabc42ae014f4227afc931b1cc332d493f83f2694485b0dac86",
+    "bim_decl.json": "2296d4d20142b4a5f0024379e477a666534b07b9133dac3d5f3e5664ba5ee01f",
+    "cfg.py": "30ccd6e8d350a0e6bbbaf836d74b733af4836e08b57052efefa5e18264ff571b",
+    "design/bim_request.json": "5a10507312129e184c94982aa5780bb504fa8846dc251665e76c52acd6ee0c0a",
+    "design/calc_package_cfs.json": "8c1a4c085f29fdeb981fb685fb17852c75aa1d63fd1f97260ec046d70a07a7a3",
+    "design/consistency_result.json": "85bdc4259b535722282fee9382fdf5e892ec85198ae69d87222060ca4270e792",
+    "physical_decls.py": "8e669f5f716ea6fa5778720e08fc3c18530d1d8ae302e4968276825c1d69bd89",
+    "seg_layout_in.json": "310cbea7482a06904d2f92ee642d1ddaeef2c3671d1041b402d835a2bc9502e7",
+    "viewer_3d.html": "e0add2c5d692738e39980d96422f8893e698cfaaf14abfd25323b3f54dd5143f",
+    "workflow_review.json": "f6188ec50e993f76e2771c25130648b59131827c307e45d38df05778940d307e"
+  },
+  "physical_counts": {
+    "analysis_only": 0,
+    "connections": 221,
+    "interfaces": 1,
+    "joint_dispositions": 2924,
+    "joints": 3145,
+    "materials": 5,
+    "members": 2784,
+    "openings": 742,
+    "panels": 1968,
+    "profiles": 7,
+    "record_dispositions": 29
+  },
+  "design_records": 271,
+  "source_kind": "CFS",
+  "require_connection_parts": true,
+  "current_validation": {
+    "status": "needs_input",
+    "source_freshness_checked": false,
+    "findings": [
+      {
+        "code": "connection_selected_family",
+        "message": "A selected connection family has no corresponding located component categories in its bound entities; a typical coverage note alone does not place its hardware",
+        "entity_ids": [
+          "connections/conn-chord-builtup",
+          "connections/conn-floor-ledger",
+          "connections/conn-sheathing-screw"
+        ],
+        "severity": "needs_input",
+        "count": 3,
+        "examples": [
+          {
+            "design_record_id": "connections/conn-sheathing-screw",
+            "missing_component_categories": [
+              "screw"
+            ],
+            "selected_components": "No.10 x 3/4-in. ASTM C1513 self-drilling screws at 2 in. o.c. panel edges / 12 in. field into 68-mil studs/track; edge distance 3/8 in. min",
+            "returned_part_kinds": "wall segment wall segment wall segment wall segment",
+            "bound_entity_ids": [
+              "cfs:wall:X:A:story:1:segment:1",
+              "cfs:wall:X:A:story:1:segment:2",
+              "cfs:wall:X:A:story:1:segment:3",
+              "cfs:wall:X:A:story:1:segment:4"
+            ]
+          },
+          {
+            "design_record_id": "connections/conn-chord-builtup",
+            "missing_component_categories": [
+              "screw"
+            ],
+            "selected_components": "single 2-1/4-in. A449 rod (governed by Y-8 short line) with (4) 600S162-97 plies stitched with pairs of No.10 screws at 6 in. o.c. (brief) + rod bearing plates into podium embeds",
+            "returned_part_kinds": "tie rod shaft plate tie rod shaft plate tie rod shaft plate tie rod shaft plate",
+            "bound_entity_ids": [
+              "c:X:A:s1:e0",
+              "c:X:A:s1:e1",
+              "c:X:A:s2:e0",
+              "c:X:A:s2:e1"
+            ]
+          },
+          {
+            "design_record_id": "connections/conn-floor-ledger",
+            "missing_component_categories": [
+              "screw"
+            ],
+            "selected_components": "continuous 68-mil ledger/track with No.10 screws at 6 in. o.c. to wall + deck fastening per manufacturer to carry v_cd; 0.9D+1.0W uplift clips at joists (net-uplift path roof-to-podium)",
+            "returned_part_kinds": "wall segment wall segment wall segment wall segment",
+            "bound_entity_ids": [
+              "cfs:wall:X:A:story:1:segment:1",
+              "cfs:wall:X:A:story:1:segment:2",
+              "cfs:wall:X:A:story:1:segment:3",
+              "cfs:wall:X:A:story:1:segment:4"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "source_freshness": {
+    "status": "invalid",
+    "source_freshness_checked": true,
+    "findings": [
+      {
+        "code": "connection_selected_family",
+        "message": "A selected connection family has no corresponding located component categories in its bound entities; a typical coverage note alone does not place its hardware",
+        "entity_ids": [
+          "connections/conn-chord-builtup",
+          "connections/conn-floor-ledger",
+          "connections/conn-sheathing-screw"
+        ],
+        "severity": "needs_input",
+        "count": 3,
+        "examples": [
+          {
+            "design_record_id": "connections/conn-sheathing-screw",
+            "missing_component_categories": [
+              "screw"
+            ],
+            "selected_components": "No.10 x 3/4-in. ASTM C1513 self-drilling screws at 2 in. o.c. panel edges / 12 in. field into 68-mil studs/track; edge distance 3/8 in. min",
+            "returned_part_kinds": "wall segment wall segment wall segment wall segment",
+            "bound_entity_ids": [
+              "cfs:wall:X:A:story:1:segment:1",
+              "cfs:wall:X:A:story:1:segment:2",
+              "cfs:wall:X:A:story:1:segment:3",
+              "cfs:wall:X:A:story:1:segment:4"
+            ]
+          },
+          {
+            "design_record_id": "connections/conn-chord-builtup",
+            "missing_component_categories": [
+              "screw"
+            ],
+            "selected_components": "single 2-1/4-in. A449 rod (governed by Y-8 short line) with (4) 600S162-97 plies stitched with pairs of No.10 screws at 6 in. o.c. (brief) + rod bearing plates into podium embeds",
+            "returned_part_kinds": "tie rod shaft plate tie rod shaft plate tie rod shaft plate tie rod shaft plate",
+            "bound_entity_ids": [
+              "c:X:A:s1:e0",
+              "c:X:A:s1:e1",
+              "c:X:A:s2:e0",
+              "c:X:A:s2:e1"
+            ]
+          },
+          {
+            "design_record_id": "connections/conn-floor-ledger",
+            "missing_component_categories": [
+              "screw"
+            ],
+            "selected_components": "continuous 68-mil ledger/track with No.10 screws at 6 in. o.c. to wall + deck fastening per manufacturer to carry v_cd; 0.9D+1.0W uplift clips at joists (net-uplift path roof-to-podium)",
+            "returned_part_kinds": "wall segment wall segment wall segment wall segment",
+            "bound_entity_ids": [
+              "cfs:wall:X:A:story:1:segment:1",
+              "cfs:wall:X:A:story:1:segment:2",
+              "cfs:wall:X:A:story:1:segment:3",
+              "cfs:wall:X:A:story:1:segment:4"
+            ]
+          }
+        ]
+      },
+      {
+        "code": "source_stale",
+        "message": "Source evidence changed after export",
+        "entity_ids": [
+          "workflow_review.json"
+        ],
+        "severity": "error"
+      }
+    ]
+  },
+  "captured_worklines_required": false,
+  "current_tracked_source_files": {
+    "architectural_handoff.txt": "fd323e9a5e37e1e95167d26dc19000be96460b16201330e7d0abfe9191b31efe",
+    "architectural_input.json": "024f6c5641589eabc42ae014f4227afc931b1cc332d493f83f2694485b0dac86",
+    "bim_decl.json": "2296d4d20142b4a5f0024379e477a666534b07b9133dac3d5f3e5664ba5ee01f",
+    "cfg.py": "30ccd6e8d350a0e6bbbaf836d74b733af4836e08b57052efefa5e18264ff571b",
+    "design/bim_request.json": "5a10507312129e184c94982aa5780bb504fa8846dc251665e76c52acd6ee0c0a",
+    "design/calc_package_cfs.json": "8c1a4c085f29fdeb981fb685fb17852c75aa1d63fd1f97260ec046d70a07a7a3",
+    "design/consistency_result.json": "85bdc4259b535722282fee9382fdf5e892ec85198ae69d87222060ca4270e792",
+    "physical_decls.py": "8e669f5f716ea6fa5778720e08fc3c18530d1d8ae302e4968276825c1d69bd89",
+    "seg_layout_in.json": "310cbea7482a06904d2f92ee642d1ddaeef2c3671d1041b402d835a2bc9502e7",
+    "viewer_3d.html": "e0add2c5d692738e39980d96422f8893e698cfaaf14abfd25323b3f54dd5143f",
+    "workflow_review.json": "be1e4309ca05861751e01c95b2252421e302789045b30406c1f223901d2bf774"
+  },
+  "source_file_set_matches": false,
+  "own_output_only": true,
+  "physical_supplements_used": false
+}

@@ -1,0 +1,181 @@
+{
+  "case": "hr16",
+  "key": "hr16_earlier",
+  "module": "HR",
+  "title": "Z-plan school with stepped roof levels",
+  "project": "WF6_HR_02_School_20261103",
+  "source_run_status": "done",
+  "primary": false,
+  "files": {
+    "cfg.py": "7920311bf2380448b415346a3214ffadce56c381f1e4d3e7951ee68dc400e3f6",
+    "design/calc_package.json": "c668c6a1e7affc4f1128baebacc739026633240ed4ff08990a0680a728fbdcc2",
+    "design/bim_package.json": "bb34d15145370e1fe701e910a458519492ba202258cc30d90d44ad5e22fa9941",
+    "design/consistency_result.json": "a70f774d20ebb5363358bcfe8c11a59fe4b6b99acc99f8fd776e5aea54b0a60a",
+    "design/pipeline_results.json": "66059dd9af1cf26910248d513c18e869d45943f0b9393b27bcac194acaf3d0d0",
+    "design/bim_request.json": "537a2041c405b10d7c2466a1bd02d4f6db07a09bb84198dbf6435e9c13b20a72"
+  },
+  "job_exists": true,
+  "completion_problems": [
+    "BIM physical_opening_workline: Member worklines cross a declared opening; coordinate the framing and then check full section and connection clearance; resolve the physical declaration before claiming readiness",
+    "BIM physical_remote_part: Connection box parts are over six feet from their assigned joint; resolve the physical declaration before claiming readiness"
+  ],
+  "current_completion_gate_passed": false,
+  "package_present": true,
+  "stored_readiness": "ready",
+  "provenance": {
+    "analysis_executed": false,
+    "engine_files": {
+      "aisc_shapes.csv": "fbb655067c9e7e77c9ade032f917b5af4a95f8ee6660f7db47573bccd07727d0",
+      "bim_adapter.py": "04613fe35b1b5afb9e61cc73b9e09f6607dd1ffc5573ce6ba4400f8211912f6e",
+      "bim_contract.py": "d5267524e72bb531d067f52357a61a766bec1d0b0b30eb6f707eeb9a8a6a02a1",
+      "bim_export.py": "3a2db30f0641e05c4c0c943110029577d4eb412a61a8e55614825cd071e94e5c",
+      "bim_package.schema.json": "502052eaeceaa6e328a78305f8531b3665f4c8e6e30ee9f46c7fb8ec6f8b8efe",
+      "consistency.py": "3d563ff337a9424d06597594e8ddb3eedd5d7a5a16febfbe8adafbac9c1f7ed5",
+      "design_pipeline.py": "7a6f5361bd224260bb6c80795136f329b43f589906af429054ca7d91efba7d20",
+      "design_post.py": "0fdcca4600fd9b40fd5841e22412566cdd2fdb38c8ef77e7e7852ba2363617f0",
+      "engine3d.py": "98db78a2130fad0285d10a3654aadb1386da66f566c1d3e03b14d500896d6b67",
+      "example_build.py": "20b2d5c66e129f7f421945078bda743e093aad8d1a8384931efc5a907adbd00a",
+      "frame_diagram.py": "f516fd69637a180ee1b89a53769774905bfd0bf30f964c02575bedfa03e9a8c3",
+      "pipeline.py": "2c94024d5c1af9a4ba40a722b0ac42b6c83940b04ab71465ae9a17641467a242",
+      "plot_model.py": "aa6ad976d994a08e12c26eb7683d5b08ae746aed8d31c66bb995cb18ce3f4ed9",
+      "preflight.py": "59e7b610aad28a326ceddaa4e6fa6aab317f4fee1c39952ee5efe678e04f7680",
+      "report.py": "51303e774dc101f918dc2d22be2f1c6a80e934bcd1e30fde98c2fc1d7fc22c35",
+      "sections.py": "40a27300fd593c44ffd055e2bf2e0a5284312253ba08c837165b135faf89398e",
+      "static_model.py": "a1e552d9babe0c461ec31a7cf9aa947dcdf28af3d66c68e8d41ebcc9c0dbceac",
+      "viewer3d.py": "6138e82eb5b8c9409d1e4c595243716d7eb101b6e1014a8458f5393b159cd9b7",
+      "viz3d.py": "d2ec83cd959a5e04b84c2ecaad8779a0998680ebd8488b8ffc3c67fefe8fe602"
+    },
+    "engine_version": "3.8.0",
+    "exporter_revision": null,
+    "mode": "model_only_replay",
+    "module": "HR",
+    "package_file": "calc_package.json",
+    "producer_revision": null
+  },
+  "declared_source_files": {
+    "bim_cfg_decl.json": "587bc9ad659ec7222c6b3f1ddf67f0a681b79e91c9c7e5217ab588a00d6d585f",
+    "bim_decl.json": "22ba0efd0efb13231872cc1a0d32bd7f82e7948f91c2a9f899a845a2c9d74b0a",
+    "calc_caps.py": "2698be25ec7bd45677af526020c78ff48809f73549e30ad6855bce186a18244e",
+    "calc_conns.py": "5c8f55eeec5bee1d3f34b469a5757011f6fa666082b4c5fc2687fd0efd10300e",
+    "calc_package.FILLED.json": "c668c6a1e7affc4f1128baebacc739026633240ed4ff08990a0680a728fbdcc2",
+    "cfg.py": "7920311bf2380448b415346a3214ffadce56c381f1e4d3e7951ee68dc400e3f6",
+    "design/bim_request.json": "537a2041c405b10d7c2466a1bd02d4f6db07a09bb84198dbf6435e9c13b20a72",
+    "design/calc_package.json": "c668c6a1e7affc4f1128baebacc739026633240ed4ff08990a0680a728fbdcc2",
+    "design/consistency_result.json": "a70f774d20ebb5363358bcfe8c11a59fe4b6b99acc99f8fd776e5aea54b0a60a",
+    "design/member_schedule.csv": "68236bc70893b5a55f59b19ac784026a642979d8563274ee6d9849693a76e92e",
+    "fix_conns.py": "9f6b809ccca13d86e6a23837c0663b8c3a2e90519855630fc9aadcb483f514b4",
+    "gen_bim.py": "a932a8ec19bdd4f0bbe5c7b9ce793038ef6b38d9128e5d309596923d22c7e16a",
+    "merge_bim.py": "471489607b6596f8c8355dbb06b6f2d85f4c745bb0d2da79216dd70ec69bef60",
+    "model_opensees.py": "79f7cd6a2dc16d83ceb12264e1c149278efc76db78a2f19033ffc2e10de41dfc",
+    "model_static.py": "4eaef130146324aaefc4d1887a6f80162c8b6098b46d2f9e9a21272a7dd119b0",
+    "viewer_3d.html": "e9508433cad921745aa6002037978d7e4100ef86b6ef69f89d545ac6ac30cf56"
+  },
+  "physical_counts": {
+    "analysis_only": 0,
+    "connections": 13,
+    "interfaces": 2,
+    "joint_dispositions": 75,
+    "joints": 83,
+    "materials": 5,
+    "members": 140,
+    "openings": 1,
+    "panels": 4,
+    "profiles": 16,
+    "record_dispositions": 6
+  },
+  "design_records": 28,
+  "source_kind": "HR",
+  "require_connection_parts": null,
+  "current_validation": {
+    "status": "needs_input",
+    "source_freshness_checked": false,
+    "findings": [
+      {
+        "code": "physical_opening_workline",
+        "message": "Member worklines cross a declared opening; coordinate the framing and then check full section and connection clearance; resolve the physical declaration before claiming readiness",
+        "entity_ids": [
+          "M-123",
+          "OPEN-gym-clear",
+          "SLAB-L3"
+        ],
+        "severity": "needs_input"
+      },
+      {
+        "code": "physical_remote_part",
+        "message": "Connection box parts are over six feet from their assigned joint; resolve the physical declaration before claiming readiness",
+        "entity_ids": [
+          "C-BASE-W14X132",
+          "C-BASE-W14X132-plate",
+          "C-BASE-W14X176",
+          "C-BASE-W14X176-plate",
+          "C-BASE-W14X257",
+          "C-BASE-W14X257-plate",
+          "C-SH-W21",
+          "C-SH-W21-plate",
+          "J-1",
+          "J-2",
+          "J-41",
+          "J-56"
+        ],
+        "severity": "needs_input"
+      }
+    ]
+  },
+  "source_freshness": {
+    "status": "needs_input",
+    "source_freshness_checked": true,
+    "findings": [
+      {
+        "code": "physical_opening_workline",
+        "message": "Member worklines cross a declared opening; coordinate the framing and then check full section and connection clearance; resolve the physical declaration before claiming readiness",
+        "entity_ids": [
+          "M-123",
+          "OPEN-gym-clear",
+          "SLAB-L3"
+        ],
+        "severity": "needs_input"
+      },
+      {
+        "code": "physical_remote_part",
+        "message": "Connection box parts are over six feet from their assigned joint; resolve the physical declaration before claiming readiness",
+        "entity_ids": [
+          "C-BASE-W14X132",
+          "C-BASE-W14X132-plate",
+          "C-BASE-W14X176",
+          "C-BASE-W14X176-plate",
+          "C-BASE-W14X257",
+          "C-BASE-W14X257-plate",
+          "C-SH-W21",
+          "C-SH-W21-plate",
+          "J-1",
+          "J-2",
+          "J-41",
+          "J-56"
+        ],
+        "severity": "needs_input"
+      }
+    ]
+  },
+  "captured_worklines_required": false,
+  "current_tracked_source_files": {
+    "bim_cfg_decl.json": "587bc9ad659ec7222c6b3f1ddf67f0a681b79e91c9c7e5217ab588a00d6d585f",
+    "bim_decl.json": "22ba0efd0efb13231872cc1a0d32bd7f82e7948f91c2a9f899a845a2c9d74b0a",
+    "calc_caps.py": "2698be25ec7bd45677af526020c78ff48809f73549e30ad6855bce186a18244e",
+    "calc_conns.py": "5c8f55eeec5bee1d3f34b469a5757011f6fa666082b4c5fc2687fd0efd10300e",
+    "calc_package.FILLED.json": "c668c6a1e7affc4f1128baebacc739026633240ed4ff08990a0680a728fbdcc2",
+    "cfg.py": "7920311bf2380448b415346a3214ffadce56c381f1e4d3e7951ee68dc400e3f6",
+    "design/bim_request.json": "537a2041c405b10d7c2466a1bd02d4f6db07a09bb84198dbf6435e9c13b20a72",
+    "design/calc_package.json": "c668c6a1e7affc4f1128baebacc739026633240ed4ff08990a0680a728fbdcc2",
+    "design/consistency_result.json": "a70f774d20ebb5363358bcfe8c11a59fe4b6b99acc99f8fd776e5aea54b0a60a",
+    "design/member_schedule.csv": "68236bc70893b5a55f59b19ac784026a642979d8563274ee6d9849693a76e92e",
+    "fix_conns.py": "9f6b809ccca13d86e6a23837c0663b8c3a2e90519855630fc9aadcb483f514b4",
+    "gen_bim.py": "a932a8ec19bdd4f0bbe5c7b9ce793038ef6b38d9128e5d309596923d22c7e16a",
+    "merge_bim.py": "471489607b6596f8c8355dbb06b6f2d85f4c745bb0d2da79216dd70ec69bef60",
+    "model_opensees.py": "79f7cd6a2dc16d83ceb12264e1c149278efc76db78a2f19033ffc2e10de41dfc",
+    "model_static.py": "4eaef130146324aaefc4d1887a6f80162c8b6098b46d2f9e9a21272a7dd119b0",
+    "viewer_3d.html": "e9508433cad921745aa6002037978d7e4100ef86b6ef69f89d545ac6ac30cf56"
+  },
+  "source_file_set_matches": true,
+  "own_output_only": true,
+  "physical_supplements_used": false
+}

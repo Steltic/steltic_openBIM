@@ -1,0 +1,75 @@
+{
+  "case": "hr8",
+  "key": "hr8",
+  "title": "EBF",
+  "module": "HR",
+  "primary": true,
+  "source_run_status": "error",
+  "original_package_present": true,
+  "original_native_completion_passed": false,
+  "producer_completion_problems": [
+    "BIM export is stale; rerun consistency.check or BIM replay"
+  ],
+  "saved_readiness": "ready",
+  "original_validation": "needs_input",
+  "original_freshness": "invalid",
+  "changed_recorded_files": [
+    "workflow_review.json"
+  ],
+  "native_reexport": "exported",
+  "native_reexport_readiness": "needs_input",
+  "native_reexport_finding_codes": [
+    "connection_duplicate_parts",
+    "connection_selected_family"
+  ],
+  "exporter_revision": "343e0ad6cca528ecb30d07408224dca3597451c6",
+  "original_producer_revision": null,
+  "variants": {
+    "saved": {
+      "transport": "blocked_source",
+      "source_validation": "invalid",
+      "source_finding_codes": [
+        "connection_duplicate_parts",
+        "connection_selected_family",
+        "source_stale"
+      ],
+      "architectural_comparison": "not_tested",
+      "comparison_issue_codes": [],
+      "products_compared": 0,
+      "entities_compared": 0,
+      "package_sha256": "3460c578c08c0decbb9c13ca2136c021a02eeaf388dd3c36f35ced65aa57e227",
+      "source_ifc_sha256": null,
+      "returned_ifc_sha256": null,
+      "source_files_unchanged": null,
+      "schema_errors": null,
+      "import_readiness_verified": false,
+      "error": null,
+      "stage": null
+    },
+    "replay": {
+      "transport": "passed",
+      "source_validation": "needs_input",
+      "source_finding_codes": [
+        "connection_duplicate_parts",
+        "connection_selected_family"
+      ],
+      "architectural_comparison": "needs_resolution",
+      "comparison_issue_codes": [
+        "complete_native_physical_export"
+      ],
+      "products_compared": 4790,
+      "entities_compared": 69530,
+      "package_sha256": "d94949e00c9c970050047342dae3c9df43d0a3e8317daaa3fc789967c884e50e",
+      "source_ifc_sha256": "7aab149111c1c4ca520c91bc01d51cdf26c5ffab12a8d65031663f09500bfa56",
+      "returned_ifc_sha256": "07fdc06ba6a09729af7f4d25366cdc8b9253caa712aa059d2385bac496309887",
+      "source_files_unchanged": true,
+      "schema_errors": [],
+      "import_readiness_verified": true,
+      "error": null,
+      "stage": null
+    }
+  },
+  "status": "transport_passed_source_needs_resolution",
+  "saved_job_acceptance": false,
+  "reexport_model_checks_passed": false
+}

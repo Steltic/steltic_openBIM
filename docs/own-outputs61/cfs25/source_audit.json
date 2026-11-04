@@ -1,0 +1,24 @@
+{
+  "case": "cfs25",
+  "key": "cfs25",
+  "module": "CFS",
+  "title": "Purlin/girt retrofit",
+  "project": "WFRESH61_cfs25_20261103",
+  "source_run_status": "paused",
+  "primary": true,
+  "files": {
+    "design/bim_request.json": "b3bba463e26ff98f1e000fb00e10fc9b353dedbf2d6ef8477530321709cf3885",
+    "architectural_input.json": "1189fbe4744060822aa7cbb575ca3500d46ae229db79073f0f4087100697b4e1",
+    "architectural_handoff.txt": "697478767dc67e8765733a2d3d2e41af8552a922b5586353f137dca48c6770c1"
+  },
+  "job_exists": true,
+  "completion_problems": [
+    "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+  ],
+  "current_completion_gate_passed": false,
+  "package_present": false,
+  "missing_outputs": [
+    "cfg.py",
+    "design/bim_package.json"
+  ]
+}

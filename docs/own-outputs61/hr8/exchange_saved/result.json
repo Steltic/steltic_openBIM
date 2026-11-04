@@ -1,0 +1,825 @@
+{
+  "key": "hr8",
+  "case": "hr8",
+  "module": "HR",
+  "primary": true,
+  "variant": "saved",
+  "code_sha256": {
+    "steltic_openbim\\__init__.py": "47ba4cfead2cbfaf732ee3cc1541b26451054c29973f49a744669f8ba76a9b2d",
+    "steltic_openbim\\__main__.py": "fe9d6e6bc874e82f86479f83760029bbe75b6b17a25813d129a6b69ae19e5bd5",
+    "steltic_openbim\\assembly_pdf.py": "5fd464c17aba45ef80db9028892c2340b205af2cafb56385c11f1beafbdaeb8a",
+    "steltic_openbim\\assembly_scene.py": "1328be367f3680204df5fa78e9b4b4d3155c8ff503e5de9c658b7f7242a7e879",
+    "steltic_openbim\\assembly_templates.py": "9c7afae66515cc97c0b241aa3ce5ef40aa067e4aa90edda7a04efe05d3ca7067",
+    "steltic_openbim\\bim_contract.py": "6ba410e3c8199c30380cca23267c37388c16e82454974574da71204f7692c10e",
+    "steltic_openbim\\bim_package.schema.json": "77ab0cfaea34af4a64c29bccd1aaf1d6a6c9fbb942a582727d8fac5c7cd8e265",
+    "steltic_openbim\\connection_details.py": "de3cee740516bd58f86db95728e92d3ae3225756a1674d5496803bd5818ba8ac",
+    "steltic_openbim\\design_geometry.py": "e068501545469db3317ffc83929acbd3cc84cc0749aa17813e73cba5c8e2e682",
+    "steltic_openbim\\design_pdf.py": "d704f8f58395bb64790afc676f4e8a98d9364d6b864b31826233c1eda1b957ca",
+    "steltic_openbim\\design_scenarios.py": "2be47a5020b6cb6e643fd663adb6fedcc9957ed9576341fd03dc2a4f32c5545e",
+    "steltic_openbim\\drawing_api.py": "19b265b56d5f361f16c4a32f17872350b764bf889eee2b4a5074fcac6313e466",
+    "steltic_openbim\\drawing_pdf.py": "eabfbbb9cdd42247aa2ebf2e757c051dae800901756e2f860026d9c3ff98d493",
+    "steltic_openbim\\drawing_server.py": "222c32fda9a411d8616cffdd77dab6d8401352acc9dd7e7a424e2f553959f335",
+    "steltic_openbim\\drawing_ui.js": "3f51d00345c81a5174981655fa33f9cabdb4334a2057f9fd6d9b35b2731abd56",
+    "steltic_openbim\\drawing_workflow.py": "cefb57d59136352a6bad3edf61f5c96ea47584d6e133ca0d09b44a5f4b919c65",
+    "steltic_openbim\\ifc_api.py": "a31cb462cc0e379665b43adf534151878d007f35e3dcfcf3548263b358cc63bb",
+    "steltic_openbim\\ifc_export.py": "177785a2859633b79578ae035cf7888ae7d144a8816966d149abad6fa87d5f2a",
+    "steltic_openbim\\ifc_handoff.py": "6dc2d8ca3eb01d1adca489410f5786bcf2c465e798e8bc81990067f0db7f3e6d",
+    "steltic_openbim\\ifc_import.py": "4169aab7033504dfd17d7fd917599831692083be2762a4dc63c3532bacc50dc4",
+    "steltic_openbim\\ifc_store.py": "b9f0c53a57843b63904cc9bcf113219cdd2b722ca99fd574478a62037957167f",
+    "steltic_openbim\\ifc_ui.js": "3723cefc9fa92764d8f6b1f4db20d23b8cfb6b2d62104afb33bf50f260e89afb",
+    "steltic_openbim\\ifc_viewer.js": "d4a2b57ba62658e59365c1732b21a831832a45cbca410a0f99e004a8d40b807a",
+    "steltic_openbim\\ifc_worker.py": "67f405f44df5b1e1d9301fb6868737f057e795fd12f2eb19b1649d3791a0cf85",
+    "steltic_openbim\\job_sources.py": "c2e18307f658fb063fe72ca36fa095854b60f4385da39c178690aa323b952b13",
+    "steltic_openbim\\local_guard.py": "47661ae216ae26be6839e21dd891e1f4fd7fb91557d4f11c03bc019baf29ec7a",
+    "steltic_openbim\\panel_geometry.py": "5cef4a848504aac4ea6d21f489f2a49ac652e50e5ec5f9210fc1482752689550",
+    "steltic_openbim\\physical_pdf.py": "70c745f044e28d3beeaecbc23effbe2bfe260cb4ec06af00142b6b73c97e9172",
+    "steltic_openbim\\physical_review.py": "1b4d73f7260c44c8d49ab70c778cf5380cb193f63fc89f3d8ebeb58d07521e6f",
+    "steltic_openbim\\pilots\\__init__.py": "d094937227af6b57efc31ae9af2310686f59e7cd4fb953b38b28504c8549f742",
+    "steltic_openbim\\pilots\\catalog.json": "a3e1518ecb8ff62a1e13aa117e575203bed04387aa4613757fe0f6c11e3bcb6e",
+    "steltic_openbim\\pilots\\cfs16.py": "815abb2c7abe43330a3f8bb38467161a92a73f60a0f66b13131007214c29ba1c",
+    "steltic_openbim\\pilots\\cfs8.py": "3cbc748cb0bdf0f372452de233ada86357aa678ceaa1554c7ba0135066035f0d",
+    "steltic_openbim\\pilots\\checks.py": "db2ff2980599df5915306750ba546467e8cccaaa13dd46ada0ee29e18918fbc7",
+    "steltic_openbim\\pilots\\geometry.py": "ea35dedc08dbaa836da02c7a98fd9f97b3dc22b1ca2807d25737766f1e9c2b72",
+    "steltic_openbim\\pilots\\hr22.py": "3678c12a95197e41ad61eea6090d44f939636ed0011252fd5e2efcb9b5f54385",
+    "steltic_openbim\\pilots\\inputs.lock.json": "652bb4d5040001d685d9c8d0cb6a221575ebdceb435e307a00be59790d032a92",
+    "steltic_openbim\\pilots\\model.py": "c2e5fd68ec2fbe3b7edd26ad1862c54b38fd9c2b3089e31b8f2b33dbb012b048",
+    "steltic_openbim\\pilots\\presentation.py": "02152bb36a091864363560541b9662e87acf83451080967295122b2c48dbcce1",
+    "steltic_openbim\\review.py": "bcd4b88bf84afe6d99ccdc8dceabb2012e8a1d7bfbed97d6b96b2dafa8343f4b",
+    "steltic_openbim\\review_assemblies.py": "da5382781d8706ec713fa57ea2dcf48dc6512c3cffbdb521a098e8aa90a6fb47",
+    "steltic_openbim\\review_cases.py": "be1fea9e2a84e654e676829b7fa5398beea596f78fd97dc783a5eb287a846755",
+    "steltic_openbim\\review_cfs.py": "6ddd4922da7250dac5fecc1ccc0766b2527ee26191978c757f6beafe23edd237",
+    "steltic_openbim\\review_cfs_complements.py": "8df8956000f6aa9d9eb515a3965d9c4b6093e1045a93718752e406357f7d78e6",
+    "steltic_openbim\\review_cfs_details.py": "8966fd3edc98a1cfb97aec5262d30af2380af4560a17f8a67a6351c0222692d8",
+    "steltic_openbim\\review_cfs_frames.py": "5f77c0c5edd4ff0f5b47a686be005cdc76c46708b586a2ad7ebcf8f3f53d3f1a",
+    "steltic_openbim\\review_data\\cases.json": "dbd44a757212c4e4b8eaf87550db24aa8e43fc562d726f3747d3a1f5a49e653b",
+    "steltic_openbim\\review_detail_extras.py": "1343d142bffb739c62ad9d0ca878aef9b1c0de9d5bc4401a215d867253409fa9",
+    "steltic_openbim\\review_final_cfs.py": "d1afe264fc150c308ee829647569946572e509cb59c58292f6332a0228ea20e3",
+    "steltic_openbim\\review_final_cfs_details.py": "262bc77c08a23e54ea40701dbeed32470b950e651d528053939653f0319c0254",
+    "steltic_openbim\\review_final_details.py": "16980ddf30b84a3ef882b36917cb04eae2c643a89585e2aedd5563c0d9ba8b7f",
+    "steltic_openbim\\review_final_hr.py": "96166aad541c20c540abff407c886a97c5e88eca8af8037edb3ea74e3b680adf",
+    "steltic_openbim\\review_floor_layout.py": "f16b3dbd7ce516c864fa5af899e361a5612921ee3ac206ca5a78bec63b53dd33",
+    "steltic_openbim\\review_hr.py": "f93e914a503d9f70bb1e01828f07dd8e5a6e4ba0a778d22a43c892510c35e061",
+    "steltic_openbim\\review_hr_complements.py": "3b1f8923804e70ccb081771be84d91af81db3b9f0458eb8b67e42fed2eca8196",
+    "steltic_openbim\\review_hr_details.py": "996daf195a08dc921efdea0c0fd54b0eb963c6f44a133e7fe5b6c9d29e82b08d",
+    "steltic_openbim\\review_hr_special.py": "30676ca482d4ff4704cb5c7f4eb9ef3b5fc338958037a8aeaee22355d66b4a79",
+    "steltic_openbim\\review_model.py": "4cf08ae541f4da192ce2beec653624caa414195220bc238b89f52f776f6287ff",
+    "steltic_openbim\\review_next_cfs_details.py": "8c0040b5bfeca386e62abd4017963c91af3ed9507265ab3b6722cd0e9990de5d",
+    "steltic_openbim\\review_next_cfs_frames.py": "4a5eaf9de2868cea2c13e10da6a244071a40ad5edc9eae165c58345bd9950341",
+    "steltic_openbim\\review_next_cfs_walls.py": "0c95a175ddb1798b25a31ed2fc1ca9c1c13fecd94e0aa7a65db4a3c72fd398f2",
+    "steltic_openbim\\review_next_hr.py": "6f3c8465b70502deadc5973056421c3313ef683ba4834ace0f53589f9959ab6e",
+    "steltic_openbim\\review_next_hr_details.py": "5078bf5425e0e6642dcca93dd56233acec5dc624a2b0a8620390ff575c8da0b6",
+    "steltic_openbim\\review_next_hr_industrial.py": "fcd5b4f98a1787d945918daccf8505537e88efa9cc430eb8ee8f5340a8746b09",
+    "steltic_openbim\\review_next_sbmf.py": "97c2c0cb086dc1d81cbbacec5d8849e92ed4245cc5dc40a8237afaee59adc5b8",
+    "steltic_openbim\\review_pdf.py": "8172a52a7490f498a1cd4a202b22f14a5f0fae98bc1f96db3e9372104bc0aa9c",
+    "steltic_openbim\\review_provisional.py": "28f86ace80e36f030b10968baf91661d56fbbed426eaf3c7b08bdb41c95ca551",
+    "steltic_openbim\\review_splice_parts.py": "309b5a8328c81361fe7613d8a24e5fa4d5a3705efc3f312f21c4ac12f2d67588",
+    "steltic_openbim\\review_supplements.py": "236945524d52ac782cd0ed0d86c467d5426bfd9b35a7682258ed0c30b1a07621",
+    "steltic_openbim\\review_wall_details.py": "c9d8cd6fbacd629ce4a2a635369e1e66d304844625d8d5b246248c2526a809a8",
+    "steltic_openbim\\source_workline_pdf.py": "8cc0ced6f0de74833a32ddd7b47b1cbdb033ef784eafeea3111d2f08c6a40f6a",
+    "steltic_openbim\\source_worklines.py": "5cbc1eb0cae86d4d0f81c949b48ed3fb58d6734cdd5019f9f4b7487d3245416d",
+    "steltic_openbim\\validation.py": "dbe2e7042edb42bff62ff21ec295c4bac22361549e5ac8b00fcc5078c24bf26b"
+  },
+  "llm_calls": 0,
+  "redesign": false,
+  "analysis_solve": false,
+  "drawings": false,
+  "supplements": false,
+  "package_sha256": "3460c578c08c0decbb9c13ca2136c021a02eeaf388dd3c36f35ced65aa57e227",
+  "validation": {
+    "status": "invalid",
+    "source_freshness_checked": true,
+    "findings": [
+      {
+        "code": "connection_selected_family",
+        "message": "A selected connection family has no corresponding located component categories in its bound entities; a typical coverage note alone does not place its hardware",
+        "entity_ids": [
+          "connections/collector-irregularity-lines",
+          "connections/conn-gravity_col-W14X109",
+          "connections/conn-gravity_col-W14X53",
+          "connections/conn-gravity_col-W14X68",
+          "connections/conn-gravity_col-W14X82",
+          "connections/conn-lateral_col-W14X311",
+          "connections/conn-lateral_col-W14X426",
+          "connections/conn-lateral_col-W14X53",
+          "connections/conn-lateral_col-W14X550",
+          "connections/conn-lateral_col-W14X68",
+          "connections/conn-lateral_col-W14X730"
+        ],
+        "severity": "needs_input",
+        "count": 11,
+        "examples": [
+          {
+            "design_record_id": "connections/conn-gravity_col-W14X109",
+            "missing_component_categories": [
+              "bolt",
+              "weld"
+            ],
+            "selected_components": "CJP groove weld full W14X109 section at splice 4 ft AFF every 2 stories (demand-critical, E70, AISC 341 F3.6a); erection bolts 4x 3/4-in A325 snug-tight",
+            "returned_part_kinds": "col col col col col",
+            "bound_entity_ids": [
+              "M-1",
+              "M-35",
+              "M-40",
+              "M-48",
+              "M-64"
+            ]
+          },
+          {
+            "design_record_id": "connections/conn-lateral_col-W14X311",
+            "missing_component_categories": [
+              "bolt",
+              "weld"
+            ],
+            "selected_components": "CJP groove weld full W14X311 section at splice 4 ft AFF every 2 stories (demand-critical, E70, AISC 341 F3.6a); erection bolts 4x 3/4-in A325 snug-tight",
+            "returned_part_kinds": "col col col col col",
+            "bound_entity_ids": [
+              "M-124",
+              "M-15",
+              "M-218",
+              "M-23",
+              "M-85"
+            ]
+          },
+          {
+            "design_record_id": "connections/conn-lateral_col-W14X426",
+            "missing_component_categories": [
+              "bolt",
+              "weld"
+            ],
+            "selected_components": "CJP groove weld full W14X426 section at splice 4 ft AFF every 2 stories (demand-critical, E70, AISC 341 F3.6a); erection bolts 4x 3/4-in A325 snug-tight",
+            "returned_part_kinds": "col col col col col",
+            "bound_entity_ids": [
+              "M-13",
+              "M-21",
+              "M-29",
+              "M-34",
+              "M-60"
+            ]
+          },
+          {
+            "design_record_id": "connections/conn-gravity_col-W14X53",
+            "missing_component_categories": [
+              "bolt",
+              "weld"
+            ],
+            "selected_components": "CJP groove weld full W14X53 section at splice 4 ft AFF every 2 stories (demand-critical, E70, AISC 341 F3.6a); erection bolts 4x 3/4-in A325 snug-tight",
+            "returned_part_kinds": "col col col col col",
+            "bound_entity_ids": [
+              "M-46",
+              "M-54",
+              "M-62",
+              "M-7",
+              "M-93"
+            ]
+          },
+          {
+            "design_record_id": "connections/conn-lateral_col-W14X53",
+            "missing_component_categories": [
+              "bolt",
+              "weld"
+            ],
+            "selected_components": "CJP groove weld full W14X53 section at splice 4 ft AFF every 2 stories (demand-critical, E70, AISC 341 F3.6a); erection bolts 4x 3/4-in A325 snug-tight",
+            "returned_part_kinds": "col col col col col",
+            "bound_entity_ids": [
+              "M-46",
+              "M-54",
+              "M-62",
+              "M-7",
+              "M-93"
+            ]
+          },
+          {
+            "design_record_id": "connections/conn-lateral_col-W14X550",
+            "missing_component_categories": [
+              "bolt",
+              "weld"
+            ],
+            "selected_components": "CJP groove weld full W14X550 section at splice 4 ft AFF every 2 stories (demand-critical, E70, AISC 341 F3.6a); erection bolts 4x 3/4-in A325 snug-tight",
+            "returned_part_kinds": "col col col col col",
+            "bound_entity_ids": [
+              "M-11",
+              "M-19",
+              "M-27",
+              "M-32",
+              "M-58"
+            ]
+          },
+          {
+            "design_record_id": "connections/conn-gravity_col-W14X68",
+            "missing_component_categories": [
+              "bolt",
+              "weld"
+            ],
+            "selected_components": "CJP groove weld full W14X68 section at splice 4 ft AFF every 2 stories (demand-critical, E70, AISC 341 F3.6a); erection bolts 4x 3/4-in A325 snug-tight",
+            "returned_part_kinds": "col col col col col",
+            "bound_entity_ids": [
+              "M-39",
+              "M-44",
+              "M-5",
+              "M-52",
+              "M-68"
+            ]
+          },
+          {
+            "design_record_id": "connections/conn-lateral_col-W14X68",
+            "missing_component_categories": [
+              "bolt",
+              "weld"
+            ],
+            "selected_components": "CJP groove weld full W14X68 section at splice 4 ft AFF every 2 stories (demand-critical, E70, AISC 341 F3.6a); erection bolts 4x 3/4-in A325 snug-tight",
+            "returned_part_kinds": "col col col col col",
+            "bound_entity_ids": [
+              "M-39",
+              "M-44",
+              "M-5",
+              "M-52",
+              "M-68"
+            ]
+          },
+          {
+            "design_record_id": "connections/conn-lateral_col-W14X730",
+            "missing_component_categories": [
+              "bolt",
+              "weld"
+            ],
+            "selected_components": "CJP groove weld full W14X730 section at splice 4 ft AFF every 2 stories (demand-critical, E70, AISC 341 F3.6a); erection bolts 4x 3/4-in A325 snug-tight",
+            "returned_part_kinds": "col col col col col",
+            "bound_entity_ids": [
+              "M-17",
+              "M-25",
+              "M-30",
+              "M-56",
+              "M-9"
+            ]
+          },
+          {
+            "design_record_id": "connections/conn-gravity_col-W14X82",
+            "missing_component_categories": [
+              "bolt",
+              "weld"
+            ],
+            "selected_components": "CJP groove weld full W14X82 section at splice 4 ft AFF every 2 stories (demand-critical, E70, AISC 341 F3.6a); erection bolts 4x 3/4-in A325 snug-tight",
+            "returned_part_kinds": "col col col col col",
+            "bound_entity_ids": [
+              "M-3",
+              "M-37",
+              "M-42",
+              "M-50",
+              "M-66"
+            ]
+          },
+          {
+            "design_record_id": "connections/collector-irregularity-lines",
+            "missing_component_categories": [
+              "bolt",
+              "weld"
+            ],
+            "selected_components": "Collector: W24X104 beam axial (diaphragm to EBF bay along Grid C Grids 5-8 and Grid 5 Grids C-F); CJP flange splices + bolted/welded web for drag+shear (E70); diaphragm-to-collector weld per 12.10.2.1 with 12.3.3.5 25% increase (Fpx Eq.12.10-2 x1.25, not stacked on Om0)",
+            "returned_part_kinds": "beam beam beam beam beam",
+            "bound_entity_ids": [
+              "M-270",
+              "M-271",
+              "M-272",
+              "M-284",
+              "M-285"
+            ]
+          }
+        ]
+      },
+      {
+        "code": "connection_duplicate_parts",
+        "message": "Distinct component IDs repeat identical solid geometry inside the same assembly; resolve actual placement or duplicate emission, without dropping a required component",
+        "entity_ids": [
+          "CONN-J-1",
+          "CONN-J-102",
+          "CONN-J-105",
+          "CONN-J-2",
+          "CONN-J-200",
+          "CONN-J-205",
+          "CONN-J-3",
+          "CONN-J-300",
+          "CONN-J-4",
+          "CONN-J-403",
+          "CONN-J-404",
+          "CONN-J-502",
+          "CONN-J-602",
+          "CONN-J-700",
+          "CONN-J-701"
+        ],
+        "severity": "needs_input",
+        "count": 60,
+        "examples": [
+          {
+            "connection_id": "CONN-J-1",
+            "part_ids": [
+              "PART-J-1-AR1",
+              "PART-J-1-AR7"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-1",
+            "part_ids": [
+              "PART-J-1-AR4",
+              "PART-J-1-AR8"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-1",
+            "part_ids": [
+              "PART-J-1-AR3",
+              "PART-J-1-AR9"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-1",
+            "part_ids": [
+              "PART-J-1-AR6",
+              "PART-J-1-AR10"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-2",
+            "part_ids": [
+              "PART-J-2-AR1",
+              "PART-J-2-AR7"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-2",
+            "part_ids": [
+              "PART-J-2-AR4",
+              "PART-J-2-AR8"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-2",
+            "part_ids": [
+              "PART-J-2-AR3",
+              "PART-J-2-AR9"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-2",
+            "part_ids": [
+              "PART-J-2-AR6",
+              "PART-J-2-AR10"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-3",
+            "part_ids": [
+              "PART-J-3-AR1",
+              "PART-J-3-AR7"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-3",
+            "part_ids": [
+              "PART-J-3-AR4",
+              "PART-J-3-AR8"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-3",
+            "part_ids": [
+              "PART-J-3-AR3",
+              "PART-J-3-AR9"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-3",
+            "part_ids": [
+              "PART-J-3-AR6",
+              "PART-J-3-AR10"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-4",
+            "part_ids": [
+              "PART-J-4-AR1",
+              "PART-J-4-AR7"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-4",
+            "part_ids": [
+              "PART-J-4-AR4",
+              "PART-J-4-AR8"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-4",
+            "part_ids": [
+              "PART-J-4-AR3",
+              "PART-J-4-AR9"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-4",
+            "part_ids": [
+              "PART-J-4-AR6",
+              "PART-J-4-AR10"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-102",
+            "part_ids": [
+              "PART-J-102-AR1",
+              "PART-J-102-AR7"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-102",
+            "part_ids": [
+              "PART-J-102-AR4",
+              "PART-J-102-AR8"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-102",
+            "part_ids": [
+              "PART-J-102-AR3",
+              "PART-J-102-AR9"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-102",
+            "part_ids": [
+              "PART-J-102-AR6",
+              "PART-J-102-AR10"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-105",
+            "part_ids": [
+              "PART-J-105-AR1",
+              "PART-J-105-AR7"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-105",
+            "part_ids": [
+              "PART-J-105-AR4",
+              "PART-J-105-AR8"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-105",
+            "part_ids": [
+              "PART-J-105-AR3",
+              "PART-J-105-AR9"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-105",
+            "part_ids": [
+              "PART-J-105-AR6",
+              "PART-J-105-AR10"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-200",
+            "part_ids": [
+              "PART-J-200-AR1",
+              "PART-J-200-AR7"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-200",
+            "part_ids": [
+              "PART-J-200-AR4",
+              "PART-J-200-AR8"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-200",
+            "part_ids": [
+              "PART-J-200-AR3",
+              "PART-J-200-AR9"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-200",
+            "part_ids": [
+              "PART-J-200-AR6",
+              "PART-J-200-AR10"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-205",
+            "part_ids": [
+              "PART-J-205-AR1",
+              "PART-J-205-AR7"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-205",
+            "part_ids": [
+              "PART-J-205-AR4",
+              "PART-J-205-AR8"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-205",
+            "part_ids": [
+              "PART-J-205-AR3",
+              "PART-J-205-AR9"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-205",
+            "part_ids": [
+              "PART-J-205-AR6",
+              "PART-J-205-AR10"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-300",
+            "part_ids": [
+              "PART-J-300-AR1",
+              "PART-J-300-AR7"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-300",
+            "part_ids": [
+              "PART-J-300-AR4",
+              "PART-J-300-AR8"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-300",
+            "part_ids": [
+              "PART-J-300-AR3",
+              "PART-J-300-AR9"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-300",
+            "part_ids": [
+              "PART-J-300-AR6",
+              "PART-J-300-AR10"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-403",
+            "part_ids": [
+              "PART-J-403-AR1",
+              "PART-J-403-AR7"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-403",
+            "part_ids": [
+              "PART-J-403-AR4",
+              "PART-J-403-AR8"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-403",
+            "part_ids": [
+              "PART-J-403-AR3",
+              "PART-J-403-AR9"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-403",
+            "part_ids": [
+              "PART-J-403-AR6",
+              "PART-J-403-AR10"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-404",
+            "part_ids": [
+              "PART-J-404-AR1",
+              "PART-J-404-AR7"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-404",
+            "part_ids": [
+              "PART-J-404-AR4",
+              "PART-J-404-AR8"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-404",
+            "part_ids": [
+              "PART-J-404-AR3",
+              "PART-J-404-AR9"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-404",
+            "part_ids": [
+              "PART-J-404-AR6",
+              "PART-J-404-AR10"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-502",
+            "part_ids": [
+              "PART-J-502-AR1",
+              "PART-J-502-AR7"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-502",
+            "part_ids": [
+              "PART-J-502-AR4",
+              "PART-J-502-AR8"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-502",
+            "part_ids": [
+              "PART-J-502-AR3",
+              "PART-J-502-AR9"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-502",
+            "part_ids": [
+              "PART-J-502-AR6",
+              "PART-J-502-AR10"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-602",
+            "part_ids": [
+              "PART-J-602-AR1",
+              "PART-J-602-AR7"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-602",
+            "part_ids": [
+              "PART-J-602-AR4",
+              "PART-J-602-AR8"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-602",
+            "part_ids": [
+              "PART-J-602-AR3",
+              "PART-J-602-AR9"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-602",
+            "part_ids": [
+              "PART-J-602-AR6",
+              "PART-J-602-AR10"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-700",
+            "part_ids": [
+              "PART-J-700-AR1",
+              "PART-J-700-AR7"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-700",
+            "part_ids": [
+              "PART-J-700-AR4",
+              "PART-J-700-AR8"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-700",
+            "part_ids": [
+              "PART-J-700-AR3",
+              "PART-J-700-AR9"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-700",
+            "part_ids": [
+              "PART-J-700-AR6",
+              "PART-J-700-AR10"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-701",
+            "part_ids": [
+              "PART-J-701-AR1",
+              "PART-J-701-AR7"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-701",
+            "part_ids": [
+              "PART-J-701-AR4",
+              "PART-J-701-AR8"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-701",
+            "part_ids": [
+              "PART-J-701-AR3",
+              "PART-J-701-AR9"
+            ],
+            "kind": "anchor-rod group"
+          },
+          {
+            "connection_id": "CONN-J-701",
+            "part_ids": [
+              "PART-J-701-AR6",
+              "PART-J-701-AR10"
+            ],
+            "kind": "anchor-rod group"
+          }
+        ]
+      },
+      {
+        "code": "source_stale",
+        "message": "Source evidence changed after export",
+        "entity_ids": [
+          "workflow_review.json"
+        ],
+        "severity": "error"
+      }
+    ]
+  },
+  "copied_source_files": {
+    "workflow_review.json": "8b32d640e2431eeba9cef2e7fb9ac9500edbaa0a6b7c690f2f28e18aa024ecb6",
+    "_tmp_walls.json": "23c3447293cc1fb58a30c501044fa58b0327e0c5dbc2c959fecce19f1fb36a6d",
+    "model_opensees.py": "f25863900f8ffbb22483ece4b696ddd88ac10aee3dcbd2ee930baabba8c91356",
+    "_tmp_surfaces.json": "f6b875d27fae43ec75900cc67f6a3d0e6e7796fea9a6b19e2716d9102ed495f7",
+    "design/member_schedule.csv": "145ffd74d53fa3498599e7e8f8b4092205042dfc49af572124cc71dafc955547",
+    "design/consistency_result.json": "4f3e2229f31fc1227eda28e49d29122b3d93291b43b812fac84b7bc489786e18",
+    "design/bim_request.json": "031d9d3fbe9d7bacaebf24687874e89a43ef0c09fdcae61e12fde9ab3d8cd5a7",
+    "cfg.py": "badc9d89d8de6f4dbeedaf18e17f75017b8f39c555efc12e6e94d3da8fbee3af",
+    "architectural_input.json": "243e428522c27d3f661f7af42ae79c205af1d62179cc6579a5e3a8fdbfa30887",
+    "model_static.py": "bb2d7290a41de8200c36cdbf59bed0257121c92c7aa543b4292ef1aee3e0c601",
+    "viewer_3d.html": "2c0f78c0a16a006e8f4e42b4c4ae2478c37d61f7ae8733d722a11ab4f1a4279e",
+    "design/calc_package.json": "d547287d06646e07709085a5eeb1838f614612fe9bdc9d75d002bcded1afd999",
+    "conn_builder.py": "6b997e3f6c0e632b5af48bf0474a1f6d48da7f6f8f06845c6ed2d1399ca03c6f",
+    "bim_block.py": "c550fefb58f4374ca6d7ea3df335664040819c3e97e3f50fad68fae866d13244",
+    "architectural_handoff.txt": "1968d6e91f45fbfffb5131de7b0e8d852e43db04f2046c2ec5aa6846aec6b217",
+    "bim_helper.py": "77043b9f65c10bda4b9225703c0cf5700a5006f359a76e27c550ea6a56be80b2"
+  },
+  "status": "blocked_source",
+  "guard_passed": true,
+  "reason": "source_stale: Source evidence changed after export"
+}

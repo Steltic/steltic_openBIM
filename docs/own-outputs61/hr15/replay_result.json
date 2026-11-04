@@ -1,0 +1,6 @@
+{
+  "key": "hr15",
+  "case": "hr15",
+  "status": "unavailable",
+  "reason": "The saved job has no cfg.py and calculation package pair."
+}

@@ -1,0 +1,230 @@
+{
+  "case": "cfs16",
+  "key": "cfs16",
+  "module": "CFS",
+  "title": "Portal warehouse",
+  "project": "WFRESH61_cfs16_20261103",
+  "source_run_status": "paused",
+  "primary": true,
+  "files": {
+    "cfg.py": "6447e714835aa7ef32995688178db544ac1a7e7355d8fd6443142a3caec1f14c",
+    "design/calc_package_cfs.json": "535ca0d72222c232f9d8992cbb4d752f9140dd94262fde1cf35812869c1af680",
+    "design/bim_package.json": "552b141781b8e73596c8237caa6c233108af09c0156984b46955fbf72c8d3acc",
+    "design/consistency_result.json": "55aad204443867d2c6c0aa1a96ff71a248d778f70b35be5dda72427f864bfe5f",
+    "design/bim_request.json": "e98d4e3d6729548ce03f3077f2e0cba2fb345618e758ad06a1e24acb2580e561",
+    "architectural_input.json": "8a5fb571b35c23acc3c27df1efc4ea8caea13ee459d0567530b93cfa44b89ecb",
+    "architectural_handoff.txt": "78796033c95c2687018b3f9953cb68b84faac115d96022a2e029a190ca4f505c"
+  },
+  "job_exists": true,
+  "completion_problems": [
+    "BIM export is stale; rerun consistency.check or BIM replay"
+  ],
+  "current_completion_gate_passed": false,
+  "package_present": true,
+  "stored_readiness": "ready",
+  "provenance": {
+    "analysis_executed": false,
+    "engine_files": {
+      "aisc_shapes.csv": "fbb655067c9e7e77c9ade032f917b5af4a95f8ee6660f7db47573bccd07727d0",
+      "architectural_input.py": "66636d505e963da6e98963af37d0850092e17a14dd92de4dca4512471abdf5aa",
+      "bim_adapter.py": "ed75c91a71618a49fe99a0cb88108e8d81a2ffad30bc00198a15abcd661b3190",
+      "bim_contract.py": "5256ab28fff573951934740ebbf71a15a83132ad51880cb4df0b7c4938dc2081",
+      "bim_export.py": "396e079986ba4171986e26a4414580f802c52fbd7c9d4d891f980141232bf69d",
+      "bim_package.schema.json": "fc77621224e0aef4d75cccbcca2820c0be48710b6c6dbe131a0ebcb62db85b4e",
+      "build_cfs_models.py": "85670ba24dc97c4a046771be2034d1fe190a1a8e7036267899b6c54b91df00ec",
+      "cfs_engine.py": "d71558210d2333d8c47b943e4588b5fd8be2940ced82ad2dbe5a82985c1fefde",
+      "cfs_frame.py": "4ac5df87a55492c84e8591bd5640b7f87477e1a3d667c6372844e80d2c842d28",
+      "cfs_gates.py": "4df390650c78fc67c65bd84c7f31a45b723c6c0665065ba4a64ae6cf1206c8d2",
+      "cfs_pipeline.py": "167ce20c4d752db9920ee2c7f7ca769b677b97e957152191296d5b0fa4f680fd",
+      "cfs_sections.py": "f0502b4621636c0b899a29f0221d297611f4dc9de6617c33c9456a35dae69fce",
+      "cfs_shapes.csv": "c43f2ce3bc10f3feb5a54d9025f6a3cf9c772723c69e85a95025867cf7384a41",
+      "cfs_systems.py": "f83d3da5b7405b7b09ff774de7b4a44c278badc37b39839f89905701093a8eeb",
+      "cfs_viewer3d.py": "76e237bbc09a3bd517511cdeaf11bcd0706ebcdce59f71cc3b434347af032ea7",
+      "consistency.py": "b575eec3688c324453a79d646849a60c224e5ef0f781edf2925b1ba15eb3830d",
+      "design_pipeline.py": "1c0980b14ba06f1a2bf75f9afa58ab62d8cc6c1a8952c160b67f9bc733894d1e",
+      "design_post.py": "0fdcca4600fd9b40fd5841e22412566cdd2fdb38c8ef77e7e7852ba2363617f0",
+      "eff_stiffness.py": "0807a2f9196b5317eb635faa14a4837da71dccb1d1fba16cbbd337aa5cd357e2",
+      "engine3d.py": "6f2573e4f787e5c1b6ecabe19b30ba291ec2a5acd866328ad8b639cd44eac149",
+      "example_build.py": "20b2d5c66e129f7f421945078bda743e093aad8d1a8384931efc5a907adbd00a",
+      "extract_sfia.py": "96a6a12dd369e6a97ea1985ea630c6badbd1891ae02640e75de4a34308c27cc2",
+      "frame_diagram.py": "f516fd69637a180ee1b89a53769774905bfd0bf30f964c02575bedfa03e9a8c3",
+      "pipeline.py": "6dc646b73cf3eb865e7e90b3de181b4f3e70271131190d7ca4202987afb0638d",
+      "plot_model.py": "aa6ad976d994a08e12c26eb7683d5b08ae746aed8d31c66bb995cb18ce3f4ed9",
+      "preflight.py": "9097f278c742b10bd620de270538e3b824a5b1a8d460cdbba7349be13fd55831",
+      "report.py": "a0e370350bc4a8f51a72ab2e2bb1a7adcac17280b12834d7336a8dc0f0825485",
+      "sections.py": "11df74a1d20ba7dd84866d6c940eac7d64d9695658695ebd28efdd8c43f21c58",
+      "sfia_oracle_axial_lateral.csv": "2cd74c1b805f63be32e2909bd7b0fbb7bca9b644544e4c98c7841b820253d4b8",
+      "sfia_oracle_headers.csv": "c84aa6d04e5b1fc60857c156baca272cd7aa264a26171bae4dea03e685f1296a",
+      "sfia_oracle_joist_spans.csv": "fd2f96be9c04d6997a20ebef2ea1add6dd1d5a9de1eb06beda396124baf6d6e8",
+      "sfia_oracle_limiting_heights.csv": "cff2c38e80249654c686c9e196681964a98549be718fdcdb5fcd98aea24e1d09",
+      "sfia_oracle_web_crippling.csv": "94f78d4898b8826bdac1cc1c430cdc0e62a24206d6a5a4f2aafde06f2c8ef34c",
+      "static_model.py": "f1fc1faaa353aca1ec19eb6ca411e8fad30c240c0e2756d3f6cd578f97c1f8d6",
+      "test_span_tables.py": "6e28bc4eef0fcbcfd1def0b89ddbd8a059c7832669b70f01f9bec15250ccb3f5",
+      "viewer3d.py": "8dffc664cf6de99835670c5d1b5dc87aaec66803cb7d837563e79b3014abfb79",
+      "viz3d.py": "d2ec83cd959a5e04b84c2ecaad8779a0998680ebd8488b8ffc3c67fefe8fe602",
+      "wall_line.py": "8e77c9968f22ef2419c504414554c2208119a443c71e5e2f092d061f37e9b9aa"
+    },
+    "engine_version": "cfs_frame native builder",
+    "exporter_revision": null,
+    "mode": "model_only_replay",
+    "module": "CFS",
+    "package_file": "calc_package_cfs.json",
+    "producer_revision": null
+  },
+  "declared_source_files": {
+    "architectural_handoff.txt": "78796033c95c2687018b3f9953cb68b84faac115d96022a2e029a190ca4f505c",
+    "architectural_input.json": "8a5fb571b35c23acc3c27df1efc4ea8caea13ee459d0567530b93cfa44b89ecb",
+    "bim_build.py": "984f9d0b1f8fe809920161208aaad66e9325abbb3a60022845232136432a6775",
+    "bim_build2.py": "2ed1e328e4d43a0294ab6117a0578f637c8e1f966d8f7f2558055710b50b643d",
+    "bim_build3.py": "c1fb8c689f3f223f111a3f0238cfa9954ba66479e8191dd6ffec49e53832da20",
+    "bim_pkg_block.json": "681e1e2c6c7b8e3eb8b844c2a12007b39927f26e1e58fd3443892e54cbd158b9",
+    "bim_pkg_block3.json": "184517e3d8a7bc2315c7667c616a8ac4dc00dad550742d2483834ad1100efe9d",
+    "build_bim.py": "88edd249cd39d2f837227c672d2bfc6c7a3fd32ae0732bf6c12b35b0c4040df7",
+    "cfg.py": "6447e714835aa7ef32995688178db544ac1a7e7355d8fd6443142a3caec1f14c",
+    "cfg_header.txt": "4f6340bb92accfe14af7b739cf2e051f8e2450fbcdee9d2050b62e194c94c552",
+    "design/bim_request.json": "e98d4e3d6729548ce03f3077f2e0cba2fb345618e758ad06a1e24acb2580e561",
+    "design/calc_package_cfs.json": "535ca0d72222c232f9d8992cbb4d752f9140dd94262fde1cf35812869c1af680",
+    "design/consistency_result.json": "55aad204443867d2c6c0aa1a96ff71a248d778f70b35be5dda72427f864bfe5f",
+    "viewer_3d.html": "44608f15a3071516c153bc3f54fe70c4b4459e25fe3c83eca87a6fdf4ce832ff",
+    "workflow_review.json": "850e765b53bdaab6c564718598331b5631459f585632ac54f5b8e6e4494e43fd"
+  },
+  "physical_counts": {
+    "analysis_only": 0,
+    "connections": 163,
+    "interfaces": 1,
+    "joint_dispositions": 0,
+    "joints": 163,
+    "materials": 8,
+    "members": 132,
+    "openings": 4,
+    "panels": 9,
+    "profiles": 5,
+    "record_dispositions": 0
+  },
+  "design_records": 109,
+  "source_kind": "CFS",
+  "require_connection_parts": true,
+  "current_validation": {
+    "status": "needs_input",
+    "source_freshness_checked": false,
+    "findings": [
+      {
+        "code": "connection_selected_family",
+        "message": "A selected connection family has no corresponding located component categories in its bound entities; a typical coverage note alone does not place its hardware",
+        "entity_ids": [
+          "schedules/sched-strap"
+        ],
+        "severity": "needs_input",
+        "count": 1,
+        "examples": [
+          {
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "bolt"
+            ],
+            "selected_components": "Strap phiTn=min(0.9x0.45x50=20.3, 0.75xAnet x65)=18.2 kip governs at net section vs T=18.2 kip; connection (3) 3/4-in. F3125 bolts phi=19.7 kip vs 18.2",
+            "returned_part_kinds": "brace brace brace brace brace brace brace brace brace brace brace brace brace brace brace brace",
+            "bound_entity_ids": [
+              "strap-roof-ESN-1",
+              "strap-roof-ESN-2",
+              "strap-roof-ESS-1",
+              "strap-roof-ESS-2",
+              "strap-roof-WSN-1",
+              "strap-roof-WSN-2",
+              "strap-roof-WSS-1",
+              "strap-roof-WSS-2",
+              "strap-wall-EN-1",
+              "strap-wall-EN-2",
+              "strap-wall-ES-1",
+              "strap-wall-ES-2",
+              "strap-wall-WN-1",
+              "strap-wall-WN-2",
+              "strap-wall-WS-1",
+              "strap-wall-WS-2"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "source_freshness": {
+    "status": "invalid",
+    "source_freshness_checked": true,
+    "findings": [
+      {
+        "code": "connection_selected_family",
+        "message": "A selected connection family has no corresponding located component categories in its bound entities; a typical coverage note alone does not place its hardware",
+        "entity_ids": [
+          "schedules/sched-strap"
+        ],
+        "severity": "needs_input",
+        "count": 1,
+        "examples": [
+          {
+            "design_record_id": "schedules/sched-strap",
+            "missing_component_categories": [
+              "bolt"
+            ],
+            "selected_components": "Strap phiTn=min(0.9x0.45x50=20.3, 0.75xAnet x65)=18.2 kip governs at net section vs T=18.2 kip; connection (3) 3/4-in. F3125 bolts phi=19.7 kip vs 18.2",
+            "returned_part_kinds": "brace brace brace brace brace brace brace brace brace brace brace brace brace brace brace brace",
+            "bound_entity_ids": [
+              "strap-roof-ESN-1",
+              "strap-roof-ESN-2",
+              "strap-roof-ESS-1",
+              "strap-roof-ESS-2",
+              "strap-roof-WSN-1",
+              "strap-roof-WSN-2",
+              "strap-roof-WSS-1",
+              "strap-roof-WSS-2",
+              "strap-wall-EN-1",
+              "strap-wall-EN-2",
+              "strap-wall-ES-1",
+              "strap-wall-ES-2",
+              "strap-wall-WN-1",
+              "strap-wall-WN-2",
+              "strap-wall-WS-1",
+              "strap-wall-WS-2"
+            ]
+          }
+        ]
+      },
+      {
+        "code": "source_stale",
+        "message": "Source evidence changed after export",
+        "entity_ids": [
+          "bim_build3.py"
+        ],
+        "severity": "error"
+      },
+      {
+        "code": "source_stale",
+        "message": "Source evidence changed after export",
+        "entity_ids": [
+          "workflow_review.json"
+        ],
+        "severity": "error"
+      }
+    ]
+  },
+  "captured_worklines_required": false,
+  "current_tracked_source_files": {
+    "architectural_handoff.txt": "78796033c95c2687018b3f9953cb68b84faac115d96022a2e029a190ca4f505c",
+    "architectural_input.json": "8a5fb571b35c23acc3c27df1efc4ea8caea13ee459d0567530b93cfa44b89ecb",
+    "bim_build.py": "984f9d0b1f8fe809920161208aaad66e9325abbb3a60022845232136432a6775",
+    "bim_build2.py": "2ed1e328e4d43a0294ab6117a0578f637c8e1f966d8f7f2558055710b50b643d",
+    "bim_build3.py": "0392f1b219ea22032840815c47eb8d7c8d2dfb6ec0c226585d3b938f5c81bc20",
+    "bim_pkg_block.json": "681e1e2c6c7b8e3eb8b844c2a12007b39927f26e1e58fd3443892e54cbd158b9",
+    "bim_pkg_block3.json": "184517e3d8a7bc2315c7667c616a8ac4dc00dad550742d2483834ad1100efe9d",
+    "build_bim.py": "88edd249cd39d2f837227c672d2bfc6c7a3fd32ae0732bf6c12b35b0c4040df7",
+    "cfg.py": "6447e714835aa7ef32995688178db544ac1a7e7355d8fd6443142a3caec1f14c",
+    "cfg_header.txt": "4f6340bb92accfe14af7b739cf2e051f8e2450fbcdee9d2050b62e194c94c552",
+    "design/bim_request.json": "e98d4e3d6729548ce03f3077f2e0cba2fb345618e758ad06a1e24acb2580e561",
+    "design/calc_package_cfs.json": "535ca0d72222c232f9d8992cbb4d752f9140dd94262fde1cf35812869c1af680",
+    "design/consistency_result.json": "55aad204443867d2c6c0aa1a96ff71a248d778f70b35be5dda72427f864bfe5f",
+    "viewer_3d.html": "44608f15a3071516c153bc3f54fe70c4b4459e25fe3c83eca87a6fdf4ce832ff",
+    "workflow_review.json": "d552c7685eca02225375e91545664368559ddd2d8a1bdd40aded4bf6eb6dfa96"
+  },
+  "source_file_set_matches": false,
+  "own_output_only": true,
+  "physical_supplements_used": false
+}

@@ -1,0 +1,54 @@
+{
+  "key": "cfs29_earlier",
+  "case": "cfs29",
+  "status": "exported",
+  "producer": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+  "package_sha256": "7bcbdfb981bfa3f3ddf3b453c6702909eaa42d500b205a06cae74d59ddda2524",
+  "source_files_unchanged": true,
+  "original_recorded_package_unchanged": true,
+  "stored_readiness": "needs_input",
+  "findings": [
+    {
+      "code": "physical_ply_count",
+      "entity_ids": [
+        "box-2x1200S200-97",
+        "box-2x600S162-97"
+      ],
+      "message": "Built-up section labels disagree with constituent counts; resolve the physical declaration before claiming readiness",
+      "severity": "needs_input"
+    },
+    {
+      "code": "physical_opening_workline",
+      "entity_ids": [
+        "deck-platform",
+        "joist-X5.5-0-8",
+        "joist-X54.5-0-8",
+        "pallet-gate",
+        "stair-opening"
+      ],
+      "message": "Member worklines cross a declared opening; coordinate the framing and then check full section and connection clearance; resolve the physical declaration before claiming readiness",
+      "severity": "needs_input"
+    }
+  ],
+  "physical_counts": {
+    "analysis_only": 0,
+    "connections": 234,
+    "interfaces": 2,
+    "joint_dispositions": 0,
+    "joints": 234,
+    "materials": 3,
+    "members": 117,
+    "openings": 2,
+    "panels": 16,
+    "profiles": 7,
+    "record_dispositions": 31
+  },
+  "connection_parts": 0,
+  "design_records": 71,
+  "seconds": 1.298863172531128,
+  "llm_calls": 0,
+  "redesign": false,
+  "analysis_solve": false,
+  "drawings": false,
+  "supplements": false
+}

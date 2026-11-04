@@ -1,0 +1,1366 @@
+{
+  "case": "cfs26",
+  "module": "CFS",
+  "project": "WFRESH61_cfs26_20261103",
+  "variant": "replay",
+  "checked_at": 1793764729.2970667,
+  "status": "needs_resolution",
+  "checks": [
+    {
+      "code": "own_output_binding",
+      "passed": true,
+      "evidence": {
+        "physical_supplements_supplied": false,
+        "source_package_sha256": "80829438d0f350eb1d6070d1123dbab318b3a508e86bce403a5a71eccbad351b"
+      }
+    },
+    {
+      "code": "complete_native_physical_export",
+      "passed": false,
+      "evidence": {
+        "stored_readiness": {
+          "counts": {
+            "analysis_elements": 80,
+            "design_records": 151,
+            "members": 38,
+            "panels": 1
+          },
+          "findings": [
+            {
+              "code": "connection_fastener_quantity",
+              "count": 32,
+              "entity_ids": [
+                "CONN-FR1-BASE-L",
+                "CONN-FR1-BASE-R",
+                "CONN-FR1-KBCOL-L",
+                "CONN-FR1-KBCOL-R",
+                "CONN-FR1-KNEE-L",
+                "CONN-FR1-KNEE-R",
+                "CONN-FR2-BASE-L",
+                "CONN-FR2-BASE-R",
+                "CONN-FR2-KBCOL-L",
+                "CONN-FR2-KBCOL-R",
+                "CONN-FR2-KNEE-L",
+                "CONN-FR2-KNEE-R",
+                "CONN-FR3-BASE-L",
+                "CONN-FR3-BASE-R",
+                "CONN-FR3-KBCOL-L",
+                "CONN-FR3-KBCOL-R",
+                "CONN-FR3-KNEE-L",
+                "CONN-FR3-KNEE-R",
+                "CONN-FR4-BASE-L",
+                "CONN-FR4-BASE-R",
+                "CONN-FR4-KBCOL-L",
+                "CONN-FR4-KBCOL-R",
+                "CONN-FR4-KNEE-L",
+                "CONN-FR4-KNEE-R",
+                "CONN-STRAP-E1-A",
+                "CONN-STRAP-E1-A-END",
+                "CONN-STRAP-E1-B",
+                "CONN-STRAP-E1-B-END",
+                "CONN-STRAP-E2-A",
+                "CONN-STRAP-E2-A-END",
+                "CONN-STRAP-E2-B",
+                "CONN-STRAP-E2-B-END"
+              ],
+              "examples": [
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "CONN-FR1-BASE-L",
+                  "declared_count": 4,
+                  "part_id": "FR1-L-RODS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "CONN-FR1-BASE-R",
+                  "declared_count": 4,
+                  "part_id": "FR1-R-RODS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR1-KNEE-L",
+                  "declared_count": 4,
+                  "part_id": "FR1-L-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR1-KNEE-R",
+                  "declared_count": 4,
+                  "part_id": "FR1-R-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "CONN-FR2-BASE-L",
+                  "declared_count": 4,
+                  "part_id": "FR2-L-RODS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "CONN-FR2-BASE-R",
+                  "declared_count": 4,
+                  "part_id": "FR2-R-RODS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR2-KNEE-L",
+                  "declared_count": 4,
+                  "part_id": "FR2-L-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR2-KNEE-R",
+                  "declared_count": 4,
+                  "part_id": "FR2-R-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "CONN-FR3-BASE-L",
+                  "declared_count": 4,
+                  "part_id": "FR3-L-RODS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "CONN-FR3-BASE-R",
+                  "declared_count": 4,
+                  "part_id": "FR3-R-RODS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR3-KNEE-L",
+                  "declared_count": 4,
+                  "part_id": "FR3-L-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR3-KNEE-R",
+                  "declared_count": 4,
+                  "part_id": "FR3-R-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "CONN-FR4-BASE-L",
+                  "declared_count": 4,
+                  "part_id": "FR4-L-RODS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "CONN-FR4-BASE-R",
+                  "declared_count": 4,
+                  "part_id": "FR4-R-RODS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR4-KNEE-L",
+                  "declared_count": 4,
+                  "part_id": "FR4-L-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR4-KNEE-R",
+                  "declared_count": 4,
+                  "part_id": "FR4-R-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR1-KBCOL-L",
+                  "declared_count": 4,
+                  "part_id": "FR1-L-KBCOL-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR1-KBCOL-R",
+                  "declared_count": 4,
+                  "part_id": "FR1-R-KBCOL-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR2-KBCOL-L",
+                  "declared_count": 4,
+                  "part_id": "FR2-L-KBCOL-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR2-KBCOL-R",
+                  "declared_count": 4,
+                  "part_id": "FR2-R-KBCOL-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR3-KBCOL-L",
+                  "declared_count": 4,
+                  "part_id": "FR3-L-KBCOL-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR3-KBCOL-R",
+                  "declared_count": 4,
+                  "part_id": "FR3-R-KBCOL-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR4-KBCOL-L",
+                  "declared_count": 4,
+                  "part_id": "FR4-L-KBCOL-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR4-KBCOL-R",
+                  "declared_count": 4,
+                  "part_id": "FR4-R-KBCOL-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "screw",
+                  "connection_id": "CONN-STRAP-E1-A-END",
+                  "declared_count": 6,
+                  "part_id": "STRAP-E1-A-END-SCREWS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "screw",
+                  "connection_id": "CONN-STRAP-E1-B-END",
+                  "declared_count": 6,
+                  "part_id": "STRAP-E1-B-END-SCREWS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "screw",
+                  "connection_id": "CONN-STRAP-E2-A-END",
+                  "declared_count": 6,
+                  "part_id": "STRAP-E2-A-END-SCREWS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "screw",
+                  "connection_id": "CONN-STRAP-E2-B-END",
+                  "declared_count": 6,
+                  "part_id": "STRAP-E2-B-END-SCREWS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "screw",
+                  "connection_id": "CONN-STRAP-E1-A",
+                  "declared_count": 6,
+                  "part_id": "STRAP-E1-A-SCREWS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "screw",
+                  "connection_id": "CONN-STRAP-E1-B",
+                  "declared_count": 6,
+                  "part_id": "STRAP-E1-B-SCREWS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "screw",
+                  "connection_id": "CONN-STRAP-E2-A",
+                  "declared_count": 6,
+                  "part_id": "STRAP-E2-A-SCREWS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "screw",
+                  "connection_id": "CONN-STRAP-E2-B",
+                  "declared_count": 6,
+                  "part_id": "STRAP-E2-B-SCREWS"
+                }
+              ],
+              "message": "A solid fastener count exceeds the distinct located fastener solids in its local design assembly; instantiate the actual checked pattern instead of multiplying a representative solid by a count label",
+              "severity": "needs_input"
+            }
+          ],
+          "status": "needs_input"
+        },
+        "current_contract_findings": [
+          {
+            "code": "connection_fastener_quantity",
+            "message": "A solid fastener count exceeds the distinct located fastener solids in its local design assembly; instantiate the actual checked pattern instead of multiplying a representative solid by a count label",
+            "entity_ids": [
+              "CONN-FR1-BASE-L",
+              "CONN-FR1-BASE-R",
+              "CONN-FR1-KBCOL-L",
+              "CONN-FR1-KBCOL-R",
+              "CONN-FR1-KNEE-L",
+              "CONN-FR1-KNEE-R",
+              "CONN-FR2-BASE-L",
+              "CONN-FR2-BASE-R",
+              "CONN-FR2-KBCOL-L",
+              "CONN-FR2-KBCOL-R",
+              "CONN-FR2-KNEE-L",
+              "CONN-FR2-KNEE-R",
+              "CONN-FR3-BASE-L",
+              "CONN-FR3-BASE-R",
+              "CONN-FR3-KBCOL-L",
+              "CONN-FR3-KBCOL-R",
+              "CONN-FR3-KNEE-L",
+              "CONN-FR3-KNEE-R",
+              "CONN-FR4-BASE-L",
+              "CONN-FR4-BASE-R",
+              "CONN-FR4-KBCOL-L",
+              "CONN-FR4-KBCOL-R",
+              "CONN-FR4-KNEE-L",
+              "CONN-FR4-KNEE-R",
+              "CONN-STRAP-E1-A",
+              "CONN-STRAP-E1-A-END",
+              "CONN-STRAP-E1-B",
+              "CONN-STRAP-E1-B-END",
+              "CONN-STRAP-E2-A",
+              "CONN-STRAP-E2-A-END",
+              "CONN-STRAP-E2-B",
+              "CONN-STRAP-E2-B-END"
+            ],
+            "severity": "needs_input",
+            "count": 32,
+            "examples": [
+              {
+                "connection_id": "CONN-FR1-BASE-L",
+                "part_id": "FR1-L-RODS",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR1-BASE-R",
+                "part_id": "FR1-R-RODS",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR1-KNEE-L",
+                "part_id": "FR1-L-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR1-KNEE-R",
+                "part_id": "FR1-R-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR2-BASE-L",
+                "part_id": "FR2-L-RODS",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR2-BASE-R",
+                "part_id": "FR2-R-RODS",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR2-KNEE-L",
+                "part_id": "FR2-L-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR2-KNEE-R",
+                "part_id": "FR2-R-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR3-BASE-L",
+                "part_id": "FR3-L-RODS",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR3-BASE-R",
+                "part_id": "FR3-R-RODS",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR3-KNEE-L",
+                "part_id": "FR3-L-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR3-KNEE-R",
+                "part_id": "FR3-R-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR4-BASE-L",
+                "part_id": "FR4-L-RODS",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR4-BASE-R",
+                "part_id": "FR4-R-RODS",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR4-KNEE-L",
+                "part_id": "FR4-L-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR4-KNEE-R",
+                "part_id": "FR4-R-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR1-KBCOL-L",
+                "part_id": "FR1-L-KBCOL-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR1-KBCOL-R",
+                "part_id": "FR1-R-KBCOL-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR2-KBCOL-L",
+                "part_id": "FR2-L-KBCOL-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR2-KBCOL-R",
+                "part_id": "FR2-R-KBCOL-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR3-KBCOL-L",
+                "part_id": "FR3-L-KBCOL-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR3-KBCOL-R",
+                "part_id": "FR3-R-KBCOL-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR4-KBCOL-L",
+                "part_id": "FR4-L-KBCOL-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR4-KBCOL-R",
+                "part_id": "FR4-R-KBCOL-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-STRAP-E1-A-END",
+                "part_id": "STRAP-E1-A-END-SCREWS",
+                "category": "screw",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-STRAP-E1-B-END",
+                "part_id": "STRAP-E1-B-END-SCREWS",
+                "category": "screw",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-STRAP-E2-A-END",
+                "part_id": "STRAP-E2-A-END-SCREWS",
+                "category": "screw",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-STRAP-E2-B-END",
+                "part_id": "STRAP-E2-B-END-SCREWS",
+                "category": "screw",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-STRAP-E1-A",
+                "part_id": "STRAP-E1-A-SCREWS",
+                "category": "screw",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-STRAP-E1-B",
+                "part_id": "STRAP-E1-B-SCREWS",
+                "category": "screw",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-STRAP-E2-A",
+                "part_id": "STRAP-E2-A-SCREWS",
+                "category": "screw",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-STRAP-E2-B",
+                "part_id": "STRAP-E2-B-SCREWS",
+                "category": "screw",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "code": "return_fully_rendered",
+      "passed": true,
+      "evidence": {
+        "source_products": 435,
+        "selected": 435,
+        "displayed": 435,
+        "unrendered": 0,
+        "excluded_by_scope": 0,
+        "triangles": 18906
+      }
+    },
+    {
+      "code": "architectural_opening_export_geometry",
+      "passed": true,
+      "evidence": {
+        "unresolved_opening_warnings": []
+      }
+    },
+    {
+      "code": "recoverable_input_surface_3hEkIGKO9Nbg5BjwBJ4YwL",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded roof plane 1"
+      }
+    },
+    {
+      "code": "floor_roof_panel_classification",
+      "passed": true,
+      "evidence": {
+        "untyped_horizontal_or_sloped_panels": [],
+        "method": "Panel geometry is compared even when the source did not declare its floor/roof role; role omission is reported separately."
+      }
+    },
+    {
+      "code": "floor_roof_planes_footprints_voids",
+      "passed": true,
+      "evidence": {
+        "required_plane_groups": 1,
+        "returned_plane_groups": 1,
+        "differences": [],
+        "plane_distance_tolerance_m": 0.005
+      }
+    },
+    {
+      "code": "no_unrequested_floor_roof_planes",
+      "passed": true,
+      "evidence": {
+        "extra_planes": []
+      }
+    },
+    {
+      "code": "structural_datums_retained",
+      "passed": true,
+      "evidence": {
+        "required": [
+          {
+            "id": "1B6D8WDYvIC8QaJy2VSiEH",
+            "name": "Ground",
+            "elevation_m": 0.0
+          },
+          {
+            "id": "0D7HYHSWHJShf7XslcYwt1",
+            "name": "Datum 14.0 ft",
+            "elevation_m": 4.2672
+          },
+          {
+            "id": "20QvPFjVXOZf4TNVIIF5_5",
+            "name": "Datum 17.400000000000002 ft",
+            "elevation_m": 5.303520000000001
+          }
+        ],
+        "returned": [
+          {
+            "id": "1w1IgQSnrGWQzUDo3Munku",
+            "name": "Ground",
+            "elevation_m": 0.0
+          },
+          {
+            "id": "0A25rtNZ1VVv0N2L0Zw4Gg",
+            "name": "Datum 14.0 ft",
+            "elevation_m": 4.2672
+          },
+          {
+            "id": "0NBW1zgqvJ_AVr39ixV5so",
+            "name": "Datum 17.400000000000002 ft",
+            "elevation_m": 5.303520000000001
+          }
+        ],
+        "missing": []
+      }
+    },
+    {
+      "code": "architectural_grid_locations",
+      "passed": true,
+      "evidence": {
+        "source_axes": 6,
+        "returned_axes": 6,
+        "missing_or_changed": [],
+        "checks": "labels, U/V/W family and full 3D polyline"
+      }
+    },
+    {
+      "code": "architectural_source_identity",
+      "passed": true,
+      "evidence": {
+        "expected": "a246500704aee3692bf8093d920db5b66a1c1069547fb6baadbaba960b0e0855",
+        "declared": "a246500704aee3692bf8093d920db5b66a1c1069547fb6baadbaba960b0e0855"
+      }
+    },
+    {
+      "code": "physical_member_placement_defined",
+      "passed": true,
+      "evidence": {
+        "unknown_member_ids": [],
+        "method": "Null offsets or orientation remain unknown; no zero offsets or local axes are invented for these checks."
+      }
+    },
+    {
+      "code": "door_window_boundaries",
+      "passed": true,
+      "evidence": {
+        "source_count": 0,
+        "physical_count": 0,
+        "changed": []
+      }
+    },
+    {
+      "code": "door_window_workline_clearance",
+      "passed": true,
+      "evidence": {
+        "count": 0,
+        "examples": [],
+        "method": "Strict opening bounds against physical worklines; separate from a solid clash or fabrication-fit check"
+      }
+    },
+    {
+      "code": "door_window_solid_clearance",
+      "passed": true,
+      "evidence": {
+        "checked_solids": 434,
+        "clashes": [],
+        "method": "Returned IFC mesh triangles against source axis-aligned opening volumes, with 5 mm tolerance at jamb/sill/head. All door/window fixtures in this sweep have axis-aligned hosts or are axis-aligned freestanding reservations."
+      }
+    },
+    {
+      "code": "connection_part_dimensions",
+      "passed": true,
+      "evidence": {
+        "checked": 272,
+        "mismatches": [],
+        "method": "Explicit plate/gusset thickness or cylindrical shaft diameter versus solid dimensions; tolerance max(0.005 in, 2%). Resolve against actual completed design records, not by relabelling an arbitrary solid."
+      }
+    },
+    {
+      "code": "member_design_record_sections",
+      "passed": true,
+      "evidence": {
+        "checked_links": 0,
+        "links_requiring_other_review": 0,
+        "mismatches": [],
+        "method": "Actual physical catalogue section label versus every linked member record with an explicit inputs.section. Custom profile aliases and built-up constituent calculations are outside this exact-label screen."
+      }
+    },
+    {
+      "code": "gravity_profile_orientation",
+      "passed": true,
+      "evidence": {
+        "checked": 10,
+        "suspect_members": [],
+        "method": "Deep gravity-framing profiles: detect depth axis nearly perpendicular to projected gravity; inspect intentional weak-axis designs separately.",
+        "unknown_placement_members_not_screened": []
+      }
+    },
+    {
+      "code": "built_up_constituents_separate",
+      "passed": true,
+      "evidence": {
+        "checked_profiles": 3,
+        "overlaps": [],
+        "method": "Separate built-up constituents must not substantially occupy the same section area; threshold >0.005 in2 and >5% of a constituent, allowing preview fillet simplifications."
+      }
+    },
+    {
+      "code": "no_duplicate_physical_occurrences",
+      "passed": true,
+      "evidence": {
+        "count": 0,
+        "examples": []
+      }
+    },
+    {
+      "code": "located_connection_occurrences",
+      "passed": true,
+      "evidence": {
+        "connections": 84,
+        "designed_without_parts": [],
+        "delegated_interfaces": []
+      }
+    },
+    {
+      "code": "connection_occurrence_coverage",
+      "passed": true,
+      "evidence": {
+        "checked_exemptions": 8,
+        "problems": [],
+        "method": "Explicit hardware notes and column bases lacking any connection-part bounds within six feet; continuous-subdivision claims must have opposing collinear member ends. Checks returned solid and reference-part bounds. Nearness alone is not connection completeness, fit or capacity certification.",
+        "unknown_placement_members_not_screened": []
+      }
+    }
+  ],
+  "issues": [
+    {
+      "code": "complete_native_physical_export",
+      "evidence": {
+        "stored_readiness": {
+          "counts": {
+            "analysis_elements": 80,
+            "design_records": 151,
+            "members": 38,
+            "panels": 1
+          },
+          "findings": [
+            {
+              "code": "connection_fastener_quantity",
+              "count": 32,
+              "entity_ids": [
+                "CONN-FR1-BASE-L",
+                "CONN-FR1-BASE-R",
+                "CONN-FR1-KBCOL-L",
+                "CONN-FR1-KBCOL-R",
+                "CONN-FR1-KNEE-L",
+                "CONN-FR1-KNEE-R",
+                "CONN-FR2-BASE-L",
+                "CONN-FR2-BASE-R",
+                "CONN-FR2-KBCOL-L",
+                "CONN-FR2-KBCOL-R",
+                "CONN-FR2-KNEE-L",
+                "CONN-FR2-KNEE-R",
+                "CONN-FR3-BASE-L",
+                "CONN-FR3-BASE-R",
+                "CONN-FR3-KBCOL-L",
+                "CONN-FR3-KBCOL-R",
+                "CONN-FR3-KNEE-L",
+                "CONN-FR3-KNEE-R",
+                "CONN-FR4-BASE-L",
+                "CONN-FR4-BASE-R",
+                "CONN-FR4-KBCOL-L",
+                "CONN-FR4-KBCOL-R",
+                "CONN-FR4-KNEE-L",
+                "CONN-FR4-KNEE-R",
+                "CONN-STRAP-E1-A",
+                "CONN-STRAP-E1-A-END",
+                "CONN-STRAP-E1-B",
+                "CONN-STRAP-E1-B-END",
+                "CONN-STRAP-E2-A",
+                "CONN-STRAP-E2-A-END",
+                "CONN-STRAP-E2-B",
+                "CONN-STRAP-E2-B-END"
+              ],
+              "examples": [
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "CONN-FR1-BASE-L",
+                  "declared_count": 4,
+                  "part_id": "FR1-L-RODS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "CONN-FR1-BASE-R",
+                  "declared_count": 4,
+                  "part_id": "FR1-R-RODS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR1-KNEE-L",
+                  "declared_count": 4,
+                  "part_id": "FR1-L-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR1-KNEE-R",
+                  "declared_count": 4,
+                  "part_id": "FR1-R-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "CONN-FR2-BASE-L",
+                  "declared_count": 4,
+                  "part_id": "FR2-L-RODS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "CONN-FR2-BASE-R",
+                  "declared_count": 4,
+                  "part_id": "FR2-R-RODS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR2-KNEE-L",
+                  "declared_count": 4,
+                  "part_id": "FR2-L-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR2-KNEE-R",
+                  "declared_count": 4,
+                  "part_id": "FR2-R-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "CONN-FR3-BASE-L",
+                  "declared_count": 4,
+                  "part_id": "FR3-L-RODS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "CONN-FR3-BASE-R",
+                  "declared_count": 4,
+                  "part_id": "FR3-R-RODS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR3-KNEE-L",
+                  "declared_count": 4,
+                  "part_id": "FR3-L-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR3-KNEE-R",
+                  "declared_count": 4,
+                  "part_id": "FR3-R-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "CONN-FR4-BASE-L",
+                  "declared_count": 4,
+                  "part_id": "FR4-L-RODS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "CONN-FR4-BASE-R",
+                  "declared_count": 4,
+                  "part_id": "FR4-R-RODS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR4-KNEE-L",
+                  "declared_count": 4,
+                  "part_id": "FR4-L-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR4-KNEE-R",
+                  "declared_count": 4,
+                  "part_id": "FR4-R-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR1-KBCOL-L",
+                  "declared_count": 4,
+                  "part_id": "FR1-L-KBCOL-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR1-KBCOL-R",
+                  "declared_count": 4,
+                  "part_id": "FR1-R-KBCOL-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR2-KBCOL-L",
+                  "declared_count": 4,
+                  "part_id": "FR2-L-KBCOL-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR2-KBCOL-R",
+                  "declared_count": 4,
+                  "part_id": "FR2-R-KBCOL-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR3-KBCOL-L",
+                  "declared_count": 4,
+                  "part_id": "FR3-L-KBCOL-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR3-KBCOL-R",
+                  "declared_count": 4,
+                  "part_id": "FR3-R-KBCOL-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR4-KBCOL-L",
+                  "declared_count": 4,
+                  "part_id": "FR4-L-KBCOL-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "CONN-FR4-KBCOL-R",
+                  "declared_count": 4,
+                  "part_id": "FR4-R-KBCOL-BOLTS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "screw",
+                  "connection_id": "CONN-STRAP-E1-A-END",
+                  "declared_count": 6,
+                  "part_id": "STRAP-E1-A-END-SCREWS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "screw",
+                  "connection_id": "CONN-STRAP-E1-B-END",
+                  "declared_count": 6,
+                  "part_id": "STRAP-E1-B-END-SCREWS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "screw",
+                  "connection_id": "CONN-STRAP-E2-A-END",
+                  "declared_count": 6,
+                  "part_id": "STRAP-E2-A-END-SCREWS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "screw",
+                  "connection_id": "CONN-STRAP-E2-B-END",
+                  "declared_count": 6,
+                  "part_id": "STRAP-E2-B-END-SCREWS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "screw",
+                  "connection_id": "CONN-STRAP-E1-A",
+                  "declared_count": 6,
+                  "part_id": "STRAP-E1-A-SCREWS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "screw",
+                  "connection_id": "CONN-STRAP-E1-B",
+                  "declared_count": 6,
+                  "part_id": "STRAP-E1-B-SCREWS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "screw",
+                  "connection_id": "CONN-STRAP-E2-A",
+                  "declared_count": 6,
+                  "part_id": "STRAP-E2-A-SCREWS"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "screw",
+                  "connection_id": "CONN-STRAP-E2-B",
+                  "declared_count": 6,
+                  "part_id": "STRAP-E2-B-SCREWS"
+                }
+              ],
+              "message": "A solid fastener count exceeds the distinct located fastener solids in its local design assembly; instantiate the actual checked pattern instead of multiplying a representative solid by a count label",
+              "severity": "needs_input"
+            }
+          ],
+          "status": "needs_input"
+        },
+        "current_contract_findings": [
+          {
+            "code": "connection_fastener_quantity",
+            "message": "A solid fastener count exceeds the distinct located fastener solids in its local design assembly; instantiate the actual checked pattern instead of multiplying a representative solid by a count label",
+            "entity_ids": [
+              "CONN-FR1-BASE-L",
+              "CONN-FR1-BASE-R",
+              "CONN-FR1-KBCOL-L",
+              "CONN-FR1-KBCOL-R",
+              "CONN-FR1-KNEE-L",
+              "CONN-FR1-KNEE-R",
+              "CONN-FR2-BASE-L",
+              "CONN-FR2-BASE-R",
+              "CONN-FR2-KBCOL-L",
+              "CONN-FR2-KBCOL-R",
+              "CONN-FR2-KNEE-L",
+              "CONN-FR2-KNEE-R",
+              "CONN-FR3-BASE-L",
+              "CONN-FR3-BASE-R",
+              "CONN-FR3-KBCOL-L",
+              "CONN-FR3-KBCOL-R",
+              "CONN-FR3-KNEE-L",
+              "CONN-FR3-KNEE-R",
+              "CONN-FR4-BASE-L",
+              "CONN-FR4-BASE-R",
+              "CONN-FR4-KBCOL-L",
+              "CONN-FR4-KBCOL-R",
+              "CONN-FR4-KNEE-L",
+              "CONN-FR4-KNEE-R",
+              "CONN-STRAP-E1-A",
+              "CONN-STRAP-E1-A-END",
+              "CONN-STRAP-E1-B",
+              "CONN-STRAP-E1-B-END",
+              "CONN-STRAP-E2-A",
+              "CONN-STRAP-E2-A-END",
+              "CONN-STRAP-E2-B",
+              "CONN-STRAP-E2-B-END"
+            ],
+            "severity": "needs_input",
+            "count": 32,
+            "examples": [
+              {
+                "connection_id": "CONN-FR1-BASE-L",
+                "part_id": "FR1-L-RODS",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR1-BASE-R",
+                "part_id": "FR1-R-RODS",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR1-KNEE-L",
+                "part_id": "FR1-L-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR1-KNEE-R",
+                "part_id": "FR1-R-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR2-BASE-L",
+                "part_id": "FR2-L-RODS",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR2-BASE-R",
+                "part_id": "FR2-R-RODS",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR2-KNEE-L",
+                "part_id": "FR2-L-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR2-KNEE-R",
+                "part_id": "FR2-R-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR3-BASE-L",
+                "part_id": "FR3-L-RODS",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR3-BASE-R",
+                "part_id": "FR3-R-RODS",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR3-KNEE-L",
+                "part_id": "FR3-L-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR3-KNEE-R",
+                "part_id": "FR3-R-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR4-BASE-L",
+                "part_id": "FR4-L-RODS",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR4-BASE-R",
+                "part_id": "FR4-R-RODS",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR4-KNEE-L",
+                "part_id": "FR4-L-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR4-KNEE-R",
+                "part_id": "FR4-R-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR1-KBCOL-L",
+                "part_id": "FR1-L-KBCOL-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR1-KBCOL-R",
+                "part_id": "FR1-R-KBCOL-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR2-KBCOL-L",
+                "part_id": "FR2-L-KBCOL-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR2-KBCOL-R",
+                "part_id": "FR2-R-KBCOL-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR3-KBCOL-L",
+                "part_id": "FR3-L-KBCOL-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR3-KBCOL-R",
+                "part_id": "FR3-R-KBCOL-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR4-KBCOL-L",
+                "part_id": "FR4-L-KBCOL-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-FR4-KBCOL-R",
+                "part_id": "FR4-R-KBCOL-BOLTS",
+                "category": "bolt",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-STRAP-E1-A-END",
+                "part_id": "STRAP-E1-A-END-SCREWS",
+                "category": "screw",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-STRAP-E1-B-END",
+                "part_id": "STRAP-E1-B-END-SCREWS",
+                "category": "screw",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-STRAP-E2-A-END",
+                "part_id": "STRAP-E2-A-END-SCREWS",
+                "category": "screw",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-STRAP-E2-B-END",
+                "part_id": "STRAP-E2-B-END-SCREWS",
+                "category": "screw",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-STRAP-E1-A",
+                "part_id": "STRAP-E1-A-SCREWS",
+                "category": "screw",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-STRAP-E1-B",
+                "part_id": "STRAP-E1-B-SCREWS",
+                "category": "screw",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-STRAP-E2-A",
+                "part_id": "STRAP-E2-A-SCREWS",
+                "category": "screw",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "CONN-STRAP-E2-B",
+                "part_id": "STRAP-E2-B-SCREWS",
+                "category": "screw",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "input_scope": [
+    {
+      "guid": "3hEkIGKO9Nbg5BjwBJ4YwL",
+      "name": "Recorded roof plane 1",
+      "role": "required_structural_coordination"
+    }
+  ],
+  "architectural_sha256": "a246500704aee3692bf8093d920db5b66a1c1069547fb6baadbaba960b0e0855",
+  "architectural_handoff_sha256": "83be9e92432d38dc8d9a32a1b025c11aa9e1e105cacdd8b90040f39c74563d08",
+  "physical_package_sha256": "80829438d0f350eb1d6070d1123dbab318b3a508e86bce403a5a71eccbad351b",
+  "return_ifc_sha256": "030bdd525e13f39f2260780baf2e19e1fa60cbc69a30ccfabc74f8f3b67d41ad",
+  "counts": {
+    "analysis_only": 0,
+    "connections": 84,
+    "interfaces": 0,
+    "joint_dispositions": 8,
+    "joints": 92,
+    "materials": 7,
+    "members": 38,
+    "openings": 0,
+    "panels": 1,
+    "profiles": 11,
+    "record_dispositions": 11
+  },
+  "limits": [
+    "Existing own-output package with independent geometry/data checks; not a fresh analysis, engineering certification or fabrication acceptance.",
+    "Base slabs and explicitly existing host context are outside the new elevated steel design comparison and remain in the original architectural IFC.",
+    "Input fixtures are synthetic; no native Revit application acceptance is claimed."
+  ],
+  "key": "cfs26",
+  "check_binding": {
+    "checker": "72bc7bb6c45509ef76ab60a17ace2f500637d5e358138bceece3d15121a72278",
+    "algorithms": "972e237fce8421ffa6b4be2f39cba5420bedfe1eed870a3f83934780b1eb33c4",
+    "returned_ifc": "030bdd525e13f39f2260780baf2e19e1fa60cbc69a30ccfabc74f8f3b67d41ad"
+  }
+}

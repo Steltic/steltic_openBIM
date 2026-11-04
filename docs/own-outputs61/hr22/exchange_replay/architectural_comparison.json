@@ -1,0 +1,729 @@
+{
+  "case": "hr22",
+  "module": "HR",
+  "project": "WFRESH61_hr22_20261103",
+  "variant": "replay",
+  "checked_at": 1793764835.5150704,
+  "status": "needs_resolution",
+  "checks": [
+    {
+      "code": "own_output_binding",
+      "passed": true,
+      "evidence": {
+        "physical_supplements_supplied": false,
+        "source_package_sha256": "9132e5e4b4cfd5979c7ffc7f3776342eaba3ee04e0121a4253723eb36dfed25a"
+      }
+    },
+    {
+      "code": "complete_native_physical_export",
+      "passed": true,
+      "evidence": {
+        "stored_readiness": {
+          "counts": {
+            "analysis_elements": 558,
+            "design_records": 26,
+            "members": 558,
+            "panels": 6
+          },
+          "findings": [],
+          "status": "ready"
+        },
+        "current_contract_findings": []
+      }
+    },
+    {
+      "code": "return_fully_rendered",
+      "passed": true,
+      "evidence": {
+        "source_products": 2619,
+        "selected": 2619,
+        "displayed": 2619,
+        "unrendered": 0,
+        "excluded_by_scope": 0,
+        "triangles": 38800
+      }
+    },
+    {
+      "code": "architectural_opening_export_geometry",
+      "passed": true,
+      "evidence": {
+        "unresolved_opening_warnings": []
+      }
+    },
+    {
+      "code": "recoverable_input_surface_3cZ59b3YnVLRgnvw9Xt4Ee",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 16.25 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_2LXphfybnTNRN5KP9IOIIE",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 16 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_2KJ3joyyPJCRGQjR82$vH1",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 30.25 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_1z6Q89ak1S$PMY0c1nKqqE",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 30 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_3cZlhUv25OTuyIKUs2hBFT",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 44.25 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_3H6ADu_XnT6uS5RlCGEeCI",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 44 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_3965AP02PJZP5itrwMS$IZ",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 58.25 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_3meZY4cunKoA6o88KPT5kC",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 58 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_30b37G5DPU9vOERA9wQ$c6",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 72.25 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_1hWLIO7DjNgh6quseWlAxP",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 72 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_0pxOjCskfGLPNEwEnMCxoO",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 86.25 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_3EFpTjx6rRBAp9zwi9LuDK",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 86 ft / 1"
+      }
+    },
+    {
+      "code": "floor_roof_panel_classification",
+      "passed": true,
+      "evidence": {
+        "untyped_horizontal_or_sloped_panels": [],
+        "method": "Panel geometry is compared even when the source did not declare its floor/roof role; role omission is reported separately."
+      }
+    },
+    {
+      "code": "floor_roof_planes_footprints_voids",
+      "passed": false,
+      "evidence": {
+        "required_plane_groups": 12,
+        "returned_plane_groups": 6,
+        "differences": [
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -4.953
+            ],
+            "input_area_m2": 2006.7056639999998,
+            "changed_area_m2": 2006.7056639999998,
+            "matched_planes": 0
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -4.8768
+            ],
+            "input_area_m2": 1968.0579993599997,
+            "changed_area_m2": 38.647664639999995,
+            "matched_planes": 1
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -9.2202
+            ],
+            "input_area_m2": 2006.7056639999998,
+            "changed_area_m2": 2006.7056639999998,
+            "matched_planes": 0
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -9.144
+            ],
+            "input_area_m2": 1968.0579993599997,
+            "changed_area_m2": 38.647664639999995,
+            "matched_planes": 1
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -13.4874
+            ],
+            "input_area_m2": 2006.7056639999998,
+            "changed_area_m2": 2006.7056639999998,
+            "matched_planes": 0
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -13.4112
+            ],
+            "input_area_m2": 1968.0579993599997,
+            "changed_area_m2": 38.647664639999995,
+            "matched_planes": 1
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -17.7546
+            ],
+            "input_area_m2": 2006.7056639999998,
+            "changed_area_m2": 2006.7056639999998,
+            "matched_planes": 0
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -17.6784
+            ],
+            "input_area_m2": 1968.0579993599997,
+            "changed_area_m2": 38.647664639999995,
+            "matched_planes": 1
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -22.0218
+            ],
+            "input_area_m2": 2006.7056639999998,
+            "changed_area_m2": 2006.7056639999998,
+            "matched_planes": 0
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -21.9456
+            ],
+            "input_area_m2": 1968.0579993599997,
+            "changed_area_m2": 38.647664639999995,
+            "matched_planes": 1
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -26.289
+            ],
+            "input_area_m2": 2006.7056639999998,
+            "changed_area_m2": 2006.7056639999998,
+            "matched_planes": 0
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -26.2128
+            ],
+            "input_area_m2": 1968.0579993599997,
+            "changed_area_m2": 38.647664639999995,
+            "matched_planes": 1
+          }
+        ],
+        "plane_distance_tolerance_m": 0.005
+      }
+    },
+    {
+      "code": "no_unrequested_floor_roof_planes",
+      "passed": true,
+      "evidence": {
+        "extra_planes": []
+      }
+    },
+    {
+      "code": "structural_datums_retained",
+      "passed": true,
+      "evidence": {
+        "required": [
+          {
+            "id": "3_y3KwmeHLcRxOpNI4DhNE",
+            "name": "Ground",
+            "elevation_m": 0.0
+          },
+          {
+            "id": "2lLeEOJwHJkxqTtL_GYURj",
+            "name": "Datum 16.0 ft",
+            "elevation_m": 4.8768
+          },
+          {
+            "id": "1$08pzfOnQ7Bq9EVS9zA4R",
+            "name": "Datum 30.0 ft",
+            "elevation_m": 9.144
+          },
+          {
+            "id": "3JOujK1_XVRfM6t6x9Y0iF",
+            "name": "Datum 44.0 ft",
+            "elevation_m": 13.411200000000001
+          },
+          {
+            "id": "3dsok8Qj1UIOeUIU690Pf3",
+            "name": "Datum 58.0 ft",
+            "elevation_m": 17.678400000000003
+          },
+          {
+            "id": "3lYYaiwIbUZA1f1q0pLRZ7",
+            "name": "Datum 72.0 ft",
+            "elevation_m": 21.945600000000002
+          },
+          {
+            "id": "1C5u7PSlvKTxZWFxpJZDt8",
+            "name": "Datum 86.0 ft",
+            "elevation_m": 26.2128
+          }
+        ],
+        "returned": [
+          {
+            "id": "2u7QVONxjIJAtPd7CSgzD$",
+            "name": "Ground",
+            "elevation_m": 0.0
+          },
+          {
+            "id": "1HjeIx94bP8BCphU564rZ8",
+            "name": "Datum 16.0 ft",
+            "elevation_m": 4.8768
+          },
+          {
+            "id": "3iPro2E1fOIPzCYzq2LBjh",
+            "name": "Datum 30.0 ft",
+            "elevation_m": 9.144
+          },
+          {
+            "id": "2aGVaWGA5MPwt8cGr6dGQG",
+            "name": "Datum 44.0 ft",
+            "elevation_m": 13.4112
+          },
+          {
+            "id": "0F5kqoXv9H_fQ3W3VmCGPt",
+            "name": "Datum 58.0 ft",
+            "elevation_m": 17.678400000000003
+          },
+          {
+            "id": "0ENJ5CKPfNQPodmQaczoCz",
+            "name": "Datum 72.0 ft",
+            "elevation_m": 21.945600000000002
+          },
+          {
+            "id": "0_OCh2FzbJl9$wPx7_OvvE",
+            "name": "Datum 86.0 ft",
+            "elevation_m": 26.212799999999998
+          }
+        ],
+        "missing": []
+      }
+    },
+    {
+      "code": "architectural_grid_locations",
+      "passed": true,
+      "evidence": {
+        "source_axes": 12,
+        "returned_axes": 12,
+        "missing_or_changed": [],
+        "checks": "labels, U/V/W family and full 3D polyline"
+      }
+    },
+    {
+      "code": "architectural_source_identity",
+      "passed": true,
+      "evidence": {
+        "expected": "e0935edd79415dbfc7accdbbff33eb7ef9508ffa73070af1510bc8e9bd549b47",
+        "declared": "e0935edd79415dbfc7accdbbff33eb7ef9508ffa73070af1510bc8e9bd549b47"
+      }
+    },
+    {
+      "code": "physical_member_placement_defined",
+      "passed": true,
+      "evidence": {
+        "unknown_member_ids": [],
+        "method": "Null offsets or orientation remain unknown; no zero offsets or local axes are invented for these checks."
+      }
+    },
+    {
+      "code": "door_window_boundaries",
+      "passed": true,
+      "evidence": {
+        "source_count": 0,
+        "physical_count": 0,
+        "changed": []
+      }
+    },
+    {
+      "code": "door_window_workline_clearance",
+      "passed": true,
+      "evidence": {
+        "count": 0,
+        "examples": [],
+        "method": "Strict opening bounds against physical worklines; separate from a solid clash or fabrication-fit check"
+      }
+    },
+    {
+      "code": "door_window_solid_clearance",
+      "passed": true,
+      "evidence": {
+        "checked_solids": 1743,
+        "clashes": [],
+        "method": "Returned IFC mesh triangles against source axis-aligned opening volumes, with 5 mm tolerance at jamb/sill/head. All door/window fixtures in this sweep have axis-aligned hosts or are axis-aligned freestanding reservations."
+      }
+    },
+    {
+      "code": "connection_part_dimensions",
+      "passed": true,
+      "evidence": {
+        "checked": 990,
+        "mismatches": [],
+        "method": "Explicit plate/gusset thickness or cylindrical shaft diameter versus solid dimensions; tolerance max(0.005 in, 2%). Resolve against actual completed design records, not by relabelling an arbitrary solid."
+      }
+    },
+    {
+      "code": "member_design_record_sections",
+      "passed": true,
+      "evidence": {
+        "checked_links": 558,
+        "links_requiring_other_review": 0,
+        "mismatches": [],
+        "method": "Actual physical catalogue section label versus every linked member record with an explicit inputs.section. Custom profile aliases and built-up constituent calculations are outside this exact-label screen."
+      }
+    },
+    {
+      "code": "gravity_profile_orientation",
+      "passed": true,
+      "evidence": {
+        "checked": 348,
+        "suspect_members": [],
+        "method": "Deep gravity-framing profiles: detect depth axis nearly perpendicular to projected gravity; inspect intentional weak-axis designs separately.",
+        "unknown_placement_members_not_screened": []
+      }
+    },
+    {
+      "code": "built_up_constituents_separate",
+      "passed": true,
+      "evidence": {
+        "checked_profiles": 0,
+        "overlaps": [],
+        "method": "Separate built-up constituents must not substantially occupy the same section area; threshold >0.005 in2 and >5% of a constituent, allowing preview fillet simplifications."
+      }
+    },
+    {
+      "code": "no_duplicate_physical_occurrences",
+      "passed": true,
+      "evidence": {
+        "count": 0,
+        "examples": []
+      }
+    },
+    {
+      "code": "located_connection_occurrences",
+      "passed": true,
+      "evidence": {
+        "connections": 455,
+        "designed_without_parts": [],
+        "delegated_interfaces": []
+      }
+    },
+    {
+      "code": "connection_occurrence_coverage",
+      "passed": true,
+      "evidence": {
+        "checked_exemptions": 0,
+        "problems": [],
+        "method": "Explicit hardware notes and column bases lacking any connection-part bounds within six feet; continuous-subdivision claims must have opposing collinear member ends. Checks returned solid and reference-part bounds. Nearness alone is not connection completeness, fit or capacity certification.",
+        "unknown_placement_members_not_screened": []
+      }
+    }
+  ],
+  "issues": [
+    {
+      "code": "floor_roof_planes_footprints_voids",
+      "evidence": {
+        "required_plane_groups": 12,
+        "returned_plane_groups": 6,
+        "differences": [
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -4.953
+            ],
+            "input_area_m2": 2006.7056639999998,
+            "changed_area_m2": 2006.7056639999998,
+            "matched_planes": 0
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -4.8768
+            ],
+            "input_area_m2": 1968.0579993599997,
+            "changed_area_m2": 38.647664639999995,
+            "matched_planes": 1
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -9.2202
+            ],
+            "input_area_m2": 2006.7056639999998,
+            "changed_area_m2": 2006.7056639999998,
+            "matched_planes": 0
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -9.144
+            ],
+            "input_area_m2": 1968.0579993599997,
+            "changed_area_m2": 38.647664639999995,
+            "matched_planes": 1
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -13.4874
+            ],
+            "input_area_m2": 2006.7056639999998,
+            "changed_area_m2": 2006.7056639999998,
+            "matched_planes": 0
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -13.4112
+            ],
+            "input_area_m2": 1968.0579993599997,
+            "changed_area_m2": 38.647664639999995,
+            "matched_planes": 1
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -17.7546
+            ],
+            "input_area_m2": 2006.7056639999998,
+            "changed_area_m2": 2006.7056639999998,
+            "matched_planes": 0
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -17.6784
+            ],
+            "input_area_m2": 1968.0579993599997,
+            "changed_area_m2": 38.647664639999995,
+            "matched_planes": 1
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -22.0218
+            ],
+            "input_area_m2": 2006.7056639999998,
+            "changed_area_m2": 2006.7056639999998,
+            "matched_planes": 0
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -21.9456
+            ],
+            "input_area_m2": 1968.0579993599997,
+            "changed_area_m2": 38.647664639999995,
+            "matched_planes": 1
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -26.289
+            ],
+            "input_area_m2": 2006.7056639999998,
+            "changed_area_m2": 2006.7056639999998,
+            "matched_planes": 0
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -26.2128
+            ],
+            "input_area_m2": 1968.0579993599997,
+            "changed_area_m2": 38.647664639999995,
+            "matched_planes": 1
+          }
+        ],
+        "plane_distance_tolerance_m": 0.005
+      }
+    }
+  ],
+  "input_scope": [
+    {
+      "guid": "3cZ59b3YnVLRgnvw9Xt4Ee",
+      "name": "Recorded floor/roof plane 16.25 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "2LXphfybnTNRN5KP9IOIIE",
+      "name": "Recorded floor/roof plane 16 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "2KJ3joyyPJCRGQjR82$vH1",
+      "name": "Recorded floor/roof plane 30.25 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "1z6Q89ak1S$PMY0c1nKqqE",
+      "name": "Recorded floor/roof plane 30 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "3cZlhUv25OTuyIKUs2hBFT",
+      "name": "Recorded floor/roof plane 44.25 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "3H6ADu_XnT6uS5RlCGEeCI",
+      "name": "Recorded floor/roof plane 44 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "3965AP02PJZP5itrwMS$IZ",
+      "name": "Recorded floor/roof plane 58.25 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "3meZY4cunKoA6o88KPT5kC",
+      "name": "Recorded floor/roof plane 58 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "30b37G5DPU9vOERA9wQ$c6",
+      "name": "Recorded floor/roof plane 72.25 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "1hWLIO7DjNgh6quseWlAxP",
+      "name": "Recorded floor/roof plane 72 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "0pxOjCskfGLPNEwEnMCxoO",
+      "name": "Recorded floor/roof plane 86.25 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "3EFpTjx6rRBAp9zwi9LuDK",
+      "name": "Recorded floor/roof plane 86 ft / 1",
+      "role": "required_structural_coordination"
+    }
+  ],
+  "architectural_sha256": "e0935edd79415dbfc7accdbbff33eb7ef9508ffa73070af1510bc8e9bd549b47",
+  "architectural_handoff_sha256": "15a89c2ab1a3aaae352a1c63cea26b81ef7ee2071afd796d6e24760a7261ddb1",
+  "physical_package_sha256": "9132e5e4b4cfd5979c7ffc7f3776342eaba3ee04e0121a4253723eb36dfed25a",
+  "return_ifc_sha256": "13c57db52c05fb70214a201d8e4a16d7b8fcc696e55172444ca0469c284deb5a",
+  "counts": {
+    "analysis_only": 0,
+    "connections": 455,
+    "interfaces": 2,
+    "joint_dispositions": 0,
+    "joints": 455,
+    "materials": 8,
+    "members": 558,
+    "openings": 0,
+    "panels": 6,
+    "profiles": 12,
+    "record_dispositions": 0
+  },
+  "limits": [
+    "Existing own-output package with independent geometry/data checks; not a fresh analysis, engineering certification or fabrication acceptance.",
+    "Base slabs and explicitly existing host context are outside the new elevated steel design comparison and remain in the original architectural IFC.",
+    "Input fixtures are synthetic; no native Revit application acceptance is claimed."
+  ],
+  "key": "hr22",
+  "check_binding": {
+    "checker": "72bc7bb6c45509ef76ab60a17ace2f500637d5e358138bceece3d15121a72278",
+    "algorithms": "972e237fce8421ffa6b4be2f39cba5420bedfe1eed870a3f83934780b1eb33c4",
+    "returned_ifc": "13c57db52c05fb70214a201d8e4a16d7b8fcc696e55172444ca0469c284deb5a"
+  }
+}

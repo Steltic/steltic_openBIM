@@ -1,0 +1,6 @@
+{
+  "key": "cfs13",
+  "case": "cfs13",
+  "status": "unavailable",
+  "reason": "The saved job has no cfg.py and calculation package pair."
+}

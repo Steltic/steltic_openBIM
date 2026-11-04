@@ -1,0 +1,5423 @@
+{
+  "case": "hr25",
+  "module": "HR",
+  "project": "WFRESH61_hr25_20261103",
+  "variant": "replay",
+  "checked_at": 1793764837.5324328,
+  "status": "needs_resolution",
+  "checks": [
+    {
+      "code": "own_output_binding",
+      "passed": true,
+      "evidence": {
+        "physical_supplements_supplied": false,
+        "source_package_sha256": "4d83b4b1a1d6f7879e1151366af547b96bee572e2e3bad2b2fc07331f7e23578"
+      }
+    },
+    {
+      "code": "complete_native_physical_export",
+      "passed": false,
+      "evidence": {
+        "stored_readiness": {
+          "counts": {
+            "analysis_elements": 1085,
+            "design_records": 54,
+            "members": 1085,
+            "panels": 12
+          },
+          "findings": [
+            {
+              "code": "connection_fastener_quantity",
+              "count": 449,
+              "entity_ids": [
+                "c-j1",
+                "c-j10",
+                "c-j100",
+                "c-j101",
+                "c-j102",
+                "c-j103",
+                "c-j104",
+                "c-j105",
+                "c-j106",
+                "c-j107",
+                "c-j108",
+                "c-j109",
+                "c-j11",
+                "c-j110",
+                "c-j111",
+                "c-j112",
+                "c-j113",
+                "c-j114",
+                "c-j115",
+                "c-j116",
+                "c-j117",
+                "c-j118",
+                "c-j119",
+                "c-j12",
+                "c-j120",
+                "c-j121",
+                "c-j122",
+                "c-j123",
+                "c-j124",
+                "c-j125",
+                "c-j126",
+                "c-j127",
+                "c-j128",
+                "c-j129",
+                "c-j13",
+                "c-j130",
+                "c-j131",
+                "c-j132",
+                "c-j133",
+                "c-j134",
+                "c-j135",
+                "c-j136",
+                "c-j137",
+                "c-j138",
+                "c-j139",
+                "c-j14",
+                "c-j140",
+                "c-j141",
+                "c-j142",
+                "c-j143",
+                "c-j144",
+                "c-j145",
+                "c-j146",
+                "c-j147",
+                "c-j148",
+                "c-j149",
+                "c-j15",
+                "c-j150",
+                "c-j151",
+                "c-j152",
+                "c-j153",
+                "c-j154",
+                "c-j155",
+                "c-j156",
+                "c-j157",
+                "c-j158",
+                "c-j159",
+                "c-j16",
+                "c-j160",
+                "c-j161",
+                "c-j162",
+                "c-j163",
+                "c-j164",
+                "c-j165",
+                "c-j166",
+                "c-j167",
+                "c-j168",
+                "c-j169",
+                "c-j17",
+                "c-j170",
+                "c-j171",
+                "c-j172",
+                "c-j173",
+                "c-j174",
+                "c-j175",
+                "c-j176",
+                "c-j177",
+                "c-j178",
+                "c-j179",
+                "c-j18",
+                "c-j180",
+                "c-j181",
+                "c-j182",
+                "c-j183",
+                "c-j184",
+                "c-j185",
+                "c-j186",
+                "c-j187",
+                "c-j188",
+                "c-j189",
+                "c-j19",
+                "c-j190",
+                "c-j191",
+                "c-j192",
+                "c-j193",
+                "c-j194",
+                "c-j195",
+                "c-j196",
+                "c-j197",
+                "c-j198",
+                "c-j199",
+                "c-j2",
+                "c-j20",
+                "c-j200",
+                "c-j201",
+                "c-j202",
+                "c-j203",
+                "c-j204",
+                "c-j205",
+                "c-j206",
+                "c-j207",
+                "c-j208",
+                "c-j209",
+                "c-j21",
+                "c-j210",
+                "c-j211",
+                "c-j212",
+                "c-j213",
+                "c-j214",
+                "c-j215",
+                "c-j216",
+                "c-j217",
+                "c-j218",
+                "c-j219",
+                "c-j22",
+                "c-j220",
+                "c-j221",
+                "c-j222",
+                "c-j223",
+                "c-j224",
+                "c-j225",
+                "c-j226",
+                "c-j227",
+                "c-j228",
+                "c-j229",
+                "c-j23",
+                "c-j230",
+                "c-j231",
+                "c-j232",
+                "c-j233",
+                "c-j234",
+                "c-j235",
+                "c-j236",
+                "c-j237",
+                "c-j238",
+                "c-j239",
+                "c-j24",
+                "c-j240",
+                "c-j241",
+                "c-j242",
+                "c-j243",
+                "c-j244",
+                "c-j245",
+                "c-j246",
+                "c-j247",
+                "c-j248",
+                "c-j249",
+                "c-j25",
+                "c-j250",
+                "c-j251",
+                "c-j252",
+                "c-j253",
+                "c-j254",
+                "c-j255",
+                "c-j256",
+                "c-j257",
+                "c-j258",
+                "c-j259",
+                "c-j26",
+                "c-j260",
+                "c-j261",
+                "c-j262",
+                "c-j263",
+                "c-j264",
+                "c-j265",
+                "c-j266",
+                "c-j267",
+                "c-j268",
+                "c-j269",
+                "c-j27",
+                "c-j270",
+                "c-j271",
+                "c-j272",
+                "c-j273",
+                "c-j274",
+                "c-j275",
+                "c-j276",
+                "c-j277",
+                "c-j278",
+                "c-j279",
+                "c-j28",
+                "c-j280",
+                "c-j281",
+                "c-j282",
+                "c-j283",
+                "c-j284",
+                "c-j285",
+                "c-j286",
+                "c-j287",
+                "c-j288",
+                "c-j289",
+                "c-j29",
+                "c-j290",
+                "c-j291",
+                "c-j292",
+                "c-j293",
+                "c-j294",
+                "c-j295",
+                "c-j296",
+                "c-j297",
+                "c-j298",
+                "c-j299",
+                "c-j3",
+                "c-j30",
+                "c-j300",
+                "c-j301",
+                "c-j302",
+                "c-j303",
+                "c-j304",
+                "c-j305",
+                "c-j306",
+                "c-j307",
+                "c-j308",
+                "c-j309",
+                "c-j31",
+                "c-j310",
+                "c-j311",
+                "c-j312",
+                "c-j313",
+                "c-j314",
+                "c-j315",
+                "c-j316",
+                "c-j317",
+                "c-j318",
+                "c-j319",
+                "c-j32",
+                "c-j320",
+                "c-j321",
+                "c-j322",
+                "c-j323",
+                "c-j324",
+                "c-j325",
+                "c-j326",
+                "c-j327",
+                "c-j328",
+                "c-j329",
+                "c-j33",
+                "c-j330",
+                "c-j331",
+                "c-j332",
+                "c-j333",
+                "c-j334",
+                "c-j335",
+                "c-j336",
+                "c-j337",
+                "c-j338",
+                "c-j339",
+                "c-j34",
+                "c-j340",
+                "c-j341",
+                "c-j342",
+                "c-j343",
+                "c-j344",
+                "c-j345",
+                "c-j346",
+                "c-j347",
+                "c-j348",
+                "c-j349",
+                "c-j35",
+                "c-j350",
+                "c-j351",
+                "c-j352",
+                "c-j353",
+                "c-j354",
+                "c-j355",
+                "c-j356",
+                "c-j357",
+                "c-j358",
+                "c-j359",
+                "c-j36",
+                "c-j360",
+                "c-j361",
+                "c-j362",
+                "c-j363",
+                "c-j364",
+                "c-j365",
+                "c-j366",
+                "c-j367",
+                "c-j368",
+                "c-j369",
+                "c-j37",
+                "c-j370",
+                "c-j371",
+                "c-j372",
+                "c-j373",
+                "c-j374",
+                "c-j375",
+                "c-j376",
+                "c-j377",
+                "c-j378",
+                "c-j379",
+                "c-j38",
+                "c-j380",
+                "c-j381",
+                "c-j382",
+                "c-j383",
+                "c-j384",
+                "c-j385",
+                "c-j386",
+                "c-j387",
+                "c-j388",
+                "c-j389",
+                "c-j39",
+                "c-j390",
+                "c-j391",
+                "c-j392",
+                "c-j393",
+                "c-j394",
+                "c-j395",
+                "c-j396",
+                "c-j397",
+                "c-j398",
+                "c-j399",
+                "c-j4",
+                "c-j40",
+                "c-j400",
+                "c-j401",
+                "c-j402",
+                "c-j403",
+                "c-j404",
+                "c-j405",
+                "c-j406",
+                "c-j407",
+                "c-j408",
+                "c-j409",
+                "c-j41",
+                "c-j410",
+                "c-j411",
+                "c-j412",
+                "c-j413",
+                "c-j414",
+                "c-j415",
+                "c-j416",
+                "c-j417",
+                "c-j418",
+                "c-j419",
+                "c-j42",
+                "c-j420",
+                "c-j421",
+                "c-j422",
+                "c-j423",
+                "c-j424",
+                "c-j425",
+                "c-j426",
+                "c-j427",
+                "c-j428",
+                "c-j429",
+                "c-j43",
+                "c-j430",
+                "c-j431",
+                "c-j432",
+                "c-j433",
+                "c-j434",
+                "c-j435",
+                "c-j436",
+                "c-j437",
+                "c-j438",
+                "c-j439",
+                "c-j44",
+                "c-j440",
+                "c-j441",
+                "c-j442",
+                "c-j443",
+                "c-j444",
+                "c-j445",
+                "c-j446",
+                "c-j447",
+                "c-j448",
+                "c-j449",
+                "c-j45",
+                "c-j46",
+                "c-j47",
+                "c-j48",
+                "c-j49",
+                "c-j5",
+                "c-j50",
+                "c-j51",
+                "c-j52",
+                "c-j53",
+                "c-j54",
+                "c-j55",
+                "c-j56",
+                "c-j57",
+                "c-j58",
+                "c-j59",
+                "c-j6",
+                "c-j60",
+                "c-j61",
+                "c-j62",
+                "c-j63",
+                "c-j64",
+                "c-j65",
+                "c-j66",
+                "c-j67",
+                "c-j68",
+                "c-j69",
+                "c-j7",
+                "c-j70",
+                "c-j71",
+                "c-j72",
+                "c-j73",
+                "c-j74",
+                "c-j75",
+                "c-j76",
+                "c-j77",
+                "c-j78",
+                "c-j79",
+                "c-j8",
+                "c-j80",
+                "c-j81",
+                "c-j82",
+                "c-j83",
+                "c-j84",
+                "c-j85",
+                "c-j86",
+                "c-j87",
+                "c-j88",
+                "c-j89",
+                "c-j9",
+                "c-j90",
+                "c-j91",
+                "c-j92",
+                "c-j93",
+                "c-j94",
+                "c-j95",
+                "c-j96",
+                "c-j97",
+                "c-j98",
+                "c-j99"
+              ],
+              "examples": [
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "c-j1",
+                  "declared_count": 12,
+                  "part_id": "anchors"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j2",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j3",
+                  "declared_count": 8,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j4",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j5",
+                  "declared_count": 8,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j6",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j7",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j8",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j9",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j10",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j11",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j12",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j13",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "c-j14",
+                  "declared_count": 12,
+                  "part_id": "anchors"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j15",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j16",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j17",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j18",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j19",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j20",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j21",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j22",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j23",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j24",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j25",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j26",
+                  "declared_count": 3,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "c-j27",
+                  "declared_count": 12,
+                  "part_id": "anchors"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j28",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j29",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j30",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j31",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j32",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j33",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j34",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j35",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j36",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j37",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j38",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j39",
+                  "declared_count": 3,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "c-j40",
+                  "declared_count": 12,
+                  "part_id": "anchors"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j41",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j42",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j43",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j44",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j45",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j46",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j47",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j48",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j49",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j50",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j51",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j52",
+                  "declared_count": 3,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "c-j53",
+                  "declared_count": 12,
+                  "part_id": "anchors"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j54",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j55",
+                  "declared_count": 8,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j56",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j57",
+                  "declared_count": 8,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j58",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j59",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j60",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j61",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j62",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j63",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j64",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j65",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "c-j66",
+                  "declared_count": 12,
+                  "part_id": "anchors"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j67",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j68",
+                  "declared_count": 8,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j69",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j70",
+                  "declared_count": 8,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j71",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j72",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j73",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j74",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j75",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j76",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j77",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j78",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "c-j79",
+                  "declared_count": 4,
+                  "part_id": "anchors"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j80",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j81",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j82",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j83",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j84",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j85",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j86",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j87",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j88",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j89",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j90",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j91",
+                  "declared_count": 3,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "c-j92",
+                  "declared_count": 4,
+                  "part_id": "anchors"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j93",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j94",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j95",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j96",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j97",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j98",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j99",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j100",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                }
+              ],
+              "message": "A solid fastener count exceeds the distinct located fastener solids in its local design assembly; instantiate the actual checked pattern instead of multiplying a representative solid by a count label",
+              "severity": "needs_input"
+            }
+          ],
+          "status": "needs_input"
+        },
+        "current_contract_findings": [
+          {
+            "code": "connection_fastener_quantity",
+            "message": "A solid fastener count exceeds the distinct located fastener solids in its local design assembly; instantiate the actual checked pattern instead of multiplying a representative solid by a count label",
+            "entity_ids": [
+              "c-j1",
+              "c-j10",
+              "c-j100",
+              "c-j101",
+              "c-j102",
+              "c-j103",
+              "c-j104",
+              "c-j105",
+              "c-j106",
+              "c-j107",
+              "c-j108",
+              "c-j109",
+              "c-j11",
+              "c-j110",
+              "c-j111",
+              "c-j112",
+              "c-j113",
+              "c-j114",
+              "c-j115",
+              "c-j116",
+              "c-j117",
+              "c-j118",
+              "c-j119",
+              "c-j12",
+              "c-j120",
+              "c-j121",
+              "c-j122",
+              "c-j123",
+              "c-j124",
+              "c-j125",
+              "c-j126",
+              "c-j127",
+              "c-j128",
+              "c-j129",
+              "c-j13",
+              "c-j130",
+              "c-j131",
+              "c-j132",
+              "c-j133",
+              "c-j134",
+              "c-j135",
+              "c-j136",
+              "c-j137",
+              "c-j138",
+              "c-j139",
+              "c-j14",
+              "c-j140",
+              "c-j141",
+              "c-j142",
+              "c-j143",
+              "c-j144",
+              "c-j145",
+              "c-j146",
+              "c-j147",
+              "c-j148",
+              "c-j149",
+              "c-j15",
+              "c-j150",
+              "c-j151",
+              "c-j152",
+              "c-j153",
+              "c-j154",
+              "c-j155",
+              "c-j156",
+              "c-j157",
+              "c-j158",
+              "c-j159",
+              "c-j16",
+              "c-j160",
+              "c-j161",
+              "c-j162",
+              "c-j163",
+              "c-j164",
+              "c-j165",
+              "c-j166",
+              "c-j167",
+              "c-j168",
+              "c-j169",
+              "c-j17",
+              "c-j170",
+              "c-j171",
+              "c-j172",
+              "c-j173",
+              "c-j174",
+              "c-j175",
+              "c-j176",
+              "c-j177",
+              "c-j178",
+              "c-j179",
+              "c-j18",
+              "c-j180",
+              "c-j181",
+              "c-j182",
+              "c-j183",
+              "c-j184",
+              "c-j185",
+              "c-j186",
+              "c-j187",
+              "c-j188",
+              "c-j189",
+              "c-j19",
+              "c-j190",
+              "c-j191",
+              "c-j192",
+              "c-j193",
+              "c-j194",
+              "c-j195",
+              "c-j196",
+              "c-j197",
+              "c-j198",
+              "c-j199",
+              "c-j2",
+              "c-j20",
+              "c-j200",
+              "c-j201",
+              "c-j202",
+              "c-j203",
+              "c-j204",
+              "c-j205",
+              "c-j206",
+              "c-j207",
+              "c-j208",
+              "c-j209",
+              "c-j21",
+              "c-j210",
+              "c-j211",
+              "c-j212",
+              "c-j213",
+              "c-j214",
+              "c-j215",
+              "c-j216",
+              "c-j217",
+              "c-j218",
+              "c-j219",
+              "c-j22",
+              "c-j220",
+              "c-j221",
+              "c-j222",
+              "c-j223",
+              "c-j224",
+              "c-j225",
+              "c-j226",
+              "c-j227",
+              "c-j228",
+              "c-j229",
+              "c-j23",
+              "c-j230",
+              "c-j231",
+              "c-j232",
+              "c-j233",
+              "c-j234",
+              "c-j235",
+              "c-j236",
+              "c-j237",
+              "c-j238",
+              "c-j239",
+              "c-j24",
+              "c-j240",
+              "c-j241",
+              "c-j242",
+              "c-j243",
+              "c-j244",
+              "c-j245",
+              "c-j246",
+              "c-j247",
+              "c-j248",
+              "c-j249",
+              "c-j25",
+              "c-j250",
+              "c-j251",
+              "c-j252",
+              "c-j253",
+              "c-j254",
+              "c-j255",
+              "c-j256",
+              "c-j257",
+              "c-j258",
+              "c-j259",
+              "c-j26",
+              "c-j260",
+              "c-j261",
+              "c-j262",
+              "c-j263",
+              "c-j264",
+              "c-j265",
+              "c-j266",
+              "c-j267",
+              "c-j268",
+              "c-j269",
+              "c-j27",
+              "c-j270",
+              "c-j271",
+              "c-j272",
+              "c-j273",
+              "c-j274",
+              "c-j275",
+              "c-j276",
+              "c-j277",
+              "c-j278",
+              "c-j279",
+              "c-j28",
+              "c-j280",
+              "c-j281",
+              "c-j282",
+              "c-j283",
+              "c-j284",
+              "c-j285",
+              "c-j286",
+              "c-j287",
+              "c-j288",
+              "c-j289",
+              "c-j29",
+              "c-j290",
+              "c-j291",
+              "c-j292",
+              "c-j293",
+              "c-j294",
+              "c-j295",
+              "c-j296",
+              "c-j297",
+              "c-j298",
+              "c-j299",
+              "c-j3",
+              "c-j30",
+              "c-j300",
+              "c-j301",
+              "c-j302",
+              "c-j303",
+              "c-j304",
+              "c-j305",
+              "c-j306",
+              "c-j307",
+              "c-j308",
+              "c-j309",
+              "c-j31",
+              "c-j310",
+              "c-j311",
+              "c-j312",
+              "c-j313",
+              "c-j314",
+              "c-j315",
+              "c-j316",
+              "c-j317",
+              "c-j318",
+              "c-j319",
+              "c-j32",
+              "c-j320",
+              "c-j321",
+              "c-j322",
+              "c-j323",
+              "c-j324",
+              "c-j325",
+              "c-j326",
+              "c-j327",
+              "c-j328",
+              "c-j329",
+              "c-j33",
+              "c-j330",
+              "c-j331",
+              "c-j332",
+              "c-j333",
+              "c-j334",
+              "c-j335",
+              "c-j336",
+              "c-j337",
+              "c-j338",
+              "c-j339",
+              "c-j34",
+              "c-j340",
+              "c-j341",
+              "c-j342",
+              "c-j343",
+              "c-j344",
+              "c-j345",
+              "c-j346",
+              "c-j347",
+              "c-j348",
+              "c-j349",
+              "c-j35",
+              "c-j350",
+              "c-j351",
+              "c-j352",
+              "c-j353",
+              "c-j354",
+              "c-j355",
+              "c-j356",
+              "c-j357",
+              "c-j358",
+              "c-j359",
+              "c-j36",
+              "c-j360",
+              "c-j361",
+              "c-j362",
+              "c-j363",
+              "c-j364",
+              "c-j365",
+              "c-j366",
+              "c-j367",
+              "c-j368",
+              "c-j369",
+              "c-j37",
+              "c-j370",
+              "c-j371",
+              "c-j372",
+              "c-j373",
+              "c-j374",
+              "c-j375",
+              "c-j376",
+              "c-j377",
+              "c-j378",
+              "c-j379",
+              "c-j38",
+              "c-j380",
+              "c-j381",
+              "c-j382",
+              "c-j383",
+              "c-j384",
+              "c-j385",
+              "c-j386",
+              "c-j387",
+              "c-j388",
+              "c-j389",
+              "c-j39",
+              "c-j390",
+              "c-j391",
+              "c-j392",
+              "c-j393",
+              "c-j394",
+              "c-j395",
+              "c-j396",
+              "c-j397",
+              "c-j398",
+              "c-j399",
+              "c-j4",
+              "c-j40",
+              "c-j400",
+              "c-j401",
+              "c-j402",
+              "c-j403",
+              "c-j404",
+              "c-j405",
+              "c-j406",
+              "c-j407",
+              "c-j408",
+              "c-j409",
+              "c-j41",
+              "c-j410",
+              "c-j411",
+              "c-j412",
+              "c-j413",
+              "c-j414",
+              "c-j415",
+              "c-j416",
+              "c-j417",
+              "c-j418",
+              "c-j419",
+              "c-j42",
+              "c-j420",
+              "c-j421",
+              "c-j422",
+              "c-j423",
+              "c-j424",
+              "c-j425",
+              "c-j426",
+              "c-j427",
+              "c-j428",
+              "c-j429",
+              "c-j43",
+              "c-j430",
+              "c-j431",
+              "c-j432",
+              "c-j433",
+              "c-j434",
+              "c-j435",
+              "c-j436",
+              "c-j437",
+              "c-j438",
+              "c-j439",
+              "c-j44",
+              "c-j440",
+              "c-j441",
+              "c-j442",
+              "c-j443",
+              "c-j444",
+              "c-j445",
+              "c-j446",
+              "c-j447",
+              "c-j448",
+              "c-j449",
+              "c-j45",
+              "c-j46",
+              "c-j47",
+              "c-j48",
+              "c-j49",
+              "c-j5",
+              "c-j50",
+              "c-j51",
+              "c-j52",
+              "c-j53",
+              "c-j54",
+              "c-j55",
+              "c-j56",
+              "c-j57",
+              "c-j58",
+              "c-j59",
+              "c-j6",
+              "c-j60",
+              "c-j61",
+              "c-j62",
+              "c-j63",
+              "c-j64",
+              "c-j65",
+              "c-j66",
+              "c-j67",
+              "c-j68",
+              "c-j69",
+              "c-j7",
+              "c-j70",
+              "c-j71",
+              "c-j72",
+              "c-j73",
+              "c-j74",
+              "c-j75",
+              "c-j76",
+              "c-j77",
+              "c-j78",
+              "c-j79",
+              "c-j8",
+              "c-j80",
+              "c-j81",
+              "c-j82",
+              "c-j83",
+              "c-j84",
+              "c-j85",
+              "c-j86",
+              "c-j87",
+              "c-j88",
+              "c-j89",
+              "c-j9",
+              "c-j90",
+              "c-j91",
+              "c-j92",
+              "c-j93",
+              "c-j94",
+              "c-j95",
+              "c-j96",
+              "c-j97",
+              "c-j98",
+              "c-j99"
+            ],
+            "severity": "needs_input",
+            "count": 449,
+            "examples": [
+              {
+                "connection_id": "c-j1",
+                "part_id": "anchors",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j2",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j3",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j4",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j5",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j6",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j7",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j8",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j9",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j10",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j11",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j12",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j13",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j14",
+                "part_id": "anchors",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j15",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j16",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j17",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j18",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j19",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j20",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j21",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j22",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j23",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j24",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j25",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j26",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 3,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j27",
+                "part_id": "anchors",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j28",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j29",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j30",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j31",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j32",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j33",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j34",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j35",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j36",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j37",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j38",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j39",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 3,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j40",
+                "part_id": "anchors",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j41",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j42",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j43",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j44",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j45",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j46",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j47",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j48",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j49",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j50",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j51",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j52",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 3,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j53",
+                "part_id": "anchors",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j54",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j55",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j56",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j57",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j58",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j59",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j60",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j61",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j62",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j63",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j64",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j65",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j66",
+                "part_id": "anchors",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j67",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j68",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j69",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j70",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j71",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j72",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j73",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j74",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j75",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j76",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j77",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j78",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j79",
+                "part_id": "anchors",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j80",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j81",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j82",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j83",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j84",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j85",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j86",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j87",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j88",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j89",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j90",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j91",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 3,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j92",
+                "part_id": "anchors",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j93",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j94",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j95",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j96",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j97",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j98",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j99",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j100",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "code": "return_fully_rendered",
+      "passed": true,
+      "evidence": {
+        "source_products": 2450,
+        "selected": 2450,
+        "displayed": 2450,
+        "unrendered": 0,
+        "excluded_by_scope": 0,
+        "triangles": 69652
+      }
+    },
+    {
+      "code": "architectural_opening_export_geometry",
+      "passed": true,
+      "evidence": {
+        "unresolved_opening_warnings": []
+      }
+    },
+    {
+      "code": "recoverable_input_surface_1QGIOtfRjKcvm4JHNIudeQ",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 16 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_1V1C6_OSjQNw1i6q3si6yA",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 29 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_1ibXhMl51HuOzhdteaA7A9",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 42 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_3epY6694vH5B8sw1h75QKx",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 55 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_3PG3J7UfXSphTyQrbx6zqf",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 68 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_0qBd2oo$HHQxe4cSPhv779",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 81 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_1QRggNeOjMd9KIhFumcM14",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 94 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_1yfCtjOaDMHfmpQ6pFZz1D",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 107 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_0OWgQxU5HL0AQg6YPgUGJc",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 120 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_21i3ZKhr9ImA7CIg7NAeBl",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 133 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_1No0XJY7XPPuW0_liygRUc",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 146 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_2pcSA2qmjInREdDYlti7Sf",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 159 ft / 1"
+      }
+    },
+    {
+      "code": "floor_roof_panel_classification",
+      "passed": true,
+      "evidence": {
+        "untyped_horizontal_or_sloped_panels": [],
+        "method": "Panel geometry is compared even when the source did not declare its floor/roof role; role omission is reported separately."
+      }
+    },
+    {
+      "code": "floor_roof_planes_footprints_voids",
+      "passed": false,
+      "evidence": {
+        "required_plane_groups": 12,
+        "returned_plane_groups": 12,
+        "differences": [
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -4.8768
+            ],
+            "input_area_m2": 1534.0149964799998,
+            "changed_area_m2": 338.9102899199999,
+            "matched_planes": 1
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -8.8392
+            ],
+            "input_area_m2": 1534.0149964799998,
+            "changed_area_m2": 26.756075520000007,
+            "matched_planes": 1
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -12.8016
+            ],
+            "input_area_m2": 1534.0149964799998,
+            "changed_area_m2": 26.756075520000007,
+            "matched_planes": 1
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -16.764
+            ],
+            "input_area_m2": 1534.0149964799998,
+            "changed_area_m2": 26.756075520000007,
+            "matched_planes": 1
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -20.7264
+            ],
+            "input_area_m2": 1534.0149964799998,
+            "changed_area_m2": 26.756075520000007,
+            "matched_planes": 1
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -24.6888
+            ],
+            "input_area_m2": 1534.0149964799998,
+            "changed_area_m2": 26.756075520000007,
+            "matched_planes": 1
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -28.6512
+            ],
+            "input_area_m2": 1846.1692108799998,
+            "changed_area_m2": 338.91028991999997,
+            "matched_planes": 1
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -32.6136
+            ],
+            "input_area_m2": 1846.1692108799998,
+            "changed_area_m2": 26.756075520000007,
+            "matched_planes": 1
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -36.576
+            ],
+            "input_area_m2": 1846.1692108799998,
+            "changed_area_m2": 26.756075520000007,
+            "matched_planes": 1
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -40.5384
+            ],
+            "input_area_m2": 1846.1692108799998,
+            "changed_area_m2": 26.756075520000007,
+            "matched_planes": 1
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -44.5008
+            ],
+            "input_area_m2": 1846.1692108799998,
+            "changed_area_m2": 26.756075520000007,
+            "matched_planes": 1
+          }
+        ],
+        "plane_distance_tolerance_m": 0.005
+      }
+    },
+    {
+      "code": "no_unrequested_floor_roof_planes",
+      "passed": true,
+      "evidence": {
+        "extra_planes": []
+      }
+    },
+    {
+      "code": "structural_datums_retained",
+      "passed": true,
+      "evidence": {
+        "required": [
+          {
+            "id": "0AXR3v5dvOF9m_Wl5PXEVb",
+            "name": "Ground",
+            "elevation_m": 0.0
+          },
+          {
+            "id": "1phhL5XwzS48oIQQK_XYwX",
+            "name": "Datum 16.0 ft",
+            "elevation_m": 4.8768
+          },
+          {
+            "id": "2th$z7g8vKruv9zXGanjt7",
+            "name": "Datum 29.0 ft",
+            "elevation_m": 8.839200000000002
+          },
+          {
+            "id": "2kLK9t_GrP7fIpByoamkRU",
+            "name": "Datum 42.0 ft",
+            "elevation_m": 12.8016
+          },
+          {
+            "id": "01yfOWY59HU9pusunYyDKK",
+            "name": "Datum 55.0 ft",
+            "elevation_m": 16.764
+          },
+          {
+            "id": "0VTQbtWejJEO1WQEJ4LpVs",
+            "name": "Datum 68.0 ft",
+            "elevation_m": 20.7264
+          },
+          {
+            "id": "1H1mIH_rvVm8yyrh4J9CjB",
+            "name": "Datum 81.0 ft",
+            "elevation_m": 24.6888
+          },
+          {
+            "id": "2oxEKHZUDU_9INh14StfZn",
+            "name": "Datum 94.0 ft",
+            "elevation_m": 28.651200000000003
+          },
+          {
+            "id": "1FydWyMC9J3Rst7tylh3dy",
+            "name": "Datum 107.0 ft",
+            "elevation_m": 32.613600000000005
+          },
+          {
+            "id": "1trQSC8qDG7Re0TLuQCeYJ",
+            "name": "Datum 120.0 ft",
+            "elevation_m": 36.576
+          },
+          {
+            "id": "23eSf5y6TNf8m0vjF3eJnt",
+            "name": "Datum 133.0 ft",
+            "elevation_m": 40.5384
+          },
+          {
+            "id": "3HGT5vsgrVweYHjWoXPz_2",
+            "name": "Datum 146.0 ft",
+            "elevation_m": 44.500800000000005
+          },
+          {
+            "id": "3tGCUbSFfKExAFd3mts0fO",
+            "name": "Datum 159.0 ft",
+            "elevation_m": 48.46320000000001
+          }
+        ],
+        "returned": [
+          {
+            "id": "1MQa5cIIfPxODFJIVzSqW1",
+            "name": "Ground",
+            "elevation_m": 0.0
+          },
+          {
+            "id": "0PFzr_tvzSJgQqfJa20LW_",
+            "name": "Datum 16.0 ft",
+            "elevation_m": 4.8768
+          },
+          {
+            "id": "1cgXkcwhjPFwahtwa4LJL5",
+            "name": "Datum 29.0 ft",
+            "elevation_m": 8.839200000000002
+          },
+          {
+            "id": "0i5Ur2OtrHQeEzyS21NVHr",
+            "name": "Datum 42.0 ft",
+            "elevation_m": 12.8016
+          },
+          {
+            "id": "0A2M1dOuHTUg5xZFHBd8Gt",
+            "name": "Datum 55.0 ft",
+            "elevation_m": 16.764
+          },
+          {
+            "id": "0iCj92I85VcBroi3hQBRYT",
+            "name": "Datum 68.0 ft",
+            "elevation_m": 20.7264
+          },
+          {
+            "id": "3TIuYaBsrQpAJj_L8g8VJa",
+            "name": "Datum 81.0 ft",
+            "elevation_m": 24.6888
+          },
+          {
+            "id": "3RNKsjydbNOvzyZnyReZpH",
+            "name": "Datum 94.0 ft",
+            "elevation_m": 28.651200000000003
+          },
+          {
+            "id": "2bMi3MFRvIywNpp6DZec39",
+            "name": "Datum 107.0 ft",
+            "elevation_m": 32.613600000000005
+          },
+          {
+            "id": "0RlF4f4tjIFR1pAmXeUekH",
+            "name": "Datum 120.0 ft",
+            "elevation_m": 36.576
+          },
+          {
+            "id": "3o_Z5ZgivKpfvvJZiF7Crm",
+            "name": "Datum 133.0 ft",
+            "elevation_m": 40.5384
+          },
+          {
+            "id": "0TnuOePL9Ncgk9MoJKX8Ib",
+            "name": "Datum 146.0 ft",
+            "elevation_m": 44.500800000000005
+          },
+          {
+            "id": "3lKs55sdTJkA8BXzhFbZ$d",
+            "name": "Datum 159.0 ft",
+            "elevation_m": 48.46320000000001
+          }
+        ],
+        "missing": []
+      }
+    },
+    {
+      "code": "architectural_grid_locations",
+      "passed": true,
+      "evidence": {
+        "source_axes": 12,
+        "returned_axes": 12,
+        "missing_or_changed": [],
+        "checks": "labels, U/V/W family and full 3D polyline"
+      }
+    },
+    {
+      "code": "architectural_source_identity",
+      "passed": true,
+      "evidence": {
+        "expected": "f7e0794a702bb273f45e214eb1b55def1b091731f93d60b003e9d90bd7976c16",
+        "declared": "f7e0794a702bb273f45e214eb1b55def1b091731f93d60b003e9d90bd7976c16"
+      }
+    },
+    {
+      "code": "physical_member_placement_defined",
+      "passed": true,
+      "evidence": {
+        "unknown_member_ids": [],
+        "method": "Null offsets or orientation remain unknown; no zero offsets or local axes are invented for these checks."
+      }
+    },
+    {
+      "code": "door_window_boundaries",
+      "passed": true,
+      "evidence": {
+        "source_count": 0,
+        "physical_count": 6,
+        "changed": []
+      }
+    },
+    {
+      "code": "door_window_workline_clearance",
+      "passed": true,
+      "evidence": {
+        "count": 0,
+        "examples": [],
+        "method": "Strict opening bounds against physical worklines; separate from a solid clash or fabrication-fit check"
+      }
+    },
+    {
+      "code": "door_window_solid_clearance",
+      "passed": true,
+      "evidence": {
+        "checked_solids": 2432,
+        "clashes": [],
+        "method": "Returned IFC mesh triangles against source axis-aligned opening volumes, with 5 mm tolerance at jamb/sill/head. All door/window fixtures in this sweep have axis-aligned hosts or are axis-aligned freestanding reservations."
+      }
+    },
+    {
+      "code": "connection_part_dimensions",
+      "passed": true,
+      "evidence": {
+        "checked": 898,
+        "mismatches": [],
+        "method": "Explicit plate/gusset thickness or cylindrical shaft diameter versus solid dimensions; tolerance max(0.005 in, 2%). Resolve against actual completed design records, not by relabelling an arbitrary solid."
+      }
+    },
+    {
+      "code": "member_design_record_sections",
+      "passed": true,
+      "evidence": {
+        "checked_links": 1085,
+        "links_requiring_other_review": 0,
+        "mismatches": [],
+        "method": "Actual physical catalogue section label versus every linked member record with an explicit inputs.section. Custom profile aliases and built-up constituent calculations are outside this exact-label screen."
+      }
+    },
+    {
+      "code": "gravity_profile_orientation",
+      "passed": true,
+      "evidence": {
+        "checked": 672,
+        "suspect_members": [],
+        "method": "Deep gravity-framing profiles: detect depth axis nearly perpendicular to projected gravity; inspect intentional weak-axis designs separately.",
+        "unknown_placement_members_not_screened": []
+      }
+    },
+    {
+      "code": "built_up_constituents_separate",
+      "passed": true,
+      "evidence": {
+        "checked_profiles": 0,
+        "overlaps": [],
+        "method": "Separate built-up constituents must not substantially occupy the same section area; threshold >0.005 in2 and >5% of a constituent, allowing preview fillet simplifications."
+      }
+    },
+    {
+      "code": "no_duplicate_physical_occurrences",
+      "passed": true,
+      "evidence": {
+        "count": 0,
+        "examples": []
+      }
+    },
+    {
+      "code": "located_connection_occurrences",
+      "passed": true,
+      "evidence": {
+        "connections": 449,
+        "designed_without_parts": [],
+        "delegated_interfaces": []
+      }
+    },
+    {
+      "code": "connection_occurrence_coverage",
+      "passed": true,
+      "evidence": {
+        "checked_exemptions": 0,
+        "problems": [],
+        "method": "Explicit hardware notes and column bases lacking any connection-part bounds within six feet; continuous-subdivision claims must have opposing collinear member ends. Checks returned solid and reference-part bounds. Nearness alone is not connection completeness, fit or capacity certification.",
+        "unknown_placement_members_not_screened": []
+      }
+    }
+  ],
+  "issues": [
+    {
+      "code": "complete_native_physical_export",
+      "evidence": {
+        "stored_readiness": {
+          "counts": {
+            "analysis_elements": 1085,
+            "design_records": 54,
+            "members": 1085,
+            "panels": 12
+          },
+          "findings": [
+            {
+              "code": "connection_fastener_quantity",
+              "count": 449,
+              "entity_ids": [
+                "c-j1",
+                "c-j10",
+                "c-j100",
+                "c-j101",
+                "c-j102",
+                "c-j103",
+                "c-j104",
+                "c-j105",
+                "c-j106",
+                "c-j107",
+                "c-j108",
+                "c-j109",
+                "c-j11",
+                "c-j110",
+                "c-j111",
+                "c-j112",
+                "c-j113",
+                "c-j114",
+                "c-j115",
+                "c-j116",
+                "c-j117",
+                "c-j118",
+                "c-j119",
+                "c-j12",
+                "c-j120",
+                "c-j121",
+                "c-j122",
+                "c-j123",
+                "c-j124",
+                "c-j125",
+                "c-j126",
+                "c-j127",
+                "c-j128",
+                "c-j129",
+                "c-j13",
+                "c-j130",
+                "c-j131",
+                "c-j132",
+                "c-j133",
+                "c-j134",
+                "c-j135",
+                "c-j136",
+                "c-j137",
+                "c-j138",
+                "c-j139",
+                "c-j14",
+                "c-j140",
+                "c-j141",
+                "c-j142",
+                "c-j143",
+                "c-j144",
+                "c-j145",
+                "c-j146",
+                "c-j147",
+                "c-j148",
+                "c-j149",
+                "c-j15",
+                "c-j150",
+                "c-j151",
+                "c-j152",
+                "c-j153",
+                "c-j154",
+                "c-j155",
+                "c-j156",
+                "c-j157",
+                "c-j158",
+                "c-j159",
+                "c-j16",
+                "c-j160",
+                "c-j161",
+                "c-j162",
+                "c-j163",
+                "c-j164",
+                "c-j165",
+                "c-j166",
+                "c-j167",
+                "c-j168",
+                "c-j169",
+                "c-j17",
+                "c-j170",
+                "c-j171",
+                "c-j172",
+                "c-j173",
+                "c-j174",
+                "c-j175",
+                "c-j176",
+                "c-j177",
+                "c-j178",
+                "c-j179",
+                "c-j18",
+                "c-j180",
+                "c-j181",
+                "c-j182",
+                "c-j183",
+                "c-j184",
+                "c-j185",
+                "c-j186",
+                "c-j187",
+                "c-j188",
+                "c-j189",
+                "c-j19",
+                "c-j190",
+                "c-j191",
+                "c-j192",
+                "c-j193",
+                "c-j194",
+                "c-j195",
+                "c-j196",
+                "c-j197",
+                "c-j198",
+                "c-j199",
+                "c-j2",
+                "c-j20",
+                "c-j200",
+                "c-j201",
+                "c-j202",
+                "c-j203",
+                "c-j204",
+                "c-j205",
+                "c-j206",
+                "c-j207",
+                "c-j208",
+                "c-j209",
+                "c-j21",
+                "c-j210",
+                "c-j211",
+                "c-j212",
+                "c-j213",
+                "c-j214",
+                "c-j215",
+                "c-j216",
+                "c-j217",
+                "c-j218",
+                "c-j219",
+                "c-j22",
+                "c-j220",
+                "c-j221",
+                "c-j222",
+                "c-j223",
+                "c-j224",
+                "c-j225",
+                "c-j226",
+                "c-j227",
+                "c-j228",
+                "c-j229",
+                "c-j23",
+                "c-j230",
+                "c-j231",
+                "c-j232",
+                "c-j233",
+                "c-j234",
+                "c-j235",
+                "c-j236",
+                "c-j237",
+                "c-j238",
+                "c-j239",
+                "c-j24",
+                "c-j240",
+                "c-j241",
+                "c-j242",
+                "c-j243",
+                "c-j244",
+                "c-j245",
+                "c-j246",
+                "c-j247",
+                "c-j248",
+                "c-j249",
+                "c-j25",
+                "c-j250",
+                "c-j251",
+                "c-j252",
+                "c-j253",
+                "c-j254",
+                "c-j255",
+                "c-j256",
+                "c-j257",
+                "c-j258",
+                "c-j259",
+                "c-j26",
+                "c-j260",
+                "c-j261",
+                "c-j262",
+                "c-j263",
+                "c-j264",
+                "c-j265",
+                "c-j266",
+                "c-j267",
+                "c-j268",
+                "c-j269",
+                "c-j27",
+                "c-j270",
+                "c-j271",
+                "c-j272",
+                "c-j273",
+                "c-j274",
+                "c-j275",
+                "c-j276",
+                "c-j277",
+                "c-j278",
+                "c-j279",
+                "c-j28",
+                "c-j280",
+                "c-j281",
+                "c-j282",
+                "c-j283",
+                "c-j284",
+                "c-j285",
+                "c-j286",
+                "c-j287",
+                "c-j288",
+                "c-j289",
+                "c-j29",
+                "c-j290",
+                "c-j291",
+                "c-j292",
+                "c-j293",
+                "c-j294",
+                "c-j295",
+                "c-j296",
+                "c-j297",
+                "c-j298",
+                "c-j299",
+                "c-j3",
+                "c-j30",
+                "c-j300",
+                "c-j301",
+                "c-j302",
+                "c-j303",
+                "c-j304",
+                "c-j305",
+                "c-j306",
+                "c-j307",
+                "c-j308",
+                "c-j309",
+                "c-j31",
+                "c-j310",
+                "c-j311",
+                "c-j312",
+                "c-j313",
+                "c-j314",
+                "c-j315",
+                "c-j316",
+                "c-j317",
+                "c-j318",
+                "c-j319",
+                "c-j32",
+                "c-j320",
+                "c-j321",
+                "c-j322",
+                "c-j323",
+                "c-j324",
+                "c-j325",
+                "c-j326",
+                "c-j327",
+                "c-j328",
+                "c-j329",
+                "c-j33",
+                "c-j330",
+                "c-j331",
+                "c-j332",
+                "c-j333",
+                "c-j334",
+                "c-j335",
+                "c-j336",
+                "c-j337",
+                "c-j338",
+                "c-j339",
+                "c-j34",
+                "c-j340",
+                "c-j341",
+                "c-j342",
+                "c-j343",
+                "c-j344",
+                "c-j345",
+                "c-j346",
+                "c-j347",
+                "c-j348",
+                "c-j349",
+                "c-j35",
+                "c-j350",
+                "c-j351",
+                "c-j352",
+                "c-j353",
+                "c-j354",
+                "c-j355",
+                "c-j356",
+                "c-j357",
+                "c-j358",
+                "c-j359",
+                "c-j36",
+                "c-j360",
+                "c-j361",
+                "c-j362",
+                "c-j363",
+                "c-j364",
+                "c-j365",
+                "c-j366",
+                "c-j367",
+                "c-j368",
+                "c-j369",
+                "c-j37",
+                "c-j370",
+                "c-j371",
+                "c-j372",
+                "c-j373",
+                "c-j374",
+                "c-j375",
+                "c-j376",
+                "c-j377",
+                "c-j378",
+                "c-j379",
+                "c-j38",
+                "c-j380",
+                "c-j381",
+                "c-j382",
+                "c-j383",
+                "c-j384",
+                "c-j385",
+                "c-j386",
+                "c-j387",
+                "c-j388",
+                "c-j389",
+                "c-j39",
+                "c-j390",
+                "c-j391",
+                "c-j392",
+                "c-j393",
+                "c-j394",
+                "c-j395",
+                "c-j396",
+                "c-j397",
+                "c-j398",
+                "c-j399",
+                "c-j4",
+                "c-j40",
+                "c-j400",
+                "c-j401",
+                "c-j402",
+                "c-j403",
+                "c-j404",
+                "c-j405",
+                "c-j406",
+                "c-j407",
+                "c-j408",
+                "c-j409",
+                "c-j41",
+                "c-j410",
+                "c-j411",
+                "c-j412",
+                "c-j413",
+                "c-j414",
+                "c-j415",
+                "c-j416",
+                "c-j417",
+                "c-j418",
+                "c-j419",
+                "c-j42",
+                "c-j420",
+                "c-j421",
+                "c-j422",
+                "c-j423",
+                "c-j424",
+                "c-j425",
+                "c-j426",
+                "c-j427",
+                "c-j428",
+                "c-j429",
+                "c-j43",
+                "c-j430",
+                "c-j431",
+                "c-j432",
+                "c-j433",
+                "c-j434",
+                "c-j435",
+                "c-j436",
+                "c-j437",
+                "c-j438",
+                "c-j439",
+                "c-j44",
+                "c-j440",
+                "c-j441",
+                "c-j442",
+                "c-j443",
+                "c-j444",
+                "c-j445",
+                "c-j446",
+                "c-j447",
+                "c-j448",
+                "c-j449",
+                "c-j45",
+                "c-j46",
+                "c-j47",
+                "c-j48",
+                "c-j49",
+                "c-j5",
+                "c-j50",
+                "c-j51",
+                "c-j52",
+                "c-j53",
+                "c-j54",
+                "c-j55",
+                "c-j56",
+                "c-j57",
+                "c-j58",
+                "c-j59",
+                "c-j6",
+                "c-j60",
+                "c-j61",
+                "c-j62",
+                "c-j63",
+                "c-j64",
+                "c-j65",
+                "c-j66",
+                "c-j67",
+                "c-j68",
+                "c-j69",
+                "c-j7",
+                "c-j70",
+                "c-j71",
+                "c-j72",
+                "c-j73",
+                "c-j74",
+                "c-j75",
+                "c-j76",
+                "c-j77",
+                "c-j78",
+                "c-j79",
+                "c-j8",
+                "c-j80",
+                "c-j81",
+                "c-j82",
+                "c-j83",
+                "c-j84",
+                "c-j85",
+                "c-j86",
+                "c-j87",
+                "c-j88",
+                "c-j89",
+                "c-j9",
+                "c-j90",
+                "c-j91",
+                "c-j92",
+                "c-j93",
+                "c-j94",
+                "c-j95",
+                "c-j96",
+                "c-j97",
+                "c-j98",
+                "c-j99"
+              ],
+              "examples": [
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "c-j1",
+                  "declared_count": 12,
+                  "part_id": "anchors"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j2",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j3",
+                  "declared_count": 8,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j4",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j5",
+                  "declared_count": 8,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j6",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j7",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j8",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j9",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j10",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j11",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j12",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j13",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "c-j14",
+                  "declared_count": 12,
+                  "part_id": "anchors"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j15",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j16",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j17",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j18",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j19",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j20",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j21",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j22",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j23",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j24",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j25",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j26",
+                  "declared_count": 3,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "c-j27",
+                  "declared_count": 12,
+                  "part_id": "anchors"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j28",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j29",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j30",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j31",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j32",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j33",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j34",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j35",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j36",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j37",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j38",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j39",
+                  "declared_count": 3,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "c-j40",
+                  "declared_count": 12,
+                  "part_id": "anchors"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j41",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j42",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j43",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j44",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j45",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j46",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j47",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j48",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j49",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j50",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j51",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j52",
+                  "declared_count": 3,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "c-j53",
+                  "declared_count": 12,
+                  "part_id": "anchors"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j54",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j55",
+                  "declared_count": 8,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j56",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j57",
+                  "declared_count": 8,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j58",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j59",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j60",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j61",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j62",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j63",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j64",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j65",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "c-j66",
+                  "declared_count": 12,
+                  "part_id": "anchors"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j67",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j68",
+                  "declared_count": 8,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j69",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j70",
+                  "declared_count": 8,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j71",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j72",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j73",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j74",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j75",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j76",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j77",
+                  "declared_count": 10,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j78",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "c-j79",
+                  "declared_count": 4,
+                  "part_id": "anchors"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j80",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j81",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j82",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j83",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j84",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j85",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j86",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j87",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j88",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j89",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j90",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j91",
+                  "declared_count": 3,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "c-j92",
+                  "declared_count": 4,
+                  "part_id": "anchors"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j93",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j94",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j95",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j96",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j97",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j98",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j99",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "bolt",
+                  "connection_id": "c-j100",
+                  "declared_count": 6,
+                  "part_id": "bolts"
+                }
+              ],
+              "message": "A solid fastener count exceeds the distinct located fastener solids in its local design assembly; instantiate the actual checked pattern instead of multiplying a representative solid by a count label",
+              "severity": "needs_input"
+            }
+          ],
+          "status": "needs_input"
+        },
+        "current_contract_findings": [
+          {
+            "code": "connection_fastener_quantity",
+            "message": "A solid fastener count exceeds the distinct located fastener solids in its local design assembly; instantiate the actual checked pattern instead of multiplying a representative solid by a count label",
+            "entity_ids": [
+              "c-j1",
+              "c-j10",
+              "c-j100",
+              "c-j101",
+              "c-j102",
+              "c-j103",
+              "c-j104",
+              "c-j105",
+              "c-j106",
+              "c-j107",
+              "c-j108",
+              "c-j109",
+              "c-j11",
+              "c-j110",
+              "c-j111",
+              "c-j112",
+              "c-j113",
+              "c-j114",
+              "c-j115",
+              "c-j116",
+              "c-j117",
+              "c-j118",
+              "c-j119",
+              "c-j12",
+              "c-j120",
+              "c-j121",
+              "c-j122",
+              "c-j123",
+              "c-j124",
+              "c-j125",
+              "c-j126",
+              "c-j127",
+              "c-j128",
+              "c-j129",
+              "c-j13",
+              "c-j130",
+              "c-j131",
+              "c-j132",
+              "c-j133",
+              "c-j134",
+              "c-j135",
+              "c-j136",
+              "c-j137",
+              "c-j138",
+              "c-j139",
+              "c-j14",
+              "c-j140",
+              "c-j141",
+              "c-j142",
+              "c-j143",
+              "c-j144",
+              "c-j145",
+              "c-j146",
+              "c-j147",
+              "c-j148",
+              "c-j149",
+              "c-j15",
+              "c-j150",
+              "c-j151",
+              "c-j152",
+              "c-j153",
+              "c-j154",
+              "c-j155",
+              "c-j156",
+              "c-j157",
+              "c-j158",
+              "c-j159",
+              "c-j16",
+              "c-j160",
+              "c-j161",
+              "c-j162",
+              "c-j163",
+              "c-j164",
+              "c-j165",
+              "c-j166",
+              "c-j167",
+              "c-j168",
+              "c-j169",
+              "c-j17",
+              "c-j170",
+              "c-j171",
+              "c-j172",
+              "c-j173",
+              "c-j174",
+              "c-j175",
+              "c-j176",
+              "c-j177",
+              "c-j178",
+              "c-j179",
+              "c-j18",
+              "c-j180",
+              "c-j181",
+              "c-j182",
+              "c-j183",
+              "c-j184",
+              "c-j185",
+              "c-j186",
+              "c-j187",
+              "c-j188",
+              "c-j189",
+              "c-j19",
+              "c-j190",
+              "c-j191",
+              "c-j192",
+              "c-j193",
+              "c-j194",
+              "c-j195",
+              "c-j196",
+              "c-j197",
+              "c-j198",
+              "c-j199",
+              "c-j2",
+              "c-j20",
+              "c-j200",
+              "c-j201",
+              "c-j202",
+              "c-j203",
+              "c-j204",
+              "c-j205",
+              "c-j206",
+              "c-j207",
+              "c-j208",
+              "c-j209",
+              "c-j21",
+              "c-j210",
+              "c-j211",
+              "c-j212",
+              "c-j213",
+              "c-j214",
+              "c-j215",
+              "c-j216",
+              "c-j217",
+              "c-j218",
+              "c-j219",
+              "c-j22",
+              "c-j220",
+              "c-j221",
+              "c-j222",
+              "c-j223",
+              "c-j224",
+              "c-j225",
+              "c-j226",
+              "c-j227",
+              "c-j228",
+              "c-j229",
+              "c-j23",
+              "c-j230",
+              "c-j231",
+              "c-j232",
+              "c-j233",
+              "c-j234",
+              "c-j235",
+              "c-j236",
+              "c-j237",
+              "c-j238",
+              "c-j239",
+              "c-j24",
+              "c-j240",
+              "c-j241",
+              "c-j242",
+              "c-j243",
+              "c-j244",
+              "c-j245",
+              "c-j246",
+              "c-j247",
+              "c-j248",
+              "c-j249",
+              "c-j25",
+              "c-j250",
+              "c-j251",
+              "c-j252",
+              "c-j253",
+              "c-j254",
+              "c-j255",
+              "c-j256",
+              "c-j257",
+              "c-j258",
+              "c-j259",
+              "c-j26",
+              "c-j260",
+              "c-j261",
+              "c-j262",
+              "c-j263",
+              "c-j264",
+              "c-j265",
+              "c-j266",
+              "c-j267",
+              "c-j268",
+              "c-j269",
+              "c-j27",
+              "c-j270",
+              "c-j271",
+              "c-j272",
+              "c-j273",
+              "c-j274",
+              "c-j275",
+              "c-j276",
+              "c-j277",
+              "c-j278",
+              "c-j279",
+              "c-j28",
+              "c-j280",
+              "c-j281",
+              "c-j282",
+              "c-j283",
+              "c-j284",
+              "c-j285",
+              "c-j286",
+              "c-j287",
+              "c-j288",
+              "c-j289",
+              "c-j29",
+              "c-j290",
+              "c-j291",
+              "c-j292",
+              "c-j293",
+              "c-j294",
+              "c-j295",
+              "c-j296",
+              "c-j297",
+              "c-j298",
+              "c-j299",
+              "c-j3",
+              "c-j30",
+              "c-j300",
+              "c-j301",
+              "c-j302",
+              "c-j303",
+              "c-j304",
+              "c-j305",
+              "c-j306",
+              "c-j307",
+              "c-j308",
+              "c-j309",
+              "c-j31",
+              "c-j310",
+              "c-j311",
+              "c-j312",
+              "c-j313",
+              "c-j314",
+              "c-j315",
+              "c-j316",
+              "c-j317",
+              "c-j318",
+              "c-j319",
+              "c-j32",
+              "c-j320",
+              "c-j321",
+              "c-j322",
+              "c-j323",
+              "c-j324",
+              "c-j325",
+              "c-j326",
+              "c-j327",
+              "c-j328",
+              "c-j329",
+              "c-j33",
+              "c-j330",
+              "c-j331",
+              "c-j332",
+              "c-j333",
+              "c-j334",
+              "c-j335",
+              "c-j336",
+              "c-j337",
+              "c-j338",
+              "c-j339",
+              "c-j34",
+              "c-j340",
+              "c-j341",
+              "c-j342",
+              "c-j343",
+              "c-j344",
+              "c-j345",
+              "c-j346",
+              "c-j347",
+              "c-j348",
+              "c-j349",
+              "c-j35",
+              "c-j350",
+              "c-j351",
+              "c-j352",
+              "c-j353",
+              "c-j354",
+              "c-j355",
+              "c-j356",
+              "c-j357",
+              "c-j358",
+              "c-j359",
+              "c-j36",
+              "c-j360",
+              "c-j361",
+              "c-j362",
+              "c-j363",
+              "c-j364",
+              "c-j365",
+              "c-j366",
+              "c-j367",
+              "c-j368",
+              "c-j369",
+              "c-j37",
+              "c-j370",
+              "c-j371",
+              "c-j372",
+              "c-j373",
+              "c-j374",
+              "c-j375",
+              "c-j376",
+              "c-j377",
+              "c-j378",
+              "c-j379",
+              "c-j38",
+              "c-j380",
+              "c-j381",
+              "c-j382",
+              "c-j383",
+              "c-j384",
+              "c-j385",
+              "c-j386",
+              "c-j387",
+              "c-j388",
+              "c-j389",
+              "c-j39",
+              "c-j390",
+              "c-j391",
+              "c-j392",
+              "c-j393",
+              "c-j394",
+              "c-j395",
+              "c-j396",
+              "c-j397",
+              "c-j398",
+              "c-j399",
+              "c-j4",
+              "c-j40",
+              "c-j400",
+              "c-j401",
+              "c-j402",
+              "c-j403",
+              "c-j404",
+              "c-j405",
+              "c-j406",
+              "c-j407",
+              "c-j408",
+              "c-j409",
+              "c-j41",
+              "c-j410",
+              "c-j411",
+              "c-j412",
+              "c-j413",
+              "c-j414",
+              "c-j415",
+              "c-j416",
+              "c-j417",
+              "c-j418",
+              "c-j419",
+              "c-j42",
+              "c-j420",
+              "c-j421",
+              "c-j422",
+              "c-j423",
+              "c-j424",
+              "c-j425",
+              "c-j426",
+              "c-j427",
+              "c-j428",
+              "c-j429",
+              "c-j43",
+              "c-j430",
+              "c-j431",
+              "c-j432",
+              "c-j433",
+              "c-j434",
+              "c-j435",
+              "c-j436",
+              "c-j437",
+              "c-j438",
+              "c-j439",
+              "c-j44",
+              "c-j440",
+              "c-j441",
+              "c-j442",
+              "c-j443",
+              "c-j444",
+              "c-j445",
+              "c-j446",
+              "c-j447",
+              "c-j448",
+              "c-j449",
+              "c-j45",
+              "c-j46",
+              "c-j47",
+              "c-j48",
+              "c-j49",
+              "c-j5",
+              "c-j50",
+              "c-j51",
+              "c-j52",
+              "c-j53",
+              "c-j54",
+              "c-j55",
+              "c-j56",
+              "c-j57",
+              "c-j58",
+              "c-j59",
+              "c-j6",
+              "c-j60",
+              "c-j61",
+              "c-j62",
+              "c-j63",
+              "c-j64",
+              "c-j65",
+              "c-j66",
+              "c-j67",
+              "c-j68",
+              "c-j69",
+              "c-j7",
+              "c-j70",
+              "c-j71",
+              "c-j72",
+              "c-j73",
+              "c-j74",
+              "c-j75",
+              "c-j76",
+              "c-j77",
+              "c-j78",
+              "c-j79",
+              "c-j8",
+              "c-j80",
+              "c-j81",
+              "c-j82",
+              "c-j83",
+              "c-j84",
+              "c-j85",
+              "c-j86",
+              "c-j87",
+              "c-j88",
+              "c-j89",
+              "c-j9",
+              "c-j90",
+              "c-j91",
+              "c-j92",
+              "c-j93",
+              "c-j94",
+              "c-j95",
+              "c-j96",
+              "c-j97",
+              "c-j98",
+              "c-j99"
+            ],
+            "severity": "needs_input",
+            "count": 449,
+            "examples": [
+              {
+                "connection_id": "c-j1",
+                "part_id": "anchors",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j2",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j3",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j4",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j5",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j6",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j7",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j8",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j9",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j10",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j11",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j12",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j13",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j14",
+                "part_id": "anchors",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j15",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j16",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j17",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j18",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j19",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j20",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j21",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j22",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j23",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j24",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j25",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j26",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 3,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j27",
+                "part_id": "anchors",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j28",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j29",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j30",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j31",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j32",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j33",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j34",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j35",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j36",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j37",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j38",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j39",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 3,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j40",
+                "part_id": "anchors",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j41",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j42",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j43",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j44",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j45",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j46",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j47",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j48",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j49",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j50",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j51",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j52",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 3,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j53",
+                "part_id": "anchors",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j54",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j55",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j56",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j57",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j58",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j59",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j60",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j61",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j62",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j63",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j64",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j65",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j66",
+                "part_id": "anchors",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j67",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j68",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j69",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j70",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j71",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j72",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j73",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j74",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j75",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j76",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j77",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 10,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j78",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j79",
+                "part_id": "anchors",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j80",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j81",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j82",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j83",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j84",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j85",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j86",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j87",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j88",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j89",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j90",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j91",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 3,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j92",
+                "part_id": "anchors",
+                "category": "anchor",
+                "declared_count": 4,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j93",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j94",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j95",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j96",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j97",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j98",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j99",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "c-j100",
+                "part_id": "bolts",
+                "category": "bolt",
+                "declared_count": 6,
+                "actual_distinct_solids": 1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "code": "floor_roof_planes_footprints_voids",
+      "evidence": {
+        "required_plane_groups": 12,
+        "returned_plane_groups": 12,
+        "differences": [
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -4.8768
+            ],
+            "input_area_m2": 1534.0149964799998,
+            "changed_area_m2": 338.9102899199999,
+            "matched_planes": 1
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -8.8392
+            ],
+            "input_area_m2": 1534.0149964799998,
+            "changed_area_m2": 26.756075520000007,
+            "matched_planes": 1
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -12.8016
+            ],
+            "input_area_m2": 1534.0149964799998,
+            "changed_area_m2": 26.756075520000007,
+            "matched_planes": 1
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -16.764
+            ],
+            "input_area_m2": 1534.0149964799998,
+            "changed_area_m2": 26.756075520000007,
+            "matched_planes": 1
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -20.7264
+            ],
+            "input_area_m2": 1534.0149964799998,
+            "changed_area_m2": 26.756075520000007,
+            "matched_planes": 1
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -24.6888
+            ],
+            "input_area_m2": 1534.0149964799998,
+            "changed_area_m2": 26.756075520000007,
+            "matched_planes": 1
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -28.6512
+            ],
+            "input_area_m2": 1846.1692108799998,
+            "changed_area_m2": 338.91028991999997,
+            "matched_planes": 1
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -32.6136
+            ],
+            "input_area_m2": 1846.1692108799998,
+            "changed_area_m2": 26.756075520000007,
+            "matched_planes": 1
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -36.576
+            ],
+            "input_area_m2": 1846.1692108799998,
+            "changed_area_m2": 26.756075520000007,
+            "matched_planes": 1
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -40.5384
+            ],
+            "input_area_m2": 1846.1692108799998,
+            "changed_area_m2": 26.756075520000007,
+            "matched_planes": 1
+          },
+          {
+            "plane": [
+              -0.0,
+              -0.0,
+              1.0,
+              -44.5008
+            ],
+            "input_area_m2": 1846.1692108799998,
+            "changed_area_m2": 26.756075520000007,
+            "matched_planes": 1
+          }
+        ],
+        "plane_distance_tolerance_m": 0.005
+      }
+    }
+  ],
+  "input_scope": [
+    {
+      "guid": "1QGIOtfRjKcvm4JHNIudeQ",
+      "name": "Recorded floor/roof plane 16 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "1V1C6_OSjQNw1i6q3si6yA",
+      "name": "Recorded floor/roof plane 29 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "1ibXhMl51HuOzhdteaA7A9",
+      "name": "Recorded floor/roof plane 42 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "3epY6694vH5B8sw1h75QKx",
+      "name": "Recorded floor/roof plane 55 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "3PG3J7UfXSphTyQrbx6zqf",
+      "name": "Recorded floor/roof plane 68 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "0qBd2oo$HHQxe4cSPhv779",
+      "name": "Recorded floor/roof plane 81 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "1QRggNeOjMd9KIhFumcM14",
+      "name": "Recorded floor/roof plane 94 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "1yfCtjOaDMHfmpQ6pFZz1D",
+      "name": "Recorded floor/roof plane 107 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "0OWgQxU5HL0AQg6YPgUGJc",
+      "name": "Recorded floor/roof plane 120 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "21i3ZKhr9ImA7CIg7NAeBl",
+      "name": "Recorded floor/roof plane 133 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "1No0XJY7XPPuW0_liygRUc",
+      "name": "Recorded floor/roof plane 146 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "2pcSA2qmjInREdDYlti7Sf",
+      "name": "Recorded floor/roof plane 159 ft / 1",
+      "role": "required_structural_coordination"
+    }
+  ],
+  "architectural_sha256": "f7e0794a702bb273f45e214eb1b55def1b091731f93d60b003e9d90bd7976c16",
+  "architectural_handoff_sha256": "78e17712017246e55dd9f0135b979d9e9763c2b0e9ebedaf8eb16043d0a019fb",
+  "physical_package_sha256": "4d83b4b1a1d6f7879e1151366af547b96bee572e2e3bad2b2fc07331f7e23578",
+  "return_ifc_sha256": "614c6001b398c7bac8bb033dd54fa117c2e44a4b4da0612210ed2c7983a65362",
+  "counts": {
+    "analysis_only": 0,
+    "connections": 449,
+    "interfaces": 0,
+    "joint_dispositions": 0,
+    "joints": 449,
+    "materials": 2,
+    "members": 1085,
+    "openings": 6,
+    "panels": 12,
+    "profiles": 17,
+    "record_dispositions": 11
+  },
+  "limits": [
+    "Existing own-output package with independent geometry/data checks; not a fresh analysis, engineering certification or fabrication acceptance.",
+    "Base slabs and explicitly existing host context are outside the new elevated steel design comparison and remain in the original architectural IFC.",
+    "Input fixtures are synthetic; no native Revit application acceptance is claimed."
+  ],
+  "key": "hr25",
+  "check_binding": {
+    "checker": "72bc7bb6c45509ef76ab60a17ace2f500637d5e358138bceece3d15121a72278",
+    "algorithms": "972e237fce8421ffa6b4be2f39cba5420bedfe1eed870a3f83934780b1eb33c4",
+    "returned_ifc": "614c6001b398c7bac8bb033dd54fa117c2e44a4b4da0612210ed2c7983a65362"
+  }
+}

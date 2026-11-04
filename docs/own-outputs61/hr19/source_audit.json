@@ -1,0 +1,20 @@
+{
+  "case": "hr19",
+  "key": "hr19",
+  "module": "HR",
+  "title": "SMF",
+  "project": "WFRESH61_hr19_20261103",
+  "source_run_status": "not_started",
+  "primary": true,
+  "files": {},
+  "job_exists": false,
+  "completion_problems": [
+    "No production job exists for this case."
+  ],
+  "current_completion_gate_passed": false,
+  "package_present": false,
+  "missing_outputs": [
+    "cfg.py",
+    "design/bim_package.json"
+  ]
+}

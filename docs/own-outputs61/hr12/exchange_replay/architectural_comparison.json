@@ -1,0 +1,1770 @@
+{
+  "case": "hr12",
+  "module": "HR",
+  "project": "WFRESH61_hr12_20261103",
+  "variant": "replay",
+  "checked_at": 1793764829.989707,
+  "status": "needs_resolution",
+  "checks": [
+    {
+      "code": "own_output_binding",
+      "passed": true,
+      "evidence": {
+        "physical_supplements_supplied": false,
+        "source_package_sha256": "3fb2b4f7669e0411524ba319153edba7fd0672198453efc0533337f50f8df99e"
+      }
+    },
+    {
+      "code": "complete_native_physical_export",
+      "passed": false,
+      "evidence": {
+        "stored_readiness": {
+          "counts": {
+            "analysis_elements": 1064,
+            "design_records": 47,
+            "members": 1064,
+            "panels": 14
+          },
+          "findings": [
+            {
+              "code": "connection_fastener_quantity",
+              "count": 36,
+              "entity_ids": [
+                "C-J-J-1",
+                "C-J-J-100",
+                "C-J-J-101",
+                "C-J-J-102",
+                "C-J-J-103",
+                "C-J-J-104",
+                "C-J-J-105",
+                "C-J-J-2",
+                "C-J-J-200",
+                "C-J-J-201",
+                "C-J-J-202",
+                "C-J-J-203",
+                "C-J-J-204",
+                "C-J-J-205",
+                "C-J-J-3",
+                "C-J-J-300",
+                "C-J-J-301",
+                "C-J-J-302",
+                "C-J-J-303",
+                "C-J-J-304",
+                "C-J-J-305",
+                "C-J-J-4",
+                "C-J-J-400",
+                "C-J-J-401",
+                "C-J-J-402",
+                "C-J-J-403",
+                "C-J-J-404",
+                "C-J-J-405",
+                "C-J-J-5",
+                "C-J-J-500",
+                "C-J-J-50000",
+                "C-J-J-501",
+                "C-J-J-502",
+                "C-J-J-503",
+                "C-J-J-504",
+                "C-J-J-505"
+              ],
+              "examples": [
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-1",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-1-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-2",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-2-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-3",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-3-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-4",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-4-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-5",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-5-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-100",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-100-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-101",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-gravity_col-W14X176-J-101-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-102",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-lateral_col-W14X176-J-102-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-103",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-gravity_col-W14X176-J-103-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-104",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-gravity_col-W14X176-J-104-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-105",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-105-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-200",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-200-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-201",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-gravity_col-W14X176-J-201-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-202",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-lateral_col-W14X176-J-202-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-203",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-gravity_col-W14X176-J-203-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-204",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-gravity_col-W14X176-J-204-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-205",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-205-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-300",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-300-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-301",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-gravity_col-W14X176-J-301-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-302",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-lateral_col-W14X176-J-302-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-303",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-lateral_col-W14X176-J-303-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-304",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-lateral_col-W14X176-J-304-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-305",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-305-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-400",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-400-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-401",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-gravity_col-W14X176-J-401-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-402",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-gravity_col-W14X176-J-402-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-403",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-gravity_col-W14X176-J-403-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-404",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-gravity_col-W14X176-J-404-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-405",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-405-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-500",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-gravity_col-W14X730-J-500-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-501",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-501-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-502",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-502-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-503",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-503-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-504",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-504-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-505",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-gravity_col-W14X730-J-505-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-50000",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-gravity_col-W14X730-J-50000-rod"
+                }
+              ],
+              "message": "A solid fastener count exceeds the distinct located fastener solids in its local design assembly; instantiate the actual checked pattern instead of multiplying a representative solid by a count label",
+              "severity": "needs_input"
+            }
+          ],
+          "status": "needs_input"
+        },
+        "current_contract_findings": [
+          {
+            "code": "connection_fastener_quantity",
+            "message": "A solid fastener count exceeds the distinct located fastener solids in its local design assembly; instantiate the actual checked pattern instead of multiplying a representative solid by a count label",
+            "entity_ids": [
+              "C-J-J-1",
+              "C-J-J-100",
+              "C-J-J-101",
+              "C-J-J-102",
+              "C-J-J-103",
+              "C-J-J-104",
+              "C-J-J-105",
+              "C-J-J-2",
+              "C-J-J-200",
+              "C-J-J-201",
+              "C-J-J-202",
+              "C-J-J-203",
+              "C-J-J-204",
+              "C-J-J-205",
+              "C-J-J-3",
+              "C-J-J-300",
+              "C-J-J-301",
+              "C-J-J-302",
+              "C-J-J-303",
+              "C-J-J-304",
+              "C-J-J-305",
+              "C-J-J-4",
+              "C-J-J-400",
+              "C-J-J-401",
+              "C-J-J-402",
+              "C-J-J-403",
+              "C-J-J-404",
+              "C-J-J-405",
+              "C-J-J-5",
+              "C-J-J-500",
+              "C-J-J-50000",
+              "C-J-J-501",
+              "C-J-J-502",
+              "C-J-J-503",
+              "C-J-J-504",
+              "C-J-J-505"
+            ],
+            "severity": "needs_input",
+            "count": 36,
+            "examples": [
+              {
+                "connection_id": "C-J-J-1",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-1-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-2",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-2-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-3",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-3-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-4",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-4-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-5",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-5-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-100",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-100-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-101",
+                "part_id": "C-conn-base-gravity_col-W14X176-J-101-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-102",
+                "part_id": "C-conn-base-lateral_col-W14X176-J-102-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-103",
+                "part_id": "C-conn-base-gravity_col-W14X176-J-103-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-104",
+                "part_id": "C-conn-base-gravity_col-W14X176-J-104-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-105",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-105-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-200",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-200-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-201",
+                "part_id": "C-conn-base-gravity_col-W14X176-J-201-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-202",
+                "part_id": "C-conn-base-lateral_col-W14X176-J-202-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-203",
+                "part_id": "C-conn-base-gravity_col-W14X176-J-203-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-204",
+                "part_id": "C-conn-base-gravity_col-W14X176-J-204-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-205",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-205-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-300",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-300-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-301",
+                "part_id": "C-conn-base-gravity_col-W14X176-J-301-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-302",
+                "part_id": "C-conn-base-lateral_col-W14X176-J-302-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-303",
+                "part_id": "C-conn-base-lateral_col-W14X176-J-303-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-304",
+                "part_id": "C-conn-base-lateral_col-W14X176-J-304-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-305",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-305-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-400",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-400-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-401",
+                "part_id": "C-conn-base-gravity_col-W14X176-J-401-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-402",
+                "part_id": "C-conn-base-gravity_col-W14X176-J-402-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-403",
+                "part_id": "C-conn-base-gravity_col-W14X176-J-403-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-404",
+                "part_id": "C-conn-base-gravity_col-W14X176-J-404-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-405",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-405-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-500",
+                "part_id": "C-conn-base-gravity_col-W14X730-J-500-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-501",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-501-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-502",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-502-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-503",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-503-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-504",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-504-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-505",
+                "part_id": "C-conn-base-gravity_col-W14X730-J-505-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-50000",
+                "part_id": "C-conn-base-gravity_col-W14X730-J-50000-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "code": "return_fully_rendered",
+      "passed": true,
+      "evidence": {
+        "source_products": 9321,
+        "selected": 9321,
+        "displayed": 9321,
+        "unrendered": 0,
+        "excluded_by_scope": 0,
+        "triangles": 334625
+      }
+    },
+    {
+      "code": "architectural_opening_export_geometry",
+      "passed": true,
+      "evidence": {
+        "unresolved_opening_warnings": []
+      }
+    },
+    {
+      "code": "recoverable_input_surface_312WU0QS9KrOapSj7gfy47",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 17 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_3mwXxfngTJuPC2h8oyAtC_",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 30 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_1M8cWHW2THXOA7jZYLXaiU",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 43 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_22obvRKCvQjemxm_8TTGmK",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 56 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_3aGtIrG8fJqeaeQvQefgIr",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 69 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_0Aj5tNRwzIDAVT0i8oI0gG",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 82 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_12KX8OzWrGnRI91$yUIK7$",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 95 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_1oy6XbYjXQ8unGBwlMTMTA",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 108 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_3BVPRis5TKYQ9oQ3SRM_5l",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 121 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_0sqeNByuXJSgRFyesdXPI8",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 134 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_3QHqvKs9zO58U1079nwX7E",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 147 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_3dY$aGjEnLzBVpG7zKKK1k",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 160 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_32ovVfxeDH2hHy7BKppyys",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 173 ft / 1"
+      }
+    },
+    {
+      "code": "recoverable_input_surface_3UYKPDEaDS0xB8IrNELYTs",
+      "passed": true,
+      "evidence": {
+        "name": "Recorded floor/roof plane 186 ft / 1"
+      }
+    },
+    {
+      "code": "floor_roof_panel_classification",
+      "passed": true,
+      "evidence": {
+        "untyped_horizontal_or_sloped_panels": [],
+        "method": "Panel geometry is compared even when the source did not declare its floor/roof role; role omission is reported separately."
+      }
+    },
+    {
+      "code": "floor_roof_planes_footprints_voids",
+      "passed": true,
+      "evidence": {
+        "required_plane_groups": 14,
+        "returned_plane_groups": 14,
+        "differences": [],
+        "plane_distance_tolerance_m": 0.005
+      }
+    },
+    {
+      "code": "no_unrequested_floor_roof_planes",
+      "passed": true,
+      "evidence": {
+        "extra_planes": []
+      }
+    },
+    {
+      "code": "structural_datums_retained",
+      "passed": true,
+      "evidence": {
+        "required": [
+          {
+            "id": "349ermMfjU0QS9sd8wFJJJ",
+            "name": "Ground",
+            "elevation_m": 0.0
+          },
+          {
+            "id": "2Td1frfwvO$hpYLTDGffas",
+            "name": "Datum 17.0 ft",
+            "elevation_m": 5.1816
+          },
+          {
+            "id": "3uJuWR_dDHoAdqg1bQ$D5z",
+            "name": "Datum 30.0 ft",
+            "elevation_m": 9.144
+          },
+          {
+            "id": "1EWHGkjyfN0gCausu4mGSU",
+            "name": "Datum 43.0 ft",
+            "elevation_m": 13.1064
+          },
+          {
+            "id": "3NGfVS1nDTkP6w6B6xjC0p",
+            "name": "Datum 56.0 ft",
+            "elevation_m": 17.0688
+          },
+          {
+            "id": "2TgTlPpTPOueEAkcNOnTqs",
+            "name": "Datum 69.0 ft",
+            "elevation_m": 21.031200000000002
+          },
+          {
+            "id": "0uSibTo_vPKQLd58WMvWVs",
+            "name": "Datum 82.0 ft",
+            "elevation_m": 24.993600000000004
+          },
+          {
+            "id": "2Kj3lzefjOsAbEe50ioZj9",
+            "name": "Datum 95.0 ft",
+            "elevation_m": 28.956
+          },
+          {
+            "id": "0pREJ0wM5NtRERrLYlPeIx",
+            "name": "Datum 108.0 ft",
+            "elevation_m": 32.918400000000005
+          },
+          {
+            "id": "2gIKvVsOzS9uY0j1zebI6C",
+            "name": "Datum 121.0 ft",
+            "elevation_m": 36.8808
+          },
+          {
+            "id": "1unGL9RQPH9fbPw72oFCJo",
+            "name": "Datum 134.0 ft",
+            "elevation_m": 40.8432
+          },
+          {
+            "id": "1sn0nR5b1M6BcrsdmUOotQ",
+            "name": "Datum 147.0 ft",
+            "elevation_m": 44.8056
+          },
+          {
+            "id": "3_TPMmqiPVlgjx09ompdck",
+            "name": "Datum 160.0 ft",
+            "elevation_m": 48.768
+          },
+          {
+            "id": "1a5QWwvzXJ3wLIDwihbc$v",
+            "name": "Datum 173.0 ft",
+            "elevation_m": 52.7304
+          },
+          {
+            "id": "2kdUMAOljHIPlXS280SjA5",
+            "name": "Datum 186.0 ft",
+            "elevation_m": 56.692800000000005
+          }
+        ],
+        "returned": [
+          {
+            "id": "1w3_Bb0WLT4PnfOOfOmYKv",
+            "name": "Ground",
+            "elevation_m": 0.0
+          },
+          {
+            "id": "1PrNJGAnrHNgz9t_$icKvx",
+            "name": "Datum 17.0 ft",
+            "elevation_m": 5.1816
+          },
+          {
+            "id": "2dlWuCmBjV9xs$HMtA8oOC",
+            "name": "Datum 30.0 ft",
+            "elevation_m": 9.144
+          },
+          {
+            "id": "05$LCymavOuB3xbQ47dec2",
+            "name": "Datum 43.0 ft",
+            "elevation_m": 13.106399999999999
+          },
+          {
+            "id": "1Jd3stA6rVLOl0uKm58iLG",
+            "name": "Datum 56.0 ft",
+            "elevation_m": 17.0688
+          },
+          {
+            "id": "1OU_ja7NPOSRURJy4RDaFq",
+            "name": "Datum 69.0 ft",
+            "elevation_m": 21.031200000000002
+          },
+          {
+            "id": "3EWRA$WQXGj84Xpf3enu_P",
+            "name": "Datum 82.0 ft",
+            "elevation_m": 24.993600000000004
+          },
+          {
+            "id": "2I1AORz1fPYBjHktW$PoG7",
+            "name": "Datum 95.0 ft",
+            "elevation_m": 28.956
+          },
+          {
+            "id": "1hn3mcArLHZQN_BRKCGtIy",
+            "name": "Datum 108.0 ft",
+            "elevation_m": 32.918400000000005
+          },
+          {
+            "id": "2UlcC_Ae5NpgoB$4SQr04n",
+            "name": "Datum 121.0 ft",
+            "elevation_m": 36.8808
+          },
+          {
+            "id": "1GDUBqTYLRMeWnfYa2zGGC",
+            "name": "Datum 134.0 ft",
+            "elevation_m": 40.8432
+          },
+          {
+            "id": "1bbnbFBJDQwuWtjpdV9l0I",
+            "name": "Datum 147.0 ft",
+            "elevation_m": 44.8056
+          },
+          {
+            "id": "2DtnPU4vPVmgEIwSEz36x9",
+            "name": "Datum 160.0 ft",
+            "elevation_m": 48.768
+          },
+          {
+            "id": "1KbuBVREPVKeVbC25a3Xnd",
+            "name": "Datum 173.0 ft",
+            "elevation_m": 52.730399999999996
+          },
+          {
+            "id": "2GqCN2a51UT9z3EM$wNV6G",
+            "name": "Datum 186.0 ft",
+            "elevation_m": 56.69280000000001
+          }
+        ],
+        "missing": []
+      }
+    },
+    {
+      "code": "architectural_grid_locations",
+      "passed": true,
+      "evidence": {
+        "source_axes": 14,
+        "returned_axes": 14,
+        "missing_or_changed": [],
+        "checks": "labels, U/V/W family and full 3D polyline"
+      }
+    },
+    {
+      "code": "architectural_source_identity",
+      "passed": true,
+      "evidence": {
+        "expected": "78e3bc628829cd14dc2c3743323ac85b0c412304e13510f5e46bf1774b5d78df",
+        "declared": "78e3bc628829cd14dc2c3743323ac85b0c412304e13510f5e46bf1774b5d78df"
+      }
+    },
+    {
+      "code": "physical_member_placement_defined",
+      "passed": true,
+      "evidence": {
+        "unknown_member_ids": [],
+        "method": "Null offsets or orientation remain unknown; no zero offsets or local axes are invented for these checks."
+      }
+    },
+    {
+      "code": "door_window_boundaries",
+      "passed": true,
+      "evidence": {
+        "source_count": 0,
+        "physical_count": 28,
+        "changed": []
+      }
+    },
+    {
+      "code": "door_window_workline_clearance",
+      "passed": true,
+      "evidence": {
+        "count": 0,
+        "examples": [],
+        "method": "Strict opening bounds against physical worklines; separate from a solid clash or fabrication-fit check"
+      }
+    },
+    {
+      "code": "door_window_solid_clearance",
+      "passed": true,
+      "evidence": {
+        "checked_solids": 9279,
+        "clashes": [],
+        "method": "Returned IFC mesh triangles against source axis-aligned opening volumes, with 5 mm tolerance at jamb/sill/head. All door/window fixtures in this sweep have axis-aligned hosts or are axis-aligned freestanding reservations."
+      }
+    },
+    {
+      "code": "connection_part_dimensions",
+      "passed": true,
+      "evidence": {
+        "checked": 7316,
+        "mismatches": [],
+        "method": "Explicit plate/gusset thickness or cylindrical shaft diameter versus solid dimensions; tolerance max(0.005 in, 2%). Resolve against actual completed design records, not by relabelling an arbitrary solid."
+      }
+    },
+    {
+      "code": "member_design_record_sections",
+      "passed": true,
+      "evidence": {
+        "checked_links": 1064,
+        "links_requiring_other_review": 0,
+        "mismatches": [],
+        "method": "Actual physical catalogue section label versus every linked member record with an explicit inputs.section. Custom profile aliases and built-up constituent calculations are outside this exact-label screen."
+      }
+    },
+    {
+      "code": "gravity_profile_orientation",
+      "passed": true,
+      "evidence": {
+        "checked": 660,
+        "suspect_members": [],
+        "method": "Deep gravity-framing profiles: detect depth axis nearly perpendicular to projected gravity; inspect intentional weak-axis designs separately.",
+        "unknown_placement_members_not_screened": []
+      }
+    },
+    {
+      "code": "built_up_constituents_separate",
+      "passed": true,
+      "evidence": {
+        "checked_profiles": 0,
+        "overlaps": [],
+        "method": "Separate built-up constituents must not substantially occupy the same section area; threshold >0.005 in2 and >5% of a constituent, allowing preview fillet simplifications."
+      }
+    },
+    {
+      "code": "no_duplicate_physical_occurrences",
+      "passed": true,
+      "evidence": {
+        "count": 0,
+        "examples": []
+      }
+    },
+    {
+      "code": "located_connection_occurrences",
+      "passed": true,
+      "evidence": {
+        "connections": 441,
+        "designed_without_parts": [],
+        "delegated_interfaces": []
+      }
+    },
+    {
+      "code": "connection_occurrence_coverage",
+      "passed": true,
+      "evidence": {
+        "checked_exemptions": 0,
+        "problems": [],
+        "method": "Explicit hardware notes and column bases lacking any connection-part bounds within six feet; continuous-subdivision claims must have opposing collinear member ends. Checks returned solid and reference-part bounds. Nearness alone is not connection completeness, fit or capacity certification.",
+        "unknown_placement_members_not_screened": []
+      }
+    }
+  ],
+  "issues": [
+    {
+      "code": "complete_native_physical_export",
+      "evidence": {
+        "stored_readiness": {
+          "counts": {
+            "analysis_elements": 1064,
+            "design_records": 47,
+            "members": 1064,
+            "panels": 14
+          },
+          "findings": [
+            {
+              "code": "connection_fastener_quantity",
+              "count": 36,
+              "entity_ids": [
+                "C-J-J-1",
+                "C-J-J-100",
+                "C-J-J-101",
+                "C-J-J-102",
+                "C-J-J-103",
+                "C-J-J-104",
+                "C-J-J-105",
+                "C-J-J-2",
+                "C-J-J-200",
+                "C-J-J-201",
+                "C-J-J-202",
+                "C-J-J-203",
+                "C-J-J-204",
+                "C-J-J-205",
+                "C-J-J-3",
+                "C-J-J-300",
+                "C-J-J-301",
+                "C-J-J-302",
+                "C-J-J-303",
+                "C-J-J-304",
+                "C-J-J-305",
+                "C-J-J-4",
+                "C-J-J-400",
+                "C-J-J-401",
+                "C-J-J-402",
+                "C-J-J-403",
+                "C-J-J-404",
+                "C-J-J-405",
+                "C-J-J-5",
+                "C-J-J-500",
+                "C-J-J-50000",
+                "C-J-J-501",
+                "C-J-J-502",
+                "C-J-J-503",
+                "C-J-J-504",
+                "C-J-J-505"
+              ],
+              "examples": [
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-1",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-1-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-2",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-2-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-3",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-3-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-4",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-4-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-5",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-5-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-100",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-100-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-101",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-gravity_col-W14X176-J-101-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-102",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-lateral_col-W14X176-J-102-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-103",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-gravity_col-W14X176-J-103-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-104",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-gravity_col-W14X176-J-104-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-105",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-105-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-200",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-200-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-201",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-gravity_col-W14X176-J-201-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-202",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-lateral_col-W14X176-J-202-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-203",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-gravity_col-W14X176-J-203-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-204",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-gravity_col-W14X176-J-204-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-205",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-205-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-300",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-300-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-301",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-gravity_col-W14X176-J-301-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-302",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-lateral_col-W14X176-J-302-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-303",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-lateral_col-W14X176-J-303-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-304",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-lateral_col-W14X176-J-304-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-305",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-305-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-400",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-400-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-401",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-gravity_col-W14X176-J-401-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-402",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-gravity_col-W14X176-J-402-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-403",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-gravity_col-W14X176-J-403-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-404",
+                  "declared_count": 8,
+                  "part_id": "C-conn-base-gravity_col-W14X176-J-404-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-405",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-405-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-500",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-gravity_col-W14X730-J-500-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-501",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-501-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-502",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-502-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-503",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-503-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-504",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-lateral_col-W14X730-J-504-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-505",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-gravity_col-W14X730-J-505-rod"
+                },
+                {
+                  "actual_distinct_solids": 1,
+                  "category": "anchor",
+                  "connection_id": "C-J-J-50000",
+                  "declared_count": 12,
+                  "part_id": "C-conn-base-gravity_col-W14X730-J-50000-rod"
+                }
+              ],
+              "message": "A solid fastener count exceeds the distinct located fastener solids in its local design assembly; instantiate the actual checked pattern instead of multiplying a representative solid by a count label",
+              "severity": "needs_input"
+            }
+          ],
+          "status": "needs_input"
+        },
+        "current_contract_findings": [
+          {
+            "code": "connection_fastener_quantity",
+            "message": "A solid fastener count exceeds the distinct located fastener solids in its local design assembly; instantiate the actual checked pattern instead of multiplying a representative solid by a count label",
+            "entity_ids": [
+              "C-J-J-1",
+              "C-J-J-100",
+              "C-J-J-101",
+              "C-J-J-102",
+              "C-J-J-103",
+              "C-J-J-104",
+              "C-J-J-105",
+              "C-J-J-2",
+              "C-J-J-200",
+              "C-J-J-201",
+              "C-J-J-202",
+              "C-J-J-203",
+              "C-J-J-204",
+              "C-J-J-205",
+              "C-J-J-3",
+              "C-J-J-300",
+              "C-J-J-301",
+              "C-J-J-302",
+              "C-J-J-303",
+              "C-J-J-304",
+              "C-J-J-305",
+              "C-J-J-4",
+              "C-J-J-400",
+              "C-J-J-401",
+              "C-J-J-402",
+              "C-J-J-403",
+              "C-J-J-404",
+              "C-J-J-405",
+              "C-J-J-5",
+              "C-J-J-500",
+              "C-J-J-50000",
+              "C-J-J-501",
+              "C-J-J-502",
+              "C-J-J-503",
+              "C-J-J-504",
+              "C-J-J-505"
+            ],
+            "severity": "needs_input",
+            "count": 36,
+            "examples": [
+              {
+                "connection_id": "C-J-J-1",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-1-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-2",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-2-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-3",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-3-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-4",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-4-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-5",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-5-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-100",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-100-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-101",
+                "part_id": "C-conn-base-gravity_col-W14X176-J-101-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-102",
+                "part_id": "C-conn-base-lateral_col-W14X176-J-102-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-103",
+                "part_id": "C-conn-base-gravity_col-W14X176-J-103-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-104",
+                "part_id": "C-conn-base-gravity_col-W14X176-J-104-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-105",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-105-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-200",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-200-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-201",
+                "part_id": "C-conn-base-gravity_col-W14X176-J-201-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-202",
+                "part_id": "C-conn-base-lateral_col-W14X176-J-202-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-203",
+                "part_id": "C-conn-base-gravity_col-W14X176-J-203-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-204",
+                "part_id": "C-conn-base-gravity_col-W14X176-J-204-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-205",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-205-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-300",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-300-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-301",
+                "part_id": "C-conn-base-gravity_col-W14X176-J-301-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-302",
+                "part_id": "C-conn-base-lateral_col-W14X176-J-302-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-303",
+                "part_id": "C-conn-base-lateral_col-W14X176-J-303-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-304",
+                "part_id": "C-conn-base-lateral_col-W14X176-J-304-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-305",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-305-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-400",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-400-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-401",
+                "part_id": "C-conn-base-gravity_col-W14X176-J-401-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-402",
+                "part_id": "C-conn-base-gravity_col-W14X176-J-402-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-403",
+                "part_id": "C-conn-base-gravity_col-W14X176-J-403-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-404",
+                "part_id": "C-conn-base-gravity_col-W14X176-J-404-rod",
+                "category": "anchor",
+                "declared_count": 8,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-405",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-405-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-500",
+                "part_id": "C-conn-base-gravity_col-W14X730-J-500-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-501",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-501-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-502",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-502-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-503",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-503-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-504",
+                "part_id": "C-conn-base-lateral_col-W14X730-J-504-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-505",
+                "part_id": "C-conn-base-gravity_col-W14X730-J-505-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              },
+              {
+                "connection_id": "C-J-J-50000",
+                "part_id": "C-conn-base-gravity_col-W14X730-J-50000-rod",
+                "category": "anchor",
+                "declared_count": 12,
+                "actual_distinct_solids": 1
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "input_scope": [
+    {
+      "guid": "312WU0QS9KrOapSj7gfy47",
+      "name": "Recorded floor/roof plane 17 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "3mwXxfngTJuPC2h8oyAtC_",
+      "name": "Recorded floor/roof plane 30 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "1M8cWHW2THXOA7jZYLXaiU",
+      "name": "Recorded floor/roof plane 43 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "22obvRKCvQjemxm_8TTGmK",
+      "name": "Recorded floor/roof plane 56 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "3aGtIrG8fJqeaeQvQefgIr",
+      "name": "Recorded floor/roof plane 69 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "0Aj5tNRwzIDAVT0i8oI0gG",
+      "name": "Recorded floor/roof plane 82 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "12KX8OzWrGnRI91$yUIK7$",
+      "name": "Recorded floor/roof plane 95 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "1oy6XbYjXQ8unGBwlMTMTA",
+      "name": "Recorded floor/roof plane 108 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "3BVPRis5TKYQ9oQ3SRM_5l",
+      "name": "Recorded floor/roof plane 121 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "0sqeNByuXJSgRFyesdXPI8",
+      "name": "Recorded floor/roof plane 134 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "3QHqvKs9zO58U1079nwX7E",
+      "name": "Recorded floor/roof plane 147 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "3dY$aGjEnLzBVpG7zKKK1k",
+      "name": "Recorded floor/roof plane 160 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "32ovVfxeDH2hHy7BKppyys",
+      "name": "Recorded floor/roof plane 173 ft / 1",
+      "role": "required_structural_coordination"
+    },
+    {
+      "guid": "3UYKPDEaDS0xB8IrNELYTs",
+      "name": "Recorded floor/roof plane 186 ft / 1",
+      "role": "required_structural_coordination"
+    }
+  ],
+  "architectural_sha256": "78e3bc628829cd14dc2c3743323ac85b0c412304e13510f5e46bf1774b5d78df",
+  "architectural_handoff_sha256": "5eb7b1338d72ff412e8e12647ff034bef147c9aa7000a081d51f306c0e040561",
+  "physical_package_sha256": "3fb2b4f7669e0411524ba319153edba7fd0672198453efc0533337f50f8df99e",
+  "return_ifc_sha256": "14f8301b003003bdcc7355a3db3bdd55dc86fba1c1ff26fdb3f4d8486fed5b9c",
+  "counts": {
+    "analysis_only": 0,
+    "connections": 441,
+    "interfaces": 3,
+    "joint_dispositions": 0,
+    "joints": 440,
+    "materials": 7,
+    "members": 1064,
+    "openings": 28,
+    "panels": 14,
+    "profiles": 13,
+    "record_dispositions": 0
+  },
+  "limits": [
+    "Existing own-output package with independent geometry/data checks; not a fresh analysis, engineering certification or fabrication acceptance.",
+    "Base slabs and explicitly existing host context are outside the new elevated steel design comparison and remain in the original architectural IFC.",
+    "Input fixtures are synthetic; no native Revit application acceptance is claimed."
+  ],
+  "key": "hr12",
+  "check_binding": {
+    "checker": "72bc7bb6c45509ef76ab60a17ace2f500637d5e358138bceece3d15121a72278",
+    "algorithms": "972e237fce8421ffa6b4be2f39cba5420bedfe1eed870a3f83934780b1eb33c4",
+    "returned_ifc": "14f8301b003003bdcc7355a3db3bdd55dc86fba1c1ff26fdb3f4d8486fed5b9c"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "key": "hr33",
+  "case": "hr33",
+  "status": "exported",
+  "producer": "343e0ad6cca528ecb30d07408224dca3597451c6",
+  "package_sha256": "256113ccd6c9b14a564e7ca4fc539faba2b821a8e73b00cc91ffbc7d2b5e2d27",
+  "source_files_unchanged": true,
+  "original_recorded_package_unchanged": true,
+  "stored_readiness": "ready",
+  "findings": [],
+  "physical_counts": {
+    "analysis_only": 0,
+    "connections": 70,
+    "interfaces": 4,
+    "joint_dispositions": 0,
+    "joints": 44,
+    "materials": 7,
+    "members": 57,
+    "openings": 0,
+    "panels": 1,
+    "profiles": 4,
+    "record_dispositions": 1
+  },
+  "connection_parts": 408,
+  "design_records": 9,
+  "seconds": 1.3617737293243408,
+  "llm_calls": 0,
+  "redesign": false,
+  "analysis_solve": false,
+  "drawings": false,
+  "supplements": false
+}

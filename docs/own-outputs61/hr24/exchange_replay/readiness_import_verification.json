@@ -1,0 +1,14 @@
+{
+  "key": "hr24",
+  "variant": "replay",
+  "status": "passed",
+  "binding": {
+    "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+    "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+    "source_ifc_sha256": "25428066e694d298987af7f35763d0d8fa0d209bfc78eedd887c3148c5fa7793",
+    "returned_ifc_sha256": "17404638ec84d14b8c607c77aa219286d21c7fcfdd504d91e335b8df07171d26"
+  },
+  "declared_findings_retained": 8,
+  "geometry_builder_unchanged": true,
+  "exporter_unchanged": false
+}

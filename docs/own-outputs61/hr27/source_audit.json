@@ -1,0 +1,24 @@
+{
+  "case": "hr27",
+  "key": "hr27",
+  "module": "HR",
+  "title": "CC-PSW/CF + SMF",
+  "project": "WFRESH61_hr27_20261103",
+  "source_run_status": "error",
+  "primary": true,
+  "files": {
+    "design/bim_request.json": "ba67611bb30bfe27d41188fe17e89861ef472a8eb66a686846a186e9f3a1eef9",
+    "architectural_input.json": "2b0fa159516d219f610b917a498d72c293d494921621d988328c62c58b8f16c9",
+    "architectural_handoff.txt": "fd3eab88472262a5b6f767ae2920c5a30af9628fef9a69eb8e1d2c82dba1d100"
+  },
+  "job_exists": true,
+  "completion_problems": [
+    "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+  ],
+  "current_completion_gate_passed": false,
+  "package_present": false,
+  "missing_outputs": [
+    "cfg.py",
+    "design/bim_package.json"
+  ]
+}

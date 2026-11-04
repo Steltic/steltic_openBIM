@@ -1,0 +1,65 @@
+{
+  "case": "cfs1",
+  "key": "cfs1",
+  "title": "ShearWall",
+  "module": "CFS",
+  "primary": true,
+  "source_run_status": "done",
+  "original_package_present": true,
+  "original_native_completion_passed": false,
+  "producer_completion_problems": [
+    "BIM export is stale; rerun consistency.check or BIM replay"
+  ],
+  "saved_readiness": "ready",
+  "original_validation": "ready",
+  "original_freshness": "invalid",
+  "changed_recorded_files": [
+    "workflow_review.json"
+  ],
+  "native_reexport": "exported",
+  "native_reexport_readiness": "ready",
+  "native_reexport_finding_codes": [],
+  "exporter_revision": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+  "original_producer_revision": null,
+  "variants": {
+    "saved": {
+      "transport": "blocked_source",
+      "source_validation": "invalid",
+      "source_finding_codes": [
+        "source_stale"
+      ],
+      "architectural_comparison": "not_tested",
+      "comparison_issue_codes": [],
+      "products_compared": 0,
+      "entities_compared": 0,
+      "package_sha256": "21d769d3828d3fe68bad59e31b0cb3438394869f1383ad095a74a28e277a862c",
+      "source_ifc_sha256": null,
+      "returned_ifc_sha256": null,
+      "source_files_unchanged": null,
+      "schema_errors": null,
+      "import_readiness_verified": false,
+      "error": null,
+      "stage": null
+    },
+    "replay": {
+      "transport": "passed",
+      "source_validation": "ready",
+      "source_finding_codes": [],
+      "architectural_comparison": "passed",
+      "comparison_issue_codes": [],
+      "products_compared": 3099,
+      "entities_compared": 42176,
+      "package_sha256": "d08e05a926d293c81869b8cdbd2bb5afffe1ffff873f008d707212558b3ab891",
+      "source_ifc_sha256": "cb9651315f2aef97259f0edd0e19b645ff43d7d4938719e773bd97fee1ff4a71",
+      "returned_ifc_sha256": "0ce94ae43c15ed656e83e890b8945b2bf319166c93d823bfb6f8510c0cae2461",
+      "source_files_unchanged": true,
+      "schema_errors": [],
+      "import_readiness_verified": true,
+      "error": null,
+      "stage": null
+    }
+  },
+  "status": "reexport_checks_passed_producer_not_complete",
+  "saved_job_acceptance": false,
+  "reexport_model_checks_passed": true
+}

@@ -1,0 +1,38 @@
+{
+  "case": "hr24",
+  "key": "hr24",
+  "module": "HR",
+  "title": "SMF X / SCBF Y (completed source design)",
+  "project": "WFRESH61_hr24_20261103",
+  "source_run_status": "error",
+  "primary": true,
+  "files": {
+    "cfg.py": "0b2f3bef0a96d0225c380093043a21d1e448ab1cd80a4331ee3f882dab8b875d",
+    "design/calc_package.json": "46aab2d82305ebca2c8de850334cfb745e987c54e93934efa8de86ab4ea374ea",
+    "design/consistency_result.json": "728eaeb29e0f8c48f3c3a2ed42eebd2e7a55a2c08827a8ab3ef2421e75012e80",
+    "design/pipeline_results.json": "65a442789c26bfb3504fe6a28386b1b72604e2d6d15f522eb5bf305e12986ce0",
+    "design/bim_request.json": "364f6b3d63f3b31b3b6962d353429724de09930ce42d4ac61d9d5ce2f1d2836c",
+    "architectural_input.json": "45cb72ad936f955c573b7863d635c743f45c4fc4e7ee187aaf25830273456cfe",
+    "architectural_handoff.txt": "c265fa4075946a35ca2f838609d36ef0d6b3d37fca124163b8931441971a6482"
+  },
+  "job_exists": true,
+  "completion_problems": [
+    "'roof-W18X50' has no numeric D/C (top-level or in checks) and no waiver",
+    "'roof-W18X50' has no cited AISC clause",
+    "'floor-W21X62' has no numeric D/C (top-level or in checks) and no waiver",
+    "'floor-W21X62' has no cited AISC clause",
+    "'roof-W21X62' has no numeric D/C (top-level or in checks) and no waiver",
+    "'roof-W21X62' has no cited AISC clause",
+    "'floor-W24X62' has no numeric D/C (top-level or in checks) and no waiver",
+    "'floor-W24X62' has no cited AISC clause",
+    "'floor-W24X68' has no numeric D/C (top-level or in checks) and no waiver",
+    "'floor-W24X68' has no cited AISC clause",
+    "'floor-W27X94' has no numeric D/C (top-level or in checks) and no waiver",
+    "... and 238 more problem(s) -- see consistency.check / the sanity suite output"
+  ],
+  "current_completion_gate_passed": false,
+  "package_present": false,
+  "missing_outputs": [
+    "design/bim_package.json"
+  ]
+}

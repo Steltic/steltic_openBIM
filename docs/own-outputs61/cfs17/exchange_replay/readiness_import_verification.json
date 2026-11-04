@@ -1,0 +1,14 @@
+{
+  "key": "cfs17",
+  "variant": "replay",
+  "status": "passed",
+  "binding": {
+    "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+    "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+    "source_ifc_sha256": "f2f60aeecd18732b6300c9a9287eae788c9d92d8f517a48f716c4e264d2a418b",
+    "returned_ifc_sha256": "832bc0b1fbe73b3e2cade47521d4ccfd2fa478dc34b80f97041b7e6740ec7ce2"
+  },
+  "declared_findings_retained": 2,
+  "geometry_builder_unchanged": true,
+  "exporter_unchanged": false
+}

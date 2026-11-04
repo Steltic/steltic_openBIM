@@ -1,0 +1,71 @@
+{
+  "case": "cfs29",
+  "key": "cfs29_earlier",
+  "title": "Independent CFS mezzanine in an existing host",
+  "module": "CFS",
+  "primary": false,
+  "source_run_status": "done",
+  "original_package_present": true,
+  "original_native_completion_passed": false,
+  "producer_completion_problems": [
+    "BIM physical_ply_count: Built-up section labels disagree with constituent counts; resolve the physical declaration before claiming readiness",
+    "BIM physical_opening_workline: Member worklines cross a declared opening; coordinate the framing and then check full section and connection clearance; resolve the physical declaration before claiming readiness"
+  ],
+  "saved_readiness": "ready",
+  "original_validation": "needs_input",
+  "original_freshness": "needs_input",
+  "changed_recorded_files": [],
+  "native_reexport": "exported",
+  "native_reexport_readiness": "needs_input",
+  "native_reexport_finding_codes": [
+    "physical_opening_workline",
+    "physical_ply_count"
+  ],
+  "exporter_revision": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+  "original_producer_revision": null,
+  "variants": {
+    "saved": {
+      "transport": "passed",
+      "source_validation": "needs_input",
+      "source_finding_codes": [
+        "physical_opening_workline",
+        "physical_ply_count"
+      ],
+      "architectural_comparison": "unverifiable_input",
+      "comparison_issue_codes": [],
+      "products_compared": 135,
+      "entities_compared": 2369,
+      "package_sha256": "5d1a44e452697482f52aaa373983f6317159bba64d68b3ceafe6eec7789ef3fa",
+      "source_ifc_sha256": "3b675694507943a7d589fa50830407dfcc7787e82787e88ce3c96e3d08eeb8a5",
+      "returned_ifc_sha256": "42846635b17fd702570eb41061d63b902b8033991a8c4688e719465115efea4a",
+      "source_files_unchanged": true,
+      "schema_errors": [],
+      "import_readiness_verified": true,
+      "error": null,
+      "stage": null
+    },
+    "replay": {
+      "transport": "passed",
+      "source_validation": "needs_input",
+      "source_finding_codes": [
+        "physical_opening_workline",
+        "physical_ply_count"
+      ],
+      "architectural_comparison": "unverifiable_input",
+      "comparison_issue_codes": [],
+      "products_compared": 135,
+      "entities_compared": 2369,
+      "package_sha256": "7bcbdfb981bfa3f3ddf3b453c6702909eaa42d500b205a06cae74d59ddda2524",
+      "source_ifc_sha256": "ad8e67a4bc46635ddecceac7eb1e530a3584146278e0fb6e1fda4a19080ff869",
+      "returned_ifc_sha256": "ab2de4f45dfc7138cefcc20e36bef04d478619df6ba4f68ea6389ab151c39e2f",
+      "source_files_unchanged": true,
+      "schema_errors": [],
+      "import_readiness_verified": true,
+      "error": null,
+      "stage": null
+    }
+  },
+  "status": "transport_passed_source_needs_resolution",
+  "saved_job_acceptance": false,
+  "reexport_model_checks_passed": false
+}

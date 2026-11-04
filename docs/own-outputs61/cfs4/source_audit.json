@@ -1,0 +1,24 @@
+{
+  "case": "cfs4",
+  "key": "cfs4",
+  "module": "CFS",
+  "title": "SBSW",
+  "project": "WFRESH61_cfs4_20261103",
+  "source_run_status": "error",
+  "primary": true,
+  "files": {
+    "design/bim_request.json": "91ff5e8368f509b05701fbf44e8b4f9ed8d758dd00d557845a902b8f86d49137",
+    "architectural_input.json": "5e86bc469c586aeb3b416202c92a4ea51b8634a126b126619742a16ccb4c46f9",
+    "architectural_handoff.txt": "191a1c0b881c0fd405bfbbd380eae70bfa76f1df89421c226a462f1999e8ebab"
+  },
+  "job_exists": true,
+  "completion_problems": [
+    "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+  ],
+  "current_completion_gate_passed": false,
+  "package_present": false,
+  "missing_outputs": [
+    "cfg.py",
+    "design/bim_package.json"
+  ]
+}

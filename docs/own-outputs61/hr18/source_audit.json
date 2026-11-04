@@ -1,0 +1,24 @@
+{
+  "case": "hr18",
+  "key": "hr18",
+  "module": "HR",
+  "title": "R3 not specifically detailed",
+  "project": "WFRESH61_hr18_20261103",
+  "source_run_status": "error",
+  "primary": true,
+  "files": {
+    "design/bim_request.json": "639a9c7d3290e228cfae1b37652872301f1dc23c2dcf96e628eb8ee36fd0ccc9",
+    "architectural_input.json": "f44fff4629e7ace60bbcaeac46379fae0f2753efbcd96178d6b9fbd72067cf23",
+    "architectural_handoff.txt": "ddf9c755c077664ee444ccf984cf93019abd73d77aed62eac3350ca9cd452b81"
+  },
+  "job_exists": true,
+  "completion_problems": [
+    "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+  ],
+  "current_completion_gate_passed": false,
+  "package_present": false,
+  "missing_outputs": [
+    "cfg.py",
+    "design/bim_package.json"
+  ]
+}

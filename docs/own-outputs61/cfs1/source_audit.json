@@ -1,0 +1,143 @@
+{
+  "case": "cfs1",
+  "key": "cfs1",
+  "module": "CFS",
+  "title": "ShearWall",
+  "project": "WFRESH61_cfs1_20261103",
+  "source_run_status": "done",
+  "primary": true,
+  "files": {
+    "cfg.py": "7f9ade7eb2b58e57053bd987bfb1924913b30a83b7e14d6bf26359974bb678a0",
+    "design/calc_package_cfs.json": "1a57c1b66bf4ff21ebafa2009e06720b619f9c7bbc4cc5de1f4b3b2a4f993489",
+    "design/bim_package.json": "21d769d3828d3fe68bad59e31b0cb3438394869f1383ad095a74a28e277a862c",
+    "design/consistency_result.json": "77054267d95ff3e388441ce95ab25af542d0c5e0e61727ef4cbf4bec18b1911a",
+    "design/bim_request.json": "90d2409fe2b1c7cecdf4d7850460b1b981bf9ded36b7c643756b4db652581c61",
+    "architectural_input.json": "d1859fa57590ef4b242be1e666594a7df307d401a078bf674cec0fd3ad1f1e51",
+    "architectural_handoff.txt": "10247eb308f3e57d0677e9b003095bfcf621aa7730138fe042f5810707e496d7"
+  },
+  "job_exists": true,
+  "completion_problems": [
+    "BIM export is stale; rerun consistency.check or BIM replay"
+  ],
+  "current_completion_gate_passed": false,
+  "package_present": true,
+  "stored_readiness": "ready",
+  "provenance": {
+    "analysis_executed": false,
+    "engine_files": {
+      "aisc_shapes.csv": "fbb655067c9e7e77c9ade032f917b5af4a95f8ee6660f7db47573bccd07727d0",
+      "architectural_input.py": "1b00359fd6e1470198beac88c84f88254f2be6f34c4c5c299795a3e285f38c7d",
+      "bim_adapter.py": "ed75c91a71618a49fe99a0cb88108e8d81a2ffad30bc00198a15abcd661b3190",
+      "bim_contract.py": "8807a15cf85c09f148e44a4b51051ab2acd3e7ada6feedf2f5e519f4ce56d86d",
+      "bim_export.py": "a5782357a2b2609b9a99c67e3ae5a53213321ef7b3710606164a8430161e9516",
+      "bim_package.schema.json": "77ab0cfaea34af4a64c29bccd1aaf1d6a6c9fbb942a582727d8fac5c7cd8e265",
+      "build_cfs_models.py": "85670ba24dc97c4a046771be2034d1fe190a1a8e7036267899b6c54b91df00ec",
+      "cfs_engine.py": "d71558210d2333d8c47b943e4588b5fd8be2940ced82ad2dbe5a82985c1fefde",
+      "cfs_frame.py": "4ac5df87a55492c84e8591bd5640b7f87477e1a3d667c6372844e80d2c842d28",
+      "cfs_gates.py": "4df390650c78fc67c65bd84c7f31a45b723c6c0665065ba4a64ae6cf1206c8d2",
+      "cfs_pipeline.py": "167ce20c4d752db9920ee2c7f7ca769b677b97e957152191296d5b0fa4f680fd",
+      "cfs_sections.py": "f0502b4621636c0b899a29f0221d297611f4dc9de6617c33c9456a35dae69fce",
+      "cfs_shapes.csv": "c43f2ce3bc10f3feb5a54d9025f6a3cf9c772723c69e85a95025867cf7384a41",
+      "cfs_systems.py": "f83d3da5b7405b7b09ff774de7b4a44c278badc37b39839f89905701093a8eeb",
+      "cfs_viewer3d.py": "76e237bbc09a3bd517511cdeaf11bcd0706ebcdce59f71cc3b434347af032ea7",
+      "consistency.py": "b575eec3688c324453a79d646849a60c224e5ef0f781edf2925b1ba15eb3830d",
+      "design_pipeline.py": "1c0980b14ba06f1a2bf75f9afa58ab62d8cc6c1a8952c160b67f9bc733894d1e",
+      "design_post.py": "0fdcca4600fd9b40fd5841e22412566cdd2fdb38c8ef77e7e7852ba2363617f0",
+      "eff_stiffness.py": "0807a2f9196b5317eb635faa14a4837da71dccb1d1fba16cbbd337aa5cd357e2",
+      "engine3d.py": "6f2573e4f787e5c1b6ecabe19b30ba291ec2a5acd866328ad8b639cd44eac149",
+      "example_build.py": "20b2d5c66e129f7f421945078bda743e093aad8d1a8384931efc5a907adbd00a",
+      "extract_sfia.py": "96a6a12dd369e6a97ea1985ea630c6badbd1891ae02640e75de4a34308c27cc2",
+      "frame_diagram.py": "f516fd69637a180ee1b89a53769774905bfd0bf30f964c02575bedfa03e9a8c3",
+      "pipeline.py": "6dc646b73cf3eb865e7e90b3de181b4f3e70271131190d7ca4202987afb0638d",
+      "plot_model.py": "aa6ad976d994a08e12c26eb7683d5b08ae746aed8d31c66bb995cb18ce3f4ed9",
+      "preflight.py": "9097f278c742b10bd620de270538e3b824a5b1a8d460cdbba7349be13fd55831",
+      "report.py": "a0e370350bc4a8f51a72ab2e2bb1a7adcac17280b12834d7336a8dc0f0825485",
+      "sections.py": "11df74a1d20ba7dd84866d6c940eac7d64d9695658695ebd28efdd8c43f21c58",
+      "sfia_oracle_axial_lateral.csv": "2cd74c1b805f63be32e2909bd7b0fbb7bca9b644544e4c98c7841b820253d4b8",
+      "sfia_oracle_headers.csv": "c84aa6d04e5b1fc60857c156baca272cd7aa264a26171bae4dea03e685f1296a",
+      "sfia_oracle_joist_spans.csv": "fd2f96be9c04d6997a20ebef2ea1add6dd1d5a9de1eb06beda396124baf6d6e8",
+      "sfia_oracle_limiting_heights.csv": "cff2c38e80249654c686c9e196681964a98549be718fdcdb5fcd98aea24e1d09",
+      "sfia_oracle_web_crippling.csv": "94f78d4898b8826bdac1cc1c430cdc0e62a24206d6a5a4f2aafde06f2c8ef34c",
+      "static_model.py": "f1fc1faaa353aca1ec19eb6ca411e8fad30c240c0e2756d3f6cd578f97c1f8d6",
+      "test_span_tables.py": "6e28bc4eef0fcbcfd1def0b89ddbd8a059c7832669b70f01f9bec15250ccb3f5",
+      "viewer3d.py": "8dffc664cf6de99835670c5d1b5dc87aaec66803cb7d837563e79b3014abfb79",
+      "viz3d.py": "d2ec83cd959a5e04b84c2ecaad8779a0998680ebd8488b8ffc3c67fefe8fe602",
+      "wall_line.py": "8e77c9968f22ef2419c504414554c2208119a443c71e5e2f092d061f37e9b9aa"
+    },
+    "engine_version": "wall_line physical declarations; no spring solve",
+    "exporter_revision": null,
+    "mode": "model_only_replay",
+    "module": "CFS",
+    "package_file": "calc_package_cfs.json",
+    "producer_revision": null
+  },
+  "declared_source_files": {
+    "_bim_test.json": "f749a494d81c6be17cba2079ec25305c62a7f79d1395a03abd38e500028e8c58",
+    "_brief_1.txt": "10247eb308f3e57d0677e9b003095bfcf621aa7730138fe042f5810707e496d7",
+    "_cfg_head.py": "1a55c967cf1cd7578e8abe64d3613d3d5ec25fdc1937bc86bafb37977135582e",
+    "arch_data.json": "c38d86e4b06fde7a1919bf518e994c89c9b6060b02bb2f5181cb3080e92da21a",
+    "architectural_handoff.txt": "10247eb308f3e57d0677e9b003095bfcf621aa7730138fe042f5810707e496d7",
+    "architectural_input.json": "d1859fa57590ef4b242be1e666594a7df307d401a078bf674cec0fd3ad1f1e51",
+    "bim_gen.py": "74e27f88f6dd0c2cf340834b0e5a03029cf1aaee92644bb5008d4ba6545dda80",
+    "cfg.py": "7f9ade7eb2b58e57053bd987bfb1924913b30a83b7e14d6bf26359974bb678a0",
+    "design/bim_request.json": "90d2409fe2b1c7cecdf4d7850460b1b981bf9ded36b7c643756b4db652581c61",
+    "design/calc_package_cfs.json": "1a57c1b66bf4ff21ebafa2009e06720b619f9c7bbc4cc5de1f4b3b2a4f993489",
+    "design/consistency_result.json": "77054267d95ff3e388441ce95ab25af542d0c5e0e61727ef4cbf4bec18b1911a",
+    "viewer_3d.html": "34067a7d38ab50077bb55bc85a41fa7da056d9e8997a1702285f81ecf6bb24c0",
+    "workflow_review.json": "6ee41486c74f5e34fb7ec8a86a93574e61818483280a806a0accb868d22c92bd"
+  },
+  "physical_counts": {
+    "analysis_only": 0,
+    "connections": 636,
+    "interfaces": 0,
+    "joint_dispositions": 520,
+    "joints": 1156,
+    "materials": 7,
+    "members": 442,
+    "openings": 64,
+    "panels": 197,
+    "profiles": 8,
+    "record_dispositions": 0
+  },
+  "design_records": 133,
+  "source_kind": "CFS",
+  "require_connection_parts": true,
+  "current_validation": {
+    "status": "ready",
+    "source_freshness_checked": false,
+    "findings": []
+  },
+  "source_freshness": {
+    "status": "invalid",
+    "source_freshness_checked": true,
+    "findings": [
+      {
+        "code": "source_stale",
+        "message": "Source evidence changed after export",
+        "entity_ids": [
+          "workflow_review.json"
+        ],
+        "severity": "error"
+      }
+    ]
+  },
+  "captured_worklines_required": false,
+  "current_tracked_source_files": {
+    "_bim_test.json": "f749a494d81c6be17cba2079ec25305c62a7f79d1395a03abd38e500028e8c58",
+    "_brief_1.txt": "10247eb308f3e57d0677e9b003095bfcf621aa7730138fe042f5810707e496d7",
+    "_cfg_head.py": "1a55c967cf1cd7578e8abe64d3613d3d5ec25fdc1937bc86bafb37977135582e",
+    "arch_data.json": "c38d86e4b06fde7a1919bf518e994c89c9b6060b02bb2f5181cb3080e92da21a",
+    "architectural_handoff.txt": "10247eb308f3e57d0677e9b003095bfcf621aa7730138fe042f5810707e496d7",
+    "architectural_input.json": "d1859fa57590ef4b242be1e666594a7df307d401a078bf674cec0fd3ad1f1e51",
+    "bim_gen.py": "74e27f88f6dd0c2cf340834b0e5a03029cf1aaee92644bb5008d4ba6545dda80",
+    "cfg.py": "7f9ade7eb2b58e57053bd987bfb1924913b30a83b7e14d6bf26359974bb678a0",
+    "design/bim_request.json": "90d2409fe2b1c7cecdf4d7850460b1b981bf9ded36b7c643756b4db652581c61",
+    "design/calc_package_cfs.json": "1a57c1b66bf4ff21ebafa2009e06720b619f9c7bbc4cc5de1f4b3b2a4f993489",
+    "design/consistency_result.json": "77054267d95ff3e388441ce95ab25af542d0c5e0e61727ef4cbf4bec18b1911a",
+    "viewer_3d.html": "34067a7d38ab50077bb55bc85a41fa7da056d9e8997a1702285f81ecf6bb24c0",
+    "workflow_review.json": "655c6354676d551063686ee6138abf02ec3654951861c0dc1bca403db364113b"
+  },
+  "source_file_set_matches": false,
+  "own_output_only": true,
+  "physical_supplements_used": false
+}

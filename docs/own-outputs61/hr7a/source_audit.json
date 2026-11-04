@@ -1,0 +1,24 @@
+{
+  "case": "hr7a",
+  "key": "hr7a",
+  "module": "HR",
+  "title": "SMF",
+  "project": "WFRESH61_hr7a_20261103",
+  "source_run_status": "error",
+  "primary": true,
+  "files": {
+    "design/bim_request.json": "600cbf5146870d677b1f72eeee0283abdb5f658e91119842c491ece06fe35256",
+    "architectural_input.json": "4f2fb1cad6947802b6b6299c345dbd0867e754a3bb2527b19996ca38b93422d4",
+    "architectural_handoff.txt": "ae86d5a85044ad57381f6c7b04e3e1104efad90248e98358eb9a3259969bc694"
+  },
+  "job_exists": true,
+  "completion_problems": [
+    "design/calc_package.json does not exist -- run pipeline.design_and_report first"
+  ],
+  "current_completion_gate_passed": false,
+  "package_present": false,
+  "missing_outputs": [
+    "cfg.py",
+    "design/bim_package.json"
+  ]
+}

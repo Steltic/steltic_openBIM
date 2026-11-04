@@ -1,0 +1,20 @@
+{
+  "case": "cfs15",
+  "key": "cfs15",
+  "module": "CFS",
+  "title": "WSP",
+  "project": "WFRESH61_cfs15_20261103",
+  "source_run_status": "not_started",
+  "primary": true,
+  "files": {},
+  "job_exists": false,
+  "completion_problems": [
+    "No production job exists for this case."
+  ],
+  "current_completion_gate_passed": false,
+  "package_present": false,
+  "missing_outputs": [
+    "cfg.py",
+    "design/bim_package.json"
+  ]
+}

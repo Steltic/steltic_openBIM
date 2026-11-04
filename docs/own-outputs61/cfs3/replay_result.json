@@ -1,0 +1,88 @@
+{
+  "key": "cfs3",
+  "case": "cfs3",
+  "status": "exported",
+  "producer": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+  "package_sha256": "38e7e4b8314e1d733043b035dac58e5618f55642e0fadf037dd543d0ad613cfe",
+  "source_files_unchanged": true,
+  "original_recorded_package_unchanged": true,
+  "stored_readiness": "needs_input",
+  "findings": [
+    {
+      "code": "connection_selected_family",
+      "count": 3,
+      "entity_ids": [
+        "connections/conn-chord-builtup",
+        "connections/conn-floor-ledger",
+        "connections/conn-sheathing-screw"
+      ],
+      "examples": [
+        {
+          "bound_entity_ids": [
+            "cfs:wall:X:A:story:1:segment:1",
+            "cfs:wall:X:A:story:1:segment:2",
+            "cfs:wall:X:A:story:1:segment:3",
+            "cfs:wall:X:A:story:1:segment:4"
+          ],
+          "design_record_id": "connections/conn-sheathing-screw",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "wall segment wall segment wall segment wall segment",
+          "selected_components": "No.10 x 3/4-in. ASTM C1513 self-drilling screws at 2 in. o.c. panel edges / 12 in. field into 68-mil studs/track; edge distance 3/8 in. min"
+        },
+        {
+          "bound_entity_ids": [
+            "c:X:A:s1:e0",
+            "c:X:A:s1:e1",
+            "c:X:A:s2:e0",
+            "c:X:A:s2:e1"
+          ],
+          "design_record_id": "connections/conn-chord-builtup",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "tie rod shaft plate tie rod shaft plate tie rod shaft plate tie rod shaft plate",
+          "selected_components": "single 2-1/4-in. A449 rod (governed by Y-8 short line) with (4) 600S162-97 plies stitched with pairs of No.10 screws at 6 in. o.c. (brief) + rod bearing plates into podium embeds"
+        },
+        {
+          "bound_entity_ids": [
+            "cfs:wall:X:A:story:1:segment:1",
+            "cfs:wall:X:A:story:1:segment:2",
+            "cfs:wall:X:A:story:1:segment:3",
+            "cfs:wall:X:A:story:1:segment:4"
+          ],
+          "design_record_id": "connections/conn-floor-ledger",
+          "missing_component_categories": [
+            "screw"
+          ],
+          "returned_part_kinds": "wall segment wall segment wall segment wall segment",
+          "selected_components": "continuous 68-mil ledger/track with No.10 screws at 6 in. o.c. to wall + deck fastening per manufacturer to carry v_cd; 0.9D+1.0W uplift clips at joists (net-uplift path roof-to-podium)"
+        }
+      ],
+      "message": "A selected connection family has no corresponding located component categories in its bound entities; a typical coverage note alone does not place its hardware",
+      "severity": "needs_input"
+    }
+  ],
+  "physical_counts": {
+    "analysis_only": 0,
+    "connections": 221,
+    "interfaces": 1,
+    "joint_dispositions": 2924,
+    "joints": 3145,
+    "materials": 5,
+    "members": 2784,
+    "openings": 742,
+    "panels": 1968,
+    "profiles": 7,
+    "record_dispositions": 29
+  },
+  "connection_parts": 442,
+  "design_records": 271,
+  "seconds": 3.9777932167053223,
+  "llm_calls": 0,
+  "redesign": false,
+  "analysis_solve": false,
+  "drawings": false,
+  "supplements": false
+}

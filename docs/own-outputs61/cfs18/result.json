@@ -1,0 +1,67 @@
+{
+  "case": "cfs18",
+  "key": "cfs18",
+  "title": "Portal with mezzanine",
+  "module": "CFS",
+  "primary": true,
+  "source_run_status": "paused",
+  "original_package_present": true,
+  "original_native_completion_passed": false,
+  "producer_completion_problems": [
+    "BIM export is stale; rerun consistency.check or BIM replay"
+  ],
+  "saved_readiness": "ready",
+  "original_validation": "ready",
+  "original_freshness": "invalid",
+  "changed_recorded_files": [
+    "workflow_review.json"
+  ],
+  "native_reexport": "exported",
+  "native_reexport_readiness": "ready",
+  "native_reexport_finding_codes": [],
+  "exporter_revision": "dfaae462f246cd0d694bf6f828f1f90ac7b4f9b5",
+  "original_producer_revision": null,
+  "variants": {
+    "saved": {
+      "transport": "blocked_source",
+      "source_validation": "invalid",
+      "source_finding_codes": [
+        "source_stale"
+      ],
+      "architectural_comparison": "not_tested",
+      "comparison_issue_codes": [],
+      "products_compared": 0,
+      "entities_compared": 0,
+      "package_sha256": "528a271a169d9598c7d8da7a3636bc0dc0c474eb79475351474a36b869d56c21",
+      "source_ifc_sha256": null,
+      "returned_ifc_sha256": null,
+      "source_files_unchanged": null,
+      "schema_errors": null,
+      "import_readiness_verified": false,
+      "error": null,
+      "stage": null
+    },
+    "replay": {
+      "transport": "passed",
+      "source_validation": "ready",
+      "source_finding_codes": [],
+      "architectural_comparison": "needs_resolution",
+      "comparison_issue_codes": [
+        "door_window_solid_clearance"
+      ],
+      "products_compared": 8012,
+      "entities_compared": 112119,
+      "package_sha256": "0e3a951d5d29ecac3211d5cc5b4ed1c32597b175c548c7112e5fc1073e768b61",
+      "source_ifc_sha256": "242a337eccd54a28f87571aa5c2c9199a8de4f4208ebf4f1a21c37a22c5a9b3b",
+      "returned_ifc_sha256": "0479680e057e08737f9a40f421bb31395246d7b249ff54f222669874525f6f4e",
+      "source_files_unchanged": true,
+      "schema_errors": [],
+      "import_readiness_verified": true,
+      "error": null,
+      "stage": null
+    }
+  },
+  "status": "transport_passed_source_needs_resolution",
+  "saved_job_acceptance": false,
+  "reexport_model_checks_passed": false
+}

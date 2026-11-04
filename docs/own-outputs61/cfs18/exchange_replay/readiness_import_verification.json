@@ -1,0 +1,14 @@
+{
+  "key": "cfs18",
+  "variant": "replay",
+  "status": "passed",
+  "binding": {
+    "baseline_commit": "f24c08a74006376ed995294c213147d74d9a6154",
+    "importer_sha256": "1b068d8a96d1d67ee2f3926b7cf90fbe6b5fb96eca42bf96b4091cdc83d36af7",
+    "source_ifc_sha256": "242a337eccd54a28f87571aa5c2c9199a8de4f4208ebf4f1a21c37a22c5a9b3b",
+    "returned_ifc_sha256": "0479680e057e08737f9a40f421bb31395246d7b249ff54f222669874525f6f4e"
+  },
+  "declared_findings_retained": 0,
+  "geometry_builder_unchanged": true,
+  "exporter_unchanged": false
+}

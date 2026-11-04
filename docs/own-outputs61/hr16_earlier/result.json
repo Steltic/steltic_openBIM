@@ -1,0 +1,71 @@
+{
+  "case": "hr16",
+  "key": "hr16_earlier",
+  "title": "Z-plan school with stepped roof levels",
+  "module": "HR",
+  "primary": false,
+  "source_run_status": "done",
+  "original_package_present": true,
+  "original_native_completion_passed": false,
+  "producer_completion_problems": [
+    "BIM physical_opening_workline: Member worklines cross a declared opening; coordinate the framing and then check full section and connection clearance; resolve the physical declaration before claiming readiness",
+    "BIM physical_remote_part: Connection box parts are over six feet from their assigned joint; resolve the physical declaration before claiming readiness"
+  ],
+  "saved_readiness": "ready",
+  "original_validation": "needs_input",
+  "original_freshness": "needs_input",
+  "changed_recorded_files": [],
+  "native_reexport": "exported",
+  "native_reexport_readiness": "needs_input",
+  "native_reexport_finding_codes": [
+    "physical_opening_workline",
+    "physical_remote_part"
+  ],
+  "exporter_revision": "343e0ad6cca528ecb30d07408224dca3597451c6",
+  "original_producer_revision": null,
+  "variants": {
+    "saved": {
+      "transport": "passed",
+      "source_validation": "needs_input",
+      "source_finding_codes": [
+        "physical_opening_workline",
+        "physical_remote_part"
+      ],
+      "architectural_comparison": "unverifiable_input",
+      "comparison_issue_codes": [],
+      "products_compared": 149,
+      "entities_compared": 2559,
+      "package_sha256": "bb34d15145370e1fe701e910a458519492ba202258cc30d90d44ad5e22fa9941",
+      "source_ifc_sha256": "8f659f648f1be7ea99e33dfa8afdbc044715c82700de31eb9fe9d7b056cdf74b",
+      "returned_ifc_sha256": "47a4e56a1a79d0db88e324c97c502c8d1f9df2b795c9961bed4898c38a5a99c1",
+      "source_files_unchanged": true,
+      "schema_errors": [],
+      "import_readiness_verified": true,
+      "error": null,
+      "stage": null
+    },
+    "replay": {
+      "transport": "passed",
+      "source_validation": "needs_input",
+      "source_finding_codes": [
+        "physical_opening_workline",
+        "physical_remote_part"
+      ],
+      "architectural_comparison": "unverifiable_input",
+      "comparison_issue_codes": [],
+      "products_compared": 149,
+      "entities_compared": 2559,
+      "package_sha256": "925edc565ba8d4196767c0dc696f524d3d321024ea92cfa4274cbc510dbe2ea7",
+      "source_ifc_sha256": "1737510fdcdfce76c0f4bb92ac156b97eea24d8d2402fdfe622b97135132d0f8",
+      "returned_ifc_sha256": "dc09add9df7f035f39aaea97229bd70ea9cc2f857f65909b2c25efd5fb89c80b",
+      "source_files_unchanged": true,
+      "schema_errors": [],
+      "import_readiness_verified": true,
+      "error": null,
+      "stage": null
+    }
+  },
+  "status": "transport_passed_source_needs_resolution",
+  "saved_job_acceptance": false,
+  "reexport_model_checks_passed": false
+}

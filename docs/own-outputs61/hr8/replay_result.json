@@ -1,0 +1,735 @@
+{
+  "key": "hr8",
+  "case": "hr8",
+  "status": "exported",
+  "producer": "343e0ad6cca528ecb30d07408224dca3597451c6",
+  "package_sha256": "d94949e00c9c970050047342dae3c9df43d0a3e8317daaa3fc789967c884e50e",
+  "source_files_unchanged": true,
+  "original_recorded_package_unchanged": true,
+  "stored_readiness": "needs_input",
+  "findings": [
+    {
+      "code": "connection_selected_family",
+      "count": 11,
+      "entity_ids": [
+        "connections/collector-irregularity-lines",
+        "connections/conn-gravity_col-W14X109",
+        "connections/conn-gravity_col-W14X53",
+        "connections/conn-gravity_col-W14X68",
+        "connections/conn-gravity_col-W14X82",
+        "connections/conn-lateral_col-W14X311",
+        "connections/conn-lateral_col-W14X426",
+        "connections/conn-lateral_col-W14X53",
+        "connections/conn-lateral_col-W14X550",
+        "connections/conn-lateral_col-W14X68",
+        "connections/conn-lateral_col-W14X730"
+      ],
+      "examples": [
+        {
+          "bound_entity_ids": [
+            "M-1",
+            "M-35",
+            "M-40",
+            "M-48",
+            "M-64"
+          ],
+          "design_record_id": "connections/conn-gravity_col-W14X109",
+          "missing_component_categories": [
+            "bolt",
+            "weld"
+          ],
+          "returned_part_kinds": "col col col col col",
+          "selected_components": "CJP groove weld full W14X109 section at splice 4 ft AFF every 2 stories (demand-critical, E70, AISC 341 F3.6a); erection bolts 4x 3/4-in A325 snug-tight"
+        },
+        {
+          "bound_entity_ids": [
+            "M-124",
+            "M-15",
+            "M-218",
+            "M-23",
+            "M-85"
+          ],
+          "design_record_id": "connections/conn-lateral_col-W14X311",
+          "missing_component_categories": [
+            "bolt",
+            "weld"
+          ],
+          "returned_part_kinds": "col col col col col",
+          "selected_components": "CJP groove weld full W14X311 section at splice 4 ft AFF every 2 stories (demand-critical, E70, AISC 341 F3.6a); erection bolts 4x 3/4-in A325 snug-tight"
+        },
+        {
+          "bound_entity_ids": [
+            "M-13",
+            "M-21",
+            "M-29",
+            "M-34",
+            "M-60"
+          ],
+          "design_record_id": "connections/conn-lateral_col-W14X426",
+          "missing_component_categories": [
+            "bolt",
+            "weld"
+          ],
+          "returned_part_kinds": "col col col col col",
+          "selected_components": "CJP groove weld full W14X426 section at splice 4 ft AFF every 2 stories (demand-critical, E70, AISC 341 F3.6a); erection bolts 4x 3/4-in A325 snug-tight"
+        },
+        {
+          "bound_entity_ids": [
+            "M-46",
+            "M-54",
+            "M-62",
+            "M-7",
+            "M-93"
+          ],
+          "design_record_id": "connections/conn-gravity_col-W14X53",
+          "missing_component_categories": [
+            "bolt",
+            "weld"
+          ],
+          "returned_part_kinds": "col col col col col",
+          "selected_components": "CJP groove weld full W14X53 section at splice 4 ft AFF every 2 stories (demand-critical, E70, AISC 341 F3.6a); erection bolts 4x 3/4-in A325 snug-tight"
+        },
+        {
+          "bound_entity_ids": [
+            "M-46",
+            "M-54",
+            "M-62",
+            "M-7",
+            "M-93"
+          ],
+          "design_record_id": "connections/conn-lateral_col-W14X53",
+          "missing_component_categories": [
+            "bolt",
+            "weld"
+          ],
+          "returned_part_kinds": "col col col col col",
+          "selected_components": "CJP groove weld full W14X53 section at splice 4 ft AFF every 2 stories (demand-critical, E70, AISC 341 F3.6a); erection bolts 4x 3/4-in A325 snug-tight"
+        },
+        {
+          "bound_entity_ids": [
+            "M-11",
+            "M-19",
+            "M-27",
+            "M-32",
+            "M-58"
+          ],
+          "design_record_id": "connections/conn-lateral_col-W14X550",
+          "missing_component_categories": [
+            "bolt",
+            "weld"
+          ],
+          "returned_part_kinds": "col col col col col",
+          "selected_components": "CJP groove weld full W14X550 section at splice 4 ft AFF every 2 stories (demand-critical, E70, AISC 341 F3.6a); erection bolts 4x 3/4-in A325 snug-tight"
+        },
+        {
+          "bound_entity_ids": [
+            "M-39",
+            "M-44",
+            "M-5",
+            "M-52",
+            "M-68"
+          ],
+          "design_record_id": "connections/conn-gravity_col-W14X68",
+          "missing_component_categories": [
+            "bolt",
+            "weld"
+          ],
+          "returned_part_kinds": "col col col col col",
+          "selected_components": "CJP groove weld full W14X68 section at splice 4 ft AFF every 2 stories (demand-critical, E70, AISC 341 F3.6a); erection bolts 4x 3/4-in A325 snug-tight"
+        },
+        {
+          "bound_entity_ids": [
+            "M-39",
+            "M-44",
+            "M-5",
+            "M-52",
+            "M-68"
+          ],
+          "design_record_id": "connections/conn-lateral_col-W14X68",
+          "missing_component_categories": [
+            "bolt",
+            "weld"
+          ],
+          "returned_part_kinds": "col col col col col",
+          "selected_components": "CJP groove weld full W14X68 section at splice 4 ft AFF every 2 stories (demand-critical, E70, AISC 341 F3.6a); erection bolts 4x 3/4-in A325 snug-tight"
+        },
+        {
+          "bound_entity_ids": [
+            "M-17",
+            "M-25",
+            "M-30",
+            "M-56",
+            "M-9"
+          ],
+          "design_record_id": "connections/conn-lateral_col-W14X730",
+          "missing_component_categories": [
+            "bolt",
+            "weld"
+          ],
+          "returned_part_kinds": "col col col col col",
+          "selected_components": "CJP groove weld full W14X730 section at splice 4 ft AFF every 2 stories (demand-critical, E70, AISC 341 F3.6a); erection bolts 4x 3/4-in A325 snug-tight"
+        },
+        {
+          "bound_entity_ids": [
+            "M-3",
+            "M-37",
+            "M-42",
+            "M-50",
+            "M-66"
+          ],
+          "design_record_id": "connections/conn-gravity_col-W14X82",
+          "missing_component_categories": [
+            "bolt",
+            "weld"
+          ],
+          "returned_part_kinds": "col col col col col",
+          "selected_components": "CJP groove weld full W14X82 section at splice 4 ft AFF every 2 stories (demand-critical, E70, AISC 341 F3.6a); erection bolts 4x 3/4-in A325 snug-tight"
+        },
+        {
+          "bound_entity_ids": [
+            "M-270",
+            "M-271",
+            "M-272",
+            "M-284",
+            "M-285"
+          ],
+          "design_record_id": "connections/collector-irregularity-lines",
+          "missing_component_categories": [
+            "bolt",
+            "weld"
+          ],
+          "returned_part_kinds": "beam beam beam beam beam",
+          "selected_components": "Collector: W24X104 beam axial (diaphragm to EBF bay along Grid C Grids 5-8 and Grid 5 Grids C-F); CJP flange splices + bolted/welded web for drag+shear (E70); diaphragm-to-collector weld per 12.10.2.1 with 12.3.3.5 25% increase (Fpx Eq.12.10-2 x1.25, not stacked on Om0)"
+        }
+      ],
+      "message": "A selected connection family has no corresponding located component categories in its bound entities; a typical coverage note alone does not place its hardware",
+      "severity": "needs_input"
+    },
+    {
+      "code": "connection_duplicate_parts",
+      "count": 60,
+      "entity_ids": [
+        "CONN-J-1",
+        "CONN-J-102",
+        "CONN-J-105",
+        "CONN-J-2",
+        "CONN-J-200",
+        "CONN-J-205",
+        "CONN-J-3",
+        "CONN-J-300",
+        "CONN-J-4",
+        "CONN-J-403",
+        "CONN-J-404",
+        "CONN-J-502",
+        "CONN-J-602",
+        "CONN-J-700",
+        "CONN-J-701"
+      ],
+      "examples": [
+        {
+          "connection_id": "CONN-J-1",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-1-AR1",
+            "PART-J-1-AR7"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-1",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-1-AR4",
+            "PART-J-1-AR8"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-1",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-1-AR3",
+            "PART-J-1-AR9"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-1",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-1-AR6",
+            "PART-J-1-AR10"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-2",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-2-AR1",
+            "PART-J-2-AR7"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-2",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-2-AR4",
+            "PART-J-2-AR8"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-2",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-2-AR3",
+            "PART-J-2-AR9"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-2",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-2-AR6",
+            "PART-J-2-AR10"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-3",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-3-AR1",
+            "PART-J-3-AR7"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-3",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-3-AR4",
+            "PART-J-3-AR8"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-3",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-3-AR3",
+            "PART-J-3-AR9"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-3",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-3-AR6",
+            "PART-J-3-AR10"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-4",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-4-AR1",
+            "PART-J-4-AR7"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-4",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-4-AR4",
+            "PART-J-4-AR8"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-4",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-4-AR3",
+            "PART-J-4-AR9"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-4",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-4-AR6",
+            "PART-J-4-AR10"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-102",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-102-AR1",
+            "PART-J-102-AR7"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-102",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-102-AR4",
+            "PART-J-102-AR8"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-102",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-102-AR3",
+            "PART-J-102-AR9"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-102",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-102-AR6",
+            "PART-J-102-AR10"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-105",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-105-AR1",
+            "PART-J-105-AR7"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-105",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-105-AR4",
+            "PART-J-105-AR8"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-105",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-105-AR3",
+            "PART-J-105-AR9"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-105",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-105-AR6",
+            "PART-J-105-AR10"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-200",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-200-AR1",
+            "PART-J-200-AR7"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-200",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-200-AR4",
+            "PART-J-200-AR8"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-200",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-200-AR3",
+            "PART-J-200-AR9"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-200",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-200-AR6",
+            "PART-J-200-AR10"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-205",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-205-AR1",
+            "PART-J-205-AR7"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-205",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-205-AR4",
+            "PART-J-205-AR8"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-205",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-205-AR3",
+            "PART-J-205-AR9"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-205",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-205-AR6",
+            "PART-J-205-AR10"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-300",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-300-AR1",
+            "PART-J-300-AR7"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-300",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-300-AR4",
+            "PART-J-300-AR8"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-300",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-300-AR3",
+            "PART-J-300-AR9"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-300",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-300-AR6",
+            "PART-J-300-AR10"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-403",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-403-AR1",
+            "PART-J-403-AR7"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-403",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-403-AR4",
+            "PART-J-403-AR8"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-403",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-403-AR3",
+            "PART-J-403-AR9"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-403",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-403-AR6",
+            "PART-J-403-AR10"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-404",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-404-AR1",
+            "PART-J-404-AR7"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-404",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-404-AR4",
+            "PART-J-404-AR8"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-404",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-404-AR3",
+            "PART-J-404-AR9"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-404",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-404-AR6",
+            "PART-J-404-AR10"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-502",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-502-AR1",
+            "PART-J-502-AR7"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-502",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-502-AR4",
+            "PART-J-502-AR8"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-502",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-502-AR3",
+            "PART-J-502-AR9"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-502",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-502-AR6",
+            "PART-J-502-AR10"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-602",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-602-AR1",
+            "PART-J-602-AR7"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-602",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-602-AR4",
+            "PART-J-602-AR8"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-602",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-602-AR3",
+            "PART-J-602-AR9"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-602",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-602-AR6",
+            "PART-J-602-AR10"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-700",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-700-AR1",
+            "PART-J-700-AR7"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-700",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-700-AR4",
+            "PART-J-700-AR8"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-700",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-700-AR3",
+            "PART-J-700-AR9"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-700",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-700-AR6",
+            "PART-J-700-AR10"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-701",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-701-AR1",
+            "PART-J-701-AR7"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-701",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-701-AR4",
+            "PART-J-701-AR8"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-701",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-701-AR3",
+            "PART-J-701-AR9"
+          ]
+        },
+        {
+          "connection_id": "CONN-J-701",
+          "kind": "anchor-rod group",
+          "part_ids": [
+            "PART-J-701-AR6",
+            "PART-J-701-AR10"
+          ]
+        }
+      ],
+      "message": "Distinct component IDs repeat identical solid geometry inside the same assembly; resolve actual placement or duplicate emission, without dropping a required component",
+      "severity": "needs_input"
+    }
+  ],
+  "physical_counts": {
+    "analysis_only": 0,
+    "connections": 410,
+    "interfaces": 1,
+    "joint_dispositions": 0,
+    "joints": 410,
+    "materials": 8,
+    "members": 906,
+    "openings": 185,
+    "panels": 60,
+    "profiles": 26,
+    "record_dispositions": 35
+  },
+  "connection_parts": 3639,
+  "design_records": 35,
+  "seconds": 2.620345115661621,
+  "llm_calls": 0,
+  "redesign": false,
+  "analysis_solve": false,
+  "drawings": false,
+  "supplements": false
+}
