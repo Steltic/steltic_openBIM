@@ -52,5 +52,7 @@ def panel_rings(panel, openings):
         if part.is_empty:continue
         part=orient(part,sign=1.)
         rings.append(dict(exterior=restore(part.exterior.coords),holes=[restore(r.coords) for r in part.interiors]))
-    if not rings:raise ValueError('Openings remove the entire panel '+panel['id'])
+    if not rings:
+        findings.append(dict(id=panel['id'],host_id=panel['id'],
+            message='Declared openings remove the entire panel; no host surface remains. The source boundary is retained as a reference for coordination.'))
     return rings,applied,findings

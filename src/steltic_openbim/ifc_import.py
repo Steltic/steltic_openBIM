@@ -45,6 +45,37 @@ def unit_info(model):
     return dict(known=True,name=((getattr(length,'Prefix',None) or '')+' '+str(length.Name)).strip(),scale_to_m=scale)
 
 
+def declared_readiness(properties):
+    """Display exported completeness evidence without treating it as a new check."""
+    if not any(k in properties for k in ('SourceReadiness','SourceFindings','GeometryWarnings')):return []
+    provenance='Steltic_Coordination in source IFC; not independently recomputed by import'
+    try:
+        rows=json.loads(properties.get('SourceFindings','[]'))
+        if not isinstance(rows,list):raise ValueError('Expected a list')
+        for row in rows:
+            if (not isinstance(row,dict) or not isinstance(row.get('code'),str) or not isinstance(row.get('message'),str)
+                    or row.get('severity') not in ('needs_input','error') or not isinstance(row.get('entity_ids',[]),list)
+                    or any(not isinstance(value,str) for value in row.get('entity_ids',[]))):
+                raise ValueError('Invalid source finding')
+        result=[dict(code='declared_source_'+row['code'],title='Exported source information: '+row['message'],
+                     count=max(1,len(row.get('entity_ids',[]))),source_entity_ids=row.get('entity_ids',[]),
+                     severity=row['severity'],provenance=provenance) for row in rows]
+        status=properties.get('SourceReadiness')
+        if status not in (None,'ready','needs_input','invalid'):raise ValueError('Unknown source readiness')
+        if status in ('needs_input','invalid') and not result:
+            result.append(dict(code='declared_source_incomplete',title='Exported source reports incomplete physical data',count=1,provenance=provenance))
+        warnings=json.loads(properties.get('GeometryWarnings','[]'))
+        if not isinstance(warnings,list):raise ValueError('Expected a warning list')
+        for warning in warnings:
+            if not isinstance(warning,dict) or not isinstance(warning.get('message'),str):raise ValueError('Invalid geometry warning')
+            identifiers=list(dict.fromkeys(warning[k] for k in ('id','host_id') if isinstance(warning.get(k),str)))
+            result.append(dict(code='declared_geometry_warning',title='Exported geometry warning: '+warning['message'],
+                               count=1,source_entity_ids=identifiers,provenance=provenance))
+        return result
+    except (ValueError,TypeError):
+        return [dict(code='source_readiness_unreadable',title='Exported source-readiness metadata could not be read',count=1,provenance=provenance)]
+
+
 def metadata(model):
     unit=unit_info(model);rows=[];storeys=[]
     for s in model.by_type('IfcBuildingStorey'):
@@ -85,7 +116,9 @@ def metadata(model):
     finding('missing_global_id','Products without a GlobalId',[r['id'] for r in rows if not r['guid']])
     finding('duplicate_global_id','Duplicate GlobalIds',[r['id'] for r in rows if ids[r['guid']]>1])
     for project in model.by_type('IfcProject'):
-        declared=element_util.get_psets(project).get('Steltic_PhysicalChecks',{})
+        project_properties=element_util.get_psets(project)
+        problems.extend(declared_readiness(project_properties.get('Steltic_Coordination',{})))
+        declared=project_properties.get('Steltic_PhysicalChecks',{})
         if not declared:
             continue
         try:

@@ -68,3 +68,24 @@ def test_closed_solid_bottom_is_not_promoted_to_top_surface():
     surfaces=top_surfaces(obj)
     assert len(surfaces)==1
     assert {p[2] for p in surfaces[0]['boundary_m']}=={1}
+
+
+@pytest.mark.parametrize('split',[False,True])
+def test_fully_voided_panel_is_an_explicit_reference_without_a_filled_host(tmp_path,split):
+    panel=dict(id='wall',kind='wall',vertices=[[0,0,0],[120,0,0],[120,0,96],[0,0,96]])
+    cuts=[(0,60),(60,120)] if split else [(0,120)]
+    openings=[dict(id='door'+str(i),host_id='wall',vertices=[[a,0,0],[b,0,0],[b,0,96],[a,0,96]]) for i,(a,b) in enumerate(cuts)]
+    report,objects=export_panel(tmp_path,panel,openings);obj=objects['wall']
+    assert report['source_status']=='provisional' and report['counts']['panel_surfaces']==0
+    assert report['counts']['panel_reference_boundaries']==1 and report['counts']['panel_opening_cuts']==len(openings)
+    assert obj['ifc_class']=='IfcAnnotation' and obj['faces']==[] and obj['representation']=='reference_axes'
+    edge=lambda a,b:tuple(sorted((tuple(np.round(a,7)),tuple(np.round(b,7)))))
+    actual={edge(a,b) for line in obj['lines'] for a,b in zip(line,line[1:])}
+    boundary=np.array(panel['vertices']+[panel['vertices'][0]])*.0254
+    assert actual=={edge(a,b) for a,b in zip(boundary,boundary[1:])}
+    props=obj['properties']['Steltic_Coordination']
+    assert props['GeometryRole']=='source_panel_boundary_reference'
+    assert all(objects[o['id']]['properties']['Steltic_Coordination']['OpeningCutInHost'] is True for o in openings)
+    assert any('entire panel' in w['message'] for w in report['warnings'])
+    review=build_review(tmp_path/'panel.ifc',dict(units='auto',scope='all'))
+    assert any(f['code']=='declared_geometry_warning' and 'entire panel' in f['title'] for f in review['checks'])

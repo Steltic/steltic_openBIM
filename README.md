@@ -1,5 +1,7 @@
 # steltic_openBIM
 
+Version 0.8.32 keeps exported missing-data and geometry warnings visible on IFC import and reimport. A source panel completely consumed by its declared openings is retained as a labelled boundary reference, with no invented host surface, so it no longer blocks a provisional IFC return.
+
 Drawing and IFC module for Steltic Hub: dimensioned engineering design drawings, IFC import for model review, and IFC export. Fabrication/shop output and IFC-to-structural-analysis conversion remain later work.
 
 ## Current status
