@@ -169,6 +169,8 @@ def floor_openings(b):
                 b.connections=kept
             fp=b.profile('W18X40' if ishr else '2X1200S250-97');depth=b.depth(fp);zz=z-depth/2 if ishr else z-.75-depth/2
             plain_joists=[m for m in cut_members if m['kind']=='joist']
+            chord_sources=[m for m in cut_members if m['kind']=='truss_chord' and abs(m['axis'][0][2]-m['axis'][1][2])<.01]
+            framing_sources=plain_joists
             frame_axis=None
             if not ishr and plain_joists and len(plain_joists)==len(cut_members):
                 # A rectangular perimeter floating between cut joists has no
@@ -178,15 +180,30 @@ def floor_openings(b):
                 if len(directions)==1:
                     frame_axis=directions.pop()
                     zz=max(q[2]+o[2]+b.depth(m['profile_id'])/2 for m in plain_joists for q,o in zip(m['axis'],m['end_offsets']))-depth/2
+            elif not ishr and chord_sources:
+                directions={0 if abs(m['axis'][1][0]-m['axis'][0][0])>.01 else 1 for m in chord_sources}
+                if len(directions)==1:
+                    # Open-web units have several chord pieces. Their whole
+                    # original span, not one cut panel length, defines the
+                    # trimmer's bearing route. Keep the actual top-chord datum.
+                    frame_axis=directions.pop()
+                    prefixes={m.get('original_physical_member_id',m['id']).rsplit('-',1)[0] for m in chord_sources}
+                    framing_sources=[m for m in b.members+cut_members if m['kind']=='truss_chord'
+                        and m.get('original_physical_member_id',m['id']).rsplit('-',1)[0] in prefixes]
+                    zz=max(q[2]+o[2]+b.depth(m['profile_id'])/2 for m in chord_sources for q,o in zip(m['axis'],m['end_offsets']))-depth/2
             for j,(aa,dd) in enumerate((([x-4,y-4,zz],[x+w+4,y-4,zz]),([x-4,y+h+4,zz],[x+w+4,y+h+4,zz]),([x-4,y-4,zz],[x-4,y+h+4,zz]),([x+w+4,y-4,zz],[x+w+4,y+h+4,zz]))):
                 parallel=frame_axis is not None and (0 if j<2 else 1)==frame_axis
                 if parallel:
-                    example=min(plain_joists,key=lambda m:abs(m['axis'][0][1-frame_axis]-aa[1-frame_axis]))
-                    aa[frame_axis]=min(q[frame_axis] for q in example['axis']);dd[frame_axis]=max(q[frame_axis] for q in example['axis'])
+                    example=min(framing_sources,key=lambda m:abs(m['axis'][0][1-frame_axis]-aa[1-frame_axis]))
+                    span=[example]
+                    if example['kind']=='truss_chord':
+                        prefix=example.get('original_physical_member_id',example['id']).rsplit('-',1)[0]
+                        span=[m for m in framing_sources if m.get('original_physical_member_id',m['id']).rsplit('-',1)[0]==prefix]
+                    aa[frame_axis]=min(q[frame_axis] for m in span for q in m['axis']);dd[frame_axis]=max(q[frame_axis] for m in span for q in m['axis'])
                 kind=('opening_trimmer' if parallel else 'opening_header') if frame_axis is not None else ('opening_header' if j<2 else 'opening_trimmer')
                 m=b.member(feature['id']+'-FRAME'+str(j),fp,kind,aa,dd,k,'A');b.ends(m,'review_cfs_joist' if parallel else 'test_floor_opening')
             if frame_axis is not None:
-                b.changes.append(dict(kind='opening_trimmers_to_source_supports',opening=feature['id'],source_joist_ids=[m['id'] for m in plain_joists],
+                b.changes.append(dict(kind='opening_trimmers_to_source_supports',opening=feature['id'],source_joist_ids=[m['id'] for m in framing_sources],
                     basis='A: full-span paired trimmers parallel the original joists and share their bearing lines. Header top flanges align with the actual joist top flanges; source joist datums and selected sections are unchanged. New framing/connection capacity remains unverified.'))
             for panel in ps:
                 panel.setdefault('openings',[]).append(feature['id'])

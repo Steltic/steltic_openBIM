@@ -74,11 +74,12 @@ def bind(model):
             for m in near.get(origin):
                 if m['kind'] not in ('bottom_track','ordinary_track','tier_track'):continue
                 aa,bb=axis(m);u=unit(sub(bb,aa));length=math.dist(aa,bb);s=dot(sub(origin,aa),u)
-                if not -.01<=s<=length+.01:continue
+                overhang=max(-s,s-length,0)
+                if overhang>.01 and (m['kind'] not in ('ordinary_track','bottom_track') or overhang>6):continue
                 q=add(aa,mul(u,s))
-                if math.dist(q[:2],origin[:2])<.01 and abs(q[2]-origin[2])<.25:candidates.append(m)
+                if math.dist(q[:2],origin[:2])<.01 and abs(q[2]-origin[2])<.25:candidates.append((overhang,m['id'],m))
             if candidates:
-                track=sorted(candidates,key=lambda m:m['id'])[0];aa,bb=axis(track);axes=horizontal_frame(sub(bb,aa))
+                track=min(candidates,key=lambda v:(v[0],v[1]))[2];aa,bb=axis(track);axes=horizontal_frame(sub(bb,aa))
                 from .review_located_wall_details import section_bounds
                 jamb_data=local_member(primary,origin,axes)
                 outline=section_bounds(profiles,jamb_data);bounds=[min(v[0][0] for v in outline),max(v[0][1] for v in outline)]
@@ -87,16 +88,20 @@ def bind(model):
                 # this physical end allowance as an accepted fit proposal.
                 for end in range(2):
                     oldpoint=axis(track)[end];station=point(oldpoint,origin,axes)[0]
-                    if math.dist(oldpoint[:2],origin[:2])<.25:
+                    if math.dist(oldpoint[:2],origin[:2])<.25 or track['kind'] in ('ordinary_track','bottom_track') and math.dist(oldpoint[:2],origin[:2])<=6:
                         target=bounds[0]-.125 if end==0 else bounds[1]+.125
                         offset=add(track['end_offsets'][end],mul(axes[0],target-station))
                         if math.dist(offset,track['end_offsets'][end])>.001:
                             previous=copy.deepcopy(track['end_offsets'][end]);track['end_offsets'][end]=offset
-                            model.setdefault('changes',[]).append(dict(kind='jamb_bottom_track_end_allowance',member_id=track['id'],end=end,previous_offset=previous,offset=offset,basis='A: extend the actual cut track beneath the complete jamb foot; workline and source section retained'))
+                            model.setdefault('changes',[]).append(dict(kind='jamb_bottom_track_end_allowance',member_id=track['id'],end=end,previous_offset=previous,offset=offset,basis='A: extend the actual cut track beneath the complete jamb foot; workline, source section and braced-bay length retained. Added jamb-foot load and local end allowance have no new capacity verification.'))
                 c.setdefault('parameters',{})['physical_jamb_base']=dict(jamb=local_member(primary,origin,axes),track=local_member(track,origin,axes))
                 c['member_ids']=list(dict.fromkeys(c['member_ids']+[track['id']]))
                 c['source_context_records']=c['design_record_ids'];c['design_record_ids']=[]
                 c['basis']='A: jamb-to-track foot clips; header connection source remains on the actual header occurrence'
+            elif abs(origin[2])<.01:
+                c.setdefault('parameters',{})['direct_jamb_base']=True
+                c['source_context_records']=list(c.get('design_record_ids',[]));c['design_record_ids']=[]
+                c['basis']='A: direct jamb foot angles and slab anchors where no physical sill track is present; source header design is not an anchor design'
         elif family in ('cfs_stud_bridging','review_sheathing'):
             if abs(a[2]-b[2])>.01:continue
             axes=horizontal_frame(sub(b,a));candidates=[]

@@ -36,3 +36,18 @@ def test_actual_opening_plies_datums_cut_clearance_and_screw_contact(paired,reve
     # Re-preparing the same model cannot apply another cutback or duplicate links.
     before=list(primary['end_offsets'][1 if reverse else 0]);bind(m)
     assert primary['end_offsets'][1 if reverse else 0]==before and len(m['connection_endpoint_links'])==1
+
+
+def test_short_truss_chord_uses_a_fitted_and_explicitly_unverified_screw_group():
+    profiles=[dict(id='CH',family='channel',dimensions=dict(d=2.5,b=1.625,t=.0713,lip=.375)),
+              dict(id='H',family='channel',dimensions=dict(d=12,b=2.5,t=.1017,lip=.625))]
+    primary=dict(id='CHORD',kind='truss_chord',profile_id='CH',axis=[[0,0,0],[100,0,0]],end_offsets=[[0,0,0],[0,0,0]],local_y=[0,1,0])
+    support=dict(id='H',kind='opening_header',profile_id='H',axis=[[0,-40,-4.75],[0,40,-4.75]],end_offsets=[[0,0,0],[0,0,0]],local_y=[-1,0,0])
+    c=dict(id='end',point=[0,0,0],member_ids=['CHORD'],detail_ref=dict(id='test_floor_opening'),parameters={},design_record_ids=[])
+    model=dict(pilot='cfs-fixture',members=[primary,support],profiles=profiles,connections=[c])
+    bind(model);scene=build_scene(model,dict(design_records=[]),c);parts={p['id']:p for p in scene['parts']}
+    for f in scene['fasteners']:
+        assert f['basis']=='A' and len(f['points'])==2
+        for q in f['points']:
+            for name in f['connects']:assert contact(parts[name],f,q),(f['id'],name,q)
+    assert any('reduced screw count' in note and 'capacity verification' in note for note in scene['notes'])

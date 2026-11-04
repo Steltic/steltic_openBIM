@@ -237,7 +237,8 @@ class Assembly:
             if len(interface['connects'])<2 or not set(interface['connects'])<=ids:raise ValueError('Invalid bearing/bond interface')
         if not self.fasteners and not self.welds and not self.interfaces:raise ValueError('Assembly has no attachment: '+self.title)
         return dict(title=self.title,parts=self.parts,fasteners=self.fasteners,welds=self.welds,interfaces=self.interfaces,dimensions=self.dimensions,notes=self.notes,
-                    bounds=bounds([f for p in self.parts for f in p['faces']]),section_axis=self.section_axis,section_at=self.section_at,front_axes=list(self.front_axes))
+                    bounds=bounds([f for p in self.parts for f in p['faces']]),section_axis=self.section_axis,section_at=self.section_at,front_axes=list(self.front_axes),
+                    **({'front_depth_sign':self.front_depth_sign} if hasattr(self,'front_depth_sign') else {}))
 
 
 def section_polygons(part,axis,value):

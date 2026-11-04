@@ -81,7 +81,7 @@ def prepare(model,package):
             cy=column['local_y'];cx=cross(cy,[0,0,1])
             shape_parameters['chamfer_direction']=[round(dot(ray,v),6) for v in (cx,cy)]
         from .review_cfs_wall_bindings import signature
-        for name in ('physical_opening_joint','physical_wall_attachment','physical_floor_stack','physical_jamb_base'):
+        for name in ('physical_opening_joint','physical_wall_attachment','physical_floor_stack','physical_jamb_base','physical_wall_strap'):
             if name in shape_parameters:shape_parameters[name]=signature(shape_parameters[name])
         if 'physical_stud_support' in shape_parameters:
             shape_parameters['physical_stud_support']={k:v for k,v in shape_parameters['physical_stud_support'].items() if k!='member_id'}

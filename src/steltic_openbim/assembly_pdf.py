@@ -20,14 +20,15 @@ def path_polygon(canvas,pts,fill,stroke,width=.65,edges=None):
 
 
 def projection(scene,mode):
+    depth_sign=scene.get('front_depth_sign',1)
     if mode=='front':
         axes=scene['front_axes'];missing=next(i for i in range(3) if i not in axes)
-        return lambda p:(p[axes[0]],p[axes[1]],p[missing]),axes
+        return lambda p:(p[axes[0]],p[axes[1]],depth_sign*p[missing]),axes
     if mode=='section':
         axes=[i for i in range(3) if i!=scene['section_axis']]
         return lambda p:(p[axes[0]],p[axes[1]],p[scene['section_axis']]),axes
     # View from front/right/above. Local Z remains vertical in the axonometric view.
-    return lambda p:(.8660254*(p[0]-p[1]),.5*(p[0]+p[1])+p[2],p[0]+p[1]-p[2]),None
+    return lambda p:(.8660254*(p[0]-depth_sign*p[1]),.5*(p[0]+depth_sign*p[1])+p[2],p[0]+depth_sign*p[1]-p[2]),None
 
 
 def draw_view(sh,scene,mode,rect,title):

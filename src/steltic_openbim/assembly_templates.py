@@ -94,6 +94,15 @@ def build_scene(model,package,c,subtype=''):
         from .review_assemblies import Context
         from .review_floor_openings import draw
         ctx=Context(model,package,c);draw(ctx);return ctx.finish()
+    if par.get('direct_jamb_base'):
+        from .review_assemblies import Context
+        from .review_detail_extras import endpost
+        ctx=Context(model,package,c);endpost(ctx,True)
+        for item in ctx.a.parts:
+            if not item.get('member'):item['basis']='A'
+        for item in ctx.a.fasteners+ctx.a.welds+ctx.a.interfaces:item['basis']='A'
+        ctx.a.notes.append('A: direct jamb foot angles, bolts and slab anchors are accepted fictional details. No bottom track is present at this opening. Local slab/anchor capacity remains unverified; the source header design does not certify this foot.')
+        return ctx.finish()
     if par.get('physical_hr_kicker'):
         from .review_assemblies import Context
         from .review_hr_kickers import draw

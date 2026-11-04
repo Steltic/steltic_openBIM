@@ -145,6 +145,9 @@ def hold_down(ctx):
     a.section_axis=2;a.section_at=-2;a.dim([-w/2-1,0,0],[w/2+1,0,0],basis='A')
 
 def strap(ctx):
+    if ctx.params.get('physical_wall_strap'):
+        from .review_wall_straps import draw
+        return draw(ctx)
     if ctx.params.get('physical_strap_end'):
         from .review_cfs_frame_straps import draw
         return draw(ctx)

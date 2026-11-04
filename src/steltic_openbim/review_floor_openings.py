@@ -73,18 +73,25 @@ def draw(ctx):
         web=bb[1][1 if sign>0 else 0];yy=web if sign>0 else web-t
         low=max(bb[2][0],max(q[2][0] for q in hostwebs))+.5
         high=min(bb[2][1],min(q[2][1] for q in hostwebs))-.5
-        if high-low<3:raise ValueError('Opening clip lacks usable overlapping web depth: '+ctx.c['id'])
+        if high-low<.75:raise ValueError('Opening clip lacks usable overlapping web depth: '+ctx.c['id'])
         height=min(8,high-low);lo=(low+high-height)/2;leg=bolt_x+2-face;label='CLIP'+str(i)
         a.box(label,[face,yy,lo],[leg,t,height],'A','A 1/8 in opening clip leg at the actual supported web')
         foot=yy if sign>0 else yy-3+t
         a.box(label+'R',[face,foot,lo],[t,3,height],'A','A 3 in return leg against actual supporting web')
-        zs=[lo+1+r*(height-2)/3 for r in range(4)]
+        # Short open-web-truss chords cannot receive the tall joist's four
+        # screw rows. This is an A attachment proposal: use only the rows that
+        # physically fit, keeping >=3/8 in clip edges and >=3/4 in row pitch.
+        rows=min(4,math.floor((height-.75)/.75)+1)
+        zs=([lo+1+r*(height-2)/3 for r in range(4)] if height>=4.25 else
+            [lo+height/2] if rows==1 else [lo+.375+r*(height-.75)/(rows-1) for r in range(rows)])
+        count=2*rows
         pts=[[xx,web+sign*t,zz] for xx in (bolt_x,bolt_x+1) for zz in zs]
         a.fastener('J'+str(i),pts,[0,-sign,0],.25,t+bb[1][1]-bb[1][0],['JOIST',label],
-            'A eight No.14 supported-web screws per ply; exact face fit and edge stations',basis='A',screw=True)
+            f'A {count} No.14 supported-web screws per ply; exact face fit and edge stations',basis='A',screw=True)
         pts=[[face+t,web+sign*d,zz] for d in (.75,1.75) for zz in zs]
         a.fastener('S'+str(i),pts,[-1,0,0],.25,t+face-back,['SUPPORT',label+'R'],
-            'A eight No.14 receiving-web screws per clip through the actual receiving plies; grip includes their spacing',basis='A',screw=True)
+            f'A {count} No.14 receiving-web screws per clip through the actual receiving plies; grip includes their spacing',basis='A',screw=True)
         a.weld('BEND'+str(i),[face+t,yy,lo],[face+t,yy,lo+height],[label,label+'R'],kind='BEND',basis='A',description='A single formed angle; no site weld')
     a.section_axis=0;a.section_at=bolt_x;a.dim([face,0,lo],[face,0,lo+height],basis='A')
     a.notes.append('A accepted fictional opening assembly: actual header/trimmer/joist centroids, plies and roll retained. The supported end is clear of the receiving flange and each ply has its own formed clip. Trimmer bearing is shown separately. These added opening members and attachments have no new capacity verification.')
+    if rows<4:a.notes.append('A short chord attachment: screw rows are limited by the actual overlapping web depth. The reduced screw count is a fictional fit proposal requiring capacity verification; no tall-joist attachment capacity is transferred to this detail.')

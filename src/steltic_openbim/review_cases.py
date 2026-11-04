@@ -35,6 +35,8 @@ def build_model(package,state):
     else:
         from .review_cfs import build
     build(b)
+    from .review_wall_line_joists import apply as wall_line_joists
+    wall_line_joists(b,adopt_roof_wall_joists=True)
     from .review_supplements import floor_openings
     floor_openings(b)
     from .review_cfs_complements import apply
@@ -57,6 +59,8 @@ def build_model(package,state):
     profile_fit(b)
     from .review_cfs_frame_straps import apply as frame_straps
     frame_straps(b)
+    from .review_wall_straps import apply as wall_straps
+    wall_straps(b)
     from .review_crossings import apply as brace_crossings
     brace_crossings(b)
     from .review_releases import apply as physical_releases
