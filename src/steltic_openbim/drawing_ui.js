@@ -34,6 +34,48 @@ window.StelticDrawingQueries={async mount(root,project){
    if(r.confirmed){const reopen=el('button',{onclick:()=>save({id:r.id,action:'reopen',author:who.value,note:note.value},reopen)},'Reopen as TBD');detail.append(reopen)}
    return detail;
  }
+ async function nativeRegister(){
+   if(!state.native_source)return;
+   const section=el('section',{class:'ob-card'},el('h3',{},'HR/CFS information requests'));
+   box.append(section);
+   try{
+     const register=await api(base+'/native-requests');
+     section.append(el('p',{},'Answers are saved in '+register.module+' / '+register.job+'. Proposals remain usable for drawings with TBD dimensions until confirmed. Lengths below are in inches.'));
+     function editor(value,label){
+       if(Array.isArray(value)){
+         const parts=value.map((v,i)=>editor(v,label+' '+(i+1)));
+         return {node:el('div',{class:'ob-row'},...parts.map(p=>p.node)),get:()=>parts.map(p=>p.get())};
+       }
+       if(value&&typeof value==='object'){
+         const parts=Object.entries(value).map(([k,v])=>[k,editor(v,label+' '+k)]);
+         return {node:el('div',{},...parts.map(([k,p])=>el('label',{},k,p.node))),get:()=>Object.fromEntries(parts.map(([k,p])=>[k,p.get()]))};
+       }
+       const numeric=typeof value==='number',boolean=typeof value==='boolean';
+       const input=el('input',{type:boolean?'checkbox':numeric?'number':'text','aria-label':label,step:'any'});
+       if(boolean)input.checked=value;else input.value=value??'';
+       return {node:el('label',{},label,input),get:()=>{if(boolean)return input.checked;if(numeric){if(input.value.trim()===''||!Number.isFinite(Number(input.value)))throw Error('Enter a finite value for '+label);return Number(input.value)}return input.value}};
+     }
+     for(const request of register.requests){
+       const card=el('details',{},el('summary',{},request.id+' - '+request.question),el('span',{class:'ob-badge'},request.quantitatively_resolved?'Confirmed information':'Provisional - TBD'),el('p',{},request.proposal));
+       if(request.answer)card.append(el('p',{},'Saved answer: '+request.answer));
+       const author=el('input',{'aria-label':request.id+' native reviewer',placeholder:'Your name'}),note=el('textarea',{'aria-label':request.id+' native information',placeholder:'Answer and source reference'});
+       card.append(author,note);
+       const fields=(request.bindings||[]).map(b=>({binding:b,editor:editor(b.value,b.label||b.entity_id+' '+b.field)}));
+       if(fields.length){const values=el('details',{},el('summary',{},'Review proposed values'),...fields.map(f=>f.editor.node));card.append(values)}
+       async function submit(action,button){button.disabled=true;try{
+         const changes=action==='confirm'?fields.map(f=>({...f.binding,value:f.editor.get()})).filter((f,i)=>JSON.stringify(f.value)!==JSON.stringify(fields[i].binding.value)).map(({collection,entity_id,field,value})=>({collection,entity_id,field,value})):[];
+         const result=await api(base+'/native-answers',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({request_id:request.id,author:author.value,note:note.value,action,changes,decision_id:crypto.randomUUID(),expected_revision:register.revision,expected_sha256:register.sha256,drawing_revision:state.revision})});
+         await refresh();message.textContent=result.drawings_updated?'Saved in '+register.module+'; drawings updated.':result.message;
+       }catch(e){error(e)}finally{button.disabled=false}}
+       for(const [action,label] of [['accept_proposal','Save information; keep TBD'],['confirm','Confirm values and update'],['reopen','Reopen as TBD']]){
+         const button=el('button',{onclick:()=>submit(action,button)},label);card.append(button);
+       }
+       section.append(card);
+     }
+     if(!register.requests.length)section.append(el('p',{},'No native information requests.'));
+     if(register.pending_design_reviews.length)section.append(el('p',{},'Changed physical inputs need their affected engineering checks. Existing drawings remain available.'));
+   }catch(e){section.append(el('p',{},e.message))}
+ }
  async function render(){
    box.replaceChildren(el('h2',{},'Drawings and information requests'),el('p',{},state.drawing_status==='design_test'?'Dimensioned design drawings use the adopted fictional test answers. Grids, member marks, sections and connection callouts are coordinated; A identifies every assumed input.':'Every request has a provisional proposal, accepted for drawings by default. Dashed items and TBD labels identify unconfirmed information; drawings continue while requests remain open.'));
    if(state.state==='available'){
@@ -58,6 +100,7 @@ window.StelticDrawingQueries={async mount(root,project){
      if(state.representation==='source_physical_geometry'){const n=state.drawing_counts||{};box.append(el('div',{class:'ob-card'},el('b',{},'Dimensioned source drawings'),el('p',{},`${n.members||0} declared physical members and ${n.connections||0} connection occurrences. Plans and frame sections include grids, member marks and source connection references. Assembly views use supplied parts; remaining information requests stay explicit.`),el('div',{class:'ob-row'},...['member_index.json','connection_index.json','source_records.json'].map(file=>el('a',{href:base+'/file/'+file,target:'_blank'},file.replaceAll('_',' '))))));}
      if(state.design_scenario){box.append(el('div',{class:'ob-card'},el('b',{},'Fictional test assumptions adopted'),el('p',{},'A identifies assumed inputs and supplementary geometry. Source capacity checks have not been rerun for these changes. Reopening a request returns the set to provisional drawings until the test scenario is explicitly adopted again.'),el('div',{class:'ob-row'},...['adopted_answers.json','member_index.json','connection_assemblies.json','design_model.json'].filter(file=>state.artifacts.includes(file)).map(file=>el('a',{href:base+'/file/'+file,target:'_blank'},file.replaceAll('_',' '))))));}
      box.append(register);
+     await nativeRegister();
      register.append(el('a',{href:base+'/file/information_requests.json',download:'information_requests.json'},'Download request data (JSON)'));
      const h=await api(base+'/history');const hist=el('details',{},el('summary',{},'Drawing revision history'));for(const r of h.revisions)hist.append(el('p',{},el('a',{href:base+'/file/drawings.pdf?revision='+encodeURIComponent(r.directory),target:'_blank'},'Revision '+r.revision+' - '+r.drawing_status)));box.append(hist);
    }

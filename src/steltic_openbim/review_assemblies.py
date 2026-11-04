@@ -12,7 +12,12 @@ def source_text(package,c):
         if rid.endswith('/collector-irregularity-lines'):continue
         row=lookup.get(rid,{})
         for key in ('components','selection','detail','design_note','type','note'):
-            if row.get(key):chunks.append(str(row[key]))
+            selected=next((s for s in c.get('source_record_selections',[]) if s['record_id']==rid and s['field']==key),None)
+            if selected:
+                from .bim_record_clauses import clauses
+                if clauses(row.get(key)).get(selected['clause'])!=selected['text']:raise ValueError('Source clause changed')
+                chunks.append(selected['text'])
+            elif row.get(key):chunks.append(str(row[key]))
         for r in row.get('rows',[]):
             chunks.append(str(r.get('item',r.get('zone','')))+': '+str(r.get('selection',r.get('section',''))))
     return '\n'.join(chunks)
@@ -37,32 +42,49 @@ class Context:
         profiles=' / '.join(dict.fromkeys(m['profile_id'] for m in self.ms))
         self.a.title+=' | '+profiles[:95]
     def select(self,kinds,default=None):
+        receiver=self.receiver(kinds)
+        if receiver:return receiver['profile_id']
+        if default:return default
+        # Receiving geometry absent from source is an explicit A part, never S.
+        return self.default_w() if self.model['pilot'].startswith('hr') else channel(self.p,'ASSEMBLY-C600',6,1.625,.0566,.5)
+    def receiver(self,kinds):
         direct=next((m for m in self.ms if m['kind'] in kinds),None)
-        if direct:return direct['profile_id']
+        if direct:return direct
         point=self.c['point'];best=None;dd=1e30
         for m in self.model['members']:
             if m['kind'] not in kinds:continue
             a,b=m['axis'];v=sub(b,a);t=max(0,min(1,dot(sub(point,a),v)/dot(v,v)));distance=math.dist(point,add(a,mul(v,t)))
             if distance<dd:best=m;dd=distance
-        if best and dd<60:return best['profile_id']
-        if default:return default
-        # Receiving geometry absent from source is an explicit A part, never S.
-        return self.default_w() if self.model['pilot'].startswith('hr') else channel(self.p,'ASSEMBLY-C600',6,1.625,.0566,.5)
+        return best if best and dd<60 else None
     def default_w(self):
         label='ASSEMBLY-W12';self.p[label]=dict(id=label,family='i',dimensions=dict(d=12,bf=6.5,tw=.3,tf=.5));return label
     def n(self,pattern,default):return findnum(pattern,self.text,default)
     def finish(self):
         a=self.a
+        if self.params.get('released_connection_proposal'):
+            for item in a.parts:
+                if item['kind']!='member':item['basis']='A'
+            for item in a.fasteners+a.welds+a.interfaces:item['basis']='A'
+            a.notes.insert(0,'S: major-axis moment release at this end. A: simple-end plate, bolt and weld proposal; no source capacity verification for this attachment. The source RBS belongs to the fixed end and is not repeated here.')
         if not a.dimensions:
             bb=a.parts[0]['bounds'];a.dim([bb[0][0],0,bb[2][0]],[bb[0][1],0,bb[2][0]],basis='A',offset=-30)
         a.notes.insert(0,'A: local fit dimensions, plate outlines and procurement lengths not explicitly stated in the source are fictional test inputs. S values retain their source record; capacity checks have not been rerun.')
         result=a.result();result.update(family=self.family,subtype=self.params.get('joint',''),source_record_ids=self.c.get('design_record_ids',[]),source_text=self.text,
           representative_occurrence=self.c['id'],building_point=self.c['point'],source_member_ids=self.c['member_ids'],level=self.ms[0].get('level',1),
-          coordinate_note='Inches. Local member worklines and source profiles; S source / A authored fit. World occurrence location retained in index.',source_context={})
+          coordinate_note='Inches. Local member worklines and source profiles; S source / A authored fit. World occurrence location retained in index.',source_context=dict(record_ids=self.c.get('source_context_records',[])))
         return result
 
 def build_scene(model,package,c,subtype=''):
     ctx=Context(model,package,c);family=ctx.family
+    if family=='review_rod_coupler':
+        from .review_cfs_rods import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_column_local_stiffeners':
+        from .review_column_local_checks import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_selected_studs':
+        from .review_selected_details import draw
+        draw(ctx);return ctx.finish()
     from .review_final_details import FAMILIES as FINAL,draw as final
     if family in FINAL:final(ctx);return ctx.finish()
     from .review_final_cfs_details import FAMILIES as FINAL_CFS,draw as final_cfs

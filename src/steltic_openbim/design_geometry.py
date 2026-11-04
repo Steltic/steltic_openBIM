@@ -47,12 +47,18 @@ def build_model(package,state):
         return pid
 
     def custom(pid,family,dimensions,**extra):
-        profiles.setdefault(pid,dict(id=pid,family=family,dimensions=dimensions,status='declared',basis='A',**extra))
+        profiles.setdefault(pid,dict(id=pid,family=family,dimensions=dimensions,status='declared',**dict({'basis':'A'},**extra)))
         return pid
 
     def pair(section,n=2):
         profile(section)
-        return custom(f'TEST-{n}x{section}','built_up',{},components=[{'profile_id':section,'offset':[(i-(n-1)/2)*4,0],'rotation_deg':180 if i%2 else 0} for i in range(n)])
+        if n%2:raise ValueError('Boxed channel pairs need an even ply count')
+        d=profiles[section]['dimensions'];width=d['b'];gap=.125;spacing=2*width+2*gap+d['t']
+        components=[]
+        for j in range(n//2):
+            centre=(j-(n/2-1)/2)*spacing
+            components.extend(dict(profile_id=section,offset=[centre+sg*(width+gap/2),0],rotation_deg=0 if sg<0 else 180) for sg in (-1,1))
+        return custom(f'TEST-{n}x{section}','built_up',{},components=components,basis='A: boxed source plies with 1/8 in clear between flange tips; no new capacity check')
 
     def cfs(pid,d,b,t):
         return custom(pid,'channel',dict(d=d,b=b,t=t,lip=.625,r=1.5*t))
@@ -290,6 +296,11 @@ def build_model(package,state):
                 connections.append(dict(id=f'TRIM-C:{m["id"]}:{end}',point=p,member_ids=[m['id']],detail_ref={'id':'test_floor_opening' if m['kind']=='joist' else 'test_wall_opening'},
                     design_record_ids=[],parts=[],basis='A',assumption_id=m['assumption_id']))
 
+    if pilot.startswith('hr'):
+        from types import SimpleNamespace
+        from .review_physical_pieces import opening_receivers
+        binding=SimpleNamespace(members=members,connections=connections,changes=changes)
+        opening_receivers(binding);connections=binding.connections
     families=sorted({c['detail_ref']['id'] for c in connections})
     details={family:{'id':f'D{i+1:02}','family':family,'number':i%4+1,'sheet':f'S{501+i//4}',
         'reference':f'{i%4+1}/S{501+i//4}'} for i,family in enumerate(families)}
@@ -319,4 +330,6 @@ def build_model(package,state):
             dict(id='assumed_test_material',basis='A',specification='Fictional supplementary framing. Geometry and connection assumptions only; no newly verified strength or capacity.')],
         panels=panels,openings=features,connections=connections,
         member_schedule=schedule,details=list(details.values()),grids=grids,levels=spec['levels'],changes=changes,
-        assumptions=[dict(id=r['id'],answer=r['resolution'],basis='A - user-authorized fictional test input') for r in state['requests']])
+        assumptions=[dict(id=r['id'],answer=r['resolution'] if r.get('confirmed') else 'TBD - resolve query: '+r['proposal'],
+                          basis='A - user-authorized fictional test input' if r.get('confirmed') else 'Provisional information request',
+                          confirmed=bool(r.get('confirmed'))) for r in state['requests']])

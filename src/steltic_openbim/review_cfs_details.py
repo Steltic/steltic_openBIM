@@ -22,8 +22,12 @@ def draw(ctx):
         from .review_detail_extras import roof_seat
         roof_seat(ctx)
     elif f=='review_cfs_joist' and ctx.params.get('clip'):
-        from .review_detail_extras import joist_clip
-        joist_clip(ctx)
+        if ctx.params.get('physical_joist_end') and re.search(r'L\s*3\s*x\s*3\s*x\s*54 mil',ctx.text,re.I):
+            from .review_wall_occurrence_details import joist
+            joist(ctx)
+        else:
+            from .review_detail_extras import joist_clip
+            joist_clip(ctx)
     elif f in ('review_cfs_sill','review_cfs_floor','review_cfs_joist'):floor(ctx)
     elif f=='review_cfs_hold_down':hold_down(ctx)
     elif f=='review_cfs_strap':strap(ctx)
@@ -135,14 +139,22 @@ def hold_down(ctx):
         pts=[[x+( .25 if sg>0 else 0),yy,-1.5-r] for r in range(math.ceil(per/2)) for yy in (-d/4,d/4)][:per]
         a.fastener('F'+str(j),pts,[-sg,0,0],.25,.25+web,[side,'CHORD'],f'{per} No.14 at this return; {count} total source bracket screws / A distribution',basis='A',screw=True);a.weld('W'+str(j),[x,-d/2,0],[x,d/2,0],[side,'BEARING'],.1875,basis='A')
     a.cylinder('NUT',[0,0,t/2],[0,0,1],dia*1.8,dia*.8,'A','A heavy nut / take-up envelope');a.weld('BEAR',[0,0,t/2],[dia,0,t/2],['NUT','BEARING'],kind='BEARING',basis='A',description='Nut/washer bearing interface; no weld to rod')
-    cp=tube(p,dia*2,dia*2,.2);a.member('COUPLER',cp,[0,0,12],[0,0,12+4*dia],basis='A',description='A proprietary coupler envelope');a.notes.append('Source rod grade, diameter and cumulative story force remain unchanged. Coupler/take-up envelope and bracket local layout are A, with no supplier capacity approval. All chord plies receive a shown attachment.')
+    if not par.get('separate_coupler'):
+        cp=tube(p,dia*2,dia*2,.2);a.member('COUPLER',cp,[0,0,12],[0,0,12+4*dia],basis='A',representation_role='assembly_component',description='A proprietary coupler envelope')
+    a.notes.append('Source rod grade, diameter and cumulative story force remain unchanged. Coupler/take-up envelope and bracket local layout are A, with no supplier capacity approval. All chord plies receive a shown attachment. Actual floor couplers are separate located details when so scheduled.')
     a.section_axis=2;a.section_at=-2;a.dim([-w/2-1,0,0],[w/2+1,0,0],basis='A')
 
 def strap(ctx):
+    if ctx.params.get('physical_strap_end'):
+        from .review_cfs_frame_straps import draw
+        return draw(ctx)
     a,p,pid,txt,par=ctx.a,ctx.p,ctx.pid,ctx.text,ctx.params;level=par.get('story',ctx.ms[0].get('level',1))
     story=re.search(r'story '+str(level)+r':\s*(.*?)(?=; story|\n|$)',txt,re.I);txt=story[1] if story else txt
     count=int(par.get('screws') or findnum(r'(\d+) No\.?\s*(?:10|12|14)',txt,10));size=int(par.get('screw_size') or findnum(r'\d+ No\.?\s*(\d+)',txt,14));dia=screw_diameter(size)
-    cp=par.get('host_profile') or ctx.select(('chord','column','endwall_post','stud'));tp=ctx.select(('top_track','bottom_track','eave_strut'),cp);cd=effective(p,cp);width=p[pid]['dimensions']['width'];t=p[pid]['dimensions']['thickness'];gusset=.1017 if ctx.model['pilot'] in ('cfs14','cfs29') else .1875
+    cp=par.get('host_profile') or ctx.select(('chord','column','endwall_post','stud'))
+    receiver=ctx.receiver(('top_track','bottom_track','ordinary_track','tier_track','eave_strut','rim_track','floor_rim'))
+    if receiver is None:raise ValueError('Strap needs an actual receiving track/member selection: '+ctx.c['id'])
+    tp=receiver['profile_id'];cd=effective(p,cp);width=p[pid]['dimensions']['width'];t=p[pid]['dimensions']['thickness'];gusset=.1017 if ctx.model['pilot'] in ('cfs14','cfs29') else .1875
     if ctx.model['pilot']=='cfs2':gusset=.1423
     if ctx.model['pilot']=='cfs5':gusset=.1242 if width==8 else .1017
     a.member('CHORD',cp,[0,0,-6],[0,0,30]);a.member('TRACK',tp,[0,0,0],[34,0,0],y=[0,0,1]);y=cd/2+.25

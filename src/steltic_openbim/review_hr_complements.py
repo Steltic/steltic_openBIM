@@ -23,11 +23,17 @@ def apply(b,levels):
                 par.update(gusset_thickness=t,interface_length=length,doubler_thickness=dt,source_grid=grid,source_level=level)
         if family!='review_beam':continue
         along=0 if abs(m['axis'][1][0]-m['axis'][0][0])>abs(m['axis'][1][1]-m['axis'][0][1]) else 1
-        grid=chr(65+round(pt[1]/b.config.get('SY',336))) if along==0 else str(1+round(pt[0]/b.config.get('SX',336)))
+        coords=b.config.get('YS' if along==0 else 'XS')
+        at=min(range(len(coords)),key=lambda i:abs(coords[i]-pt[1-along])) if coords else round(pt[1-along]/b.config.get('SY' if along==0 else 'SX',336))
+        grid=chr(65+at) if along==0 else str(1+at)
         support=next((lookup[i] for i in c['member_ids'][1:] if lookup[i]['kind']=='column'),None)
         if b.key=='hr10' and k==3:
             for rid in raw:
                 if rid.startswith('conn-collector-L3-'+grid+'-') and rid.endswith('-'+m['profile_id']):attach(c,rid,True)
+        if b.key=='hr10' and support and par.get('moment'):
+            top=max(q[2] for q in support['axis'])
+            terminal=abs(pt[2]-top)<.1 and not any(mm['kind']=='column' and mm['id']!=support['id'] and min(q[2] for q in mm['axis'])>=top-.1 and math.dist(mm['axis'][0][:2],pt[:2])<.1 for mm in b.members)
+            if terminal:attach(c,'conn-SMF-joint-'+support['profile_id']+'-roof')
         if b.key!='hr12':continue
         diagonal=abs(m['axis'][1][0]-m['axis'][0][0])>1 and abs(m['axis'][1][1]-m['axis'][0][1])>1
         if support and par.get('moment'):

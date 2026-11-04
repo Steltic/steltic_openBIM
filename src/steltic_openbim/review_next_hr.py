@@ -76,6 +76,8 @@ def physical_extras(b,levels):
         raw={r['id'] for r in b.raw['connections']}
         for col in b.members:
             if col['kind']!='column':continue
+            if b.key=='hr16':continue  # exact source boxed-column orientation is already retained
+            if b.key=='hr25' and not (col['axis'][0][0]==1008 and col['axis'][0][1] in (0,1440)):continue
             prefix='conn-two-way-'+('4A4E-' if b.key=='hr25' else '')+col['profile_id']+'-strong-'
             for beam in b.members:
                 if beam['kind'] in ('beam','moment_beam','girder') and prefix+beam['profile_id'] in raw and any(math.dist(q[:2],col['axis'][0][:2])<.1 and min(v[2] for v in col['axis'])<=q[2]<=max(v[2] for v in col['axis']) for q in beam['axis']):
@@ -135,7 +137,8 @@ def connection_extras(b,levels):
             if b.key=='hr16':
                 if support:attach(con,'conn-column-webs-collector-lines')
                 if support and support.get('source_boxed_profile'):attach(con,'conn-two-way-joint-'+support['profile_id'])
-                if k==2 and 'infill-library-W18X46' in raw and 1008<=point[0]<=1680 and 336<=point[1]<=1008:attach(con,'conn-infill-library-W18X46',True)
+                if k==1 and pid=='W18X46' and m['kind']=='infill' and 1008<=point[0]<=1344 and 336<=point[1]<=1008:attach(con,'conn-infill-library-W18X46',True)
+                if k in (1,2) and point[1] in (336,672) and 672<=point[0]<=1344:attach(con,'collector-irregularity-lines')
             if b.key in ('hr18','hr21','hr30'):
                 braces=[mm for mm in b.members if mm['kind']=='brace' and mm['level']==k and abs(mm['axis'][0][1-along]-a[1-along])<.1 and min(q[along] for q in mm['axis'])<=sum(q[along] for q in m['axis'])/2<=max(q[along] for q in mm['axis'])]
                 if braces and m['kind']!='infill':

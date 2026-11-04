@@ -25,6 +25,14 @@ def prepare(model,package):
     Same geometry repeated at many locations shares a detail. A story-dependent
     bracket/rod or floor-shear connection cannot borrow another story's parameters.
     """
+    from .review_cfs_occurrences import bind
+    if model['pilot'].startswith('cfs'):
+        from .review_cfs_wall_bindings import bind as wall_bind
+        wall_bind(model)
+    bind(model)
+    if model['pilot'].startswith('cfs'):
+        from .review_source_clauses import apply as source_clauses
+        source_clauses(model,package)
     members={m['id']:m for m in model['members']};groups=defaultdict(list)
     truss_nodes=defaultdict(set)
     for m in model['members']:
@@ -55,7 +63,42 @@ def prepare(model,package):
                 vector=[far[i]-c['point'][i] for i in range(3)];length=sum(v*v for v in vector)**.5
                 if length>1e-8:vectors.append(tuple(round(v/length,5) for v in vector))
             angles=tuple(sorted(vectors))
-        parameters=json.dumps(c.get('parameters',{}),sort_keys=True,separators=(',',':'))
+        # Occurrence identity is provenance, not a shape parameter. In particular,
+        # equal stud layouts on different beams share a drawing detail while the
+        # source-beam identity remains on every actual connection occurrence.
+        shape_parameters={k:v for k,v in c.get('parameters',{}).items() if k not in ('original_physical_member_id','source_releases')}
+        if family=='review_splice':
+            # Equal W designations do not imply that both actual shafts have
+            # full-height boxing. This changes the receiver list itself.
+            shape_parameters['actual_shaft_boxing']=[dict(profile=m['profile_id'],thickness=m.get('boxing_thickness_in'),width=m.get('boxing_width_in')) for m in ms if m['kind']=='column']
+        if family=='review_chamfer':
+            # Opposite corners can be reflections, not rotations about global
+            # up. Preserve beam direction in the actual column frame so sharing
+            # a detail cannot require turning its below-TOS beam upside down.
+            from .pilots.model import sub,unit,dot,cross
+            column=next(m for m in ms if m['kind']=='column')
+            ray=unit(sub(max(ms[0]['axis'],key=lambda p:sum((p[i]-c['point'][i])**2 for i in range(3))),c['point']))
+            cy=column['local_y'];cx=cross(cy,[0,0,1])
+            shape_parameters['chamfer_direction']=[round(dot(ray,v),6) for v in (cx,cy)]
+        from .review_cfs_wall_bindings import signature
+        for name in ('physical_opening_joint','physical_wall_attachment','physical_floor_stack','physical_jamb_base'):
+            if name in shape_parameters:shape_parameters[name]=signature(shape_parameters[name])
+        if 'physical_stud_support' in shape_parameters:
+            shape_parameters['physical_stud_support']={k:v for k,v in shape_parameters['physical_stud_support'].items() if k!='member_id'}
+        if 'core_face_attachment' in shape_parameters:
+            shape_parameters['core_face_attachment']={k:v for k,v in shape_parameters['core_face_attachment'].items() if k!='wall_id'}
+        if family in ('review_beam','review_existing_joint','review_crane_bracket','review_pin_beam'):
+            from .pilots.model import sub,unit,dot
+            column=next((m for m in ms if m['kind'] in ('column','walkway_post','prop')),None)
+            if column:
+                beam_axis=unit(sub(ms[0]['axis'][1],ms[0]['axis'][0]))
+                shape_parameters['support_weak_axis']=abs(dot(beam_axis,column['local_y']))>.7
+        parameters=json.dumps(shape_parameters,sort_keys=True,separators=(',',':'))
+        if family=='test_floor_opening':
+            # Equal section names do not imply equal connection datums. A
+            # centroid-based perimeter and a TOS-based infill need distinct fits.
+            parameters+=json.dumps([(m['id']==ms[0]['id'],m['kind'],m['profile_id'],
+                round(m['axis'][0][2]+m.get('end_offsets',[[0,0,0]])[0][2]-c['point'][2],6)) for m in ms])
         key=(family,subtype(c,ms),tuple(sorted((m['kind'],m['profile_id']) for m in ms)),tuple(sorted(c.get('design_record_ids',[]))),story,angles,parameters)
         groups[key].append(c)
     assemblies=[];details=[];refs=defaultdict(set)

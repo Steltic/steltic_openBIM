@@ -104,16 +104,19 @@ def adopt_scenario(package,state,body):
     author=str(body.get('author','')).strip()
     if not author or len(author)>160: raise ValueError('Provide the author of the adopted test assumptions')
     result=copy.deepcopy(state); scenario=SCENARIOS[pilot]
-    if {r['id'] for r in result['requests']}!=set(scenario['answers']):
+    if not set(scenario['answers'])<={r['id'] for r in result['requests']}:
         raise ValueError('The information-request set differs from the reviewed test scenario')
     for request in result['requests']:
+        # New producer/consumer checks may find omissions after this fictional
+        # scenario was authored. Saved answers resolve only their own questions.
+        if request['id'] not in scenario['answers']:continue
         request.update(confirmed=True,status='resolved_for_test',resolution=scenario['answers'][request['id']],
             resolution_basis='user_authorized_fictional_assumption',confirmed_by=author)
     result['features']=scenario_features(pilot)
     for feature in result['features']: feature['confirmed_by']=author
     result['design_scenario']={'id':pilot,'version':1,'source_sha256':fingerprint(package),
         'answers_sha256':fingerprint(scenario['answers']),'author':author,'fictional':True}
-    result['revision']+=1;result['drawing_status']='design_test'
+    result['revision']+=1;result['drawing_status']='provisional' if any(not r['confirmed'] for r in result['requests']) else 'design_test'
     result['policy']['new_capacity_verification']=False
     result['events'].append(dict(revision=result['revision'],action='adopt_fictional_design_answers',author=author,
         note='User-authorized assumed answers for this registered fictional building; source design remains immutable.'))

@@ -45,4 +45,24 @@ def build_model(package,state):
     if key in ('cfs1','cfs5','cfs15'):
         from .review_final_cfs import connections
         connections(b)
+    from .review_design_bindings import apply as design_bindings
+    design_bindings(b)
+    from .review_cfs_rods import apply as rod_joints
+    rod_joints(b)
+    from .review_physical_pieces import apply as physical_pieces
+    physical_pieces(b)
+    from .review_selected_details import apply as selected_details
+    selected_details(b)
+    from .review_profile_fit import apply as profile_fit
+    profile_fit(b)
+    from .review_cfs_frame_straps import apply as frame_straps
+    frame_straps(b)
+    from .review_crossings import apply as brace_crossings
+    brace_crossings(b)
+    from .review_releases import apply as physical_releases
+    physical_releases(b)
+    from .review_column_local_checks import apply as local_checks
+    local_checks(b)
+    from .review_rbs import apply as physical_rbs
+    physical_rbs(b)
     return b.finish()

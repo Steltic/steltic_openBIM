@@ -132,12 +132,22 @@ def build(b):
                 if len(locations)!=len(widths):locations=spaced_segments(lo,hi,widths)
             elif b.key in next_keys:locations=next_locations(b,d,line,k,ranges)
             elif b.key in final.KEYS:locations=final.locations(b,d,line,k,ranges)
-            else:locations=[(0,12),(48,60)] if d=='X' else [(10,22)]
+            else:
+                # CFS29's end-wall bay is 16 ft in the checked design. Keep the
+                # adopted centre at Y=16 ft, but derive its width from the actual
+                # selected segment rather than copying the 12 ft X-wall width.
+                if d=='X':
+                    if len(widths)!=2:raise ValueError('Mezzanine X wall requires its two selected bay lengths')
+                    locations=[(0,widths[0]),(60-widths[1],60)]
+                else:
+                    if len(widths)!=1:raise ValueError('Mezzanine Y wall requires its selected bay length')
+                    locations=[(16-widths[0]/2,16+widths[0]/2)]
             record=rawwalls.get(f'wall-{d}-{name}-s{k}',{});props=dict(line.get('wall_props') or {});props.update(props.get('by_story',{}).get(str(k),{}))
             floor_depth=14 if b.key=='cfs3' else (14.25 if b.key=='cfs13' else (16.25 if b.key=='cfs14' else 12))
             z0=levels[k-1];zt=levels[k]-(floor_depth if k<len(heights) or b.key=='cfs3' else 0)
             if b.key in next_keys:floor_depth=next_depth(b,k);zt=levels[k]-floor_depth
             if b.key in final.KEYS:floor_depth=final.depth(b,k);zt=levels[k]-floor_depth
+            if b.key=='cfs29':floor_depth=14 if name=='XM' else 12;zt=levels[k]-floor_depth
             # This line is a geometric physical wall, not its fitted tributary line.
             runs=[]
             for j,(a,dend) in enumerate(locations):
@@ -153,6 +163,7 @@ def build(b):
             elif b.key in next_keys:rstud=next_stud(b,d,name,k,props,ordinary)
             elif b.key in final.KEYS:rstud=final.stud(b,d,name,k,props,ordinary)
             studpid=b.profile(section(rstud.get('section')));spacing=float(rstud.get('spacing_in',12 if b.key=='cfs14' else 16));trackpid=b.profile('600T150-'+str(int(round(props.get('t_stud_in',.054)*1000))))
+            if b.key=='cfs29':spacing=12 if name=='XM' else 24
             if b.key=='cfs5':trackpid=b.profile('600T125-97')
             chordrec=story_value(chords.get(f'chord-{d}-{name}',{}),k);hold=story_value(holds.get(f'hd-{d}-{name}',{}),k)
             if b.key=='cfs14' and ((name in ('S','M','N') and k>=3) or (name in ('C1S','C2S') and k>=2)):
@@ -190,10 +201,12 @@ def build(b):
                             post=b.member(label+'-INTERMEDIATE',physical_pack(b,postrec['section'],f'POST-{name}-{k}'),'chord',pt(dend,z0+.1),pt(dend,zt-.1),k,'A',local_y=local_y,records=[b.record('studs',postrec['id'])]);b.ends(post,'cfs_stud');continue
                     typeii=b.key=='cfs13' and name in ('SW','SE','SEE','NB','NW','NE');is_end=not typeii or (j==0 and side==0) or (j==len(runs)-1 and side==1)
                     cp=chordpid if is_end else b.profile('2X600S162-54')
-                    chord=b.member(label+'-CH'+str(side),cp,'chord' if is_end else 'opening_jamb',pt(u,z0+.1),pt(u,zt-.1),k,'A',local_y=local_y,records=[b.record('studs',chordrec.get('id'))])
+                    chord_top=levels[k] if b.key=='cfs29' else zt-.1
+                    chord=b.member(label+'-CH'+str(side),cp,'chord' if is_end else 'opening_jamb',pt(u,z0+.1),pt(u,chord_top),k,'A',local_y=local_y,records=[b.record('studs',chordrec.get('id'))])
                     if is_end:
                         rtext=str(hold.get('rod',hold.get('selection','5/8 in.')));dia=number(re.search(NUMBER+r'\s*in',rtext)[1]) if re.search(NUMBER+r'\s*in',rtext) else .625
-                        if b.profiles[cp]['family']=='rhs' or b.key=='cfs29':b.ends(chord,'review_cfs_post',[b.record('holddowns',hold.get('id'))],parameters={'at_base':k==1 or name=='N' and k==2,'embedment':4 if b.key=='cfs29' else 12})
+                        if b.key=='cfs29':b.connection(chord['id']+':0','review_cfs_post',chord['axis'][0],[chord],[b.record('holddowns',hold.get('id'))],parameters={'at_base':True,'embedment':4})
+                        elif b.profiles[cp]['family']=='rhs':b.ends(chord,'review_cfs_post',[b.record('holddowns',hold.get('id'))],parameters={'at_base':k==1 or name=='N' and k==2,'embedment':12})
                         else:
                             if not .375<=dia<=3:raise ValueError(f'{b.key} {label}: invalid source rod diameter {dia}; use the story-specific rod record')
                             rodpid=b.custom(f'ROD-{dia:g}','round',{'d':dia},basis='S: scheduled tie rod');rod=b.member(label+'-ROD'+str(side),rodpid,'hold_down_rod',pt(u,z0-2),pt(u,zt+4),k,'A',records=[b.record('holddowns',hold.get('id'))])
@@ -218,7 +231,7 @@ def build(b):
                     strap=b.custom(f'STRAP-{w:g}X{t:g}','flat',dict(width=w,thickness=t),basis='S: source strap schedule')
                     for face in (-1,1):
                         for diagonal,(u,v) in enumerate(((a,dend),(dend,a))):
-                            aa,dd=pt(u,z0),pt(v,zt);aa[normal]+=face*3;dd[normal]+=face*3
+                            aa,dd=pt(u,z0),pt(v,zt);aa[normal]+=face*(3+(t/2 if b.key=='cfs29' else 0));dd[normal]+=face*(3+(t/2 if b.key=='cfs29' else 0))
                             m=b.member(label+f'-X{face}-{diagonal}',strap,'strap',aa,dd,k,'A',records=[wall['source_record']],local_y=local_y)
                             b.ends(m,'review_cfs_strap',[wall['source_record'],b.record('connections',f'conn-strap-{d}-{name}')],parameters={'story':k,'line':name})
                 else:
@@ -366,7 +379,7 @@ def mezzanine(b,levels):
     for x in range(0,721,144):
         for y in (0,192,384):
             if any(m['kind']=='chord' and math.dist(m['axis'][0][:2],[x,y])<.1 for m in b.members):continue
-            pid=b.pack(b.profile('600S250-97'),2,'box');m=b.member(f'MEZZPOST-{x}-{y}',pid,'column',[x,y,0],[x,y,144],1,'S');b.ends(m,'review_cfs_post',[b.record('connections','conn-post-base')],parameters={'slab_thickness':6,'embedment':4})
+            pid=b.pack(b.profile('600S250-97'),2,'box');m=b.member(f'MEZZPOST-{x}-{y}',pid,'column',[x,y,0],[x,y,144],1,'S');b.connection(m['id']+':0','review_cfs_post',m['axis'][0],[m],[b.record('connections','conn-post-base')],parameters={'slab_thickness':6,'embedment':4})
     for y in (0,192,384):
         pid=b.pack(b.profile('1400S300-118' if y==192 else '1200S300-97'),2,'box')
         for x in range(0,720,144):

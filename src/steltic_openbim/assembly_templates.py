@@ -42,6 +42,9 @@ def effective(profiles,pid,key='depth'):
     return dim(p,key)
 
 def channel(profiles,pid,d=6,b=1.625,t=.0566,lip=.5):
+    # Local recipes share a package. A friendly name such as TRACK600 is not
+    # a section identity when different details specify different flange sizes.
+    pid += f'-{d:g}x{b:g}x{t:g}x{lip:g}'
     profiles.setdefault(pid,dict(id=pid,family='channel',dimensions=dict(d=d,b=b,t=t,lip=lip)))
     return pid
 
@@ -86,6 +89,17 @@ def source_text(package,c):
     return '\n'.join(chunks)
 
 def build_scene(model,package,c,subtype=''):
+    par=c.get('parameters',{});family=c['detail_ref']['id']
+    located=None
+    if par.get('physical_opening_joint'):located='header'
+    elif par.get('physical_jamb_base'):located='jamb_base'
+    elif par.get('physical_wall_attachment') and family=='cfs_stud_bridging':located='bridging'
+    elif par.get('physical_wall_attachment') and family=='review_sheathing':located='sheathing'
+    elif par.get('physical_floor_stack'):located='floor'
+    if located:
+        from .review_assemblies import Context
+        from . import review_located_wall_details
+        ctx=Context(model,package,c);getattr(review_located_wall_details,located)(ctx);return ctx.finish()
     if c['detail_ref']['id'].startswith('review_'):
         from .review_assemblies import build_scene as review_scene
         return review_scene(model,package,c,subtype)
@@ -135,22 +149,36 @@ def build_scene(model,package,c,subtype=''):
 
     # HR beam-to-column/beam: member solids, support face, plate, bolt grip, welds.
     if family in ('hr_simple_shear_plate','hr_infill_shear_plate_cope','hr_rbs_joint','hr_shear','hr_moment','hr_link_end') or (family=='test_floor_opening' and model['pilot'].startswith('hr')):
-        bp=pick(('girder','infill','moment_beam','opening_header','opening_trimmer','beam','link'))
-        cp=pick(('column',),next((m['profile_id'] for m in ms if m['profile_id']!=bp),default_w()))
+        floor_opening=family=='test_floor_opening'
+        bp=primary['profile_id'] if floor_opening else pick(('girder','infill','moment_beam','opening_header','opening_trimmer','beam','link'))
+        if floor_opening:
+            support=next((m for m in ms if m['id']!=primary['id']),None)
+            if support is None:raise ValueError('Opening detail needs its actual perpendicular receiving member: '+c['id'])
+            cp=support['profile_id']
+        else:cp=pick(('column',),next((m['profile_id'] for m in ms if m['profile_id']!=bp),default_w()))
         bd=effective(p,bp);cd=effective(p,cp);bf=effective(p,bp,'width');beam=next((m for m in ms if m['profile_id']==bp),primary)
         support_is_column=any(m['kind']=='column' for m in ms) or family in ('hr_simple_shear_plate','hr_rbs_joint','hr_moment')
+        beam_z=-bd/2;support_z=-cd/2
+        if floor_opening:
+            def physical_z(m):
+                aa,bb=m['axis'];v=sub(bb,aa);s=max(0,min(1,sum(x*y for x,y in zip(sub(c['point'],aa),v))/sum(x*x for x in v)))
+                offsets=m.get('end_offsets',[[0,0,0],[0,0,0]])
+                return aa[2]+s*v[2]+offsets[0][2]+s*(offsets[1][2]-offsets[0][2])-c['point'][2]
+            beam_z=physical_z(primary);support_z=physical_z(support)
         if support_is_column:
             a.member('M1',cp,[0,0,-bd-12],[0,0,15],description='Supporting column '+cp)
             face=cd/2
         else:
-            a.member('M1',cp,[0,-22,-cd/2],[0,22,-cd/2],y=(1,0,0),description='Supporting girder '+cp)
+            a.member('M1',cp,[0,-22,support_z],[0,22,support_z],y=(1,0,0),description='Supporting girder '+cp)
             face=p[cp]['dimensions'].get('tw',.375)/2
         gap=0 if family in ('hr_rbs_joint','hr_moment') else 1.25
-        rbs=beam.get('rbs');extra={'rbs':rbs} if rbs else {}
+        rbs=dict(beam['rbs'],ends=[0]) if beam.get('rbs') else None
+        if rbs:rbs.pop('cuts',None)
+        extra={'rbs':rbs} if rbs else {}
         if not support_is_column and p[bp]['family']=='i' and p[cp]['family']=='i':
             extra['cope']=dict(length_in=max(1,p[cp]['dimensions']['bf']/2+.5-face-gap),depth_in=p[cp]['dimensions']['tf']+.5)
         length=max(40,(rbs['a_in']+rbs['b_in']+8) if rbs else 40)
-        a.member('M2',bp,[face+gap,0,-bd/2],[face+gap+length,0,-bd/2],description='Connected beam '+bp,**extra)
+        a.member('M2',bp,[face+gap,0,beam_z],[face+gap+length,0,beam_z],description='Connected beam '+bp,**extra)
         moment=family in ('hr_rbs_joint','hr_moment')
         plate_t=.375 if moment or family=='test_floor_opening' else (.25 if 'infill' in family else .5)
         n=4 if moment else (3 if family=='test_floor_opening' else (5 if 'infill' in family else 6))
@@ -165,7 +193,7 @@ def build_scene(model,package,c,subtype=''):
         if edge<dia: # Explicit test alternative when a source family does not fit the smaller beam.
             pitch=max(2.5*dia,(bd-4)/(n-1));ph=(n-1)*pitch+2;edge=1
             note('A: pitch fitted to this member web; retained source count. This variant has no new capacity verification.')
-        tw=p[bp]['dimensions'].get('tw',.375);z=-bd/2-ph/2
+        tw=p[bp]['dimensions'].get('tw',.375);z=beam_z-ph/2
         a.box('P1',[face,tw/2,z],[pw,plate_t,ph],'A' if moment or family=='test_floor_opening' else 'S',description=f'Shear/erection plate {pw:g} x {ph:g} x {plate_t:g}')
         bolt_x=face+pw-1.75
         fast('F1',grid(n,1,pitch,origin=(bolt_x,-tw/2,z+edge)),(0,1,0),dia,tw+plate_t,['M2','P1'],f'{n} x {dia:g} in '+('A325' if dia==.75 else 'A490')+' through beam web and P1','A' if moment or family=='test_floor_opening' else 'S')
@@ -371,10 +399,17 @@ def build_scene(model,package,c,subtype=''):
         note('Three independent load-path attachments are drawn: brace to gusset, gusset to vertical member, gusset to horizontal member. Source attachment counts remain separate.')
 
     elif family in ('cfs_stud','cfs_top_track','cfs_bottom_track','cfs_stud_bridging','cfs_bridging_anchor'):
-        sp=pick(('stud',),next((m['profile_id'] for m in model['members'] if m['kind']=='stud'),default_c()));sd=effective(p,sp)
+        if c.get('parameters',{}).get('physical_stud_support'):
+            from .review_assemblies import Context
+            from .review_wall_occurrence_details import cripple
+            ctx=Context(model,package,c);cripple(ctx);return ctx.finish()
+        fitted=c.get('parameters',{}).get('physical_track')
+        sp=pid if fitted else pick(('stud',),next((m['profile_id'] for m in model['members'] if m['kind']=='stud'),default_c()));sd=effective(p,sp)
         tp=pick(('top_track','bottom_track'),channel(p,f'ASSEMBLY-T{sd:g}',sd,1.25,.0566,0))
         bridging=family in ('cfs_stud_bridging','cfs_bridging_anchor')
-        a.member('M1',sp,[0,0,-12 if bridging else 0],[0,0,18],description='Stud '+sp)
+        direction=c.get('parameters',{}).get('stud_end_direction',1)
+        ends=([0,0,0],[0,0,18]) if direction>0 else ([0,0,-18],[0,0,0])
+        a.member('M1',sp,*ends,y=(1,0,0),description='Stud '+sp) if fitted else a.member('M1',sp,[0,0,-12 if bridging else 0],[0,0,18],description='Stud '+sp)
         if bridging:
             bp=pick(('stud_bridging',),channel(p,'ASSEMBLY-U1.5',1.5,.5,.0566,0));a.member('M2',bp,[-18,0,6],[18,0,6],description='Continuous bridging '+bp)
             clip(a,'L1',[-1,0,4],4,2,.0566)
@@ -386,11 +421,22 @@ def build_scene(model,package,c,subtype=''):
             a.section_at=0
         else:
             # Rotate track to open upward; stud flanges engage the two track legs.
-            a.member('M2',tp,[-15,0,0],[15,0,0],y=(0,0,1),description='Receiving track '+tp)
+            if fitted:a.member('M2',fitted['profile_id'],*fitted['axis'],y=fitted['local_y'],description='Actual receiving track '+fitted['profile_id'])
+            else:a.member('M2',tp,[-15,0,0],[15,0,0],y=(0,0,1),description='Receiving track '+tp)
             for i,sign in enumerate((-1,1)):
-                fast('F'+str(i+1),[[0,sign*sd/2,.65]],[0,-sign,0],.19,.12,['M1','M2'],'1 No.10 through track leg and stud flange','S',True)
+                if c.get('parameters',{}).get('each_ply_end_screws'):
+                    from .pilots.geometry import strips
+                    positions=set()
+                    for poly in strips(p[sp],p):
+                        for aa,bb in zip(poly,poly[1:]+poly[:1]):
+                            if abs(aa[1]-sign*sd/2)<1e-6 and abs(bb[1]-aa[1])<1e-6 and abs(bb[0]-aa[0])>.3:positions.add(round((aa[0]+bb[0])/2,6))
+                    if not positions:raise ValueError('No exposed chord flange at track attachment')
+                    trackpart=next(part for part in a.parts if part['id']=='M2');surface=trackpart['bounds'][1][i]
+                    grip=abs(surface-sign*sd/2)+.125
+                    fast('F'+str(i+1),[[x,surface,direction*.65] for x in sorted(positions)],[0,-sign,0],.19,grip,['M1','M2'],'A one No.10 at each exposed chord-ply flange; verify grip/attachment capacity','A',True)
+                else:fast('F'+str(i+1),[[.75 if fitted else 0,sign*sd/2,direction*.65]],[0,-sign,0],.19,.12,['M1','M2'],'1 No.10 through track leg and stud flange; A local station','S',True)
             a.dim([0,-sd/2,0],[0,sd/2,0],'Stud/track nominal depth',view='section');note('Stud seated on track web. One screw through EACH flange; top condition mirrors this bottom condition. Track size follows the stud depth/mil variant.')
-        a.section_axis=2;a.section_at=.65 if not bridging else 6
+        a.section_axis=2;a.section_at=direction*.65 if not bridging else 6
 
     elif family in ('cfs_joist','cfs_bearing_stiffener','cfs_squash_block','cfs_rim_track','cfs_collector','cfs_collector_blocking','cfs_junction_collector','cfs_floor_stack'):
         jp=pick(('joist',),next((m['profile_id'] for m in model['members'] if m['kind']=='joist'),default_c(12,2,.0713)))

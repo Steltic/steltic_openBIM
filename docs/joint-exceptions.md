@@ -59,3 +59,12 @@ gusset does not represent all other attached members' connections.
 
 
 From 0.8.28, strict jobs also compare explicit solid-fastener counts with distinct located solids in the same local design assembly. A single block or shaft carrying `count: 4` does not produce four fasteners. Actual split arrays sharing a joint and record are supported. This lower-bound check preserves reference/delegated scope and does not certify spacing, fit or capacity.
+
+Source schedules can explicitly distinguish `base: ...; floors: ...` hardware.
+The optional `connections[].source_record_selections` records the exact linked
+`record_id`, `field` (`selection` or `components`), `clause`, unchanged `text`,
+receiving-track `level`, and applicability `basis`. The full original design
+record remains unchanged. Both clauses must have located applications, and each
+application must bind its actual bottom track at the correct storey. Missing,
+edited, malformed or partly parsed clauses fail validation. This mechanism does
+not permit selecting arbitrary fragments from an unlabelled design record.

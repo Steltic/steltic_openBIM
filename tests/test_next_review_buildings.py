@@ -21,7 +21,7 @@ def test_hillside_footing_datum_is_not_a_floor_and_auxiliary_basement_is_framed(
 def test_crossing_details_do_not_replace_brace_end_connections(key):
     _,m=model(key)
     for brace in (x for x in m['members'] if x['kind']=='brace'):
-        ends=[c['point'] for c in m['connections'] if c['member_ids'][0]==brace['id'] and c['detail_ref']['id']=='review_brace']
+        ends=[c['point'] for c in m['connections'] if brace['id'] in c['member_ids'] and c['detail_ref']['id'] in ('review_brace','review_brace_crossing')]
         assert all(any(math.dist(point,end)<.001 for end in ends) for point in brace['axis'])
     assert any(c['detail_ref']['id']=='review_brace_crossing' for c in m['connections'])
 
@@ -93,7 +93,10 @@ def test_school_splices_follow_the_classroom_floor_not_the_lower_gym_roof_index(
 
 def test_boxed_column_splice_includes_side_plates_and_source_erection_bolts():
     p,m=model('hr16');scenes=prepare(m,p)
-    scene=next(s for s in scenes if 'connections/conn-lateral_col-W14X193B' in s['source_record_ids'])
+    for c in m['connections']:
+        if c['detail_ref']['id']=='review_splice' and not c.get('parameters',{}).get('boxing_t'):
+            assert 'connections/conn-lateral_col-W14X193B' not in c['design_record_ids']
+    scene=next(s for s in scenes if s['family']=='review_splice' and 'connections/conn-lateral_col-W14X193B' in s['source_record_ids'])
     assert {'BOX00','BOX01','BOX10','BOX11','ERECT'}<={q['id'] for q in scene['parts']}
     assert {'BOX-SPLICE0','BOX-SPLICE1'}<={q['id'] for q in scene['welds']}
     assert sum(len(f['points']) for f in scene['fasteners'] if f['id'].startswith('ERECT-B'))==4

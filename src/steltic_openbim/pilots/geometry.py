@@ -27,7 +27,7 @@ def strips(profile,profiles):
     if family in ('i','i_tapered'):
         h,b,tf,tw=[d[k] for k in ['d','bf','tf','tw']]
         if family=='i_tapered':
-            tip=max(.1,tf-b/24);root=tf+b/24
+            tip=d.get('tf_tip',max(.1,tf-b/24));root=d.get('tf_root',tf+b/24)
             return [[[-b/2,-h/2],[b/2,-h/2],[b/2,-h/2+tip],[tw/2,-h/2+root],[-tw/2,-h/2+root],[-b/2,-h/2+tip]],rect(-tw/2,-h/2+root,tw/2,h/2-root),[[-b/2,h/2],[b/2,h/2],[b/2,h/2-tip],[tw/2,h/2-root],[-tw/2,h/2-root],[-b/2,h/2-tip]]]
         return [rect(-b/2,-h/2,b/2,-h/2+tf),rect(-tw/2,-h/2+tf,tw/2,h/2-tf),rect(-b/2,h/2-tf,b/2,h/2)]
     if family in ('channel','z'):
@@ -88,27 +88,44 @@ def member_faces(member,profiles,limits=None):
     lo,hi=[v*extent for v in clip]; d=unit(vector); y=member['local_y']; profile=profiles[member['profile_id']]
     base=strips(profile,profiles); rbs=member.get('rbs'); cope=member.get('cope')
     stations={lo,hi}
+    from ..member_slots import validated,cut_sections
+    slots=validated(member.get('slots',[]),extent)
+    if slots and (rbs or cope):raise ValueError('Combined slots and flange cuts require an explicit selected solid')
+    for slot in slots:
+        for station in (slot['start_in'],slot['end_in']):
+            if lo<station<hi:stations.add(station)
+    cuts=[]
     if rbs:
-        aa,bb=rbs['a_in'],rbs['b_in']
-        for s in [aa+bb*i/12 for i in range(13)]:
-            for pos in [s,extent-s]:
-                if lo<pos<hi: stations.add(pos)
+        cuts=rbs.get('cuts') or [dict(rbs,end=end) for end in rbs.get('ends',[0,1])]
+        for cut in cuts:
+            if cut['end'] not in (0,1) or cut['a_in']<0 or cut['b_in']<=0 or cut['c_in']<=0:
+                raise ValueError('An RBS cut needs an explicit end and positive source cut dimensions')
+            for s in [cut['a_in']+cut['b_in']*i/12 for i in range(13)]:
+                pos=s if cut['end']==0 else extent-s
+                if lo<pos<hi:stations.add(pos)
     if cope:
         for s in [cope['length_in'],extent-cope['length_in']]:
             if lo<s<hi: stations.add(s)
     stations=sorted(stations); faces=[]
     def shape(at,index):
         poly=[p[:] for p in base[index]]
-        if rbs and index in (0,2):
-            s=min(at,extent-at)-rbs['a_in']; b0=rbs['b_in']; c=rbs['c_in']; radius=(b0*b0+4*c*c)/(8*c)
-            cut=max(0,math.sqrt(max(0,radius*radius-(s-b0/2)**2))-(radius-c)) if 0<=s<=b0 else 0
-            for p in poly: p[0]+=-cut if p[0]>0 else cut
+        if cuts and index in (0,2):
+            reduction=0.
+            for selected in cuts:
+                s=(at if selected['end']==0 else extent-at)-selected['a_in']; b0=selected['b_in']; c=selected['c_in']; radius=(b0*b0+4*c*c)/(8*c)
+                amount=max(0,math.sqrt(max(0,radius*radius-(s-b0/2)**2))-(radius-c)) if 0<=s<=b0 else 0
+                reduction=max(reduction,amount)
+            for p in poly:p[0]+=-reduction if p[0]>0 else reduction
         return poly
     z=cross(d,y)
     for s,t in zip(stations,stations[1:]):
         coped=cope and ((0 in cope.get('ends',[0,1]) and (s+t)/2<cope['length_in']) or (1 in cope.get('ends',[0,1]) and extent-(s+t)/2<cope['length_in']))
         for index in range(len(base)):
             if coped and index==2: continue
+            if slots:
+                for poly in cut_sections([base[index]],slots,(s+t)/2):
+                    faces.extend(extrude(poly,add(a,mul(d,s)),add(a,mul(d,t)),y))
+                continue
             rings=[]
             for at in [s,t]:
                 poly=shape(at,index)
@@ -129,6 +146,7 @@ def part_lines(part):
 
 def part_faces(part,profiles):
     g=part['geometry']; kind=g['type']; a=g.get('origin')
+    if kind=='mesh':return g['faces']
     if kind=='box':
         x,y=g['x_axis'],g['y_axis']; z=cross(x,y); sx,sy,sz=g['size']; b=add(a,mul(z,sz))
         return extrude([[0,0],[sx,0],[sx,sy],[0,sy]],a,b,x)  # local z cross x == y

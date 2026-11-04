@@ -2,7 +2,7 @@
 import re
 from .assembly_scene import clip_part
 from .assembly_templates import NUMBER,number,effective,findnum
-from .pilots.geometry import strips
+from .review_transition_geometry import loft
 
 
 def transition(ctx,lower):
@@ -61,10 +61,7 @@ def transition(ctx,lower):
         specific=re.search(r'tapered 1:2.5 over \(?'+NUMBER+r' in',txt)
         if specific:height=number(specific[1])
     clip_part(part,[0,0,-1],height)
-    low=strips(bottom,p);high=strips(upper,p);faces=[]
-    for below,above in zip(low,high):
-        rings=[[[ -v,u,z] for u,v in poly] for poly,z in ((below,-height),(above,0))]
-        faces += [rings[0][::-1],rings[1]]+[[rings[0][i],rings[0][(i+1)%len(below)],rings[1][(i+1)%len(below)],rings[1][i]] for i in range(len(below))]
+    faces=loft(bottom,upper,height)
     a.part('TRANSITION','Source section transition; A interpolated fit envelope, source taper/weld preparation requirements retained',faces,'A','member',transition_height_in=height,lower_profile=lower,upper_profile=pid)
     a.weld('TRANS-LOW',[-ld/2,0,-height],[ld/2,0,-height],['M1','TRANSITION'],kind='CJP' if segment else 'CONTINUOUS',description='Source shop-welded transition' if segment else 'Continuous shaft; A start of tapered fit envelope')
     next(w for w in a.welds if w['id']=='SPLICE')['connects']=['TRANSITION','M2']

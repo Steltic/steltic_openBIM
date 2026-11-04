@@ -63,6 +63,12 @@ def complete_walls(b,outline,bystory,levels):
                             m=b.member(f'{label}-{gi}-{tag}-{pi}',tp,'ordinary_track',pt(u,z),pt(v,z),k,'A',local_y=[0,0,up]);b.connection(m['id'],'review_cfs_sill' if tag=='B' else 'review_cfs_floor',pt((u+v)/2,z),[m],parameters={'floor_depth':levels[k]-top,'level':k})
                 for j,u in enumerate(frange(lo+8,hi,16)):
                     if void(u,bottom) or any(aa<u<dd for aa,dd in occupied):continue
+                    # Opening jambs already occupy these narrow end zones. The
+                    # old 7-in mask left duplicate, unsupported short studs
+                    # just outside the actual header/sill span.
+                    if any(any(abs(u-v)<4 for v in (f['xy'[axis]+'_ft']*12-3,f['xy'[axis]+'_ft']*12+f['width_ft']*12+3)) for f in opens):
+                        b.changes.append(dict(kind='ordinary_stud_replaced_by_opening_jamb',station_in=u,wall_axis=axis,wall_position_in=pos,level=k,basis='A: existing opening jamb occupies this station; omit duplicate ordinary stud, retain source stud schedule'))
+                        continue
                     intervals=[(bottom+.1,top-.1)]
                     for f in opens:
                         start=f['xy'[axis]+'_ft']*12
@@ -82,6 +88,17 @@ def floor_openings(b):
         if not ishr and k==max(group) and b.key not in ('cfs29','cfs10','cfs18'):continue
         # Choose the two most separated source floor cells / polygon corners with an interior margin.
         candidates=[]
+        # Include the actual ordinary/bearing framing ABOVE this floor. Testing
+        # only the source braced segments left stairs under a through wall.
+        from bisect import bisect_left,bisect_right
+        z=ps[0]['vertices'][0][2]
+        wall_points=sorted({tuple(m['axis'][0][:2]) for m in b.members
+            if m['kind'] in ('stud','chord','opening_jamb','column')
+            and math.dist(m['axis'][0][:2],m['axis'][1][:2])<.01
+            and max(q[2] for q in m['axis'])>z+.1 and min(q[2] for q in m['axis'])<z+24})
+        wall_x=[p[0] for p in wall_points]
+        def clear_of_walls(xx,yy):
+            return not any(yy-8<wy<yy+224 for _,wy in wall_points[bisect_left(wall_x,xx-8):bisect_right(wall_x,xx+104)])
         for panel in ps:
             poly=[[q[0],q[1]] for q in panel['vertices']];z=panel['vertices'][0][2]
             xs=[q[0] for q in poly];ys=[q[1] for q in poly]
@@ -89,12 +106,14 @@ def floor_openings(b):
                 if len(poly)!=4 or max(xs)-min(xs)<240 or max(ys)-min(ys)<300:continue
                 candidates.append((min(xs)+(132 if b.key=='hr30' else 60),min(ys)+60,96,216,z))
             else:
-                for xx in (min(xs)+72,max(xs)-168):
-                    for yy in (min(ys)+72,max(ys)-288):
+                xstations=list(dict.fromkeys([min(xs)+72,max(xs)-168]+list(frange(min(xs)+24,max(xs)-119,24))))
+                ystations=list(dict.fromkeys([min(ys)+72,max(ys)-288]+list(frange(min(ys)+24,max(ys)-239,24))))
+                for xx in xstations:
+                    for yy in ystations:
                         if all(any(lo<xxx<hi for lo,hi in intersections(poly,0,yyy)) for xxx in (xx,xx+96) for yyy in (yy,yy+216)):
                             # Keep floor holes clear of all source bearing/braced wall planes.
                             hit=any(w['level']==k and any((xx-12<r['position_in']<xx+108 if w['direction']=='Y' else yy-12<r['position_in']<yy+228) for r in w['runs']) for w in b.walls)
-                            if not hit:candidates.append((xx,yy,96,216,z))
+                            if not hit and clear_of_walls(xx,yy):candidates.append((xx,yy,96,216,z))
         if not candidates:continue
         chosen=[candidates[0]]
         if len(candidates)>1:
@@ -104,7 +123,9 @@ def floor_openings(b):
             # Proprietary open-web floor joists are excluded from the void as full units;
             # headers/trimmers support their replacement supplier bay, explicitly A.
             feature=dict(id=f'STAIR-{k}-{oi+1}',kind='stair',plane='xy',x_ft=x/12,y_ft=y/12,z_ft=z/12,width_ft=w/12,height_ft=h/12,level=k,basis='A',query_id=b.key.upper()+'-OPENINGS',confirmed=True)
-            b.openings.append(feature);lo=[x,y,z-32];hi=[x+w,y+h,z+2];replaced={}
+            # Secondary worklines end on the perimeter framing worklines. The
+            # clear architectural void is still x/y/w/h, four inches inside.
+            b.openings.append(feature);lo=[x-4,y-4,z-32];hi=[x+w+4,y+h+4,z+2];replaced={}
             for m in list(b.members):
                 if m['level']!=k or m['kind'] not in ('infill','joist','truss_chord','truss_web'):continue
                 if max(q[2] for q in m['axis'])<z-32 or min(q[2] for q in m['axis'])>z+2:continue
@@ -113,19 +134,37 @@ def floor_openings(b):
                 aa,dd=m['axis'];v=sub(dd,aa);chunks=[(0,cut[0]),(cut[1],1)];b.members.remove(m);new=[]
                 for j,(u,t) in enumerate(chunks):
                     if (t-u)*math.dist(aa,dd)<1:continue
-                    mm=b.member(m['id']+f'-O{oi}-{j}',m['profile_id'],m['kind'],add(aa,mul(v,u)),add(aa,mul(v,t)),k,'A',local_y=m['local_y'],records=m['design_record_ids'],source=m.get('source_member_id'));new.append(mm)
-                    b.ends(mm,'test_floor_opening')
+                    mm=b.member(m['id']+f'-O{oi}-{j}',m['profile_id'],m['kind'],add(aa,mul(v,u)),add(aa,mul(v,t)),k,'A',local_y=m['local_y'],records=m['design_record_ids'],source=m.get('source_member_id'))
+                    # A cut does not erase the selected physical datum offset.
+                    # Interpolate both offsets at the retained interval ends.
+                    offsets=m.get('end_offsets',[[0,0,0],[0,0,0]])
+                    mm['end_offsets']=[[a+s*(d-a) for a,d in zip(*offsets)] for s in (u,t)]
+                    mm['original_physical_member_id']=m.get('original_physical_member_id',m['id'])
+                    new.append(mm)
+                    # Only a newly cut end receives an opening connection.
+                    # Preserve the selected original end detail at uncut ends.
+                    for end,station in ((0,u),(1,t)):
+                        if (end==0 and station>1e-7) or (end==1 and station<1-1e-7):
+                            b.connection(mm['id']+':opening-'+str(end),'test_floor_opening',mm['axis'][end],[mm])
                 replaced[m['id']]=[q['id'] for q in new]
                 b.changes.append(dict(kind='framed_opening_cut',old_member=m['id'],new_members=replaced[m['id']],opening=feature['id'],basis='A'))
             if replaced:
-                kept=[]
+                kept=[];byid={m['id']:m for m in b.members}
                 for c in b.connections:
                     original=list(c['member_ids'])
-                    if original[0] in replaced:continue
-                    c['member_ids']=[mid for mid in original if mid not in replaced]
+                    mapped=[]
+                    for mid in original:
+                        if mid not in replaced:mapped.append(mid);continue
+                        for rid in replaced[mid]:
+                            axis=byid[rid]['axis'];vector=sub(axis[1],axis[0]);length=math.dist(*axis)
+                            station=sum(v*(q-a) for v,q,a in zip(vector,c['point'],axis[0]))/(length*length)
+                            nearest=add(axis[0],mul(vector,max(0,min(1,station))))
+                            if math.dist(nearest,c['point'])<.01:mapped.append(rid)
+                    c['member_ids']=list(dict.fromkeys(mapped))
                     if c['member_ids']:
                         if len(c['member_ids'])==1 and c['detail_ref']['id'] in ('review_truss_node','review_truss_heel'):c['detail_ref']['id']='review_roof_seat'
                         kept.append(c)
+                    else:b.changes.append(dict(kind='opening_removed_connection',source=c,source_member_ids=original,opening=feature['id'],basis='Accepted fictional opening removes this station; source design remains in the record register'))
                 b.connections=kept
             fp=b.profile('W18X40' if ishr else '2X1200S250-97');depth=b.depth(fp);zz=z-depth/2 if ishr else z-.75-depth/2
             for j,(aa,dd) in enumerate((([x-4,y-4,zz],[x+w+4,y-4,zz]),([x-4,y+h+4,zz],[x+w+4,y+h+4,zz]),([x-4,y-4,zz],[x-4,y+h+4,zz]),([x+w+4,y-4,zz],[x+w+4,y+h+4,zz]))):

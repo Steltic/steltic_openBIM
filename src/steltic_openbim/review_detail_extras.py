@@ -127,6 +127,9 @@ def joist_clip(ctx):
 
 
 def roof_seat(ctx):
+    if ctx.model['pilot'].startswith('hr'):
+        from .review_hr_seats import roof
+        return roof(ctx)
     a,p,pid=ctx.a,ctx.p,ctx.pid;cp=next((m['profile_id'] for m in ctx.ms if m['kind']=='truss_chord'),pid);depth=effective(p,cp)
     sp=ctx.select(('stud','chord','column'),channel(p,'ASSEMBLY-WALL600',6,1.625,.0713,.5));tp=channel(p,'ASSEMBLY-TRACK600',6.2,1.5,.0713,0)
     if ctx.model['pilot'].startswith('hr'):

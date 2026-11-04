@@ -18,27 +18,94 @@ def bounds(faces):
 
 def clip_part(part,normal,offset):
     """Keep dot(point,normal)>=offset; used for physically separated mitre ends."""
-    faces=[];segments=[]
+    faces=[]
     for face in part['faces']:
-        out=[];hits=[]
+        out=[]
         for a,b in zip(face,face[1:]+face[:1]):
             da,db=dot(a,normal)-offset,dot(b,normal)-offset
             if da>=-1e-8:out.append(a)
             if da*db < -1e-14:
-                p=add(a,mul(sub(b,a),da/(da-db)));out.append(p);hits.append(p)
+                p=add(a,mul(sub(b,a),da/(da-db)));out.append(p)
         if len(out)>=3:faces.append(out)
-        if len(hits)==2:segments.append(hits)
+    # A stitched cap commonly closes by repeating its first point. Mesh faces
+    # close implicitly, so retaining that point creates a zero-length edge.
+    clean=[]
+    for face in faces:
+        ring=[]
+        for q in face:
+            if not ring or math.dist(ring[-1],q)>1e-7:ring.append(q)
+        if len(ring)>1 and math.dist(ring[0],ring[-1])<1e-7:ring.pop()
+        if len(ring)>=3 and any(sum(v*v for v in cross(sub(ring[i],ring[0]),sub(ring[i+1],ring[0])))>1e-16 for i in range(1,len(ring)-1)):clean.append(ring)
+    # Build the cap from the resulting boundary, including original edges that
+    # lie on the cutting plane. Counting only two strict crossing points misses
+    # the cap when a skew cut passes through an existing vertical plate edge.
+    from collections import defaultdict
+    edges=defaultdict(list)
+    key=lambda q:tuple(round(v,7) for v in q)
+    for face in clean:
+        for a,b in zip(face,face[1:]+face[:1]):
+            if abs(dot(a,normal)-offset)<1e-6 and abs(dot(b,normal)-offset)<1e-6:
+                edges[tuple(sorted((key(a),key(b))))].append((a,b))
+    segments=[rows[0] for rows in edges.values() if len(rows)==1]
     while segments:
-        chain=segments.pop();changed=True
-        while changed:
-            changed=False
+        a,b=segments.pop();chain=[b,a]
+        while math.dist(chain[-1],chain[0])>1e-6:
+            found=False
             for i,(a,b) in enumerate(segments):
-                if math.dist(chain[-1],a)<1e-6:chain.append(b)
-                elif math.dist(chain[-1],b)<1e-6:chain.append(a)
+                if math.dist(chain[-1],b)<1e-6:chain.append(a)
+                elif math.dist(chain[-1],a)<1e-6:chain.append(b)
                 else:continue
-                segments.pop(i);changed=True;break
-        if len(chain)>=3:faces.append(chain)
-    part['faces']=faces;part['bounds']=bounds(faces);part.setdefault('cut_planes',[]).append(dict(normal=normal,offset=offset))
+                segments.pop(i);found=True;break
+            if not found:break
+        if len(chain)>=4 and math.dist(chain[-1],chain[0])<1e-6:clean.append(chain[:-1])
+    part['faces']=clean;part['bounds']=bounds(clean);part.setdefault('cut_planes',[]).append(dict(normal=normal,offset=offset))
+
+
+def reflect_z(assembly):
+    """Reflect geometry AND receiver/fastener metadata for a mirrored detail."""
+    def point(p):return [p[0],p[1],-p[2]]
+    for part in assembly.parts:
+        # A reflection reverses handedness; reverse face winding as well.
+        part['faces']=[[point(p) for p in reversed(face)] for face in part['faces']]
+        part['bounds']=bounds(part['faces'])
+        if 'geometry' in part:
+            part['geometry']=dict(type='mesh',faces=copy.deepcopy(part['faces']))
+        if 'member' in part:
+            member=part['member'];member['axis']=[point(p) for p in member['axis']]
+            member['local_y']=point(member['local_y'])
+            member['end_offsets']=[point(p) for p in member.get('end_offsets',[[0,0,0],[0,0,0]])]
+        if 'points' in part:part['points']=[point(p) for p in part['points']]
+        if 'axis' in part:part['axis']=point(part['axis'])
+        if 'polygon' in part:part['polygon']=[point(p) for p in part['polygon']]
+        if 'normal' in part:part['normal']=point(part['normal'])
+        for cut in part.get('cut_planes',[]):cut['normal']=point(cut['normal'])
+    for fastener in assembly.fasteners:
+        fastener['points']=[point(p) for p in fastener['points']];fastener['axis']=point(fastener['axis'])
+    for item in assembly.welds+assembly.dimensions:
+        item['a']=point(item['a']);item['b']=point(item['b'])
+    if assembly.section_axis==2:assembly.section_at=-assembly.section_at
+
+
+def upright_receiver(assembly):
+    """Rotate a vertical receiver from local X into drawing Z, including metadata."""
+    rotate=lambda p:[-p[2],p[1],p[0]]
+    for part in assembly.parts:
+        part['faces']=[[rotate(p) for p in face] for face in part['faces']]
+        part['bounds']=bounds(part['faces'])
+        if 'geometry' in part:part['geometry']=dict(type='mesh',faces=copy.deepcopy(part['faces']))
+        if 'member' in part:
+            m=part['member'];m['axis']=[rotate(p) for p in m['axis']]
+            m['local_y']=rotate(m['local_y']);m['end_offsets']=[rotate(p) for p in m['end_offsets']]
+        for field in ('points','polygon'):
+            if field in part:part[field]=[rotate(p) for p in part[field]]
+        for field in ('axis','normal'):
+            if field in part:part[field]=rotate(part[field])
+        if 'pattern' in part:part['pattern']['axes']=[rotate(v) for v in part['pattern']['axes']]
+        for cut in part.get('cut_planes',[]):cut['normal']=rotate(cut['normal'])
+    for f in assembly.fasteners:f['points']=[rotate(p) for p in f['points']];f['axis']=rotate(f['axis'])
+    for item in assembly.welds+assembly.dimensions:item['a']=rotate(item['a']);item['b']=rotate(item['b'])
+    if assembly.section_axis==0:assembly.section_axis=2
+    elif assembly.section_axis==2:assembly.section_axis=0;assembly.section_at=-assembly.section_at
 
 
 class Assembly:
@@ -53,11 +120,36 @@ class Assembly:
         item=dict(id=label,description=description,basis=basis,kind=kind,faces=faces,**data)
         item['bounds']=bounds(faces);self.parts.append(item);return item
 
-    def member(self,label,pid,a,b,y=(0,1,0),basis='S',description=None,**extra):
+    def member(self,label,pid,a,b,y=(0,1,0),basis='S',description=None,representation_role=None,**extra):
         if pid.startswith('ASSEMBLY-'):basis='A'
         v=unit(sub(b,a));y=unit(sub(y,mul(v,dot(v,y))))
         m=dict(id=label,axis=[list(a),list(b)],end_offsets=[[0,0,0],[0,0,0]],profile_id=pid,local_y=y,**extra)
-        return self.part(label,description or pid,member_faces(m,self.profiles),basis,'member',member=m,profile_id=pid)
+        part=self.part(label,description or pid,member_faces(m,self.profiles),basis,'member',member=m,profile_id=pid)
+        if representation_role:
+            part['representation_role']=representation_role
+        needed={pid};pending=[pid]
+        while pending:
+            for component in self.profiles[pending.pop()].get('components',[]):
+                child=component['profile_id']
+                if child not in needed:needed.add(child);pending.append(child)
+        part['section_definitions']=[copy.deepcopy(self.profiles[key]) for key in sorted(needed)]
+        return part
+
+    def translate(self,delta):
+        """Translate the whole local detail, including all attachment metadata."""
+        from .bim_assemblies import transform_geometry
+        frame=dict(origin=delta,x_axis=[1,0,0],y_axis=[0,1,0])
+        for part in self.parts:
+            part['faces']=[[add(p,delta) for p in face] for face in part['faces']]
+            part['bounds']=bounds(part['faces'])
+            if 'geometry' in part:part['geometry']=transform_geometry(part['geometry'],frame)
+            if 'member' in part:part['member']['axis']=[add(p,delta) for p in part['member']['axis']]
+            if 'points' in part:part['points']=[add(p,delta) for p in part['points']]
+            if 'polygon' in part:part['polygon']=[add(p,delta) for p in part['polygon']]
+            for cut in part.get('cut_planes',[]):cut['offset']+=dot(delta,cut['normal'])
+        for fastener in self.fasteners:fastener['points']=[add(p,delta) for p in fastener['points']]
+        for item in self.welds+self.dimensions:item['a']=add(item['a'],delta);item['b']=add(item['b'],delta)
+        self.section_at+=delta[self.section_axis]
 
     def box(self,label,origin,size,basis='A',description=None,x=(1,0,0),y=(0,1,0),kind='plate'):
         g=dict(type='box',origin=list(origin),size=list(size),x_axis=list(x),y_axis=list(y))

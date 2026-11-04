@@ -22,7 +22,13 @@ def locations(b,d,line,k,ranges):
     from .review_cfs import spaced_segments
     name=line['name'];widths=[s[0] for s in line['segments'][str(k)]];n=len(widths)
     if b.key=='cfs2' and d=='Y':
-        half=n//2;return spaced_segments(0,31,widths[:half],0)+spaced_segments(37,68,widths[half:],0)
+        # Source specifies two continuous multi-bay walls with shared
+        # interior posts. Keep each group contiguous and centre it in its wing.
+        half=n//2;result=[]
+        for lo,hi,ws in ((0,31,widths[:half]),(37,68,widths[half:])):
+            x=(lo+hi-sum(ws))/2
+            for width in ws:result.append((x,x+width));x+=width
+        return result
     if b.key=='cfs6' and name in ('Y0','YLE'):ranges=[(0,152)]
     if b.key=='cfs6' and name in ('YLC1','YLC2'):ranges=[(0,90)]
     if b.key=='cfs6' and name.startswith('P'):ranges=[(90,152)]
