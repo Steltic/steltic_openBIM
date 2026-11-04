@@ -10,8 +10,10 @@ from .drawing_workflow import DrawingStore,StaleRevision
 from .job_sources import JobSources
 
 
-def router(store:DrawingStore,source_roots=None):
+def router(store:DrawingStore,source_roots=None,service_urls=None):
     r=APIRouter(); jobs=JobSources(source_roots)
+    from .native_requests import router as native_router
+    r.include_router(native_router(store,jobs,service_urls))
 
     def invoke(fn,*args):
         try: return fn(*args)
@@ -42,9 +44,8 @@ def router(store:DrawingStore,source_roots=None):
     @r.post('/api/project/{p}/drawings/import')
     async def import_source(p:str,request:Request):
         body=await body_object(request)
-        path=invoke(jobs.path,body.get('module'),body.get('job'))
-        package=invoke(json_object,path.read_bytes())
-        return await run_in_threadpool(invoke,store.import_package,p,package,body.get('revision'))
+        package,_=invoke(jobs.load_current,body.get('module'),body.get('job'))
+        return await run_in_threadpool(invoke,store.import_package,p,package,body.get('revision'),dict(module=body['module'],job=body['job']))
 
     @r.post('/api/project/{p}/drawings/upload')
     async def upload(p:str,request:Request):

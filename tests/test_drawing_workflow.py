@@ -85,11 +85,16 @@ def test_render_failure_leaves_previous_revision_current(warehouse,tmp_path,monk
 
 
 def test_api_source_import_answers_history_and_path_confinement(warehouse,tmp_path):
-    job=tmp_path/'hr'/'Example'/'design';job.mkdir(parents=True)
-    (job/'bim_package.json').write_text(json.dumps(warehouse))
-    store=DrawingStore(tmp_path/'drawings');app=FastAPI();app.include_router(router(store,{'HR':tmp_path/'hr'}));c=TestClient(app)
-    assert c.get('/api/drawings/sources').json()['sources']==[{'module':'HR','job':'Example'}]
-    s=c.post('/api/project/Test/drawings/import',json={'module':'HR','job':'Example'}).json()
+    import hashlib
+    job=tmp_path/'cfs'/'Example'/'design';job.mkdir(parents=True)
+    package=copy.deepcopy(warehouse)
+    source=b'# Synthetic source for the CFS warehouse test fixture\n'
+    (job.parent/'cfg.py').write_bytes(source)
+    package['provenance']['source_files']={'cfg.py':hashlib.sha256(source).hexdigest()}
+    (job/'bim_package.json').write_text(json.dumps(package))
+    store=DrawingStore(tmp_path/'drawings');app=FastAPI();app.include_router(router(store,{'CFS':tmp_path/'cfs'}));c=TestClient(app)
+    assert c.get('/api/drawings/sources').json()['sources']==[{'module':'CFS','job':'Example'}]
+    s=c.post('/api/project/Test/drawings/import',json={'module':'CFS','job':'Example'}).json()
     assert s['can_generate'] and c.get('/api/project/Test/drawings').json()['questions']['blocks_drawings'] is False
     before=c.get('/api/project/Test/drawings/file/drawings.pdf').content
     assert c.post('/api/project/Test/drawings/answers',json=answer(s)).status_code==200

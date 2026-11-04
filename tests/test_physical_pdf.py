@@ -69,6 +69,35 @@ def test_reference_only_connections_have_no_invented_assembly(tmp_path):
     assert 'No located part geometry supplied' in text and 'TBD - resolve query' in text
 
 
+def test_native_templates_draw_in_their_occurrence_frame_and_keep_variants(tmp_path):
+    from steltic_openbim import bim_assemblies as A
+    from steltic_openbim.physical_pdf import drawing_model
+    p=source_frame();physical=p['physical'];c=physical['connections'][0]
+    part=copy.deepcopy(c.pop('parts')[0]);part['geometry']['origin']=[0,0,0]
+    receiver=dict(id='COL',kind='member',axis=[[0,0,-180],[0,0,0]],profile_id='TEST',local_y=[1,0,0])
+    template=dict(id='PLATE',basis='Synthetic source selection',parts=[part],receivers=[receiver],source_record_ids=c['design_record_ids'])
+    template['revision']=A.fingerprint(template)
+    variant=copy.deepcopy(template);variant.update(id='LONGER');variant['parts'][0]['geometry']['size'][0]*=2
+    variant['revision']=A.fingerprint({k:v for k,v in variant.items() if k!='revision'})
+    physical['assemblies']=[template,variant]
+    c.update(parts=[],detail_ref=dict(id='CLIP',revision='1'),member_ids=['beam','C00'],assembly_instance=dict(template_id=template['id'],revision=template['revision'],origin=[0,0,180],x_axis=[0,1,0],y_axis=[-1,0,0],bindings={'COL':'C00'}))
+    second=copy.deepcopy(c);second.update(id='second',joint_id=physical['joints'][1]['id'])
+    second['member_ids']=['beam','C10']
+    second['assembly_instance'].update(template_id=variant['id'],revision=variant['revision'],origin=[360,0,180],bindings={'COL':'C10'})
+    physical['joints'][1]['member_ends'].append(dict(member_id='C10',end='end'))
+    physical['connections'].append(second)
+    before=fingerprint(p);model=drawing_model(p)
+    assert len(model['details'])==2
+    report=generate(p,initial_state(p,1),tmp_path)
+    assert fingerprint(p)==before
+    views=[v for v in report['views'] if v.get('kind')=='source_connection_assembly']
+    assert len(views)==8 and {v['connection_id'] for v in views}=={c['id'],'second'}
+    assert all(v['part_ids']==[v['connection_id']+':plate'] for v in views)
+    envelopes=[d['value_in'] for d in report['dimensions'] if d.get('reference')=='Source connection-part envelope']
+    assert part['geometry']['size'][0] in envelopes and 2*part['geometry']['size'][0] in envelopes
+    assert all(v<30 for v in envelopes), 'World translation must not become a part dimension'
+
+
 @pytest.mark.parametrize('kind,roof',[('floor',False),('roof',True)])
 def test_top_floor_is_only_labelled_roof_when_source_declares_it(tmp_path,kind,roof):
     p=source_frame();p['module']='CFS'

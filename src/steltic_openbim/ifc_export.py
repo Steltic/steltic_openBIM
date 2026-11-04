@@ -19,6 +19,7 @@ import ifcopenshell.validate
 
 from .drawing_workflow import fingerprint
 from .pilots.geometry import member_faces,part_faces,part_lines
+from . import bim_assemblies
 
 INCH=.0254
 
@@ -116,6 +117,9 @@ def _export_source(directory,destination,source):
         obj=ifcopenshell.api.root.create_entity(model,ifc_class=cls,name=str(label))
         obj.GlobalId=ifcopenshell.guid.compress(uuid.uuid5(uuid.NAMESPACE_URL,'steltic:'+package['building_id']+':'+key).hex)
         return obj
+    def relation(cls,key,**attributes):
+        guid=ifcopenshell.guid.compress(uuid.uuid5(uuid.NAMESPACE_URL,'steltic:'+package['building_id']+':relation:'+key).hex)
+        return model.create_entity(cls,GlobalId=guid,**attributes)
     project=entity('IfcProject',package['building_id'],'project')
     metre=ifcopenshell.api.unit.add_si_unit(model,unit_type='LENGTHUNIT')
     ifcopenshell.api.unit.assign_unit(model,units=[metre])
@@ -183,8 +187,9 @@ def _export_source(directory,destination,source):
     records={r['id']:r for r in package.get('design_records',[])}
     counts=dict(members=0,member_surfaces=0,reference_axes=0,panel_surfaces=0,panel_reference_boundaries=0,panel_opening_cuts=0,opening_references=0,connection_parts=0,connection_reference_parts=0,connection_references=0,unassigned_connection_parts=0,unassigned_elements=0)
     warnings=[];objects=[];unlocated_connections=[];property_pool={};mesh_templates={}
+    member_objects={};panel_objects={};relationship_manifest=[]
     identity_mapping=model.create_entity('IfcCartesianTransformationOperator3D',LocalOrigin=origin.Location,Scale=1.)
-    def add(cls,item,faces=(),lines=(),key=None,face_holes=()):
+    def add(cls,item,faces=(),lines=(),key=None,face_holes=(),local_frame=None):
         key=key or item['id'];obj=entity(cls,item.get('mark') or item['id'],key)
         obj.Description=item.get('description') or item.get('kind') or basis
         obj.ObjectPlacement=model.create_entity('IfcLocalPlacement',RelativePlacement=origin)
@@ -224,7 +229,12 @@ def _export_source(directory,destination,source):
                 mesh_templates[token]=model.create_entity('IfcRepresentationMap',MappingOrigin=origin,MappedRepresentation=template)
             mapped=model.create_entity('IfcMappedItem',MappingSource=mesh_templates[token],MappingTarget=identity_mapping)
             rep=model.create_entity('IfcShapeRepresentation',ContextOfItems=body_context,RepresentationIdentifier='Body',RepresentationType='MappedRepresentation',Items=[mapped])
-            obj.ObjectPlacement=model.create_entity('IfcLocalPlacement',RelativePlacement=model.create_entity('IfcAxis2Placement3D',Location=model.create_entity('IfcCartesianPoint',Coordinates=translation)))
+            if local_frame:
+                placement=bim_assemblies.transformed([v/INCH for v in translation],local_frame)
+                rotation=dict(Axis=model.create_entity('IfcDirection',DirectionRatios=tuple(float(v) for v in bim_assemblies.cross(local_frame['x_axis'],local_frame['y_axis']))),RefDirection=model.create_entity('IfcDirection',DirectionRatios=tuple(float(v) for v in local_frame['x_axis'])))
+                translation=tuple(v*INCH for v in placement)
+            else:rotation={}
+            obj.ObjectPlacement=model.create_entity('IfcLocalPlacement',RelativePlacement=model.create_entity('IfcAxis2Placement3D',Location=model.create_entity('IfcCartesianPoint',Coordinates=translation),**rotation))
             ifcopenshell.api.geometry.assign_representation(model,product=obj,representation=rep)
         elif lines:
             curves=[model.create_entity('IfcPolyline',Points=[model.create_entity('IfcCartesianPoint',Coordinates=[float(v)*INCH for v in p]) for p in line]) for line in lines]
@@ -250,6 +260,7 @@ def _export_source(directory,destination,source):
             AppliedOpeningIds=item.get('applied_opening_ids'),OpeningCutInHost=item.get('opening_cut_in_host'),
             AnalysisIds=item.get('analysis_ids'),AnalysisSegments=item.get('analysis_segments'),
             SourceIFCGuid=item.get('source_ifc_guid'),
+            SourceEntity=item,AssemblyTemplate=item.get('assembly_instance',{}).get('template_id'),
             SourceKind=item.get('kind'),SourceLevel=None if item.get('level_basis') else item.get('level'),AssignedLevel=item.get('level'),
             SourceStorey=item.get('storey'),LevelSourceField=item.get('level_source_field'),
             StoreyAssignment=item.get('level_basis') or ('source declared' if item.get('level') is not None else 'not supplied; contained in building'),
@@ -264,7 +275,7 @@ def _export_source(directory,destination,source):
             try:faces=member_faces(m,profiles)
             except (ValueError,KeyError,TypeError,ZeroDivisionError) as ex:warnings.append(dict(id=m['id'],message='Reference axis only: '+str(ex)[:160]))
         cls='IfcColumn' if m['kind'] in ('column','col','stud','post','endwall_post') else 'IfcBeam' if m['kind'] in ('beam','girder','joist','rafter','moment_beam') else 'IfcMember'
-        add(cls,m,faces,[m['axis']]);counts['members']+=1;counts['member_surfaces' if faces else 'reference_axes']+=1
+        member_objects[m['id']]=add(cls,m,faces,[m['axis']]);counts['members']+=1;counts['member_surfaces' if faces else 'reference_axes']+=1
     from .panel_geometry import panel_rings
     cut_openings=set()
     for p in panels:
@@ -281,13 +292,14 @@ def _export_source(directory,destination,source):
                 # A full-height/full-width opening has no remaining host mesh.
                 # Keep its original boundary as an explicit reference, never a
                 # filled wall over the opening or an invented residual strip.
-                add('IfcAnnotation',dict(p,applied_opening_ids=applied,
+                panel_objects[p['id']]=add('IfcAnnotation',dict(p,applied_opening_ids=applied,
                     geometry_role='source_panel_boundary_reference',
                     description='Panel fully removed by declared openings; original boundary reference only'),
                     lines=[vertices+[vertices[0]]],key='panel:'+p['id'])
                 counts['panel_reference_boundaries']+=1;status='provisional'
                 continue
             obj=add(cls,dict(p,applied_opening_ids=applied),[r['exterior'] for r in rings],key='panel:'+p['id'],face_holes=[r['holes'] for r in rings])
+            panel_objects[p['id']]=obj
             if cls=='IfcBuildingElementProxy':obj.ObjectType='Coordination panel: '+kind
             counts['panel_surfaces']+=1
     counts['panel_opening_cuts']=len(cut_openings)
@@ -299,14 +311,45 @@ def _export_source(directory,destination,source):
                   description='Source opening boundary; cut in declared host panel' if opening['id'] in cut_openings else 'Source opening boundary reference; no valid planar host cut')
         if item.get('level') is None and host.get('level') is not None:
             item['level']=host['level'];item['level_basis']='Inherited from host panel: '+str(host.get('level_basis') or 'source declared')
-        add('IfcAnnotation',item,lines=[vertices+[vertices[0]]],key='opening:'+opening['id'])
+        obj=add('IfcAnnotation',item,lines=[vertices+[vertices[0]]],key='opening:'+opening['id'])
+        if opening.get('host_id') in panel_objects:
+            host=panel_objects[opening['host_id']]
+            rel=relation('IfcRelAssignsToProduct','opening-host:'+opening['id'],Name='Declared opening boundary on host',RelatedObjects=[obj],RelatingProduct=host)
+            relationship_manifest.append(dict(guid=rel.GlobalId,type=rel.is_a(),source=opening['id'],target=opening['host_id'],role='opening_host'))
         counts['opening_references']+=1
     joints={j['id']:j for j in physical.get('joints',[])}
+    templates=bim_assemblies.index(physical);assembly_meshes={}
+    counts['connection_assemblies']=0
     for c in connections:
         joint=joints.get(c.get('joint_id'),{})
-        connected=sorted(set(c.get('member_ids',[])) | {e['member_id'] for e in joint.get('member_ends',[])+joint.get('attachments',[])})
+        connected=sorted(set(c.get('member_ids',[])) | set(c.get('assembly_instance',{}).get('bindings',{}).values()) | {e['member_id'] for e in joint.get('member_ends',[])+joint.get('attachments',[])})
         source_level=c['level'] if c.get('level') is not None else joint.get('level')
         level_source=c if c.get('level') is not None else joint
+        if c.get('assembly_instance'):
+            frame=c['assembly_instance'];template=templates[frame['template_id']]
+            if template['id'] not in assembly_meshes:
+                solids=[part_faces(p,profiles) for p in template['parts']]
+                curves=[part_lines(p) for p in template['parts']]
+                assembly_meshes[template['id']]=([f for fs in solids for f in fs],[line for ls in curves for line in ls],sum(bool(fs) for fs in solids),sum(bool(ls) for ls in curves))
+            faces,lines,solid_count,curve_count=assembly_meshes[template['id']]
+            item=dict(c,level=source_level,connection_id=c['id'],connected_member_ids=connected,
+                      description='Located connection assembly; individual component identities and selections are retained in its versioned template')
+            obj=add('IfcElementAssembly',item,faces,key='connection:'+c['id'],local_frame=frame)
+            for mid in connected:
+                if mid not in member_objects:raise ValueError('Connection references missing exported member: '+mid)
+                rel=relation('IfcRelConnectsElements','connection:'+c['id']+':'+mid,Name='Declared structural connection',RelatingElement=obj,RelatedElement=member_objects[mid])
+                relationship_manifest.append(dict(guid=rel.GlobalId,type=rel.is_a(),source=c['id'],target=mid,role='connection_member'))
+            if lines:
+                located=[[bim_assemblies.transformed(p,frame) for p in line] for line in lines]
+                annotation=add('IfcAnnotation',dict(item,id=c['id']+':references',geometry_role='assembly_reference_curves'),lines=located,key='connection:'+c['id']+':references')
+                rel=relation('IfcRelAssignsToProduct','connection-references:'+c['id'],Name='Assembly weld and interface references',RelatedObjects=[annotation],RelatingProduct=obj)
+                relationship_manifest.append(dict(guid=rel.GlobalId,type=rel.is_a(),source=c['id']+':references',target=c['id'],role='assembly_references'))
+            counts['connection_assemblies']+=1
+            counts['connection_parts']+=solid_count
+            counts['connection_reference_parts']+=curve_count
+            if source_level is None:counts['unassigned_connection_parts']+=len(template['parts'])
+            continue
+        related=[member_objects[mid] for mid in connected if mid in member_objects]
         for i,part in enumerate(c.get('parts',[])):
             faces=part_faces(part,profiles);lines=part_lines(part)
             if not faces and not lines:warnings.append(dict(id=c['id'],message='Unsupported connection-part geometry'));continue
@@ -316,9 +359,15 @@ def _export_source(directory,destination,source):
                 if field in level_source:item[field]=level_source[field]
             cls='IfcAnnotation' if lines else 'IfcMechanicalFastener' if kind in ('bolt','screw','anchor') else 'IfcPlate'
             if lines:item['description']='Connection reference only: '+kind+'; physical part set-out remains unspecified'
-            add(cls,item,faces,lines,key='connection:'+c['id']+':'+str(i))
+            related.append(add(cls,item,faces,lines,key='connection:'+c['id']+':'+str(i)))
             counts['connection_reference_parts' if lines else 'connection_parts']+=1
             if source_level is None:counts['unassigned_connection_parts']+=1
+        if related:
+            group=entity('IfcGroup',c['id'],'connection-group:'+c['id'])
+            group.Description='Source connection occurrence and its participating members, parts and references'
+            property_set(model,group,dict(SourceConnection=c),cache=property_pool)
+            rel=relation('IfcRelAssignsToGroup','connection-group:'+c['id'],RelatedObjects=list(dict.fromkeys(related)),RelatingGroup=group)
+            relationship_manifest.append(dict(guid=rel.GlobalId,type=rel.is_a(),source=c['id'],targets=[o.GlobalId for o in related],role='connection_group'))
         if not c.get('parts'):
             # Keep the complete declared reference, including design parameters,
             # storey and adopted-detail identity. No hardware placement is inferred.
@@ -341,6 +390,11 @@ def _export_source(directory,destination,source):
         DesignRecords=package.get('design_records',[]),
         ConnectionSchedules=[r for r in package.get('design_records',[]) if r['table']=='connections'],
         UnlocatedConnectionReferences=unlocated_connections,Interfaces=package['physical'].get('interfaces',[]),
+        AssemblyTemplates=physical.get('assemblies',[]),InformationDecisions=package.get('information'),SourceRelationships=relationship_manifest,
+        SourceProfiles=physical.get('profiles',[]),SourceMaterials=physical.get('materials',[]),
+        SourceJoints=physical.get('joints',[]),SourceCoverage=physical.get('coverage',{}),
+        SourceAnalysisOnly=physical.get('analysis_only',[]),SourceRecordDispositions=physical.get('record_dispositions',[]),
+        SourceJointDispositions=physical.get('joint_dispositions',[]),
         UnassignedConnectionParts=counts['unassigned_connection_parts'],
         UnassignedElements=counts['unassigned_elements'],
         SourceOpenings=physical.get('openings',[]),SourceOpeningCoordinateUnits='inch',
@@ -354,7 +408,7 @@ def _export_source(directory,destination,source):
     reopened=ifcopenshell.open(str(destination))
     if len(reopened.by_type('IfcElement'))+len(reopened.by_type('IfcAnnotation'))!=len(objects):raise ValueError('IFC round-trip product count changed')
     return dict(schema='IFC4',source=source,**({'physical_revision':state['revision'],'source_job':state['source_job'],'source_module':state['source_module']} if structural else {'drawing_revision':state['revision']}),source_sha256=state['source_model_sha256'],
-        counts=counts,objects=objects,warnings=warnings,physical_checks=physical_checks,source_validation=source_validation,
+        counts=counts,objects=objects,relationships=relationship_manifest,warnings=warnings,physical_checks=physical_checks,source_validation=source_validation,
         source_evidence=state.get('source_evidence'),source_status=status,schema_errors=errors,mesh_templates=len(mesh_templates),shared_property_values=len(property_pool),sha256=hashlib.sha256(destination.read_bytes()).hexdigest(),
         limits=['Coordination IFC, not an editable Revit family library or a fabrication issue.',
                 'Panels are surfaces; their thickness is metadata. Valid coplanar openings cut explicitly related host panels, with source boundaries retained as annotations. Members are not cut. Unconfirmed proposals remain request metadata.',
