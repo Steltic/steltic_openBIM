@@ -308,7 +308,9 @@ def _export_source(directory,destination,source):
             counts['connection_reference_parts' if lines else 'connection_parts']+=1
             if source_level is None:counts['unassigned_connection_parts']+=1
         if not c.get('parts'):
-            unlocated_connections.append({k:c[k] for k in ('id','point','joint_id','member_ids','detail_ref','design_record_ids','basis') if k in c})
+            # Keep the complete declared reference, including design parameters,
+            # storey and adopted-detail identity. No hardware placement is inferred.
+            unlocated_connections.append(c)
             counts['connection_references']+=1
     for level,items in containment.items():
         ifcopenshell.api.spatial.assign_container(model,products=items,relating_structure=storeys.get(level,building))
@@ -320,6 +322,9 @@ def _export_source(directory,destination,source):
         ReferenceSystem=reference or None,RequireConnectionParts=package.get('require_connection_parts',False),
         **({'SourceStatus':status} if structural else {'DrawingStatus':status}),
         OpenRequests=[dict(id=r['id'],proposal=r['proposal'],confirmed=r['confirmed']) for r in state['requests']],
+        # Some saved designs (anchorage, hold-downs, schedules, etc.) have no
+        # corresponding solid. Product-level properties alone would lose them.
+        DesignRecords=package.get('design_records',[]),
         ConnectionSchedules=[r for r in package.get('design_records',[]) if r['table']=='connections'],
         UnlocatedConnectionReferences=unlocated_connections,Interfaces=package['physical'].get('interfaces',[]),
         UnassignedConnectionParts=counts['unassigned_connection_parts'],

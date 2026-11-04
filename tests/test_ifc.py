@@ -103,6 +103,37 @@ def test_steltic_export_schema_roundtrip_coordinates_and_stable_ids(tmp_path):
     assert [o['guid'] for o in report['objects']]==[o['guid'] for o in second['objects']]
 
 
+def test_saved_design_register_and_connection_parameters_survive_without_solids(tmp_path):
+    folder,p,_=drawing_source(tmp_path)
+    for table in ('anchorage','schedules'):
+        record=copy.deepcopy(p['design_records'][0])
+        record.update(id=table+':gold-1',table=table,source_pointer='/'+table+'/0',
+                      data={'name':'Saved '+table,'quantity':4,'note':'Gold design; no located hardware supplied'})
+        p['design_records'].append(record)
+    connection=p['physical']['connections'][0]
+    connection.update(parts=[],level=2,parameters={'anchor_diameter_in':.75,'anchor_count':4},
+                      detail_ref={'id':'BASE-A','revision':'1'},
+                      assembly_id='BASE-A',drawing_ref='S501/1',
+                      design_record_ids=['anchorage:gold-1'])
+    write_json(folder/'source.json',p);write_json(folder/'state.json',initial_state(p,1))
+    source_bytes=(folder/'source.json').read_bytes()
+    path=tmp_path/'gold.ifc';report=export_drawing(folder,path)
+    assert report['counts']['connection_parts']==0 and report['counts']['connection_references']==1
+    imported=dict(source_sha256=report['sha256'],revision=2,status='built',options={'scope':'all','units':'auto'})
+    returned=tmp_path/'returned.ifc';result=export_import(path,returned,imported)
+    assert not result['schema_errors']
+    for file in (path,returned):
+        model=ifcopenshell.open(str(file))
+        props=ifcopenshell.util.element.get_psets(model.by_type('IfcProject')[0])['Steltic_Coordination']
+        assert json.loads(props['DesignRecords'])==p['design_records']
+        assert json.loads(props['UnlocatedConnectionReferences'])==[connection]
+        assert json.loads(props['ConnectionSchedules'])==[r for r in p['design_records'] if r['table']=='connections']
+        assert not model.by_type('IfcMechanicalFastener') and not model.by_type('IfcPlate')
+    original=ifcopenshell.open(str(path));retained=ifcopenshell.open(str(returned))
+    assert all(retained.by_id(e.id()).to_string()==e.to_string() for e in original)
+    assert (folder/'source.json').read_bytes()==source_bytes
+
+
 def test_recovered_worklines_export_every_occurrence_without_inventing_solids(tmp_path):
     from test_source_worklines import grouped_package
     p=grouped_package();s=initial_state(p,1);s['representation']='captured_source_worklines'
