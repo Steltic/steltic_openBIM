@@ -83,6 +83,9 @@ def build_scene(model,package,c,subtype=''):
     if family=='review_track_corner':
         from .review_track_corners import draw
         draw(ctx);return ctx.finish()
+    if family=='review_track_splice':
+        from .review_track_splices import draw
+        draw(ctx);return ctx.finish()
     if family=='review_rod_coupler':
         from .review_cfs_rods import draw
         draw(ctx);return ctx.finish()
