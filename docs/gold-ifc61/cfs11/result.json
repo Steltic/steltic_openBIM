@@ -1,0 +1,98 @@
+{
+  "case": "cfs11",
+  "module": "CFS",
+  "title": "Gypsum shear walls",
+  "status": "passed",
+  "scope": "Gold HR/CFS model-only replay with saved physical supplements; IFC import/export transport.",
+  "native_replay": true,
+  "source_files_unchanged": true,
+  "saved_designs_match": true,
+  "llm_calls": 0,
+  "redesign": false,
+  "drawings": false,
+  "source_replay_binding_matches": true,
+  "schema_errors": [],
+  "source_coverage": {
+    "members": 8636,
+    "panels": 250,
+    "openings": 95,
+    "connection_references": 15558,
+    "connection_parts": 0,
+    "design_records": 481,
+    "member_surfaces": 8636,
+    "reference_axes": 0
+  },
+  "entities_compared": 123483,
+  "entity_classes": {
+    "IFCPROJECT": 1,
+    "IFCSIUNIT": 1,
+    "IFCUNITASSIGNMENT": 1,
+    "IFCCARTESIANPOINT": 9501,
+    "IFCDIRECTION": 17966,
+    "IFCAXIS2PLACEMENT3D": 8984,
+    "IFCGEOMETRICREPRESENTATIONCONTEXT": 1,
+    "IFCGEOMETRICREPRESENTATIONSUBCONTEXT": 1,
+    "IFCSITE": 1,
+    "IFCBUILDING": 1,
+    "IFCRELAGGREGATES": 3,
+    "IFCBUILDINGSTOREY": 4,
+    "IFCGRID": 1,
+    "IFCPOLYLINE": 116,
+    "IFCGRIDAXIS": 21,
+    "IFCRELCONTAINEDINSPATIALSTRUCTURE": 4,
+    "IFCLOCALPLACEMENT": 17868,
+    "IFCPROPERTYSET": 8984,
+    "IFCRELDEFINESBYPROPERTIES": 8984,
+    "IFCPROPERTYSINGLEVALUE": 9443,
+    "IFCCARTESIANTRANSFORMATIONOPERATOR3D": 1,
+    "IFCMEMBER": 4324,
+    "IFCCARTESIANPOINTLIST3D": 191,
+    "IFCINDEXEDPOLYGONALFACE": 4906,
+    "IFCPOLYGONALFACESET": 191,
+    "IFCSHAPEREPRESENTATION": 9172,
+    "IFCREPRESENTATIONMAP": 191,
+    "IFCMAPPEDITEM": 8886,
+    "IFCPRODUCTDEFINITIONSHAPE": 8981,
+    "IFCMATERIAL": 1,
+    "IFCCOLUMN": 3308,
+    "IFCBEAM": 1004,
+    "IFCBUILDINGELEMENTPROXY": 247,
+    "IFCSLAB": 3,
+    "IFCANNOTATION": 95,
+    "IFCGEOMETRICCURVESET": 95,
+    "IFCRELASSOCIATESMATERIAL": 1
+  },
+  "original_entities_unchanged": true,
+  "added_review_entities": 9,
+  "products_compared": 8981,
+  "every_product_geometry_and_data_identical": true,
+  "review_counts": {
+    "source_products": 8981,
+    "selected": 8981,
+    "displayed": 8981,
+    "unrendered": 0,
+    "excluded_by_scope": 0,
+    "triangles": 669422
+  },
+  "source_findings": [
+    {
+      "code": "missing_material",
+      "count": 3
+    }
+  ],
+  "returned_findings": [
+    {
+      "code": "missing_material",
+      "count": 3
+    }
+  ],
+  "source_sha256": "56909e3876cdc1feccb18650edb2b4c6185ce16066e123c2454bc88bd684a9ee",
+  "returned_sha256": "ea74384cf7f430f388f9ae97b66bc733437f6b3ed9044c1c0305fc3f20bb7176",
+  "source_export_seconds": 16.89653444290161,
+  "hub_seconds": 183.034410238266,
+  "limitations": [
+    "Existing fictional coordination supplements are retained and attributed.",
+    "Source geometry/data findings remain visible; this is not a new structural design approval.",
+    "Connections without placed hardware retain complete design records and declared references; no placements are invented."
+  ]
+}

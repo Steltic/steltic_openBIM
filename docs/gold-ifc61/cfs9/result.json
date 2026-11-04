@@ -1,0 +1,107 @@
+{
+  "case": "cfs9",
+  "module": "CFS",
+  "title": "Podium wall building",
+  "status": "passed",
+  "scope": "Gold HR/CFS model-only replay with saved physical supplements; IFC import/export transport.",
+  "native_replay": true,
+  "source_files_unchanged": true,
+  "saved_designs_match": true,
+  "llm_calls": 0,
+  "redesign": false,
+  "drawings": false,
+  "source_replay_binding_matches": true,
+  "schema_errors": [],
+  "source_coverage": {
+    "members": 24517,
+    "panels": 596,
+    "openings": 271,
+    "connection_references": 44638,
+    "connection_parts": 0,
+    "design_records": 331,
+    "member_surfaces": 24517,
+    "reference_axes": 0
+  },
+  "entities_compared": 335533,
+  "entity_classes": {
+    "IFCPROJECT": 1,
+    "IFCSIUNIT": 1,
+    "IFCUNITASSIGNMENT": 1,
+    "IFCCARTESIANPOINT": 26780,
+    "IFCDIRECTION": 50772,
+    "IFCAXIS2PLACEMENT3D": 25387,
+    "IFCGEOMETRICREPRESENTATIONCONTEXT": 1,
+    "IFCGEOMETRICREPRESENTATIONSUBCONTEXT": 1,
+    "IFCSITE": 1,
+    "IFCBUILDING": 1,
+    "IFCRELAGGREGATES": 3,
+    "IFCBUILDINGSTOREY": 6,
+    "IFCGRID": 1,
+    "IFCPOLYLINE": 290,
+    "IFCGRIDAXIS": 19,
+    "IFCRELCONTAINEDINSPATIALSTRUCTURE": 7,
+    "IFCLOCALPLACEMENT": 50498,
+    "IFCPROPERTYSET": 25387,
+    "IFCRELDEFINESBYPROPERTIES": 25387,
+    "IFCPROPERTYSINGLEVALUE": 25970,
+    "IFCCARTESIANTRANSFORMATIONOPERATOR3D": 1,
+    "IFCMEMBER": 6194,
+    "IFCCARTESIANPOINTLIST3D": 107,
+    "IFCINDEXEDPOLYGONALFACE": 3051,
+    "IFCPOLYGONALFACESET": 107,
+    "IFCSHAPEREPRESENTATION": 25491,
+    "IFCREPRESENTATIONMAP": 107,
+    "IFCMAPPEDITEM": 25113,
+    "IFCPRODUCTDEFINITIONSHAPE": 25384,
+    "IFCMATERIAL": 1,
+    "IFCCOLUMN": 11935,
+    "IFCBEAM": 6388,
+    "IFCBUILDINGELEMENTPROXY": 591,
+    "IFCSLAB": 5,
+    "IFCINDEXEDPOLYGONALFACEWITHVOIDS": 1,
+    "IFCANNOTATION": 271,
+    "IFCGEOMETRICCURVESET": 271,
+    "IFCRELASSOCIATESMATERIAL": 1
+  },
+  "original_entities_unchanged": true,
+  "added_review_entities": 9,
+  "products_compared": 25384,
+  "every_product_geometry_and_data_identical": true,
+  "review_counts": {
+    "source_products": 25384,
+    "selected": 25384,
+    "displayed": 25384,
+    "unrendered": 0,
+    "excluded_by_scope": 0,
+    "triangles": 1579552
+  },
+  "source_findings": [
+    {
+      "code": "missing_material",
+      "count": 5
+    },
+    {
+      "code": "declared_physical_constituent_overlap",
+      "count": 32
+    }
+  ],
+  "returned_findings": [
+    {
+      "code": "missing_material",
+      "count": 5
+    },
+    {
+      "code": "declared_physical_constituent_overlap",
+      "count": 32
+    }
+  ],
+  "source_sha256": "a5d447854824fbbb1754bde5229de8f6e65cb253ea043ede39ad7c3632ecda25",
+  "returned_sha256": "38ca942c8cb8125b6eb28293b7ccb8696e672761caed8cb366abd39fdb05e827",
+  "source_export_seconds": 46.76220512390137,
+  "hub_seconds": 502.27827525138855,
+  "limitations": [
+    "Existing fictional coordination supplements are retained and attributed.",
+    "Source geometry/data findings remain visible; this is not a new structural design approval.",
+    "Connections without placed hardware retain complete design records and declared references; no placements are invented."
+  ]
+}

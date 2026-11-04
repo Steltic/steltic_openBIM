@@ -1,0 +1,13 @@
+{
+  "heads": {
+    "steltic_openbim": "6958f8eb1b7d5293d5f047796659195ff2a75ec4",
+    "hub": "a4e6d1396a678083c3f64e0810c0452c07647c6d"
+  },
+  "matching_ifc_consumers": [
+    "steltic_openbim",
+    "steltic_userbuilding"
+  ],
+  "temporary_cfs_override_restored": true,
+  "paid_workers_resumed": false,
+  "llm_calls": 0
+}

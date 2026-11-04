@@ -1,0 +1,107 @@
+{
+  "case": "cfs13",
+  "module": "CFS",
+  "title": "Type II WSP walls",
+  "status": "passed",
+  "scope": "Gold HR/CFS model-only replay with saved physical supplements; IFC import/export transport.",
+  "native_replay": true,
+  "source_files_unchanged": true,
+  "saved_designs_match": true,
+  "llm_calls": 0,
+  "redesign": false,
+  "drawings": false,
+  "source_replay_binding_matches": true,
+  "schema_errors": [],
+  "source_coverage": {
+    "members": 7823,
+    "panels": 161,
+    "openings": 96,
+    "connection_references": 13028,
+    "connection_parts": 0,
+    "design_records": 448,
+    "member_surfaces": 7823,
+    "reference_axes": 0
+  },
+  "entities_compared": 112939,
+  "entity_classes": {
+    "IFCPROJECT": 1,
+    "IFCSIUNIT": 1,
+    "IFCUNITASSIGNMENT": 1,
+    "IFCCARTESIANPOINT": 8589,
+    "IFCDIRECTION": 16164,
+    "IFCAXIS2PLACEMENT3D": 8083,
+    "IFCGEOMETRICREPRESENTATIONCONTEXT": 1,
+    "IFCGEOMETRICREPRESENTATIONSUBCONTEXT": 1,
+    "IFCSITE": 1,
+    "IFCBUILDING": 1,
+    "IFCRELAGGREGATES": 3,
+    "IFCBUILDINGSTOREY": 5,
+    "IFCGRID": 1,
+    "IFCPOLYLINE": 109,
+    "IFCGRIDAXIS": 13,
+    "IFCRELCONTAINEDINSPATIALSTRUCTURE": 5,
+    "IFCLOCALPLACEMENT": 16065,
+    "IFCPROPERTYSET": 8083,
+    "IFCRELDEFINESBYPROPERTIES": 8083,
+    "IFCPROPERTYSINGLEVALUE": 8557,
+    "IFCCARTESIANTRANSFORMATIONOPERATOR3D": 1,
+    "IFCMEMBER": 3274,
+    "IFCCARTESIANPOINTLIST3D": 173,
+    "IFCINDEXEDPOLYGONALFACE": 6156,
+    "IFCPOLYGONALFACESET": 173,
+    "IFCSHAPEREPRESENTATION": 8253,
+    "IFCREPRESENTATIONMAP": 173,
+    "IFCMAPPEDITEM": 7984,
+    "IFCPRODUCTDEFINITIONSHAPE": 8080,
+    "IFCMATERIAL": 1,
+    "IFCCOLUMN": 3238,
+    "IFCBEAM": 1311,
+    "IFCBUILDINGELEMENTPROXY": 157,
+    "IFCSLAB": 4,
+    "IFCINDEXEDPOLYGONALFACEWITHVOIDS": 1,
+    "IFCANNOTATION": 96,
+    "IFCGEOMETRICCURVESET": 96,
+    "IFCRELASSOCIATESMATERIAL": 1
+  },
+  "original_entities_unchanged": true,
+  "added_review_entities": 9,
+  "products_compared": 8080,
+  "every_product_geometry_and_data_identical": true,
+  "review_counts": {
+    "source_products": 8080,
+    "selected": 8080,
+    "displayed": 8080,
+    "unrendered": 0,
+    "excluded_by_scope": 0,
+    "triangles": 583082
+  },
+  "source_findings": [
+    {
+      "code": "missing_material",
+      "count": 4
+    },
+    {
+      "code": "declared_physical_constituent_overlap",
+      "count": 3
+    }
+  ],
+  "returned_findings": [
+    {
+      "code": "missing_material",
+      "count": 4
+    },
+    {
+      "code": "declared_physical_constituent_overlap",
+      "count": 3
+    }
+  ],
+  "source_sha256": "027f862be831b1da58a029339f941a06592c057c87d1e65f1fcb8c8e60f206a4",
+  "returned_sha256": "9687dca75a0c6b254c02d3445621a6f9f3029822f7e4c46e27ef2b0a5150b048",
+  "source_export_seconds": 15.675752878189087,
+  "hub_seconds": 153.99696850776672,
+  "limitations": [
+    "Existing fictional coordination supplements are retained and attributed.",
+    "Source geometry/data findings remain visible; this is not a new structural design approval.",
+    "Connections without placed hardware retain complete design records and declared references; no placements are invented."
+  ]
+}

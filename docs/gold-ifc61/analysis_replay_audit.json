@@ -1,0 +1,368 @@
+[
+  {
+    "case": "cfs1",
+    "exact_analysis_match": true,
+    "nodes": 0,
+    "elements": 0
+  },
+  {
+    "case": "cfs10",
+    "exact_analysis_match": true,
+    "nodes": 171,
+    "elements": 162
+  },
+  {
+    "case": "cfs11",
+    "exact_analysis_match": true,
+    "nodes": 0,
+    "elements": 0
+  },
+  {
+    "case": "cfs12",
+    "exact_analysis_match": true,
+    "nodes": 0,
+    "elements": 0
+  },
+  {
+    "case": "cfs13",
+    "exact_analysis_match": true,
+    "nodes": 0,
+    "elements": 0
+  },
+  {
+    "case": "cfs14",
+    "exact_analysis_match": true,
+    "nodes": 0,
+    "elements": 0
+  },
+  {
+    "case": "cfs15",
+    "exact_analysis_match": true,
+    "nodes": 0,
+    "elements": 0
+  },
+  {
+    "case": "cfs16",
+    "exact_analysis_match": true,
+    "nodes": 437,
+    "elements": 414
+  },
+  {
+    "case": "cfs17",
+    "exact_analysis_match": true,
+    "nodes": 608,
+    "elements": 589
+  },
+  {
+    "case": "cfs18",
+    "exact_analysis_match": true,
+    "nodes": 323,
+    "elements": 306
+  },
+  {
+    "case": "cfs19",
+    "exact_analysis_match": true,
+    "nodes": 120,
+    "elements": 112
+  },
+  {
+    "case": "cfs2",
+    "exact_analysis_match": true,
+    "nodes": 0,
+    "elements": 0
+  },
+  {
+    "case": "cfs25",
+    "exact_analysis_match": true,
+    "nodes": 297,
+    "elements": 286
+  },
+  {
+    "case": "cfs26",
+    "exact_analysis_match": true,
+    "nodes": 76,
+    "elements": 80
+  },
+  {
+    "case": "cfs27",
+    "exact_analysis_match": true,
+    "nodes": 527,
+    "elements": 496
+  },
+  {
+    "case": "cfs28",
+    "exact_analysis_match": true,
+    "nodes": 187,
+    "elements": 176
+  },
+  {
+    "case": "cfs29",
+    "exact_analysis_match": true,
+    "nodes": 0,
+    "elements": 0
+  },
+  {
+    "case": "cfs3",
+    "exact_analysis_match": true,
+    "nodes": 0,
+    "elements": 0
+  },
+  {
+    "case": "cfs30",
+    "exact_analysis_match": true,
+    "nodes": 425,
+    "elements": 408
+  },
+  {
+    "case": "cfs4",
+    "exact_analysis_match": true,
+    "nodes": 0,
+    "elements": 0
+  },
+  {
+    "case": "cfs5",
+    "exact_analysis_match": true,
+    "nodes": 0,
+    "elements": 0
+  },
+  {
+    "case": "cfs6",
+    "exact_analysis_match": true,
+    "nodes": 0,
+    "elements": 0
+  },
+  {
+    "case": "cfs7",
+    "exact_analysis_match": true,
+    "nodes": 0,
+    "elements": 0
+  },
+  {
+    "case": "cfs8",
+    "exact_analysis_match": true,
+    "nodes": 0,
+    "elements": 0
+  },
+  {
+    "case": "cfs9",
+    "exact_analysis_match": true,
+    "nodes": 0,
+    "elements": 0
+  },
+  {
+    "case": "hr1",
+    "exact_analysis_match": true,
+    "nodes": 169,
+    "elements": 370
+  },
+  {
+    "case": "hr10",
+    "exact_analysis_match": true,
+    "nodes": 614,
+    "elements": 1544
+  },
+  {
+    "case": "hr11",
+    "exact_analysis_match": true,
+    "nodes": 636,
+    "elements": 1534
+  },
+  {
+    "case": "hr12",
+    "exact_analysis_match": true,
+    "nodes": 463,
+    "elements": 1064
+  },
+  {
+    "case": "hr13",
+    "exact_analysis_match": true,
+    "nodes": 173,
+    "elements": 342
+  },
+  {
+    "case": "hr14",
+    "exact_analysis_match": true,
+    "nodes": 604,
+    "elements": 1328
+  },
+  {
+    "case": "hr15",
+    "exact_analysis_match": true,
+    "nodes": 768,
+    "elements": 1890
+  },
+  {
+    "case": "hr16",
+    "exact_analysis_match": true,
+    "nodes": 91,
+    "elements": 143
+  },
+  {
+    "case": "hr17",
+    "exact_analysis_match": true,
+    "nodes": 381,
+    "elements": 952
+  },
+  {
+    "case": "hr18",
+    "exact_analysis_match": true,
+    "nodes": 278,
+    "elements": 696
+  },
+  {
+    "case": "hr19",
+    "exact_analysis_match": true,
+    "nodes": 249,
+    "elements": 559
+  },
+  {
+    "case": "hr2",
+    "exact_analysis_match": true,
+    "nodes": 369,
+    "elements": 864
+  },
+  {
+    "case": "hr20",
+    "exact_analysis_match": true,
+    "nodes": 431,
+    "elements": 1096
+  },
+  {
+    "case": "hr21",
+    "exact_analysis_match": true,
+    "nodes": 71,
+    "elements": 109
+  },
+  {
+    "case": "hr22",
+    "exact_analysis_match": true,
+    "nodes": 251,
+    "elements": 558
+  },
+  {
+    "case": "hr23",
+    "exact_analysis_match": true,
+    "nodes": 329,
+    "elements": 803
+  },
+  {
+    "case": "hr24",
+    "exact_analysis_match": true,
+    "nodes": 333,
+    "elements": 805
+  },
+  {
+    "case": "hr25",
+    "exact_analysis_match": true,
+    "nodes": 460,
+    "elements": 1085
+  },
+  {
+    "case": "hr26",
+    "exact_analysis_match": true,
+    "nodes": 282,
+    "elements": 702
+  },
+  {
+    "case": "hr27",
+    "exact_analysis_match": true,
+    "nodes": 827,
+    "elements": 1620
+  },
+  {
+    "case": "hr28",
+    "exact_analysis_match": true,
+    "nodes": 116,
+    "elements": 232
+  },
+  {
+    "case": "hr29",
+    "exact_analysis_match": true,
+    "nodes": 585,
+    "elements": 1500
+  },
+  {
+    "case": "hr3",
+    "exact_analysis_match": true,
+    "nodes": 287,
+    "elements": 679
+  },
+  {
+    "case": "hr30",
+    "exact_analysis_match": true,
+    "nodes": 174,
+    "elements": 420
+  },
+  {
+    "case": "hr31",
+    "exact_analysis_match": true,
+    "nodes": 55,
+    "elements": 71
+  },
+  {
+    "case": "hr32",
+    "exact_analysis_match": true,
+    "nodes": 125,
+    "elements": 255
+  },
+  {
+    "case": "hr33",
+    "exact_analysis_match": true,
+    "nodes": 67,
+    "elements": 95
+  },
+  {
+    "case": "hr34a",
+    "exact_analysis_match": true,
+    "nodes": 310,
+    "elements": 728
+  },
+  {
+    "case": "hr34b",
+    "exact_analysis_match": true,
+    "nodes": 240,
+    "elements": 542
+  },
+  {
+    "case": "hr35",
+    "exact_analysis_match": true,
+    "nodes": 51,
+    "elements": 105
+  },
+  {
+    "case": "hr4",
+    "exact_analysis_match": true,
+    "nodes": 155,
+    "elements": 315
+  },
+  {
+    "case": "hr5",
+    "exact_analysis_match": true,
+    "nodes": 406,
+    "elements": 960
+  },
+  {
+    "case": "hr6",
+    "exact_analysis_match": true,
+    "nodes": 240,
+    "elements": 594
+  },
+  {
+    "case": "hr7a",
+    "exact_analysis_match": true,
+    "nodes": 391,
+    "elements": 910
+  },
+  {
+    "case": "hr8",
+    "exact_analysis_match": true,
+    "nodes": 423,
+    "elements": 906
+  },
+  {
+    "case": "hr9",
+    "exact_analysis_match": true,
+    "nodes": 469,
+    "elements": 1307
+  }
+]

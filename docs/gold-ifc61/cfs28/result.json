@@ -1,0 +1,97 @@
+{
+  "case": "cfs28",
+  "module": "CFS",
+  "title": "Agricultural portal",
+  "status": "passed",
+  "scope": "Gold HR/CFS model-only replay with saved physical supplements; IFC import/export transport.",
+  "native_replay": true,
+  "source_files_unchanged": true,
+  "saved_designs_match": true,
+  "llm_calls": 0,
+  "redesign": false,
+  "drawings": false,
+  "schema_errors": [],
+  "source_coverage": {
+    "members": 576,
+    "panels": 2,
+    "openings": 2,
+    "connection_references": 833,
+    "connection_parts": 0,
+    "design_records": 187,
+    "member_surfaces": 576,
+    "reference_axes": 0
+  },
+  "entities_compared": 9132,
+  "entity_classes": {
+    "IFCPROJECT": 1,
+    "IFCSIUNIT": 1,
+    "IFCUNITASSIGNMENT": 1,
+    "IFCCARTESIANPOINT": 621,
+    "IFCDIRECTION": 1164,
+    "IFCAXIS2PLACEMENT3D": 583,
+    "IFCGEOMETRICREPRESENTATIONCONTEXT": 1,
+    "IFCGEOMETRICREPRESENTATIONSUBCONTEXT": 1,
+    "IFCSITE": 1,
+    "IFCBUILDING": 1,
+    "IFCRELAGGREGATES": 3,
+    "IFCBUILDINGSTOREY": 3,
+    "IFCGRID": 1,
+    "IFCPOLYLINE": 16,
+    "IFCGRIDAXIS": 14,
+    "IFCRELCONTAINEDINSPATIALSTRUCTURE": 2,
+    "IFCLOCALPLACEMENT": 1159,
+    "IFCPROPERTYSET": 583,
+    "IFCRELDEFINESBYPROPERTIES": 583,
+    "IFCPROPERTYSINGLEVALUE": 694,
+    "IFCCARTESIANTRANSFORMATIONOPERATOR3D": 1,
+    "IFCCOLUMN": 24,
+    "IFCCARTESIANPOINTLIST3D": 40,
+    "IFCINDEXEDPOLYGONALFACE": 1214,
+    "IFCPOLYGONALFACESET": 40,
+    "IFCSHAPEREPRESENTATION": 620,
+    "IFCREPRESENTATIONMAP": 40,
+    "IFCMAPPEDITEM": 578,
+    "IFCPRODUCTDEFINITIONSHAPE": 580,
+    "IFCMATERIAL": 2,
+    "IFCBEAM": 22,
+    "IFCMEMBER": 530,
+    "IFCSLAB": 2,
+    "IFCANNOTATION": 2,
+    "IFCGEOMETRICCURVESET": 2,
+    "IFCRELASSOCIATESMATERIAL": 2
+  },
+  "original_entities_unchanged": true,
+  "added_review_entities": 9,
+  "products_compared": 580,
+  "every_product_geometry_and_data_identical": true,
+  "review_counts": {
+    "source_products": 580,
+    "selected": 580,
+    "displayed": 580,
+    "unrendered": 0,
+    "excluded_by_scope": 0,
+    "triangles": 35836
+  },
+  "source_findings": [
+    {
+      "code": "missing_material",
+      "count": 2
+    }
+  ],
+  "returned_findings": [
+    {
+      "code": "missing_material",
+      "count": 2
+    }
+  ],
+  "source_sha256": "f82de150e492adb8177df9ff17aeecbf2cc7a69d8641489e5d920a06016417f8",
+  "returned_sha256": "494bb318bd4174f2f28d127c9387baac27f60a7daec776011f3b8dee09538206",
+  "source_export_seconds": 1.3165781497955322,
+  "hub_seconds": 27.528781175613403,
+  "limitations": [
+    "Existing fictional coordination supplements are retained and attributed.",
+    "Source geometry/data findings remain visible; this is not a new structural design approval.",
+    "Connections without placed hardware retain complete design records and declared references; no placements are invented."
+  ],
+  "source_replay_binding_matches": true
+}

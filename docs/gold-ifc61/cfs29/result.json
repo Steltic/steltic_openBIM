@@ -1,0 +1,104 @@
+{
+  "case": "cfs29",
+  "module": "CFS",
+  "title": "Strap-braced mezzanine",
+  "status": "passed",
+  "scope": "Gold HR/CFS model-only replay with saved physical supplements; IFC import/export transport.",
+  "native_replay": true,
+  "source_files_unchanged": true,
+  "saved_designs_match": true,
+  "llm_calls": 0,
+  "redesign": false,
+  "drawings": false,
+  "schema_errors": [],
+  "source_coverage": {
+    "members": 331,
+    "panels": 18,
+    "openings": 0,
+    "connection_references": 646,
+    "connection_parts": 0,
+    "design_records": 71,
+    "member_surfaces": 331,
+    "reference_axes": 0
+  },
+  "entities_compared": 5597,
+  "entity_classes": {
+    "IFCPROJECT": 1,
+    "IFCSIUNIT": 1,
+    "IFCUNITASSIGNMENT": 1,
+    "IFCCARTESIANPOINT": 362,
+    "IFCDIRECTION": 702,
+    "IFCAXIS2PLACEMENT3D": 352,
+    "IFCGEOMETRICREPRESENTATIONCONTEXT": 1,
+    "IFCGEOMETRICREPRESENTATIONSUBCONTEXT": 1,
+    "IFCSITE": 1,
+    "IFCBUILDING": 1,
+    "IFCRELAGGREGATES": 3,
+    "IFCBUILDINGSTOREY": 2,
+    "IFCGRID": 1,
+    "IFCPOLYLINE": 5,
+    "IFCGRIDAXIS": 5,
+    "IFCRELCONTAINEDINSPATIALSTRUCTURE": 2,
+    "IFCLOCALPLACEMENT": 699,
+    "IFCPROPERTYSET": 352,
+    "IFCRELDEFINESBYPROPERTIES": 352,
+    "IFCPROPERTYSINGLEVALUE": 468,
+    "IFCCARTESIANTRANSFORMATIONOPERATOR3D": 1,
+    "IFCMEMBER": 154,
+    "IFCCARTESIANPOINTLIST3D": 27,
+    "IFCINDEXEDPOLYGONALFACE": 776,
+    "IFCPOLYGONALFACESET": 27,
+    "IFCSHAPEREPRESENTATION": 376,
+    "IFCREPRESENTATIONMAP": 27,
+    "IFCMAPPEDITEM": 349,
+    "IFCPRODUCTDEFINITIONSHAPE": 349,
+    "IFCMATERIAL": 2,
+    "IFCCOLUMN": 70,
+    "IFCBEAM": 107,
+    "IFCSLAB": 1,
+    "IFCBUILDINGELEMENTPROXY": 17,
+    "IFCRELASSOCIATESMATERIAL": 2
+  },
+  "original_entities_unchanged": true,
+  "added_review_entities": 9,
+  "products_compared": 349,
+  "every_product_geometry_and_data_identical": true,
+  "review_counts": {
+    "source_products": 349,
+    "selected": 349,
+    "displayed": 349,
+    "unrendered": 0,
+    "excluded_by_scope": 0,
+    "triangles": 22320
+  },
+  "source_findings": [
+    {
+      "code": "missing_material",
+      "count": 1
+    },
+    {
+      "code": "coincident_geometry",
+      "count": 4
+    }
+  ],
+  "returned_findings": [
+    {
+      "code": "missing_material",
+      "count": 1
+    },
+    {
+      "code": "coincident_geometry",
+      "count": 4
+    }
+  ],
+  "source_sha256": "60b686ebc35eb1eb8d645e46310f0fa39839811143a30034d87be4a43ffd0df8",
+  "returned_sha256": "fe6fc100d4af10b3773a79976ecb097d5f058d0e6aeaea2508d8d256c473d6ee",
+  "source_export_seconds": 0.9782464504241943,
+  "hub_seconds": 17.76505732536316,
+  "limitations": [
+    "Existing fictional coordination supplements are retained and attributed.",
+    "Source geometry/data findings remain visible; this is not a new structural design approval.",
+    "Connections without placed hardware retain complete design records and declared references; no placements are invented."
+  ],
+  "source_replay_binding_matches": true
+}
