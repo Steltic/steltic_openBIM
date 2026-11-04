@@ -1,6 +1,7 @@
 """Three coordinated views of one physical connection assembly per detail sheet."""
 import math
 from .assembly_scene import section_polygons
+from .mesh_display import display_faces,feature_edges
 from .pilots.model import cross,dot,sub,unit
 
 COLORS={'member':('#dce7ec','#294e63'),'plate':('#f2dfb4','#8b642a'),
@@ -8,11 +9,14 @@ COLORS={'member':('#dce7ec','#294e63'),'plate':('#f2dfb4','#8b642a'),
         'panel':('#e6ece4','#6a8068'),'concrete':('#f5f5f3','#b3b6b4'),'grout':('#eee9dc','#a49673')}
 
 
-def path_polygon(canvas,pts,fill,stroke,width=.65):
+def path_polygon(canvas,pts,fill,stroke,width=.65,edges=None):
     if len(pts)<3:return
     path=canvas.beginPath();path.moveTo(*pts[0])
     for p in pts[1:]:path.lineTo(*p)
-    path.close();canvas.setFillColor(fill);canvas.setStrokeColor(stroke);canvas.setLineWidth(width);canvas.drawPath(path,fill=1,stroke=1)
+    path.close();canvas.setFillColor(fill);canvas.setStrokeColor(stroke);canvas.setLineWidth(width);canvas.drawPath(path,fill=1,stroke=0 if edges is not None else 1)
+    if edges is not None:
+        for a,b,show in zip(pts,pts[1:]+pts[:1],edges):
+            if show:canvas.line(*a,*b)
 
 
 def projection(scene,mode):
@@ -29,7 +33,7 @@ def projection(scene,mode):
 def draw_view(sh,scene,mode,rect,title):
     x,y,w,h=rect;sh.text(x+12,y+h-24,title,16,font='Helvetica-Bold')
     sh.c.setStrokeColor('#c8d2d5');sh.c.setLineWidth(.6);sh.c.rect(x,y,w,h)
-    project,axes=projection(scene,mode);parts=scene['parts']
+    project,axes=projection(scene,mode);parts=scene['parts'];edge_flags={}
     if mode=='section':
         polys=[]
         for part in parts:
@@ -38,7 +42,13 @@ def draw_view(sh,scene,mode,rect,title):
             for loop in loops:polys.append((part,[(p[0],p[1],0) for p in loop]))
         if not polys:raise ValueError('Empty transverse section '+scene['id'])
     else:
-        polys=[(part,[project(p) for p in f]) for part in parts if part['kind']!='concrete' for f in part['faces']]
+        polys=[]
+        for part in parts:
+            if part['kind']=='concrete':continue
+            faces=display_faces(part['faces'])
+            flags=feature_edges(faces) if part.get('member',{}).get('rbs') else [None]*len(faces)
+            for f,edges in zip(faces,flags):
+                projected=[project(p) for p in f];polys.append((part,projected));edge_flags[id(projected)]=edges
         polys.sort(key=lambda row:sum(p[2] for p in row[1])/len(row[1]),reverse=True)
     pts=[p for _,face in polys for p in face]
     if mode!='section':
@@ -58,7 +68,7 @@ def draw_view(sh,scene,mode,rect,title):
                 for aa,bb in zip(points,points[1:]+points[:1]):sh.line(aa,bb,'#aab5b4',.5,[5,4])
     for part,face in polys:
         fill,stroke=COLORS.get(part['kind'],COLORS['plate'])
-        path_polygon(sh.c,[tr(p) for p in face],fill,stroke,.7 if part['kind']=='member' else .6)
+        path_polygon(sh.c,[tr(p) for p in face],fill,stroke,.7 if part['kind']=='member' else .6,edge_flags.get(id(face)))
     if mode=='front' and scene['family']=='review_transfer_truss':
         for part in parts:
             if part['kind']!='member':continue
@@ -148,13 +158,17 @@ def draw_assembly(sh,scene):
     for label,parts in groups.items():
         part=parts[0]
         description=part['description']
-        if len(parts)>1:description+=f' | qty {len(parts)}; repeated group'
+        if len(parts)>1 and part['kind']!='fastener':description+=f' | qty {len(parts)}; repeated group'
         if part.get('geometry',{}).get('type')=='box':description+=' | '+ ' x '.join(f'{v:g}' for v in part['geometry']['size'])+' in'
         if part['kind']=='fastener':
-            description+=f" | qty {part['count']}; grip {part['grip']:g} in"
+            description+=f" | qty {sum(p['count'] for p in parts)}; grip {part['grip']:g} in"
             if 'pattern' in part:
                 pat=part['pattern'];description+=' | grid '+ ' / '.join(f'{n} at {d:g} in' for n,d in zip(pat['counts'],pat['spacing']) if n>1 and d is not None)
-        entries.append((label,part['basis'],description))
+        basis=str(part['basis'])
+        if basis not in ('S','A'):
+            description+=' | Basis: '+basis
+            basis='S/A' if 'S' in basis and 'A' in basis else 'S' if basis.startswith('S') else 'A'
+        entries.append((label,basis,description))
     entries += [(w['id'],w['basis'],w['description']+' | '+joined(w['connects'])) for w in scene['welds']]
     entries += [(i['id'],i['basis'],i['description']+' | '+joined(i['connects'])) for i in scene.get('interfaces',[])]
     font=11;line=15
