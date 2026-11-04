@@ -79,4 +79,6 @@ def build_model(package,state):
     track_splices(b)
     from .review_edge_chords import apply as edge_chord_corners
     edge_chord_corners(b)
+    from .review_cfs_source_bindings import apply as cfs_source_bindings
+    cfs_source_bindings(b)
     return b.finish()
