@@ -302,7 +302,12 @@ def floors_and_roofs(b,outline,bystory,levels):
                 for station in frange((y0 if along==0 else x0)*12,(y1 if along==0 else x1)*12+.1,24):
                     lo=(x0 if along==0 else y0)*12;hi=(x1 if along==0 else y1)*12
                     if b.key=='cfs13' and 72.5*12<station<97.5*12:lo=20*12
-                    simple_truss(b,f'ROOF-{ri}-{station}',along,station,lo,hi,z,(hi-lo)/8,k,'2X600S162-68','2X600S162-54',24*4)
+                    # Roof level is the wall bearing datum. The six-inch
+                    # delegated chord needs its centroid above that surface,
+                    # not buried halfway inside the top track.
+                    simple_truss(b,f'ROOF-{ri}-{station}',along,station,lo,hi,z+3.125,(hi-lo)/8,k,'2X600S162-68','2X600S162-54',24*4)
+            b.changes.append(dict(kind='delegated_roof_chord_bearing_datum',level=k,chord_centroid_shift_in=3.125,
+                basis='A: place the six-inch delegated bottom chord underside 1/8 in above the wall bearing workpoint; local bearing pack fits the actual track web. Source spacing/sections and analysis remain unchanged; supplier capacity and final roof-cover geometry remain separately required.'))
             continue
         direction=1 if b.key=='cfs14' else 0;normal=1-direction
         # Physical bearing lines subdivide the irregular footprint into real spans.

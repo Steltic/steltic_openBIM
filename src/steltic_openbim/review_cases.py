@@ -73,4 +73,6 @@ def build_model(package,state):
     physical_rbs(b)
     from .review_track_corners import apply as track_corners
     track_corners(b)
+    from .review_edge_chords import apply as edge_chord_corners
+    edge_chord_corners(b)
     return b.finish()

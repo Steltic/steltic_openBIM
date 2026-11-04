@@ -1,5 +1,5 @@
 """CFS details built around actual receiving axes, profiles and section rolls."""
-import math
+import copy,math
 from .assembly_templates import effective,channel,screw_diameter,web_faces
 from .pilots.geometry import strips
 from .pilots.model import cross,unit,sub
@@ -121,7 +121,13 @@ def floor(ctx):
     a,p,par=ctx.a,ctx.p,ctx.params;data=par['physical_floor_stack'];parts={};by_id={};joists=[];tracks=[];studs=[]
     for index,item in enumerate(data['receivers']):
         label='R'+str(index+1);part=member(a,label,item);parts[label]=part;by_id[item['member_id']]=(label,item,part)
-        if item['member_id'] in data['joist_ids']:joists.append((label,item,part))
+        if item['member_id'] in data['joist_ids']:
+            # A built-up trimmer has real, separated channel webs. Hardware
+            # acts on those plies, while the receiver remains the original
+            # built-up physical member. Do not use a fictitious centre web.
+            if abs(item['axis'][1][1]-item['axis'][0][1])>abs(item['axis'][1][0]-item['axis'][0][0]):
+                joists.extend((label,ply,part) for ply in channel_plies(p,item))
+            else:joists.append((label,item,part))
         elif item['member_id'] in data['stud_ids']:studs.append((label,item,part))
         else:tracks.append((label,item,part))
     for index,(label,j,part) in enumerate(joists):
@@ -146,19 +152,40 @@ def floor(ctx):
             track_end_clip(a,p,index,label,j,support,low,side,-1)
         elif support:
             sl,sm,sp=support;surface=sp['bounds'][2][1];gap=low-surface;joins=[label,sname,sl]
+            tt=p[sm['profile_id']]['dimensions']['t']
             if gap>.02:
-                pack='PACK'+str(index);a.box(pack,[x-3,-3,surface],[6,6,gap],'A','A steel bearing packer at actual joist/track gap');joins.append(pack)
+                pack='PACK'+str(index);px=sorted((x-width_sign*jt/2,x+width_sign*(p[j['profile_id']]['dimensions']['b']-jt/2)))
+                a.box(pack,[px[0],min(0,side*2.5),surface],[px[1]-px[0],2.5,gap],'A','A steel bearing packer under this actual channel flange; separate plies do not duplicate overlapping pack solids');joins.append(pack)
             a.interfaces.append(dict(id='BEAR'+str(index),kind='compression_bearing',connects=joins,basis='A',description='Actual joist and lower track; local packer/stiffener fit requires capacity verification'))
-            a.fastener('LOWER-S'+str(index),[[x+width_sign*.75,side*.75,low+.0566]],[0,0,-1],.216,max(.15,low-surface+.15),[label,sl]+([pack] if gap>.02 else []),'A No.12 lower flange/track transfer screw; source spacing schedule remains attached',basis='A',screw=True)
+            a.fastener('LOWER-S'+str(index),[[x+width_sign*.75,side*.75,low+jt]],[0,0,-1],.216,jt+max(0,gap)+tt,[label,sl]+([pack] if gap>.02 else []),'A No.12 lower flange/track transfer screw; source spacing schedule remains attached',basis='A',screw=True)
         if upper and not overlaps(upper):
             track_end_clip(a,p,index,label,j,upper,high,side,1)
         elif upper:
             ul,um,up=upper;surface=up['bounds'][2][0];gap=surface-high;joins=[label,ul]
+            tt=p[um['profile_id']]['dimensions']['t']
             if gap>.02:
-                pack='UP-PACK'+str(index);a.box(pack,[x-3,-3,high],[6,6,gap],'A','A steel upper-wall bearing packer; subfloor kept outside bearing strip');joins.append(pack)
-            a.fastener('UPPER-S'+str(index),[[x+width_sign*.75,side*.75,up['bounds'][2][0]+.15]],[0,0,-1],.216,max(.2,gap+.2),joins,'A No.12 upper track/joist transfer screw; source diaphragm schedule remains attached',basis='A',screw=True)
+                pack='UP-PACK'+str(index);px=sorted((x-width_sign*jt/2,x+width_sign*(p[j['profile_id']]['dimensions']['b']-jt/2)))
+                a.box(pack,[px[0],min(0,side*2.5),high],[px[1]-px[0],2.5,gap],'A','A separate upper-wall packer on this actual channel flange; subfloor kept outside bearing strip');joins.append(pack)
+            a.fastener('UPPER-S'+str(index),[[x+width_sign*.75,side*.75,surface+tt]],[0,0,-1],.216,jt+max(0,gap)+tt,joins,'A No.12 upper track/joist transfer screw; source diaphragm schedule remains attached',basis='A',screw=True)
     a.section_axis=1;a.section_at=1.25
     a.notes.append('Every wall, track and joist extract is bound to a real member at its actual centroid, elevation and roll. Only the connection stiffeners/packers are added components. Source selected sections and story shear/uplift requirements remain attached; A local fit and transfer fasteners are coordination proposals without new capacity verification. Stud-to-track end screws are shown on their separate located details.')
+
+
+def channel_plies(profiles,item):
+    """Actual horizontal channel constituents in the receiver's local frame."""
+    profile=profiles[item['profile_id']]
+    if profile['family']=='channel':return [item]
+    if profile['family']!='built_up':raise ValueError('Floor attachment requires actual channel plies')
+    axis=unit(sub(item['axis'][1],item['axis'][0]));y=item['local_y'];z=cross(axis,y);result=[]
+    for comp in profile['components']:
+        angle=math.radians(comp['rotation_deg']);ca,sa=math.cos(angle),math.sin(angle)
+        if abs(sa)>1e-6:raise ValueError('Rotated floor-channel ply needs its actual web attachment recipe')
+        ply=copy.deepcopy(item);ply['profile_id']=comp['profile_id']
+        offset=[y[i]*comp['offset'][0]+z[i]*comp['offset'][1] for i in range(3)]
+        ply['axis']=[[q[i]+offset[i] for i in range(3)] for q in item['axis']]
+        ply['local_y']=[y[i]*ca+z[i]*sa for i in range(3)]
+        result.extend(channel_plies(profiles,ply))
+    return result
 
 
 def track_end_clip(a,p,index,label,j,track,edge,side,end):
@@ -169,7 +196,11 @@ def track_end_clip(a,p,index,label,j,track,edge,side,end):
     """
     host,tm,tp=track;x=j['axis'][0][0];jt=p[j['profile_id']]['dimensions']['t'];tt=p[tm['profile_id']]['dimensions']['t'];t=.0713
     surface=tp['bounds'][2][1 if end<0 else 0];direction=1 if sum(tp['bounds'][0])/2>x else -1
-    face=x+direction*jt/2;reach=3.;xs=sorted((face,face+direction*reach))
+    face=x+direction*jt/2
+    first=tp['bounds'][0][0 if direction>0 else 1]
+    reach=max(3.,direction*(first-face)+2.5)
+    if reach>12:raise ValueError('Actual track is too far away for this local return-clip proposal')
+    xs=sorted((face,face+direction*reach))
     left=max(xs[0],tp['bounds'][0][0])+.5;right=min(xs[1],tp['bounds'][0][1])-.5
     if right-left<.5:raise ValueError('Cut track has no room for the proposed return-clip foot')
     ylo,yhi=sorted((side*.35,side*2.35));y=(ylo+yhi)/2

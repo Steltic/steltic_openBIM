@@ -181,11 +181,19 @@ def bind(model):
                     distance=min(abs(axis(m)[0][2]-origin[2]) for m in options)
                     chosen.extend(m for m in options if abs(abs(axis(m)[0][2]-origin[2])-distance)<.01)
             selected_joists=[]
+            if primary['kind']=='truss_chord':
+                # A nearby opening trimmer must not replace the truss whose
+                # seat this occurrence describes. Keep its own chord group.
+                joists=[];parallel=[]
+            def within_each_track_tier(m,margin=0):
+                x=point(axis(m)[0],origin,axes)[0]
+                tiers=[[t for t in chosen if t['local_y'][2]*sign>.9] for sign in (-1,1)]
+                return all(any(min(point(q,origin,axes)[0] for q in axis(t))+margin-.01<=x
+                    <=max(point(q,origin,axes)[0] for q in axis(t))-margin+.01 for t in tier)
+                    for tier in tiers if tier)
             for side in (-1,1):
                 options=[m for m in joists if (sum(point(q,origin,axes)[1] for q in axis(m))/2)*side>0]
-                supported=[m for m in options if any(
-                    min(point(q,origin,axes)[0] for q in axis(t))-.01<=point(axis(m)[0],origin,axes)[0]
-                    <=max(point(q,origin,axes)[0] for q in axis(t))+.01 for t in chosen)]
+                supported=[m for m in options if within_each_track_tier(m)]
                 if supported:options=supported
                 if options:selected_joists.append(min(options,key=lambda m:(abs(point(axis(m)[0],origin,axes)[0]),abs(axis(m)[0][2]-origin[2]),m['id'])))
             if is_joist and primary['kind']!='truss_chord' and primary not in selected_joists:selected_joists.insert(0,primary)
@@ -206,13 +214,15 @@ def bind(model):
                     # A track-end detail must use a truss actually above the
                     # track run. The closest grid station can lie outside its
                     # cut end (notably at the stepped east roof in CFS15).
-                    supported=[m for m in options if any(
-                        min(point(q,origin,axes)[0] for q in axis(t))+.5<=point(axis(m)[0],origin,axes)[0]
-                        <=max(point(q,origin,axes)[0] for q in axis(t))-.5 for t in chosen)]
+                    supported=[m for m in options if within_each_track_tier(m,.5)]
                     if supported:options=supported
                     closest=min(options,key=lambda m:(abs(point(axis(m)[0],origin,axes)[0]),abs(axis(m)[0][2]-origin[2]),m['id']))
                     prefix=closest.get('original_physical_member_id',closest['id']).rsplit('-',1)[0]
                     selected_truss.extend(m for m in options if m.get('original_physical_member_id',m['id']).rsplit('-',1)[0]==prefix)
+            if primary['kind']=='truss_chord':
+                prefix=primary.get('original_physical_member_id',primary['id']).rsplit('-',1)[0]
+                selected_truss=[m for m in truss if m.get('original_physical_member_id',m['id']).rsplit('-',1)[0]==prefix]
+                if primary not in selected_truss:selected_truss.insert(0,primary)
             selected_studs=[]
             for side in (-1,1):
                 options=[m for m in studs if (sum(q[2] for q in axis(m))/2-origin[2])*side>0]
