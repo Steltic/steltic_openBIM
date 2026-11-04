@@ -86,7 +86,10 @@ class DesignSheets(Sheets):
         self.line(p,q,GREY,.55)
         for pt in (p,q):self.line((pt[0]-vx*3-nx*3,pt[1]-vy*3-ny*3),(pt[0]+vx*3+nx*3,pt[1]+vy*3+ny*3),INK,.8)
         label=label or feet(value)
-        c=self.c;c.saveState();c.translate((p[0]+q[0])/2,(p[1]+q[1])/2);c.rotate(math.degrees(math.atan2(dy,dx)))
+        angle=math.degrees(math.atan2(dy,dx))
+        if angle>90:angle-=180
+        elif angle<=-90:angle+=180
+        c=self.c;c.saveState();c.translate((p[0]+q[0])/2,(p[1]+q[1])/2);c.rotate(angle)
         self.center(0,5,label,size,ASSUMED if basis=='A' else INK);c.restoreState()
         self.dimensions.append(dict(sheet=self.current,value_in=value,text=label,basis=basis,reference=ref))
 

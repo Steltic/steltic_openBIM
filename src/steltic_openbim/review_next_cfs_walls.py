@@ -66,7 +66,11 @@ def floors(b,outline,levels):
     rows={r['id']:r for r in b.raw['framing']}
     def joist(mid,pid,axis,station,lo,hi,z,k,rid,spacing):
         d=b.depth(b.profile(pid));aa=[lo,station,z-d/2] if axis==0 else [station,lo,z-d/2];dd=[hi,station,z-d/2] if axis==0 else [station,hi,z-d/2]
-        m=b.member(mid,pid,'joist',aa,dd,k,'A',records=[b.record('framing',rid)]);b.ends(m,'review_cfs_joist',[b.record('framing',rid)],parameters={'spacing':spacing,'floor_depth':depth(b,k),'concrete_slab':b.key in ('cfs2','cfs4')})
+        refs=[b.record('framing',rid)]
+        checked=b.records.get('gravity_framing/'+rid)
+        if checked and section(checked['data'].get('section'),'')==pid and abs(hi-lo-12*checked['data'].get('span_ft',-1))<.01:
+            refs.append(checked['id'])
+        m=b.member(mid,pid,'joist',aa,dd,k,'A',records=refs);b.ends(m,'review_cfs_joist',refs,parameters={'spacing':spacing,'floor_depth':depth(b,k),'concrete_slab':b.key in ('cfs2','cfs4')})
     for k,z in enumerate(levels[1:],1):
         roof=k==len(levels)-1;finish=(.6 if roof else 3.5) if b.key=='cfs2' else (.75 if roof else 4) if b.key=='cfs4' else 2.4 if b.key=='cfs12' else .72 if roof else 2.22
         b.panel(f'FLOOR-{k}','roof' if roof else 'floor',[[x*12,y*12,z] for x,y in outline],finish,k,'A')

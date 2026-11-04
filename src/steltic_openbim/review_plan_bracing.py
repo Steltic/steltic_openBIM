@@ -13,6 +13,22 @@ AXES=([1,0,0],[0,1,0],[0,0,1])
 def apply(b):
     if b.key!='hr35':return
     lookup={m['id']:m for m in b.members};levels={k:z for k,_,z in b.levels}
+    # The source places these gussets beside the supplier foot, not beneath it.
+    # Locate the accepted fit along the real supporting beam and keep the
+    # original leg-point reference explicitly in the change history.
+    feet=[c for c in b.connections if c['detail_ref']['id']=='review_equipment_foot']
+    for c in b.connections:
+        if c['detail_ref']['id']!='review_plan_angle' or c.get('parameters',{}).get('joint')!='leg_point':continue
+        foot=next((f for f in feet if math.dist(f['point'],c['point'])<.01),None)
+        if foot is None:continue
+        brace=lookup[c['member_ids'][0]];host=lookup[c['member_ids'][1]];u=unit(sub(host['axis'][1],host['axis'][0]))
+        end=min(range(2),key=lambda i:math.dist(brace['axis'][i],c['point']));far=brace['axis'][1-end]
+        sign=1 if dot(sub(far,c['point']),u)>=0 else -1;width=12 if c['parameters'].get('count',2)==3 else 10
+        old=list(c['point']);target=add(old,mul(u,sign*(6+width/2+.5)))
+        brace.setdefault('source_axis',copy.deepcopy(brace['axis']));brace['axis'][end]=target;c['point']=list(target)
+        c['parameters']['supplier_foot_point']=old
+        b.changes.append(dict(kind='plan_gusset_beside_supplier_foot',connection_id=c['id'],source_point=old,point=target,
+            basis='S leg-point plate size and selected brace section. A move along its actual support to clear the 12 in supplier foot by at least 1/2 in; original source workline retained. Eccentricity and supplier/local connection capacity remain unverified.'))
     # Original levels are supplied after this builder stage in some cases.
     if not levels:
         for m in b.members:
@@ -131,6 +147,10 @@ def draw(ctx):
             line=across+side*(bf/2-.25)
             a.weld('W'+str(j),add(mul(u,along-width/2),mul(v,line)),add(mul(u,along+width/2),mul(v,line)),[label,'PLATE'],.25,basis='A',description='A 1/4 in local plate-to-actual-top-flange fit; source connection capacity requirement retained')
         a.dim(vertices[0],vertices[1],'Source plate length')
+        if par.get('supplier_foot_point'):
+            foot=point(par['supplier_foot_point'],origin,AXES)
+            context=a.box('SUPPLIER-FOOT',[foot[0]-6,foot[1]-6,0],[12,12,.75],'A','Adjacent actual supplier foot outline; see its separate foot assembly')
+            context['representation_role']='context_only';context['drawing_style']='outline'
     a.fastener('BOLTS',[[q[0],q[1],z] for q in centres],[0,0,1],.75,.375+t,['ANGLE','PLATE'],f'S {count} x 3/4 in A325, 3 in pitch; A actual face grip and stations',basis='S count / A fit')
     a.front_axes=(0,1);a.section_axis=0 if abs(ray[0])>abs(ray[1]) else 1;a.section_at=centres[0][a.section_axis]
     a.notes.append('S source angle, plate dimensions and bolt count. A local face fit and bolt stations; the connected angle leg and all receiving girders are the actual physical pieces. Source capacity checks have not been rerun for the accepted fit.')

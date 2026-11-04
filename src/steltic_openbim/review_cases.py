@@ -65,4 +65,6 @@ def build_model(package,state):
     local_checks(b)
     from .review_rbs import apply as physical_rbs
     physical_rbs(b)
+    from .review_track_corners import apply as track_corners
+    track_corners(b)
     return b.finish()

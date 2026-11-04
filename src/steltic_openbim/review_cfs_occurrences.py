@@ -15,6 +15,8 @@ def bind(model):
     if not model['pilot'].startswith('cfs'):return
     for c in model['connections']:
         if 'parameters' in c:c['parameters']=copy.deepcopy(c['parameters'])
+    from .review_floor_openings import bind as openings
+    openings(model)
     bind_sills_and_joists(model)
     members={m['id']:m for m in model['members']};cells=defaultdict(list)
     tracks=[m for m in model['members'] if m['kind'] in ('top_track','bottom_track','ordinary_track','tier_track')]

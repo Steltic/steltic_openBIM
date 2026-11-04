@@ -90,6 +90,10 @@ def source_text(package,c):
 
 def build_scene(model,package,c,subtype=''):
     par=c.get('parameters',{});family=c['detail_ref']['id']
+    if par.get('physical_floor_opening'):
+        from .review_assemblies import Context
+        from .review_floor_openings import draw
+        ctx=Context(model,package,c);draw(ctx);return ctx.finish()
     if par.get('physical_hr_kicker'):
         from .review_assemblies import Context
         from .review_hr_kickers import draw

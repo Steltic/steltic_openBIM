@@ -103,7 +103,7 @@ def draw_view(sh,scene,mode,rect,title):
             if len(face)>=3:
                 points=[tr(p) for p in face];cx=sum(p[0] for p in points)/len(points);cy=sum(p[1] for p in points)/len(points)
                 sh.line((cx-2,cy-2),(cx+2,cy+2),'#677e89',.5)
-    else:sh.text(x+12,y+17,('AXONOMETRIC - NTS' if mode=='iso' else f'ASSEMBLED ELEVATION | scale 1:{denom:g}')+' | dimensions inches',11)
+    else:sh.text(x+12,y+17,('AXONOMETRIC - NTS' if mode=='iso' else f'ASSEMBLED {"PLAN" if tuple(scene["front_axes"])==(0,1) else "ELEVATION"} | scale 1:{denom:g}')+' | dimensions inches',11)
     # Labels use separate rails; one leader per component/group, no scattered text.
     visible={part['id'] for part,_ in polys};labels=[]
     labelled_groups=set()
@@ -151,7 +151,7 @@ def draw_view(sh,scene,mode,rect,title):
 def draw_assembly(sh,scene):
     sh.text(70,sh.H-160,f"{scene['reference']}  |  {scene['occurrence_count']} occurrence(s)  |  example {scene['representative_occurrence']}",13)
     sh.text(70,sh.H-183,'S = source design parameter   A = authored fictional fit/layout   |   Full source specifications remain in S7xx and source_records.json',12)
-    draw_view(sh,scene,'front',(70,855,1090,620),'1  ASSEMBLED JOINT / ELEVATION')
+    draw_view(sh,scene,'front',(70,855,1090,620),'1  ASSEMBLED JOINT / '+('PLAN' if tuple(scene['front_axes'])==(0,1) else 'ELEVATION'))
     draw_view(sh,scene,'section',(1190,855,1120,620),'2  SECTION A-A / JOINED MEMBERS AND PLIES')
     draw_view(sh,scene,'iso',(70,155,1090,675),'3  ASSEMBLY / ISOMETRIC')
     x=1210;y=805;sh.text(x,y,'PARTS, ATTACHMENTS AND LOCAL DIMENSIONS',16,font='Helvetica-Bold');y-=31

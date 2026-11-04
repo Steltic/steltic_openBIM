@@ -136,7 +136,7 @@ def bind(model):
                 c['member_ids']=list(dict.fromkeys(c['member_ids']+[stud['id']]))
         elif family in ('review_cfs_floor','review_cfs_sill','review_final_cfs_joist','review_cfs_joist'):
             if family=='review_cfs_sill' and primary.get('level')==1:continue
-            is_joist=primary['kind']=='joist'
+            is_joist=primary['kind'] in ('joist','opening_trimmer')
             if not is_joist and primary['kind'] not in ('top_track','bottom_track','ordinary_track','tier_track'):continue
             if is_joist:
                 far=max(primary['axis'],key=lambda q:math.dist(q,origin));into=unit(sub(far,origin));along=cross(into,[0,0,1]);axes=horizontal_frame(along)
@@ -146,7 +146,7 @@ def bind(model):
                 aa,bb=axis(m);local=[point(q,origin,axes) for q in (aa,bb)];u=unit(sub(bb,aa))
                 if m['kind'] in ('top_track','bottom_track','ordinary_track','tier_track') and abs(dot(u,axes[0]))>.999:
                     if abs(local[0][1])<.01 and min(q[0] for q in local)-.01<=0<=max(q[0] for q in local)+.01 and abs(local[0][2])<30:tracks.append(m)
-                elif m['kind']=='joist' and abs(dot(u,axes[1]))>.999:
+                elif m['kind'] in ('joist','opening_trimmer') and abs(dot(u,axes[1]))>.999:
                     if abs(local[0][0])<=24 and abs(local[0][2])<24 and any(abs(q[1])<.01 for q in local):joists.append(m)
                 elif m['kind'] in ('joist','rim_track','floor_rim') and abs(dot(u,axes[0]))>.999:
                     if abs(local[0][1])<.01 and abs(local[0][2])<24 and min(q[0] for q in local)-.01<=0<=max(q[0] for q in local)+.01:parallel.append(m)

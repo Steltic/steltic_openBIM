@@ -57,6 +57,22 @@ def test_equipment_records_and_all_supplier_leg_ends_are_preserved(platform):
     assert len(legs)==14 and all((leg['id'],end) in links for leg in legs for end in ('start','end'))
 
 
+def test_leg_point_gussets_clear_supplier_feet_and_foot_bolts_hit_real_flanges(platform):
+    from shapely.geometry import Polygon,box
+    p,m=platform
+    for c in m['connections']:
+        if c.get('parameters',{}).get('supplier_foot_point'):
+            scene=build_scene(m,p,c);parts={q['id']:q for q in scene['parts']}
+            plate=Polygon([q[:2] for q in parts['PLATE']['polygon']]);bb=parts['SUPPLIER-FOOT']['bounds']
+            assert plate.distance(box(bb[0][0],bb[1][0],bb[0][1],bb[1][1]))>=.4999,c['id']
+            assert parts['SUPPLIER-FOOT']['representation_role']=='context_only'
+        elif c['detail_ref']['id']=='review_equipment_foot':
+            scene=build_scene(m,p,c);parts={q['id']:q for q in scene['parts']};beam=parts['BEAM']['bounds']
+            assert len(scene['welds'])==4
+            for q in scene['fasteners'][0]['points']:
+                assert beam[1][0]+.99999<=q[1]<=beam[1][1]-.99999,c['id']
+
+
 def test_outer_tower_chord_uses_source_extension_width_and_unused_check_is_explicit():
     p=evidence('hr34b')['package'];m=build_model(p,dict(design_scenario=dict(id='hr34b',answers_sha256=fingerprint(scenario('hr34b')['answers']))))
     chords=[q for q in m['members'] if 'members/chord-L2-Grid9-W24X76' in q['design_record_ids']]

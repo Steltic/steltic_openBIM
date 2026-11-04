@@ -125,12 +125,13 @@ def floor_openings(b):
             feature=dict(id=f'STAIR-{k}-{oi+1}',kind='stair',plane='xy',x_ft=x/12,y_ft=y/12,z_ft=z/12,width_ft=w/12,height_ft=h/12,level=k,basis='A',query_id=b.key.upper()+'-OPENINGS',confirmed=True)
             # Secondary worklines end on the perimeter framing worklines. The
             # clear architectural void is still x/y/w/h, four inches inside.
-            b.openings.append(feature);lo=[x-4,y-4,z-32];hi=[x+w+4,y+h+4,z+2];replaced={}
+            b.openings.append(feature);lo=[x-4,y-4,z-32];hi=[x+w+4,y+h+4,z+2];replaced={};cut_members=[]
             for m in list(b.members):
                 if m['level']!=k or m['kind'] not in ('infill','joist','truss_chord','truss_web'):continue
                 if max(q[2] for q in m['axis'])<z-32 or min(q[2] for q in m['axis'])>z+2:continue
                 cut=interval_in_rectangle(*m['axis'],lo,hi,(0,1))
                 if cut is None:continue
+                cut_members.append(m)
                 aa,dd=m['axis'];v=sub(dd,aa);chunks=[(0,cut[0]),(cut[1],1)];b.members.remove(m);new=[]
                 for j,(u,t) in enumerate(chunks):
                     if (t-u)*math.dist(aa,dd)<1:continue
@@ -167,8 +168,26 @@ def floor_openings(b):
                     else:b.changes.append(dict(kind='opening_removed_connection',source=c,source_member_ids=original,opening=feature['id'],basis='Accepted fictional opening removes this station; source design remains in the record register'))
                 b.connections=kept
             fp=b.profile('W18X40' if ishr else '2X1200S250-97');depth=b.depth(fp);zz=z-depth/2 if ishr else z-.75-depth/2
+            plain_joists=[m for m in cut_members if m['kind']=='joist']
+            frame_axis=None
+            if not ishr and plain_joists and len(plain_joists)==len(cut_members):
+                # A rectangular perimeter floating between cut joists has no
+                # independent bearing route. Run the parallel trimmers to the
+                # same supports as the original joists, with headers between.
+                directions={0 if abs(m['axis'][1][0]-m['axis'][0][0])>.01 else 1 for m in plain_joists}
+                if len(directions)==1:
+                    frame_axis=directions.pop()
+                    zz=max(q[2]+o[2]+b.depth(m['profile_id'])/2 for m in plain_joists for q,o in zip(m['axis'],m['end_offsets']))-depth/2
             for j,(aa,dd) in enumerate((([x-4,y-4,zz],[x+w+4,y-4,zz]),([x-4,y+h+4,zz],[x+w+4,y+h+4,zz]),([x-4,y-4,zz],[x-4,y+h+4,zz]),([x+w+4,y-4,zz],[x+w+4,y+h+4,zz]))):
-                m=b.member(feature['id']+'-FRAME'+str(j),fp,'opening_header' if j<2 else 'opening_trimmer',aa,dd,k,'A');b.ends(m,'test_floor_opening')
+                parallel=frame_axis is not None and (0 if j<2 else 1)==frame_axis
+                if parallel:
+                    example=min(plain_joists,key=lambda m:abs(m['axis'][0][1-frame_axis]-aa[1-frame_axis]))
+                    aa[frame_axis]=min(q[frame_axis] for q in example['axis']);dd[frame_axis]=max(q[frame_axis] for q in example['axis'])
+                kind=('opening_trimmer' if parallel else 'opening_header') if frame_axis is not None else ('opening_header' if j<2 else 'opening_trimmer')
+                m=b.member(feature['id']+'-FRAME'+str(j),fp,kind,aa,dd,k,'A');b.ends(m,'review_cfs_joist' if parallel else 'test_floor_opening')
+            if frame_axis is not None:
+                b.changes.append(dict(kind='opening_trimmers_to_source_supports',opening=feature['id'],source_joist_ids=[m['id'] for m in plain_joists],
+                    basis='A: full-span paired trimmers parallel the original joists and share their bearing lines. Header top flanges align with the actual joist top flanges; source joist datums and selected sections are unchanged. New framing/connection capacity remains unverified.'))
             for panel in ps:
                 panel.setdefault('openings',[]).append(feature['id'])
     b.note('FLOOR-OPENINGS','A: dimensioned 8 x 18 ft stair coordination openings occupy the scheduled floor cells, with W18x40 HR or paired 1200S250-97 CFS perimeter framing. Affected secondary members terminate at the new perimeter and receive end details. Any cut proprietary joist is a fictional replacement assembly, not an approved alteration to a supplier product; reactions and capacity approval remain delegated.')

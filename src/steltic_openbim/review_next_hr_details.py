@@ -167,7 +167,17 @@ def plan_angle(ctx):
     a.fastener('BOLTS',[[(-count+1)*1.5+j*3,0,0] for j in range(count)],[0,0,1],.75,.375+t,['PLATE','ANGLE'],f'S {count} x 3/4 in A325; 3 in pitch; A local datum');a.weld('WP',[-width/2,-4,0],[width/2,-4,0],['SUPPORT','PLATE'],.25,description='Source plate perimeter weld / joint-gusset weld');a.front_axes=(0,1);a.section_axis=0;a.section_at=0;a.dim([-width/2,-4,0],[width/2,-4,0],basis='A')
 
 def equipment_foot(ctx):
-    a,p=ctx.a,ctx.p;bp=ctx.ms[-1]['profile_id'];d=effective(p,bp);leg=ctx.pid;a.member('BEAM',bp,[-22,0,-d/2],[22,0,-d/2]);a.box('FOOT',[-6,-6,0],[12,12,.75],'A','Fictional supplier base plate');a.member('LEG',leg,[0,0,.75],[0,0,24],basis='A');a.fastener('BOLTS',[[x,y,-p[bp]['dimensions'].get('tf',.5)] for x in (-4,4) for y in (-3,3)],[0,0,1],.75,.75+p[bp]['dimensions'].get('tf',.5),['FOOT','BEAM'],'A 4 x 3/4 in A325 supplier attachment','A');a.weld('WL',[-2,-2,.75],[2,-2,.75],['LEG','FOOT'],.25,basis='A');a.dim([-6,0,0],[6,0,0],basis='A');a.notes.append('A supplier geometry and attachments. Source vessel/skid/pump reactions and delegated supplier checks remain unchanged.')
+    a,p=ctx.a,ctx.p;bp=ctx.ms[-1]['profile_id'];d=effective(p,bp);leg=ctx.pid
+    a.member('BEAM',bp,[-22,0,-d/2],[22,0,-d/2]);a.box('FOOT',[-6,-6,0],[12,12,.75],'A','Fictional supplier base plate')
+    a.member('LEG',leg,[0,0,.75],[0,0,24],basis='A')
+    half_gauge=min(3,effective(p,bp,'width')/2-1);tf=p[bp]['dimensions'].get('tf',.5)
+    if half_gauge<=.75:raise ValueError('Supplier foot needs a wider actual flange or a different attachment proposal')
+    a.fastener('BOLTS',[[x,y,-tf] for x in (-4,4) for y in (-half_gauge,half_gauge)],[0,0,1],.75,.75+tf,['FOOT','BEAM'],
+        'A four 3/4 in A325 supplier bolts; actual flange gauge and at least 1 in flange edge distance','A')
+    lx=effective(p,leg)/2;ly=effective(p,leg,'width')/2
+    corners=[[-lx,-ly,.75],[lx,-ly,.75],[lx,ly,.75],[-lx,ly,.75]]
+    for i,(v,w) in enumerate(zip(corners,corners[1:]+corners[:1])):a.weld('WL'+str(i),v,w,['LEG','FOOT'],.25,basis='A',description='A supplier leg perimeter fillet to its foot plate')
+    a.dim([-6,0,0],[6,0,0],basis='A');a.notes.append('A supplier geometry and attachments. Source vessel/skid/pump reactions and delegated supplier checks remain unchanged.')
 
 
 def equipment_head(ctx):
