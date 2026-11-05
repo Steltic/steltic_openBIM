@@ -1,5 +1,5 @@
 """Evidence-checked SBMF analysis links and actual endpoint attachments."""
-import math,re
+import copy,math,re
 from .review_cfs_source_bindings import attach
 
 
@@ -25,6 +25,18 @@ def apply(b):
         m['mapping_basis']='Exact saved frame index and col_L/col_R/raf_L/raf_R labels, with node coordinates verified. Source [span,frame-station,z] axes are relabelled [frame-station,span,z] in the accepted drawing grid. Column head extensions and beam end allowances remain explicit physical geometry.'
     expected={e['id'] for e in b.package['analysis']['elements'] if e['id'].startswith('cfs:frame:')}
     if assigned!=expected:raise ValueError('Incomplete source SBMF frame mapping')
+    for m in b.members:
+        if not m.get('analysis_ids'):continue
+        before=copy.deepcopy(m['axis']);physical=[[q+o for q,o in zip(p,off)] for p,off in zip(m['axis'],m['end_offsets'])]
+        # The reference axis is exactly the saved solver extent; the head
+        # extensions and beam projections belong in physical end offsets.
+        if m['kind']=='column':m['axis'][1][2]=288
+        else:m['axis'][0][1]=0;m['axis'][1][1]=600
+        m['end_offsets']=[[q-p for p,q in zip(ref,actual)] for ref,actual in zip(m['axis'],physical)]
+        m['analysis_coordinate_mapping']=dict(axis_order=[1,0,2],basis='Saved solver [span,frame-station,z] is relabelled to drawing [frame-station,span,z]. Inches and all coordinates retained; no rotation angle, scale or translation inferred.')
+        m['reference_line']='Exact saved analysis reference axis under explicit span/station relabelling; physical head extensions and end projections are end_offsets.'
+        b.changes.append(dict(kind='sbmf_analysis_reference_axis',member_id=m['id'],previous_axis=before,
+            axis=copy.deepcopy(m['axis']),end_offsets=copy.deepcopy(m['end_offsets']),basis='Source interval extents retained exactly; actual physical endpoints remain unchanged.'))
     for m in b.members:
         if re.fullmatch(r'FRAME-\d+-C[01]',m['id']):
             rid=b.record('members','frame-col');assert m['profile_id']==b.profile(b.cfg['col_section'])
