@@ -1,4 +1,5 @@
 import copy
+import math
 from collections import defaultdict
 
 import pytest
@@ -21,7 +22,7 @@ def actual():
     return m,p
 
 
-def test_design_mat_retains_source_size_spacing_and_unresolved_full_schedule(actual):
+def test_design_mat_retains_source_size_spacing_and_full_schedule_binding(actual):
     model,package=actual
     profile=next(p for p in model['profiles'] if p['id']=='WWR-W2.9')
     assert profile['dimensions']['d']==.192 and profile['nominal_area_in2']==.029
@@ -37,7 +38,8 @@ def test_design_mat_retains_source_size_spacing_and_unresolved_full_schedule(act
     for stations in rows.values():
         values=sorted(stations)
         assert all(b-a==6 for a,b in zip(values,values[1:]))
-    assert 'diaphragms/diaphragm-floors' not in model['record_coverage']['used']
+    assert 'diaphragms/diaphragm-floors' in model['record_coverage']['used']
+    assert all(p.get('attachment_schedule',{}).get('blocking_member_ids') for p in model['panels'] if p['kind']=='deck')
     for panel in model['panels']:
         if panel['kind']!='floor':continue
         mat=panel['reinforcement_design_mat']
@@ -74,6 +76,21 @@ def test_mesh_detail_uses_wire_size_instead_of_collector_size(actual):
     scene=build_scene(model,package,c)
     wire=next(p for p in scene['parts'] if p['kind']=='member')
     assert wire['member']['profile_id']=='WWR-W2.9'
+    assert abs(wire['member']['axis'][1][0]-wire['member']['axis'][0][0])==pytest.approx(36)
+    assert wire['native_receiver_extent']=='whole_member'
     assert any('W2.9' in text for text in scene['notes'])
     assert not scene['fasteners'] and not scene['welds']
     assert scene['interfaces'][0]['native_bond']['kind']=='reinforcement_bond_development'
+
+
+def test_mat_overview_shows_real_touching_crossings_and_full_wires_are_retained(actual):
+    from steltic_openbim.assembly_templates import build_scene
+    model,package=actual;members={m['id']:m for m in model['members']}
+    c=next(c for c in model['connections'] if c['id']=='WWR-MAT-L1')
+    scene=build_scene(model,package,c)
+    wires=[p for p in scene['parts'] if p['kind']=='member']
+    assert len(wires)==6 and len(scene['interfaces'])==6
+    assert all(w['native_receiver_extent']=='whole_member' for w in wires)
+    assert all(len(i['native_bond']['bar_receivers'])==1 for i in scene['interfaces'])
+    assert any(d['basis']=='S' and d.get('label')=='Wire spacing' for d in scene['dimensions'])
+    assert all(math.dist(*members[mid]['axis'])>800 for mid in c['member_ids'])

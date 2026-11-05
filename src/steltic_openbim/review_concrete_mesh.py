@@ -25,7 +25,7 @@ def apply(b):
     if '6x6-W2.9xW2.9 WWR' not in record['data']['selection']:
         raise ValueError('Unrecognized source floor mesh selection')
     # WRI nominal-size table: W2.9 has 0.029 in2 area and 0.192 in diameter.
-    diameter=.192;spacing=6.;margin=2.
+    diameter=.192;spacing=6.;margin=3.
     profile=b.custom('WWR-W2.9','round',dict(d=diameter),nominal_area_in2=.029,
         basis='S: W2.9 plain wire; WRI nominal size table, https://wirereinforcementinstitute.org/application/files/3316/0588/6872/WWR400-R-03.pdf')
     b.material_selections.append(dict(id='CFS4-WWR',basis='S product designation; A manufacturing standard',
@@ -65,7 +65,7 @@ def apply(b):
                     member['material_id']='CFS4-WWR';axes[along].append(member)
                     cid=mid+':BOND'
                     b.connection(cid,'review_collector_bond',[(x+y)/2 for x,y in zip(a,d)],[member],
-                        parameters=dict(host_panel_id=panel['id'],slab_top_in=top,topping_in=2.5,
+                        parameters=dict(host_panel_id=panel['id'],slab_top_in=top,topping_in=2.5,context_extent_in=18,
                             reinforcement_label='W2.9 welded-wire design mat',
                             reinforcement_note='S: 6x6-W2.9xW2.9 mesh, nominal wire diameter 0.192 in. A: grid origin, cover, two touching wire layers and opening trims. Sheet panelization/laps, edge development and factory weld certification remain supplier/engineer requirements.'),
                         title='SOURCE WELDED-WIRE MAT / A HOST SET-OUT')
@@ -85,7 +85,21 @@ def apply(b):
             factory_crossing_rule='All actual orthogonal wire intersections have touching surfaces and belong to the source welded mesh; factory weld shape and strength are not fabricated here.',
             fabrication_requirements=['Supplier sheet/roll panelization and laps','Opening-edge anchorage/development','Wire strength and factory weld certification'],
             engineering_status='not_verified')
+        # A readable mat detail binds actual crossing wires. Individual bond
+        # details are short local extracts; full wire lengths stay in the model.
+        centre=[low[i]+51 for i in (0,1)]+[top]
+        selected=[]
+        for along in (0,1):
+            candidates=[w for w in axes[along] if abs(w['axis'][0][1-along]-centre[1-along])<6.01
+                        and w['axis'][0][along]<centre[along]-12 and w['axis'][1][along]>centre[along]+12]
+            if len(candidates)!=3:raise ValueError('Mesh overview needs six actual wires clear of an opening')
+            selected.extend(candidates)
+        b.connection(f'WWR-MAT-L{level}','review_collector_bond',centre,selected,
+            parameters=dict(host_panel_id=panel['id'],slab_top_in=top,topping_in=2.5,context_extent_in=12,
+                reinforcement_label='Source six-inch welded-wire mat',mesh_spacing_in=6,
+                reinforcement_note='S 6x6-W2.9xW2.9 source mesh, shown as six actual crossing wires at6 in. A two touching layers and this clipped host view. Factory crossings are source mesh interfaces; weld shape, sheet laps and certification are not fabricated here.'),
+            title='SOURCE WELDED-WIRE MAT / SIX-INCH CROSSINGS')
         b.changes.append(dict(kind='source_welded_wire_design_mat',host_panel_id=panel['id'],
             source_context_record_id=rid,wire_count=sum(map(len,axes)),factory_crossing_count=crossings,
-            basis='S spacing and W2.9 size. A three-inch grid origin, two-inch end/void margins and centres0.5/0.692 in below topping top. Design mat only; fabrication and development remain explicit requirements.'))
-    b.note('FLOOR-WWR','S: 6x6-W2.9xW2.9 plain welded-wire reinforcement is represented by actual individual wires, with a located factory-crossing rule and cuts around each accepted stair void. A: grid origin, vertical placement and edge margins. This design mat is not a fabrication sheet/lap schedule. Supplier panelization, laps, anchorage and certification remain explicit requirements. The floor diaphragm schedule stays unmapped until perimeter chord continuity and deck attachments are complete.')
+            basis='S spacing and W2.9 size. A three-inch grid origin and end/void margins, with centres0.5/0.692 in below topping top. The edge margin clears the separate source chord bars. Design mat only; fabrication and development remain explicit requirements.'))
+    b.note('FLOOR-WWR','S: 6x6-W2.9xW2.9 plain welded-wire reinforcement is represented by actual individual wires, with a located factory-crossing rule and cuts around each accepted stair void. A: grid origin, vertical placement and edge margins. This design mat is not a fabrication sheet/lap schedule. Supplier panelization, laps, anchorage and certification remain explicit requirements. Perimeter chords and deck attachments have separate located details.')
