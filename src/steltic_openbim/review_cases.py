@@ -141,6 +141,8 @@ def build_model(package,state):
     source_diaphragms(b)
     from .review_cfs6_endpoint_links import apply as cfs6_endpoint_links
     cfs6_endpoint_links(b)
+    from .review_cfs5_parapets import apply as cfs5_parapets
+    cfs5_parapets(b)
     from .review_cfs6_floor_panels import bind_bearing_clearances
     bind_bearing_clearances(b)
     return b.finish()

@@ -84,6 +84,9 @@ class Context:
 
 def build_scene(model,package,c,subtype=''):
     ctx=Context(model,package,c);family=ctx.family
+    if family=='review_parapet_roof':
+        from .review_cfs5_parapets import draw
+        draw(ctx);return ctx.finish()
     if family=='review_roof_distribution':
         from .review_cfs6_roof_distribution import draw
         draw(ctx);return ctx.finish()

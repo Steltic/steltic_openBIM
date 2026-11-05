@@ -428,6 +428,10 @@ def build_scene(model,package,c,subtype=''):
         note('Three independent load-path attachments are drawn: brace to gusset, gusset to vertical member, gusset to horizontal member. Source attachment counts remain separate.')
 
     elif family in ('cfs_stud','cfs_top_track','cfs_bottom_track','cfs_stud_bridging','cfs_bridging_anchor'):
+        if c.get('parameters',{}).get('physical_track_end_clip'):
+            from .review_assemblies import Context
+            from .review_wall_occurrence_details import track_end
+            ctx=Context(model,package,c);track_end(ctx);return ctx.finish()
         if c.get('parameters',{}).get('physical_stud_support'):
             from .review_assemblies import Context
             from .review_wall_occurrence_details import cripple
@@ -438,6 +442,7 @@ def build_scene(model,package,c,subtype=''):
         bridging=family in ('cfs_stud_bridging','cfs_bridging_anchor')
         direction=c.get('parameters',{}).get('stud_end_direction',1)
         ends=([0,0,0],[0,0,18]) if direction>0 else ([0,0,-18],[0,0,0])
+        if c.get('parameters',{}).get('stud_through_track'):ends=([0,0,-18],[0,0,18])
         a.member('M1',sp,*ends,y=(1,0,0),description='Stud '+sp) if fitted else a.member('M1',sp,[0,0,-12 if bridging else 0],[0,0,18],description='Stud '+sp)
         if bridging:
             bp=pick(('stud_bridging',),channel(p,'ASSEMBLY-U1.5',1.5,.5,.0566,0));a.member('M2',bp,[-18,0,6],[18,0,6],description='Continuous bridging '+bp)
@@ -450,7 +455,7 @@ def build_scene(model,package,c,subtype=''):
             a.section_at=0
         else:
             # Rotate track to open upward; stud flanges engage the two track legs.
-            if fitted:a.member('M2',fitted['profile_id'],*fitted['axis'],y=fitted['local_y'],description='Actual receiving track '+fitted['profile_id'])
+            if fitted:a.member('M2',fitted['profile_id'],*fitted['axis'],y=fitted['local_y'],description='Actual receiving track '+fitted['profile_id'],**({'slots':fitted['slots']} if fitted.get('slots') else {}))
             else:a.member('M2',tp,[-15,0,0],[15,0,0],y=(0,0,1),description='Receiving track '+tp)
             for i,sign in enumerate((-1,1)):
                 if c.get('parameters',{}).get('each_ply_end_screws') or fitted and p[sp]['family']=='built_up':

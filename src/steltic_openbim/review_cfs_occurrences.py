@@ -19,7 +19,7 @@ def bind(model):
     openings(model)
     bind_sills_and_joists(model)
     members={m['id']:m for m in model['members']};cells=defaultdict(list)
-    tracks=[m for m in model['members'] if m['kind'] in ('top_track','bottom_track','ordinary_track','tier_track')]
+    tracks=[m for m in model['members'] if m['kind'] in ('top_track','bottom_track','ordinary_track','tier_track','parapet_cap')]
     opening_edges=[m for m in model['members'] if m['kind'] in ('opening_header','opening_sill')]
     profiles={p['id']:p for p in model['profiles']}
     for m in tracks:
@@ -37,8 +37,11 @@ def bind(model):
                 seen.add(track['id']);a,b=axis(track);v=sub(b,a);length=math.dist(a,b);direction=mul(v,1/length)
                 if abs(dot(direction,x))<.99999:continue
                 t=dot(sub(point,a),direction)
-                if not -.01<=t<=length+.01:continue
-                nearest=add(a,mul(direction,t));delta=sub(nearest,point)
+                # The track corner/end fit can trim its web 1/16 in back from
+                # the stud workline. Keep that real receiver instead of falling
+                # back to an unrelated generic track at the same node.
+                if not -.125<=t<=length+.125:continue
+                nearest=add(a,mul(direction,max(0,min(length,t))));delta=sub(nearest,point)
                 if abs(dot(delta,y))>.01 or abs(delta[2])>1:continue
                 choices.append((math.dist(nearest,point),track['id'],track,nearest))
         if not choices:
@@ -71,7 +74,21 @@ def bind(model):
         direction=1 if abs(point[2]-aa[2])<=abs(point[2]-bb[2]) else -1
         par=c.setdefault('parameters',{})
         par['physical_track']=dict(profile_id=track['profile_id'],axis=[local(p) for p in ends],local_y=[round(dot(track['local_y'],v),7) for v in axes])
+        if track.get('slots'):
+            first=max(0,station-18);last=min(math.dist(a,b),station+18)
+            slots=[]
+            for selected in track['slots']:
+                start=max(first,selected['start_in']);end=min(last,selected['end_in'])
+                if end>start:slots.append(dict(copy.deepcopy(selected),start_in=start-first,end_in=end-first))
+            if slots:par['physical_track']['slots']=slots
         par['stud_end_direction']=direction
+        if min(math.dist(point,aa),math.dist(point,bb))>1:
+            par['stud_through_track']=True
+        # At a cut/spliced track end the usual flange screw can lie outside
+        # the actual finite track. A separately labelled web/foot clip bridges
+        # that finite end; do not extend the receiving track just for the view.
+        if min(station,math.dist(a,b)-station)<3:
+            par['physical_track_end_clip']=True
         c['member_ids']=list(dict.fromkeys([stud['id'],track['id']]+c['member_ids'][1:]))
 
 

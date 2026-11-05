@@ -3,6 +3,43 @@ import math,re
 from .review_assemblies import NUMBER,number,effective
 
 
+def track_end(ctx):
+    """A formed web clip whose foot screws stay within the real track end."""
+    from .review_receiver_geometry import extract,horizontal_frame
+    from .pilots.geometry import strips
+    a=ctx.a;stud,track=ctx.ms[:2];axes=horizontal_frame(stud['local_y'])
+    sp=extract(ctx,stud,'STUD',axes,18);tp=extract(ctx,track,'TRACK',axes,18)
+    direction=ctx.params['stud_end_direction'];tt=ctx.p[track['profile_id']]['dimensions']['t'];t=.0566
+    z=tp['member']['axis'][0][2]+direction*tt/2
+    low,high=sorted(q[0] for q in tp['member']['axis'])
+    webs=[poly for poly in strips(ctx.p[stud['profile_id']],ctx.p)
+          if max(q[0] for q in poly)-min(q[0] for q in poly)<.25
+          and max(q[1] for q in poly)-min(q[1] for q in poly)>2]
+    if not webs:raise ValueError('Finite track-end clip needs actual stud webs')
+    for i,web in enumerate(webs):
+        lo,hi=min(q[0] for q in web),max(q[0] for q in web)
+        sign=1 if (low+high)/2>(lo+hi)/2 else -1
+        face=hi if sign>0 else lo;thickness=hi-lo
+        fx=max(low+.5,min(high-.5,face+sign*.875))
+        if not low<fx<high or sign*(fx-face)<=t:raise ValueError('No actual track web for clip foot')
+        xlo,xhi=sorted((face,fx+sign*.5));y=(min(q[1] for q in web)+max(q[1] for q in web))/2
+        leg='WEB'+str(i);foot='FOOT'+str(i)
+        a.box(leg,[min(face,face+sign*t),y-.875,min(z,z+direction*1.5)],
+              [t,1.75,1.5],'A','A 54mil finite-track-end clip, vertical leg to actual stud web')
+        a.box(foot,[xlo,y-.875,min(z,z+direction*t)],[xhi-xlo,1.75,t],
+              'A','A continuous clip foot; screw stations remain inside actual track cut')
+        a.fastener('SW'+str(i),[[face+sign*t,y+dy,z+direction*.75] for dy in (-.5,.5)],
+                   [-sign,0,0],.19,t+thickness,['STUD',leg],
+                   'A two No10 clip-to-stud-web screws; attachment capacity unverified',basis='A',screw=True)
+        a.fastener('ST'+str(i),[[fx,y+dy,z+direction*t] for dy in (-.5,.5)],
+                   [0,0,-direction],.19,t+tt,['TRACK',foot],
+                   'A two No10 foot screws through the real track web',basis='A',screw=True)
+        a.weld('BEND'+str(i),[face,y-.875,z],[face,y+.875,z],[leg,foot],kind='BEND',basis='A',
+               description='A continuous formed clip; no site weld')
+    a.section_axis=0;a.section_at=fx;a.front_axes=(0,2)
+    a.notes.append('A finite-track-end proposal replaces flange screws outside the cut track. The stud and track sections/ends are actual; 54mil clip proportions, four No10 screws per web and capacity need engineering verification. Source stud capacity is unchanged.')
+
+
 def cripple(ctx):
     from .review_receiver_geometry import extract,point
     from .pilots.model import unit,cross,add,sub

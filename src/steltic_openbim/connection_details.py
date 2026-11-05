@@ -161,6 +161,10 @@ def prepare(model,package):
             n=shape_parameters.get('actual_endwall_head',{}).get('normal',ms[0]['local_y'])
             frame=(cross(n,[0,0,1]),n,[0,0,1])
             shape_parameters['actual_endwall_receivers']=signature([local_member(m,c['point'],frame,48) for m in ms])
+        if shape_parameters.get('actual_parapet'):
+            from .review_cfs_wall_bindings import local_member,signature
+            frame=([1,0,0],[0,1,0],[0,0,1])
+            shape_parameters['actual_parapet_receivers']=signature([local_member(m,c['point'],frame,44) for m in ms])
         if family in ('test_roof_truss','review_truss_node','review_truss_heel'):
             from .truss_node_geometry import receivers
             # A piece trimmed at a nearby opening cannot borrow the longer
