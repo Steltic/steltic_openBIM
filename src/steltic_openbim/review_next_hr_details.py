@@ -96,6 +96,9 @@ def crossing(ctx):
     a.notes.append('The gusset passes through a slot in the continuous diagonal; the second diagonal is interrupted at the plate. Slot clearances and free-edge perimeter are A. Hidden slot faces are diagrammatic; this is not a shop solid.')
 
 def cap(ctx):
+    if ctx.params.get('actual_bearing_cap'):
+        from .review_gable_receivers import bearing_cap
+        return bearing_cap(ctx)
     a,p,pid=ctx.a,ctx.p,ctx.pid;d=effective(p,pid);w=effective(p,pid,'width');t=.75;match=re.search(r'PL '+NUMBER+r' x '+NUMBER+r' x '+NUMBER+r' in (?:closure|cap)',ctx.text)
     if match:t,bx,by=map(number,match.groups())
     else:bx,by=d+2,w+2

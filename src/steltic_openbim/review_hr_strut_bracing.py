@@ -61,6 +61,12 @@ def apply(b):
 
 
 def draw(ctx):
+    if ctx.params.get('crane_eave_bracing'):
+        from .review_crane_eave_bracing import draw as crane_eave
+        return crane_eave(ctx)
+    if ctx.params.get('crane_roof_bracing'):
+        from .review_crane_roof_bracing import draw as crane_roof
+        return crane_roof(ctx)
     a,p=ctx.a,ctx.p;beam,support,strut,kicker=ctx.ms;origin=ctx.c['point'];sign=ctx.params['sign'];plate=.375
     for label,m,extent in (('BEAM',beam,30),('ADJACENT',support,30),('STRUT',strut,150),('KICKER',kicker,90)):
         part=extract(ctx,m,label,AXES,extent)

@@ -37,6 +37,12 @@ def build_model(package,state):
     build(b)
     from .review_parallel_wall_framing import apply as parallel_wall_framing
     parallel_wall_framing(b)
+    from .review_crane_receivers import apply as crane_receivers
+    crane_receivers(b)
+    from .review_crane_roof_bracing import apply as crane_roof_bracing
+    crane_roof_bracing(b)
+    from .review_crane_eave_bracing import apply as crane_eave_bracing
+    crane_eave_bracing(b)
     from .review_wall_line_joists import apply as wall_line_joists
     wall_line_joists(b,adopt_roof_wall_joists=True)
     from .review_supplements import floor_openings
@@ -57,6 +63,8 @@ def build_model(package,state):
     rod_joints(b)
     from .review_physical_pieces import apply as physical_pieces
     physical_pieces(b)
+    from .review_endwall_posts import apply as endwall_posts
+    endwall_posts(b)
     from .review_selected_details import apply as selected_details
     selected_details(b)
     from .review_profile_fit import apply as profile_fit

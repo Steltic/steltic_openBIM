@@ -82,6 +82,9 @@ def support(ctx,bp):
 
 def draw(ctx):
     a,p,pid,txt,par,f=ctx.a,ctx.p,ctx.pid,ctx.text,ctx.params,ctx.family
+    if par.get('actual_crane_joint'):
+        from .review_crane_receivers import draw as actual_crane
+        return actual_crane(ctx)
     if f in ('review_beam','review_existing_joint','review_crane_bracket'):
         # A member-specific V-beam end selection can accompany a generic
         # collector force check. Do not mix one record's bolt group with the
@@ -461,6 +464,9 @@ def retrofit(ctx):
 def industrial(ctx):
     a,p,pid,f=ctx.a,ctx.p,ctx.pid,ctx.family
     if f=='review_sliding_post':
+        if ctx.params.get('actual_endwall_head') or ctx.params.get('actual_endwall_base'):
+            from .review_endwall_posts import head,base
+            return head(ctx) if ctx.params.get('actual_endwall_head') else base(ctx)
         from .review_cfs_details import endpost
         endpost(ctx,base=ctx.c['point'][2]<1);return
     run=ctx.params.get('runway_profile',ctx.select(('runway_beam','beam','girder')));d=effective(p,run);w=effective(p,run,'width')
