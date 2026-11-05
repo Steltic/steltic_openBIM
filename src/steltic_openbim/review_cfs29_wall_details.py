@@ -30,6 +30,7 @@ def draw(ctx):
     elif purpose in ('bridge_stud','bridge_post'):bridge(ctx,axes,purpose=='bridge_post')
     elif purpose=='blocking_end':blocking(ctx,axes)
     a.front_axes=(0,2);a.section_axis=2;a.section_at=0
+    if purpose=='strap_end':a.section_at=a.fasteners[0]['points'][5][2]
     return True
 
 

@@ -38,7 +38,7 @@ def build(b,posts,beams,joists):
             rail=b.member(f'MZ-RAIL-{along}-{pos}-{j}','362S162-54','guard_rail',aa,dd,1,'A',local_y=[0,sg,0] if along==0 else [sg,0,0])
             rails.append(rail)
             for end,post in enumerate((left,right)):
-                c=joint(b,rail['id']+'-END'+str(end),'rail_post',axis(rail)[end],[rail,post,caps[post['id']]],['connections/conn-guard-post'],along=along,end=end);link(b,rail,c,end)
+                c=joint(b,rail['id']+'-END'+str(end),'rail_post',axis(rail)[end],[rail,post,caps[post['id']]],along=along,end=end);link(b,rail,c,end)
     # Close the return-rail gap between the end-edge rows and the long-edge
     # corner posts, instead of displaying unconnected corner rail ends.
     for x in (0,720):
@@ -47,7 +47,7 @@ def build(b,posts,beams,joists):
             aa=[*left['axis'][1][:2],184.1875];dd=[*right['axis'][1][:2],184.1875]
             m=b.member(f'MZ-RAIL-CORNER-{x}-{y}','362S162-54','guard_rail',aa,dd,1,'A')
             for end,post in enumerate((left,right)):
-                c=joint(b,m['id']+'-END'+str(end),'rail_post',axis(m)[end],[m,post,caps[post['id']]],['connections/conn-guard-post'],end=end,corner=True);link(b,m,c,end)
+                c=joint(b,m['id']+'-END'+str(end),'rail_post',axis(m)[end],[m,post,caps[post['id']]],end=end,corner=True);link(b,m,c,end)
     strings=[]
     for i,x in enumerate((312,360)):
         m=b.member('MZ-STRINGER-'+str(i),'2X1000S250-97','stair_stringer',[x,-200,0],[x,0,140],1,'A',local_y=[1,0,0])

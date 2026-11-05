@@ -13,6 +13,8 @@ def actual():
     p=evidence('cfs29')['package'];before=fingerprint(p)
     m=build_model(p,dict(design_scenario=dict(id='cfs29',answers_sha256=fingerprint(scenario('cfs29')['answers']))))
     assert fingerprint(p)==before
+    records={r['id'] for r in p['design_records']}
+    assert all(r in records for collection in ('members','connections','panels') for v in m[collection] for r in v.get('design_record_ids',[]))
     return m,p
 
 
@@ -31,7 +33,7 @@ def test_source_grid_and_collector_halves(actual):
 
 def test_source_deck_welds_and_source_bolt_groups(actual):
     m,p=actual;floor=next(v for v in m['panels'] if v['id']=='MEZZ29-FLOOR')
-    assert floor['thickness_in']==1.125 and len(floor['physical_constituent_member_ids'])==60
+    assert floor['thickness_in']==1.125 and len(floor['physical_constituent_member_ids'])==64
     assert sum(v['kind']=='joist' for v in m['members'])==92
     seams=[v for v in m['connections'] if v['parameters']['purpose']=='box_seams']
     assert len(seams)==33
@@ -40,11 +42,23 @@ def test_source_deck_welds_and_source_bolt_groups(actual):
         if c['parameters']['post']:
             lengths=Counter(round(math.dist(w['a'],w['b']),5) for w in s['welds'])
             assert lengths[8]==4 and lengths[1.5]>=18
+            from steltic_openbim.assembly_legend import weld_groups
+            assert len(list(weld_groups(s)))==2
         else:assert len(s['welds'])==2
     c=next(v for v in m['connections'] if v['parameters']['purpose']=='beam_end')
     s=build_scene(m,p,c)
     assert len(s['fasteners'])==4
     assert all(f['count']==2 and f['diameter']==.75 for f in s['fasteners'])
+
+
+def test_each_sheet_has_both_supported_edge_screw_rows(actual):
+    m,p=actual
+    for sheet in [v for v in m['members'] if v['kind']=='floor_sheet']:
+        lo,hi=sheet['sheet_x_limits']
+        assert 0<hi-lo<=48
+        groups=[c for c in m['connections'] if c['parameters']['purpose']=='deck_screws' and c['member_ids'][0]==sheet['id'] and c['member_ids'][1].startswith('MZ-JOIST-')]
+        for edge in (lo,hi):
+            assert any(c['parameters']['spacing']==6 and abs(c['parameters']['points'][0][0]-edge)<=.75 for c in groups)
 
 
 def test_shared_guard_caps_and_unspliced_braces(actual):

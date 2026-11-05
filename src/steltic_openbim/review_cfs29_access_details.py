@@ -74,7 +74,7 @@ def rail(ctx):
     # adopted diagonal corner rail rather than a synthetic perpendicular beam.
     direction=1 if dot(m['local_y'],axes[1])>0 else -1
     a.fastener('RAIL-SCREWS',[[.75,direction*v,-1.8125+.0566] for v in (.5,1.1)],[0,0,-1],.19,.0566+.125,['RAIL','CAP'],'A2No10 rail-to-cap screws',basis='A',screw=True)
-    a.front_axes=(0,2);a.section_axis=2;a.section_at=-1.75
+    a.front_axes=(0,2);a.section_axis=0;a.section_at=.75
 
 
 def guard_cap(ctx):
@@ -106,7 +106,7 @@ def stair(ctx):
     face=.0625+.1017;t=.25
     if end==0:
         base=-origin[2];box(a,'SLAB',[-8,-8,base-6],[8,8,base],'S6in existing slab / A stair shoe context');a.parts[-1]['kind']='concrete'
-        box(a,'BASE',[-4,-5,base],[4,5,base+.375],'A3/8x8x10in stair shoe')
+        box(a,'BASE',[-4,-5,base],[4,9,base+.375],'A3/8x8x14in stair shoe fully supporting both side-plate welds')
         for side in (-1,1):
             box(a,'WEB'+str(side),[side*face,-3,base+.375],[side*(face+t),8,12],'A stair shoe side plate on real stringer web')
             a.weld('W'+str(side),[side*(face+t),-3,base+.375],[side*(face+t),8,base+.375],['BASE','WEB'+str(side)],.1875,basis='A')

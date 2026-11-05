@@ -3,8 +3,9 @@
 
 def weld_groups(scene):
     groups={}
+    labels={p['id']:p.get('annotation_group',p['id']) for p in scene['parts']}
     for weld in scene['welds']:
-        key=(weld['basis'],weld['kind'],weld['size'],weld['description'],tuple(weld['connects']))
+        key=(weld['basis'],weld['kind'],weld['size'],weld['description'],tuple(labels.get(i,i) for i in weld['connects']))
         groups.setdefault(key,[]).append(weld)
     for key,welds in groups.items():
         label=welds[0]['id'] if len(welds)==1 else welds[0]['id']+'..'+welds[-1]['id']

@@ -100,7 +100,8 @@ def seams(ctx):
             a.profiles[pid]=dict(id=pid,family='flat',dimensions=dict(width=t,thickness=t),basis='A square filled groove envelope for source weld metal')
             a.member(label,pid,[left,0,z],[right,0,z],y=[0,1,0],basis='S weld / A geometry',description='S flare V-groove seam / A square filled-flush envelope',representation_role='assembly_component')
             a.parts[-1]['material_category']='weld'
-            a.weld('SEAM'+label,[left,0,side*depth/2],[right,0,side*depth/2],['BOX',label],kind='CJP',description='S ER70S-6 GMAW filled-flush flare V-groove, AWS D1.3; exact qualified groove preparation retained in source requirements.')
+            a.parts[-1]['annotation_group']='GROOVE-FILL-'+str(round(right-left,3))
+            a.weld('SEAM'+label,[left,0,side*depth/2],[right,0,side*depth/2],['BOX',label],kind='CJP',description=f'S{right-left:g}in ER70S-6 GMAW filled-flush flare V-groove, AWS D1.3; exact qualified groove preparation retained in source requirements.')
     a.front_axes=(0,2);a.section_axis=0;a.section_at=(lo+hi)/2
     a.notes.append('S post seams1.5in long at12in plus8in continuous at each end; beam seams continuous on both sides. Drawing weld envelope is A and does not replace the qualified flare-groove procedure.')
 
