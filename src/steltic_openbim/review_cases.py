@@ -175,6 +175,8 @@ def build_model(package,state):
     sbmf_roof_seats(b)
     from .review_sbmf_restraints import apply as sbmf_restraints
     sbmf_restraints(b)
+    from .review_cfs27_endwall import prepare as single_endwall_prepare
+    single_endwall_prepare(b)
     from .review_sbmf_girts import apply as sbmf_girts
     sbmf_girts(b)
     from .review_sbmf_post_heads import apply as sbmf_post_heads
@@ -203,6 +205,20 @@ def build_model(package,state):
     sbmf_stud_heads(b)
     from .review_sbmf_sag_angles import apply as sbmf_sag_angles
     sbmf_sag_angles(b)
+    from .review_cfs27_primary import prepare as single_primary_prepare,apply as single_primary
+    single_primary_prepare(b);single_primary(b)
+    from .review_cfs27_secondary import apply as single_secondary
+    single_secondary(b)
+    from .review_cfs27_endwall import apply as single_endwall
+    single_endwall(b)
+    from .review_cfs27_struts import apply as single_struts
+    single_struts(b)
+    from .review_cfs27_braces import apply as single_braces
+    single_braces(b)
+    from .review_cfs27_straps import apply as single_straps
+    single_straps(b)
+    from .review_cfs27_cladding import apply as single_cladding
+    single_cladding(b)
     from .review_cfs25_secondary import apply as cfs25_secondary
     cfs25_secondary(b)
     from .review_cfs25_existing import apply as cfs25_existing

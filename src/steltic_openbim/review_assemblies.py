@@ -84,6 +84,15 @@ class Context:
 
 def build_scene(model,package,c,subtype=''):
     ctx=Context(model,package,c);family=ctx.family
+    if family=='review_single_stitch':
+        from .review_cfs27_stitches import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_single_cladding':
+        from .review_cfs27_cladding import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_single_strap_node':
+        from .review_cfs27_straps import draw
+        draw(ctx);return ctx.finish()
     if family=='review_canopy_cladding':
         from .review_cfs26_cladding import draw
         draw(ctx);return ctx.finish()
@@ -98,6 +107,21 @@ def build_scene(model,package,c,subtype=''):
         draw(ctx);return ctx.finish()
     if family=='review_canopy_purlin':
         from .review_cfs26_purlins import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_single_flybrace':
+        from .review_cfs27_braces import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_single_strut':
+        from .review_cfs27_struts import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_single_endwall':
+        from .review_cfs27_endwall import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_single_channel_z':
+        from .review_cfs27_secondary import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_single_channel_primary':
+        from .review_cfs27_primary import draw
         draw(ctx);return ctx.finish()
     if family=='review_canopy_primary':
         from .review_cfs26_primary import draw
