@@ -87,6 +87,21 @@ def prepare(model,package):
         if shape_parameters.get('actual_canopy_fascia'):
             from .review_cfs_wall_bindings import local_member,signature
             shape_parameters['actual_canopy_fascia_receivers']=signature([local_member(m,c['point'],shape_parameters['axes'],40) for m in ms])
+        if shape_parameters.get('actual_single_endwall') or shape_parameters.get('actual_single_strut'):
+            from .review_cfs_wall_bindings import local_member,signature
+            shape_parameters['actual_single_endwall_receivers']=signature([local_member(m,c['point'],([1,0,0],[0,1,0],[0,0,1]),30) for m in ms])
+        if shape_parameters.get('actual_single_flybrace'):
+            from .review_cfs_wall_bindings import local_member,signature
+            shape_parameters['actual_single_brace_receivers']=signature([local_member(m,c['point'],shape_parameters['axes'],60) for m in ms])
+        if shape_parameters.get('actual_single_strap_node'):
+            from .review_cfs_wall_bindings import local_member,signature
+            shape_parameters['actual_single_strap_receivers']=signature([local_member(m,c['point'],shape_parameters['axes'],45) for m in ms])
+        if shape_parameters.get('actual_single_channel_z'):
+            from .review_cfs_wall_bindings import local_member,signature
+            shape_parameters['actual_single_z_receivers']=signature([local_member(m,c['point'],shape_parameters['axes'],24) for m in ms])
+        if shape_parameters.get('actual_single_channel_primary'):
+            from .review_cfs_wall_bindings import local_member,signature
+            shape_parameters['actual_single_channel_receivers']=signature([local_member(m,c['point'],([1,0,0],[0,1,0],[0,0,1]),60) for m in ms])
         if shape_parameters.get('actual_canopy_primary'):
             from .review_cfs_wall_bindings import local_member,signature
             shape_parameters['actual_canopy_receivers']=signature([local_member(m,c['point'],([1,0,0],[0,1,0],[0,0,1]),400 if shape_parameters['purpose']=='seams' else 32) for m in ms])
