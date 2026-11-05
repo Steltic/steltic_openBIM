@@ -127,8 +127,16 @@ def draw(ctx):
     def plate(label,lo,hi,description):
         low=[min(x,y) for x,y in zip(lo,hi)];size=[abs(x-y) for x,y in zip(lo,hi)]
         return a.box(label,low,size,'A',description)
-    plate('BLOCK-LEG',[face,yface,bz-1.25],[far,yface+side*T,bz+1.25],'A54mil folded clip on actual block web')
-    plate('JOIST-LEG',[face,yface+side*(T+3),bz-1.25],[face+sign*T,yface+side*T,bz+1.25],'A54mil return on actual joist web')
+    collector=par.get('source_collector_block',False);half=2.25 if collector else 1.25
+    plate('BLOCK-LEG',[face,yface,bz-half],[far,yface+side*T,bz+half],'S54mil clip; A finite envelope' if collector else 'A54mil folded clip on actual block web')
+    plate('JOIST-LEG',[face,yface+side*(T+3),bz-half],[face+sign*T,yface+side*T,bz+half],'S54mil return; A finite envelope' if collector else 'A54mil return on actual joist web')
+    if collector:
+        a.fastener('FB',[[bx+sign*x,yface+side*T,bz+z] for x in (.75,1.75) for z in (-1.5,0,1.5)],[0,-side,0],.19,T+bt,['BLOCK-LEG','BLOCK'],'S sixNo10 to source block; A gauge/stations',basis='S',screw=True)
+        a.fastener('FJ',[[face+sign*T,yface+side*(T+y),bz+z] for y in (.75,1.75) for z in (-1.5,0,1.5)],[-sign,0,0],.19,T+jt,['JOIST-LEG','JOIST'],'S sixNo10 to actual joist; A gauge/stations',basis='S',screw=True)
+        a.weld('BEND',[face,yface+side*T,bz-half],[face,yface+side*T,bz+half],['BLOCK-LEG','JOIST-LEG'],kind='BEND',basis='A',description='A continuous folded54mil clip, not a weld')
+        a.section_axis=2;a.section_at=bz;a.front_axes=(0,2)
+        a.notes.append('S1000S200-68 full-depth collector block and54mil clip with sixNo10 per leg at each end. A actual clear block length, clip envelope and screw gauge; shortened blocks and adjoining source joists require capacity verification for this physical fit.')
+        return
     source_block=bool(par.get('roof_restraint_block'))
     a.fastener('FB',[[bx+sign*1.25,yface+side*T,bz+z] for z in (-.75,.75)],[0,-side,0],.19,T+bt,['BLOCK-LEG','BLOCK'],
         ('S' if source_block else 'A')+' twoNo10 to actual block web; A stations',basis='S' if source_block else 'A',screw=True)

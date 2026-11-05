@@ -9,7 +9,7 @@ from steltic_openbim.drawing_workflow import fingerprint
 from steltic_openbim.review_cfs_occurrences import axis
 from steltic_openbim.assembly_templates import build_scene
 from steltic_openbim.assembly_scene import section_polygons
-from test_floor_opening_contact import contact
+from test_sbmf_header_fit import contact
 
 
 @pytest.fixture(scope='module')
@@ -41,8 +41,10 @@ def test_exact_source_layers_and_physical_joist_tops(actual):
 def test_all_source_diaphragm_zones_have_blocks_and_located_screws(actual):
     m,p=actual;members={m['id']:m for m in m['members']};by_host=defaultdict(list)
     for c in m['connections']:
-        if c['detail_ref']['id']!='review_wsp_screws':continue
-        par=c['parameters'];by_host[c['member_ids'][0]].extend([[v+o for v,o in zip(q,c['point'])] for q in par['points_relative']])
+        family=c['detail_ref']['id']
+        if family not in ('review_wsp_screws','review_cfs5_drag_screws'):continue
+        par=c['parameters'];host=c['member_ids'][1 if family=='review_cfs5_drag_screws' else 0]
+        by_host[host].extend([[v+o for v,o in zip(q,c['point'])] for q in par['points_relative']])
     blocks=[v for v in m['members'] if v['kind']=='diaphragm_blocking']
     assert len(blocks)>12000
     endpoints={(v['member_id'],v['end']) for v in m['connection_endpoint_links']}

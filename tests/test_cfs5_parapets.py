@@ -4,7 +4,7 @@ from steltic_openbim.review_cases import evidence,scenario,build_model
 from steltic_openbim.drawing_workflow import fingerprint
 from steltic_openbim.assembly_templates import build_scene
 from steltic_openbim.review_cfs_occurrences import bind,axis
-from test_floor_opening_contact import contact
+from test_sbmf_header_fit import contact
 
 
 @pytest.fixture(scope='module')
@@ -41,7 +41,9 @@ def test_all_actual_parapet_roof_screws_cross_both_attached_sheets(actual):
     for c in model['connections']:
         if c['detail_ref']['id']!='review_parapet_roof':continue
         scene=build_scene(model,package,c);parts={p['id']:p for p in scene['parts']}
-        assert {p['member']['profile_id'] for p in parts.values() if p.get('member')}=={'600S162-43','1000S200-54'}
+        joist=next(m for m in model['members'] if m['id']==c['member_ids'][1])
+        expected='1000S200-68' if joist.get('prior_profile_id')=='1000S200-54' else '1000S200-54'
+        assert {p['member']['profile_id'] for p in parts.values() if p.get('member')}=={'600S162-43',expected}
         assert [f['count'] for f in scene['fasteners']]==[4,4]
         for fastener in scene['fasteners']:
             for q in fastener['points']:

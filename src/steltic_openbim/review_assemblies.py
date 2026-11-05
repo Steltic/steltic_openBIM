@@ -135,6 +135,12 @@ def build_scene(model,package,c,subtype=''):
     if family in ('review_wsp_block','review_wsp_screws'):
         from .review_cfs5_diaphragms import draw
         draw(ctx);return ctx.finish()
+    if family=='review_cfs5_drag_screws':
+        from .review_cfs5_collectors import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_cfs5_drag_end':
+        from .review_cfs5_drag_ends import draw
+        draw(ctx);return ctx.finish()
     if family=='review_parapet_roof':
         from .review_cfs5_parapets import draw
         draw(ctx);return ctx.finish()
