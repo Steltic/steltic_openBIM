@@ -84,6 +84,9 @@ class Context:
 
 def build_scene(model,package,c,subtype=''):
     ctx=Context(model,package,c);family=ctx.family
+    if family=='review_mezz_bearing':
+        from .review_sbmf_bearing import draw
+        draw(ctx);return ctx.finish()
     if family=='review_sbmf_collector':
         from .review_sbmf_collectors import draw
         draw(ctx);return ctx.finish()
