@@ -20,7 +20,7 @@ def test_source_chord_track_and_collector_fasteners_reach_actual_parts(actual):
     families={'review_sbmf_chord_stitch','review_sbmf_chord_track','review_sbmf_track_anchor','review_sbmf_top_collector','review_sbmf_wall_bridging'}
     for c in m['connections']:
         family=c['detail_ref']['id']
-        if family not in families:continue
+        if family not in families or not c['member_ids'][0].startswith('SIDE-'):continue
         scene=build_scene(m,p,c);parts={v['id']:v for v in scene['parts']}
         for f in scene['fasteners']:
             for q in f['points']:

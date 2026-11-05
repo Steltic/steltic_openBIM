@@ -21,7 +21,8 @@ def apply(b):
         for end,q in enumerate(m['axis']):nodes[tuple(round(v,5) for v in q)].append((m,end))
     existing={c['id'] for c in b.connections}
     for point,items in sorted(nodes.items()):
-        if len(items)!=2 or not any(m['kind']=='ordinary_track' for m,_ in items):continue
+        mezz_corner=b.key=='cfs18' and len(items)==2 and all(m['id'].startswith('MEZZ-') for m,_ in items)
+        if len(items)!=2 or not (mezz_corner or any(m['kind']=='ordinary_track' for m,_ in items)):continue
         # At the end of a braced wall, keep its scheduled track untouched and
         # cut back only the complementary ordinary return. Two braced tracks
         # still need their own selected collector connection.
@@ -38,10 +39,10 @@ def apply(b):
         b.connection(cid,'review_track_corner',point,[first,second],parameters=dict(
             corner_turn=1 if dot(dy,cross([0,0,1],dx))>0 else -1,
             flange_direction=1 if first['local_y'][2]>0 else -1,
-            cutback_in=width/2+.125),title='ORDINARY TRACK CORNER / A')
+            cutback_in=width/2+.125),title=('MEZZANINE TRACK FIT / A' if mezz_corner else 'ORDINARY TRACK CORNER / A'))
         b.changes.append(dict(kind='ordinary_track_corner_fit',member_id=second['id'],end=ej,
             previous_offset=previous,end_offset=offset,connection_id=cid,
-            basis='A: butt the ordinary return track 1/8 in clear of the first track, preserving its existing vertical datum; join their actual outer flanges with the shown formed clip. The braced-wall track, source sections and checked collector details are unchanged.'))
+            basis=('A: butt the mezzanine return track 1/8 in clear of the other track and join the actual flanges with an adopted formed clip. This is a local corner fit; source shear-wall collector transfer requires its separate source-bound detail.' if mezz_corner else 'A: butt the ordinary return track 1/8 in clear of the first track, preserving its existing vertical datum; join their actual outer flanges with the shown formed clip. The braced-wall track, source sections and checked collector details are unchanged.')))
     if any(c['detail_ref']['id']=='review_track_corner' for c in b.connections):
         b.note('ORDINARY-TRACK-CORNERS','A: ordinary-track corners use explicit face cutbacks and formed external clips. These local assembly fits retain source track sections; floor transfer, shear-wall collectors and base anchorage remain separate source-bound details. No new capacity verification.')
 

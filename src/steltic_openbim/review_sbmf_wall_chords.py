@@ -118,24 +118,27 @@ def draw(ctx):
         chord,track=ctx.ms;axes=axes_for(chord);extract(ctx,chord,'CHORD',axes,12);extract(ctx,track,'TRACK',axes,12)
         td=p[track['profile_id']]['dimensions'];cp=p[chord['profile_id']];cd=p[cp['components'][0]['profile_id']]['dimensions']
         sign=1 if par['end']==0 else -1;t=td['t'];gap=td['d']/2-t-cd['d']/2
-        assert abs(gap-.03125)<1e-6
-        counts=[4,4,4,4] if par['screws']==16 else [4,3,3,3]
+        if not 0 < gap < .125:
+            raise ValueError('Actual chord/track clearance is outside the adopted packer fit')
+        counts={12:[3]*4,13:[4,3,3,3],16:[4]*4,24:[6]*4}[par['screws']]
+        pack_height=2.4 if par['screws']==24 else 1.7
         for j,(side,hand) in enumerate(((-1,-1),(-1,1),(1,-1),(1,1))):
             xx=sorted((hand*.4,hand*1.65));face=side*cd['d']/2
             label='PACK'+str(j)
-            a.box(label,[xx[0],face if side>0 else face-gap,min(sign*.25,sign*1.7)],[xx[1]-xx[0],gap,1.45],
-                'A','A1/32in fit pack between track leg and actual chord flange')
-            pts=[[hand*x,side*td['d']/2,sign*z] for z in (.55,1.25) for x in (.55,1.25)][:counts[j]]
+            a.box(label,[xx[0],face if side>0 else face-gap,min(sign*.25,sign*pack_height)],[xx[1]-xx[0],gap,pack_height-.25],
+                'A',f'A{gap:.5f}in fit pack between actual track leg and chord flange')
+            pts=[[hand*x,side*td['d']/2,sign*z] for z in (.55,1.25,1.95) for x in (.55,1.25)][:counts[j]]
             a.fastener('SCREWS'+str(j),pts,[0,-side,0],.216,t+gap+cd['t'],['CHORD','TRACK',label],
                 'S No.12 chord-to-track screws / A actual pitch, gauge and clearance pack',screw=True)
         a.section_axis=2;a.section_at=sign*.55
         return
     axes=([1,0,0],[0,1,0],[0,0,1])
     if family=='review_sbmf_track_anchor':
+        if par.get('along')==1:axes=([0,1,0],[-1,0,0],[0,0,1])
         track=ctx.ms[0];extract(ctx,track,'TRACK',axes,16);t=p[track['profile_id']]['dimensions']['t'];e=par['embedment'];stations=par['stations']
         a.box('CONC',[min(stations)-4,-12,-e-2],[max(stations)-min(stations)+8,24,e+2],'A','A slab/foundation context, capacity delegated',kind='concrete')
         a.fastener('ANCHOR',[[x,0,-e] for x in stations],[0,0,1],par['diameter'],e+t,['TRACK','CONC'],
-            'S three3/4in F1554 Gr36 shear anchors within12in of chord / A8in embedment and set-out',basis='S')
+            ('S three3/4in F1554 Gr36 shear anchors within12in of chord' if len(stations)==3 else 'S four3/4in F1554 Gr36 anchors within16in of chord' if len(stations)==4 else 'S3/4in F1554 Gr36 field anchor at maximum32in')+' / A8in embedment and set-out',basis='S')
         a.section_axis=0;a.section_at=stations[0]
         return
     if family=='review_sbmf_top_collector':
