@@ -15,7 +15,7 @@ from .drawing_pdf import Sheets,ascii_text,feature_vertices
 from .drawing_workflow import write_json,fingerprint
 from .design_geometry import build_model,length
 from .pilots.geometry import strips,member_faces,part_faces,clip_axis
-from .pilots.model import add
+from .pilots.model import add,sub,mul,unit,cross
 
 INK='#243d49'; LIGHT='#c1cdcf'; GREY='#687b80'; ASSUMED='#946320'; BLUE='#275e75'
 
@@ -32,6 +32,16 @@ def feet(value):
 
 
 def physical_axis(m): return [add(p,o) for p,o in zip(m['axis'],m['end_offsets'])]
+
+
+def wall_plan_sections(member,profiles):
+    """Actual wide wall sections, which cannot be drawn as vertical-axis dots."""
+    if member['kind'] not in ('composite_wall','wall_closure'):return []
+    a,b=physical_axis(member)
+    if math.dist(a[:2],b[:2])>.001:return []
+    y=member['local_y'];z=cross(unit(sub(b,a)),y)
+    return [[add(a,add(mul(y,u),mul(z,v))) for u,v in polygon]
+            for polygon in strips(profiles[member['profile_id']],profiles)]
 
 
 def compact_references(values):
@@ -177,8 +187,13 @@ class DesignSheets(Sheets):
             if seg in seen:continue
             seen.add(seg);basis=m['basis'];color=ASSUMED if basis=='A' else INK
             primary=m['kind'] in ('column','moment_beam','girder','rafter','chord','girder_truss','walkway_post','walkway_edge_beam')
-            self.line(p,q,color,1.1 if primary else .45)
-            if math.dist(p,q)<2:
+            sections=wall_plan_sections(m,self.profiles) if axes==(0,1) else []
+            for polygon in sections:
+                pts=[tr(v) for v in polygon];path=self.c.beginPath();path.moveTo(*pts[0])
+                for v in pts[1:]:path.lineTo(*v)
+                path.close();self.c.setStrokeColor(color);self.c.setFillColor('#dbe6eb');self.c.setLineWidth(.65);self.c.drawPath(path,stroke=1,fill=1)
+            if not sections:self.line(p,q,color,1.1 if primary else .45)
+            if not sections and math.dist(p,q)<2:
                 self.c.setStrokeColor(color);self.c.rect(p[0]-2.5,p[1]-2.5,5,5,stroke=1,fill=0)
             marks[m['mark']].append((m,p,q))
             if mark_mode=='all' and math.dist(p,q)>25 and m['kind'] not in ('flange_kicker','opening_trimmer','opening_header'):
