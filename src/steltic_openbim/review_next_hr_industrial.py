@@ -66,6 +66,15 @@ def gable(b):
         axis=[[p[0],p[1],312 if abs(p[2]-372)<.01 else p[2]] for p in src['axis']]
         k=1 if max(p[2] for p in axis)<=192 else 2
         m=b.member(src['id'],pid,kind,*axis,k,local_y=src.get('local_y'),source=src['id'])
+        m['analysis_ids']=list(src.get('analysis_ids',[])) if axis==src['axis'] else []
+        if axis!=src['axis']:
+            b.excluded.append(dict(id=src['id'],profile_id=pid,entity_ids=[m['id']],source_axis=src['axis'],
+                reason='The source flat model uses31 ft mean roof height. This analysis-only workline is replaced by the same selected column/eave member at the source26 ft eave; source analysis and checks remain unchanged.'))
+        record={'W12X26':'roof-W12X26','W16X31':'floor-W16X31','W24X84':'lateral_col-W24X84'}.get(pid)
+        if pid=='W8X31':
+            lateral=any(axis[0][0] in (b.config['XC'][i],b.config['XC'][i+1]) and axis[0][1]==b.config['YC'][j] for i,j in b.config['OFF_BRACED'])
+            record=('lateral_col' if lateral else 'gravity_col')+'-W8X31'
+        if record:m['design_record_ids'].append(b.record('members',record))
     connect_primary(b,[0,192,312])
     # Replace source column continuity interpretations with one-piece columns.
     b.connections[:]=[c for c in b.connections if c['detail_ref']['id'] not in ('review_splice','review_column_continuity')]

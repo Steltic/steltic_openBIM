@@ -4,6 +4,12 @@ from .review_assemblies import *
 
 def draw(ctx):
     f=ctx.family
+    if ctx.params.get('actual_gable_brace'):
+        from .review_gable_bracing import brace
+        return brace(ctx)
+    if ctx.params.get('actual_gable_secondary'):
+        from .review_gable_bracing import secondary
+        return secondary(ctx)
     if f in ('review_pack_stitch','review_floor_strap','review_post_collector','review_rod_transfer','review_roof_edge','review_post_edge'):
         from .review_wall_details import draw
         draw(ctx)
