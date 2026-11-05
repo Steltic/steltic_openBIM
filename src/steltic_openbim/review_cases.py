@@ -35,6 +35,8 @@ def build_model(package,state):
     else:
         from .review_cfs import build
     build(b)
+    from .review_sbmf_wall_chords import prepare as prepare_sbmf_wall_chords
+    prepare_sbmf_wall_chords(b)
     from .review_sbmf_restraints import prepare as prepare_sbmf_restraints
     prepare_sbmf_restraints(b)
     from .review_parallel_wall_framing import apply as parallel_wall_framing
@@ -173,6 +175,8 @@ def build_model(package,state):
     sbmf_source(b)
     from .review_sbmf_hold_downs import apply as sbmf_hold_downs
     sbmf_hold_downs(b)
+    from .review_sbmf_wall_chords import apply as sbmf_wall_chords
+    sbmf_wall_chords(b)
     from .review_cfs6_floor_panels import bind_bearing_clearances
     bind_bearing_clearances(b)
     return b.finish()

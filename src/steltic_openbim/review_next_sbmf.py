@@ -22,7 +22,8 @@ def build(b):
     for side,y in enumerate((0,600)):
         hp='2X1200S250-97' if office and side==0 else '2X1200S300-118' if office else '2X1000S250-97';hr='header-storefront' if office and side==0 else 'header-interior' if office else 'header-eave';headerpid=b.profile(hp,gap=.375)
         for i,(xa,xb) in enumerate(zip(frames,frames[1:])):
-            m=b.member(f'HEADER-{side}-{i}',headerpid,'girder',[xa,y,roofbase-b.depth(headerpid)/2],[xb,y,roofbase-b.depth(headerpid)/2],1,'S',records=[b.record('headers',hr)])
+            header_z=roofbase-b.depth(headerpid)/2 if office else 288+b.depth(headerpid)/2
+            m=b.member(f'HEADER-{side}-{i}',headerpid,'girder',[xa,y,header_z],[xb,y,header_z],1,'S',records=[b.record('headers',hr)])
             for end,point in enumerate(m['axis']):b.connection(m['id']+str(end),'review_sbmf_header',point,[m,cols[i+end,side]],[b.record('headers',hr),b.record('connections','conn-'+hr+'-to-column')])
             if office and side==0:
                 ep=b.pack(b.profile('1600S350-118'),2,'back_to_back',label='SBMF-STOREFRONT',gap=12);ew=b.member(f'EW-BEAM-{i}',ep,'moment_beam',[xa-6,0,246],[xb+6,0,246],1,'S',local_y=[0,1,0],records=[b.record('frames','frame-EW-storefront')])
