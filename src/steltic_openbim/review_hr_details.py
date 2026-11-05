@@ -400,6 +400,9 @@ def splice(ctx):
 
 def wall(ctx):
     a,p,pid,txt,par=ctx.a,ctx.p,ctx.pid,ctx.text,ctx.params
+    if ctx.family=='review_plate_wall' and par.get('actual_plate_boundary'):
+        from .review_plate_boundaries import draw
+        return draw(ctx)
     if ctx.family=='review_plate_wall':
         cp=ctx.select(('column',));bp=ctx.select(('beam','moment_beam'));cd=effective(p,cp);bd=effective(p,bp);t=par['thickness'];wp=flat(p,32,t)
         a.member('M1',cp,[-cd/2,0,-bd],[ -cd/2,0,40]);a.member('M2',bp,[0,0,-bd/2],[42,0,-bd/2]);a.member('WALL',wp,[18,.28125,2],[18,.28125,34],y=[1,0,0],basis='S',description='Physical 3/16 in wall plate / corner extract')

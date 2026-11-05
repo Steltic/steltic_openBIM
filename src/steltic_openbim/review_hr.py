@@ -69,6 +69,8 @@ def build(b):
             b.changes.append(dict(kind='gold_local_member_selection',member_id=made['id'],analysis_profile_id=original,physical_profile_id='W24X62',record_id=made['design_record_ids'][0],basis='S: explicit final mechanical-zone hand design supersedes the generic roof analysis section on Grid B / Grids 1-3'))
         if b.key=='hr32':made['phase']='existing A36' if max(aa[2],bb[2])<=468.01 else 'new A992'
         if kind=='column':column_ids.add(made['id'])
+    from .review_hr9_selections import collectors
+    collectors(b)
     # Floor cells preserve real voids and setbacks; the crane bracket level is not a floor.
     from .review_floor_layout import cells,thickness,interval
     for i,cell in enumerate(cells(b,levels)):
@@ -309,7 +311,7 @@ def connect_primary(b,levels):
                     if preferred:refs.append(b.record('connections',preferred))
                 match=re.search(r'RBS a = (\d+(?:[ -]\d+/\d+|/\d+|\.\d+)?) in, b = (\d+(?:[ -]\d+/\d+|/\d+|\.\d+)?) in, c = (\d+(?:[ -]\d+/\d+|/\d+|\.\d+)?)',text)
                 if match:m['rbs']=dict(zip(('a_in','b_in','c_in'),map(number,match.groups())))
-            b.connection(m['id']+':'+str(side),family,point,[m]+([support] if support else []),refs,parameters={'moment':moment,'collector':abs(axial)>10,'existing':b.key=='hr32' and k<=3})
+            b.connection(m['id']+':'+str(side),family,point,[m]+([support] if support else []),refs,parameters={'moment':moment,'collector':abs(axial)>10 or bool(m.get('source_collector_line')),'existing':b.key=='hr32' and k<=3})
 
 def ebf(b):
     length=b.config.get('E_LINK',36)

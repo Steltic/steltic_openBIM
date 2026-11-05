@@ -83,4 +83,10 @@ def build_model(package,state):
     cfs_source_bindings(b)
     from .review_concrete_collectors import apply as concrete_collectors
     concrete_collectors(b)
+    from .review_source_conflicts import apply as source_conflicts
+    source_conflicts(b)
+    from .review_plate_boundaries import apply as plate_boundaries
+    plate_boundaries(b)
+    from .review_hr9_selections import splice_scope
+    splice_scope(b)
     return b.finish()

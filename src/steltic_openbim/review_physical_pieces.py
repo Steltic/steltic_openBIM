@@ -202,7 +202,9 @@ def embedded_shafts(builder):
             transition=c['point'][2]+12;old=copy.deepcopy(m);embedded=copy.deepcopy(m)
             embedded.update(id=m['id']+':embedded',profile_id=pid,axis=[[*m['axis'][end][:2],c['point'][2]-length],[*m['axis'][end][:2],transition]],end_offsets=[[0,0,0],[0,0,0]],analysis_ids=[],design_record_ids=list(c['design_record_ids']))
             embedded.pop('analysis_segments',None);embedded['setout_basis']='S heavier embedded box and 12 in above-foundation transition; source inner taper requirement retained in base detail'
-            m['axis'][end][2]=transition;m['end_offsets'][end]=[0,0,0];builder.members.append(embedded);c['member_ids'].append(embedded['id'])
+            # This is a physical end cut, not a shortening of the solver's
+            # reference interval. Keep analysis mappings on their original axis.
+            m['end_offsets'][end]=[0,0,transition-m['axis'][end][2]];builder.members.append(embedded);c['member_ids'].append(embedded['id'])
             builder.endpoint_links=getattr(builder,'endpoint_links',[])
             for mid,side in ((m['id'],'start' if end==0 else 'end'),(embedded['id'],'start'),(embedded['id'],'end')):
                 builder.endpoint_links.append(dict(member_id=mid,end=side,connection_id=c['id'],basis='Actual embedded shaft/end plate and source heavier-to-lighter shaft CJP transition are in this base assembly'))

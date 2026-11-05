@@ -77,6 +77,9 @@ class Context:
 
 def build_scene(model,package,c,subtype=''):
     ctx=Context(model,package,c);family=ctx.family
+    if family=='review_transition_splice':
+        from .review_source_conflicts import draw_transition
+        draw_transition(ctx);return ctx.finish()
     if family in ('review_collector_bond','review_collector_lap'):
         from .review_concrete_collectors import draw
         draw(ctx);return ctx.finish()
