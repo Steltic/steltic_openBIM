@@ -302,8 +302,9 @@ def parallel_floor(a,p,index,label,j,part,tracks,studs,ends=(-1,1)):
         if (trackz-surface_z)*end<-.03:raise ValueError('Parallel wall/chord steel intersects the track web')
         xs=[max(part['bounds'][0][0]+1,bounds['bounds'][0][0]+1,-6),min(part['bounds'][0][1]-1,bounds['bounds'][0][1]-1,6)]
         if xs[1]<=xs[0]:raise ValueError('Parallel wall/joist has no physical attachment overlap')
-        yy=cy+side*.75
-        if not bounds['bounds'][1][0]+.25<=yy<=bounds['bounds'][1][1]-.25:raise ValueError('Parallel chord flange misses the actual track web')
+        ylo=max(part['bounds'][1][0],bounds['bounds'][1][0]);yhi=min(part['bounds'][1][1],bounds['bounds'][1][1])
+        if yhi-ylo<.5:raise ValueError('Parallel chord flange misses the actual track web')
+        yy=(ylo+yhi)/2
         if gap>.02:
             ys=sorted((cy-side*jt/2,cy+side*(p[j['profile_id']]['dimensions']['b']-jt/2)))
             name='RIM-PACK'+str(index)+tag;a.box(name,[xs[0]-.5,ys[0],min(trackz,surface_z)],[xs[1]-xs[0]+1,ys[1]-ys[0],gap],'A','A separate steel pack beneath this actual channel flange; source local capacity remains to verify');joins.append(name)

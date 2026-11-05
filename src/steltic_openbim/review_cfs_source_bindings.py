@@ -23,7 +23,7 @@ def unresolved(b,rid,reason):
 def apply(b):
     # These exact table schemas belong to these saved gold examples. Do not
     # infer similarly named source tables on an unrelated production job.
-    if b.key not in ('cfs2','cfs3','cfs12'):return
+    if b.key not in ('cfs2','cfs3','cfs7','cfs12'):return
     walls={(w['line'],w['level']):w for w in b.walls};stories=len(b.cfg['heights_ft'])
     by_wall={}
     for m in b.members:
@@ -33,7 +33,8 @@ def apply(b):
     for rid,record in b.records.items():
         data=record['data'];table=record['table']
         if table=='segment_framing':
-            line=data['line'];values=[int(v.strip()) for v in data['framing_mil_stories_1_to_8'].split('/')]
+            line=data['line']
+            values=[int(data[f's{k}']) for k in range(1,stories+1)] if b.key=='cfs7' else [int(v.strip()) for v in data['framing_mil_stories_1_to_8'].split('/')]
             if len(values)!=stories:
                 unresolved(b,rid,'Source framing schedule does not enumerate every storey');continue
             matches=[];valid=True
@@ -51,6 +52,9 @@ def apply(b):
                 unresolved(b,rid,'A required stud/track occurrence or its source framing thickness is missing');continue
             for m in matches:attach(b,m,rid,'Source segment-framing minimum at this exact line and storey, verified against each actual stud/track thickness. Independent gravity section and attachment checks remain separate.')
         elif table=='braced_wall_layout':
+            if b.key=='cfs7':
+                cfs7_layout(b,rid,data,walls,by_wall,stories)
+                continue
             lines=re.findall(r'\b[XY][A-Z0-9]+\b',data['line'])
             if b.key=='cfs2' and data['line']=='Y1-Y5':lines=['Y'+str(i) for i in range(1,6)]
             if b.key=='cfs3' and data['line']=='Y28 to Y168':lines=['Y'+str(i) for i in range(28,169,28)]
@@ -92,3 +96,27 @@ def apply(b):
                 if previous!=m['design_record_ids']:
                     b.changes.append(dict(kind='source_segment_stud_binding',member_id=m['id'],previous_record_ids=previous,
                         record_ids=list(m['design_record_ids']),basis='Source explicitly distinguishes 97 mil segment studs from ordinary party-wall studs; physical section and position retained.'))
+
+
+def cfs7_layout(b,rid,data,walls,by_wall,stories):
+    text=data['line'];lines=[]
+    for token in re.split(r'\s*[,/]\s*',text):
+        match=re.fullmatch(r'([XY][A-Z]+)(\d+)-\1(\d+)',token)
+        lines.extend([match[1]+str(n) for n in range(int(match[2]),int(match[3])+1)] if match else [token])
+    segments={'6 x 18 ft per corridor wall':[216]*6,'2 x 26 ft':[312]*2,
+              '2 x 14 ft':[168]*2,'2 x 14 ft + 10 ft':[168,168,120],'3 x 10 ft':[120]*3}.get(data['walls'])
+    if segments is None:raise ValueError('Unknown CFS7 source segment layout')
+    # The named throat-end row is more specific than the range row. The two
+    # ordinary 14 ft runs are still represented, alongside its third 10 ft run.
+    expected_special=data['walls']=='2 x 14 ft'
+    matches=[]
+    for line in lines:
+        for k in range(1,stories+1):
+            wall=walls.get((line,k));actual=by_wall.get((line,k),[])
+            expected=segments+([120] if expected_special and line in ('YN7','YS5') else [])
+            lengths=sorted(round(r['end_in']-r['start_in'],6) for r in wall['runs']) if wall else []
+            if not actual or lengths!=sorted(expected):
+                unresolved(b,rid,'Actual CFS7 segment count/length differs at '+line+' storey '+str(k));return
+            if abs(sum(segments)-data['per_line_ft']*12)>.001:raise ValueError('Source CFS7 segment total changed')
+            matches.extend(actual)
+    for m in matches:attach(b,m,rid,'Exact source line/storey and segment lengths verified. YN7/YS5 retain their more-specific additional 10 ft throat segment; the generic 28 ft row describes their two ordinary 14 ft runs only.')
