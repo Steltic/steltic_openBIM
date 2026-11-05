@@ -5,7 +5,7 @@ from pathlib import Path
 from .review_cases import build_model
 from .connection_details import prepare
 from .assembly_pdf import draw_assembly
-from .design_pdf import DesignSheets,feet,physical_axis,section,specifications,compact_references,INK,BLUE,GREY,LIGHT,ASSUMED
+from .design_pdf import DesignSheets,feet,physical_axis,wall_plan_sections,section,specifications,compact_references,INK,BLUE,GREY,LIGHT,ASSUMED
 from .drawing_workflow import write_json,fingerprint
 from .drawing_pdf import feature_vertices
 
@@ -90,6 +90,27 @@ def plan(sh,k,kind):
         'Openings S3xx; source specifications S7xx. Additional complete geometry and assumption records accompany this PDF.'],x=sh.W-540,width=460)
     if not selected:raise ValueError('Empty review plan '+sh.current)
 
+
+def core_plan(sh):
+    selected=[m for m in sh.m['members'] if m['level']==1 and m['kind'] in ('composite_wall','wall_closure')]
+    groups=defaultdict(list)
+    for m in selected:
+        if m.get('core_group'):groups[m['core_group']].extend(q for poly in wall_plan_sections(m,sh.profiles) for q in poly)
+    pts=[q for rows in groups.values() for q in rows]
+    bounds=[(min(q[i] for q in pts)-36,max(q[i] for q in pts)+36) for i in (0,1)]
+    scale=scale_for(bounds,1450,1000);tr,s=sh.grid_view(bounds,(0,1),scale,(180,380))
+    marks=sh.draw_members(selected,tr,(0,1),s);sh.representative_marks(marks,12)
+    for name,rows in sorted(groups.items()):
+        x0,x1=min(q[0] for q in rows),max(q[0] for q in rows);y0,y1=min(q[1] for q in rows),max(q[1] for q in rows)
+        sh.dim(tr([x0,y0,0]),tr([x1,y0,0]),-25,value=x1-x0,basis='S',ref=name+' outer X extent')
+        sh.dim(tr([x0,y0,0]),tr([x0,y1,0]),25,value=y1-y0,basis='S',ref=name+' outer Y extent')
+        sh.label(*tr([(x0+x1)/2,(y0+y1)/2,0]),name+' core pier',13,BLUE)
+    sh.panel_notes(['L1 core footprint from the actual steel plate profiles; source outside dimensions shown.',
+        'Each pier has two steel faceplates and a source 1 in free-end closure. Overall wall thickness is 18 in; concrete infill is omitted from this steel set-out view.',
+        'Faceplate thickness changes by storey; see the member schedule, pier source records and the separate assembled core details.',
+        'The framing plans show these same footprints at each storey. Coupling-beam embedments, ties, diaphragm studs, panel splices and caps each have their own located C-series details.',
+        'A: story splices, non-load-bearing roof caps and local fit proposals remain explicitly identified. This drawing does not certify new capacity or fabrication.'],x=sh.W-540,width=460)
+
 def generate(package,state,dest):
     if not all(r['confirmed'] for r in state['requests']):raise ValueError('Adopt the fictional answers before dimensioned review drawings')
     dest=Path(dest);dest.mkdir(parents=True,exist_ok=True);m=build_model(package,state);assemblies=prepare(m,package);sh=DesignSheets(package,state,dest,m);jobs=[]
@@ -142,12 +163,18 @@ def generate(package,state,dest):
             queue(f'S{100+k:03}',label+' framing plan',lambda k=k:plan(sh,k,'roof' if k==last else 'floor'))
         if m['pilot'].startswith('cfs'):
             for k in range(1,last+1):queue(f'S{130+k:03}',f'Storey {k} wall framing plan',lambda k=k:plan(sh,k,'walls'))
+    if any(v['kind']=='composite_wall' for v in m['members']):
+        queue('S150','Composite core footprint / L1',lambda:core_plan(sh))
     cuts=[]
     for normal in (0,1):
         values=[v for _,v in m['grids']['xy'[normal]]]
         for value in (values[0],values[len(values)//2]):cuts.append((normal,value,1-normal,None,f'Grid plane {"XY"[normal]}={feet(value)}'))
     for view in m.get('extra_views',[]):
         along=0 if view['direction']=='X' else 1;cuts.append((1-along,view['station_in'],along,view.get('range_in'),view['title']))
+    for member in m['members']:
+        if member['kind']!='composite_wall' or member['level']!=1:continue
+        along=max(range(2),key=lambda i:abs(member['local_y'][i]));normal=1-along;station=member['axis'][0][normal]
+        cuts.append((normal,station,along,None,'Composite core plane '+str('XY'[normal])+'='+feet(station)))
     for wall in m.get('wall_layouts',[]):
         along=0 if wall['direction']=='X' else 1
         if wall['level']!=1 or not wall['runs']:continue
