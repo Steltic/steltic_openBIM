@@ -45,7 +45,7 @@ def test_main_hall_ground_tracks_are_not_drawn_as_intermediate_floors(key):
     model=build_model(package,dict(design_scenario=dict(id=key,answers_sha256=fingerprint(s['answers']))))
     bind(model);lookup={m['id']:m for m in model['members']};count=0
     for c in model['connections']:
-        if c['detail_ref']['id']!='review_cfs_sill' or abs(c['point'][2])>.01 or lookup[c['member_ids'][0]]['level']!=3:continue
+        if c['detail_ref']['id'] not in ('review_cfs_sill','review_sbmf_track_anchor') or abs(c['point'][2])>.01 or lookup[c['member_ids'][0]]['level']!=3:continue
         scene=build_scene(model,package,c)
         assert {p['id'] for p in scene['parts'] if p.get('member')}=={'TRACK'}
         assert any(p['kind']=='concrete' for p in scene['parts'])

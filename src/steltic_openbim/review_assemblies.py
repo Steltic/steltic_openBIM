@@ -84,6 +84,9 @@ class Context:
 
 def build_scene(model,package,c,subtype=''):
     ctx=Context(model,package,c);family=ctx.family
+    if family in ('review_sbmf_chord_stitch','review_sbmf_chord_track','review_sbmf_track_anchor','review_sbmf_top_collector','review_sbmf_wall_bridging'):
+        from .review_sbmf_wall_chords import draw
+        draw(ctx);return ctx.finish()
     if family=='review_sbmf_rod_foundation' or (family=='review_sbmf_hold_down' and ctx.params.get('actual_sbmf_hold_down')):
         from .review_sbmf_hold_downs import draw
         draw(ctx);return ctx.finish()
