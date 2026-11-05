@@ -43,6 +43,10 @@ def build_model(package,state):
     crane_roof_bracing(b)
     from .review_crane_eave_bracing import apply as crane_eave_bracing
     crane_eave_bracing(b)
+    from .review_rod_receivers import apply as rod_receivers
+    rod_receivers(b)
+    from .review_gable_bracing import apply as gable_bracing
+    gable_bracing(b)
     from .review_wall_line_joists import apply as wall_line_joists
     wall_line_joists(b,adopt_roof_wall_joists=True)
     from .review_supplements import floor_openings

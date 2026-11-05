@@ -71,6 +71,21 @@ def prepare(model,package):
         # equal stud layouts on different beams share a drawing detail while the
         # source-beam identity remains on every actual connection occurrence.
         shape_parameters={k:v for k,v in c.get('parameters',{}).items() if k not in ('original_physical_member_id','source_releases')}
+        if family=='review_roof_seat' and model['pilot'].startswith('hr'):
+            from .review_cfs_wall_bindings import local_member,signature
+            from .pilots.model import sub,unit,cross
+            import math
+            chord=next(m for m in ms if m['kind']=='truss_chord')
+            away=sub(max(chord['axis'],key=lambda q:math.dist(q,c['point'])),c['point'])
+            y=unit([away[0],away[1],0]);frame=(cross(y,[0,0,1]),y,[0,0,1])
+            shape_parameters['actual_hr_roof_seat_receivers']=signature([local_member(m,c['point'],frame,30 if m is chord else 24) for m in ms if m is chord or m['kind'] in ('beam','girder','moment_beam','rafter')])
+        if shape_parameters.get('actual_gable_brace') or shape_parameters.get('actual_gable_secondary'):
+            from .review_cfs_wall_bindings import local_member,signature
+            shape_parameters.pop('primary_origin',None)
+            shape_parameters['actual_gable_brace_receivers']=signature([local_member(m,c['point'],([1,0,0],[0,1,0],[0,0,1]),70) for m in ms])
+        if shape_parameters.get('actual_rod_end') or shape_parameters.get('actual_rod_adjuster'):
+            from .review_cfs_wall_bindings import local_member,signature
+            shape_parameters['actual_rod_receivers']=signature([local_member(m,c['point'],([1,0,0],[0,1,0],[0,0,1]),70) for m in ms])
         if shape_parameters.get('actual_crane_joint'):
             from .review_cfs_wall_bindings import local_member,signature
             from .review_receiver_geometry import horizontal_frame

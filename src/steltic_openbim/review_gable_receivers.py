@@ -6,7 +6,7 @@ from .assembly_scene import clip_part
 
 
 def apply(b):
-    lookup={m['id']:m for m in b.members}
+    lookup={m['id']:m for m in b.members};knee_columns={}
     for c in b.connections:
         if c['detail_ref']['id']=='review_hr_gable_knee':
             rafter,column=[lookup[mid] for mid in c['member_ids']]
@@ -15,6 +15,7 @@ def apply(b):
             # The saved knee is explicitly bolted to a loaded column flange.
             # Its physical roll must present that flange to the hall rafter.
             old=copy.deepcopy(column['local_y']);column['local_y']=y
+            knee_columns[tuple(column['axis'][0][:2])]=(column['profile_id'],list(y))
             d=b.profiles[column['profile_id']]['dimensions'];rd=b.depth(rafter['profile_id'])
             face=d['d']/2;ep=face+1;upper=slope*ep+rd*math.sqrt(1+slope*slope)/2
             end=max(range(2),key=lambda i:column['axis'][i][2]);previous=copy.deepcopy(column['end_offsets'][end])
@@ -33,6 +34,15 @@ def apply(b):
             b.changes.append(dict(kind='source_office_column_cap_bearing_datum',member_id=column['id'],
                 previous_offset=old,end_offset=copy.deepcopy(column['end_offsets'][end]),beam_id=beam['id'],
                 source_record_ids=c['design_record_ids'],basis='S: 3/4 in cap beneath the actual girder bottom flange. A physical column cut; the office roof TOS and analysis workline are unchanged.'))
+    # Analysis-storey segments are one physical shaft. A loaded-flange knee
+    # cannot rotate only the upper segment and leave the lower shaft at90deg.
+    for member in b.members:
+        if member['kind']!='column':continue
+        chosen=knee_columns.get(tuple(member['axis'][0][:2]))
+        if not chosen or member['profile_id']!=chosen[0] or member['local_y']==chosen[1]:continue
+        previous=list(member['local_y']);member['local_y']=list(chosen[1])
+        b.changes.append(dict(kind='continuous_gable_column_roll',member_id=member['id'],previous_local_y=previous,local_y=list(chosen[1]),
+            basis='A physical continuity: every analysis segment of the same selected column shaft has the source loaded-flange knee orientation. Analysis axes and original checks retained; no new capacity verification.'))
 
 
 def knee(ctx):
