@@ -35,6 +35,8 @@ def build_model(package,state):
     else:
         from .review_cfs import build
     build(b)
+    from .review_parallel_wall_framing import apply as parallel_wall_framing
+    parallel_wall_framing(b)
     from .review_wall_line_joists import apply as wall_line_joists
     wall_line_joists(b,adopt_roof_wall_joists=True)
     from .review_supplements import floor_openings

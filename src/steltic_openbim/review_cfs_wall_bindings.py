@@ -90,6 +90,9 @@ def bind(model):
                     oldpoint=axis(track)[end];station=point(oldpoint,origin,axes)[0]
                     if math.dist(oldpoint[:2],origin[:2])<.25 or track['kind'] in ('ordinary_track','bottom_track') and math.dist(oldpoint[:2],origin[:2])<=6:
                         target=bounds[0]-.125 if end==0 else bounds[1]+.125
+                        # This allowance may extend a cut end, but must never
+                        # retract it from another real stud already on the run.
+                        target=min(target,station) if end==0 else max(target,station)
                         offset=add(track['end_offsets'][end],mul(axes[0],target-station))
                         if math.dist(offset,track['end_offsets'][end])>.001:
                             previous=copy.deepcopy(track['end_offsets'][end]);track['end_offsets'][end]=offset
@@ -160,22 +163,32 @@ def bind(model):
                     parallel_axes=horizontal_frame(into)
                     if present_track(parallel_axes):axes=parallel_axes
             else:axes=horizontal_frame(sub(b,a))
+            wall_y=0.
+            if primary.get('parallel_wall_line'):
+                # The source pair straddles the wall; neither web lies on its
+                # centreline. Bind the real parallel track even at an outside
+                # corner where no perpendicular track reaches the outer web.
+                axes=horizontal_frame(sub(b,a));centre=origin.copy()
+                normal=1 if abs(b[0]-a[0])>abs(b[1]-a[1]) else 0
+                centre[normal]=primary['parallel_wall_axis_in']
+                wall_y=point(centre,origin,axes)[1]
             candidates=near.get(origin);tracks=[];joists=[];parallel=[];studs=[];truss=[]
             for m in candidates:
                 aa,bb=axis(m);local=[point(q,origin,axes) for q in (aa,bb)];u=unit(sub(bb,aa))
                 if m['kind'] in ('top_track','bottom_track','ordinary_track','tier_track') and abs(dot(u,axes[0]))>.999:
                     allowance=6 if is_joist else .01
-                    if abs(local[0][1])<.01 and min(q[0] for q in local)-allowance<=0<=max(q[0] for q in local)+allowance and abs(local[0][2])<30:tracks.append(m)
+                    if abs(local[0][1]-wall_y)<.01 and min(q[0] for q in local)-allowance<=0<=max(q[0] for q in local)+allowance and abs(local[0][2])<30:tracks.append(m)
                 elif m['kind'] in ('joist','opening_trimmer') and abs(dot(u,axes[1]))>.999:
-                    if abs(local[0][0])<=48 and abs(local[0][2])<24 and any(abs(q[1])<.01 for q in local):joists.append(m)
+                    if not primary.get('parallel_wall_line') and abs(local[0][0])<=48 and abs(local[0][2])<24 and any(abs(q[1])<.01 for q in local):joists.append(m)
                 elif m['kind'] in ('joist','rim_track','floor_rim') and abs(dot(u,axes[0]))>.999:
-                    if abs(local[0][1])<.01 and abs(local[0][2])<24 and min(q[0] for q in local)-.01<=0<=max(q[0] for q in local)+.01:parallel.append(m)
+                    on_pair=m.get('parallel_wall_line') and abs(local[0][1]-wall_y)<=4.001
+                    if (abs(local[0][1]-wall_y)<.01 or on_pair) and abs(local[0][2])<24 and min(q[0] for q in local)-.01<=0<=max(q[0] for q in local)+.01:parallel.append(m)
                 elif m['kind']=='truss_chord' and abs(dot(u,axes[1]))>.999:
                     if abs(local[0][0])<=48 and abs(local[0][2])<24 and min(q[1] for q in local)-.01<=0<=max(q[1] for q in local)+.01:truss.append(m)
                 elif m['kind']=='truss_chord' and abs(dot(u,axes[0]))>.999:
                     if abs(local[0][1])<.01 and abs(local[0][2])<24 and min(q[0] for q in local)-.01<=0<=max(q[0] for q in local)+.01:truss.append(m)
                 elif m['kind'] in ('stud','chord','opening_jamb'):
-                    if abs(local[0][1])<.01 and abs(local[0][0])<24 and min(q[2] for q in local)<30 and max(q[2] for q in local)>-30:studs.append(m)
+                    if abs(local[0][1]-wall_y)<.01 and abs(local[0][0])<24 and min(q[2] for q in local)<30 and max(q[2] for q in local)>-30:studs.append(m)
             # Keep the closest lower and upper track. A roof has no upper wall.
             chosen=[]
             for direction in (-1,1):
@@ -210,8 +223,12 @@ def bind(model):
                 for side in (-1,1):
                     options=[m for m in parallel if max(side*point(q,origin,axes)[0] for q in axis(m))>2]
                     if options:
-                        selected=min(options,key=lambda m:(abs(axis(m)[0][2]-origin[2]),m['id']))
-                        if selected not in selected_joists:selected_joists.append(selected)
+                        paired=[m for m in options if m.get('parallel_wall_line')]
+                        selected=min(paired or options,key=lambda m:(abs(axis(m)[0][2]-origin[2]),m['id']))
+                        if paired:
+                            for m in paired:
+                                if abs(axis(m)[0][2]-axis(selected)[0][2])<.01 and m not in selected_joists:selected_joists.append(m)
+                        elif selected not in selected_joists:selected_joists.append(selected)
             selected_truss=[]
             if not selected_joists and truss:
                 for side in (-1,1):

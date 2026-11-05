@@ -93,14 +93,19 @@ def floors(b,outline,levels):
                 if roof and ri==1:
                     for x in frange(0,2160+.1,24):simple_truss(b,f'BAR-ROOF-{x}',1,x,1080,1824,z,124,k,'2X600S162-68','2X600S162-54',96)
                     continue
-                for station in frange((y0 if axis==0 else x0)*12,(y1 if axis==0 else x1)*12+.1,16):
+                low,high=(y0 if axis==0 else x0)*12,(y1 if axis==0 else x1)*12
+                stations=list(frange(low,high+.1,16))
+                if roof:
+                    from .review_supplements import wall_axis_framing_stations
+                    stations=wall_axis_framing_stations(b,stations,axis,k,f'J-{k}-{ri}-'+'{station}-','source-family roof joist',station_bounds=(low,high))
+                for station in stations:
                     for j,(lo,hi) in enumerate(zip(supports,supports[1:])):
                         rid='joist-corridor' if hi-lo==6 else 'joist-amenity-roof' if roof else 'joist-unit';pid=section(rows[rid]['section']);joist(f'J-{k}-{ri}-{station}-{j}',pid,axis,station,lo*12,hi*12,z-finish,k,rid,16)
             continue
         rid='joist-roof' if roof and 'joist-roof' in rows else 'joist-floor';pid=section(rows[rid]['section']);spacing=24 if roof and b.key=='cfs12' else 12 if b.key in ('cfs4','cfs12') else 16
         support_positions=[p for axis,p in bearing_lines(b) if axis==1] or [i*336 for i in range(6)]
         stations=list(frange(0,max(y for x,y in outline)*12+.1,spacing))
-        if b.key=='cfs12':
+        if b.key in ('cfs9','cfs12'):
             from .review_supplements import wall_axis_framing_stations
             stations=wall_axis_framing_stations(b,stations,0,k,f'J-{k}-'+'{station}-','source-family joist')
         for station in stations:
