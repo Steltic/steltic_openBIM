@@ -34,11 +34,13 @@ def face_intervals(member,profiles,n):
 
 
 def apply(builder):
-    if builder.key not in ('cfs17','cfs19','cfs26','cfs27','cfs28','cfs30'):return
+    if builder.key not in ('cfs10','cfs18','cfs17','cfs19','cfs26','cfs27','cfs28','cfs30'):return
     members={m['id']:m for m in builder.members}
     for m in builder.members:
         if m['kind']!='strap':continue
-        if m['id'].startswith('ROOF-X-'):kinds=('rafter',)
+        wall_panel=builder.key in ('cfs10','cfs18') and '-X-' in m['id']
+        if wall_panel:kinds=('chord',)
+        elif m['id'].startswith('ROOF-X-'):kinds=('rafter',)
         elif m['id'].startswith(('SIDE-X-','WALL-X-')):kinds=('column',)
         elif m['id'].startswith('END-X-'):kinds=('column','endwall_post','opening_jamb')
         elif m['id'].startswith('VALLEY-X-'):kinds=('prop',)
@@ -47,18 +49,22 @@ def apply(builder):
         conns=[c for c in builder.connections if c['member_ids']==[m['id']] and c['detail_ref']['id']=='review_cfs_strap']
         if len(conns)!=2:raise ValueError('Expected both actual strap end connections: '+m['id'])
         thickness=builder.profiles[m['profile_id']]['dimensions']['thickness']
-        packing=thickness+.0625 if m['id'].endswith('True') or builder.key in ('cfs27','cfs28') and m['id'].endswith('-1') else 0.
+        packing=thickness+.0625 if m['id'].endswith('True') or builder.key in ('cfs10','cfs18','cfs27','cfs28') and m['id'].endswith('-1') else 0.
         normals=[];receivers=[]
         for end,p in enumerate(m['axis']):
             roof_normal=None
             if kinds==('rafter',):
                 dv=sub(*reversed(m['axis']));roof_normal=unit([-dv[2],0,dv[0]])
             choices=[(closest(r,p)[0],r['id'],r) for r in builder.members if r['kind'] in kinds
+                     and (not wall_panel or r['id'].startswith(m['id'].split('-X-',1)[0]+'-CH-'))
                      and (roof_normal is None or abs(dot(cross(unit(sub(*reversed(r['axis']))),r['local_y']),roof_normal))>.99999)]
             distance,_,host=min(choices)
             if distance>(16 if m['id'].startswith('VALLEY-X-') else 10):raise ValueError('No physical portal receiver at '+m['id'])
             _,q,u,_,_=closest(host,p)
-            if kinds==('rafter',):
+            if wall_panel:
+                direction=sub(*reversed(m['axis']));wall=unit([direction[0],direction[1],0]);normal=cross(wall,[0,0,1])
+                n=mul(normal,1 if dot(sub(p,q),normal)>0 else -1)
+            elif kinds==('rafter',):
                 n=cross(u,host['local_y'])
                 if n[2]<0:n=mul(n,-1)
             elif m['id'].startswith(('END-X-','VEST-X-')):n=[0,-1 if p[1]<=0 else 1,0]
@@ -116,7 +122,7 @@ def draw(ctx):
         a.parts[-1]['annotation_group']='FP'
     a.section_axis=0;a.section_at=host_points[0][0][0]
     a.dim(screw_points[0],screw_points[-1],f'{count} No.{size}; A 1 in row pitch',basis='A')
-    a.notes.append('Source strap section and end screw count retained. Collector plate, per-ply receiving attachments, packing and screw lengths are accepted fictional fit proposals, not source capacity checks. Both diagonals remain continuous; their crossing is not a restraint or load-transfer connection.')
+    a.notes.append('Source strap section and end screw count retained. Collector plate, per-ply receiving attachments, packing and screw lengths are accepted fictional fit proposals, not source capacity checks. The original direct strap/chord capacity is not assigned to an added collector plate. Both diagonals remain continuous; their crossing is not a restraint or load-transfer connection.')
     if abs(u[2])>.99999:
         from .assembly_scene import upright_receiver
         upright_receiver(a)
