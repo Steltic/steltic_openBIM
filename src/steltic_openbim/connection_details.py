@@ -79,6 +79,26 @@ def prepare(model,package):
             away=sub(max(chord['axis'],key=lambda q:math.dist(q,c['point'])),c['point'])
             y=unit([away[0],away[1],0]);frame=(cross(y,[0,0,1]),y,[0,0,1])
             shape_parameters['actual_hr_roof_seat_receivers']=signature([local_member(m,c['point'],frame,30 if m is chord else 24) for m in ms if m is chord or m['kind'] in ('beam','girder','moment_beam','rafter')])
+        if shape_parameters.get('actual_composite_core'):
+            from .review_cfs_wall_bindings import local_member,signature
+            from .review_receiver_geometry import horizontal_frame
+            from .pilots.model import unit,sub,mul
+            import math
+            purpose=shape_parameters['purpose']
+            direction=[1,0,0] if shape_parameters['direction']=='X' else [0,1,0]
+            frame=horizontal_frame(mul(unit(sub(*ms[0]['axis'][::-1])),1 if shape_parameters['end']==0 else -1)) if purpose=='coupling' else horizontal_frame(direction)
+            extent=76 if purpose=='base' else (max(math.dist(*m['axis']) for m in ms)+72 if purpose in ('corner','closure') else 36 if purpose=='coupling' else 12 if purpose in ('splice','cap') else 7)
+            core_receivers=[]
+            for m in ms:
+                item=local_member(m,c['point'],frame,extent)
+                # Slot positions are relative to the actual start, including
+                # the embedded base. Two equal wall profiles can have different
+                # coupling-flange cuts in this extract.
+                actual_start=[x+y for x,y in zip(m['axis'][0],m['end_offsets'][0])]
+                u=unit(sub(*m['axis'][::-1]));station=sum((x-y)*z for x,y,z in zip(c['point'],actual_start,u))
+                item['source_slots']=[dict(slot,start_in=slot['start_in']-station,end_in=slot['end_in']-station) for slot in m.get('slots',[]) if slot['start_in']<station+extent and slot['end_in']>station-extent]
+                core_receivers.append(item)
+            shape_parameters['actual_core_receivers']=signature(core_receivers)
         if shape_parameters.get('actual_gable_brace') or shape_parameters.get('actual_gable_secondary'):
             from .review_cfs_wall_bindings import local_member,signature
             shape_parameters.pop('primary_origin',None)

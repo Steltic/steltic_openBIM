@@ -82,6 +82,9 @@ def support(ctx,bp):
 
 def draw(ctx):
     a,p,pid,txt,par,f=ctx.a,ctx.p,ctx.pid,ctx.text,ctx.params,ctx.family
+    if par.get('actual_composite_core'):
+        from .review_composite_core import draw as core
+        return core(ctx)
     if par.get('actual_crane_joint'):
         from .review_crane_receivers import draw as actual_crane
         return actual_crane(ctx)
