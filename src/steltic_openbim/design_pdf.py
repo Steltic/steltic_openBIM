@@ -206,6 +206,21 @@ class DesignSheets(Sheets):
         self.label(cx+3,cy+4,f['id']+(' A' if f.get('basis') else ' S'),size,ASSUMED)
 
 
+def plan_connections(model,selected,level,kind):
+    """Located occurrences for this view, not every joint on a tall column."""
+    from .review_pdf import is_base_connection
+    lookup={m['id']:m for m in model['members']};ids={m['id'] for m in selected}
+    z=next((z for k,_,z in model['levels'] if k==level),0)
+    result=[]
+    for c in model['connections']:
+        if not ids.intersection(c['member_ids']):continue
+        if kind=='base' and not is_base_connection(c,lookup):continue
+        if kind=='floor' and not z-40<=c['point'][2]<=z+6:continue
+        if kind=='roof' and c['point'][2]<z-40:continue
+        result.append(c)
+    return result
+
+
 def plan(sh,level,kind='floor'):
     m=sh.m;pilot=m['pilot'];allm=m['members']
     if pilot=='hr22':
@@ -253,7 +268,8 @@ def plan(sh,level,kind='floor'):
     notes.append(f'{len(selected):,} members represented in this view. Repeated-member leaders identify groups; full instance mapping is in the model index.')
     y=sh.panel_notes(notes)
     sh.text(sh.W-460,y-12,'CONNECTION CALLOUTS',15,font='Helvetica-Bold');y-=42
-    refs=sorted({ref for a in selected for ref in a['connection_refs']})
+    connections=plan_connections(m,selected,level,kind)
+    refs=sorted({c['drawing_ref'] for c in connections})
     for ref in refs:
         if y<185:
             sh.text(sh.W-460,y,'Further joint variants: connection index / member index.',10);break
@@ -261,10 +277,10 @@ def plan(sh,level,kind='floor'):
         y=sh.wrap(sh.W-460,y,ref+'  '+detail['family'].replace('_',' '),390,11,16)-7
     # Place at least one anchored callout for each family that occurs in the view.
     used=set()
-    for a in selected:
-        for ref in a['connection_refs']:
-            if ref in used or len(used)>=6:continue
-            p=tr(physical_axis(a)[0]);sh.callout(p,ref,25,18+len(used)%3*14);used.add(ref)
+    for c in connections:
+        ref=c['drawing_ref']
+        if ref in used or len(used)>=6:continue
+        p=tr(c['point']);sh.callout(p,ref,25,18+len(used)%3*14);used.add(ref)
 
 
 def section(sh,normal,station,along,title,scale,bounds,origin=(215,340),band=1):
