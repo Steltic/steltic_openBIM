@@ -157,6 +157,8 @@ def build_model(package,state):
     cfs5_roof_restraint(b)
     from .review_sbmf_headers import apply as sbmf_headers
     sbmf_headers(b)
+    from .review_sbmf_roof_seats import apply as sbmf_roof_seats
+    sbmf_roof_seats(b)
     from .review_cfs6_floor_panels import bind_bearing_clearances
     bind_bearing_clearances(b)
     return b.finish()

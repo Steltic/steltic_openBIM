@@ -84,6 +84,9 @@ class Context:
 
 def build_scene(model,package,c,subtype=''):
     ctx=Context(model,package,c);family=ctx.family
+    if family in ('review_sbmf_roof_seat','review_sbmf_column_cap'):
+        from .review_sbmf_roof_seats import draw
+        draw(ctx);return ctx.finish()
     if family=='review_sbmf_cap' or (family=='review_sbmf_header' and ctx.params.get('actual_sbmf_header')):
         from .review_sbmf_headers import draw
         draw(ctx);return ctx.finish()
