@@ -35,6 +35,8 @@ def build_model(package,state):
     else:
         from .review_cfs import build
     build(b)
+    from .review_cfs26_primary import prepare as canopy_primary_prepare
+    canopy_primary_prepare(b)
     from .review_sbmf_floor import prepare as prepare_sbmf_floor
     prepare_sbmf_floor(b)
     from .review_sbmf_wall_chords import prepare as prepare_sbmf_wall_chords
@@ -205,6 +207,10 @@ def build_model(package,state):
     cfs25_secondary(b)
     from .review_cfs25_existing import apply as cfs25_existing
     cfs25_existing(b)
+    from .review_cfs26_primary import apply as canopy_primary
+    canopy_primary(b)
+    from .review_cfs26_purlins import apply as canopy_purlins
+    canopy_purlins(b)
     from .review_cfs6_floor_panels import bind_bearing_clearances
     bind_bearing_clearances(b)
     return b.finish()

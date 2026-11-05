@@ -75,6 +75,12 @@ def prepare(model,package):
         # equal stud layouts on different beams share a drawing detail while the
         # source-beam identity remains on every actual connection occurrence.
         shape_parameters={k:v for k,v in c.get('parameters',{}).items() if k not in ('original_physical_member_id','source_releases')}
+        if shape_parameters.get('actual_canopy_purlin'):
+            from .review_cfs_wall_bindings import local_member,signature
+            shape_parameters['actual_canopy_purlin_receivers']=signature([local_member(m,c['point'],shape_parameters['axes'],24) for m in ms])
+        if shape_parameters.get('actual_canopy_primary'):
+            from .review_cfs_wall_bindings import local_member,signature
+            shape_parameters['actual_canopy_receivers']=signature([local_member(m,c['point'],([1,0,0],[0,1,0],[0,0,1]),400 if shape_parameters['purpose']=='seams' else 32) for m in ms])
         if shape_parameters.get('actual_retrofit_z'):
             from .review_cfs_wall_bindings import local_member,signature
             shape_parameters['actual_retrofit_receivers']=signature([local_member(m,c['point'],shape_parameters['axes'],36) for m in ms])

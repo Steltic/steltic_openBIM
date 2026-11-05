@@ -84,6 +84,12 @@ class Context:
 
 def build_scene(model,package,c,subtype=''):
     ctx=Context(model,package,c);family=ctx.family
+    if family=='review_canopy_purlin':
+        from .review_cfs26_purlins import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_canopy_primary':
+        from .review_cfs26_primary import draw
+        draw(ctx);return ctx.finish()
     if family=='review_sbmf_sag':
         from .review_sbmf_sag_angles import draw
         draw(ctx);return ctx.finish()
