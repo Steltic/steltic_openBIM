@@ -230,6 +230,9 @@ def prepare(model,package):
             # standard node's screw stations or local member extent.
             from .review_cfs_wall_bindings import signature as receiver_shape
             shape_parameters['physical_truss_receivers']=receiver_shape(receivers(ms,c['point']))
+        if family=='review_mezzanine29':
+            from .review_cfs_wall_bindings import local_member,signature
+            shape_parameters['actual_mezzanine_receivers']=signature([local_member(m,c['point'],([1,0,0],[0,1,0],[0,0,1]),150) for m in ms])
         if family=='review_splice':
             # Equal W designations do not imply that both actual shafts have
             # full-height boxing. This changes the receiver list itself.

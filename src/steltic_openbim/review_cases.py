@@ -30,6 +30,10 @@ def build_model(package,state):
     if fingerprint(package)!=spec['source_sha256'] or state['design_scenario']['answers_sha256']!=fingerprint(spec['answers']):raise ValueError('Review scenario or source changed')
     from .review_model import CaseModel
     b=CaseModel(key,package,state,evidence(key))
+    if key=='cfs29':
+        from .review_cfs29_model import build as mezzanine
+        mezzanine(b)
+        return b.finish()
     if CASES[key]['module']=='HR':
         from .review_hr import build
     else:
