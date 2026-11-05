@@ -83,4 +83,6 @@ def build_model(package,state):
     cfs_source_bindings(b)
     from .review_concrete_collectors import apply as concrete_collectors
     concrete_collectors(b)
+    from .review_concrete_mesh import apply as concrete_mesh
+    concrete_mesh(b)
     return b.finish()

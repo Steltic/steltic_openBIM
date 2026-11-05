@@ -148,6 +148,8 @@ def draw(ctx):
     a = ctx.a;par = ctx.params;origin = ctx.c['point']
     axes = horizontal_frame(sub(ctx.ms[0]['axis'][1],ctx.ms[0]['axis'][0]))
     lap = ctx.family == 'review_collector_lap'
+    label=par.get('reinforcement_label','Source collector bar')
+    radius=ctx.p[ctx.ms[0]['profile_id']]['dimensions']['d']/2
     extent = par['lap_in']/2+12 if lap else math.dist(*ctx.ms[0]['axis'])/2+.01
     for j,m in enumerate(ctx.ms):
         extract(ctx,m,'BAR'+str(j),axes,extent)
@@ -164,7 +166,7 @@ def draw(ctx):
     a.interfaces.append(dict(id='BOND',kind='reinforcement_bond_lap' if lap else 'reinforcement_bond_development',
         connects=[p['id'] for p in parts]+['TOPPING'],basis='A',
         description='Physical contact lap in the host topping; development/capacity unverified' if lap else
-                    'Source collector bar embedded in the host topping; development/capacity unverified',
+                    label+' embedded in the host topping; development/capacity unverified',
         **({'length_in':par['lap_in']} if lap else {})))
     a.interfaces[-1]['native_bond']=dict(id='BOND',kind=a.interfaces[-1]['kind'],host_receiver='TOPPING',
         bar_receivers=[p['id'] for p in parts],basis='Accepted fictional bond geometry; no development or capacity check',
@@ -173,6 +175,6 @@ def draw(ctx):
     if lap:a.dim([-par['lap_in']/2,0,0],[par['lap_in']/2,0,0],'Contact lap; unverified',basis='A')
     else:a.dim([xmin,0,0],[xmax,0,0],'Bar-piece length',basis='A')
     a.dim([0,ymin,top-par['topping_in']],[0,ymin,top],'Topping',view='section',basis='S',offset=-35)
-    a.dim([0,ymax,.3125],[0,ymax,top],'Top cover; unverified',view='section',basis='A',offset=35)
-    a.notes.extend(['S: source collector bar count, #5 nominal diameter and Gr 60. A: stock lengths, lap stations, cover and layering. No new reinforcement capacity check.',
+    a.dim([0,ymax,radius],[0,ymax,top],'Top cover; unverified',view='section',basis='A',offset=35)
+    a.notes.extend([par.get('reinforcement_note','S: source collector bar count, #5 nominal diameter and Gr 60. A: stock lengths, lap stations, cover and layering. No new reinforcement capacity check.'),
         'Concrete is host context. The floor model retains its deck/fill boundary and openings. No reinforcing-bar weld; the bond interface does not assert a verified development length.'])
