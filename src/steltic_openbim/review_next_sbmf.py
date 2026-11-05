@@ -74,7 +74,9 @@ def build(b):
 
 def wall(b,label,axis,pos,lo,hi,base,top,k,sp,cp,bays,width,count,rod,continuous=False):
     def pt(u,z):return [u,pos,z] if axis==0 else [pos,u,z]
-    d=b.depth(b.profile(sp));tp=b.profile(('800' if d>=8 else '600')+'T200-68');cp=b.profile(cp);sp=b.profile(sp)
+    d=b.depth(b.profile(sp));track=('800' if d>=8 else '600')+'T200-68'
+    if b.key=='cfs18' and label.startswith('MEZZ-'):track='600T300-97' if k==1 else '600T200-54'
+    tp=b.profile(track);cp=b.profile(cp);sp=b.profile(sp)
     for suffix,z,ly in (('BT',base,[0,0,1]),('TT',top,[0,0,-1])):
         m=b.member(label+suffix,tp,'bottom_track' if suffix=='BT' else 'top_track',pt(lo,z),pt(hi,z),k,'S',local_y=ly);b.connection(m['id'],'review_cfs_sill' if suffix=='BT' else 'review_cfs_floor',pt(lo,z),[m],parameters={'floor_depth':12,'level':k})
     for u in frange(lo,hi+.1,12 if b.key=='cfs10' and label.startswith('OFF') else 16):
@@ -86,7 +88,7 @@ def wall(b,label,axis,pos,lo,hi,base,top,k,sp,cp,bays,width,count,rod,continuous
             tr=b.member(label+'-TIER'+str(face),tp,'tier_track',pt(lo,(base+top)/2+face*.08),pt(hi,(base+top)/2+face*.08),k,'S',local_y=[0,0,face]);b.ends(tr,'review_sbmf_wall_slide',[b.record('framing','sidewall-tier-track')],parameters={'joint':'tier'})
     for j,(aa,dd) in enumerate(bays):
         chords=[]
-        chord_stations=(aa,dd) if b.key=='cfs18' and continuous else (aa+3,dd-3)
+        chord_stations=(aa,dd) if b.key=='cfs18' else (aa+3,dd-3)
         for side,u in enumerate(chord_stations):
             m=b.member(f'{label}-CH-{j}-{side}',cp,'chord',pt(u,base),pt(u,top),k,'S',local_y=[1,0,0] if axis==0 else [0,1,0]);chords.append(m)
             rp=b.custom('ROD-'+str(rod),'round',dict(d=rod),basis='S');r=b.member(m['id']+'R',rp,'hold_down_rod',pt(u,base-2),pt(u,top+4),k,'A')
@@ -106,10 +108,13 @@ def wing(b,office):
         # The roof uses 19/32 WSP, not the floor's WSP + gypsum stack.
         # One exact top-of-finish datum sets the joist, bearing track and panel.
         finish=23/32+(1 if office else 1.5) if k==1 else 19/32
-        z0=(k-1)*h;zt=k*h;floor_depth=b.depth(b.profile(pid))+finish;top=zt-floor_depth
+        z0=(k-1)*h-(1.5 if b.key=='cfs18' and k==2 else 0);zt=k*h;floor_depth=b.depth(b.profile(pid))+finish;top=zt-floor_depth
         sp='600S162-54' if office else '600S162-43';cp=('2X600S250-97' if k==1 else '2X600S162-54') if office else ('2X600S200-68' if k==1 else '2X600S162-54');rod=1.25 if office and k==1 else .75 if k==1 or office else .625
         for name,axis,pos,lo,hi in [('S',0,y0,x0,x1),('N',0,y1,x0,x1),('W',1,x0,y0,y1),('E',1,x1,y0,y1)]:
             margin=(hi-lo-240)/3;bays=[(lo+margin,lo+margin+120),(hi-margin-120,hi-margin)]
+            if b.key=='cfs18':
+                starts=[lo+math.ceil(margin/16)*16,lo+math.floor((hi-lo-margin-120)/16)*16]
+                bays=[(start,start+120) for start in starts]
             wall(b,('OFF-' if office else 'MEZZ-')+name+str(k),axis,pos,lo,hi,z0,top,k,sp,cp,bays,(6 if office else 5) if k==1 else 3 if office else 2,(20 if office else 16) if k==1 else 10 if office else 8,rod)
         bearing=[y0,(y0+y1)/2,y1] if office else [y0,y0+184,y0+368,y1]
         for j,y in enumerate(bearing[1:-1]):wall(b,f'BEARING-{k}-{j}',0,y,x0,x1,z0,top,k,sp,cp,[],0,0,rod)
