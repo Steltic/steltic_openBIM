@@ -88,7 +88,7 @@ def prepare(model,package):
             frame=horizontal_frame(sub(ms[0]['axis'][1],ms[0]['axis'][0]))
             extent=shape_parameters.get('context_extent_in',shape_parameters['lap_in']/2+12 if family=='review_collector_lap' else math.dist(*ms[0]['axis'])/2+.01)
             shape_parameters['actual_reinforcement_receivers']=signature([local_member(m,c['point'],frame,extent) for m in ms])
-        if any(shape_parameters.get(k) for k in ('actual_sbmf_roof','actual_sbmf_header','actual_cfs_strut_end','actual_cfs_endwall_girt','actual_cfs_door_header','actual_cfs_cross_plate','actual_cfs_endwall_head')) or family=='review_sbmf_joint':
+        if any(shape_parameters.get(k) for k in ('actual_sbmf_restraint','actual_sbmf_roof','actual_sbmf_header','actual_cfs_strut_end','actual_cfs_endwall_girt','actual_cfs_door_header','actual_cfs_cross_plate','actual_cfs_endwall_head')) or family=='review_sbmf_joint':
             from .review_cfs_wall_bindings import local_member,signature
             shape_parameters['actual_cfs_endwall_receivers']=signature([local_member(m,c['point'],([1,0,0],[0,1,0],[0,0,1]),30) for m in ms])
         if shape_parameters.get('actual_cfs_kicker'):

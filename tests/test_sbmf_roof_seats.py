@@ -26,7 +26,7 @@ def test_all_heel_bolts_cross_actual_caps_shims_and_chord_flanges(actual):
                 for label in f['connects']:assert contact(parts[label],f,q),(c['id'],label,q)
         assert len(s['interfaces'])==2
         count+=1
-    assert supports=={'column','header'} and count==(78 if m['pilot']=='cfs10' else 102)
+    assert supports=={'column','header'} and count==(114 if m['pilot']=='cfs10' else 170)
 
 
 def test_one_real_closure_per_hss_and_heel_footprints_are_supported(actual):

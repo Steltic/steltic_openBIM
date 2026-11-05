@@ -12,7 +12,9 @@ def build(b):
         m=b.member(f'FRAME-{i}-BEAM',bp,'moment_beam',[x,-b.depth(cp)/2,288],[x,600+b.depth(cp)/2,288],1,'S',local_y=[1,0,0],records=[b.record('members','frame-raf')])
         for side,y in enumerate((0,600)):b.connection(m['id']+'J'+str(side),'review_sbmf_joint',[x,y,288],[m,cols[i,side]],[b.record('connections','conn-knee')],parameters={'bearing_plates':office})
         # Independent truss restrains the beam flange through vertically slotted struts only.
-        stations=sorted(set([v for v in frange(18,73,18)]+[600-v for v in frange(18,73,18)]+list(frange(96,505,96))))
+        face=b.depth(cp)/2
+        near=[face+v for v in frange(18,73,18)]
+        stations=sorted(set(near+[600-v for v in near]+list(frange(96,505,96))))
         for j,y in enumerate(stations):
             for hand in (-1,1):
                 st=b.member(f'FLANGE-STRUT-{i}-{j}-{hand}','362S162-54','flange_strut',[x+hand*b.depth(cp)/2,y,288-b.depth(bp)/2],[x+hand*(b.depth(cp)/2+24),y,288-b.depth(bp)/2],1,'S')
