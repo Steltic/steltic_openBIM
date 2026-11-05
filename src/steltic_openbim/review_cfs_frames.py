@@ -39,7 +39,7 @@ def build(b):
     for a,d in zip(roof,roof[1:]):xs.update(frange(a[0],d[0]+.1,ps))
     if key=='cfs30':xs.update((140,280,560,700))
     if key=='cfs17':xs.update((150,300,450,744,888))
-    lap=15 if key=='cfs17' else (30 if key=='cfs19' else 24)
+    lap=15 if key=='cfs17' else (30 if key=='cfs19' else 18 if key=='cfs30' else 24)
     for x in sorted(xs):
         for j,(ya,yb) in enumerate(zip(frames,frames[1:])):
             label='1200Z300-118' if canopy else ('1000Z250-68' if key=='cfs19' else ('800Z250-68' if key=='cfs30' or min(abs(x-t) for t in (300,600,816))<204 else '800Z250-54'))
@@ -62,9 +62,10 @@ def build(b):
             if not canopy:
                 gs=78 if key=='cfs30' else 84 if key=='cfs19' else 72
                 for z in frange(30 if key=='cfs30' else 24 if key=='cfs17' else gs,rz(x),gs):
-                    label='800Z250-'+('97' if key=='cfs19' and j in (0,len(frames)-2) else '68' if key=='cfs19' else '54')
+                    label='600Z250-54' if key=='cfs30' else '800Z250-'+('97' if key=='cfs19' and j in (0,len(frames)-2) else '68' if key=='cfs19' else '54')
                     gp=pid(label);outside=x+(-1 if side==0 else 1)*(7+b.depth(gp)/2+.125)
-                    m=b.member(f'G-{side}-{j}-{z}',gp,'girt',[outside,ya-(lap if j else 0),z],[outside,yb+(lap if j<len(frames)-2 else 0),z],1,'A',local_y=[0,0,1],records=[rec('girt')]);b.ends(m,'review_secondary',[rec('girt')],parameters={'kind':'girt','lap':lap})
+                    girt_lap=15 if key=='cfs30' else lap
+                    m=b.member(f'G-{side}-{j}-{z}',gp,'girt',[outside,ya-(girt_lap if j else 0),z],[outside,yb+(girt_lap if j<len(frames)-2 else 0),z],1,'A',local_y=[0,0,1],records=[rec('girt')],lap_in=girt_lap);b.ends(m,'review_secondary',[rec('girt')],parameters={'kind':'girt','lap':girt_lap})
     # Actual scheduled strap planes and nodes; no diaphragm substituted for them.
     braced=range(6,10) if key=='cfs30' else (0,len(frames)-2)
     def strap(label,aa,dd,width,mil,count,supports,record):
