@@ -3,6 +3,9 @@ import math,re,copy
 from .review_assemblies import *
 
 def draw(ctx):
+    if ctx.params.get('actual_cfs_strut_end'):
+        from .review_cfs_strut_ends import draw as strut_end
+        return strut_end(ctx)
     f=ctx.family
     if ctx.params.get('actual_cfs_endwall_girt'):
         from .review_cfs_endwall_girts import draw as endwall_girt

@@ -73,6 +73,8 @@ def build_model(package,state):
     selected_details(b)
     from .review_profile_fit import apply as profile_fit
     profile_fit(b)
+    from .review_cfs_strut_ends import apply as cfs_strut_ends
+    cfs_strut_ends(b)
     from .review_cfs_endwall_girts import apply as cfs_endwall_girts
     cfs_endwall_girts(b)
     from .review_cfs_endwall_heads import apply as cfs_endwall_heads
