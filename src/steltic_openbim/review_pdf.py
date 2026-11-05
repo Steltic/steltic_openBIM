@@ -5,12 +5,13 @@ from pathlib import Path
 from .review_cases import build_model
 from .connection_details import prepare
 from .assembly_pdf import draw_assembly
-from .design_pdf import DesignSheets,feet,physical_axis,wall_plan_sections,section,specifications,compact_references,INK,BLUE,GREY,LIGHT,ASSUMED
+from .design_pdf import DesignSheets,feet,physical_axis,wall_plan_sections,section,specifications,compact_references,opening_level,INK,BLUE,GREY,LIGHT,ASSUMED
 from .drawing_workflow import write_json,fingerprint
 from .drawing_pdf import feature_vertices
 
 def refs(values):
     return compact_references(values)
+
 
 def scale_for(bounds,width=1530,height=1050):
     return max(15,math.ceil(max((bounds[0][1]-bounds[0][0])*72/width,(bounds[1][1]-bounds[1][0])*72/height)/5)*5)
@@ -62,9 +63,9 @@ def plan(sh,k,kind):
         if p['kind'] in ('floor','roof') and p['level']==k:
             vertices=[tr(q) for q in p['vertices']]
             for a,b in zip(vertices,vertices[1:]+vertices[:1]):sh.line(a,b,LIGHT,.7)
-    reserved=[]
+    reserved=[];opening_hosts={p['id']:p for p in m['panels']}
     for f in m['openings']:
-        if f['level']==k and f['plane']=='xy':
+        if opening_level(f,opening_hosts)==k and f['plane']=='xy':
             pts=[tr(q) for q in feature_vertices(f)];reserved.append(tuple(sum(q[i] for q in pts)/len(pts) for i in (0,1)))
     groups=sh.draw_members(selected,tr,(0,1),s);sh.representative_marks(groups,28,reserved)
     selected_ids={q['id'] for q in selected};seen=set();points=[];lookup={v['id']:v for v in m['members']}
@@ -78,7 +79,7 @@ def plan(sh,k,kind):
         sh.callout(p,c['drawing_ref'],35,30);seen.add(c['drawing_ref']);points.append(p)
         if len(seen)>=10:break
     for f in m['openings']:
-        if f['level']!=k:continue
+        if opening_level(f,opening_hosts)!=k:continue
         if f['plane']=='xy':sh.opening(f,tr,9)
         elif kind=='walls' or kind=='base':
             vertices=feature_vertices(f);pa,pb=tr(vertices[0]),tr(vertices[1]);sh.line(pa,pb,ASSUMED,2)
@@ -207,9 +208,9 @@ def generate(package,state,dest):
                     y-=rh
                 if y<145:raise ValueError('Flexible table overflow')
             queue(f'{prefix}{start+i:03}',title+f' / {i+1}',draw)
-    opening_rows=[]
+    opening_rows=[];opening_hosts={p['id']:p for p in m['panels']}
     for f in m['openings']:
-        opening_rows.append([f['id'],f['kind']+' / '+f.get('basis','A'),str(f['level']),f['plane'].upper(),*[feet(f[n]*12) for n in ('x_ft','y_ft','z_ft','width_ft','height_ft')]])
+        opening_rows.append([f['id'],f['kind']+' / '+f.get('basis','A'),str(opening_level(f,opening_hosts)),f['plane'].upper(),*[feet(f[n]*12) for n in ('x_ft','y_ft','z_ft','width_ft','height_ft')]])
     tables(['ID','TYPE / BASIS','LEVEL','PLANE','X','Y','Z','WIDTH','HEIGHT'],opening_rows,[270,250,90,90,280,280,280,280,280],'S',301,'Dimensioned opening coordinate schedule')
     from .assembly_legend import continuation_jobs
     for scene in assemblies:

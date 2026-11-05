@@ -34,6 +34,14 @@ def feet(value):
 def physical_axis(m): return [add(p,o) for p,o in zip(m['axis'],m['end_offsets'])]
 
 
+def opening_level(opening,hosts):
+    """Read the declared level or its actual host, without changing geometry."""
+    if opening.get('level') is not None:return opening['level']
+    host=hosts.get(opening.get('host_id'),{})
+    if host.get('level') is not None:return host['level']
+    raise ValueError('Opening has no declared or host level: '+opening['id'])
+
+
 def wall_plan_sections(member,profiles):
     """Actual wide wall sections, which cannot be drawn as vertical-axis dots."""
     if member['kind'] not in ('composite_wall','wall_closure'):return []
@@ -257,9 +265,10 @@ def plan(sh,level,kind='floor'):
     if pilot=='cfs8' and kind in ('base','roof','floor','walls'):
         perimeter=[[0,1008,0],[564,1008,0],[564,0,0],[1116,0,0],[1116,1008,0],[1680,1008,0],[1680,1560,0],[0,1560,0],[0,1008,0]]
         for a,b in zip(perimeter,perimeter[1:]):sh.line(tr(a),tr(b),GREY,.9)
+    opening_hosts={p['id']:p for p in m['panels']}
     for f in m['openings']:
-        show=f['plane']=='xy' and f['level']==level and kind not in ('base','walls')
-        show|=f['plane']!='xy' and (pilot=='cfs16' and kind=='base' or pilot=='cfs8' and kind=='walls' and f['level']==level)
+        show=f['plane']=='xy' and opening_level(f,opening_hosts)==level and kind not in ('base','walls')
+        show|=f['plane']!='xy' and (pilot=='cfs16' and kind=='base' or pilot=='cfs8' and kind=='walls' and opening_level(f,opening_hosts)==level)
         if show:sh.opening(f,tr)
     if kind=='base' and pilot=='cfs8':
         for p in m['panels']:
@@ -357,9 +366,9 @@ def section(sh,normal,station,along,title,scale,bounds,origin=(215,340),band=1):
 
 def opening_schedule(sh):
     headers=['ID','TYPE / BASIS','LEVEL','PLANE','X','Y','Z BASE','CLEAR WIDTH','CLEAR HEIGHT']
-    rows=[]
+    rows=[];opening_hosts={p['id']:p for p in sh.m['panels']}
     for f in sh.m['openings']:
-        rows.append([f['id'],f['kind']+(' / A' if f.get('basis') else ' / S'),str(f['level']),f['plane'].upper(),*[feet(f[k]*12) for k in ('x_ft','y_ft','z_ft','width_ft','height_ft')]])
+        rows.append([f['id'],f['kind']+(' / A' if f.get('basis') else ' / S'),str(opening_level(f,opening_hosts)),f['plane'].upper(),*[feet(f[k]*12) for k in ('x_ft','y_ft','z_ft','width_ft','height_ft')]])
         for key in ('x_ft','y_ft','z_ft','width_ft','height_ft'):
             sh.dimensions.append(dict(sheet=sh.current,value_in=f[key]*12,text=feet(f[key]*12),basis='A' if f.get('basis') else 'S',reference=f['id']+' '+key))
     table(sh,headers,rows,[120,330,100,100,205,205,205,225,225],x=80,y=sh.H-185,row_height=25,font=11)
