@@ -169,6 +169,10 @@ def build_model(package,state):
     sbmf_post_heads(b)
     from .review_sbmf_tiers import apply as sbmf_tiers
     sbmf_tiers(b)
+    from .review_sbmf_source import apply as sbmf_source
+    sbmf_source(b)
+    from .review_sbmf_hold_downs import apply as sbmf_hold_downs
+    sbmf_hold_downs(b)
     from .review_cfs6_floor_panels import bind_bearing_clearances
     bind_bearing_clearances(b)
     return b.finish()
