@@ -15,6 +15,29 @@ def refs(values):
 def scale_for(bounds,width=1530,height=1050):
     return max(15,math.ceil(max((bounds[0][1]-bounds[0][0])*72/width,(bounds[1][1]-bounds[1][0])*72/height)/5)*5)
 
+
+def is_base_connection(connection,lookup):
+    family=connection['detail_ref']['id'];primary=lookup[connection['member_ids'][0]]
+    explicit=family.endswith('_base') or family in ('hr_column_base','hr_embedded_column_base','sill_anchor_group','review_rod_foundation')
+    post_base=family in ('review_cfs_post','review_sliding_post','test_walkway_support') and abs(connection['point'][2]-min(q[2] for q in primary['axis']))<.1
+    sill=family=='review_cfs_sill' and primary['level']==1
+    return explicit or post_base or sill
+
+
+def base_members(model):
+    """All physical support bases, independent of the deepest embedment datum."""
+    lookup={m['id']:m for m in model['members']};selected=set()
+    for c in model['connections']:
+        if is_base_connection(c,lookup):selected.update(c['member_ids'])
+    datum=next((z for k,_,z in model['levels'] if k==0),0)
+    result=[]
+    for m in model['members']:
+        a,b=physical_axis(m);lo,hi=sorted((a[2],b[2]));vertical=hi-lo>2 and math.dist(a[:2],b[:2])<1
+        at_datum=vertical and lo<=datum+36 and hi>=datum-36
+        track=m['kind'] in ('bottom_track','ordinary_track') and m['level']==1
+        if (m['id'] in selected and vertical) or at_datum or track:result.append(m)
+    return result
+
 def plan(sh,k,kind):
     m=sh.m;bounds=[tuple(m['bounds'][i]) for i in (0,1)];grids=None
     if m['pilot'] in ('cfs10','cfs18') and k in (1,2) and kind=='floor':
@@ -27,10 +50,10 @@ def plan(sh,k,kind):
             grids={'x':[('13',1800),('M1',1818),('M2',2382),('17',2400)],'y':[('A',0),('MA',24),('MB',208),('MC',392),('MD',576),('B',600)]}
     scale=scale_for(bounds);tr,s=sh.grid_view(bounds,(0,1),scale,(180,340),grids=grids)
     level=next((z for n,_,z in m['levels'] if n==k),0);selected=[]
-    bases={c['member_ids'][0] for c in m['connections'] if c['detail_ref']['id']=='review_base'} if m['pilot']=='hr14' else set()
+    bases={v['id'] for v in base_members(m)} if kind=='base' else set()
     for member in m['members']:
         a,b=physical_axis(member);z0,z1=min(a[2],b[2]),max(a[2],b[2]);vertical=abs(z1-z0)>2 and math.dist(a[:2],b[:2])<1
-        if kind=='base':use=member['id'] in bases or vertical and abs(z0-m['bounds'][2][0])<36 or member['kind'] in ('bottom_track','ordinary_track') and member['level']==1
+        if kind=='base':use=member['id'] in bases
         elif kind=='walls':use=member['level']==k and member['kind'] in ('stud','chord','hold_down_rod','bottom_track','top_track','ordinary_track','strap','opening_jamb','opening_header','opening_sill','column','walkway_post')
         elif kind=='roof':use=(member['level']==k and z1>=level-40) or (member['level']==1 and sh.m['pilot'] in ('cfs17','cfs19','cfs25','cfs26','cfs27','cfs28','cfs30','hr33') and member['kind'] not in ('girt','stud','opening_jamb','opening_header'))
         else:use=member['level']==k and (z0>=level-40 or vertical and z1>=level-40)
@@ -44,8 +67,11 @@ def plan(sh,k,kind):
         if f['level']==k and f['plane']=='xy':
             pts=[tr(q) for q in feature_vertices(f)];reserved.append(tuple(sum(q[i] for q in pts)/len(pts) for i in (0,1)))
     groups=sh.draw_members(selected,tr,(0,1),s);sh.representative_marks(groups,28,reserved)
-    selected_ids={q['id'] for q in selected};seen=set();points=[]
+    selected_ids={q['id'] for q in selected};seen=set();points=[];lookup={v['id']:v for v in m['members']}
     for c in m['connections']:
+        if kind=='base' and not is_base_connection(c,lookup):continue
+        if kind=='floor' and not level-40<=c['point'][2]<=level+6:continue
+        if kind=='roof' and c['point'][2]<level-40:continue
         if c['drawing_ref'] in seen or not any(i in selected_ids for i in c['member_ids']):continue
         p=tr(c['point'])
         if any(math.dist(p,q)<100 for q in points):continue

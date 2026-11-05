@@ -1,5 +1,13 @@
 # Gold-example drawing corrections
 
+## Base-plan support coverage (0.8.51)
+
+Base plans select all explicitly connected foundations and vertical members at
+the base datum. They no longer use a fixed distance from the deepest physical
+embedment: that omitted shallower foundations in HR9 and other mixed-depth
+buildings. This is a drawing-only correction. Model members, decisions, native
+exports and IFC geometry are unchanged.
+
 ## Parallel-wall source framing (0.8.50)
 
 The CFS1, CFS6, CFS11 and CFS14 source-selected inward-facing joist pairs are
