@@ -193,6 +193,8 @@ def build_model(package,state):
     sbmf_deck(b)
     from .review_sbmf_floor import apply as sbmf_floor
     sbmf_floor(b)
+    from .review_sbmf_diaphragms import apply as sbmf_diaphragms
+    sbmf_diaphragms(b)
     from .review_cfs6_floor_panels import bind_bearing_clearances
     bind_bearing_clearances(b)
     return b.finish()
