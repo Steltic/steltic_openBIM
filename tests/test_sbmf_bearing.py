@@ -15,13 +15,14 @@ def actual():
 
 
 def test_gypsum_is_both_real_faces_and_stud_grid_matches_joists(actual):
-    m,p=actual;panels=[v for v in m['panels'] if '-GYP' in v['id']];assert len(panels)==4
+    m,p=actual;panels=[v for v in m['panels'] if '-GYP' in v['id'] and v['kind']=='wall_sheathing'];assert len(panels)==4
     materials={v['id']:v for v in m['materials']}
     for panel in panels:
         assert panel['thickness_in']==.625
         assert 'gypsum' in materials[panel['material_id']]['specification']
     studs=[v for v in m['members'] if v['id'].startswith('BEARING-1-') and v['kind']=='stud']
-    assert len(studs)==72
+    # Two local paired stations and shifted edge joists add two studs per row.
+    assert len(studs)==76
     joists=[v for v in m['members'] if v['id'].startswith('WING-J-1-')]
     for stud in studs:
         assert stud['profile_id']=='600S162-43' and stud['slots']
@@ -45,7 +46,7 @@ def test_every_bearing_wall_screw_contacts_real_receivers_and_host_panels(actual
             assert f['basis']=='A'
             for q in f['points']:
                 for label in f['connects']:assert contact(parts[label],f,q),(c['id'],label,q)
-    assert counts=={'bridge':72,'gypsum':144}
+    assert counts=={'bridge':76,'gypsum':152}
     for values in stations.values():
         assert len(values)==10
         values.sort();assert max(d-a for a,d in zip(values,values[1:]))<=12

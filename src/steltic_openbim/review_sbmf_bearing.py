@@ -26,7 +26,7 @@ def apply(b):
                 attachment_schedule=dict(screw='A No8 self-drilling gypsum screw',maximum_spacing_in=12,basis='A exact product and stations; S5/8in gypsum each face, no new strength/stiffness verification'))
             panels[side]=p
         pid=b.custom('A-MEZZ-CRC1.5X.5-54','channel',dict(d=1.5,b=.5,t=T,lip=0),basis='A selected CRC for source-required mid-height bridging')
-        crc=b.member(label+'-MID-CRC',pid,'stud_bridging',[lo-.5,y-.25,z],[studs[-1]['axis'][0][0]+.5,y-.25,z],1,'A',records=[RID],local_y=[0,1,0])
+        crc=b.member(label+'-MID-CRC',pid,'stud_bridging',[studs[0]['axis'][0][0]-.5,y-.25,z],[studs[-1]['axis'][0][0]+.5,y-.25,z],1,'A',records=[RID],local_y=[0,1,0])
         for i,stud in enumerate(studs):
             x=stud['axis'][0][0];point=[x,y,z]
             slot(stud,point,[0,1,0],-.875,.875,.75,crc['id'],'A1.75in high x.75in wide mid-height CRC web punch; source stud capacity applicability requires verification')
@@ -39,7 +39,7 @@ def apply(b):
                 selected=zs[group:group+5];centre=sum(selected)/len(selected)
                 b.connection(stud['id']+'-GYPSUM'+str(group//5),'review_mezz_bearing',[x,y,centre],[stud],[RID],
                     parameters=dict(purpose='gypsum',z_relative=[v-centre for v in selected],negative_panel=panels[-1]['id'],positive_panel=panels[1]['id']),basis='A')
-            attach(b,stud,RID,'Exact source600S162-43 on16in grid, aligned with joists, with actual5/8in gypsum each face and located mid-height CRC. CRC/clip/punch and gypsum screws are adopted; original source capacity is not reverified for those details.')
+            attach(b,stud,RID,'Source600S162-43 at maximum16in, aligned with actual joists including explicit local floor-fit station changes, with actual5/8in gypsum each face and located mid-height CRC. Set-out, CRC/clip/punch and gypsum screws are adopted; original source capacity is not reverified for those details.')
         for track in (bottom,top):attach(b,track,RID,'Actual top/bottom receivers for the source bearing-wall studs and adopted CRC end-stud return path; no new capacity certification.')
     b.note('MEZZ-BEARING-RESTRAINT','S:600S162-43 bearing studs at16in,5/8in gypsum both faces and mid-height bridging. A:1.5x.5in54mil CRC, fitted1.75x.75in web punches,54mil formed clips/two No10 screws per leg, No8 gypsum screws at maximum12in, exact product/set-out and restraint transfer through the row end studs to their actual tracks. The source braced/unsheathed capacity remains evidence; adopted clips, punches, screw product and brace strength/stiffness require verification.')
 
