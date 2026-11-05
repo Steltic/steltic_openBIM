@@ -75,6 +75,9 @@ def prepare(model,package):
         # equal stud layouts on different beams share a drawing detail while the
         # source-beam identity remains on every actual connection occurrence.
         shape_parameters={k:v for k,v in c.get('parameters',{}).items() if k not in ('original_physical_member_id','source_releases')}
+        if family=='review_sbmf_floor':
+            from .review_cfs_wall_bindings import local_member,signature
+            shape_parameters['actual_floor_receivers']=signature([local_member(m,c['point'],([1,0,0],[0,1,0],[0,0,1]),64 if shape_parameters['purpose']=='transfer' else 18) for m in ms])
         if family=='review_sbmf_deck':
             from .review_cfs_wall_bindings import local_member,signature
             import math

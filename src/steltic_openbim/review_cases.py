@@ -35,6 +35,8 @@ def build_model(package,state):
     else:
         from .review_cfs import build
     build(b)
+    from .review_sbmf_floor import prepare as prepare_sbmf_floor
+    prepare_sbmf_floor(b)
     from .review_sbmf_wall_chords import prepare as prepare_sbmf_wall_chords
     prepare_sbmf_wall_chords(b)
     from .review_sbmf_mezzanine import prepare as prepare_sbmf_mezzanine
@@ -189,6 +191,8 @@ def build_model(package,state):
     sbmf_bearing(b)
     from .review_sbmf_deck import apply as sbmf_deck
     sbmf_deck(b)
+    from .review_sbmf_floor import apply as sbmf_floor
+    sbmf_floor(b)
     from .review_cfs6_floor_panels import bind_bearing_clearances
     bind_bearing_clearances(b)
     return b.finish()
