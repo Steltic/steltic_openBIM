@@ -20,6 +20,8 @@ def test_every_source_kicker_type_has_actual_flange_and_web_contact(key):
             assert par['lower_count']=={'cfs17':3,'cfs19':4,'cfs30':6}[key]
             assert par['upper_count']==(6 if key=='cfs30' else 4)
             assert len([m for m in rest if m['kind']=='flange_cross_plate'])==1
+        else:
+            assert par['lower_count']==par['upper_count']=={'cfs17':4,'cfs19':5,'cfs30':6}[key]
         length=math.dist(*angle['axis']);delta=[b-a for a,b in zip(*angle['axis'])]
         if data['source_length_in']:assert length==pytest.approx(30)
         else:assert abs(delta[1])==pytest.approx(abs(delta[2]))
@@ -31,6 +33,9 @@ def test_every_source_kicker_type_has_actual_flange_and_web_contact(key):
         scene=build_scene(model,package,c);parts={p['id']:p for p in scene['parts']}
         assert sum(len(f['points']) for f in scene['fasteners'] if f['id']=='LOW-ANGLE')==par['lower_count']
         assert sum(len(f['points']) for f in scene['fasteners'] if f['id']=='HIGH')==par['upper_count']
+        if par.get('post_top'):
+            assert next(f for f in scene['fasteners'] if f['id']=='LOW-ANGLE')['grip']==pytest.approx(.375)
+            assert sum(len(f['points']) for f in scene['fasteners'] if f['id']=='LOW-RAFTER')==par['lower_count']
         for f in scene['fasteners']:
             for q in f['points']:
                 for target in f['connects']:

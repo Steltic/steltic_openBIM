@@ -234,4 +234,5 @@ def flange_braces(b,frames,rec):
         if m['kind']!='endwall_post':continue
         x,y,z=m['axis'][1];pp=min(secondaries,key=lambda q:abs(q['axis'][0][0]-x)+min(abs(q['axis'][0][1]-y),abs(q['axis'][1][1]-y)))
         end=[pp['axis'][0][0],y+(18 if y==frames[0] else -18),pp['axis'][0][2]]
-        q=b.member(m['id']+'-K','L2X2X1/8','flange_kicker',[x,y,z],end,1,'A',local_y=[1,0,0]);b.connection(q['id'],'review_kicker',q['axis'][0],[q,m,pp],[rec('endwall')],parameters={'lower_count':2,'upper_count':2,'post_top':True,'stainless':b.key=='cfs30'})
+        count={'cfs17':4,'cfs19':5,'cfs30':6}.get(b.key,2)
+        q=b.member(m['id']+'-K','L2X2X1/8','flange_kicker',[x,y,z],end,1,'A',local_y=[1,0,0]);b.connection(q['id'],'review_kicker',q['axis'][0],[q,m,pp],[rec('endwall')],parameters={'lower_count':count,'upper_count':count,'post_top':True,'stainless':b.key=='cfs30'})

@@ -70,7 +70,8 @@ def apply(b):
         if not choices:raise ValueError('No source outer flange can receive the kicker foot')
         _,offset,rt=max(choices);lowy=y0+offset
         footz=lower_surface(roof,b.profiles,[face,lowy])+rt/n[2]
-        lowz=footz+.125/n[2]+1.5;headz=high['axis'][0][2]
+        lowz=footz+1.5 if post else footz+.125/n[2]+1.5
+        headz=high['axis'][0][2]
         count=int(par.get('upper_count',4));mean=1+(count-1)*.75
         for _ in range(30):
             rise=headz-lowz
@@ -101,8 +102,8 @@ def apply(b):
             basis='The complete located kicker assembly includes its actual rafter-flange foot and actual purlin-web end.'))
         b.changes.append(dict(kind='source_cfs_kicker_actual_receivers',member_id=angle['id'],previous_member=old,
             previous_lower_receiver=previous_low['id'],actual_lower_receiver=roof['id'],upper_receiver_ids=c['member_ids'][2:],
-            basis='S angle section and source end screw counts;30in rafter-brace length or45deg end-wall top kicker. A physical set-out,1/8in folded lower/upper clips and fitted web packers; no new stiffness/capacity verification.'))
-    b.note('ACTUAL-KICKER-FIT','S: source angle sections, end screw counts,30in rafter braces and45deg end-wall top kickers. A: exact cut/set-out and1/8in folded clips at the actual outer rafter flange and purlin webs, with explicit packers at nested webs. End-wall top kickers restrain the actual rafter flange, as required by the source note. New local clip/packer capacities are not verified by the saved checks.')
+            basis='S angle section and source end screw counts;30in rafter-brace length or45deg end-wall top kicker with PL1/4x3in bent foot. A physical set-out,1/8in upper clips (and rafter-kicker lower clips), fitted web packers and exact foot outlines; no new stiffness/capacity verification.'))
+    b.note('ACTUAL-KICKER-FIT','S: source angle sections, end screw counts,30in rafter braces and45deg end-wall top kickers with PL1/4x3in bent feet. A: exact cut/set-out,1/8in upper clips and ordinary rafter-kicker lower clips, with explicit packers at nested webs. End-wall top kickers restrain the actual rafter flange, as required by the source note. New local clip/packer capacities are not verified by the saved checks.')
 
 
 def draw(ctx):
@@ -137,6 +138,14 @@ def draw(ctx):
     a.fastener('LOW-RAFTER',footpts,n,dia,rt+t+cross_t,['RAFTER','LOW-FOOT']+(['CROSS-PLATE'] if plate else []),
         f'A {lower} {screw} folded-foot screws into the actual outer flange',basis='A',screw=True)
     a.interfaces.append(dict(id='LOW-FOLD',kind='continuous_folded_clip',connects=['LOW-LEG','LOW-FOOT'],basis='A',description='A continuous formed sheet; bend radius omitted'))
+    if par.get('post_top'):
+        # The two-screw detail belongs to the separate post flange brace at a
+        # girt. The top kicker uses its own source 4/5/6 screws and a 1/4 x 3
+        # plate bent to the 45-degree angle, against the angle's other leg.
+        a.parts[:]=[r for r in a.parts if r['id'] not in ('LOW-FOOT','LOW-LEG','LOW-ANGLE','LOW-RAFTER')]
+        a.fasteners[:]=[r for r in a.fasteners if r['id'] not in ('LOW-ANGLE','LOW-RAFTER')]
+        a.interfaces[:]=[r for r in a.interfaces if r['id']!='LOW-FOLD']
+        post_lower(ctx,angle,roof,u,v,normal,n,rt,lower,dia,screw)
     highpts=[add(sub(end,mul(u,1+i*1.5)),v) for i in range(upper)]
     coords=[(q[1]+dy,q[2]+dz) for q in highpts for dy,dz in ((-.5,-.5),(-.5,.5),(.5,-.5),(.5,.5))]
     poly=hull(coords)
@@ -158,4 +167,39 @@ def draw(ctx):
         f'S {upper} {screw} source upper end screws through the actual web/clip stack; A packer fit',screw=True)
     length=math.dist(*angle['axis']);a.dim([0,0,0],end,('S30in source angle length' if data['source_length_in'] else f'A{length:.2f}in length / S45deg'),basis='S' if data['source_length_in'] else 'A')
     a.front_axes=(1,2);a.section_axis=1;a.section_at=highpts[0][1]
-    a.notes.append('Actual angle, outer rafter flange and purlin webs are shown. S angle section, end counts and length/angle requirements; A1/8in folded clips, web packing and receiving-foot screw group. Saved member/connection checks do not certify these local fit additions.')
+    a.notes.append('Actual angle, outer rafter flange and purlin webs are shown. S angle section, end counts and length/angle requirements; '+('S quarter-inch bent foot; A upper web clip, web packing and local set-out.' if par.get('post_top') else 'A1/8in folded clips, web packing and receiving-foot screw group.')+' Saved member/connection checks do not certify these local fit additions.')
+
+
+def post_lower(ctx,angle,roof,u,v,normal,n,rt,count,dia,screw):
+    """Source quarter-inch, three-inch-wide foot bent to the actual kicker."""
+    a,p=ctx.a,ctx.p;origin=ctx.c['point'];t=.25;at=p[angle['profile_id']]['dimensions']['t']
+    def surface(x,y):return lower_surface(roof,p,[x,y])+rt/n[2]
+    def fold(x):
+        q=add(origin,add(mul(normal,x),mul(v,-t)))
+        station=(surface(q[0],q[1])-q[2])/u[2]
+        return add(sub(q,origin),mul(u,station))
+    edge=[fold(x) for x in (0.,3.)];last=1+(count-1)*1.5+.75
+    high=[add(mul(normal,x),add(mul(u,last),mul(v,-t))) for x in (3.,0.)]
+    a.polygon('LOW-LEG',edge+high,t,normal=v,basis='S thickness and width; A length and fit',
+              description='S PL1/4 x 3 in. inclined foot leg against the actual angle second leg')
+    # Folded foot terminates inside the finite source flange. The outer edge
+    # follows its actual roof pitch; no generic horizontal support is added.
+    fy=ctx.params['actual_cfs_kicker']['foot_centre_y'];direction=1 if u[1]>0 else -1
+    yy=fy+direction*1.35
+    far=[[q[0],yy-origin[1],surface(origin[0]+q[0],yy)-origin[2]] for q in edge]
+    a.polygon('LOW-FOOT',edge+[far[1],far[0]],t,normal=n,basis='S thickness and width; A length and fit',
+              description='S PL1/4 x 3 in. source bent foot; A compound fold following actual rafter slope')
+    points=[add(mul(u,1+i*1.5),add(mul(normal,1.),mul(v,-t))) for i in range(count)]
+    a.fastener('LOW-ANGLE',points,v,dia,t+at,['LOW-LEG','ANGLE'],
+               f'S {count} {screw} through the angle second leg and quarter-inch bent foot; A stations',screw=True)
+    stations=[(x,y) for y in (.0,.8) for x in (.5,1.5,2.5)]
+    if count==4:stations=[(x,y) for y in (.0,.8) for x in (.75,2.25)]
+    points=[]
+    for x,y in stations[:count]:
+        xx=origin[0]+normal[0]*x;yy=fy+direction*y
+        points.append(sub([xx,yy,lower_surface(roof,p,[xx,yy])],origin))
+    a.fastener('LOW-RAFTER',points,n,dia,rt+t,['RAFTER','LOW-FOOT'],
+               f'S {count} {screw} source bent-foot-to-rafter flange screws; A stations',screw=True)
+    a.interfaces.append(dict(id='LOW-FOLD',kind='continuous_folded_clip',connects=['LOW-LEG','LOW-FOOT'],basis='S/A',
+        description='S PL1/4 x 3 in. bent to the 45-degree top kicker; A compound roof-slope fit and sharp bend representation'))
+    a.notes.append('Top kicker source schedule: PL1/4 x 3 in. bent foot and '+str(count)+' screws at each interface. The separate two-screw post flange brace at a girt is a different connection.')
