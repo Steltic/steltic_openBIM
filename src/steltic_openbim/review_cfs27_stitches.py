@@ -12,3 +12,5 @@ def draw(ctx):
     a.fastener('STITCH',[[gap/2+t,y,0] for y in (-gauge,gauge)],[-1,0,0],.216,gap+2*t,['POST','PACK'],'A twoNo12 C1513 through-web stitches; source24in jamb spacing',basis='S spacing / A screw group',screw=True)
     a.title='SINGLE CHANNEL / PAIRED POST STITCH';a.front_axes=(1,2);a.section_axis=2;a.section_at=0
     a.notes.append('S jamb stitching at24in and C1513 screws. A twoNo12 screws, gauge,1/8in web pack and exact end offset; centre-post24in pitch adopted. Both real webs are engaged; the source built-up-member calculation is not assigned to the adopted local fit.')
+
+    if ctx.model['pilot']=='cfs28':a.title='AG END WALL / PAIRED POST STITCH'
