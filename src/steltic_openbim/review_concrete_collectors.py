@@ -101,7 +101,7 @@ def apply(b):
                     offset = -2 - 2*index
                 else:
                     offset = (index-(count-1)/2)*2
-                runs = stock_runs(low[along]+2, high[along]-2, 240, 25)
+                runs = stock_runs(low[along]+3, high[along]-3, 240, 25)
                 # Do not partially bind a source bar if its path crosses a void.
                 for piece, (start, end) in enumerate(runs):
                     cross = station+offset+(-1 if piece % 2 == 0 else 1)*diameter/2
@@ -136,10 +136,10 @@ def apply(b):
                                         lap_in=end-start), title='SOURCE COLLECTOR / A CONTACT LAP')
             b.changes.append(dict(kind='source_concrete_collector', record_id=rid, host_panel_id=panel['id'],
                 line=data['line'], source_bar_count=count, diameter_in=diameter,
-                basis='S: source count, #5 diameter and Gr 60. A: 20 ft maximum pieces, 25 in contact laps, 2 in bar-line spacing, end margins and two vertical layers. No development, cover or capacity verification. Source deck-to-blocking screw schedule remains a separate component requirement.'))
+                basis='S: source count, #5 diameter and Gr 60. A: 20 ft maximum pieces, 25 in contact laps, 2 in bar-line spacing, 3 in end margins and two vertical layers. No development, cover or capacity verification. Source deck-to-blocking screw schedule remains a separate component requirement.'))
     b.note('CONCRETE-COLLECTORS',
         'S: each floor collector line retains its specific 2, 3 or 4 #5 Gr 60 bars. Those specific checks supersede the generic #4 collector wording in the diaphragm summary, which remains preserved as source evidence. '
-        'A: 20 ft maximum straight pieces and 25 in contact laps (40 nominal diameters), alternate touching bars, 2 in lateral spacing and end margins; X/Y centres lie 1.25/1.875 in below the topping top. '
+        'A: 20 ft maximum straight pieces and 25 in contact laps (40 nominal diameters), alternate touching bars, 2 in lateral spacing and 3 in end margins; X/Y centres lie 1.25/1.875 in below the topping top. '
         'These are fictional set-out proposals. Concrete cover, development, lap classification, congestion and capacity require engineering verification. No reinforcing-bar weld is proposed. '
         'WWR, perimeter chord continuity and deck-to-blocking screws remain separate requirements; this addition does not establish diaphragm or whole-building completeness.')
 
@@ -148,9 +148,16 @@ def draw(ctx):
     a = ctx.a;par = ctx.params;origin = ctx.c['point']
     axes = horizontal_frame(sub(ctx.ms[0]['axis'][1],ctx.ms[0]['axis'][0]))
     lap = ctx.family == 'review_collector_lap'
-    extent = par['lap_in']/2+12 if lap else math.dist(*ctx.ms[0]['axis'])/2+.01
+    label=par.get('reinforcement_label','Source collector bar')
+    radius=ctx.p[ctx.ms[0]['profile_id']]['dimensions']['d']/2
+    extent = par.get('context_extent_in',par['lap_in']/2+12 if lap else math.dist(*ctx.ms[0]['axis'])/2+.01)
     for j,m in enumerate(ctx.ms):
         extract(ctx,m,'BAR'+str(j),axes,extent)
+        if not lap:
+            # The sheet is a local view, while its development interface binds
+            # the complete actual bar. Native entry must expand this receiver
+            # to the independently declared bar and verify its entire host fit.
+            a.parts[-1]['native_receiver_extent']='whole_member'
     parts = [p for p in a.parts if p['kind']=='member']
     xmin=min(p['bounds'][0][0] for p in parts);xmax=max(p['bounds'][0][1] for p in parts)
     ymin=min(p['bounds'][1][0] for p in parts)-2;ymax=max(p['bounds'][1][1] for p in parts)+2
@@ -164,15 +171,25 @@ def draw(ctx):
     a.interfaces.append(dict(id='BOND',kind='reinforcement_bond_lap' if lap else 'reinforcement_bond_development',
         connects=[p['id'] for p in parts]+['TOPPING'],basis='A',
         description='Physical contact lap in the host topping; development/capacity unverified' if lap else
-                    'Source collector bar embedded in the host topping; development/capacity unverified',
+                    label+' embedded in the host topping; development/capacity unverified',
         **({'length_in':par['lap_in']} if lap else {})))
-    a.interfaces[-1]['native_bond']=dict(id='BOND',kind=a.interfaces[-1]['kind'],host_receiver='TOPPING',
-        bar_receivers=[p['id'] for p in parts],basis='Accepted fictional bond geometry; no development or capacity check',
-        engineering_status='not_verified',**({'length_in':par['lap_in']} if lap else {}))
+    interface=a.interfaces.pop()
+    groups=[parts] if lap else [[p] for p in parts]
+    for i,group in enumerate(groups):
+        ident='BOND' if len(groups)==1 else 'BOND'+str(i)
+        item=copy.deepcopy(interface);item.update(id=ident,connects=[p['id'] for p in group]+['TOPPING'])
+        item['native_bond']=dict(id=ident,kind=item['kind'],host_receiver='TOPPING',
+            bar_receivers=[p['id'] for p in group],basis='Accepted fictional bond geometry; no development or capacity check',
+            engineering_status='not_verified',**({'length_in':par['lap_in']} if lap else {}))
+        a.interfaces.append(item)
     a.front_axes=(0,1);a.section_axis=0;a.section_at=0
     if lap:a.dim([-par['lap_in']/2,0,0],[par['lap_in']/2,0,0],'Contact lap; unverified',basis='A')
-    else:a.dim([xmin,0,0],[xmax,0,0],'Bar-piece length',basis='A')
+    else:a.dim([xmin,0,0],[xmax,0,0],'Local view extent' if par.get('context_extent_in') else 'Bar-piece length',basis='A')
+    if par.get('mesh_spacing_in'):
+        spacing=par['mesh_spacing_in']
+        a.dim([-spacing,-spacing,0],[0,-spacing,0],'Wire spacing',basis='S',offset=-35)
     a.dim([0,ymin,top-par['topping_in']],[0,ymin,top],'Topping',view='section',basis='S',offset=-35)
-    a.dim([0,ymax,.3125],[0,ymax,top],'Top cover; unverified',view='section',basis='A',offset=35)
-    a.notes.extend(['S: source collector bar count, #5 nominal diameter and Gr 60. A: stock lengths, lap stations, cover and layering. No new reinforcement capacity check.',
+    bar_top=max(p['bounds'][2][1] for p in parts)
+    a.dim([0,ymax,bar_top],[0,ymax,top],'Top cover; unverified',view='section',basis='A',offset=35)
+    a.notes.extend([par.get('reinforcement_note','S: source collector bar count, #5 nominal diameter and Gr 60. A: stock lengths, lap stations, cover and layering. No new reinforcement capacity check.'),
         'Concrete is host context. The floor model retains its deck/fill boundary and openings. No reinforcing-bar weld; the bond interface does not assert a verified development length.'])

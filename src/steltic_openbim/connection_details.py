@@ -75,6 +75,19 @@ def prepare(model,package):
         # equal stud layouts on different beams share a drawing detail while the
         # source-beam identity remains on every actual connection occurrence.
         shape_parameters={k:v for k,v in c.get('parameters',{}).items() if k not in ('original_physical_member_id','source_releases')}
+        if family in ('review_deck_screws','review_deck_block_link'):
+            from .review_cfs_wall_bindings import local_member,signature
+            import math
+            extent=max((math.sqrt(sum(v*v for v in q)) for q in shape_parameters.get('points_relative',[])),default=8)+2
+            shape_parameters['actual_deck_receivers']=signature([local_member(m,c['point'],([1,0,0],[0,1,0],[0,0,1]),extent) for m in ms])
+        if family in ('review_collector_bond','review_collector_lap'):
+            from .review_cfs_wall_bindings import local_member,signature
+            from .review_receiver_geometry import horizontal_frame
+            from .pilots.model import sub
+            import math
+            frame=horizontal_frame(sub(ms[0]['axis'][1],ms[0]['axis'][0]))
+            extent=shape_parameters.get('context_extent_in',shape_parameters['lap_in']/2+12 if family=='review_collector_lap' else math.dist(*ms[0]['axis'])/2+.01)
+            shape_parameters['actual_reinforcement_receivers']=signature([local_member(m,c['point'],frame,extent) for m in ms])
         if any(shape_parameters.get(k) for k in ('actual_cfs_strut_end','actual_cfs_endwall_girt','actual_cfs_door_header','actual_cfs_cross_plate','actual_cfs_endwall_head')):
             from .review_cfs_wall_bindings import local_member,signature
             shape_parameters['actual_cfs_endwall_receivers']=signature([local_member(m,c['point'],([1,0,0],[0,1,0],[0,0,1]),30) for m in ms])
