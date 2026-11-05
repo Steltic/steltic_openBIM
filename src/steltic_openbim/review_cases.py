@@ -77,6 +77,18 @@ def build_model(package,state):
     cfs6_headers(b)
     from .review_cfs6_floor_panels import apply as cfs6_floor_panels
     cfs6_floor_panels(b)
+    from .review_cfs_strut_ends import apply as cfs_strut_ends
+    cfs_strut_ends(b)
+    from .review_cfs_endwall_girts import apply as cfs_endwall_girts
+    cfs_endwall_girts(b)
+    from .review_cfs_endwall_heads import apply as cfs_endwall_heads
+    cfs_endwall_heads(b)
+    from .review_cfs_kickers import apply as cfs_kickers
+    cfs_kickers(b)
+    from .review_cfs_cross_plates import apply as cfs_cross_plates
+    cfs_cross_plates(b)
+    from .review_cfs_door_headers import apply as cfs_door_headers
+    cfs_door_headers(b)
     from .review_supplements import track_bearing_datums
     track_bearing_datums(b)
     from .review_double_top_tracks import apply as double_top_tracks

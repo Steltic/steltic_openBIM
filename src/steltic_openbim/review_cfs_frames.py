@@ -39,7 +39,7 @@ def build(b):
     for a,d in zip(roof,roof[1:]):xs.update(frange(a[0],d[0]+.1,ps))
     if key=='cfs30':xs.update((140,280,560,700))
     if key=='cfs17':xs.update((150,300,450,744,888))
-    lap=15 if key=='cfs17' else (30 if key=='cfs19' else 24)
+    lap=15 if key=='cfs17' else (30 if key=='cfs19' else 18 if key=='cfs30' else 24)
     for x in sorted(xs):
         for j,(ya,yb) in enumerate(zip(frames,frames[1:])):
             label='1200Z300-118' if canopy else ('1000Z250-68' if key=='cfs19' else ('800Z250-68' if key=='cfs30' or min(abs(x-t) for t in (300,600,816))<204 else '800Z250-54'))
@@ -62,9 +62,10 @@ def build(b):
             if not canopy:
                 gs=78 if key=='cfs30' else 84 if key=='cfs19' else 72
                 for z in frange(30 if key=='cfs30' else 24 if key=='cfs17' else gs,rz(x),gs):
-                    label='800Z250-'+('97' if key=='cfs19' and j in (0,len(frames)-2) else '68' if key=='cfs19' else '54')
+                    label='600Z250-54' if key=='cfs30' else '800Z250-'+('97' if key=='cfs19' and j in (0,len(frames)-2) else '68' if key=='cfs19' else '54')
                     gp=pid(label);outside=x+(-1 if side==0 else 1)*(7+b.depth(gp)/2+.125)
-                    m=b.member(f'G-{side}-{j}-{z}',gp,'girt',[outside,ya-(lap if j else 0),z],[outside,yb+(lap if j<len(frames)-2 else 0),z],1,'A',local_y=[0,0,1],records=[rec('girt')]);b.ends(m,'review_secondary',[rec('girt')],parameters={'kind':'girt','lap':lap})
+                    girt_lap=15 if key=='cfs30' else lap
+                    m=b.member(f'G-{side}-{j}-{z}',gp,'girt',[outside,ya-(girt_lap if j else 0),z],[outside,yb+(girt_lap if j<len(frames)-2 else 0),z],1,'A',local_y=[0,0,1],records=[rec('girt')],lap_in=girt_lap);b.ends(m,'review_secondary',[rec('girt')],parameters={'kind':'girt','lap':girt_lap})
     # Actual scheduled strap planes and nodes; no diaphragm substituted for them.
     braced=range(6,10) if key=='cfs30' else (0,len(frames)-2)
     def strap(label,aa,dd,width,mil,count,supports,record):
@@ -228,10 +229,11 @@ def flange_braces(b,frames,rec):
             for side in (-1,1):
                 # Both source rafter flange sides; end frames turn the outer brace inward.
                 yy=y+side*6.375;direction=side if y not in (frames[0],frames[-1]) else sign
-                q=b.member(label+str(side),'L2X2X1/8','flange_kicker',[x,yy,lower],[x,yy+direction*run,z],1,'A',records=[rec('strap')],local_y=[1,0,0]);b.connection(q['id'],'review_kicker',q['axis'][0],[q,r,m],[rec('strap')],parameters={'lower_count':3 if b.key=='cfs17' else 4,'upper_count':4,'stainless':b.key=='cfs30'})
+                q=b.member(label+str(side),'L2X2X1/8','flange_kicker',[x,yy,lower],[x,yy+direction*run,z],1,'A',records=[rec('strap')],local_y=[1,0,0]);b.connection(q['id'],'review_kicker',q['axis'][0],[q,r,m],[rec('strap')],parameters={'lower_count':3 if b.key=='cfs17' else 6 if b.key=='cfs30' else 4,'upper_count':6 if b.key=='cfs30' else 4,'stainless':b.key=='cfs30'})
     # Source end-wall post kickers carry reactions to the doubled end-bay purlins.
     for m in list(b.members):
         if m['kind']!='endwall_post':continue
         x,y,z=m['axis'][1];pp=min(secondaries,key=lambda q:abs(q['axis'][0][0]-x)+min(abs(q['axis'][0][1]-y),abs(q['axis'][1][1]-y)))
         end=[pp['axis'][0][0],y+(18 if y==frames[0] else -18),pp['axis'][0][2]]
-        q=b.member(m['id']+'-K','L2X2X1/8','flange_kicker',[x,y,z],end,1,'A',local_y=[1,0,0]);b.connection(q['id'],'review_kicker',q['axis'][0],[q,m,pp],[rec('endwall')],parameters={'lower_count':2,'upper_count':2,'post_top':True,'stainless':b.key=='cfs30'})
+        count={'cfs17':4,'cfs19':5,'cfs30':6}.get(b.key,2)
+        q=b.member(m['id']+'-K','L2X2X1/8','flange_kicker',[x,y,z],end,1,'A',local_y=[1,0,0]);b.connection(q['id'],'review_kicker',q['axis'][0],[q,m,pp],[rec('endwall')],parameters={'lower_count':count,'upper_count':count,'post_top':True,'stainless':b.key=='cfs30'})
