@@ -84,6 +84,9 @@ class Context:
 
 def build_scene(model,package,c,subtype=''):
     ctx=Context(model,package,c);family=ctx.family
+    if family=='review_sbmf_stud_head':
+        from .review_sbmf_stud_heads import draw
+        draw(ctx);return ctx.finish()
     if family=='review_sbmf_wsp':
         from .review_sbmf_diaphragms import draw
         draw(ctx);return ctx.finish()
