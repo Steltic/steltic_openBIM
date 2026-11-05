@@ -24,8 +24,15 @@ def folded(b, source_id, flange_difference=.25):
         strip('FLANGE'+str(sign),start,end)
         angle=math.radians(source.get('lip_angle_deg',50))
         tip=[end[0]-sign*math.cos(angle)*lip,end[1]-sign*math.sin(angle)*lip]
-        if lip:strip('LIP'+str(sign),end,tip)
+        # End the straight lip at the flange underside. Starting both full
+        # rectangular strips at their centreline intersection double-counted
+        # the sharp bend, substantially so for97mil. The omitted bend region
+        # remains an explicit adopted representation, not overlapping steel.
+        relief=t*(1+math.cos(angle))/(2*math.sin(angle))
+        if lip>relief:
+            start_lip=[end[0]-sign*math.cos(angle)*relief,end[1]-sign*math.sin(angle)*relief]
+            strip('LIP'+str(sign),start_lip,tip)
     return b.custom(pid,'built_up',copy.deepcopy(d),components=components,
         source_profile_id=source_id,source_dimensions=copy.deepcopy(d),basis='A unequal-flange physical nesting proposal; source depth and thickness retained',
         fabrication_form='one folded Z section, represented by joined strips',
-        fit_proposal=f'A upper/lower flange widths {w+flange_difference:g}/{w-flange_difference:g}in. Gold used nominal point-symmetric {w:g}in flanges; original capacity is not assigned to this changed shape. Supplier section and bend details require verification.')
+        fit_proposal=f'A upper/lower flange widths {w+flange_difference:g}/{w-flange_difference:g}in; straight lip trimmed at the flange underside with bend region omitted. Gold used nominal point-symmetric {w:g}in flanges; original capacity is not assigned to this changed shape. Supplier section and bend details require verification.')
