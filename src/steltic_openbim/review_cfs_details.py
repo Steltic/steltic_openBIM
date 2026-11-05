@@ -7,6 +7,9 @@ def draw(ctx):
         from .review_cfs_strut_ends import draw as strut_end
         return strut_end(ctx)
     f=ctx.family
+    if ctx.params.get("actual_crc"):
+        from .review_cfs6_bridging import draw as crc
+        return crc(ctx)
     if ctx.params.get('actual_cfs_endwall_girt'):
         from .review_cfs_endwall_girts import draw as endwall_girt
         return endwall_girt(ctx)

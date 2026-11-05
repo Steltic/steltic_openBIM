@@ -37,7 +37,16 @@ def locations(b,d,line,k,ranges):
         if name=='XCY':ranges=[(62,148)]
         if name in ('YW62','YE148'):ranges=[(0,130)]
     if b.key=='cfs12' and name[1:] in ('45','105'):ranges=[(0,150)]
-    if len(ranges)==1:return spaced_segments(*ranges[0],widths)
+    if len(ranges)==1:
+        result=spaced_segments(*ranges[0],widths)
+        if b.key=='cfs6':
+            adopted=[((round((a*12-8)/16)*16+8)/12,(round((a*12-8)/16)*16+8)/12+(end-a)) for a,end in result]
+            if any(a<ranges[0][0] or end>ranges[0][1] for a,end in adopted) or any(a[1]>=c[0] for a,c in zip(adopted,adopted[1:])):
+                raise ValueError('CFS6 common stud/joist grid does not fit the source wall segments')
+            b.changes.append(dict(kind='cfs6_common_stud_joist_grid',line=name,level=k,previous_runs_ft=result,runs_ft=adopted,
+                basis='A: shift only the fictional bay starts by at most8 in to a common16 in grid (8 in phase). Source wall line, segment count and every segment length remain unchanged. This permits actual in-line floor joists under ordinary/segment studs; chord packs retain separately cut floor interfaces. No source force analysis is replaced.'))
+            return adopted
+        return result
     # Equal wing runs have equal source bay counts; no panel crosses the courtyard.
     if len(ranges)==2 and n%2==0:return spaced_segments(*ranges[0],widths[:n//2])+spaced_segments(*ranges[1],widths[n//2:])
     raise ValueError('Unresolved physical wall runs '+b.key+' '+name)
@@ -48,6 +57,9 @@ def stud(b,d,name,k,props,ordinary):
         rid='stud-ext-long' if name in ('XS','XN') else 'stud-corridor' if name in ('XCS','XCN') else 'stud-end-walls' if name in ('YW','YE') else 'stud-demising'
         row=story_value(next(r for r in b.raw['studs'] if r['id']==rid),k)
         row['section']=('600S162-33' if name in ('XS','XN') else '600S162-'+('43' if k<=3 else '33') if name in ('XCS','XCN') else ('2X' if k<=3 else '')+'600S200-43');row['spacing_in']=16;return row
+    if b.key=='cfs6':
+        from .review_cfs6_studs import named
+        return named(b,d,name,k,props)
     if b.key=='cfs4':return dict(ordinary,section='600S162-54' if name in ('XS','XN') else '600S162-68' if k<=2 else '600S200-54',spacing_in=12)
     row=story_value(ordinary,k);mil=round(props.get('t_stud_in',.054)*1000)
     if b.key in ('cfs9','cfs12'):row['section']='600S162-'+str(mil)
@@ -95,6 +107,11 @@ def floors(b,outline,levels):
                     continue
                 low,high=(y0 if axis==0 else x0)*12,(y1 if axis==0 else x1)*12
                 stations=list(frange(low,high+.1,16))
+                if not roof:
+                    # The accepted wall-bay set-out and ordinary stud grid use
+                    # this same phase, giving actual steel beneath each stud.
+                    import math
+                    stations=sorted({low,high,*frange(math.ceil((low-8)/16)*16+8,high,16)})
                 if roof:
                     from .review_supplements import wall_axis_framing_stations
                     stations=wall_axis_framing_stations(b,stations,axis,k,f'J-{k}-{ri}-'+'{station}-','source-family roof joist',station_bounds=(low,high))

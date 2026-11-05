@@ -260,6 +260,8 @@ def build(b):
                     if h>0:opening(b,f'{name}-{k}-O{j}',axis,left['position_in'],u,z0+sill,width,h,k)
     from .review_supplements import complete_walls
     complete_walls(b,outline,bystory,levels)
+    from .review_cfs6_studs import ordinary as cfs6_ordinary
+    cfs6_ordinary(b)
     if b.key in next_keys:next_floors(b,outline,levels)
     elif b.key in final.KEYS:final.floors(b,outline,levels)
     elif b.key=='cfs7':

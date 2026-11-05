@@ -73,6 +73,10 @@ def build_model(package,state):
     selected_details(b)
     from .review_profile_fit import apply as profile_fit
     profile_fit(b)
+    from .review_cfs6_headers import apply as cfs6_headers
+    cfs6_headers(b)
+    from .review_cfs6_floor_panels import apply as cfs6_floor_panels
+    cfs6_floor_panels(b)
     from .review_cfs_strut_ends import apply as cfs_strut_ends
     cfs_strut_ends(b)
     from .review_cfs_endwall_girts import apply as cfs_endwall_girts
@@ -87,6 +91,10 @@ def build_model(package,state):
     cfs_door_headers(b)
     from .review_supplements import track_bearing_datums
     track_bearing_datums(b)
+    from .review_double_top_tracks import apply as double_top_tracks
+    double_top_tracks(b)
+    from .review_cfs6_floor_framing import apply as cfs6_floor_framing
+    cfs6_floor_framing(b)
     from .review_cfs_frame_straps import apply as frame_straps
     frame_straps(b)
     from .review_wall_straps import apply as wall_straps
@@ -103,6 +111,10 @@ def build_model(package,state):
     track_corners(b)
     from .review_track_splices import apply as track_splices
     track_splices(b)
+    from .review_cfs6_chord_floors import apply as chord_floor_packs
+    chord_floor_packs(b)
+    from .review_cfs6_floor_framing import bearing_receivers as floor_bearing_receivers
+    floor_bearing_receivers(b,b.levels)
     from .review_edge_chords import apply as edge_chord_corners
     edge_chord_corners(b)
     from .review_cfs_source_bindings import apply as cfs_source_bindings
@@ -115,4 +127,20 @@ def build_model(package,state):
     plate_boundaries(b)
     from .review_hr9_selections import splice_scope
     splice_scope(b)
+    from .review_cfs6_roof_distribution import apply as roof_distribution
+    roof_distribution(b)
+    from .review_cfs6_bridging import apply as actual_crc
+    actual_crc(b)
+    if key=='cfs6':
+        from .review_floor_openings import bind as floor_opening_receivers
+        floor_opening_receivers(dict(pilot=b.key,members=b.members,profiles=list(b.profiles.values()),
+            connections=b.connections,changes=b.changes,connection_endpoint_links=b.endpoint_links))
+    from .review_cfs6_wallface_blocking import apply as wallface_blocking
+    wallface_blocking(b)
+    from .review_cfs6_diaphragms import apply as source_diaphragms
+    source_diaphragms(b)
+    from .review_cfs6_endpoint_links import apply as cfs6_endpoint_links
+    cfs6_endpoint_links(b)
+    from .review_cfs6_floor_panels import bind_bearing_clearances
+    bind_bearing_clearances(b)
     return b.finish()

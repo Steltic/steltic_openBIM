@@ -113,7 +113,8 @@ def complete_walls(b,outline,bystory,levels):
                                 parts=new
                         for pi,(u,v) in enumerate(parts):
                             m=b.member(f'{label}-{gi}-{tag}-{pi}',tp,'ordinary_track',pt(u,z),pt(v,z),k,'A',local_y=[0,0,up]);b.connection(m['id'],'review_cfs_sill' if tag=='B' else 'review_cfs_floor',pt((u+v)/2,z),[m],parameters={'floor_depth':levels[k]-top,'level':k})
-                for j,u in enumerate(frange(lo+8,hi,16)):
+                start=math.ceil((lo+6-8)/16)*16+8 if b.key=='cfs6' else lo+8
+                for j,u in enumerate(frange(start,hi,16)):
                     if void(u,bottom) or any(aa<u<dd for aa,dd in occupied):continue
                     # Opening jambs already occupy these narrow end zones. The
                     # old 7-in mask left duplicate, unsupported short studs

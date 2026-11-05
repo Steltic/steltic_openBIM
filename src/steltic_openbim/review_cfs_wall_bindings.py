@@ -268,11 +268,21 @@ def bind(model):
             # absent (for example a corner outside the cut track end). Keep the
             # unresolved occurrence visible to the fit/missing-data gate.
             if not chosen:continue
-            items=list(dict((m['id'],m) for m in chosen+selected_joists+selected_truss+selected_studs).values())
+            blocks=[]
+            for joist in selected_joists:
+                for mid in joist.get('source_squash_member_ids',[]):
+                    block=lookup[mid]
+                    if math.dist([(a+b)/2 for a,b in zip(*block['axis'])],origin)<40:blocks.append(block)
+            # Adjacent wall studs have their own stud-to-track attachments.
+            # They are not receivers of any floor fastener in this recipe.
+            # Retain their IDs as context without inventing a direct floor
+            # connection or a different detail for every irrelevant offset.
+            items=list(dict((m['id'],m) for m in chosen+selected_joists+selected_truss+blocks).values())
             stations=[abs(point(axis(m)[0],origin,axes)[0]) for m in selected_joists+selected_truss
                       if abs(dot(unit(sub(axis(m)[1],axis(m)[0])),axes[1]))>.999]
             track_extent=max([32]+[s+8 for s in stations])
-            data=dict(receivers=[local_member(m,origin,axes,track_extent if m in chosen else 32) for m in items],joist_ids=[m['id'] for m in selected_joists],track_ids=[m['id'] for m in chosen],stud_ids=[m['id'] for m in selected_studs],truss_ids=[m['id'] for m in selected_truss])
+            data=dict(receivers=[local_member(m,origin,axes,track_extent if m in chosen else 32) for m in items],joist_ids=[m['id'] for m in selected_joists],track_ids=[m['id'] for m in chosen],stud_ids=[],adjacent_stud_ids=[m['id'] for m in selected_studs],truss_ids=[m['id'] for m in selected_truss])
+            if blocks:data['block_to_joist_ids']={m['id']:m['host_joist_id'] for m in blocks}
             c.setdefault('parameters',{})['physical_floor_stack']=data
             c['member_ids']=list(dict.fromkeys(c['member_ids']+[m['id'] for m in items]))
     model['connections'][:]=[c for c in model['connections'] if c['id'] not in remove]
