@@ -149,7 +149,7 @@ def bind(model):
                 c.setdefault('parameters',{})['physical_wall_attachment']=data
                 c['member_ids']=list(dict.fromkeys(c['member_ids']+[stud['id']]))
         elif family in ('review_cfs_floor','review_cfs_sill','review_final_cfs_joist','review_cfs_joist','review_roof_seat'):
-            if family=='review_cfs_sill' and primary.get('level')==1:continue
+            if family=='review_cfs_sill' and (primary.get('level')==1 or abs(origin[2])<.1):continue
             is_joist=primary['kind'] in ('joist','opening_trimmer') or family=='review_roof_seat' and primary['kind']=='truss_chord'
             if not is_joist and primary['kind'] not in ('top_track','bottom_track','ordinary_track','tier_track'):continue
             if is_joist:

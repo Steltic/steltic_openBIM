@@ -28,7 +28,7 @@ def post_edge(ctx):
 
 def floor(ctx):
     from . import review_wall_occurrence_details as located
-    if ctx.params.get('physical_sill') and ctx.ms[0].get('level',1)==1:return located.sill(ctx)
+    if ctx.params.get('physical_sill') and (ctx.ms[0].get('level',1)==1 or abs(ctx.c['point'][2])<.1):return located.sill(ctx)
     if ctx.params.get('physical_joist_end') and ctx.params.get('clip') and re.search(r'L\s*3\s*x\s*3\s*x\s*54 mil',ctx.text,re.I):return located.joist(ctx)
     a,p,pid,par=ctx.a,ctx.p,ctx.pid,ctx.params;k=ctx.ms[0].get('level',1);base=ctx.family=='review_cfs_sill' and k==1;concrete=ctx.model['pilot']=='cfs3'
     track=pid if p[pid]['family']=='channel' and 'T' in pid else channel(p,'ASSEMBLY-TRACK600',6.2,2,.0713,0)

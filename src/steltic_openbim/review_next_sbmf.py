@@ -98,18 +98,24 @@ def wall(b,label,axis,pos,lo,hi,base,top,k,sp,cp,bays,width,count,rod,continuous
 def wing(b,office):
     x0,x1,y0,y1=(1208,2168,480,960) if office else (1818,2382,24,576);h=132 if office else 120
     for k in (1,2):
-        z0=(k-1)*h;zt=k*h;floor_depth=(13.72 if k==1 else 10.6) if office else (12.22 if k==1 else 8.6);top=zt-floor_depth
+        pid='1200S250-68' if office and k==1 else '1000S200-68' if office else '1000S250-97' if k==1 else '800S162-54'
+        # The roof uses 19/32 WSP, not the floor's WSP + gypsum stack.
+        # One exact top-of-finish datum sets the joist, bearing track and panel.
+        finish=23/32+(1 if office else 1.5) if k==1 else 19/32
+        z0=(k-1)*h;zt=k*h;floor_depth=b.depth(b.profile(pid))+finish;top=zt-floor_depth
         sp='600S162-54' if office else '600S162-43';cp=('2X600S250-97' if k==1 else '2X600S162-54') if office else ('2X600S200-68' if k==1 else '2X600S162-54');rod=1.25 if office and k==1 else .75 if k==1 or office else .625
         for name,axis,pos,lo,hi in [('S',0,y0,x0,x1),('N',0,y1,x0,x1),('W',1,x0,y0,y1),('E',1,x1,y0,y1)]:
             margin=(hi-lo-240)/3;bays=[(lo+margin,lo+margin+120),(hi-margin-120,hi-margin)]
             wall(b,('OFF-' if office else 'MEZZ-')+name+str(k),axis,pos,lo,hi,z0,top,k,sp,cp,bays,(6 if office else 5) if k==1 else 3 if office else 2,(20 if office else 16) if k==1 else 10 if office else 8,rod)
         bearing=[y0,(y0+y1)/2,y1] if office else [y0,y0+184,y0+368,y1]
         for j,y in enumerate(bearing[1:-1]):wall(b,f'BEARING-{k}-{j}',0,y,x0,x1,z0,top,k,sp,cp,[],0,0,rod)
-        pid='1200S250-68' if office and k==1 else '1000S200-68' if office else '1000S250-97' if k==1 else '800S162-54';spacing=12 if office and k==1 else 16 if k==1 else 24;rid=('office-joist-floor' if k==1 else 'office-joist-roof') if office else 'mezz-joist-storage' if k==1 else 'mezz-joist-ceiling'
-        for x in frange(x0,x1+.1,spacing):
+        spacing=12 if office and k==1 else 16 if k==1 else 24;rid=('office-joist-floor' if k==1 else 'office-joist-roof') if office else 'mezz-joist-storage' if k==1 else 'mezz-joist-ceiling'
+        for x in sorted(set([*frange(x0,x1+.1,spacing),x1])):
             for j,(aa,dd) in enumerate(zip(bearing,bearing[1:])):
-                z=zt-(1.72 if office else 2.22 if k==1 else .6)-b.depth(b.profile(pid))/2;m=b.member(f'WING-J-{k}-{x}-{j}',pid,'joist',[x,aa,z],[x,dd,z],k,'S',records=[b.record('joists',rid)]);b.ends(m,'review_cfs_joist',[b.record('joists',rid)],parameters={'floor_depth':floor_depth,'spacing':spacing})
-        b.panel('WING-FLOOR-'+str(k),'floor' if k==1 else 'roof',[[x0,y0,zt],[x1,y0,zt],[x1,y1,zt],[x0,y1,zt]],1.72 if office else 2.22,k,'S')
+                z=zt-finish-b.depth(b.profile(pid))/2;m=b.member(f'WING-J-{k}-{x}-{j}',pid,'joist',[x,aa,z],[x,dd,z],k,'S',records=[b.record('joists',rid)]);b.ends(m,'review_cfs_joist',[b.record('joists',rid)],parameters={'floor_depth':floor_depth,'spacing':spacing})
+        panel=b.panel('WING-FLOOR-'+str(k),'floor' if k==1 else 'roof',[[x0,y0,zt],[x1,y0,zt],[x1,y1,zt],[x0,y1,zt]],finish,k,'S')
+        panel['thickness_direction']='negative_global_z'
+        panel['datum_basis']='Source finish thickness below top of finish; joist top meets panel underside and bottom flange meets top-track web.'
     # Door is in the middle gap, clear of both source-sized strap panels.
     opening(b,'WING-ACCESS',0,y0,(x0+x1)/2-18,0,36,84,1)
     # Remove the threshold and shorten ordinary studs at the adopted access door.
@@ -118,7 +124,10 @@ def wing(b,office):
         if m['level']!=1 or m['kind'] not in ('stud','bottom_track') or not all(abs(q[1]-y0)<.01 for q in m['axis']):continue
         aa,dd=m['axis'];lo,hi=(x0+x1)/2-18,(x0+x1)/2+18
         if m['kind']=='stud' and lo-4<aa[0]<hi+4:
-            m['axis'][0][2]=92;continue
+            m['axis'][0][2]=92
+            for c in b.connections:
+                if c['id']==m['id']+':0':c['point']=list(m['axis'][0])
+            continue
         if m['kind']=='bottom_track' and min(aa[0],dd[0])<lo and max(aa[0],dd[0])>hi:
             b.members.remove(m);cut.append(m['id'])
             for j,(a,d) in enumerate(((aa,[lo,y0,0]),([hi,y0,0],dd))):
