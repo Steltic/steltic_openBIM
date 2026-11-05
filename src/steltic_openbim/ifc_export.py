@@ -260,6 +260,7 @@ def _export_source(directory,destination,source):
             HostSourceId=item.get('host_id'),GeometryRole=item.get('geometry_role'),
             AppliedOpeningIds=item.get('applied_opening_ids'),OpeningCutInHost=item.get('opening_cut_in_host'),
             AnalysisIds=item.get('analysis_ids'),AnalysisSegments=item.get('analysis_segments'),
+            AnalysisCoordinateMapping=item.get('analysis_coordinate_mapping'),
             SourceIFCGuid=item.get('source_ifc_guid'),
             SourceEntity=item,AssemblyTemplate=item.get('assembly_instance',{}).get('template_id'),
             SourceKind=item.get('kind'),SourceLevel=None if item.get('level_basis') else item.get('level'),AssignedLevel=item.get('level'),
