@@ -163,6 +163,12 @@ def build_model(package,state):
     sbmf_roof_seats(b)
     from .review_sbmf_restraints import apply as sbmf_restraints
     sbmf_restraints(b)
+    from .review_sbmf_girts import apply as sbmf_girts
+    sbmf_girts(b)
+    from .review_sbmf_post_heads import apply as sbmf_post_heads
+    sbmf_post_heads(b)
+    from .review_sbmf_tiers import apply as sbmf_tiers
+    sbmf_tiers(b)
     from .review_cfs6_floor_panels import bind_bearing_clearances
     bind_bearing_clearances(b)
     return b.finish()
