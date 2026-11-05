@@ -120,7 +120,7 @@ def draw_view(sh,scene,mode,rect,title):
         q=project(center);labels.append((q[1],label,tr(q),part))
     # These welds share one elevation and need rails even at small counts.
     rail_welds=mode=='front' and (len(scene['welds'])>10 or scene['family'] in (
-        'review_cfs_hold_down','review_pg_seat','review_pg_pickup'))
+        'review_cfs_hold_down','review_pg_seat','review_pg_pickup','review_transition_splice'))
     if rail_welds:
         from .assembly_legend import weld_groups
         for label,_,welds in weld_groups(scene):

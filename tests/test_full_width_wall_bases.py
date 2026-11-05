@@ -19,13 +19,19 @@ def test_all_hr9_bases_keep_actual_panel_width_and_source_stud_density(hr9):
     for c in bases:
         wall=members[c['member_ids'][0]];width=profiles[wall['profile_id']]['dimensions']['width']
         scene=build_scene(m,p,c);parts={v['id']:v for v in scene['parts']}
-        receiver=parts['WALL']['member']
-        assert receiver['profile_id']==wall['profile_id'] and receiver['source_member_index']==0
-        assert receiver['axis'][0]==[0,0,2] and wall['end_offsets'][0]==[0,0,2]
-        assert parts['WALL']['bounds'][0]==pytest.approx([-width/2,width/2])
-        assert parts['EMBED']['bounds'][0]==pytest.approx([-width/2,width/2])
+        assert len(c['member_ids'])==2
+        for i,mid in enumerate(c['member_ids']):
+            physical=members[mid];name='WALL'+str(i+1);receiver=parts[name]['member']
+            assert receiver['profile_id']==physical['profile_id'] and receiver['source_member_index']==i
+            assert receiver['axis'][0][2]==2 and physical['end_offsets'][0]==[0,0,2]
+            span=parts[name]['bounds'][0]
+            assert span[1]-span[0]==pytest.approx(profiles[physical['profile_id']]['dimensions']['width'])
+        assert parts['WALL1']['bounds'][0][1]<parts['WALL2']['bounds'][0][0]
+        fit=c['parameters']['plate_base_fit'];gross=fit.get('embed_width_in',width);offset=fit.get('embed_offset_in',0)
+        assert parts['EMBED']['bounds'][0]==pytest.approx([offset-gross/2,offset+gross/2])
+        assert width<gross and gross==336 # field cut does not shorten the source embed/stud run
         assert parts['EMBED']['representation_role']=='assembly_component'
-        assert parts['STUDS']['count']==round(width*4/12)
+        assert parts['STUDS']['count']==round(gross*4/12)
         assert parts['STUDS']['count']>12
         # This row layout is explicitly selected in the source capacity check;
         # four studs/ft alone must not permit a different single-row pattern.
@@ -47,8 +53,8 @@ def test_all_hr9_bases_keep_actual_panel_width_and_source_stud_density(hr9):
                 for axis in (0,2):assert parts['EMBED']['bounds'][axis][0]<q[axis]<parts['EMBED']['bounds'][axis][1]
                 assert contact(parts['CONC'],f,q)
                 assert f['axis']==[0,-1,0]
-        assert len([w for w in scene['welds'] if w['id'].startswith('WF')])==2
-        assert len([w for w in scene['welds'] if w['id'].startswith('WW')])==2
+        assert len([w for w in scene['welds'] if w['id'].startswith('WF')])==4
+        assert len([w for w in scene['welds'] if w['id'].startswith('WW')])==4
 
 
 def test_hr9_base_fit_changes_keep_analysis_worklines_and_report_assumptions(hr9):
@@ -59,5 +65,5 @@ def test_hr9_base_fit_changes_keep_analysis_worklines_and_report_assumptions(hr9
         wall=members[change['member_id']]
         assert wall['axis'][0][2]==0
         assert 'A:' in change['basis'] and 'unverified' in change['basis']
-        panel=next(p for p in m['panels'] if p['id']==wall['id']+'-PL')
-        assert min(q[2] for q in panel['vertices'])==2
+        assert wall['source_workline'][0][2]==0
+        assert not any(p['id']==wall['id']+'-PL' for p in m['panels'])
