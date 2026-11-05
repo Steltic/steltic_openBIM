@@ -29,25 +29,33 @@ def prepare(builder):
 
 
 def plate(ctx):
+    from .pilots.model import dot,sub
     a,p=ctx.a,ctx.p;wall=ctx.ms[0];profile=p[wall['profile_id']]
+    a.title='SPSW HALF-PANELS / CONTINUOUS EMBEDDED BASE'
     if profile['family']!='flat':raise ValueError('Plate wall base requires a flat source profile')
     width=profile['dimensions']['width'];thickness=profile['dimensions']['thickness']
     fit=ctx.params.get('plate_base_fit')
     if not fit:raise ValueError('Plate wall base needs a recorded actual-wall fit')
     gap=fit['bottom_gap_in'];half=width/2;fish_y=-thickness/2-.375
-    a.member('WALL',wall['profile_id'],[0,0,gap],[0,0,12],y=[1,0,0],source_member_index=0,
-        description='Actual full-width source steel plate wall; A recorded bottom clearance')
-    embed_pid=f'SOURCE-WALL-BASE-EMBED-{width:g}'
-    p[embed_pid]=dict(id=embed_pid,family='flat',dimensions=dict(width=width,thickness=1))
-    a.member('EMBED',embed_pid,[0,0,-12],[0,0,0],y=[1,0,0],representation_role='assembly_component',
+    embed_width=fit.get('embed_width_in',width);embed_offset=fit.get('embed_offset_in',0)
+    embed_half=embed_width/2
+    fields=[]
+    for i,field in enumerate(ctx.ms):
+        fw=p[field['profile_id']]['dimensions']['width'];shift=dot(sub(field['axis'][0],ctx.c['point']),wall['local_y'])
+        name='WALL' if len(ctx.ms)==1 else 'WALL'+str(i+1)
+        fields.append((name,shift-fw/2,shift+fw/2))
+        a.member(name,field['profile_id'],[shift,0,gap],[shift,0,12],y=[1,0,0],basis=field['basis'],source_member_index=i,
+            description='Actual source half-panel; A recorded bottom clearance')
+    embed_pid=f'SOURCE-WALL-BASE-EMBED-{embed_width:g}'
+    p[embed_pid]=dict(id=embed_pid,family='flat',dimensions=dict(width=embed_width,thickness=1))
+    a.member('EMBED',embed_pid,[embed_offset,0,-12],[embed_offset,0,0],y=[1,0,0],representation_role='assembly_component',
         description='S: full-width 1 x 12 in A572 Grade 50 embedded plate')
-    a.box('FISH',[-half,fish_y,0],[width,.375,4],'S size; A datum','Source 3/8 x 4 in boundary fishplate along the full panel')
-    a.box('CONC',[-half-6,-18,-20],[width+12,36,20],'A','Mat context; foundation reinforcement and anchorage verification delegated',kind='concrete')
+    a.box('CONC',[embed_offset-embed_half-6,-18,-20],[embed_width+12,36,20],'A','Mat context; foundation reinforcement and anchorage verification delegated',kind='concrete')
     # The source check is more specific than its component summary: two rows
     # at 6 in, not an interchangeable single row at 3 in. Preserve both.
-    per_row=round(width/6)
-    if per_row<1 or abs(per_row*6-width)>.001:raise ValueError('Full-width stud run needs an explicit end-spacing proposal')
-    xs=[-half+3+6*i for i in range(per_row)]
+    per_row=round(embed_width/6)
+    if per_row<1 or abs(per_row*6-embed_width)>.001:raise ValueError('Full-width stud run needs an explicit end-spacing proposal')
+    xs=[embed_offset-embed_half+3+6*i for i in range(per_row)]
     points=[[x,-.5,z] for z in (-9,-3) for x in xs];count=len(points)
     a.fastener('STUDS',points,[0,-1,0],.875,fit['stud_length_in'],['EMBED','CONC'],
         f'S: {count} headed studs, 7/8 in diameter, two rows at 6 in pitch (4 per foot); A: 5 in length and 3 in edge margins',
@@ -55,16 +63,20 @@ def plate(ctx):
     for i,(x,y,z) in enumerate(points):
         a.weld('WS'+str(i),[x-.4375,y,z],[x+.4375,y,z],['EMBED','STUDS'],kind='STUD_WELD',
             description='Source welded headed stud; symbolic weld line at actual embed-plate face')
-    for i,y in enumerate((fish_y,fish_y+.375)):
-        a.weld('WF'+str(i),[-half,y,0],[half,y,0],['FISH','EMBED'],.25,
-            description='Source two 1/4 in fishplate shop fillets; A top-face attachment datum')
-    for i,z in enumerate((gap,4)):
-        a.weld('WW'+str(i),[-half,-thickness/2,z],[half,-thickness/2,z],['WALL','FISH'],.1875,
-            description='Source 3/16 in field fillets along both lap edges')
+    for j,(name,left,right) in enumerate(fields):
+        fish='FISH' if len(fields)==1 else 'FISH'+str(j+1)
+        a.box(fish,[left,fish_y,0],[right-left,.375,4],'S size; A datum','Source 3/8 x 4 in boundary fishplate along this half-panel')
+        for i,y in enumerate((fish_y,fish_y+.375)):
+            a.weld('WF'+str(j)+'-'+str(i),[left,y,0],[right,y,0],[fish,'EMBED'],.25,
+                description='Source two 1/4 in fishplate shop fillets; A top-face attachment datum')
+        for i,z in enumerate((gap,4)):
+            a.weld('WW'+str(j)+'-'+str(i),[left,-thickness/2,z],[right,-thickness/2,z],[name,fish],.1875,
+                description='Source 3/16 in field fillets along both lap edges')
+        if abs(embed_width-(right-left))>.001:a.dim([left,0,gap],[right,0,gap],'A clear field plate width',basis='A',offset=36)
     a.section_axis=0;a.section_at=xs[len(xs)//2]
-    a.dim([-half,0,-12],[half,0,-12],'Full source panel / embedded plate width',offset=-34)
+    a.dim([embed_offset-embed_half,0,-12],[embed_offset+embed_half,0,-12],'Source gross bay / embedded plate width',offset=-34)
     a.dim([0,0,-12],[0,0,0],'12 in source embedded plate depth',view='section',offset=34)
     a.dim([0,0,0],[0,0,gap],'A wall bottom clearance',view='section',basis='A',offset=-34)
     a.notes.extend([fit['basis'],
-        'The 36 in typical strip is replaced by the entire physical panel width. Stud quantity covers that full width; no hidden multiplier is required.',
+        'One continuous embedded plate runs across the original gross bay beneath both half-panels. Stud quantity covers that full width once; no duplicate anchorage or hidden multiplier is required.',
         'Source foundation breakout, pullout and mat reinforcement remain the foundation engineer responsibility. Stud length and row datum are accepted fictional fit proposals, not a verified anchorage design.'])

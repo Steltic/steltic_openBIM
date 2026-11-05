@@ -1,5 +1,30 @@
 # Gold-example drawing corrections
 
+## Base-plan support coverage (0.8.51)
+
+Base plans select all explicitly connected foundations and vertical members at
+the base datum. They no longer use a fixed distance from the deepest physical
+embedment: that omitted shallower foundations in HR9 and other mixed-depth
+buildings. This is a drawing-only correction. Model members, decisions, native
+exports and IFC geometry are unchanged.
+
+## Parallel-wall source framing (0.8.50)
+
+The CFS1, CFS6, CFS11 and CFS14 source-selected inward-facing joist pairs are
+located on the real parallel wall lines. Their outer web faces are one inch
+outside each six-inch wall face. Longitudinal span fit remains an explicit
+fictional input. Squash blocks, chord interruptions and diaphragm transfer are
+separate requirements; this addition does not declare those checks complete.
+
+CFS6 ordinary party walls are confined to the north bar and leg-bearing walls
+to the leg. CFS6 roof-leg and CFS9 parallel walls receive explicitly proposed
+extra joists where the regular framing grid misses the wall. Jamb-foot end
+allowances can extend tracks but cannot shorten them away from other studs.
+Actual pair/track flange overlap controls screw placement, including the
+outer joist at a cut corner. CFS7 segment-framing and wall-layout records are
+linked only after every line/storey thickness and segment length is checked,
+including the extra 10-foot segments at YN7 and YS5.
+
 The review covered all 61 original drawing models. The original calculations,
 accepted answers and PDFs remain immutable inputs. Corrections produce new
 models and review extracts. They do not establish new structural capacity or

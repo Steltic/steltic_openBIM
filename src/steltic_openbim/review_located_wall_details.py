@@ -128,6 +128,7 @@ def floor(ctx):
             if abs(item['axis'][1][1]-item['axis'][0][1])>abs(item['axis'][1][0]-item['axis'][0][0]):
                 joists.extend((label,ply,part) for ply in channel_plies(p,item))
             else:joists.append((label,item,part))
+        elif item['member_id'] in data.get('block_to_joist_ids',{}):pass
         elif item['member_id'] in data['stud_ids']:studs.append((label,item,part))
         else:tracks.append((label,item,part))
     for index,(label,j,part) in enumerate(joists):
@@ -144,10 +145,20 @@ def floor(ctx):
         upper=min(upper,key=lambda v:(not overlaps(v),abs(v[1]['axis'][0][2]-high))) if upper else None
         # Source stiffener channel is an added connection component. It is not
         # falsely claimed as a pre-existing wall member in the receiver list.
-        stiff=channel(p,'ASSEMBLY-STIFF362',3.625,1.625,.0566,.5);sname='STIFF'+str(index)
-        sx=x+width_sign*(jt/2+3.625/2+.0566/2);sy=side*1.25
-        a.member(sname,stiff,[sx,sy,low+.1],[sx,sy,high-.1],y=[0,side,0],basis='S scheduled section; A cut and fit',representation_role='assembly_component',description='362S162-54 bearing stiffener; A local cut length / orientation')
-        a.fastener('STIFF-S'+str(index),[[x+width_sign*(jt/2+.0566),sy+side*.75,zz] for zz in (low+1.5,z,high-1.5)],[-width_sign,0,0],.19,.0566+jt,[label,sname],'A three No.10 stiffener flange to actual joist web',basis='A',screw=True)
+        # The stiffener web lies against the joist web; its 3.625-in depth
+        # runs ALONG the joist. Rotating that depth across the flange put the
+        # old stiffener outside a 2.5-in pocket despite touching its screws.
+        st=.0566;sd=3.625;sb=min(1.625,p[j['profile_id']]['dimensions']['b']-jt-.125)
+        actual_blocks=[mid for mid,jid in data.get('block_to_joist_ids',{}).items() if jid==j['member_id']]
+        if actual_blocks:
+            sname=by_id[min(actual_blocks,key=lambda mid:sum(q*q for q in by_id[mid][1]['axis'][0]))][0]
+        else:
+            stiff=channel(p,'ASSEMBLY-STIFF362-FIT-'+str(round(sb,4)),sd,sb,st,.5);sname='STIFF'+str(index)
+            sx=x+width_sign*(jt+st)/2
+            ys=sorted(q[1] for q in j['axis']);sy=max(ys[0]+sd/2+.125,min(side*(sd/2+.25),ys[1]-sd/2-.125))
+            if ys[1]-ys[0]<sd+.25:raise ValueError('Joist end too short for the proposed nested bearing stiffener')
+            a.member(sname,stiff,[sx,sy,low+jt],[sx,sy,high-jt],y=[width_sign,0,0],basis='A',representation_role='assembly_component',description='A 54 mil nested channel stiffener; web against actual joist web, cut tight between flanges; flange trimmed only where needed to fit the real pocket')
+            a.fastener('STIFF-S'+str(index),[[x+width_sign*(jt/2+st),sy,zz] for zz in (low+1.5,z,high-1.5)],[-width_sign,0,0],.19,st+jt,[label,sname],'A three No.10 stiffener web to actual joist web',basis='A',screw=True)
         if support and not overlaps(support):
             track_end_clip(a,p,index,label,j,support,low,side,-1)
         elif support:
@@ -302,8 +313,9 @@ def parallel_floor(a,p,index,label,j,part,tracks,studs,ends=(-1,1)):
         if (trackz-surface_z)*end<-.03:raise ValueError('Parallel wall/chord steel intersects the track web')
         xs=[max(part['bounds'][0][0]+1,bounds['bounds'][0][0]+1,-6),min(part['bounds'][0][1]-1,bounds['bounds'][0][1]-1,6)]
         if xs[1]<=xs[0]:raise ValueError('Parallel wall/joist has no physical attachment overlap')
-        yy=cy+side*.75
-        if not bounds['bounds'][1][0]+.25<=yy<=bounds['bounds'][1][1]-.25:raise ValueError('Parallel chord flange misses the actual track web')
+        ylo=max(part['bounds'][1][0],bounds['bounds'][1][0]);yhi=min(part['bounds'][1][1],bounds['bounds'][1][1])
+        if yhi-ylo<.5:raise ValueError('Parallel chord flange misses the actual track web')
+        yy=(ylo+yhi)/2
         if gap>.02:
             ys=sorted((cy-side*jt/2,cy+side*(p[j['profile_id']]['dimensions']['b']-jt/2)))
             name='RIM-PACK'+str(index)+tag;a.box(name,[xs[0]-.5,ys[0],min(trackz,surface_z)],[xs[1]-xs[0]+1,ys[1]-ys[0],gap],'A','A separate steel pack beneath this actual channel flange; source local capacity remains to verify');joins.append(name)

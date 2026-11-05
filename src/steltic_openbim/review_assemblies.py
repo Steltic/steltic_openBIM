@@ -61,6 +61,13 @@ class Context:
     def n(self,pattern,default):return findnum(pattern,self.text,default)
     def finish(self):
         a=self.a
+        for part in a.parts:
+            parameter=part.get('source_panel_parameter')
+            if not parameter:continue
+            host=self.params.get(parameter)
+            if not host or not any(panel['id']==host for panel in self.model.get('panels',[])):
+                raise ValueError('Assembly panel context has no actual declared host: '+str(host))
+            part['bound_panel_id']=host
         a.notes=list(dict.fromkeys(a.notes))
         if self.params.get('released_connection_proposal'):
             for item in a.parts:
@@ -77,6 +84,27 @@ class Context:
 
 def build_scene(model,package,c,subtype=''):
     ctx=Context(model,package,c);family=ctx.family
+    if family=='review_roof_distribution':
+        from .review_cfs6_roof_distribution import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_wallface_blocking':
+        from .review_cfs6_wallface_blocking import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_diaphragm_screws':
+        from .review_cfs6_diaphragms import draw
+        draw(ctx);return ctx.finish()
+    if family in ('review_chord_floor_pack','review_chord_floor_clip'):
+        from .review_cfs6_chord_floors import draw
+        draw(ctx);return ctx.finish()
+    if family in ('review_source_floor_rim','review_source_floor_block'):
+        from .review_cfs6_floor_framing import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_double_top_track':
+        from .review_double_top_tracks import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_transition_splice':
+        from .review_source_conflicts import draw_transition
+        draw_transition(ctx);return ctx.finish()
     if family in ('review_collector_bond','review_collector_lap'):
         from .review_concrete_collectors import draw
         draw(ctx);return ctx.finish()

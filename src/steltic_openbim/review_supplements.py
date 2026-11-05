@@ -4,7 +4,7 @@ from .review_model import add,sub,mul
 from .review_cfs import frange,intersections
 from .design_geometry import interval_in_rectangle
 
-def wall_axis_framing_stations(b,stations,axis,level,member_prefix,kind):
+def wall_axis_framing_stations(b,stations,axis,level,member_prefix,kind,station_bounds=None):
     """Record extra fictional framing where a parallel wall misses its grid."""
     normal=1-axis;by_station={}
     for m in b.members:
@@ -12,6 +12,7 @@ def wall_axis_framing_stations(b,stations,axis,level,member_prefix,kind):
         a,d=m['axis']
         if abs(a[normal]-d[normal])>.001:continue
         value=round(a[normal],6)
+        if station_bounds and not station_bounds[0]-.001<=value<=station_bounds[1]+.001:continue
         if any(abs(value-v)<.001 for v in stations):continue
         by_station.setdefault(value,[]).append(m['id'])
     for value,wall_ids in sorted(by_station.items()):
@@ -67,6 +68,16 @@ def complete_walls(b,outline,bystory,levels):
         for (axis,pos),top in lines.items():
             normal=1-axis;ranges=intersections(poly,axis,pos/12)
             if b.key=='cfs7':ranges=wall_ranges(b,axis,pos,ranges)
+            if b.key=='cfs6' and axis==1:
+                # The leg and north bar use different room/bearing grids.
+                # A named party wall in the bar must not continue south
+                # through the leg corridor merely because its X lies inside
+                # the overall L-shaped footprint (same source scope as the
+                # braced runs in review_next_cfs_walls.locations).
+                if any(abs(pos-x*12)<.01 for x in (30,60,90,120,150,180)):
+                    ranges=[(max(lo,90),hi) for lo,hi in ranges if hi>90]
+                elif any(abs(pos-x*12)<.01 for x in (14,28,34,48)):
+                    ranges=[(lo,min(hi,90)) for lo,hi in ranges if lo<90]
             occupied=[(r['start_in']-6,r['end_in']+6) for w in b.walls if w['level']==k and w['direction']==('X' if axis==0 else 'Y') for r in w['runs'] if abs(r['position_in']-pos)<.1]
             opens=[f for f in b.openings if f['level']==k and f['plane']==('xz' if axis==0 else 'yz') and abs(f['xy'[normal]+'_ft']*12-pos)<.1]
             bottom=levels[k-1];tp=b.profile('600T150-54');sp=b.profile('600S162-54');ly=[1,0,0] if axis==0 else [0,1,0]
@@ -102,7 +113,8 @@ def complete_walls(b,outline,bystory,levels):
                                 parts=new
                         for pi,(u,v) in enumerate(parts):
                             m=b.member(f'{label}-{gi}-{tag}-{pi}',tp,'ordinary_track',pt(u,z),pt(v,z),k,'A',local_y=[0,0,up]);b.connection(m['id'],'review_cfs_sill' if tag=='B' else 'review_cfs_floor',pt((u+v)/2,z),[m],parameters={'floor_depth':levels[k]-top,'level':k})
-                for j,u in enumerate(frange(lo+8,hi,16)):
+                start=math.ceil((lo+6-8)/16)*16+8 if b.key=='cfs6' else lo+8
+                for j,u in enumerate(frange(start,hi,16)):
                     if void(u,bottom) or any(aa<u<dd for aa,dd in occupied):continue
                     # Opening jambs already occupy these narrow end zones. The
                     # old 7-in mask left duplicate, unsupported short studs

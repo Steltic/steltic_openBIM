@@ -69,6 +69,8 @@ def build(b):
             b.changes.append(dict(kind='gold_local_member_selection',member_id=made['id'],analysis_profile_id=original,physical_profile_id='W24X62',record_id=made['design_record_ids'][0],basis='S: explicit final mechanical-zone hand design supersedes the generic roof analysis section on Grid B / Grids 1-3'))
         if b.key=='hr32':made['phase']='existing A36' if max(aa[2],bb[2])<=468.01 else 'new A992'
         if kind=='column':column_ids.add(made['id'])
+    from .review_hr9_selections import collectors
+    collectors(b)
     # Floor cells preserve real voids and setbacks; the crane bracket level is not a floor.
     from .review_floor_layout import cells,thickness,interval
     for i,cell in enumerate(cells(b,levels)):
@@ -309,7 +311,7 @@ def connect_primary(b,levels):
                     if preferred:refs.append(b.record('connections',preferred))
                 match=re.search(r'RBS a = (\d+(?:[ -]\d+/\d+|/\d+|\.\d+)?) in, b = (\d+(?:[ -]\d+/\d+|/\d+|\.\d+)?) in, c = (\d+(?:[ -]\d+/\d+|/\d+|\.\d+)?)',text)
                 if match:m['rbs']=dict(zip(('a_in','b_in','c_in'),map(number,match.groups())))
-            b.connection(m['id']+':'+str(side),family,point,[m]+([support] if support else []),refs,parameters={'moment':moment,'collector':abs(axial)>10,'existing':b.key=='hr32' and k<=3})
+            b.connection(m['id']+':'+str(side),family,point,[m]+([support] if support else []),refs,parameters={'moment':moment,'collector':abs(axial)>10 or bool(m.get('source_collector_line')),'existing':b.key=='hr32' and k<=3})
 
 def ebf(b):
     length=b.config.get('E_LINK',36)
@@ -337,30 +339,8 @@ def plate_walls(b,levels):
     b.note('SPSW','Source tension-field WEB analysis strips are excluded. Gross 3/16 in physical panels and their source perforation pattern are retained. A: 2 in nominal boundary fit and corner clearances; actual wall openings and boundary members remain in their source bays.')
 
 def core_walls(b,levels):
-    c=b.config
-    for name,(direction,station,start,end,group) in c['LEGS'].items():
-        along=0 if direction=='X' else 1;normal=1-along;length=end-start
-        for k in range(1,len(levels)):
-            gi=next(i for i,(lo,hi) in enumerate(c['PLATE_GROUPS']) if lo<=k<=hi);t=c['PLATE'][group][gi]
-            plate=b.custom(f'CORE-FACE-{length:g}-{t:g}','flat',dict(width=length,thickness=t),basis='S')
-            pid=b.custom(f'CORE-{name}-{t:g}','built_up',{},components=[dict(profile_id=plate,offset=[0,s*(18-t)/2],rotation_deg=0) for s in (-1,1)],basis='S: two physical faceplates, concrete between')
-            aa=[0,0,levels[k-1]];bb=[0,0,levels[k]];aa[normal]=bb[normal]=station;aa[along]=bb[along]=(start+end)/2;ly=[0,0,0];ly[along]=1
-            m=b.member(f'CORE-{name}-{k}',pid,'composite_wall',aa,bb,k,local_y=ly)
-            verts=[]
-            for u,z in ((start,levels[k-1]),(end,levels[k-1]),(end,levels[k]),(start,levels[k])):
-                q=[0,0,z];q[normal]=station;q[along]=u;verts.append(q)
-            b.panel(m['id']+'-CONCRETE','composite_core',verts,18-2*t,k,'S')
-            b.connection(m['id']+':ties','review_core_wall',aa,[m],[b.record('connections','conn-tie-bar-to-plate'),b.record('connections','conn-diaphragm-to-core-walls')],parameters={'plate_thickness':t,'overall_thickness':18})
-            if k==1:b.connection(m['id']+':BASE','review_core_base',aa,[m],[b.record('connections','conn-base-wall-'+name[:2])],parameters={'plate_thickness':t,'overall_thickness':18})
-        b.views.append(dict(title='Composite core '+name,direction=direction,station_in=station,range_in=[start,end]))
-    for name,(direction,station,start,end) in c['CBS'].items():
-        for k in range(1,len(levels)):
-            group='Y' if name in ('2','4') else name;gi=next(i for i,(lo,hi) in enumerate(c['CB_GROUPS']) if lo<=k<=hi);tf,tw=c['CB_T'][group][gi]
-            pid=b.custom(f'COUPLING-{tf:g}-{tw:g}','i',dict(d=24,bf=18,tf=tf,tw=tw),basis='S: built-up coupling beam plates')
-            a=[start,station,levels[k]-12] if direction=='X' else [station,start,levels[k]-12];d=[end,station,levels[k]-12] if direction=='X' else [station,end,levels[k]-12]
-            lo,hi=c['CB_GROUPS'][gi];suffix='L1-20' if group=='B' else f'L{lo}-{hi}';rid=b.record('connections',f'conn-coupling-{group}-{suffix}')
-            m=b.member(f'COUPLING-{name}-{k}',pid,'coupling_beam',a,d,k,records=[rid] if rid else []);b.ends(m,'review_coupling',[rid] if rid else [],parameters={'wall_thickness':18,'flange_thickness':tf,'web_thickness':tw})
-    b.note('CORE','The saved wide-column and rigid-zone analysis members are excluded. Physical paired wall faceplates, concrete thickness, source plate groups and 9 ft coupling openings are reconstructed. A: tie locations and weld fit are dimensioned in the assembled details; they retain source verification requirements.')
+    from .review_composite_core import build
+    return build(b,levels)
 
 
 def rocking_posts(b,levels):

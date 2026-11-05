@@ -231,7 +231,7 @@ class Assembly:
             if len(f['connects'])<2 or not set(f['connects'])<=ids:raise ValueError('Invalid joined plies '+str(f))
         for w in self.welds:
             if len(w['connects'])<2 or not set(w['connects'])<=ids:raise ValueError('Invalid weld attachments '+str(w))
-        if len([p for p in self.parts if p['kind']=='member'])<2 and not any(p['kind']=='concrete' for p in self.parts):
+        if len([p for p in self.parts if p['kind']=='member' or p.get('bound_panel_id')])<2 and not any(p['kind']=='concrete' for p in self.parts):
             raise ValueError('Assembly lacks its receiving member/support: '+self.title)
         for interface in self.interfaces:
             if len(interface['connects'])<2 or not set(interface['connects'])<=ids:raise ValueError('Invalid bearing/bond interface')
@@ -247,6 +247,29 @@ def section_polygons(part,axis,value):
     Independent profile strips remain independent, preserving channel openings and
     hollow sections rather than drawing an enclosing rectangle.
     """
+    # Profile strips and slot cuts produce adjacent closed solids. Intersect
+    # each solid independently: stitching their shared vertices together can
+    # fill an opening or turn a real flange into a self-intersecting outline.
+    # This also matters for unslotted, inclined multi-channel members.
+    # Use the actual mesh faces (including rigid transforms), checking that
+    # every proposed group is closed. Other edited/mitred meshes still follow
+    # their explicit faces below.
+    if part.get('member') and not part.get('cut_planes'):
+        from .pilots.geometry import member_solids
+        profiles={p['id']:p for p in part.get('section_definitions',[])}
+        if profiles:
+            counts=[len(solid) for solid in member_solids(part['member'],profiles)]
+            if sum(counts)==len(part['faces']):
+                from collections import Counter
+                solids=[];start=0
+                for count in counts:
+                    solid=part['faces'][start:start+count];start+=count
+                    key=lambda q:tuple(round(v,7) for v in q)
+                    edges=Counter(tuple(sorted((key(a),key(b)))) for face in solid for a,b in zip(face,face[1:]+face[:1]))
+                    if any(n!=2 for n in edges.values()):break
+                    solids.append(solid)
+                if len(solids)==len(counts):
+                    return [loop for solid in solids for loop in section_polygons({'faces':solid},axis,value)]
     axes=[i for i in range(3) if i!=axis];segments=[]
     for face in part['faces']:
         hits=[]
@@ -275,12 +298,17 @@ def section_polygons(part,axis,value):
                     if abs((x-ax)*(by-ay)-(y-ay)*(bx-ax))<1e-8 and min(ax,bx)-1e-8<=x<=max(ax,bx)+1e-8 and min(ay,by)-1e-8<=y<=max(ay,by)+1e-8:return True
                     if (ay>y)!=(by>y) and x<(bx-ax)*(y-ay)/(by-ay)+ax:hit=not hit
                 return hit
-            segments.extend([a,b] for a,b in zip(points,points[1:]) if math.dist(a,b)>1e-6 and inside(mul(add(a,b),.5)))
+            for a,b in zip(points,points[1:]):
+                if math.dist(a,b)>1e-6 and inside(mul(add(a,b),.5)):segments.append([a,b])
     # Stitch matching segment ends; separate strips/cylinders yield separate loops.
     loops=[]
     while segments:
         chain=segments.pop();changed=True
         while changed:
+            # A slotted member is extruded in several adjacent intervals.
+            # Once one contour closes, do not walk through its shared corner
+            # into the next interval and create a self-intersecting outline.
+            if len(chain)>2 and math.dist(chain[-1],chain[0])<1e-5:break
             changed=False
             for i,(a,b) in enumerate(segments):
                 if math.dist(chain[-1],a)<1e-5:chain.append(b)

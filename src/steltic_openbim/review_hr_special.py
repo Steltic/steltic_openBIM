@@ -31,6 +31,9 @@ def brace(ctx):
     a,p,pid,txt,par=ctx.a,ctx.p,ctx.pid,ctx.text,ctx.params;kind=par.get('joint','corner');upper=kind in ('apex','link_end');isbrb=ctx.family=='review_brb'
     full_text=txt
     cp=ctx.select(('column',));bp=ctx.select(('beam','moment_beam','girder','transfer_chord'));cd=effective(p,cp);bd=effective(p,bp);bf=effective(p,bp,'width')
+    proposal=par.get('unsupported_base_corner')
+    if proposal:
+        bp=proposal['source_beam_profile'];bd=effective(p,bp);bf=effective(p,bp,'width')
     beam_z=par.get('beam_centroid_z',-bd/2);beam_top=beam_z+bd/2;beam_bottom=beam_z-bd/2
     # The connection datum is the building work point, not the support face.
     # Keep its exact source slope; the rounded display angle is not geometry.
@@ -62,10 +65,30 @@ def brace(ctx):
                 a.box(label,[x-.25,yy,beam_bottom+tf],[.5,bf/2-tw/2-.25,bd-2*tf],'A','Source-required stiffener, A thickness/station where unspecified');a.weld('W'+label,[x,yy,beam_bottom+tf],[x,yy,beam_top-tf],['BEAM',label],.25,basis='A')
     else:
         weak=par.get('weak_axis_gusset',False);column_face=p[cp]['dimensions'].get('tw',.375)/2 if weak else cd/2
-        a.member('COLUMN',cp,[0,0,0 if kind=='base' else -bd-lz-24],[0,0,lz+24],y=[1,0,0] if weak else [0,1,0])
+        a.member('COLUMN',cp,[0,0,-18 if proposal else 0 if kind=='base' else -bd-lz-24],[0,0,lz+12 if proposal else lz+24],y=[1,0,0] if weak else [0,1,0])
         if kind=='base':
             a.box('BASE',[-cd-4,-bf/2-6,-1.5],[cd+lx+4,bf+12,1.5],'A','A local extract of source column base plate; see separate base detail')
             a.box('CONC',[-cd-8,-bf/2-10,-12],[cd+lx+12,bf+20,10.5],'A','Foundation context',kind='concrete');host='BASE'
+        elif proposal:
+            seat=proposal['seat_thickness_in'];width=proposal['seat_width_in']
+            st=proposal['stiffener_thickness_in'];height=proposal['stiffener_depth_in']
+            a.box('SEAT',[column_face,-width/2,-seat],[lx,width,seat],'A',
+                  'A stiffened seat replaces absent same-side beam; source base-corner condition does not match this continuous column')
+            for side in (-1,1):
+                name='SEAT-STIFF'+str(side);yy=side*(width/2-2)-st/2
+                a.polygon(name,[[column_face,yy,-seat],[column_face+lx,yy,-seat],
+                                [column_face,yy,-seat-height]],st,basis='A',
+                          description='A 1/2 in triangular seat stiffener; capacity unverified')
+                a.weld(name+'-C',[column_face,yy+st/2,-seat-height],
+                       [column_face,yy+st/2,-seat],['COLUMN',name],.375,basis='A',
+                       description='A stiffener-to-column fillet, both sides; new load path unverified')
+                a.weld(name+'-S',[column_face,yy+st/2,-seat],
+                       [column_face+lx,yy+st/2,-seat],['SEAT',name],.375,basis='A',
+                       description='A stiffener-to-seat fillet, both sides')
+            a.weld('SEAT-C',[column_face,-width/2,-seat/2],
+                   [column_face,width/2,-seat/2],['COLUMN','SEAT'],.375,basis='A',
+                   description='A seat-to-column fillet, top/bottom; capacity unverified')
+            a.notes.append(proposal['basis']);host='SEAT'
         else:a.member('BEAM',bp,[column_face,0,beam_z],[column_face+lx+24,0,beam_z]);host='BEAM'
         clearance=column_face+(2*t if par.get('beam_only_gusset') else 0)
         vertices=[[clearance,-t/2,interface_z],[lx+clearance,-t/2,interface_z],[max(lx,18)+clearance,-t/2,interface_z+sign*lz*.65],[clearance,-t/2,interface_z+sign*lz]]
@@ -114,8 +137,9 @@ def brace(ctx):
     a.polygon('GUSSET',[[x,-t/2,z] for x,z in hull(outline)],t,basis='A',description=gusset['description'])
     a.section_at=start[0]+6
     edge_start=-lx/2 if upper else clearance
-    a.dim([edge_start,0,interface_z],[edge_start+lx,0,interface_z],f'{lx:g} in source interface length')
-    a.dim([0,0,interface_z],[0,0,interface_z+sign*lz],basis='A',offset=40)
+    a.dim([edge_start,0,interface_z],[edge_start+lx,0,interface_z],
+          'Source support-edge weld' if proposal else f'{lx:g} in source interface length',offset=-48 if proposal else 24)
+    a.dim([0,0,interface_z],[0,0,interface_z+sign*lz],basis='S' if proposal else 'A',offset=65 if proposal else 40)
     a.notes.append('Separate source end condition: '+kind+'. Member slot, gusset clearance and free-edge trim follow the attached source record; drawings show the assembled load path. A geometry remains subject to the unchanged design verification requirements.')
 
 

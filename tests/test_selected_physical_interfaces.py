@@ -15,7 +15,8 @@ def test_heavier_embedded_box_is_an_actual_piece_not_only_a_drawing_substitute()
     assert cases
     for c in cases:
         shaft,embedded=[members[mid] for mid in c['member_ids'][:2]]
-        assert embedded['axis'][1]==shaft['axis'][0]
+        assert embedded['axis'][1]==[v+o for v,o in zip(shaft['axis'][0],shaft['end_offsets'][0])]
+        assert shaft['axis'][0][2]==0 and shaft['end_offsets'][0][2]==12
         assert profiles[embedded['profile_id']]['dimensions']['t']>profiles[shaft['profile_id']]['dimensions']['t']
         scene=build_scene(m,p,c);drawn={v['profile_id'] for v in scene['parts'] if v.get('member')}
         assert {shaft['profile_id'],embedded['profile_id']}<=drawn

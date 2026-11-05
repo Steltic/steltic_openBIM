@@ -82,6 +82,12 @@ def support(ctx,bp):
 
 def draw(ctx):
     a,p,pid,txt,par,f=ctx.a,ctx.p,ctx.pid,ctx.text,ctx.params,ctx.family
+    if par.get('actual_composite_core'):
+        from .review_composite_core import draw as core
+        return core(ctx)
+    if par.get('actual_crane_joint'):
+        from .review_crane_receivers import draw as actual_crane
+        return actual_crane(ctx)
     if f in ('review_beam','review_existing_joint','review_crane_bracket'):
         # A member-specific V-beam end selection can accompany a generic
         # collector force check. Do not mix one record's bolt group with the
@@ -400,6 +406,9 @@ def splice(ctx):
 
 def wall(ctx):
     a,p,pid,txt,par=ctx.a,ctx.p,ctx.pid,ctx.text,ctx.params
+    if ctx.family=='review_plate_wall' and par.get('actual_plate_boundary'):
+        from .review_plate_boundaries import draw
+        return draw(ctx)
     if ctx.family=='review_plate_wall':
         cp=ctx.select(('column',));bp=ctx.select(('beam','moment_beam'));cd=effective(p,cp);bd=effective(p,bp);t=par['thickness'];wp=flat(p,32,t)
         a.member('M1',cp,[-cd/2,0,-bd],[ -cd/2,0,40]);a.member('M2',bp,[0,0,-bd/2],[42,0,-bd/2]);a.member('WALL',wp,[18,.28125,2],[18,.28125,34],y=[1,0,0],basis='S',description='Physical 3/16 in wall plate / corner extract')
@@ -458,6 +467,9 @@ def retrofit(ctx):
 def industrial(ctx):
     a,p,pid,f=ctx.a,ctx.p,ctx.pid,ctx.family
     if f=='review_sliding_post':
+        if ctx.params.get('actual_endwall_head') or ctx.params.get('actual_endwall_base'):
+            from .review_endwall_posts import head,base
+            return head(ctx) if ctx.params.get('actual_endwall_head') else base(ctx)
         from .review_cfs_details import endpost
         endpost(ctx,base=ctx.c['point'][2]<1);return
     run=ctx.params.get('runway_profile',ctx.select(('runway_beam','beam','girder')));d=effective(p,run);w=effective(p,run,'width')

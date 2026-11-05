@@ -15,7 +15,7 @@ from .drawing_pdf import Sheets,ascii_text,feature_vertices
 from .drawing_workflow import write_json,fingerprint
 from .design_geometry import build_model,length
 from .pilots.geometry import strips,member_faces,part_faces,clip_axis
-from .pilots.model import add
+from .pilots.model import add,sub,mul,unit,cross
 
 INK='#243d49'; LIGHT='#c1cdcf'; GREY='#687b80'; ASSUMED='#946320'; BLUE='#275e75'
 
@@ -32,6 +32,16 @@ def feet(value):
 
 
 def physical_axis(m): return [add(p,o) for p,o in zip(m['axis'],m['end_offsets'])]
+
+
+def wall_plan_sections(member,profiles):
+    """Actual wide wall sections, which cannot be drawn as vertical-axis dots."""
+    if member['kind'] not in ('composite_wall','wall_closure'):return []
+    a,b=physical_axis(member)
+    if math.dist(a[:2],b[:2])>.001:return []
+    y=member['local_y'];z=cross(unit(sub(b,a)),y)
+    return [[add(a,add(mul(y,u),mul(z,v))) for u,v in polygon]
+            for polygon in strips(profiles[member['profile_id']],profiles)]
 
 
 def compact_references(values):
@@ -177,8 +187,13 @@ class DesignSheets(Sheets):
             if seg in seen:continue
             seen.add(seg);basis=m['basis'];color=ASSUMED if basis=='A' else INK
             primary=m['kind'] in ('column','moment_beam','girder','rafter','chord','girder_truss','walkway_post','walkway_edge_beam')
-            self.line(p,q,color,1.1 if primary else .45)
-            if math.dist(p,q)<2:
+            sections=wall_plan_sections(m,self.profiles) if axes==(0,1) else []
+            for polygon in sections:
+                pts=[tr(v) for v in polygon];path=self.c.beginPath();path.moveTo(*pts[0])
+                for v in pts[1:]:path.lineTo(*v)
+                path.close();self.c.setStrokeColor(color);self.c.setFillColor('#dbe6eb');self.c.setLineWidth(.65);self.c.drawPath(path,stroke=1,fill=1)
+            if not sections:self.line(p,q,color,1.1 if primary else .45)
+            if not sections and math.dist(p,q)<2:
                 self.c.setStrokeColor(color);self.c.rect(p[0]-2.5,p[1]-2.5,5,5,stroke=1,fill=0)
             marks[m['mark']].append((m,p,q))
             if mark_mode=='all' and math.dist(p,q)>25 and m['kind'] not in ('flange_kicker','opening_trimmer','opening_header'):
@@ -204,6 +219,21 @@ class DesignSheets(Sheets):
         self.line(pts[0],pts[2],ASSUMED,.55);self.line(pts[1],pts[3],ASSUMED,.55)
         cx=sum(p[0] for p in pts)/4;cy=sum(p[1] for p in pts)/4
         self.label(cx+3,cy+4,f['id']+(' A' if f.get('basis') else ' S'),size,ASSUMED)
+
+
+def plan_connections(model,selected,level,kind):
+    """Located occurrences for this view, not every joint on a tall column."""
+    from .review_pdf import is_base_connection
+    lookup={m['id']:m for m in model['members']};ids={m['id'] for m in selected}
+    z=next((z for k,_,z in model['levels'] if k==level),0)
+    result=[]
+    for c in model['connections']:
+        if not ids.intersection(c['member_ids']):continue
+        if kind=='base' and not is_base_connection(c,lookup):continue
+        if kind=='floor' and not z-40<=c['point'][2]<=z+6:continue
+        if kind=='roof' and c['point'][2]<z-40:continue
+        result.append(c)
+    return result
 
 
 def plan(sh,level,kind='floor'):
@@ -253,7 +283,8 @@ def plan(sh,level,kind='floor'):
     notes.append(f'{len(selected):,} members represented in this view. Repeated-member leaders identify groups; full instance mapping is in the model index.')
     y=sh.panel_notes(notes)
     sh.text(sh.W-460,y-12,'CONNECTION CALLOUTS',15,font='Helvetica-Bold');y-=42
-    refs=sorted({ref for a in selected for ref in a['connection_refs']})
+    connections=plan_connections(m,selected,level,kind)
+    refs=sorted({c['drawing_ref'] for c in connections})
     for ref in refs:
         if y<185:
             sh.text(sh.W-460,y,'Further joint variants: connection index / member index.',10);break
@@ -261,10 +292,10 @@ def plan(sh,level,kind='floor'):
         y=sh.wrap(sh.W-460,y,ref+'  '+detail['family'].replace('_',' '),390,11,16)-7
     # Place at least one anchored callout for each family that occurs in the view.
     used=set()
-    for a in selected:
-        for ref in a['connection_refs']:
-            if ref in used or len(used)>=6:continue
-            p=tr(physical_axis(a)[0]);sh.callout(p,ref,25,18+len(used)%3*14);used.add(ref)
+    for c in connections:
+        ref=c['drawing_ref']
+        if ref in used or len(used)>=6:continue
+        p=tr(c['point']);sh.callout(p,ref,25,18+len(used)%3*14);used.add(ref)
 
 
 def section(sh,normal,station,along,title,scale,bounds,origin=(215,340),band=1):

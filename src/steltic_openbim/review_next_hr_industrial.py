@@ -66,6 +66,15 @@ def gable(b):
         axis=[[p[0],p[1],312 if abs(p[2]-372)<.01 else p[2]] for p in src['axis']]
         k=1 if max(p[2] for p in axis)<=192 else 2
         m=b.member(src['id'],pid,kind,*axis,k,local_y=src.get('local_y'),source=src['id'])
+        m['analysis_ids']=list(src.get('analysis_ids',[])) if axis==src['axis'] else []
+        if axis!=src['axis']:
+            b.excluded.append(dict(id=src['id'],profile_id=pid,entity_ids=[m['id']],source_axis=src['axis'],
+                reason='The source flat model uses31 ft mean roof height. This analysis-only workline is replaced by the same selected column/eave member at the source26 ft eave; source analysis and checks remain unchanged.'))
+        record={'W12X26':'roof-W12X26','W16X31':'floor-W16X31','W24X84':'lateral_col-W24X84'}.get(pid)
+        if pid=='W8X31':
+            lateral=any(axis[0][0] in (b.config['XC'][i],b.config['XC'][i+1]) and axis[0][1]==b.config['YC'][j] for i,j in b.config['OFF_BRACED'])
+            record=('lateral_col' if lateral else 'gravity_col')+'-W8X31'
+        if record:m['design_record_ids'].append(b.record('members',record))
     connect_primary(b,[0,192,312])
     # Replace source column continuity interpretations with one-piece columns.
     b.connections[:]=[c for c in b.connections if c['detail_ref']['id'] not in ('review_splice','review_column_continuity')]
@@ -132,11 +141,16 @@ def gable(b):
                     aa=[x,y0+sign*12,z];bb=[x+s*26.73,y0-sign*14.73,z];m=b.member(f'COLUMN-FB-{i}-{side}-{z}-{s}','L2-1/2X2-1/2X1/4','flange_brace',aa,bb,2,'A');b.connection(m['id'],'review_angle_clip',aa,[m,host],[b.record('connections','conn-flange-braces')],parameters={'count':2,'diameter':.75})
     for m in b.members:
         if m['kind'] in ('beam','girder'):m['end_offsets']=[[0,0,-b.depth(m['profile_id'])/2]]*2
+    from .review_gable_receivers import apply
+    apply(b)
     b.grids={'x':[(str(i+1),x) for i,x in enumerate(range(0,2401,300))],'y':[('A',0),('B',480),('R',960),('C',1440)]}
     b.note('GABLE','S: actual 26 ft eaves and 36 ft ridge replace the 31 ft mean-height analysis beam; W27X94 rafters and source end-plate knees retained. S rod crosses and source paired flange braces; A secondary purlin/girt products, office joist internals, endwall posts, ridge splice and clevis/turnbuckle supplier envelopes. Office roof is a roof, not an occupied floor. Adopted geometry does not certify supplier capacity.')
 
 
 def gable_detail(ctx):
+    if ctx.family=='review_hr_gable_knee' and ctx.params.get('actual_gable_knee'):
+        from .review_gable_receivers import knee
+        return knee(ctx)
     from .review_assemblies import effective
     from .assembly_scene import clip_part
     a,p=ctx.a,ctx.p;rp='W27X94';rd=effective(p,rp);rw=effective(p,rp,'width');tf=p[rp]['dimensions']['tf'];slope=.25

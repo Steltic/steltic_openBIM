@@ -96,6 +96,9 @@ def crossing(ctx):
     a.notes.append('The gusset passes through a slot in the continuous diagonal; the second diagonal is interrupted at the plate. Slot clearances and free-edge perimeter are A. Hidden slot faces are diagrammatic; this is not a shop solid.')
 
 def cap(ctx):
+    if ctx.params.get('actual_bearing_cap'):
+        from .review_gable_receivers import bearing_cap
+        return bearing_cap(ctx)
     a,p,pid=ctx.a,ctx.p,ctx.pid;d=effective(p,pid);w=effective(p,pid,'width');t=.75;match=re.search(r'PL '+NUMBER+r' x '+NUMBER+r' x '+NUMBER+r' in (?:closure|cap)',ctx.text)
     if match:t,bx,by=map(number,match.groups())
     else:bx,by=d+2,w+2
@@ -199,6 +202,12 @@ def angle_crossing(ctx):
     a.notes.append('S: horizontal-truss crossing bolt. A: angles occupy adjacent flange planes; flange offsets and local packer fit are coordination geometry. Grating is cut clear and does not act as a diaphragm.')
 
 def clevis(ctx):
+    if ctx.params.get('actual_rod_end'):
+        from .review_rod_receivers import end
+        return end(ctx)
+    if ctx.params.get('actual_rod_adjuster'):
+        from .review_rod_receivers import adjuster
+        return adjuster(ctx)
     if ctx.params.get('joint')=='turnbuckle':
         from .review_assemblies import tube
         a,p=ctx.a,ctx.p;rp=ctx.pid;dia=effective(p,rp);a.member('ROD-L',rp,[-28,0,0],[-2,0,0]);a.member('ROD-R',rp,[2,0,0],[28,0,0]);body=tube(p,3*dia,3*dia,.25);a.member('BODY',body,[-6,0,0],[6,0,0],basis='A',description='A forged turnbuckle supplier envelope');a.interfaces.append(dict(id='THREADS',kind='threaded_adjuster',connects=['ROD-L','BODY','ROD-R'],basis='A',description='Opposite-hand threaded rod engagement; source turnbuckle requirement'));a.dim([-6,0,0],[6,0,0],'A supplier envelope',basis='A');a.section_at=0;return
