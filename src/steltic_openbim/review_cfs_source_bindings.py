@@ -23,7 +23,7 @@ def unresolved(b,rid,reason):
 def apply(b):
     # These exact table schemas belong to these saved gold examples. Do not
     # infer similarly named source tables on an unrelated production job.
-    if b.key not in ('cfs2','cfs3','cfs7','cfs12'):return
+    if b.key not in ('cfs2','cfs3','cfs5','cfs7','cfs12'):return
     walls={(w['line'],w['level']):w for w in b.walls};stories=len(b.cfg['heights_ft'])
     by_wall={}
     for m in b.members:
@@ -56,10 +56,10 @@ def apply(b):
                 cfs7_layout(b,rid,data,walls,by_wall,stories)
                 continue
             lines=re.findall(r'\b[XY][A-Z0-9]+\b',data['line'])
-            if b.key=='cfs2' and data['line']=='Y1-Y5':lines=['Y'+str(i) for i in range(1,6)]
+            if b.key in ('cfs2','cfs5') and data['line']=='Y1-Y5':lines=['Y'+str(i) for i in range(1,6)]
             if b.key=='cfs3' and data['line']=='Y28 to Y168':lines=['Y'+str(i) for i in range(28,169,28)]
             selection=re.fullmatch(r'(\d+)(?: discrete bays)? x (\d+(?:\.\d+)?) ft',data['walls'])
-            continuous=re.fullmatch(r'(\d+) continuous walls of (\d+) bays x (\d+(?:\.\d+)?) ft',data['walls'])
+            continuous=re.fullmatch(r'(\d+) continuous walls? of (\d+) bays x (\d+(?:\.\d+)?) ft',data['walls'])
             if not lines or not (selection or continuous):
                 unresolved(b,rid,'No explicit line list and segment count/length selection');continue
             count=int(selection[1]) if selection else int(continuous[1])*int(continuous[2])
