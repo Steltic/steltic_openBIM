@@ -71,6 +71,25 @@ def prepare(model,package):
         # equal stud layouts on different beams share a drawing detail while the
         # source-beam identity remains on every actual connection occurrence.
         shape_parameters={k:v for k,v in c.get('parameters',{}).items() if k not in ('original_physical_member_id','source_releases')}
+        if shape_parameters.get('actual_crane_joint'):
+            from .review_cfs_wall_bindings import local_member,signature
+            from .review_receiver_geometry import horizontal_frame
+            from .pilots.model import sub
+            frame=horizontal_frame(sub(*ms[0]['axis'][::-1])) if shape_parameters['actual_crane_joint']=='bracket' else ([1,0,0],[0,1,0],[0,0,1])
+            shape_parameters['actual_crane_receivers']=signature([local_member(m,c['point'],frame,48) for m in ms])
+        if shape_parameters.get('actual_gable_knee') or shape_parameters.get('actual_bearing_cap'):
+            from .review_receiver_geometry import horizontal_frame
+            from .review_cfs_wall_bindings import local_member,signature
+            from .pilots.model import sub
+            direction=ms[0] if shape_parameters.get('actual_gable_knee') else ms[1]
+            frame=horizontal_frame(sub(*direction['axis'][::-1]))
+            shape_parameters['actual_gable_receivers']=signature([local_member(m,c['point'],frame,60) for m in ms])
+        if shape_parameters.get('actual_endwall_head') or shape_parameters.get('actual_endwall_base'):
+            from .review_cfs_wall_bindings import local_member,signature
+            from .pilots.model import cross
+            n=shape_parameters.get('actual_endwall_head',{}).get('normal',ms[0]['local_y'])
+            frame=(cross(n,[0,0,1]),n,[0,0,1])
+            shape_parameters['actual_endwall_receivers']=signature([local_member(m,c['point'],frame,48) for m in ms])
         if family in ('test_roof_truss','review_truss_node','review_truss_heel'):
             from .truss_node_geometry import receivers
             # A piece trimmed at a nearby opening cannot borrow the longer

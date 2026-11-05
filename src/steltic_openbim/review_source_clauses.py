@@ -16,7 +16,7 @@ def apply(model,package):
                 for rid in list(c['design_record_ids']):
                     data=records[rid]['data']
                     selected=next((clauses(data.get(field)) for field in ('components','selection') if clauses(data.get(field))),None)
-                    if not selected or 'bottom track' not in selected['base'].lower() or 'stud above to stud below' not in selected['floors'].lower():continue
+                    if not selected or 'floors' not in selected or 'bottom track' not in selected['base'].lower() or 'stud above to stud below' not in selected['floors'].lower():continue
                     c['design_record_ids'].remove(rid)
                     c['source_context_records']=sorted(set(c.get('source_context_records',[])+[rid]))
                     c.setdefault('source_record_applicability',[]).append(dict(record_id=rid,application='context_only',
@@ -41,7 +41,7 @@ def apply(model,package):
                 continue
             for field in ('components','selection'):
                 options=clauses(data.get(field))
-                if not options:continue
+                if not options or 'floors' not in options:continue
                 label='base' if level==1 else 'floors'
                 selection=dict(record_id=rid,field=field,clause=label,text=options[label],level=level,basis='Exact labelled source schedule at the actual bound bottom-track storey')
                 c['source_record_selections']=[s for s in c.get('source_record_selections',[]) if s['record_id']!=rid]+[selection]
