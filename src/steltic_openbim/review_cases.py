@@ -39,6 +39,8 @@ def build_model(package,state):
     prepare_sbmf_wall_chords(b)
     from .review_sbmf_mezzanine import prepare as prepare_sbmf_mezzanine
     prepare_sbmf_mezzanine(b)
+    from .review_sbmf_collectors import prepare as prepare_sbmf_collectors
+    prepare_sbmf_collectors(b)
     from .review_sbmf_restraints import prepare as prepare_sbmf_restraints
     prepare_sbmf_restraints(b)
     from .review_parallel_wall_framing import apply as parallel_wall_framing
@@ -181,6 +183,8 @@ def build_model(package,state):
     sbmf_wall_chords(b)
     from .review_sbmf_mezzanine import apply as sbmf_mezzanine
     sbmf_mezzanine(b)
+    from .review_sbmf_collectors import apply as sbmf_collectors
+    sbmf_collectors(b)
     from .review_cfs6_floor_panels import bind_bearing_clearances
     bind_bearing_clearances(b)
     return b.finish()
