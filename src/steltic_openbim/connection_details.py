@@ -87,7 +87,7 @@ def prepare(model,package):
         if shape_parameters.get('actual_canopy_fascia'):
             from .review_cfs_wall_bindings import local_member,signature
             shape_parameters['actual_canopy_fascia_receivers']=signature([local_member(m,c['point'],shape_parameters['axes'],40) for m in ms])
-        if shape_parameters.get('actual_single_endwall') or shape_parameters.get('actual_single_strut'):
+        if shape_parameters.get('actual_single_endwall') or shape_parameters.get('actual_single_strut') or shape_parameters.get('actual_ag_endwall'):
             from .review_cfs_wall_bindings import local_member,signature
             shape_parameters['actual_single_endwall_receivers']=signature([local_member(m,c['point'],([1,0,0],[0,1,0],[0,0,1]),30) for m in ms])
         if shape_parameters.get('actual_single_flybrace'):
@@ -99,6 +99,24 @@ def prepare(model,package):
         if shape_parameters.get('actual_single_channel_z'):
             from .review_cfs_wall_bindings import local_member,signature
             shape_parameters['actual_single_z_receivers']=signature([local_member(m,c['point'],shape_parameters['axes'],24) for m in ms])
+        if shape_parameters.get('actual_ag_primary'):
+            from .review_cfs_wall_bindings import local_member,signature
+            shape_parameters['actual_ag_primary_receivers']=signature([local_member(m,c['point'],([1,0,0],[0,1,0],[0,0,1]),65) for m in ms])
+        if shape_parameters.get('actual_ag_strut'):
+            from .review_cfs_wall_bindings import local_member,signature
+            shape_parameters['actual_ag_strut_receivers']=signature([local_member(m,c['point'],([1,0,0],[0,1,0],[0,0,1]),34) for m in ms])
+        if shape_parameters.get('actual_ag_z'):
+            from .review_cfs_wall_bindings import local_member,signature
+            shape_parameters['actual_ag_z_receivers']=signature([local_member(m,c['point'],shape_parameters['axes'],26) for m in ms])
+        if shape_parameters.get('actual_ag_flybrace'):
+            from .review_cfs_wall_bindings import local_member,signature
+            shape_parameters['actual_ag_flybrace_receivers']=signature([local_member(m,c['point'],shape_parameters['axes'],60) for m in ms])
+        if shape_parameters.get('actual_ag_open_brace'):
+            from .review_cfs_wall_bindings import local_member,signature
+            shape_parameters['actual_ag_open_brace_receivers']=signature([local_member(m,c['point'],([1,0,0],[0,1,0],[0,0,1]),48) for m in ms])
+        if shape_parameters.get('actual_ag_strap'):
+            from .review_cfs_wall_bindings import local_member,signature
+            shape_parameters['actual_ag_strap_receivers']=signature([local_member(m,c['point'],shape_parameters['axes'],48) for m in ms])
         if shape_parameters.get('actual_single_channel_primary'):
             from .review_cfs_wall_bindings import local_member,signature
             shape_parameters['actual_single_channel_receivers']=signature([local_member(m,c['point'],([1,0,0],[0,1,0],[0,0,1]),60) for m in ms])
