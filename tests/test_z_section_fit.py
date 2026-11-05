@@ -22,7 +22,9 @@ def test_actual_nested_sections_have_touching_webs_and_no_interpenetrating_steel
         before=copy.deepcopy(b.profiles[pid]);actual=folded(b,pid)
         assert b.profiles[pid]==before
         assert b.profiles[actual]['source_profile_id']==pid
-        sections.append(unary_union([Polygon(p) for p in strips(b.profiles[actual],b.profiles)]))
+        polygons=[Polygon(p) for p in strips(b.profiles[actual],b.profiles)]
+        assert all(a.intersection(c).area<1e-8 for i,a in enumerate(polygons) for c in polygons[i+1:])
+        sections.append(unary_union(polygons))
     moved=translate(rotate(sections[1],180,origin=(0,0)),xoff=(t1+t2)/2,yoff=-max(t1,t2))
     assert sections[0].intersection(moved).area<1e-8
     assert sections[0].distance(moved)<1e-8

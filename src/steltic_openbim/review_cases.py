@@ -205,6 +205,8 @@ def build_model(package,state):
     cfs25_secondary(b)
     from .review_cfs25_existing import apply as cfs25_existing
     cfs25_existing(b)
+    from .review_cfs25_cladding import apply as cfs25_cladding
+    cfs25_cladding(b)
     from .review_cfs6_floor_panels import bind_bearing_clearances
     bind_bearing_clearances(b)
     return b.finish()

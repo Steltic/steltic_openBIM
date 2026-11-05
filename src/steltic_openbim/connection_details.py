@@ -1,6 +1,6 @@
 """Occurrence-to-assembled-detail mapping; no silent unsupported-detail fallback."""
 from collections import defaultdict
-import hashlib
+import hashlib,math
 import json
 from .assembly_templates import build_scene
 
@@ -75,6 +75,10 @@ def prepare(model,package):
         # equal stud layouts on different beams share a drawing detail while the
         # source-beam identity remains on every actual connection occurrence.
         shape_parameters={k:v for k,v in c.get('parameters',{}).items() if k not in ('original_physical_member_id','source_releases')}
+        if shape_parameters.get('actual_cladding'):
+            from .review_cfs_wall_bindings import local_member,signature
+            extent=max(math.sqrt(sum(x*x for x in q)) for q in shape_parameters['points'])+3
+            shape_parameters['actual_cladding_receivers']=signature([local_member(m,c['point'],shape_parameters['axes'],extent) for m in ms])
         if shape_parameters.get('actual_retrofit_z'):
             from .review_cfs_wall_bindings import local_member,signature
             shape_parameters['actual_retrofit_receivers']=signature([local_member(m,c['point'],shape_parameters['axes'],36) for m in ms])
@@ -89,19 +93,16 @@ def prepare(model,package):
             shape_parameters['actual_drag_receivers']=signature([local_member(m,c['point'],([1,0,0],[0,1,0],[0,0,1]),32) for m in ms])
         if family=='review_sbmf_deck':
             from .review_cfs_wall_bindings import local_member,signature
-            import math
             extent=max(math.sqrt(sum(v*v for v in f['point_relative'])) for f in shape_parameters['fasteners'])+2
             shape_parameters['actual_folded_deck_receivers']=signature([local_member(m,c['point'],([1,0,0],[0,1,0],[0,0,1]),extent) for m in ms])
         if family in ('review_deck_screws','review_deck_block_link','review_wsp_block','review_wsp_screws','review_roof_bottom_strap','review_sbmf_wsp','review_cfs5_drag_screws'):
             from .review_cfs_wall_bindings import local_member,signature
-            import math
             extent=max((math.sqrt(sum(v*v for v in q)) for q in shape_parameters.get('points_relative',[])),default=8)+2
             shape_parameters['actual_deck_receivers']=signature([local_member(m,c['point'],([1,0,0],[0,1,0],[0,0,1]),extent) for m in ms])
         if family in ('review_collector_bond','review_collector_lap'):
             from .review_cfs_wall_bindings import local_member,signature
             from .review_receiver_geometry import horizontal_frame
             from .pilots.model import sub
-            import math
             frame=horizontal_frame(sub(ms[0]['axis'][1],ms[0]['axis'][0]))
             extent=shape_parameters.get('context_extent_in',shape_parameters['lap_in']/2+12 if family=='review_collector_lap' else math.dist(*ms[0]['axis'])/2+.01)
             shape_parameters['actual_reinforcement_receivers']=signature([local_member(m,c['point'],frame,extent) for m in ms])
@@ -115,7 +116,6 @@ def prepare(model,package):
         if family=='review_roof_seat' and model['pilot'].startswith('hr'):
             from .review_cfs_wall_bindings import local_member,signature
             from .pilots.model import sub,unit,cross
-            import math
             chord=next(m for m in ms if m['kind']=='truss_chord')
             away=sub(max(chord['axis'],key=lambda q:math.dist(q,c['point'])),c['point'])
             y=unit([away[0],away[1],0]);frame=(cross(y,[0,0,1]),y,[0,0,1])
@@ -124,7 +124,6 @@ def prepare(model,package):
             from .review_cfs_wall_bindings import local_member,signature
             from .review_receiver_geometry import horizontal_frame
             from .pilots.model import unit,sub,mul
-            import math
             purpose=shape_parameters['purpose']
             direction=[1,0,0] if shape_parameters['direction']=='X' else [0,1,0]
             frame=horizontal_frame(mul(unit(sub(*ms[0]['axis'][::-1])),1 if shape_parameters['end']==0 else -1)) if purpose=='coupling' else horizontal_frame(direction)
