@@ -78,10 +78,19 @@ def prepare(model,package):
         if shape_parameters.get('actual_canopy_purlin'):
             from .review_cfs_wall_bindings import local_member,signature
             shape_parameters['actual_canopy_purlin_receivers']=signature([local_member(m,c['point'],shape_parameters['axes'],24) for m in ms])
+        if shape_parameters.get('actual_canopy_roof_strap'):
+            from .review_cfs_wall_bindings import local_member,signature
+            shape_parameters['actual_canopy_roof_receivers']=signature([local_member(m,c['point'],shape_parameters['axes'],40) for m in ms])
+        if shape_parameters.get('actual_canopy_longitudinal'):
+            from .review_cfs_wall_bindings import local_member,signature
+            shape_parameters['actual_canopy_longitudinal_receivers']=signature([local_member(m,c['point'],shape_parameters['axes'],40) for m in ms])
+        if shape_parameters.get('actual_canopy_fascia'):
+            from .review_cfs_wall_bindings import local_member,signature
+            shape_parameters['actual_canopy_fascia_receivers']=signature([local_member(m,c['point'],shape_parameters['axes'],40) for m in ms])
         if shape_parameters.get('actual_canopy_primary'):
             from .review_cfs_wall_bindings import local_member,signature
             shape_parameters['actual_canopy_receivers']=signature([local_member(m,c['point'],([1,0,0],[0,1,0],[0,0,1]),400 if shape_parameters['purpose']=='seams' else 32) for m in ms])
-        if shape_parameters.get('actual_cladding'):
+        if shape_parameters.get('actual_cladding') or shape_parameters.get('actual_canopy_cladding'):
             from .review_cfs_wall_bindings import local_member,signature
             extent=max(math.sqrt(sum(x*x for x in q)) for q in shape_parameters['points'])+3
             shape_parameters['actual_cladding_receivers']=signature([local_member(m,c['point'],shape_parameters['axes'],extent) for m in ms])

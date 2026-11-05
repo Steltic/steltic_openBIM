@@ -211,6 +211,14 @@ def build_model(package,state):
     canopy_primary(b)
     from .review_cfs26_purlins import apply as canopy_purlins
     canopy_purlins(b)
+    from .review_cfs26_roof_straps import apply as canopy_roof_straps
+    canopy_roof_straps(b)
+    from .review_cfs26_longitudinal import apply as canopy_longitudinal
+    canopy_longitudinal(b)
+    from .review_cfs26_fascia import apply as canopy_fascia
+    canopy_fascia(b)
+    from .review_cfs26_cladding import apply as canopy_cladding
+    canopy_cladding(b)
     from .review_cfs25_cladding import apply as cfs25_cladding
     cfs25_cladding(b)
     from .review_cfs6_floor_panels import bind_bearing_clearances

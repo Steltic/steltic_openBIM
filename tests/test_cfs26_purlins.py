@@ -17,3 +17,5 @@ def test_source_purlins_are_simple_spans_and_all_supports_contact(actual):
                 for name in f['connects']:assert contact(parts[name],f,q),(c['id'],f['id'],name,q)
         if c['parameters']['purpose']=='clip':assert sum(f['count'] for f in s['fasteners'] if f['id'].startswith('WEB-BOLTS'))==2
     assert counts=={'clip':54}
+    from steltic_openbim.review_cfs26_purlins import STATIONS,U
+    assert all((b-a)/U[0]<=60 for a,b in zip(STATIONS,STATIONS[1:]))

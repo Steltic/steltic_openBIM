@@ -28,9 +28,15 @@ def prepare(b):
         b.changes.append(dict(kind='canopy_source_face_plies',profile_id=label,previous_components=old,components=copy.deepcopy(p['components'])))
     for m in b.members:
         if m['kind']=='column':
-            m['axis'][0][2]=2.75;m['axis'][1][2]+=4.5
+            # Keep the native workline; physical base/head fit belongs in the
+            # end offsets, not a changed analysis reference axis.
+            m['end_offsets']=[[0,0,2.75],[0,0,4.5]]
             m.update(basis='A',design_record_ids=['members/frame-col'],physical_fit_basis='S source box; A bottom at1.5in grout plus1.25in base, head4.5in above knee workpoint for source6in bolt square.')
-        elif m['kind']=='rafter':m['design_record_ids']=['members/frame-raf']
+        elif m['kind']=='rafter':
+            m['design_record_ids']=['members/frame-raf']
+            frame=int(m['id'].split('-')[0][1:])
+            m['analysis_ids']=[f'cfs:frame:{frame}:element:{i}' for i in [*range(3,13),16,19]]
+            m['mapping_basis']='Source continuous monoslope rafter spans both collinear native raf_L/raf_R analysis chains, including both4ft overhangs; native validation must confirm their exact interval union on this reference axis.'
         elif m['id'].startswith('F') and m['kind']=='knee_brace':
             m['design_record_ids']=['members/frame-kb']
             u=unit(sub(*axis(m)[::-1]));m['end_offsets']=[mul(u,-6),mul(u,6)]

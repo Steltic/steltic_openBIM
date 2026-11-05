@@ -35,3 +35,15 @@ def test_source_face_plies_are_outside_column_and_source_records_retained(actual
     assert abs(r['components'][1]['offset'][0]-t/2-(3.5+.1242/2))<1e-9
     assert all(v['design_record_ids']==['members/frame-raf'] for v in m['members'] if v['kind']=='rafter')
     assert not any(c['detail_ref']['id']=='review_canopy_brace' and c['member_ids'][0].startswith('F') for c in m['connections'])
+
+
+def test_reference_axes_retain_native_worklines_separate_from_physical_fit(actual):
+    m,p=actual
+    for member in m['members']:
+        if member['kind']=='column':
+            assert member['axis'][0][2]==0
+            assert member['axis'][1][2]==168+.1*member['axis'][0][0]
+            assert member['end_offsets']==[[0,0,2.75],[0,0,4.5]]
+        if member['kind']=='rafter':
+            assert len(member['analysis_ids'])==12
+            assert {v.rsplit(':',1)[-1] for v in member['analysis_ids']}=={str(i) for i in [*range(3,13),16,19]}

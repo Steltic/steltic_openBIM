@@ -15,7 +15,8 @@ RID='schedules/sched-fastener'
 T=.018
 
 
-def profile(b,label,lo,hi,first):
+def profile(b,label,lo,hi,first,thickness=T):
+    T=thickness
     left=lo if first else lo-.375;right=hi;mid=(lo+hi)/2
     def height(w):
         if not first and w<lo+.75:
