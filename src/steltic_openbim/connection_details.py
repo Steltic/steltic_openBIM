@@ -34,6 +34,8 @@ def prepare(model,package):
         from .review_cfs_wall_bindings import bind as wall_bind
         wall_bind(model)
     bind(model)
+    from .review_cfs6_endpoint_links import bind as cfs6_endpoint_links
+    cfs6_endpoint_links(model)
     if model['pilot'].startswith('cfs'):
         from .review_source_clauses import apply as source_clauses
         source_clauses(model,package)
@@ -120,9 +122,12 @@ def prepare(model,package):
                 for slot in row['slots']:slot.pop('connection_id',None)
                 data.append(row)
             shape_parameters['actual_crc_receivers']=signature(data)
-        if shape_parameters.get('actual_source_floor'):
+        if shape_parameters.get('actual_source_floor') or shape_parameters.get('actual_chord_floor'):
             from .review_cfs_wall_bindings import local_member,signature
             shape_parameters['actual_floor_receivers']=signature([local_member(m,c['point'],([1,0,0],[0,1,0],[0,0,1]),24) for m in ms])
+        if shape_parameters.get('actual_diaphragm') or shape_parameters.get('actual_roof_distribution'):
+            from .review_cfs_wall_bindings import local_member,signature
+            shape_parameters['actual_diaphragm_receivers']=signature([local_member(m,c['point'],([1,0,0],[0,1,0],[0,0,1]),40) for m in ms])
         if shape_parameters.get('actual_gable_brace') or shape_parameters.get('actual_gable_secondary'):
             from .review_cfs_wall_bindings import local_member,signature
             shape_parameters.pop('primary_origin',None)

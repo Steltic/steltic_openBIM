@@ -6,25 +6,54 @@ from .review_cfs_occurrences import axis
 
 def apply(model):
     if model['pilot']!='cfs6':return
-    members={m['id']:m for m in model['members']};blocks={};attached=defaultdict(list)
+    members={m['id']:m for m in model['members']};blocks={};attached=defaultdict(list);outer_tracks={}
     for c in model['connections']:
         if c['detail_ref']['id']=='review_source_floor_block':blocks[c['member_ids'][0]]=c
-        if c.get('parameters',{}).get('actual_source_floor') or c['detail_ref']['id']=='review_double_top_track':
+        if c.get('parameters',{}).get('actual_source_floor') or c.get('parameters',{}).get('actual_chord_floor') or c['detail_ref']['id']=='review_double_top_track':
             for mid in c['member_ids']:attached[mid].append(c)
+        if c['detail_ref']['id']=='review_double_top_track' and c.get('parameters',{}).get('purpose')=='stitch':
+            inner,outer=c['member_ids'];outer_tracks[inner]=outer
     removed={};links=model.setdefault('connection_endpoint_links',[]);updates={}
     for c in model['connections']:
         if c['detail_ref']['id'] not in ('review_cfs_floor','review_cfs_sill','review_cfs_joist','review_final_cfs_joist'):continue
-        data=c.get('parameters',{}).get('physical_floor_stack',{});ids=data.get('block_to_joist_ids',{})
-        children=[blocks[mid] for mid in ids if mid in blocks]
-        if not children:continue
         primary=members[c['member_ids'][0]];options=attached[primary['id']]
         if not options:continue
+        data=c.get('parameters',{}).get('physical_floor_stack',{});ids=data.get('block_to_joist_ids',{})
+        children=[blocks[mid] for mid in ids if mid in blocks]
+        # The old track marker may lie between the new aligned stud stations.
+        # Its generic stack then cannot bind, even though the actual short
+        # packs already connect that same track to the real floor receivers.
+        # Use those explicit member bindings, never a proximity-only substitute.
+        if not children and primary['kind'] in ('ordinary_track','top_track','bottom_track'):
+            children=[other for other in options if other['detail_ref']['id'] in
+                      ('review_source_floor_block','review_chord_floor_pack')]
+            # The inner collector is coupled to its outer ply by real web
+            # stitches. Bearing blocks sit on that outer ply. Follow only this
+            # explicit physical pair, rather than a nearby unrelated track.
+            if not children and primary['id'] in outer_tracks:
+                children=[other for other in attached[outer_tracks[primary['id']]]
+                          if other['detail_ref']['id'] in ('review_source_floor_block','review_chord_floor_pack')]
+        if not children:continue
+        # Compression-only chord packs do not select floor anchorage screws.
+        # Those requirements belong to the actual bound floor/track hardware.
+        # Keep the source record as context on the bearing pack, and transfer
+        # the active selection only to a real screwed source-floor assembly.
+        bearings=[other for other in children if other['detail_ref']['id']=='review_chord_floor_pack']
+        hardware=[other for other in children if other['detail_ref']['id']=='review_source_floor_block']
+        for other in options:
+            if other['detail_ref']['id']=='review_source_floor_block' and other not in hardware:hardware.append(other)
+        if not hardware:continue
+        children=hardware
         endpoints=[]
         for end,q in enumerate(axis(primary)):
             target=min(options,key=lambda other:math.dist(other['point'],q))
             if math.dist(target['point'],q)>24.01:break
             endpoints.append((end,target))
         if len(endpoints)!=2:continue
+        for child in bearings:
+            child['source_context_records']=sorted(set(child.get('source_context_records',[])+c['design_record_ids']))
+            child.setdefault('source_record_applicability',[]).extend(dict(record_id=rid,application='context_only',
+                basis='This scheduled chord pack is a compression-bearing assembly. The floor anchorage screws are on the separately located floor-member/track assemblies bound to the same wall track.') for rid in c['design_record_ids'])
         for child in children:
             child['design_record_ids']=sorted(set(child['design_record_ids']+c['design_record_ids']))
             for field in ('source_record_selections','source_record_applicability'):

@@ -99,6 +99,8 @@ def build_model(package,state):
     track_corners(b)
     from .review_track_splices import apply as track_splices
     track_splices(b)
+    from .review_cfs6_chord_floors import apply as chord_floor_packs
+    chord_floor_packs(b)
     from .review_cfs6_floor_framing import bearing_receivers as floor_bearing_receivers
     floor_bearing_receivers(b,b.levels)
     from .review_edge_chords import apply as edge_chord_corners
@@ -113,6 +115,20 @@ def build_model(package,state):
     plate_boundaries(b)
     from .review_hr9_selections import splice_scope
     splice_scope(b)
+    from .review_cfs6_roof_distribution import apply as roof_distribution
+    roof_distribution(b)
     from .review_cfs6_bridging import apply as actual_crc
     actual_crc(b)
+    if key=='cfs6':
+        from .review_floor_openings import bind as floor_opening_receivers
+        floor_opening_receivers(dict(pilot=b.key,members=b.members,profiles=list(b.profiles.values()),
+            connections=b.connections,changes=b.changes,connection_endpoint_links=b.endpoint_links))
+    from .review_cfs6_wallface_blocking import apply as wallface_blocking
+    wallface_blocking(b)
+    from .review_cfs6_diaphragms import apply as source_diaphragms
+    source_diaphragms(b)
+    from .review_cfs6_endpoint_links import apply as cfs6_endpoint_links
+    cfs6_endpoint_links(b)
+    from .review_cfs6_floor_panels import bind_bearing_clearances
+    bind_bearing_clearances(b)
     return b.finish()

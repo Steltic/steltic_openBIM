@@ -8,6 +8,7 @@ from collections import defaultdict
 from .pilots.model import add,sub,mul,unit,cross
 from .review_cfs_occurrences import axis
 from .review_receiver_geometry import extract,horizontal_frame,point
+from .pilots.geometry import strips
 
 
 def apply(b):
@@ -144,13 +145,22 @@ def apply(b):
 def bearing_receivers(b,levels):
     """Real upper/lower tracks for the source block's full steel bearing path."""
     if b.key!='cfs6':return
-    lookup={m['id']:m for m in b.members};tracks=defaultdict(list);rims=defaultdict(list)
+    lookup={m['id']:m for m in b.members};tracks=defaultdict(list);rims=defaultdict(list);track_tiers=defaultdict(list)
+    bounds_cache={}
+    def bounds(m):
+        if m['id'] not in bounds_cache:
+            aa,dd=axis(m);u=unit(sub(dd,aa));y=m['local_y'];z=cross(u,y)
+            points=[add(q,add(mul(y,v[0]),mul(z,v[1]))) for q in (aa,dd)
+                    for poly in strips(b.profiles[m['profile_id']],b.profiles) for v in poly]
+            bounds_cache[m['id']]=[(min(q[i] for q in points),max(q[i] for q in points)) for i in (0,1)]
+        return bounds_cache[m['id']]
     for connection in b.connections:
         if connection['detail_ref']['id']=='review_source_floor_rim' and connection['parameters']['purpose']=='joist_rim':rims[connection['member_ids'][0]].append(connection)
     for track in b.members:
         if track['kind'] not in ('top_track','bottom_track','ordinary_track','tier_track'):continue
         along=max(range(2),key=lambda i:abs(track['axis'][1][i]-track['axis'][0][i]));normal=1-along
         tracks[track['level'],along,round(track['axis'][0][normal],6),1 if track['local_y'][2]>0 else -1].append(track)
+        track_tiers[track['level'],1 if track['local_y'][2]>0 else -1].append(track)
     for c in b.connections:
         if c['detail_ref']['id']!='review_source_floor_block':continue
         block,joist=[lookup[mid] for mid in c['member_ids'][:2]];k=block['level'];ja=max(range(2),key=lambda i:abs(joist['axis'][1][i]-joist['axis'][0][i]))
@@ -163,6 +173,16 @@ def bearing_receivers(b,levels):
             for track in tracks[tier,along,round(station,6),sign]:
                 aa,dd=axis(track)
                 if min(aa[along],dd[along])+.1<=foot<=max(aa[along],dd[along])-.1:choices.append(track)
+            if not choices:
+                # At the end of the L-plan bar an actual joist can also lie
+                # along the perpendicular wall. Resolve that real footprint,
+                # not an invented extension of the other wall's track.
+                bb,jb=bounds(block),bounds(joist)
+                for track in track_tiers[tier,sign]:
+                    tb=bounds(track)
+                    if all(min(bb[i][1],jb[i][1],tb[i][1])-max(bb[i][0],jb[i][0],tb[i][0])>.3 for i in (0,1)):
+                        choices.append(track)
+                if choices:c['parameters'].setdefault('alternate_bearing_wall_basis',{})[key]='Actual finite block/joist/track footprints overlap at the perpendicular wall; no receiver extension or section substitution.'
             if not choices:continue
             # Lower bearing is on the outer top track of a nested collector;
             # upper bearing is below the actual bottom-track web.

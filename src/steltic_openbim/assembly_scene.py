@@ -231,7 +231,7 @@ class Assembly:
             if len(f['connects'])<2 or not set(f['connects'])<=ids:raise ValueError('Invalid joined plies '+str(f))
         for w in self.welds:
             if len(w['connects'])<2 or not set(w['connects'])<=ids:raise ValueError('Invalid weld attachments '+str(w))
-        if len([p for p in self.parts if p['kind']=='member'])<2 and not any(p['kind']=='concrete' for p in self.parts):
+        if len([p for p in self.parts if p['kind']=='member' or p.get('bound_panel_id')])<2 and not any(p['kind']=='concrete' for p in self.parts):
             raise ValueError('Assembly lacks its receiving member/support: '+self.title)
         for interface in self.interfaces:
             if len(interface['connects'])<2 or not set(interface['connects'])<=ids:raise ValueError('Invalid bearing/bond interface')
