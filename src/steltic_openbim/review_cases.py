@@ -35,6 +35,8 @@ def build_model(package,state):
     else:
         from .review_cfs import build
     build(b)
+    from .review_sbmf_restraints import prepare as prepare_sbmf_restraints
+    prepare_sbmf_restraints(b)
     from .review_parallel_wall_framing import apply as parallel_wall_framing
     parallel_wall_framing(b)
     from .review_crane_receivers import apply as crane_receivers
@@ -159,6 +161,8 @@ def build_model(package,state):
     sbmf_headers(b)
     from .review_sbmf_roof_seats import apply as sbmf_roof_seats
     sbmf_roof_seats(b)
+    from .review_sbmf_restraints import apply as sbmf_restraints
+    sbmf_restraints(b)
     from .review_cfs6_floor_panels import bind_bearing_clearances
     bind_bearing_clearances(b)
     return b.finish()

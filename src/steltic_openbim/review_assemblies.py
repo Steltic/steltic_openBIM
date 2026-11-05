@@ -84,6 +84,9 @@ class Context:
 
 def build_scene(model,package,c,subtype=''):
     ctx=Context(model,package,c);family=ctx.family
+    if family=='review_sbmf_restraint_cap' or (family=='review_sbmf_strut' and ctx.params.get('actual_sbmf_restraint')):
+        from .review_sbmf_restraints import draw
+        draw(ctx);return ctx.finish()
     if family in ('review_sbmf_roof_seat','review_sbmf_column_cap'):
         from .review_sbmf_roof_seats import draw
         draw(ctx);return ctx.finish()
