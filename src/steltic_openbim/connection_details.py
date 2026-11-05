@@ -71,6 +71,13 @@ def prepare(model,package):
         # equal stud layouts on different beams share a drawing detail while the
         # source-beam identity remains on every actual connection occurrence.
         shape_parameters={k:v for k,v in c.get('parameters',{}).items() if k not in ('original_physical_member_id','source_releases')}
+        if any(shape_parameters.get(k) for k in ('actual_cfs_door_header','actual_cfs_cross_plate','actual_cfs_endwall_head')):
+            from .review_cfs_wall_bindings import local_member,signature
+            shape_parameters['actual_cfs_endwall_receivers']=signature([local_member(m,c['point'],([1,0,0],[0,1,0],[0,0,1]),30) for m in ms])
+        if shape_parameters.get('actual_cfs_kicker'):
+            from .review_cfs_wall_bindings import local_member,signature
+            shape_parameters['actual_cfs_kicker']={k:v for k,v in shape_parameters['actual_cfs_kicker'].items() if k not in ('foot_face_x','foot_centre_y')}
+            shape_parameters['actual_cfs_kicker_receivers']=signature([local_member(m,c['point'],([1,0,0],[0,1,0],[0,0,1]),50) for m in ms])
         if family=='review_roof_seat' and model['pilot'].startswith('hr'):
             from .review_cfs_wall_bindings import local_member,signature
             from .pilots.model import sub,unit,cross

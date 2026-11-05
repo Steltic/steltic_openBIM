@@ -73,6 +73,14 @@ def build_model(package,state):
     selected_details(b)
     from .review_profile_fit import apply as profile_fit
     profile_fit(b)
+    from .review_cfs_endwall_heads import apply as cfs_endwall_heads
+    cfs_endwall_heads(b)
+    from .review_cfs_kickers import apply as cfs_kickers
+    cfs_kickers(b)
+    from .review_cfs_cross_plates import apply as cfs_cross_plates
+    cfs_cross_plates(b)
+    from .review_cfs_door_headers import apply as cfs_door_headers
+    cfs_door_headers(b)
     from .review_supplements import track_bearing_datums
     track_bearing_datums(b)
     from .review_cfs_frame_straps import apply as frame_straps

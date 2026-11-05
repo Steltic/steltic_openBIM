@@ -228,7 +228,7 @@ def flange_braces(b,frames,rec):
             for side in (-1,1):
                 # Both source rafter flange sides; end frames turn the outer brace inward.
                 yy=y+side*6.375;direction=side if y not in (frames[0],frames[-1]) else sign
-                q=b.member(label+str(side),'L2X2X1/8','flange_kicker',[x,yy,lower],[x,yy+direction*run,z],1,'A',records=[rec('strap')],local_y=[1,0,0]);b.connection(q['id'],'review_kicker',q['axis'][0],[q,r,m],[rec('strap')],parameters={'lower_count':3 if b.key=='cfs17' else 4,'upper_count':4,'stainless':b.key=='cfs30'})
+                q=b.member(label+str(side),'L2X2X1/8','flange_kicker',[x,yy,lower],[x,yy+direction*run,z],1,'A',records=[rec('strap')],local_y=[1,0,0]);b.connection(q['id'],'review_kicker',q['axis'][0],[q,r,m],[rec('strap')],parameters={'lower_count':3 if b.key=='cfs17' else 6 if b.key=='cfs30' else 4,'upper_count':6 if b.key=='cfs30' else 4,'stainless':b.key=='cfs30'})
     # Source end-wall post kickers carry reactions to the doubled end-bay purlins.
     for m in list(b.members):
         if m['kind']!='endwall_post':continue

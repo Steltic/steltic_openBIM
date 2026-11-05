@@ -4,12 +4,24 @@ from .review_assemblies import *
 
 def draw(ctx):
     f=ctx.family
+    if ctx.params.get('actual_cfs_door_header'):
+        from .review_cfs_door_headers import draw as door_header
+        return door_header(ctx)
+    if ctx.params.get('actual_cfs_cross_plate'):
+        from .review_cfs_cross_plates import draw as cross_plate
+        return cross_plate(ctx)
+    if ctx.params.get('actual_cfs_kicker'):
+        from .review_cfs_kickers import draw as kicker
+        return kicker(ctx)
+    if ctx.params.get('actual_cfs_endwall_head'):
+        from .review_cfs_endwall_heads import draw as endwall_head
+        return endwall_head(ctx)
     if ctx.params.get('actual_gable_brace'):
         from .review_gable_bracing import brace
         return brace(ctx)
     if ctx.params.get('actual_gable_secondary'):
-        from .review_gable_bracing import secondary
-        return secondary(ctx)
+        from .review_gable_bracing import secondary as gable_secondary
+        return gable_secondary(ctx)
     if f in ('review_pack_stitch','review_floor_strap','review_post_collector','review_rod_transfer','review_roof_edge','review_post_edge'):
         from .review_wall_details import draw
         draw(ctx)

@@ -247,13 +247,14 @@ def section_polygons(part,axis,value):
     Independent profile strips remain independent, preserving channel openings and
     hollow sections rather than drawing an enclosing rectangle.
     """
-    # Slot cuts subdivide a strip into adjacent closed solids. Intersect each
-    # solid independently: stitching their shared vertices together can fill a
-    # web opening or turn a continuous flange into a self-intersecting outline.
+    # Profile strips and slot cuts produce adjacent closed solids. Intersect
+    # each solid independently: stitching their shared vertices together can
+    # fill an opening or turn a real flange into a self-intersecting outline.
+    # This also matters for unslotted, inclined multi-channel members.
     # Use the actual mesh faces (including rigid transforms), checking that
     # every proposed group is closed. Other edited/mitred meshes still follow
     # their explicit faces below.
-    if part.get('member',{}).get('slots') and not part.get('cut_planes'):
+    if part.get('member') and not part.get('cut_planes'):
         from .pilots.geometry import member_solids
         profiles={p['id']:p for p in part.get('section_definitions',[])}
         if profiles:
