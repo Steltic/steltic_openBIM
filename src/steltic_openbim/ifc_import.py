@@ -15,7 +15,7 @@ import numpy as np
 
 STRUCTURAL = {'IfcBeam','IfcColumn','IfcMember','IfcPlate','IfcSlab','IfcFooting','IfcPile',
               'IfcMechanicalFastener','IfcFastener','IfcElementAssembly','IfcStructuralCurveMember'}
-MAX_PRODUCTS = 100000
+MAX_PRODUCTS = 250000
 MAX_TRIANGLES = 6000000
 REVIEW_GROUP_SIZE = 1000
 GEOMETRY_THREADS = min(4, os.cpu_count() or 1)

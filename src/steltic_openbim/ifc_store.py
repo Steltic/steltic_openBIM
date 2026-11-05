@@ -1,5 +1,6 @@
 """Immutable IFC source/review revisions, with the drawing store's project lock."""
 import hashlib
+import io
 import json
 import os
 from pathlib import Path
@@ -13,10 +14,13 @@ import uuid
 from .drawing_workflow import StaleRevision,write_json,fingerprint,initial_state
 from .job_sources import JobSources
 
-MAX_FILE=100*1024*1024
+MAX_FILE=2*1024*1024*1024
+UPLOAD_CHUNK=1024*1024
 # Detailed connection models can approach the product/triangle limits while
 # other local design jobs are running. Keep a finite deadline with headroom.
 WORKER_TIMEOUT_SECONDS=1200
+LARGE_WORKER_TIMEOUT_SECONDS=7200
+LARGE_SOURCE_BYTES=100*1024*1024
 
 
 def read(path):return json.loads(Path(path).read_text(encoding='utf-8'))
@@ -50,9 +54,13 @@ def run_worker(cmd,timeout):
 
 def worker(action,source,output,*args):
     cmd=[sys.executable,'-m','steltic_openbim.ifc_worker',action,str(source),str(output),*[str(a) for a in args]]
+    path=Path(source);path=path/'source.json' if path.is_dir() else path
+    timeout=LARGE_WORKER_TIMEOUT_SECONDS if path.is_file() and path.stat().st_size>LARGE_SOURCE_BYTES else WORKER_TIMEOUT_SECONDS
     try:
-        result=run_worker(cmd,WORKER_TIMEOUT_SECONDS)
-    except subprocess.TimeoutExpired:raise ValueError('IFC processing exceeded twenty minutes. Export a smaller model or discipline.') from None
+        result=run_worker(cmd,timeout)
+    except subprocess.TimeoutExpired:
+        duration='twenty minutes' if timeout==1200 else f'{timeout//60} minutes'
+        raise ValueError(f'IFC processing exceeded {duration}. Choose a storey/review group or export a smaller discipline.') from None
     if result.returncode:raise ValueError('IFC processing failed: '+(result.stderr or result.stdout)[-1000:])
     return read(output)
 
@@ -121,16 +129,30 @@ class IFCStore:
         os.replace(pointer,self.root(p)/'current.json');return state
 
     def upload(self,p,filename,raw,revision=None):
+        return self.upload_stream(p,filename,io.BytesIO(raw),revision)
+
+    def upload_stream(self,p,filename,stream,revision=None):
+        """Copy a spooled upload in bounded chunks; publish only after inspection."""
         if not isinstance(filename,str) or not filename.lower().endswith('.ifc'):raise ValueError('Choose an uncompressed .ifc file; export IFC STEP from Revit')
-        if len(raw)>MAX_FILE:raise ValueError('The IFC file exceeds 100 MB; export a smaller model')
-        if b'ISO-10303-21' not in raw[:1024]:raise ValueError('Choose an IFC STEP file, not RVT, IFCXML or IFCZIP')
+        stream.seek(0);header=stream.read(1024)
+        if b'ISO-10303-21' not in header:raise ValueError('Choose an IFC STEP file, not RVT, IFCXML or IFCZIP')
+        stream.seek(0)
         with self.drawings.lock(p):
             old=self.current(p)
             if old and revision!=old[1]['revision']:raise StaleRevision('Refresh before replacing the imported IFC')
             n=old[1]['revision']+1 if old else 1;dest=self.directory(p,n)
-            (dest/'original.ifc').write_bytes(raw)
+            digest=hashlib.sha256();size=0;original=dest/'original.ifc'
+            try:
+                with original.open('wb') as out:
+                    while chunk:=stream.read(UPLOAD_CHUNK):
+                        size+=len(chunk)
+                        if size>MAX_FILE:raise ValueError(f'The IFC file exceeds {MAX_FILE//(1024*1024)} MB; export a smaller model')
+                        digest.update(chunk);out.write(chunk)
+            except Exception:
+                original.unlink(missing_ok=True)
+                raise
             meta=worker('inspect',dest/'original.ifc',dest/'inspection.json')
-            state=dict(revision=n,source_sha256=hashlib.sha256(raw).hexdigest(),filename=Path(filename.replace('\\','/')).name,
+            state=dict(revision=n,source_sha256=digest.hexdigest(),filename=Path(filename.replace('\\','/')).name,
                        status='questions',options={},counts=meta['counts'],source_schema=meta['schema'])
             return self.publish(p,dest,state)
 
