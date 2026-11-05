@@ -71,7 +71,7 @@ def draw_view(sh,scene,mode,rect,title):
                 for aa,bb in zip(points,points[1:]+points[:1]):sh.line(aa,bb,'#aab5b4',.5,[5,4])
     for part,face in polys:
         fill,stroke=COLORS.get(part['kind'],COLORS['plate'])
-        if mode!='section' and part.get('drawing_style')=='outline':
+        if (mode!='section' and part.get('drawing_style')=='outline') or (mode=='iso' and part.get('drawing_style')=='outline_iso'):
             pts=[tr(q) for q in face]
             for aa,bb in zip(pts,pts[1:]+pts[:1]):sh.line(aa,bb,'#8da7b3',.5,[5,3])
             continue

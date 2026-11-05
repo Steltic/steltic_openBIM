@@ -27,8 +27,11 @@ def test_source_floor_and_roof_stacks_share_exact_bearing_datums(key,floor_finis
             tops.append(max(q[2] for q in points));bottoms.append(min(q[2] for q in points))
         assert tops==pytest.approx([level*height-finish]*len(joists))
         for track in tracks:
-            top=max(q[2] for face in member_faces(track,profiles) for q in face)
-            assert top==pytest.approx(bottoms[0])
+            bearing=[m for m in model['members'] if m['id'].startswith(track['id']+'-COLLECTOR')] if key=='cfs18' else [track]
+            assert bearing
+            for ply in bearing:
+                top=max(q[2] for face in member_faces(ply,profiles) for q in face)
+                assert top==pytest.approx(bottoms[0])
         east=2382 if key=='cfs18' else 2168
         assert any(j['axis'][0][0]==east for j in joists)
     lookup={m['id']:m for m in model['members']}
