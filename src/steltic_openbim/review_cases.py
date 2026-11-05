@@ -187,6 +187,8 @@ def build_model(package,state):
     sbmf_collectors(b)
     from .review_sbmf_bearing import apply as sbmf_bearing
     sbmf_bearing(b)
+    from .review_sbmf_deck import apply as sbmf_deck
+    sbmf_deck(b)
     from .review_cfs6_floor_panels import bind_bearing_clearances
     bind_bearing_clearances(b)
     return b.finish()
