@@ -85,7 +85,8 @@ def wall(b,label,axis,pos,lo,hi,base,top,k,sp,cp,bays,width,count,rod,continuous
             tr=b.member(label+'-TIER'+str(face),tp,'tier_track',pt(lo,(base+top)/2+face*.08),pt(hi,(base+top)/2+face*.08),k,'S',local_y=[0,0,face]);b.ends(tr,'review_sbmf_wall_slide',[b.record('framing','sidewall-tier-track')],parameters={'joint':'tier'})
     for j,(aa,dd) in enumerate(bays):
         chords=[]
-        for side,u in enumerate((aa+3,dd-3)):
+        chord_stations=(aa,dd) if b.key=='cfs18' and continuous else (aa+3,dd-3)
+        for side,u in enumerate(chord_stations):
             m=b.member(f'{label}-CH-{j}-{side}',cp,'chord',pt(u,base),pt(u,top),k,'S',local_y=[1,0,0] if axis==0 else [0,1,0]);chords.append(m)
             rp=b.custom('ROD-'+str(rod),'round',dict(d=rod),basis='S');r=b.member(m['id']+'R',rp,'hold_down_rod',pt(u,base-2),pt(u,top+4),k,'A')
             rid='base-north-panels' if b.key=='cfs10' and label=='NORTH' else 'hd-side-wall' if continuous else ('office' if b.key=='cfs10' else 'mezz')+'-rod-s'+str(k)

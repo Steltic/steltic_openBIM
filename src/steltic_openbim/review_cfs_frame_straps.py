@@ -105,6 +105,11 @@ def draw(ctx):
     host_points=[]
     # Each actual channel ply receives two screws on its exposed flange.
     row_stations=(2,5) if station<6 else (-5,-2) if station>length-6 else (-3,3)
+    if ctx.model['pilot']=='cfs18' and host['id'].startswith('SIDE-') and abs(ctx.c['point'][2]-144)<.01:
+        # Keep the source tier-angle slot at +12ft clear. Each upper/lower
+        # strap collector uses two stations on its own side of the tier.
+        far=max(ends,key=lambda q:math.dist(q,ctx.c['point']))
+        row_stations=(2,5) if far[2]>144 else (-5,-2)
     for lo,hi,ht in intervals:
         for x in row_stations:host_points.append(([host_c[0]+x,face+g,host_c[2]+(lo+hi)/2],ht))
     outline=hull([(q[0]+dx,q[2]+dz) for q in screw_points+[q for q,_ in host_points] for dx,dz in ((-1,-1),(-1,1),(1,-1),(1,1))])

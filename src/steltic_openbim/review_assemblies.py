@@ -84,6 +84,15 @@ class Context:
 
 def build_scene(model,package,c,subtype=''):
     ctx=Context(model,package,c);family=ctx.family
+    if family in ('review_sbmf_tier','review_sbmf_tier_seam'):
+        from .review_sbmf_tiers import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_sbmf_post_head':
+        from .review_sbmf_post_heads import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_sbmf_girt':
+        from .review_sbmf_girts import draw
+        draw(ctx);return ctx.finish()
     if family=='review_sbmf_restraint_cap' or (family=='review_sbmf_strut' and ctx.params.get('actual_sbmf_restraint')):
         from .review_sbmf_restraints import draw
         draw(ctx);return ctx.finish()
