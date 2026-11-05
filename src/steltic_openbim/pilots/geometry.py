@@ -82,6 +82,11 @@ def clip_axis(a,b,limits):
 
 
 def member_faces(member,profiles,limits=None):
+    return [face for solid in member_solids(member,profiles,limits) for face in solid]
+
+
+def member_solids(member,profiles,limits=None):
+    """Keep each closed section-strip extrusion distinct for section cuts."""
     a,b=[add(p,o) for p,o in zip(member['axis'],member['end_offsets'])]; vector=sub(b,a); extent=length(vector)
     clip=clip_axis(a,b,limits)
     if clip is None: return []
@@ -115,7 +120,7 @@ def member_faces(member,profiles,limits=None):
     for station in sorted(stations):
         if station-ordered[-1]>tolerance and hi-station>tolerance:
             ordered.append(station)
-    stations=ordered+[hi]; faces=[]
+    stations=ordered+[hi]; solids=[]
     def shape(at,index):
         poly=[p[:] for p in base[index]]
         if cuts and index in (0,2):
@@ -133,7 +138,7 @@ def member_faces(member,profiles,limits=None):
             if coped and index==2: continue
             if slots:
                 for poly in cut_sections([base[index]],slots,(s+t)/2):
-                    faces.extend(extrude(poly,add(a,mul(d,s)),add(a,mul(d,t)),y))
+                    solids.append(extrude(poly,add(a,mul(d,s)),add(a,mul(d,t)),y))
                 continue
             rings=[]
             for at in [s,t]:
@@ -142,9 +147,10 @@ def member_faces(member,profiles,limits=None):
                     ceiling=profile['dimensions']['d']/2-cope['depth_in']
                     for p in poly: p[1]=min(p[1],ceiling)
                 rings.append([add(add(a,mul(d,at)),add(mul(y,u),mul(z,v))) for u,v in poly])
-            faces.extend([rings[0][::-1],rings[1]])
+            faces=[rings[0][::-1],rings[1]]
             faces.extend([rings[0][i],rings[0][(i+1)%len(rings[0])],rings[1][(i+1)%len(rings[0])],rings[1][i]] for i in range(len(rings[0])))
-    return faces
+            solids.append(faces)
+    return solids
 
 
 def part_lines(part):
