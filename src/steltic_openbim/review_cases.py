@@ -155,6 +155,8 @@ def build_model(package,state):
     cfs5_diaphragms(b)
     from .review_cfs5_roof_restraint import apply as cfs5_roof_restraint
     cfs5_roof_restraint(b)
+    from .review_sbmf_headers import apply as sbmf_headers
+    sbmf_headers(b)
     from .review_cfs6_floor_panels import bind_bearing_clearances
     bind_bearing_clearances(b)
     return b.finish()

@@ -79,13 +79,23 @@ def flybrace(ctx):
 
 def sbmf(ctx):
     a,p,par=ctx.a,ctx.p,ctx.params;bp=ctx.pid;cp=ctx.ms[1]['profile_id'];d=effective(p,bp);cd=effective(p,cp);ct=p[cp]['dimensions']['t'];beam_t=p[p[bp]['components'][0]['profile_id']]['dimensions']['t'];bearing=par.get('bearing_plates');t=.25 if bearing else 0
-    a.member('COLUMN',cp,[0,0,-30],[0,0,22]);a.member('BEAM',bp,[-cd/2,0,0],[42,0,0]);parts=['COLUMN','BEAM']
+    from .review_receiver_geometry import extract,horizontal_frame
+    beam,column=ctx.ms[:2];far=max(beam['axis'],key=lambda q:math.dist(q,ctx.c['point']));axes=horizontal_frame(sub(far,ctx.c['point']))
+    extract(ctx,column,'COLUMN',axes,30);extract(ctx,beam,'BEAM',axes,42);parts=['COLUMN','BEAM']
     if bearing:
         for j,sg in enumerate((-1,1)):
-            name='BP'+str(j);y=cd/2+beam_t if sg>0 else -cd/2-beam_t-.25;a.box(name,[-5.625,y,-8],[11.75,.25,16],'S','Source 1/4 x 11.75 x 16 in bolt-bearing plate');a.weld('W'+str(j),[-5.625,y,-8],[6.125,y,-8],['BEAM',name],.125,description='Source 1/8 in E70 all around bearing plate');parts.append(name)
+            name='BP'+str(j);y=cd/2+beam_t if sg>0 else -cd/2-beam_t-.25
+            relief=next((slot for slot in beam.get('slots',[]) if abs((slot['start_in']+slot['end_in'])/2-(ctx.c['point'][1]-beam['axis'][0][1]))<.01),None)
+            if relief:
+                z=-relief['centre_in']-relief['width_in']/2
+                outline=[(-5.625,-8),(6.125,-8),(6.125,8),(.375,8),(.375,z),(-.375,z),(-.375,8),(-5.625,8)]
+                a.polygon(name,[[x,y,z] for x,z in outline],.25,basis='S section / A relief',description='Source1/4 x11.75 x16in bearing plate; A matching header-tab notch, revised capacity unverified')
+            else:a.box(name,[-5.625,y,-8],[11.75,.25,16],'S','Source 1/4 x 11.75 x 16 in bolt-bearing plate')
+            a.weld('W'+str(j),[-5.625,y,-8],[6.125,y,-8],['BEAM',name],.125,description='Source 1/8 in E70 all around bearing plate');parts.append(name)
     a.fastener('BOLTS',[[x,-cd/2-beam_t-t,z] for x in (-3.125,3.125) for z in (-6,-3,3,6)],[0,1,0],1,cd+2*(beam_t+t),parts,'S eight 1 in A325 snug-tight; 1-1/16 in holes; hardened washers both sides')
     a.dim([-3.125,0,-6],[3.125,0,-6],'6-1/4 in gauge');a.dim([3.125,0,-6],[3.125,0,6],'3 / 6 / 3 in vertical pattern',offset=40);a.section_axis=2;a.section_at=3
     a.notes.append('S: channel webs straddle the HSS. Full-depth through bolts use the prescribed snug-tight joint; no welded moment connection or pretension is substituted. '+('Source bearing plates weld to channel webs, never to the HSS faying faces.' if bearing else 'Source explicitly has no bolt-bearing plates.')+' Gravity roof framing is separate; no slab/deck attachment is added to this beam.')
+    if beam.get('slots'):a.notes.append('A: roof-header tabs require explicit reliefs in the moment-beam webs'+(' and matching notches in the bolt-bearing plates' if bearing else '')+'. These modify the source joint; its uncut capacity is not assigned to this fit. Revised local verification is required.')
 
 def header(ctx):
     a,p=ctx.a,ctx.p;pid=ctx.pid;cp=ctx.ms[1]['profile_id'];cd=effective(p,cp);d=effective(p,pid);tw=p[p[pid]['components'][0]['profile_id']]['dimensions']['t'];face=cd/2
