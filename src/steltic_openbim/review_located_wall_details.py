@@ -26,7 +26,7 @@ def flange_bounds(profiles,data):
 
 
 def member(a,label,data):
-    return a.member(label,data['profile_id'],*data['axis'],y=data['local_y'],basis=data.get('basis','S'),description='Actual '+data['kind']+' '+data['profile_id'])
+    return a.member(label,data['profile_id'],*data['axis'],y=data['local_y'],basis=data.get('basis','S'),description='Actual '+data['kind']+' '+data['profile_id'],**({'slots':data['slots']} if data.get('slots') else {}))
 
 
 def jamb_base(ctx):
@@ -314,7 +314,9 @@ def parallel_floor(a,p,index,label,j,part,tracks,studs,ends=(-1,1)):
         xs=[max(part['bounds'][0][0]+1,bounds['bounds'][0][0]+1,-6),min(part['bounds'][0][1]-1,bounds['bounds'][0][1]-1,6)]
         if xs[1]<=xs[0]:raise ValueError('Parallel wall/joist has no physical attachment overlap')
         ylo=max(part['bounds'][1][0],bounds['bounds'][1][0]);yhi=min(part['bounds'][1][1],bounds['bounds'][1][1])
-        if yhi-ylo<.5:raise ValueError('Parallel chord flange misses the actual track web')
+        if yhi-ylo<.5:
+            parallel_side_clip(a,p,index,label,j,part,(host,data,bounds),surface_z,end)
+            continue
         yy=(ylo+yhi)/2
         if gap>.02:
             ys=sorted((cy-side*jt/2,cy+side*(p[j['profile_id']]['dimensions']['b']-jt/2)))
@@ -324,6 +326,33 @@ def parallel_floor(a,p,index,label,j,part,tracks,studs,ends=(-1,1)):
         a.interfaces.append(dict(id='RIM-BEAR'+str(index)+tag,kind='compression_bearing',connects=joins,basis='A',description='Actual parallel chord/track bearing; fitted pack and transfer capacity unverified'))
         if end<0 and not a.dimensions:a.dim([xs[0],0,surface_z],[xs[1],0,surface_z],'Screw pitch',basis='A')
     a.notes.append('This wall is parallel to the actual floor/roof member. A flange/track transfer fit is shown at this station; source diaphragm and uplift force schedules remain applicable.')
+
+
+def parallel_side_clip(a,p,index,label,j,part,track,edge,end):
+    """Two finite formed clips where parallel flange/track bearing is absent."""
+    host,tm,tp=track;jt=p[j['profile_id']]['dimensions']['t'];tt=p[tm['profile_id']]['dimensions']['t'];t=.0713
+    side=1 if j['local_y'][1]>0 else -1;face=j['axis'][0][1]-side*jt/2
+    surface=tp['bounds'][2][1 if end<0 else 0];fy=tm['axis'][0][1]
+    if abs(face-fy)>8:raise ValueError('Parallel side clip exceeds its actual local fit envelope')
+    left=max(part['bounds'][0][0]+1,tp['bounds'][0][0]+1,-12)
+    right=min(part['bounds'][0][1]-1,tp['bounds'][0][1]-1,12)
+    direction=unit(sub(tm['axis'][1],tm['axis'][0]));slots=tm.get('slots',[])
+    def clear(x):
+        s=(x-tm['axis'][0][0])*direction[0]
+        return not any(s+.875>q['start_in'] and s-.875<q['end_in'] for q in slots)
+    possible=[left+i*.25 for i in range(max(0,int((right-left)/.25))+1) if clear(left+i*.25)]
+    if not possible or possible[-1]-possible[0]<3:raise ValueError('No two finite track-web clip stations clear of actual stud slots')
+    for number,x in enumerate((possible[0],possible[-1])):
+        tag=f'SIDE-{index}-{end}-{number}';web=tag+'-WEB';foot=tag+'-FOOT'
+        zlo,zhi=sorted((surface,edge-end*3));ylo=min(face,face-side*t,fy-.75);yhi=max(face,face-side*t,fy+.75)
+        a.box(web,[x-.75,min(face,face-side*t),zlo],[1.5,t,zhi-zlo],'A','A68mil formed side clip on actual parallel joist web')
+        a.box(foot,[x-.75,ylo,surface if end<0 else surface-t],[1.5,yhi-ylo,t],'A','A separate clip foot on intact track web, clear of continuous-stud slots')
+        a.fastener(tag+'-J',[[x,face-side*t,edge-end*z] for z in (1,2)],[0,side,0],.216,t+jt,[label,web],
+            'A twoNo12 screws through actual parallel joist web; no flange-bearing capacity implied',basis='A',screw=True)
+        a.fastener(tag+'-T',[[x+dx,fy,surface-end*t] for dx in (-.375,.375)],[0,0,end],.216,t+tt,[host,foot],
+            'A twoNo12 foot screws through intact actual track web',basis='A',screw=True)
+        a.weld(tag+'-BEND',[x-.75,face,surface],[x+.75,face,surface],[web,foot],kind='BEND',basis='A',description='A continuous formed clip; no site weld')
+    a.notes.append('A separate side clips transfer between the offset parallel joist and actual roof track. Their feet avoid the continuous-stud web openings. No direct bearing or source in-line capacity is assigned to this proposed offset attachment.')
 
 
 def parallel_end_clip(a,p,index,label,j,part,track,edge,end):

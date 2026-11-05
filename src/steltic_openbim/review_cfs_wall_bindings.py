@@ -27,7 +27,13 @@ class Nearby:
 def local_member(m,origin,axes,extent=24):
     a,b=axis(m);u=unit(sub(b,a));length=math.dist(a,b);t=max(0,min(length,dot(sub(origin,a),u)))
     ends=[add(a,mul(u,s)) for s in (max(0,t-extent),min(length,t+extent))]
-    return dict(member_id=m['id'],profile_id=m['profile_id'],kind=m['kind'],axis=[point(q,origin,axes) for q in ends],local_y=vector(m['local_y'],axes),basis=m.get('basis','S'))
+    result=dict(member_id=m['id'],profile_id=m['profile_id'],kind=m['kind'],axis=[point(q,origin,axes) for q in ends],local_y=vector(m['local_y'],axes),basis=m.get('basis','S'))
+    lo,hi=max(0,t-extent),min(length,t+extent);slots=[]
+    for selected in m.get('slots',[]):
+        start=max(lo,selected['start_in']);end=min(hi,selected['end_in'])
+        if end>start:slots.append(dict(copy.deepcopy(selected),start_in=start-lo,end_in=end-lo))
+    if slots:result['slots']=slots
+    return result
 
 
 def signature(data):
@@ -179,9 +185,10 @@ def bind(model):
                     allowance=6 if is_joist else .01
                     if abs(local[0][1]-wall_y)<.01 and min(q[0] for q in local)-allowance<=0<=max(q[0] for q in local)+allowance and abs(local[0][2])<30:tracks.append(m)
                 elif m['kind'] in ('joist','opening_trimmer') and abs(dot(u,axes[1]))>.999:
-                    if not primary.get('parallel_wall_line') and abs(local[0][0])<=48 and abs(local[0][2])<24 and any(abs(q[1])<.01 for q in local):joists.append(m)
+                    cut=m.get('parapet_roof_cut_in',0)
+                    if not primary.get('parallel_wall_line') and abs(local[0][0])<=48 and abs(local[0][2])<24 and any(abs(q[1])<cut+.01 for q in local):joists.append(m)
                 elif m['kind'] in ('joist','rim_track','floor_rim') and abs(dot(u,axes[0]))>.999:
-                    on_pair=m.get('parallel_wall_line') and abs(local[0][1]-wall_y)<=4.001
+                    on_pair=m.get('parallel_wall_line') and abs(local[0][1]-wall_y)<=max(4,abs(m.get('parallel_wall_offset_in',0)))+.001
                     if (abs(local[0][1]-wall_y)<.01 or on_pair) and abs(local[0][2])<24 and min(q[0] for q in local)-.01<=0<=max(q[0] for q in local)+.01:parallel.append(m)
                 elif m['kind']=='truss_chord' and abs(dot(u,axes[1]))>.999:
                     if abs(local[0][0])<=48 and abs(local[0][2])<24 and min(q[1] for q in local)-.01<=0<=max(q[1] for q in local)+.01:truss.append(m)
