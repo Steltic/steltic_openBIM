@@ -12,7 +12,7 @@ def prepare(b):
     b.note('PHYSICAL-FLOORS','S: source floor finishes, joist sizes, bearing spans and stepped footprints. A: local datum fit uses the deepest floor member to set the wall top; shorter corridor joists have explicitly detailed bearing packers. No analysis is rerun.')
 
 def depth(b,k):
-    return (8.75 if k==4 else 12.25) if b.key=='cfs1' else 12 if b.key=='cfs5' else (12.75 if k==6 else 14.25)
+    return (8.75 if k==4 else 12.25) if b.key=='cfs1' else (12 if k==6 else 10+1.5+23/32) if b.key=='cfs5' else (12.75 if k==6 else 14.25)
 
 def locations(b,d,line,k,ranges):
     from .review_cfs import spaced_segments
@@ -82,11 +82,15 @@ def floors(b,outline,levels):
         pid=b.profile(section(rows[rid]['section']));d=b.depth(pid)
         def pt(u):return [u,station,z-finish-d/2] if axis==0 else [station,u,z-finish-d/2]
         m=b.member(label,pid,'joist',pt(lo),pt(hi),k,'A',records=[b.record('framing',rid)])
+        if b.key=='cfs5' and axis==1 and abs(station)<.001:
+            m['local_y']=[1,0,0]
+            m['physical_fit_basis']='A west-edge joist flanges face inward beneath the actual sheathing, retaining the source section and workline.'
         b.ends(m,'review_final_cfs_joist',[b.record('framing',rid)],parameters={'spacing':16,'floor_depth':depth(b,k),'bearing_packer_in':round(depth(b,k)-finish-d,4)})
     for k,z in enumerate(levels[1:],1):
         roof=k==len(levels)-1
         if b.key in ('cfs1','cfs5'):
             finish=.75 if roof else 2.25 if b.key=='cfs1' else 2
+            if b.key=='cfs5':finish=19/32 if roof else 1.5+23/32
             b.panel(f'FLOOR-{k}','roof' if roof else 'floor',[[x*12,y*12,z] for x,y in outline],finish,k,'A')
             supports=[pos for axis,pos in bearing_lines(b)]
             for x in frange(0,b.cfg['plan_ft'][0]*12+.1,16):

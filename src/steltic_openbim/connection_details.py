@@ -75,7 +75,7 @@ def prepare(model,package):
         # equal stud layouts on different beams share a drawing detail while the
         # source-beam identity remains on every actual connection occurrence.
         shape_parameters={k:v for k,v in c.get('parameters',{}).items() if k not in ('original_physical_member_id','source_releases')}
-        if family in ('review_deck_screws','review_deck_block_link'):
+        if family in ('review_deck_screws','review_deck_block_link','review_wsp_block','review_wsp_screws','review_roof_bottom_strap'):
             from .review_cfs_wall_bindings import local_member,signature
             import math
             extent=max((math.sqrt(sum(v*v for v in q)) for q in shape_parameters.get('points_relative',[])),default=8)+2
