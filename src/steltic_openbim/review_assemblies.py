@@ -87,6 +87,24 @@ def build_scene(model,package,c,subtype=''):
     if family=='review_mezzanine29':
         from .review_cfs29_details import draw
         draw(ctx);return ctx.finish()
+    if family=='review_ag_cladding':
+        from .review_cfs28_cladding import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_ag_strap':
+        from .review_cfs28_straps import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_ag_open_brace':
+        from .review_cfs28_open_braces import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_ag_flybrace':
+        from .review_cfs28_braces import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_ag_strut':
+        from .review_cfs28_struts import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_ag_endwall':
+        from .review_cfs28_endwall import draw
+        draw(ctx);return ctx.finish()
     if family=='review_single_stitch':
         from .review_cfs27_stitches import draw
         draw(ctx);return ctx.finish()
@@ -122,6 +140,12 @@ def build_scene(model,package,c,subtype=''):
         draw(ctx);return ctx.finish()
     if family=='review_single_channel_z':
         from .review_cfs27_secondary import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_ag_primary':
+        from .review_cfs28_primary import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_ag_z':
+        from .review_cfs28_secondary import draw
         draw(ctx);return ctx.finish()
     if family=='review_single_channel_primary':
         from .review_cfs27_primary import draw

@@ -12,7 +12,7 @@ def cross_section(member,profiles,axes):
 
 
 def apply(b):
-    if b.key not in ('cfs10','cfs18','cfs27'):return
+    if b.key not in ('cfs10','cfs18','cfs27','cfs28'):return
     # The source distinguishes the stud-framed braced end bays from the
     # metal-clad girt walls between them. Generic infill studs had no source
     # selection or tracks and duplicated the latter system.
@@ -24,7 +24,7 @@ def apply(b):
         b.changes.append(dict(kind='remove_duplicate_unselected_wall_infills',member_ids=sorted(removed),
             basis='Source sidewall-studs applies to the braced end bays. Intermediate walls use source800S200-54 girts; generic field studs had no source design or receiving tracks. Source braced-bay studs remain.'))
     lookup={m['id']:m for m in b.members};hosts=[m for m in b.members if m['kind'] in ('column','endwall_post','opening_jamb')]
-    girts=[m for m in b.members if m['id'].startswith(('END-G-',) if b.key=='cfs27' else ('SIDE-GIRT-','END-GIRT-','STOREFRONT-GIRT-'))]
+    girts=[m for m in b.members if m['id'].startswith(('END-G-',) if b.key in ('cfs27','cfs28') else ('SIDE-GIRT-','END-GIRT-','STOREFRONT-GIRT-'))]
     for m in girts:
         along=0 if abs(m['axis'][1][0]-m['axis'][0][0])>1 else 1;normal=1-along
         outward=-1 if m['axis'][0][normal]==0 else 1;old=[list(q) for q in m['axis']]
@@ -36,7 +36,7 @@ def apply(b):
         u=[1,0,0] if along==0 else [0,1,0];v=cross([0,0,1],u);axes=(u,v,[0,0,1]);sg=outward*v[normal]
         profile_depth=b.depth(m['profile_id'])
         half=max(max(outward*q[normal] for poly in cross_section(h,b.profiles,([1,0,0],[0,1,0],[0,0,1])) for q in poly) for h in candidates)
-        offset=outward*(half+profile_depth/2+.25)
+        offset=outward*(half+profile_depth/2+(.75 if b.key=='cfs28' else .25))
         m['local_y']=[0,0,1]
         for q in m['axis']:q[normal]+=offset
         for end,h in enumerate(candidates):
@@ -45,7 +45,7 @@ def apply(b):
             polys=cross_section(h,b.profiles,axes);faces=[]
             for poly in polys:
                 aa,bb=min(q[1] for q in poly),max(q[1] for q in poly)
-                if .001<bb-aa<1 and max(q[0] for q in poly)-min(q[0] for q in poly)>(1.5 if b.key=='cfs27' else 2):
+                if .001<bb-aa<1 and max(q[0] for q in poly)-min(q[0] for q in poly)>(1.5 if b.key in ('cfs27','cfs28') else 2):
                     face=bb if sg>0 else aa;faces.append((sg*face,face,bb-aa))
             if not faces:raise ValueError('No broad host face for bypass clip '+c['id'])
             _,face,thickness=max(faces);face-=offset*v[normal]
@@ -55,7 +55,7 @@ def apply(b):
                 basis='Actual bypass girt clears the supporting column/post; located folded clip connects its full web stack to the actual receiving face.'))
         b.changes.append(dict(kind='sbmf_bypass_girt',member_id=m['id'],normal_offset_in=offset,
             basis='S source girt section. A outside-column set-out,1/4in clearance,1/8in end cuts, folded1/4in clips, two1/2in bolts per leg and built-up-web packing. Attachment/local capacity unverified.'))
-    if b.key=='cfs27':
+    if b.key in ('cfs27','cfs28'):
         b.note('ENDWALL-BYPASS-GIRTS','S8in54mil end-wall Z girts and actual single-channel columns / paired posts. A outward set-out,1/4in folded clips, two1/2in bolts per leg and end clearances. Receiver legs attach to actual broad webs or flanges; no invented post beyond the opening is used.')
         return
     b.note('SBMF-BYPASS-GIRTS','S: saved side-wall, end-wall and storefront girt selections. A: actual outward bypass set-out clears the HSS/post faces,1/4in folded clips, two1/2in bolts per leg and solid web-stack packers for boxed storefront members. Receiver bolts need accessible assembly or a verified blind-fastener system. Intermediate CFS18 walls use the source girt system; the previously invented untracked infill studs are omitted. Cladding offsets, girt sag-angle restraint and clip capacities remain explicit coordination/supplier requirements.')
@@ -64,6 +64,7 @@ def apply(b):
 def draw(ctx):
     a,p,par=ctx.a,ctx.p,ctx.params;m,host=ctx.ms;along=par['along'];u=[1,0,0] if along==0 else [0,1,0];axes=(u,cross([0,0,1],u),[0,0,1])
     if ctx.model['pilot']=='cfs27':a.title='SINGLE CHANNEL / ACTUAL END-WALL GIRT CLIP'
+    if ctx.model['pilot']=='cfs28':a.title='AG PORTAL / ACTUAL END-WALL GIRT CLIP'
     extract(ctx,m,'GIRT',axes,28);extract(ctx,host,'HOST',axes,20)
     polys=cross_section(m,p,axes);webs=[]
     for poly in polys:

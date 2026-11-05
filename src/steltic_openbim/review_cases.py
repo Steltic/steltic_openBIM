@@ -181,6 +181,8 @@ def build_model(package,state):
     sbmf_restraints(b)
     from .review_cfs27_endwall import prepare as single_endwall_prepare
     single_endwall_prepare(b)
+    from .review_cfs28_endwall import prepare as ag_endwall_prepare
+    ag_endwall_prepare(b)
     from .review_sbmf_girts import apply as sbmf_girts
     sbmf_girts(b)
     from .review_sbmf_post_heads import apply as sbmf_post_heads
@@ -241,6 +243,22 @@ def build_model(package,state):
     canopy_cladding(b)
     from .review_cfs25_cladding import apply as cfs25_cladding
     cfs25_cladding(b)
+    from .review_cfs28_primary import apply as ag_primary
+    ag_primary(b)
+    from .review_cfs28_secondary import apply as ag_secondary
+    ag_secondary(b)
+    from .review_cfs28_endwall import apply as ag_endwall
+    ag_endwall(b)
+    from .review_cfs28_struts import apply as ag_struts
+    ag_struts(b)
+    from .review_cfs28_braces import apply as ag_braces
+    ag_braces(b)
+    from .review_cfs28_open_braces import apply as ag_open_braces
+    ag_open_braces(b)
+    from .review_cfs28_straps import apply as ag_straps
+    ag_straps(b)
+    from .review_cfs28_cladding import apply as ag_cladding
+    ag_cladding(b)
     from .review_cfs6_floor_panels import bind_bearing_clearances
     bind_bearing_clearances(b)
     return b.finish()
