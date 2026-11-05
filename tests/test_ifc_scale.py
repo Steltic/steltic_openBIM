@@ -19,6 +19,15 @@ def test_more_than_twenty_thousand_products_can_be_opened(tmp_path):
     assert len(ifc_import.open_model(path).by_type('IfcProduct'))==20001
 
 
+def test_complete_detailed_building_above_old_hundred_thousand_limit_opens(tmp_path):
+    model=ifcopenshell.file(schema='IFC4')
+    model.create_entity('IfcProject',GlobalId=ifcopenshell.guid.new())
+    for i in range(100001):
+        model.create_entity('IfcElementAssembly',GlobalId=ifcopenshell.guid.new(),Name=str(i))
+    path=tmp_path/'complete.ifc';model.write(str(path))
+    assert len(ifc_import.open_model(path).by_type('IfcProduct'))==100001
+
+
 def test_product_limit_rejects_before_review(tmp_path,monkeypatch):
     path=tmp_path/'source.ifc';model=fixture_ifc(path)
     monkeypatch.setattr(ifc_import,'MAX_PRODUCTS',len(model.by_type('IfcProduct'))-1)

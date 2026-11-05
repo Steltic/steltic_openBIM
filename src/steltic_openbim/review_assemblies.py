@@ -96,6 +96,9 @@ def build_scene(model,package,c,subtype=''):
     if family=='review_diaphragm_screws':
         from .review_cfs6_diaphragms import draw
         draw(ctx);return ctx.finish()
+    if family in ('review_deck_screws','review_deck_block_link'):
+        from .review_concrete_deck import draw
+        draw(ctx);return ctx.finish()
     if family in ('review_chord_floor_pack','review_chord_floor_clip'):
         from .review_cfs6_chord_floors import draw
         draw(ctx);return ctx.finish()

@@ -38,7 +38,8 @@ def test_actual_collectors_preserve_all_source_counts_and_floor_scope(actual):
     bars=[v for v in m['members'] if v['kind']=='diaphragm_collector_bar']
     assert bars and len(records)==10
     assert set(records)<=set(m['record_coverage']['used'])
-    assert 'diaphragms/diaphragm-floors' not in m['record_coverage']['used']
+    assert 'diaphragms/diaphragm-floors' in m['record_coverage']['used']
+    assert all(v.get('attachment_schedule',{}).get('blocking_member_ids') for v in m['panels'] if v['kind']=='deck')
     panels={v['id']:v for v in m['panels']}
     groups=defaultdict(list)
     for bar in bars:
@@ -61,7 +62,7 @@ def test_actual_collectors_preserve_all_source_counts_and_floor_scope(actual):
 def test_every_actual_lap_has_touching_parallel_bars_and_real_source_receivers(actual):
     from steltic_openbim.assembly_templates import build_scene
     m,p=actual;members={v['id']:v for v in m['members']}
-    laps=[c for c in m['connections'] if c['detail_ref']['id']=='review_collector_lap']
+    laps=[c for c in m['connections'] if c['detail_ref']['id']=='review_collector_lap' and members[c['member_ids'][0]]['kind']=='diaphragm_collector_bar']
     assert laps
     for c in laps:
         first,second=[members[i] for i in c['member_ids']]

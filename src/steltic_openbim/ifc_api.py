@@ -25,12 +25,12 @@ def router(drawings,source_roots=None):
 
     @r.post('/api/project/{p}/ifc/import')
     async def upload(p,request:Request):
-        form=await request.form();file=form.get('file')
-        if file is None or not hasattr(file,'read'):raise HTTPException(422,'Choose an IFC file')
-        raw=await file.read(MAX_FILE+1)
-        if len(raw)>MAX_FILE:raise HTTPException(413,'IFC exceeds 100 MB')
-        revision=form.get('revision');revision=invoke(int,revision) if revision else None
-        return await run_in_threadpool(invoke,store.upload,p,file.filename,raw,revision)
+        async with request.form() as form:
+            file=form.get('file')
+            if file is None or not hasattr(file,'file'):raise HTTPException(422,'Choose an IFC file')
+            if file.size is not None and file.size>MAX_FILE:raise HTTPException(413,f'IFC exceeds {MAX_FILE//(1024*1024)} MB')
+            revision=form.get('revision');revision=invoke(int,revision) if revision else None
+            return await run_in_threadpool(invoke,store.upload_stream,p,file.filename,file.file,revision)
 
     @r.post('/api/project/{p}/ifc/build')
     async def build(p,request:Request):return await run_in_threadpool(invoke,store.build,p,await body(request))

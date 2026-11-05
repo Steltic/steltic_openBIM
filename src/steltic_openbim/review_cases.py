@@ -121,6 +121,12 @@ def build_model(package,state):
     cfs_source_bindings(b)
     from .review_concrete_collectors import apply as concrete_collectors
     concrete_collectors(b)
+    from .review_concrete_chords import apply as concrete_chords
+    concrete_chords(b)
+    from .review_concrete_mesh import apply as concrete_mesh
+    concrete_mesh(b)
+    from .review_concrete_deck import apply as concrete_deck
+    concrete_deck(b)
     from .review_source_conflicts import apply as source_conflicts
     source_conflicts(b)
     from .review_plate_boundaries import apply as plate_boundaries
