@@ -78,12 +78,15 @@ def prepare(model,package):
         if family=='review_sbmf_floor':
             from .review_cfs_wall_bindings import local_member,signature
             shape_parameters['actual_floor_receivers']=signature([local_member(m,c['point'],([1,0,0],[0,1,0],[0,0,1]),64 if shape_parameters['purpose']=='transfer' else 18) for m in ms])
+        if family=='review_cfs5_drag_end':
+            from .review_cfs_wall_bindings import local_member,signature
+            shape_parameters['actual_drag_receivers']=signature([local_member(m,c['point'],([1,0,0],[0,1,0],[0,0,1]),32) for m in ms])
         if family=='review_sbmf_deck':
             from .review_cfs_wall_bindings import local_member,signature
             import math
             extent=max(math.sqrt(sum(v*v for v in f['point_relative'])) for f in shape_parameters['fasteners'])+2
             shape_parameters['actual_folded_deck_receivers']=signature([local_member(m,c['point'],([1,0,0],[0,1,0],[0,0,1]),extent) for m in ms])
-        if family in ('review_deck_screws','review_deck_block_link','review_wsp_block','review_wsp_screws','review_roof_bottom_strap','review_sbmf_wsp'):
+        if family in ('review_deck_screws','review_deck_block_link','review_wsp_block','review_wsp_screws','review_roof_bottom_strap','review_sbmf_wsp','review_cfs5_drag_screws'):
             from .review_cfs_wall_bindings import local_member,signature
             import math
             extent=max((math.sqrt(sum(v*v for v in q)) for q in shape_parameters.get('points_relative',[])),default=8)+2

@@ -165,6 +165,8 @@ def build_model(package,state):
     cfs5_diaphragms(b)
     from .review_cfs5_roof_restraint import apply as cfs5_roof_restraint
     cfs5_roof_restraint(b)
+    from .review_cfs5_collectors import apply as cfs5_collectors
+    cfs5_collectors(b)
     from .review_sbmf_headers import apply as sbmf_headers
     sbmf_headers(b)
     from .review_sbmf_roof_seats import apply as sbmf_roof_seats
