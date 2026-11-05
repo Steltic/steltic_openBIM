@@ -73,8 +73,16 @@ def build_model(package,state):
     selected_details(b)
     from .review_profile_fit import apply as profile_fit
     profile_fit(b)
+    from .review_cfs6_headers import apply as cfs6_headers
+    cfs6_headers(b)
+    from .review_cfs6_floor_panels import apply as cfs6_floor_panels
+    cfs6_floor_panels(b)
     from .review_supplements import track_bearing_datums
     track_bearing_datums(b)
+    from .review_double_top_tracks import apply as double_top_tracks
+    double_top_tracks(b)
+    from .review_cfs6_floor_framing import apply as cfs6_floor_framing
+    cfs6_floor_framing(b)
     from .review_cfs_frame_straps import apply as frame_straps
     frame_straps(b)
     from .review_wall_straps import apply as wall_straps
@@ -91,6 +99,8 @@ def build_model(package,state):
     track_corners(b)
     from .review_track_splices import apply as track_splices
     track_splices(b)
+    from .review_cfs6_floor_framing import bearing_receivers as floor_bearing_receivers
+    floor_bearing_receivers(b,b.levels)
     from .review_edge_chords import apply as edge_chord_corners
     edge_chord_corners(b)
     from .review_cfs_source_bindings import apply as cfs_source_bindings
@@ -103,4 +113,6 @@ def build_model(package,state):
     plate_boundaries(b)
     from .review_hr9_selections import splice_scope
     splice_scope(b)
+    from .review_cfs6_bridging import apply as actual_crc
+    actual_crc(b)
     return b.finish()

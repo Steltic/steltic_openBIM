@@ -77,6 +77,12 @@ class Context:
 
 def build_scene(model,package,c,subtype=''):
     ctx=Context(model,package,c);family=ctx.family
+    if family in ('review_source_floor_rim','review_source_floor_block'):
+        from .review_cfs6_floor_framing import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_double_top_track':
+        from .review_double_top_tracks import draw
+        draw(ctx);return ctx.finish()
     if family=='review_transition_splice':
         from .review_source_conflicts import draw_transition
         draw_transition(ctx);return ctx.finish()

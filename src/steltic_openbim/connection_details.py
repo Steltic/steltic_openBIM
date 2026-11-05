@@ -37,6 +37,8 @@ def prepare(model,package):
     if model['pilot'].startswith('cfs'):
         from .review_source_clauses import apply as source_clauses
         source_clauses(model,package)
+        from .review_cfs6_floor_references import apply as source_floor_references
+        source_floor_references(model)
     members={m['id']:m for m in model['members']};groups=defaultdict(list)
     truss_nodes=defaultdict(set)
     for m in model['members']:
@@ -99,6 +101,28 @@ def prepare(model,package):
                 item['source_slots']=[dict(slot,start_in=slot['start_in']-station,end_in=slot['end_in']-station) for slot in m.get('slots',[]) if slot['start_in']<station+extent and slot['end_in']>station-extent]
                 core_receivers.append(item)
             shape_parameters['actual_core_receivers']=signature(core_receivers)
+        if shape_parameters.get('actual_double_top_track'):
+            from .review_cfs_wall_bindings import local_member,signature
+            from .review_receiver_geometry import horizontal_frame
+            frame=horizontal_frame([1,0,0] if shape_parameters['direction']==0 else [0,1,0])
+            shape_parameters['actual_track_receivers']=signature([local_member(m,c['point'],frame,24) for m in ms])
+        if shape_parameters.get('actual_crc'):
+            from .review_cfs_wall_bindings import local_member,signature
+            from .review_receiver_geometry import horizontal_frame
+            from .pilots.model import sub,unit,dot,add
+            frame=horizontal_frame([1,0,0] if shape_parameters['direction']==0 else [0,1,0])
+            extent=150 if shape_parameters['purpose']=='anchor' else 8
+            data=[]
+            for m in ms:
+                row=local_member(m,c['point'],frame,extent)
+                station=dot(sub(c['point'],add(m['axis'][0],m['end_offsets'][0])),unit(sub(*m['axis'][::-1])))
+                row['slots']=[dict(slot,start_in=slot['start_in']-station,end_in=slot['end_in']-station) for slot in m.get('slots',[]) if slot['start_in']<station+extent and slot['end_in']>station-extent]
+                for slot in row['slots']:slot.pop('connection_id',None)
+                data.append(row)
+            shape_parameters['actual_crc_receivers']=signature(data)
+        if shape_parameters.get('actual_source_floor'):
+            from .review_cfs_wall_bindings import local_member,signature
+            shape_parameters['actual_floor_receivers']=signature([local_member(m,c['point'],([1,0,0],[0,1,0],[0,0,1]),24) for m in ms])
         if shape_parameters.get('actual_gable_brace') or shape_parameters.get('actual_gable_secondary'):
             from .review_cfs_wall_bindings import local_member,signature
             shape_parameters.pop('primary_origin',None)

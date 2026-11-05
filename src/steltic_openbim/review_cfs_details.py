@@ -4,6 +4,9 @@ from .review_assemblies import *
 
 def draw(ctx):
     f=ctx.family
+    if ctx.params.get("actual_crc"):
+        from .review_cfs6_bridging import draw as crc
+        return crc(ctx)
     if ctx.params.get('actual_gable_brace'):
         from .review_gable_bracing import brace
         return brace(ctx)
