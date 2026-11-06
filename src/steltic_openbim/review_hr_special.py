@@ -28,6 +28,8 @@ def edge_bars(ctx):
 
 
 def brace(ctx):
+    from .review_hr_brace_ends import CASES,draw_brace
+    if ctx.model.get('pilot') in CASES:return draw_brace(ctx)
     a,p,pid,txt,par=ctx.a,ctx.p,ctx.pid,ctx.text,ctx.params;kind=par.get('joint','corner');upper=kind in ('apex','link_end');isbrb=ctx.family=='review_brb'
     full_text=txt
     cp=ctx.select(('column',));bp=ctx.select(('beam','moment_beam','girder','transfer_chord'));cd=effective(p,cp);bd=effective(p,bp);bf=effective(p,bp,'width')

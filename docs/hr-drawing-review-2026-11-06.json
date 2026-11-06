@@ -1,0 +1,394 @@
+{
+  "scope": "Eight user-reviewed HR sets; source design results retained, accepted geometry marked A",
+  "cases": [
+    {
+      "id": "hr1",
+      "pages": 78,
+      "accepted_model_sha256": "476f77b26e08331cb8e6095d45c3547abcee40d587e3237837245b44dd9a13dd",
+      "native_source_sha256": "54b38b2f8e76dd394ff65b7fe1f14230860d2e66cc48d37ee0028975d4df4298",
+      "ifc_return_sha256": "cea3bb5807527fa949f463f85eb4efd00b2eb400d7c5624bb3f4fb5108678dbe",
+      "pdf_sha256": "c4fcdd7637c2216d0e35ee075ae17176055cbbcd0216389e4ed88bc570e90f13",
+      "inspected_sheets": [
+        "S001",
+        "S101",
+        "S201",
+        "C038",
+        "C039",
+        "C043",
+        "C047",
+        "C001"
+      ],
+      "counts": {
+        "members": 524,
+        "connections": 1176,
+        "marks": 21,
+        "detail_families": 6,
+        "detail_variants": 60,
+        "published_detail_variants": 60,
+        "omitted_detail_variants": 0,
+        "openings": 8
+      }
+    },
+    {
+      "id": "hr15",
+      "pages": 535,
+      "accepted_model_sha256": "85e9151559f8cadcce5d37ebf32961d8c2206206c48d193110df2720eb526d05",
+      "native_source_sha256": "ac486e16b2c6bb114a96e729ec1c2e3600f788f13ba58d12ffc02cbcc06908f0",
+      "ifc_return_sha256": "27a95cd8d2ff143b95d5ab6aa340b2e77e405b2290d0829559661f64a7c1ae54",
+      "pdf_sha256": "d9b78e6b5022f1ffe3a1f3de4f4da069aa42c15757b9003afecf411bae0e11df",
+      "inspected_sheets": [
+        "S001",
+        "S101",
+        "S201",
+        "C320",
+        "C321",
+        "C322",
+        "C325",
+        "C385",
+        "C387",
+        "C391",
+        "C001",
+        "C264"
+      ],
+      "counts": {
+        "members": 2587,
+        "connections": 6259,
+        "marks": 81,
+        "detail_families": 6,
+        "detail_variants": 465,
+        "published_detail_variants": 465,
+        "omitted_detail_variants": 0,
+        "openings": 38
+      }
+    },
+    {
+      "id": "hr23",
+      "pages": 261,
+      "accepted_model_sha256": "7415cc83126f2f3033b256a4b2a2249b6c6c7e35c34d73215009f668dbdc1185",
+      "native_source_sha256": "6a0a83d8881e1dbb34ece824516831b8bcb531da3a0ad46cdf5ccf5ea2c1b998",
+      "ifc_return_sha256": "a607e18571e1c5b7450227c36ff48581b0a1c6ceb4bdc472f9776e10852d8bbb",
+      "pdf_sha256": "e5c209e25e19ff443fd96d129b073a29a6dde583074611d0931f23dca9a3db50",
+      "inspected_sheets": [
+        "S001",
+        "S101",
+        "S201",
+        "C125",
+        "C126",
+        "C139",
+        "C141",
+        "C142",
+        "C143",
+        "C147",
+        "C148",
+        "C151",
+        "C171",
+        "C176",
+        "C001",
+        "C104"
+      ],
+      "counts": {
+        "members": 1127,
+        "connections": 2595,
+        "marks": 59,
+        "detail_families": 6,
+        "detail_variants": 211,
+        "published_detail_variants": 211,
+        "omitted_detail_variants": 0,
+        "openings": 16
+      }
+    },
+    {
+      "id": "hr29",
+      "pages": 397,
+      "accepted_model_sha256": "e40cefbaf3af8638684fb03885d810b62222646c94cdd5aa8e99a9a63936ff54",
+      "native_source_sha256": "2a345a43f46e250f93d06577596ba0828c39bd33a6782442230a0fcca26a9e8f",
+      "ifc_return_sha256": "a96e914c7a3f7f41ae03e0a9478894353bed92f704e000f1f4324e7c79a6a5fd",
+      "pdf_sha256": "996cee86b136a11d282dfee961381aea3da9ce314775449e0e4b0e71485e8ea0",
+      "inspected_sheets": [
+        "S001",
+        "S101",
+        "S201",
+        "C185",
+        "C186",
+        "C187",
+        "C188",
+        "C193",
+        "C194",
+        "C195",
+        "C196",
+        "C213",
+        "C221",
+        "C225",
+        "C233",
+        "C237",
+        "C240",
+        "C245",
+        "C248",
+        "C001",
+        "C147"
+      ],
+      "counts": {
+        "members": 2098,
+        "connections": 4814,
+        "marks": 69,
+        "detail_families": 6,
+        "detail_variants": 311,
+        "published_detail_variants": 311,
+        "omitted_detail_variants": 0,
+        "openings": 38
+      }
+    },
+    {
+      "id": "hr34a",
+      "pages": 225,
+      "accepted_model_sha256": "5a5dc56431671a0275735af8b8a070654589ea001f650ce519a9f5f6136342bb",
+      "native_source_sha256": "2d62bd7361c65a8f9a5dc55e63d354716a1b8a31a3f6c52ae7a7b8f070173fc2",
+      "ifc_return_sha256": "a1ba5dc7e75f8d07bd33bd7661f52bdc8162055bf16e9c87a0e02571eed83abb",
+      "pdf_sha256": "ab4b877b89d8dcc83d85df838c9743c7cae4cbc5219de3260d56d2bfdffca1b9",
+      "inspected_sheets": [
+        "S001",
+        "S101",
+        "S201",
+        "C059",
+        "C061",
+        "C063",
+        "C064",
+        "C067",
+        "C113",
+        "C114",
+        "C001"
+      ],
+      "counts": {
+        "members": 1070,
+        "connections": 2165,
+        "marks": 58,
+        "detail_families": 9,
+        "detail_variants": 163,
+        "published_detail_variants": 163,
+        "omitted_detail_variants": 0,
+        "openings": 26
+      }
+    },
+    {
+      "id": "hr34b",
+      "pages": 189,
+      "accepted_model_sha256": "6bdc902f5b2e1d95dcbb790756a03cb63ff8a0c1cdb330cba3137689acbe9616",
+      "native_source_sha256": "f7684a18f2f2fe2c8aeaacb5d1d181b94284dad74b8732e7644afc3ecb910774",
+      "ifc_return_sha256": "d7c58adc8d2c7392708557f4bf3ca1723fd6ad4d7863c14e040d00cc09ad32e2",
+      "pdf_sha256": "a56dbb89ec10a10dfdc33f2eab85a46580d2b6b6b76201860d155bfd9779885a",
+      "inspected_sheets": [
+        "S001",
+        "S101",
+        "S201",
+        "C059",
+        "C060",
+        "C061",
+        "C062",
+        "C064",
+        "C097",
+        "C098",
+        "C001"
+      ],
+      "counts": {
+        "members": 798,
+        "connections": 1633,
+        "marks": 55,
+        "detail_families": 9,
+        "detail_variants": 140,
+        "published_detail_variants": 140,
+        "omitted_detail_variants": 0,
+        "openings": 18
+      }
+    },
+    {
+      "id": "hr27",
+      "pages": 375,
+      "accepted_model_sha256": "18e8ca33347a547fdf71381f94657a196d74edcccaf1f3415ed653028517838f",
+      "native_source_sha256": "140d3ad136513ba3b3a918a9061364e4acbfc56511f6a0ffbf5b73a7773e6de5",
+      "ifc_return_sha256": "e19eb509f7fd1e1b62cbcf0a2850cbfb51015f3221d44daa4693815e3a169fd0",
+      "pdf_sha256": "067fcc1a06a4cfab3bdbe89f8ae268d8603311f244de70c5128f05165766a0d7",
+      "inspected_sheets": [
+        "S001",
+        "S101",
+        "S201",
+        "G001",
+        "G020",
+        "S601",
+        "S701",
+        "C001",
+        "C153",
+        "C632",
+        "C633",
+        "C635",
+        "C641",
+        "C643"
+      ],
+      "counts": {
+        "members": 2108,
+        "connections": 6832,
+        "marks": 89,
+        "detail_families": 8,
+        "detail_variants": 728,
+        "published_detail_variants": 329,
+        "omitted_detail_variants": 399,
+        "openings": 40
+      }
+    },
+    {
+      "id": "hr28",
+      "pages": 251,
+      "accepted_model_sha256": "5ff237fbba6a1e5d8997364706588c136e5c4221c635937f88c95a2173c48037",
+      "native_source_sha256": "4eeab42dc8aa09d9e1458e6b501d6b3cfe7781dc05c5ce15ab33506c9e48768e",
+      "ifc_return_sha256": "56556ea36347d0ffbfd10a21cc2dad9f54ba08b59c8abe743427b3996f92c82c",
+      "pdf_sha256": "7d2b7cb7afdb4a4bed1f1dbb7b86fd31078f3ecc86975408dde1f0add023759f",
+      "inspected_sheets": [
+        "S001",
+        "S101",
+        "S201",
+        "G001",
+        "G020",
+        "S601",
+        "S701",
+        "C001"
+      ],
+      "counts": {
+        "members": 3936,
+        "connections": 3520,
+        "marks": 51,
+        "detail_families": 9,
+        "detail_variants": 260,
+        "published_detail_variants": 226,
+        "omitted_detail_variants": 34,
+        "openings": 16
+      }
+    }
+  ],
+  "production_refactor_comparison": [
+    {
+      "id": "hr1",
+      "physical_collections": "exact_match",
+      "compared_collections": [
+        "members",
+        "profiles",
+        "panels",
+        "openings",
+        "connections",
+        "connection_assemblies",
+        "grids",
+        "levels",
+        "wall_layouts",
+        "extra_views",
+        "assumptions",
+        "changes",
+        "excluded_analysis_elements",
+        "connection_endpoint_links",
+        "record_dispositions"
+      ]
+    },
+    {
+      "id": "hr15",
+      "physical_collections": "exact_match",
+      "compared_collections": [
+        "members",
+        "profiles",
+        "panels",
+        "openings",
+        "connections",
+        "connection_assemblies",
+        "grids",
+        "levels",
+        "wall_layouts",
+        "extra_views",
+        "assumptions",
+        "changes",
+        "excluded_analysis_elements",
+        "connection_endpoint_links",
+        "record_dispositions"
+      ]
+    },
+    {
+      "id": "hr23",
+      "physical_collections": "exact_match",
+      "compared_collections": [
+        "members",
+        "profiles",
+        "panels",
+        "openings",
+        "connections",
+        "connection_assemblies",
+        "grids",
+        "levels",
+        "wall_layouts",
+        "extra_views",
+        "assumptions",
+        "changes",
+        "excluded_analysis_elements",
+        "connection_endpoint_links",
+        "record_dispositions"
+      ]
+    },
+    {
+      "id": "hr29",
+      "physical_collections": "exact_match",
+      "compared_collections": [
+        "members",
+        "profiles",
+        "panels",
+        "openings",
+        "connections",
+        "connection_assemblies",
+        "grids",
+        "levels",
+        "wall_layouts",
+        "extra_views",
+        "assumptions",
+        "changes",
+        "excluded_analysis_elements",
+        "connection_endpoint_links",
+        "record_dispositions"
+      ]
+    },
+    {
+      "id": "hr34a",
+      "physical_collections": "exact_match",
+      "compared_collections": [
+        "members",
+        "profiles",
+        "panels",
+        "openings",
+        "connections",
+        "connection_assemblies",
+        "grids",
+        "levels",
+        "wall_layouts",
+        "extra_views",
+        "assumptions",
+        "changes",
+        "excluded_analysis_elements",
+        "connection_endpoint_links",
+        "record_dispositions"
+      ]
+    },
+    {
+      "id": "hr34b",
+      "physical_collections": "exact_match",
+      "compared_collections": [
+        "members",
+        "profiles",
+        "panels",
+        "openings",
+        "connections",
+        "connection_assemblies",
+        "grids",
+        "levels",
+        "wall_layouts",
+        "extra_views",
+        "assumptions",
+        "changes",
+        "excluded_analysis_elements",
+        "connection_endpoint_links",
+        "record_dispositions"
+      ]
+    }
+  ]
+}
