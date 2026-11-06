@@ -259,6 +259,20 @@ def build_model(package,state):
     ag_straps(b)
     from .review_cfs28_cladding import apply as ag_cladding
     ag_cladding(b)
+    from .review_cfs17_primary import apply as garage_primary
+    garage_primary(b)
+    from .review_cfs17_secondary import apply as garage_secondary
+    garage_secondary(b)
+    from .review_cfs17_struts import apply as garage_struts
+    garage_struts(b)
+    from .review_cfs17_endwall import apply as garage_endwall
+    garage_endwall(b)
+    from .review_cfs17_braces import apply as garage_braces
+    garage_braces(b)
+    from .review_cfs17_straps import apply as garage_straps
+    garage_straps(b)
+    from .review_cfs17_cladding import apply as garage_cladding
+    garage_cladding(b)
     from .review_cfs6_floor_panels import bind_bearing_clearances
     bind_bearing_clearances(b)
     return b.finish()
