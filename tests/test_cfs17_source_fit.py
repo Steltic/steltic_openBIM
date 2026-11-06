@@ -37,6 +37,21 @@ def test_saved_two_span_frame_and_real_door_openings(actual):
     assert {p['id'] for p in m['panels'] if p['kind']=='roof'}=={'GAR-SKIN-R'+str(j) for j in range(4)}
 
 
+def test_valley_prop_analysis_mapping_and_exact_base_source_clauses(actual):
+    from steltic_openbim.bim_record_clauses import applications
+    m,p=actual;props=[v for v in m['members'] if v['kind']=='prop']
+    assert len(props)==19
+    for v in props:
+        assert v['axis'][1][2]==216 and axis(v)[1][2]==202.25
+        assert len(v['analysis_ids'])==3
+        assert all(next(e for e in p['analysis']['elements'] if e['id']==eid)['label']=='col_I1' for eid in v['analysis_ids'])
+    connections=[c for c in m['connections'] if c['detail_ref']['id']=='review_garage_primary' and c.get('parameters',{}).get('purpose') in ('base','prop_base')]
+    assert len(connections)==57
+    chosen,errors=applications(dict(design_records=p['design_records'],physical=dict(members=m['members'],connections=connections)))
+    assert not errors and len(chosen)==57
+    assert all('A325-N bolts per pair' not in chosen[c['id'],'anchorage/base-anchor'] for c in connections if c['parameters']['purpose']=='prop_base')
+
+
 def test_source_primary_and_brace_groups(actual):
     m,p=actual
     for purpose,count in (('knee',12),('apex',16),('valley',16)):

@@ -15,11 +15,19 @@ def apply(b):
     if b.key!='cfs17':return
     b.endpoint_links=getattr(b,'endpoint_links',[])
     lookup={m['id']:m for m in b.members}
+    nodes={n['id']:n['point'] for n in b.package['analysis']['nodes']}
     for m in b.members:
         if m['kind']=='column' and m['id'].startswith('F'):
             m['end_offsets']=[[0,0,2.25],[0,0,-10]];rid='members/frame-col'
         elif m['kind']=='prop':
-            m['end_offsets']=[[0,0,2.25],[0,0,-.75]];rid='members/frame-col-int'
+            # Preserve the source analysis workline through the valley node;
+            # the real HSS still stops at the underside of the source cap.
+            m['axis'][1][2]=216;m['end_offsets']=[[0,0,2.25],[0,0,-13.75]];rid='members/frame-col-int'
+            matches=[e for e in b.package['analysis']['elements'] if e.get('label')=='col_I1' and all(abs(nodes[n][i]-m['axis'][0][i])<.001 for n in e['node_ids'] for i in (0,1))]
+            spans=sorted((min(nodes[n][2] for n in e['node_ids']),max(nodes[n][2] for n in e['node_ids'])) for e in matches)
+            if not spans or spans[0][0]!=0 or spans[-1][1]!=216 or any(abs(a[1]-d[0])>.001 for a,d in zip(spans,spans[1:])):raise ValueError('Valley prop does not cover the exact original analysis workline')
+            m['analysis_ids']=[e['id'] for e in matches]
+            m['mapping_basis']='Exact col_I1 source-node coordinates and complete 0..216in analysis segmentation. Final saved member selection is HSS6x6x1/4; source analysis EA/EI metadata remains unchanged and has not been recalculated.'
         elif m['kind']=='rafter' and m['id'].startswith('F'):
             u=unit(sub(*m['axis'][::-1]));j=int(m['id'][-1])
             m['end_offsets']=[mul(u,10 if j in (0,2) else 2),mul(u,-10 if j in (1,3) else -2)]
@@ -32,6 +40,11 @@ def apply(b):
         if f not in ('review_portal_base','review_portal_joint'):continue
         purpose='prop_base' if f.endswith('_base') and lookup[c['member_ids'][0]]['kind']=='prop' else 'base' if f.endswith('_base') else c['parameters']['joint']
         c['detail_ref']['id']='review_garage_primary';c['parameters']=dict(actual_garage_primary=True,purpose=purpose)
+        if purpose in ('base','prop_base'):
+            from .bim_record_clauses import clauses
+            rid='anchorage/base-anchor';options=clauses(b.records[rid]['data']['selection'])
+            label='interior hss6x6x1/4 columns' if purpose=='prop_base' else 'exterior bases'
+            c['source_record_selections']=[dict(record_id=rid,field='selection',clause=label,text=options[label],level=1,basis='Exact labelled source base selection at the actual exterior column or flanked HSS valley prop. Both original source clauses remain fully represented.')]
         for mid in c['member_ids']:
             m=lookup[mid];end=min(range(2),key=lambda i:math.dist(m['axis'][i],c['point']))
             b.endpoint_links.append(dict(member_id=mid,end='start' if end==0 else 'end',connection_id=c['id'],basis='Source portal/prop member physically connected at this source node through explicitly modeled finite gussets/base/cap.'))
