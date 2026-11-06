@@ -139,6 +139,7 @@ class DesignSheets(Sheets):
         self.c.setStrokeColor(GREY);self.c.setFillColor('white');self.c.circle(x,y,r,fill=1,stroke=1);self.center(x,y-4,t,11)
 
     def callout(self,p,ref,dx=35,dy=28):
+        if ref in getattr(self,'excluded_detail_refs',set()):return
         q=(p[0]+dx,p[1]+dy);self.line(p,q,BLUE,.7)
         self.label(q[0]+3,q[1],ref,10,BLUE)
         self.callouts.append(dict(sheet=self.current,reference=ref,at=list(p)))

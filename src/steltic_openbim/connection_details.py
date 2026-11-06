@@ -25,6 +25,8 @@ def prepare(model,package):
     Same geometry repeated at many locations shares a detail. A story-dependent
     bracket/rod or floor-shear connection cannot borrow another story's parameters.
     """
+    from .review_hr_brace_ends import bind as hr_brace_ends
+    hr_brace_ends(model,package)
     from .review_cfs_occurrences import bind
     if model['pilot'].startswith('cfs'):
         # Opening face cuts change actual member endpoints. Take the floor and

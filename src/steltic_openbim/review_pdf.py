@@ -13,6 +13,12 @@ def refs(values):
     return compact_references(values)
 
 
+def omitted_detail_families(pilot):
+    """User-selected PDF scope; the physical model and IFC stay complete."""
+    return {'hr27':{'review_core_base','review_core_wall'},
+            'hr28':{'review_edge_bars','review_edge_chord_corner'}}.get(pilot,set())
+
+
 def scale_for(bounds,width=1530,height=1050):
     return max(15,math.ceil(max((bounds[0][1]-bounds[0][0])*72/width,(bounds[1][1]-bounds[1][0])*72/height)/5)*5)
 
@@ -115,11 +121,15 @@ def core_plan(sh):
 def generate(package,state,dest):
     if not all(r['confirmed'] for r in state['requests']):raise ValueError('Adopt the fictional answers before dimensioned review drawings')
     dest=Path(dest);dest.mkdir(parents=True,exist_ok=True);m=build_model(package,state);assemblies=prepare(m,package);sh=DesignSheets(package,state,dest,m);jobs=[]
+    omitted=omitted_detail_families(m['pilot'])
+    published=[a for a in assemblies if a['family'] not in omitted]
+    sh.excluded_detail_refs={a['reference'] for a in assemblies if a['family'] in omitted}
+    def refs(values):return compact_references([r for r in values if r not in sh.excluded_detail_refs])
     def queue(number,title,fn,scale='NTS'):jobs.append((number,title,scale,fn))
     def cover():
         sh.text(90,sh.H-220,'DIMENSIONED DESIGN / ASSEMBLED CONNECTIONS',29,font='Helvetica-Bold')
         y=sh.H-290
-        for line in [m['title'],f'{len(m["members"]):,} members | {len(m["connections"]):,} connection occurrences | {len(assemblies)} assembled variants',
+        for line in [m['title'],f'{len(m["members"]):,} members | {len(m["connections"]):,} connection occurrences | {len(published)} published assembled variants',
             'FICTIONAL REVIEW SET - source designs preserved; explicit adopted inputs marked A.',
             'The C-series shows the connected members, plates, brackets, fastener groups and weld interfaces together. The section is a geometric cut through the same assembly.',
             'Source model and all original design records are retained. Adopted geometry has not been rerun through strength, drift, fatigue, foundation or supplier qualification checks.',
@@ -128,6 +138,8 @@ def generate(package,state,dest):
             'SOURCE SHA256: '+fingerprint(package),
             'MODEL FILES: design_model.json, member_index.json, connection_assemblies.json, source_records.json and adopted_answers.json']:
             y=sh.wrap(90,y,line,2050,17,25)-28
+        if omitted:
+            y=sh.wrap(90,y,'PDF scope: '+('core base/wall detail sheets and standalone core views' if m['pilot']=='hr27' else 'concrete edge-bar and slab-edge detail sheets')+' omitted at user request. Their BIM geometry and original source records remain complete.',2050,17,25)-28
         sh.text(90,220,'Registered fictional review case. Read the adopted answers and source applicability schedules with the assembled details.',14,BLUE)
     queue('G001','Review basis and drawing contents',cover)
     # Assumptions and source-exclusion registers are fully paginated.
@@ -164,15 +176,17 @@ def generate(package,state,dest):
             queue(f'S{100+k:03}',label+' framing plan',lambda k=k:plan(sh,k,'roof' if k==last else 'floor'))
         if m['pilot'].startswith('cfs'):
             for k in range(1,last+1):queue(f'S{130+k:03}',f'Storey {k} wall framing plan',lambda k=k:plan(sh,k,'walls'))
-    if any(v['kind']=='composite_wall' for v in m['members']):
+    if m['pilot']!='hr27' and any(v['kind']=='composite_wall' for v in m['members']):
         queue('S150','Composite core footprint / L1',lambda:core_plan(sh))
     cuts=[]
     for normal in (0,1):
         values=[v for _,v in m['grids']['xy'[normal]]]
         for value in (values[0],values[len(values)//2]):cuts.append((normal,value,1-normal,None,f'Grid plane {"XY"[normal]}={feet(value)}'))
     for view in m.get('extra_views',[]):
+        if m['pilot']=='hr27' and view['title'].startswith('Composite core'):continue
         along=0 if view['direction']=='X' else 1;cuts.append((1-along,view['station_in'],along,view.get('range_in'),view['title']))
     for member in m['members']:
+        if m['pilot']=='hr27':continue
         if member['kind']!='composite_wall' or member['level']!=1:continue
         along=max(range(2),key=lambda i:abs(member['local_y'][i]));normal=1-along;station=member['axis'][0][normal]
         cuts.append((normal,station,along,None,'Composite core plane '+str('XY'[normal])+'='+feet(station)))
@@ -213,13 +227,13 @@ def generate(package,state,dest):
         opening_rows.append([f['id'],f['kind']+' / '+f.get('basis','A'),str(opening_level(f,opening_hosts)),f['plane'].upper(),*[feet(f[n]*12) for n in ('x_ft','y_ft','z_ft','width_ft','height_ft')]])
     tables(['ID','TYPE / BASIS','LEVEL','PLANE','X','Y','Z','WIDTH','HEIGHT'],opening_rows,[270,250,90,90,280,280,280,280,280],'S',301,'Dimensioned opening coordinate schedule')
     from .assembly_legend import continuation_jobs
-    for scene in assemblies:
+    for scene in published:
         queue(scene['sheet'],scene['title'],lambda scene=scene:draw_assembly(sh,scene),'As shown')
         for number,title,draw in continuation_jobs(sh,scene):queue(number,title,draw)
     schedule=m['member_schedule'];rows=[[r['mark'],r['kind'],r['profile_id'],feet(r['length_in']),str(r['count']),r['basis'],','.join(map(str,r['levels'])),refs(r['connection_refs'])] for r in schedule]
     tables(['MARK','TYPE','SECTION','WORKLINE LENGTH','QTY','BASIS','LEVELS','JOINT REFERENCES'],rows,[105,250,430,220,70,70,200,755],'S',601,'Member mark schedule')
     specs=specifications(package,m);source_blocks=[]
-    for r in specs:source_blocks.append((r['id'],r['text']+' | Assembled details: '+refs(r['references'])))
+    for r in specs:source_blocks.append((r['id'],r['text']+' | Assembled details: '+(refs(r['references']) or 'See retained BIM/source records; no detail sheet in this PDF scope.')))
     text_pages(source_blocks,'S',701,'Original source specification and applicability')
     # The numbered index is completed after all dynamic register pagination.
     catalog=list(jobs);indices=[]
@@ -241,5 +255,5 @@ def generate(package,state,dest):
     compact(dest/'member_index.json',{mm['id']:{k:mm[k] for k in ('mark','kind','profile_id','axis','end_offsets','level','basis','source_member_id','connection_refs')} for mm in m['members']})
     write_json(dest/'source_records.json',package['design_records']);write_json(dest/'adopted_answers.json',dict(scenario=state['design_scenario'],answers=m['assumptions'],features=m['openings']))
     report=dict(schema='steltic.drawing_manifest',version=2,revision=state['revision'],building_id=package['building_id'],source_model_sha256=fingerprint(package),drawing_status=state['drawing_status'],can_generate=True,fictional=True,open_requests=0,sheets=sh.rows,dimensions=sh.dimensions,views=sh.views,member_labels=sh.labels,callouts=sh.callouts,
-       counts=dict(members=len(m['members']),connections=len(m['connections']),marks=len(schedule),detail_families=len({s['family'] for s in assemblies}),detail_variants=len(assemblies),openings=len(m['openings'])),model_sha256=fingerprint(m),pdf_sha256=hashlib.sha256((dest/'drawings.pdf').read_bytes()).hexdigest(),decision_state_sha256=fingerprint({k:v for k,v in state.items() if k not in ('sheets','artifacts')}),artifacts=['drawings.pdf','drawing_manifest.json','information_requests.json','design_model.json','member_index.json','source_records.json','adopted_answers.json','connection_assemblies.json'])
+       counts=dict(members=len(m['members']),connections=len(m['connections']),marks=len(schedule),detail_families=len({s['family'] for s in assemblies}),detail_variants=len(assemblies),published_detail_variants=len(published),omitted_detail_variants=len(assemblies)-len(published),openings=len(m['openings'])),omitted_detail_references=sorted(sh.excluded_detail_refs),model_sha256=fingerprint(m),pdf_sha256=hashlib.sha256((dest/'drawings.pdf').read_bytes()).hexdigest(),decision_state_sha256=fingerprint({k:v for k,v in state.items() if k not in ('sheets','artifacts')}),artifacts=['drawings.pdf','drawing_manifest.json','information_requests.json','design_model.json','member_index.json','source_records.json','adopted_answers.json','connection_assemblies.json'])
     write_json(dest/'drawing_manifest.json',report);return report
