@@ -54,9 +54,10 @@ def draw(ctx):
         a.interfaces.append(dict(id=tag+'-FOLD',kind='continuous_angle',connects=[tag+'-COLUMN',tag+'-HEADER'],
             basis='S/A',description='S L4x4x1/4; A sharp-corner bend representation'))
     ht=p[m['profile_id']]['dimensions']['t'];sleeves=[]
+    pid='GARAGE-HEADER-SLEEVE';a.profiles[pid]=dict(id=pid,family='chs',dimensions=dict(d=.875,t=.125),basis='A7/8in OD,1/8in wall,5/8in clear bore')
     for i,z in enumerate((-1,1)):
         label='SLEEVE'+str(i);sleeves.append(label)
-        a.cylinder(label,q(1.75,-2+ht,z),[1,0,0],.75,4-2*ht,'A','A bolt sleeve through the actual HSS cavity')
+        a.member(label,pid,q(1.75,-2+ht,z),q(1.75,2-ht,z),y=[0,1,0],basis='A',description='A hollow compression sleeve bears on both HSS inner walls;1/2in bolt passes through5/8in bore',representation_role='assembly_component')
     a.fastener('HEADER-BOLTS',[q(1.75,-2-t,z) for z in (-1,1)],[1,0,0],.5,4+2*t,
         ['HEADER','CLIP-1-HEADER','CLIP1-HEADER'],
         'S two1/2in A325-N header through-bolts; A hollow-section sleeves and exact set-out')
