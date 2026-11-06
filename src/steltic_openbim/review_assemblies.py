@@ -84,6 +84,9 @@ class Context:
 
 def build_scene(model,package,c,subtype=''):
     ctx=Context(model,package,c);family=ctx.family
+    if family=='review_mezzanine29':
+        from .review_cfs29_details import draw
+        draw(ctx);return ctx.finish()
     if family=='review_ag_cladding':
         from .review_cfs28_cladding import draw
         draw(ctx);return ctx.finish()
