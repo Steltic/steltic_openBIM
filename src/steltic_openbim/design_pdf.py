@@ -357,7 +357,9 @@ def section(sh,normal,station,along,title,scale,bounds,origin=(215,340),band=1):
         for face in member_faces(m,sh.profiles,limits):
             pts=[tr(p) for p in face]
             for a,b in zip(pts,pts[1:]+pts[:1]):
-                key=tuple(sorted((tuple(round(v,2) for v in a),tuple(round(v,2) for v in b))))
+                # Use page-coordinate precision when deduplicating clipped section edges.
+                # A short edge can otherwise share a key with a zero-length projection.
+                key=tuple(sorted((tuple(round(v,6) for v in a),tuple(round(v,6) for v in b))))
                 if key in edges:continue
                 edges.add(key);sh.line(a,b,ASSUMED if m['basis']=='A' else INK,.45)
         a,b=physical_axis(m);clip=clip_axis(a,b,limits)
