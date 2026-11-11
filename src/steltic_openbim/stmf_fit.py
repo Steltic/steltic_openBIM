@@ -12,6 +12,34 @@ from .pilots.model import add,sub,mul,dot,cross,unit
 from .review_assemblies import hull
 
 
+def slotted_end_selection(handoff,connection_id,member_id,section,vertical):
+    """Authenticated selectors for this particular slotted web and end."""
+    names={('gusset','whitmore_effective_width_in'):'width',('brace_slot_weld','length_in'):'length',
+           ('brace_slot_weld','size_in'):'size',('brace_slot_weld','count'):'count',
+           ('slot','clearance_in'):'clearance',('slot','tip_overrun_in'):'tip_overrun'}
+    values={}
+    occurrence=handoff.get('occurrences',{}).get(connection_id,{})
+    changes={(o['record_id'],o['field_index']):o['value'] for o in occurrence.get('overrides',[])}
+    for link in occurrence.get('applications',[]):
+        scoped=link.get('hss_members')
+        if scoped is not None and scoped.get(member_id)!='selected':continue
+        record=handoff['records'][link['record_id']]
+        for i in link['selected']:
+            field=record['fields'][i]
+            name=names.get((field['role'],field['field']))
+            if not name:continue
+            applies=field.get('applicability',{})
+            if applies.get('attachment')!='slotted_hss':continue
+            if applies.get('member_section',section)!=section:continue
+            if applies.get('member_axis', 'vertical' if vertical else 'diagonal')!=('vertical' if vertical else 'diagonal'):continue
+            value=float(changes.get((link['record_id'],i),field['value']))
+            if name in values and values[name]!=value or not math.isfinite(value) or value<=0:
+                raise ValueError('Conflicting STMF '+name+' on '+connection_id+' / '+member_id)
+            values[name]=value
+    if values.get('count',4)!=4:raise ValueError('Selected STMF slotted end has an unsupported weld topology')
+    return values
+
+
 def local(v,frame,point=False):
     v=sub(v,frame['origin']) if point else v
     return [dot(v,k) for k in (frame['x_axis'],frame['y_axis'],cross(frame['x_axis'],frame['y_axis']))]
@@ -64,7 +92,7 @@ def make_scene(source,rows,profiles,records,direction):
     # meet directly at their selected crossing weld and lap their own end gussets.
     flat=next((r for r in webs if profiles[r['pid']]['family']=='flat'),None)
     gy=flat['near'][1]-flat['side']*(profiles[flat['pid']]['dimensions']['thickness']+t)/2 if flat else 0.
-    starts={};slots={};outline=[];pending=[];chord_edges=[]
+    starts={};slots={};outline=[];pending=[];chord_edges=[];widths=[]
     if column:
         q=column['near'];v=column['axis']
         a.member(column['role'],column['pid'],add(q,mul(v,-24)),add(q,mul(v,24)),y=column['y'],
@@ -73,11 +101,21 @@ def make_scene(source,rows,profiles,records,direction):
         v=r['away'];h=host['axis'];n=sub(v,mul(h,dot(v,h)))
         if math.dist(n,[0,0,0])<1e-7:return 0.
         n=unit(n)
-        def cross_values(row):
+        def section_regions(row):
             z=cross(row['axis'],row['y'])
-            return [u*dot(row['y'],n)+w*dot(z,n) for poly in strips(profiles[row['pid']],profiles) for u,w in poly]
-        support=dot(host['near'],n)+max(cross_values(host))
-        return (support-dot(r['near'],n)-min(cross_values(r)))/dot(v,n)
+            return [[add(row['near'],add(mul(row['y'],u),mul(z,w))) for u,w in poly]
+                    for poly in strips(profiles[row['pid']],profiles)]
+        actual=[]
+        for hp in section_regions(host):
+            for rp in section_regions(r):
+                if host['kind']=='truss_chord':
+                    # A tube may fit wholly between the two chord flanges.
+                    # Only real steel strips with overlapping out-of-plane
+                    # coordinates can constrain its terminal cut.
+                    if min(max(q[1] for q in hp),max(q[1] for q in rp))<=max(min(q[1] for q in hp),min(q[1] for q in rp))+1e-8:
+                        continue
+                actual.append((max(dot(q,n) for q in hp)-min(dot(q,n) for q in rp))/dot(v,n))
+        return max(actual,default=0.)
     for r in chords:
         d=max(0.,support_distance(r,column)) if column else 0.
         q=add(r['near'],mul(r['away'],d));starts[r['role']]=q
@@ -127,31 +165,98 @@ def make_scene(source,rows,profiles,records,direction):
                         basis='S thickness and grade; A chord-web fit',
                         description='Stepped splice gusset fitted to both chord webs')
         gusset['selected_material']=grade
+    minimum={};sections={};selections={}
     for r in webs:
         v=r['away'];pid=r['pid'];pr=profiles[pid];d=max([2.]+[support_distance(r,h)+.125 for h in chords+([column] if column else [])])
         zaxis=cross(r['axis'],r['y'])
-        section=[add(mul(r['y'],u),mul(zaxis,z)) for poly in strips(pr,profiles) for u,z in poly]
+        sections[r['role']]=[add(mul(r['y'],u),mul(zaxis,z)) for poly in strips(pr,profiles) for u,z in poly]
+        rid,selected=end_selection(records,pid,direction,abs(v[2])>.999,source,r['role'])
+        selected.update(r.get('slotted_selection',{}))
+        references.add(rid);wl=selected['length']
+        across=unit([-v[2],0.,v[0]])
+        width=selected.get('width')
+        column_limit=None
+        if width is not None and selected['kind']=='slot':
+            # Both extremities of the selected section must lie on plate steel.
+            # A chord web bounds the plate vertically and the boxed column
+            # face bounds it horizontally at the terminal panel.
+            side=1 if v[2]>0 else -1
+            chord_face=max(edge[2]*side for _,edge,_ in chord_edges)
+            d=max(d,(chord_face-r['near'][2]*side+abs(across[2])*width/2)/abs(v[2]))
+            if column and abs(v[0])>1e-7:
+                out=1 if v[0]>0 else -1
+                face=max(edge[0]*out for _,edge,_ in chord_edges)
+                possible=(face-r['near'][0]*out+abs(across[0])*width/2)/abs(v[0])
+                if possible+2*wl<r['length']:
+                    d=max(d,possible)
+                else:
+                    # The selected runs at its two ends already consume all
+                    # remaining space. Keep the real host, welds and fit visible
+                    # in the candidate. The independent width/overlap tests hold it.
+                    column_limit=(out,face)
+        minimum[r['role']]=d
+        selections[r['role']]=selected,column_limit
+    for r in webs:
+        role=r['role'];v=r['away'];pid=r['pid'];pr=profiles[pid]
+        selected,column_limit=selections[role]
+        d=minimum[role];across=unit([-v[2],0.,v[0]])
+        width=selected.get('width');wl=selected['length']
         for other in webs:
             if other is r:continue
             diff=sub(v,other['away'])
             if math.dist(diff,[0,0,0])<.01:continue
-            n=unit(diff);d=max(d,(.125-min(dot(q,n) for q in section)-dot(r['near'],n))/dot(v,n))
-        rid,selected=end_selection(records,pid,direction,abs(v[2])>.999,source,r['role'])
-        references.add(rid);wl=selected['length'];q=add(r['near'],mul(v,d))
+            n=unit(diff)
+            own_before=dot(r['near'],n)+min(dot(q,n) for q in sections[role])
+            # A web attached to a boxed column at its other end has much less
+            # available steel. Put its cut first, then set the neighbour's cut
+            # to clear that actual finite tube. Their worklines stay unchanged.
+            if r.get('column_end_diagonal') and not other.get('column_end_diagonal'):
+                continue
+            bound=0.
+            if other.get('column_end_diagonal') and not r.get('column_end_diagonal'):
+                k=other['role']
+                bound=dot(add(other['near'],mul(other['away'],minimum[k])),n)+max(dot(q,n) for q in sections[k])
+                if width is not None and selections[k][0].get('tip_overrun'):
+                    # Keep this member's whole checked section outside the
+                    # neighbouring tube's narrow terminal relief. The true
+                    # tube-side plane gives the least necessary extra retreat.
+                    side=unit([-other['away'][2],0.,other['away'][0]])
+                    if dot(v,side)<0:side=mul(side,-1)
+                    rate=dot(v,side)
+                    if rate>1e-7:
+                        outer=dot(other['near'],side)+max(dot(q,side) for q in sections[k])
+                        start=dot(r['near'],side)-abs(dot(across,side))*width/2
+                        margin=selections[k][0]['size']
+                        d=max(d,(outer+margin+.001-start)/rate)
+            d=max(d,(.125+bound-own_before)/dot(v,n))
+        q=add(r['near'],mul(v,d))
         if d+wl>=r['length']:
             raise ValueError('STMF cutback consumes source weld length at '+r['role'])
         starts[r['role']]=q
         part=a.member(r['role'],pid,q,add(q,mul(v,min(wl+12,r['length']-d))),y=r['y'])
-        across=unit([-v[2],0.,v[0]])
         extent=pr['dimensions'].get('h',pr['dimensions'].get('width'))/2
         if selected['kind']=='slot':
+            if width is not None:
+                stations=[add(q,mul(across,sign*width/2)) for sign in (-1,1)]
+                if column_limit:
+                    sign,face=column_limit
+                    # Intersect the selected inclined transfer line with the
+                    # actual receiving face; moving only X would create a kink.
+                    for i,point in enumerate(stations):
+                        if sign*point[0]<face:
+                            stations[i]=add(q,mul(across,(sign*face-q[0])/across[0]))
+                outline.extend((s[0],s[2]) for s in stations)
+                widths.append([[s[0],s[2]] for s in stations])
+                if abs(math.dist(*stations)-width)<1e-4:
+                    a.dim(*stations,label=f'{r["role"]} effective width {width:.4g} in',basis='S')
             for side in (-1,1):
                 for face in (-1,1):
                     start=add(q,mul(across,side*extent));start[1]=gy+face*t/2
                     finish=add(start,mul(v,wl))
                     a.weld(r['role']+f'-S{side}-{face}',start,finish,[r['role'],'GUSSET'],
                            selected['size'],basis=selected['basis'],description='Slotted HSS weld, four lines')
-                    outline.extend([(start[0],start[2]),(finish[0]+v[0]*t,finish[2]+v[2]*t)])
+                    nose=min(t,max(0.,selected.get('tip_overrun',t+.0625)-.0625))
+                    outline.extend([(start[0],start[2]),(finish[0]+v[0]*nose,finish[2]+v[2]*nose)])
             pending.append((r,part,selected))
         else:
             for side in (-1,1):
@@ -165,6 +270,28 @@ def make_scene(source,rows,profiles,records,direction):
             a.weld('G-'+role,edge,other,[role,'GUSSET'],.3125,basis='A',
                    description='Gusset to actual chord web; openBIM fit weld path')
         poly=hull(outline)
+        terminal_cuts=[(r,part,s) for r,part,s in pending if s.get('tip_overrun') is not None]
+        if terminal_cuts:
+            from shapely.geometry import Polygon
+            footprint=Polygon(poly)
+            for r,part,selection in terminal_cuts:
+                # A hull spanning several weld groups can carry unused stock
+                # past a selected tube's blind slot. Relieve only that tube's
+                # finite strip, retaining the other web attachments.
+                q=part['member']['axis'][0];u=r['away'];v=(-u[2],u[0])
+                nose=selection['length']+max(0.,selection['tip_overrun']-.0625)
+                # Keep one selected fillet leg clear beside the end of the
+                # slotted wall. This avoids a residual free-edge tooth beside
+                # the weld as the opposite gusset approaches the same tube.
+                half=profiles[r['pid']]['dimensions']['h']/2+selection['size']
+                far=max((x-q[0])*u[0]+(z-q[2])*u[2] for x,z in poly)+1.
+                if far<=nose:continue
+                mask=Polygon([(q[0]+a*u[0]+b*v[0],q[2]+a*u[2]+b*v[1])
+                              for a,b in ((nose,-half),(far,-half),(far,half),(nose,half))])
+                footprint=footprint.difference(mask)
+            if footprint.geom_type!='Polygon' or footprint.interiors:
+                raise ValueError('STMF finite slot relief divides its connected gusset')
+            poly=list(footprint.exterior.coords)[:-1]
         gusset=a.polygon('GUSSET',[[x,gy-t/2,z] for x,z in poly],t,
                          basis='S thickness and grade; A located perimeter',description='Source STMF node gusset')
         gusset['selected_material']=grade
@@ -179,6 +306,7 @@ def make_scene(source,rows,profiles,records,direction):
     a.notes.append('Explicit source welds and slot widths follow the selected vertical, diagonal or flat-bar detail; remaining terminal stations and gusset perimeter are openBIM fits.')
     scene=dict(source,**{k:v for k,v in a.result().items() if k not in ('id','reference','sheet')})
     scene['source_record_ids']=sorted(references)
+    if widths:scene['checked_transfer_sections_xz_in']=widths
     return scene,starts,slots
 
 
@@ -196,6 +324,12 @@ def repair_stmf(package,model):
             if sign not in (-1,1) or not thick>0:raise ValueError('Invalid crossing plate face or thickness at '+interface['id'])
             crossing_plies[mid]=(normal,sign,thick)
     connections={c['id']:c for c in model['connections']};cache={};variants=defaultdict(list);changed={};edits=defaultdict(dict)
+    terminal_diagonals=set();opposite_ends=defaultdict(list)
+    for c in physical['connections']:
+        bindings=c.get('assembly_instance',{}).get('bindings',{})
+        if not any(members.get(mid,{}).get('kind')=='column' for mid in bindings.values()):continue
+        terminal_diagonals.update(mid for mid in bindings.values() if members.get(mid,{}).get('kind')=='truss_web' and
+                                  abs(unit(sub(*members[mid]['axis']))[2])<.999)
     for c in physical['connections']:
         scene=original.get(c.get('assembly_id'));frame=c.get('assembly_instance',{})
         if not scene or scene['family'] not in ('review_stmf_node','review_stmf_end'):continue
@@ -222,8 +356,13 @@ def repair_stmf(package,model):
                 from .hr_boxed_plies import cropped_plies
                 station=dot(sub(near,add(e[0],m['end_offsets'][0])),axis)
                 rows[-1]['plies']=cropped_plies(m['section_plies'],station-24,station+24)
+            if m['kind']=='truss_web' and profiles[m['profile_id']]['family']=='rhs':
+                rows[-1]['slotted_selection']=slotted_end_selection(package.get('source_handoff',{}),c['id'],mid,
+                                                                   m['profile_id'],abs(axis[2])>.999)
+                rows[-1]['column_end_diagonal']=mid in terminal_diagonals
         rows.sort(key=lambda r:r['role'])
-        key=(scene['id'],direction,tuple((r['role'],r['pid'],r['kind'],round(r['length'],5),fingerprint(r.get('plies',[])),
+        key=(scene['id'],direction,tuple((r['role'],r['pid'],r['kind'],tuple(sorted(r.get('slotted_selection',{}).items())),
+            r.get('column_end_diagonal',False),round(r['length'],5),fingerprint(r.get('plies',[])),
             *(round(x,5) for attr in ('near','away','y') for x in r[attr])) for r in rows))
         if key not in cache:
             made,starts,slots=make_scene(scene,rows,profiles,records,direction)
@@ -231,6 +370,8 @@ def repair_stmf(package,model):
         made,starts,slots=cache[key];made['occurrences'].append(c['id']);changed[c['id']]=made
         for r in rows:
             if r['role'] not in starts:continue
+            if r.get('column_end_diagonal') and r.get('slotted_selection',{}).get('tip_overrun'):
+                opposite_ends[r['mid']].append((made,frame))
             m=members[r['mid']];m['local_y']=r['local_y']
             q=transformed(starts[r['role']],frame);end=r['end']
             offset=sub(q,m['axis'][end]);previous=edits[m['id']].get(end)
@@ -241,6 +382,8 @@ def repair_stmf(package,model):
                 # member orientation can reverse section-axis 1.
                 if slot['section_axis']==1 and end:slot=dict(slot,centre_in=-slot['centre_in'])
             edits[m['id']][end]=(offset,c['id'],slot)
+    from .stmf_opposed_gussets import fit_opposed
+    fit_opposed(opposite_ends,profiles)
     for mid,ends in edits.items():
         m=members[mid];m['end_offsets']=[ends[i][0] if i in ends else v for i,v in enumerate(m['end_offsets'])]
         length=math.dist(*[add(p,o) for p,o in zip(m['axis'],m['end_offsets'])])
