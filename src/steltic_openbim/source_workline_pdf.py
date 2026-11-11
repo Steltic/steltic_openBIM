@@ -29,7 +29,7 @@ class WorklineSheets(DesignSheets):
         self.text(self.W-650,72,'Physical offsets, cuts and connection placement remain TBD.',11)
         self.text(self.W-200,49,f'Sheet {self.page} / {number}',12)
 
-    def table(self,number,title,headers,widths,rows):
+    def table(self,number,title,headers,widths,rows,opening_by_id=None):
         page=0;y=0
         for row in rows:
             wrapped=[self.lines(str(t),w-20,11) for t,w in zip(row,widths)]
@@ -39,8 +39,12 @@ class WorklineSheets(DesignSheets):
                 for t,w in zip(headers,widths):self.text(x,y,t,13,font='Helvetica-Bold');x+=w
                 y-=35
             x=65
-            for lines,w in zip(wrapped,widths):
-                for i,line in enumerate(lines):self.text(x,y-i*15,line,11)
+            for col,(lines,w) in enumerate(zip(wrapped,widths)):
+                for i,line in enumerate(lines):
+                    feature=(opening_by_id or {}).get(row[0])
+                    if feature and feature['confirmed'] and 3<=col<8:
+                        self.opening_cell(x,y-i*15,line,11,feature,('x_ft','y_ft','z_ft','width_ft','height_ft')[col-3])
+                    else:self.text(x,y-i*15,line,11)
                 x+=w
             y-=height;self.line((65,y+12),(self.W-65,y+12),LIGHT,.5)
 

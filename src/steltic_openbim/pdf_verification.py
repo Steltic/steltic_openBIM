@@ -33,11 +33,14 @@ def inside(point, box):
     return box[0]-POINT_TOL <= x <= box[2]+POINT_TOL and box[1]-POINT_TOL <= y <= box[3]+POINT_TOL
 
 
-def read_ink(page):
+def read_ink(page, parts=None):
     """Interpret the generated PDF operators, including surrounding graphics state."""
     groups = []
     stream = page.get_contents()
-    if stream is None or b"/StelticDim" not in stream.get_data():
+    if stream is None:
+        return groups
+    raw=stream.get_data()
+    if b"/StelticDim" not in raw and (parts is None or b"/StelticPart" not in raw):
         return groups
     ctm, clipped, stroke, fill, width, text_mode = IDENTITY, False, (0,), (0,), 1, 0
     font, size, tm = None, 0, IDENTITY
@@ -60,6 +63,10 @@ def read_ink(page):
                 groups.append(active)
                 if clipped:
                     active["errors"].append("dimension inside an unverified clipping path")
+            elif args[0] == "/StelticPart" and parts is not None:
+                from .pdf_part_verification import FaceInk
+                active=FaceInk(int(args[1]["/N"]),clipped)
+                parts.append(active)
         elif op == b"EMC":
             active = tags.pop()
         elif op in (b"RG",b"G",b"K"):
@@ -73,6 +80,9 @@ def read_ink(page):
         elif op == b"Tf":
             font, size = args[0], float(args[1])
         if active is None:
+            continue
+        if not isinstance(active,dict):
+            active.read(op,args,ctm,stroke,fill,width)
             continue
         if op == b"n":
             path, point = [], None
@@ -182,7 +192,7 @@ def verify_ink(row, group, box):
     return errors
 
 
-def verify_source(row, model, scenes, openings):
+def verify_source(row, model, scenes, openings, native=None):
     source = row.get("source") or {}
     if source.get("kind")=="opening_cell":
         opening = openings[source["id"]]
@@ -214,6 +224,20 @@ def verify_source(row, model, scenes, openings):
             caption+=" (true length)"
         if caption!=row["text"] or d["basis"]!=row["basis"] or scene["reference"]!=row["reference"]:
             return ["printed assembly selection, dimension or basis disagrees with model"]
+    elif kind in ("native_envelope","native_bond") and native is not None:
+        cid=source["connection"]
+        if kind=="native_envelope":
+            lo,hi=native.extent(cid)
+            end=lo.copy()
+            end[source["axis"]]=hi[source["axis"]]
+            points=(lo,end)
+        else:
+            points=native.bond_line(cid,source["index"])
+        measured=math.dist(*points)
+        displayed=math.dist(*[[p[i] for i in axes] for p in points])
+        expected=inch_text(measured)+(" (true length)" if abs(measured-displayed)>.03125 else "")
+        if row["text"]!=expected:
+            return ["ordinary detail label differs from its IFC geometry or bond extent"]
     elif kind=="grid":
         if source.get("override"):
             return ["grid override has no independent source binding"]
@@ -253,9 +277,9 @@ def verify_source(row, model, scenes, openings):
         points = None
     else:
         return ["dimension source or feature is unbound"]
-    if abs(measured-value)>1e-5:
+    if abs(measured-value)>(1e-4 if kind=="native_envelope" else 1e-5):
         return ["model distance disagrees with dimension value"]
-    if kind!="assembly" and row["text"]!=inch_text(measured,feet=True):
+    if kind not in ("assembly","native_envelope","native_bond") and row["text"]!=inch_text(measured,feet=True):
         return ["printed numeric label disagrees with model distance"]
     if points is not None:
         expected = [tuple(p[i]*scale for i in axes) for p in points]
@@ -266,24 +290,42 @@ def verify_source(row, model, scenes, openings):
     return []
 
 
-def verify_dimensions(directory):
+def verify_dimensions(directory,ifc_path=None):
     directory = Path(directory)
-    result = dict(passed=False,pages_checked=0,dimensions_checked=0,findings=[])
+    result = dict(passed=False,pages_checked=0,dimensions_checked=0,projected_parts_checked=0,findings=[])
     findings = result["findings"]
     def finding(sheet, dim, issue):
         findings.append(dict(sheet=sheet,dimension=dim,issue=issue))
     try:
         manifest = json.loads((directory/"drawing_manifest.json").read_bytes())
-        model = json.loads((directory/"design_model.json").read_bytes())
+        native=None
+        if manifest.get("representation")=="source_physical_geometry":
+            from .pdf_native_evidence import NativeEvidence
+            native=NativeEvidence(directory,ifc_path)
+            model=native.drawing_model
+            scenes={}
+        else:
+            model = json.loads((directory/"design_model.json").read_bytes())
+            scenes = {s["id"]:s for s in json.loads((directory/"connection_assemblies.json").read_bytes())["assemblies"]}
         openings = {f["id"]:f for f in model["openings"]}
-        scenes = {s["id"]:s for s in json.loads((directory/"connection_assemblies.json").read_bytes())["assemblies"]}
         pages = defaultdict(dict)
         seen = set()
         found_assembly = Counter()
         found_cells = Counter()
         found_grid = Counter()
         expected_grid = Counter()
+        found_extents=Counter()
+        expected_extents=Counter()
+        fronts=defaultdict(list)
         for view in manifest["views"]:
+            if view.get("kind")=="connection_front":
+                fronts[view["sheet"]].append(view)
+            if native and view.get("kind")=="source_connection_assembly" and view.get("axes"):
+                cid=view["connection_id"]
+                lo,hi=native.extent(cid)
+                for axis in view["axes"]:
+                    if (hi[axis]-lo[axis])*view["points_per_inch"]>=.1:
+                        expected_extents[(view["sheet"],cid,axis)]+=1
             if not view.get("grid_axes"):
                 continue
             for axis,bounds in zip(view["axes"],view["bounds_in"]):
@@ -295,6 +337,9 @@ def verify_dimensions(directory):
                         if abs(b[1]-a[1])*view["points_per_inch"]>=.1:
                             expected_grid[(view["sheet"],axis,a[0],b[0])]+=1
         for row in manifest["dimensions"]:
+            # Older callers use these per-opening summary records; the five actual cells are checked below.
+            if native is not None and row.get("kind") in ("source_opening","confirmed_opening"):
+                continue
             dim = row.get("id")
             if not dim or dim in seen:
                 finding(row["sheet"],dim,"missing or duplicate dimension identity")
@@ -308,11 +353,16 @@ def verify_dimensions(directory):
                 found_cells[(src["id"],src["field"])] += 1
             elif src.get("kind")=="grid":
                 found_grid[(row["sheet"],src["axis"],*src["names"])]+=1
+            elif src.get("kind")=="native_envelope":
+                found_extents[(row["sheet"],src["connection"],src["axis"])]+=1
         if not seen:
             finding(None,None,"no verifiable dimensions")
         for key in found_grid.keys() | expected_grid.keys():
             if found_grid[key]!=expected_grid[key]:
                 finding(key[0],str(key[1:]),"grid interval missing, duplicated or extra")
+        for key in found_extents.keys() | expected_extents.keys():
+            if found_extents[key]!=expected_extents[key]:
+                finding(key[0],str(key[1:]),"connection extent missing, duplicated or extra")
         expected_cells={(opening,field) for opening in openings for field in ("x_ft","y_ft","z_ft","width_ft","height_ft")}
         for key in found_cells.keys() | expected_cells:
             if found_cells[key]!=int(key in expected_cells):
@@ -322,6 +372,8 @@ def verify_dimensions(directory):
         for scene in scenes.values():
             if scene["reference"] in omitted:
                 continue
+            if sum(v["assembly_id"]==scene["id"] for v in fronts[scene["sheet"]])!=1:
+                finding(scene["sheet"],scene["id"],"assembly has no unique front view")
             for index,d in enumerate(scene["dimensions"]):
                 axes = scene["front_axes"] if d["view"]=="front" else [i for i in range(3) if i!=scene["section_axis"]]
                 if math.dist([d["a"][i] for i in axes],[d["b"][i] for i in axes])>=.01:
@@ -338,21 +390,33 @@ def verify_dimensions(directory):
                 rows = dict(pages.pop(index,{}))
                 if page.rotation or abs(page.user_unit-1)>1e-7:
                     finding(sheet,None,"rotated or rescaled PDF page")
-                for group in read_ink(page):
+                part_ink=[]
+                for group in read_ink(page,part_ink):
                     dim = group["id"]
                     row = rows.pop(dim,None)
                     if row is None or row["sheet"]!=sheet:
                         finding(sheet,dim,"unknown, duplicate or misplaced printed dimension")
                         continue
-                    for issue in verify_ink(row,group,tuple(map(float,page.cropbox)))+verify_source(row,model,scenes,openings):
+                    for issue in verify_ink(row,group,tuple(map(float,page.cropbox)))+verify_source(row,model,scenes,openings,native):
                         finding(sheet,dim,issue)
                     result["dimensions_checked"]+=1
                 for dim in rows:
                     finding(sheet,dim,"missing printed dimension")
+                views=fronts.get(sheet,[])
+                if views or part_ink:
+                    from .pdf_part_verification import check_parts
+                    if len(views)!=1 or views[0]["assembly_id"] not in scenes:
+                        finding(sheet,None,"connection ink has no unique source assembly")
+                    else:
+                        view=views[0]
+                        checked,issues=check_parts(scenes[view["assembly_id"]],view,part_ink,tuple(map(float,page.cropbox)))
+                        result["projected_parts_checked"]+=checked
+                        for part,issue in issues:
+                            finding(sheet,part,issue)
                 result["pages_checked"]+=1
         if pages:
             finding(None,None,"dimension refers to an unavailable page")
-    except (ValueError,TypeError,KeyError,IndexError,OSError,ArithmeticError,StopIteration) as exc:
+    except (ValueError,TypeError,KeyError,IndexError,OSError,ArithmeticError,StopIteration,RuntimeError) as exc:
         finding(None,None,f"unreadable PDF evidence: {exc}")
     result["passed"] = not findings
     return result

@@ -69,13 +69,18 @@ def draw_view(sh,scene,mode,rect,title):
             for face in part['faces']:
                 points=[tr(project(p)) for p in face]
                 for aa,bb in zip(points,points[1:]+points[:1]):sh.line(aa,bb,'#aab5b4',.5,[5,4])
+    part_numbers={id(part):i for i,part in enumerate(parts)}
     for part,face in polys:
+        if mode=='front':
+            sh.c.addLiteral(f'/StelticPart << /N {part_numbers[id(part)]} >> BDC')
         fill,stroke=COLORS.get(part['kind'],COLORS['plate'])
         if (mode!='section' and part.get('drawing_style')=='outline') or (mode=='iso' and part.get('drawing_style')=='outline_iso'):
             pts=[tr(q) for q in face]
             for aa,bb in zip(pts,pts[1:]+pts[:1]):sh.line(aa,bb,'#8da7b3',.5,[5,3])
-            continue
-        path_polygon(sh.c,[tr(p) for p in face],fill,stroke,.7 if part['kind']=='member' else .6,edge_flags.get(id(face)))
+        else:
+            path_polygon(sh.c,[tr(p) for p in face],fill,stroke,.7 if part['kind']=='member' else .6,edge_flags.get(id(face)))
+        if mode=='front':
+            sh.c.addLiteral('EMC')
     if mode=='front' and scene['family']=='review_transfer_truss':
         for part in parts:
             if part['kind']!='member':continue
@@ -161,7 +166,7 @@ def draw_view(sh,scene,mode,rect,title):
             aa,bb=project(weld['a']),project(weld['b']);sh.line(tr(aa),tr(bb),'#ae4742',2)
             if not rail_welds:
                 pt=tr([(aa[i]+bb[i])/2 for i in range(3)]);sh.label(pt[0]+7,pt[1]+4,weld['id'],10,'#a54841')
-    sh.views.append(dict(sheet=sh.current,kind='connection_'+mode,assembly_id=scene['id'],scale_denominator=denom,points_per_inch=scale,
+    sh.views.append(dict(sheet=sh.current,kind='connection_'+mode,assembly_id=scene['id'],scale_denominator=denom,points_per_inch=scale,rect_pt=list(rect),
                          section_axis=scene['section_axis'] if mode=='section' else None,section_at=scene['section_at'] if mode=='section' else None))
 
 

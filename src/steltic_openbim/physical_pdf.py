@@ -130,7 +130,8 @@ def plot(sh, number, title, members, axes=(0, 1), features=(), z=None):
     if axes[1] == 2:
         for a, b in zip(sh.m['levels'], sh.m['levels'][1:]):
             p = [0, 0, a]; q = [0, 0, b]; p[axes[0]] = q[axes[0]] = bounds[0][0]
-            sh.dim(tr(p), tr(q), 78, value=b-a, ref='Source level interval')
+            sh.dim(tr(p), tr(q), 78, value=b-a, ref='Source level interval',
+                   source=dict(kind='levels'),model_points=[p,q])
         for elevation in sh.m['levels']:
             p = [0, 0, elevation]; p[axes[0]] = bounds[0][1]
             x, y = tr(p); sh.label(x + 40, y + 4, feet(elevation), 10)
@@ -193,22 +194,31 @@ def detail(sh, row):
                 pp = [tr(p) for p in line]
                 for a, b in zip(pp, pp[1:]): sh.line(a, b, ASSUMED, 1.4, [5, 3])
             if axes and bonds:
-                for bond in bonds:
+                for bond_index,bond in enumerate(bonds):
                     local=bim_bonds.reference_lines(dict(template,bond_interfaces=[bond]))[0]
                     line=[bim_assemblies.transformed(q,frame) for q in local]
                     a,b=line[0],line[-1]
                     if math.dist(tr(a),tr(b))>1:
                         value=math.dist(a,b)
-                        sh.dim(tr(a),tr(b),-30,value=value,label=inches(value),ref='Declared reinforcement bond extent; capacity unverified',size=11)
+                        origin=tr([0,0,0])
+                        projected=math.dist([a[i] for i in axes],[b[i] for i in axes])
+                        label=inches(value)+(' (true length)' if abs(value-projected)>.03125 else '')
+                        sh.dim(tr(a),tr(b),-30,value=value,label=label,ref='Declared reinforcement bond extent; capacity unverified',size=11,
+                               source=dict(kind='native_bond',connection=source['id'],index=bond_index),
+                               projection=dict(sheet=sh.current,axes=list(axes),scale=72/scale,origin_pt=origin),
+                               model_points=[a,b])
             if axes and parts:
                 pp = [p for f, _ in parts for p in f]
                 low = [min(p[i] for p in pp) for i in range(3)]; high = [max(p[i] for p in pp) for i in range(3)]
-                a = list(low); b = list(low); b[axes[0]] = high[axes[0]]
-                value=high[axes[0]]-low[axes[0]]
-                sh.dim(tr(a), tr(b), -30, value=value, label=inches(value), ref='Source connection-part envelope', size=11)
-                b=list(low); b[axes[1]]=high[axes[1]]; value=high[axes[1]]-low[axes[1]]
-                sh.dim(tr(a), tr(b), 35, value=value, label=inches(value), ref='Source connection-part envelope', size=11)
+                a = list(low)
+                for axis,offset in zip(axes,(-30,35)):
+                    b=list(low);b[axis]=high[axis];value=high[axis]-low[axis]
+                    sh.dim(tr(a),tr(b),offset,value=value,label=inches(value),ref='Source connection-part envelope',size=11,
+                           source=dict(kind='native_envelope',connection=source['id'],axis=axis),
+                           projection=dict(sheet=sh.current,axes=list(axes),scale=72/scale,origin_pt=tr([0,0,0])),
+                           model_points=[a,b])
             sh.views.append(dict(sheet=sh.current, kind='source_connection_assembly' if parts else 'source_connection_reference', axes=list(axes) if axes else None,
+                                 points_per_inch=scale,origin_pt=tr([0,0,0]) if axes else None,
                                  connection_id=source['id'], part_ids=[p['id'] for p in selected_parts], contextual_member_ids=sorted(linked)))
     else:
         sh.text(85, sh.H-250, 'No located part geometry supplied for this family.', 22, ASSUMED)
@@ -298,7 +308,8 @@ def generate(package, state, dest):
             dims = [feet(f[key]*12) if f['confirmed'] else 'TBD' for key in ('x_ft','y_ft','z_ft','width_ft','height_ft')]
             rows.append([f['id'],f['level'],f['kind'],*dims,f['query_id']+(' / confirmed' if f['confirmed'] else ' / resolve query')])
             if f['confirmed']: sh.dimensions.append(dict(kind='source_opening' if f.get('geometry_role')=='source_opening' else 'confirmed_opening', feature_id=f['id'], values_ft={key:f[key] for key in ('x_ft','y_ft','z_ft','width_ft','height_ft')}))
-        sh.table('A','Opening schedule',['ID','Level','Kind','X','Y','Z','Width','Height','Source / request'],[140,90,230,220,220,220,220,220,sh.W-1790],rows)
+        sh.table('A','Opening schedule',['ID','Level','Kind','X','Y','Z','Width','Height','Source / request'],[140,90,230,220,220,220,220,220,sh.W-1790],rows,
+                 opening_by_id={f['id']:f for f in features})
     sh.c.save()
     write_json(dest/'member_index.json', model['members']); write_json(dest/'connection_index.json', model['connections'])
     write_json(dest/'source_records.json', package['design_records'])
