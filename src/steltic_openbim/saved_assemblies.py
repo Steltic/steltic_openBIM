@@ -269,6 +269,8 @@ def repair(package,model):
     from .review_hr_brace_ends import bind
     from .transfer_joint_fit import fit_end_offsets
     fit_end_offsets(model)
+    from .transfer_revision import populate as locate_transfer_fabrication
+    locate_transfer_fabrication(package,model)
     from .shared_apex import locate_pairs,consolidate
     from .brace_base_attachment import locate_grade_interfaces
     from .base_plate_extensions import locate as locate_base_tongues

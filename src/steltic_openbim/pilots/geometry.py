@@ -94,6 +94,13 @@ def member_solids(member,profiles,limits=None):
     lo,hi=[v*extent for v in clip]; d=unit(vector); y=member['local_y']; profile=profiles[member['profile_id']]
     base=strips(profile,profiles); rbs=member.get('rbs'); cope=member.get('cope')
     stations={lo,hi}
+    changes=member.get('fabricated_i_sections',[])
+    if changes:
+        from ..fabricated_i_section import check_intervals,interpolate
+        check_intervals(changes,extent)
+        if profile['family']!='i':
+            raise ValueError('Local wide-flange fabrication requires a W section')
+        stations.update(s for row in changes for s in (row['start_in'],row['end_in']) if lo<s<hi)
     from ..member_slots import validated,cut_sections
     slots=member.get('slots',[])
     if slots and 'extrusion_end_offsets' in member:
@@ -127,8 +134,9 @@ def member_solids(member,profiles,limits=None):
         if station-ordered[-1]>tolerance and hi-station>tolerance:
             ordered.append(station)
     stations=ordered+[hi]; solids=[]
-    def shape(at,index):
-        poly=[p[:] for p in base[index]]
+    def shape(at,index,alteration):
+        outline=strips(dict(profile,dimensions=interpolate(alteration,at)),profiles) if alteration else base
+        poly=[p[:] for p in outline[index]]
         if cuts and index in (0,2):
             reduction=0.
             for selected in cuts:
@@ -139,16 +147,20 @@ def member_solids(member,profiles,limits=None):
         return poly
     z=cross(d,y)
     for s,t in zip(stations,stations[1:]):
+        alteration=next((row for row in changes if row['start_in']<(s+t)/2<row['end_in']),None)
         coped=cope and ((0 in cope.get('ends',[0,1]) and (s+t)/2<cope['length_in']) or (1 in cope.get('ends',[0,1]) and extent-(s+t)/2<cope['length_in']))
         for index in range(len(base)):
             if coped and index==2: continue
             if slots:
-                for poly in cut_sections([base[index]],slots,(s+t)/2):
+                if alteration and alteration['start_dimensions']!=alteration['end_dimensions']:
+                    raise ValueError('Slotted tapered fabrication requires its explicit cut geometry')
+                section=shape(s,index,alteration) if alteration else base[index]
+                for poly in cut_sections([section],slots,(s+t)/2):
                     solids.append(extrude(poly,add(a,mul(d,s)),add(a,mul(d,t)),y))
                 continue
             rings=[]
             for at in [s,t]:
-                poly=shape(at,index)
+                poly=shape(at,index,alteration)
                 if coped and index==1:
                     ceiling=profile['dimensions']['d']/2-cope['depth_in']
                     for p in poly: p[1]=min(p[1],ceiling)

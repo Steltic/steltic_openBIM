@@ -41,6 +41,12 @@ def draw(ctx):
     selected = selections(ctx)
     chord = selected['transfer_chord']
     thickness = chord['thickness']
+    fabrication=c.get('parameters',{}).get('transfer_fabrication',{})
+    post=fabrication.get('post_weld',{})
+    if post:
+        m=next(m for m in ctx.ms if m['id']==post['member'])
+        selected['transfer_vertical']=dict(section=m['profile_id'],thickness=thickness,size=post['size_in'],
+            length=post['length_in'],metal=post['material'],start=post['start_in'],whitmore=None)
     if any(abs(r['thickness'] - thickness) > 1e-6 for r in selected.values()):
         raise ValueError('Transfer node has different selected gusset stocks at ' + c['id'])
     width = ctx.p[chord['section']]['dimensions']['bf']
@@ -51,6 +57,7 @@ def draw(ctx):
     def local(v):
         return [dot(v, direction) for direction in axes]
     witnesses, joins = [], []
+    inserts_by_tip={};roles={m['id']:'M'+str(i) for i,m in enumerate(ctx.ms)}
     for index, m in enumerate(ctx.ms):
         role = 'M' + str(index)
         d = ctx.p[m['profile_id']]['dimensions']
@@ -71,15 +78,24 @@ def draw(ctx):
         # whenever both sides of a through member are available.
         neg_span = next((r[2] for r in rays if r is not far), 0.)
         start = cap if moved else -min(neg_span, (spec['length'] / 2 if spec else 0.))
+        if spec and 'start' in spec:start=spec['start']
         if spec and start + spec['length'] > available + .001:
             raise ValueError('Selected transfer weld exceeds actual receiving steel at ' + c['id'] + ' ' + role)
         lo = cap if moved else -min(neg_span, max(16., -start + 4.))
         hi = min(available, max(24., start + (spec['length'] if spec else 12.) + 4.))
-        a.member(role, m['profile_id'], mul(v, lo), mul(v, hi), y=local(m['local_y']),
+        insert=fabrication.get('insert',{})
+        if insert and m['id']==insert['member']:
+            lo=min(lo,-insert['length_in']/2);hi=max(hi,insert['length_in']/2)
+        from .transfer_revision import shown_sections
+        alterations=shown_sections(m,c['point'],axis,lo,hi) if m.get('fabricated_i_sections') else []
+        a.member(role, m['profile_id'], mul(v, lo), mul(v, hi), y=local(m['local_y']),fabricated_i_sections=alterations,
                  description='Actual ' + m['kind'].replace('_', ' ') + ' at its located workpoint')
         if not spec:
             continue
         perp = [-v[2], 0., v[0]]
+        if insert and m['id']==insert['member']:
+            from .transfer_revision import inserts
+            inserts_by_tip[role]=inserts(a,role,v,perp,insert)
         for s, radius in ((start - thickness, d['d']/2 + thickness),
                           (start, max((spec['whitmore'] or 0.)/2, d['d']/2 + thickness)),
                           (start + spec['length'] + thickness, d['d']/2 + thickness)):
@@ -96,9 +112,15 @@ def draw(ctx):
         plate['selected_material'] = 'ASTM A572 Grade 50'
         for role, direction, perp, start, d, spec in joins:
             for sign in (-1, 1):
-                pt = add(add(mul(direction, start), mul(perp, sign*d['d']/2)), [0., side*d['bf']/2, 0.])
-                a.weld(f'W{role}-{side}-{sign}', pt, add(pt, mul(direction, spec['length'])), [role, name],
+                actual_width=width if role in inserts_by_tip else d['bf']
+                target=inserts_by_tip.get(role,{}).get((side,sign),role)
+                pt = add(add(mul(direction, start), mul(perp, sign*d['d']/2)), [0., side*actual_width/2, 0.])
+                a.weld(f'W{role}-{side}-{sign}', pt, add(pt, mul(direction, spec['length'])), [target, name],
                        spec['size'], description=f"Source {spec['metal']} flange-tip fillet, {spec['length']:g} in")
+                a.welds[-1]['selected_material']=spec['metal']
+    if fabrication.get('splice'):
+        from .transfer_revision import splice_welds
+        splice_welds(a,fabrication['splice'],roles)
     for role, axis, perp, start, _, spec in joins:
         if spec['whitmore']:
             center = mul(axis, start)
@@ -107,5 +129,5 @@ def draw(ctx):
     a.section_axis = 1
     a.section_at = width/2 + thickness/2
     a.notes.append('S: double plates and four longitudinal fillets at each selected arm. A: terminal cuts and perimeter are fitted to the located profiles. Vertical posts retain their full physical length.')
-    if any(abs(d['bf']-width) > .001 for _, _, _, _, d, _ in joins):
+    if any(abs(d['bf']-width) > .001 for role, _, _, _, d, _ in joins if role not in inserts_by_tip):
         a.notes.append('Review required: the support-column flange tips and truss flange tips occupy different planes. A support transition and edge stiffener detail must be resolved in the issued connection.')

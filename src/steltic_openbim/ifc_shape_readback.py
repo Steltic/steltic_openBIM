@@ -41,7 +41,7 @@ def unpack(mesh):
 
 def member_key(member):
     origin=np.asarray(member["axis"][0])
-    fields={key:member[key] for key in ("profile_id","local_y","end_offsets","extrusion_end_offsets","slots","rbs","cope","section_plies") if key in member}
+    fields={key:member[key] for key in ("profile_id","local_y","end_offsets","extrusion_end_offsets","slots","rbs","cope","section_plies","fabricated_i_sections") if key in member}
     fields["axis"]=[[0.,0.,0.],(np.asarray(member["axis"][1])-origin).round(9).tolist()]
     if member.get("terminal_planes"):
         fields["terminal_planes"]=[dict(normal=p["normal"],offset_in=round(p["offset_in"]-float(origin@p["normal"]),9))
