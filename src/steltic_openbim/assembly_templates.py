@@ -688,7 +688,12 @@ def build_scene(model,package,c,subtype=''):
                     along=sum(x*y for x,y in zip(normal,v));crossing=abs(sum(x*y for x,y in zip(normal,across)))
                     bolt_start=max(bolt_start,(.75*crossing+.75)/max(along,.01))
             last=max(dot(q,v) for q in part['member']['axis'])
-            stations,offsets,reduced=short_screw_layout(v,normals,last,math.ceil(bolt_start*2)/2)
+            usual=math.ceil(bolt_start*2)/2
+            if model.get('pilot','').startswith('hr'):
+                from .hr_joist_nodes import screw_stations
+                stations,offsets,reduced=screw_stations(v,normals,m,last,usual)
+            else:
+                stations,offsets,reduced=short_screw_layout(v,normals,last,usual)
             bolt_layouts[n]=(stations,offsets)
             if reduced:short_members.append('M'+str(n))
         # One node plate for EVERY actual load-carrying web plane, including all

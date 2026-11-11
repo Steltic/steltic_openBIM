@@ -213,12 +213,15 @@ def fit_brb_rows(selected,axis,support_station,column_clearance=None):
     rows=selected['rows'];count=selected['count'];dia=selected['diameter'];pitch=selected['pitch']
     if rows<1 or count<2*rows or count%rows or pitch<=dia:
         raise ValueError('Invalid selected BRB bolt count/rows/pitch')
-    edge=max(1.5*dia,2.)
+    edge=selected.get('loaded_edge',max(1.5*dia,2.))
     other_pitch=selected.get('orthogonal_pitch') or 3*dia
     across=count//rows
     choices=[]
-    for row_axis,n_along,n_across,s_along,s_across in (
-            ('transverse',across,rows,other_pitch,pitch),('longitudinal',rows,across,pitch,other_pitch)):
+    orientations=(('transverse',across,rows,other_pitch,pitch),('longitudinal',rows,across,pitch,other_pitch))
+    if 'pattern' in selected:
+        orientations=(('longitudinal',selected['along_count'],selected['across_count'],
+                       selected['along_pitch'],selected['across_pitch']),)
+    for row_axis,n_along,n_across,s_along,s_across in orientations:
         width=(n_across-1)*s_across+2*edge
         start=max(support_station+edge,support_station+(width/2*abs(axis[0])+.125)/abs(axis[2]))
         if column_clearance is not None:
@@ -240,7 +243,7 @@ def bolted_brb_end(assembly, selected, axis, station, thickness, support_station
     layout=layout or dict(row_axis='transverse',along_count=count//rows,across_count=rows,
                           along_pitch=3*dia,across_pitch=pitch,adopted_orthogonal_pitch=3*dia)
     columns=layout['along_count']
-    edge=max(1.5*dia,2.)
+    edge=selected.get('loaded_edge',max(1.5*dia,2.))
     gauge=layout['across_pitch']
     width=(layout['across_count']-1)*gauge+2*edge
     start=max(station,support_station+edge)
@@ -279,6 +282,11 @@ def bolted_brb_end(assembly, selected, axis, station, thickness, support_station
         ['SPLICE0','GUSSET','SPLICE1'],f'{count} x {dia:g} in {selected["material"]} source splice bolts')
     group.update(functional_kind='bolt',selected_material=selected['material'],parameters=dict(
         selected_rows=rows,selected_row_spacing_in=pitch,**layout))
-    assembly.notes.append(f'S: {count} x {dia:g} in {selected["material"]} bolts in {rows} rows at {pitch:g} in. A: row spacing oriented {layout["row_axis"]} to the brace; orthogonal spacing {layout["adopted_orthogonal_pitch"]:g} in. The finite group clears its actual supports.')
+    if 'pattern' in selected:
+        assembly.notes.append(f'S: {count} x {dia:g} in {selected["material"]} bolts, '
+            f'{columns} stations along the brace at {layout["along_pitch"]:g} in, '
+            f'{layout["across_count"]} transverse lines at {gauge:g} in, {edge:g} in loaded end distance.')
+    else:
+        assembly.notes.append(f'S: {count} x {dia:g} in {selected["material"]} bolts in {rows} rows at {pitch:g} in. A: row spacing oriented {layout["row_axis"]} to the brace; orthogonal spacing {layout["adopted_orthogonal_pitch"]:g} in.')
     contour=[(at(s,0,z)[0],at(s,0,z)[2]) for s in (start,far) for z in (-width/2,width/2)]
     return at(far+supplier_overlap,0,0),contour,[group]

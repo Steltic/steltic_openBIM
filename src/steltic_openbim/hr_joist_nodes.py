@@ -89,23 +89,28 @@ def bearing_face(host,profiles,post,point,direction):
     return face
 
 
+def screw_stations(direction,normals,member,last,usual):
+    """Reserve half the finite member for the gusset at its opposite endpoint."""
+    from .truss_node_geometry import short_screw_layout
+    ends=[add(p,o) for p,o in zip(member['axis'],member['end_offsets'])]
+    # Leave 1/16 in between the two adopted contours, 1/2 in from a
+    # screw centre to the outline, and 3/16 in for the opposed-ply stagger.
+    cap=math.dist(*ends)/2-.03125-.5-.1875
+    if usual+3<=cap:return short_screw_layout(direction,normals,last,usual)
+    # The short-end fitter measures clearance from the physical mitres.
+    # Keep six screws with its 1-in pitch wherever the shorter region fits.
+    return short_screw_layout(direction,normals,min(last,cap+.375),usual)
+
+
 def gussets(assembly,profiles,ends,layouts):
     planes=defaultdict(list)
-    contour=[(-4.,-4.),(4.,-4.),(4.,4.),(-4.,4.)]
     for n,direction,member in ends:
-        across=[-direction[2],0.,direction[0]]
-        tip=layouts[n][0][-1]+2
-        for side in (-3.,3.):
-            q=add(mul(direction,tip),mul(across,side))
-            contour.append((q[0],q[2]))
         for i,(face,side,thickness) in enumerate(web_faces(profiles,member['profile_id'])):
             mid=round(face+side*.125/2,6)
             planes[mid].append((n,i,face,side,thickness,direction))
-    outline=hull(contour)
     for index,(mid,plies) in enumerate(sorted(planes.items()),1):
         label='P'+str(index)
-        assembly.polygon(label,[[x,mid-.0625,z] for x,z in outline],.125,basis='A',
-                         description='One continuous 1/8 in gusset shared by the actual adjoining web plies')
+        groups=[];outline_points=[(0.,0.)]
         for n,i,face,side,thickness,direction in plies:
             stations,offsets=layouts[n];across=[-direction[2],0.,direction[0]]
             # Opposed screws land at distinct stations in the common plate.
@@ -113,6 +118,13 @@ def gussets(assembly,profiles,ends,layouts):
             shift=side*.1875 if sum(item[0]==n for item in plies)>1 else 0.
             points=[add(mul(direction,s+shift),add(mul(across,w),[0.,face-side*thickness,0.]))
                     for s in stations for w in offsets]
+            for x,_,z in points:
+                outline_points.extend((x+dx,z+dz) for dx in (-.5,.5) for dz in (-.5,.5))
+            groups.append((n,i,side,thickness,points))
+        outline=hull(outline_points)
+        assembly.polygon(label,[[x,mid-.0625,z] for x,z in outline],.125,basis='A',
+                         description='One continuous 1/8 in node gusset fitted to all screw groups; A 1/2 in screw-centre edge allowance')
+        for n,i,side,thickness,points in groups:
             assembly.fastener(f'F{index}-{n}-PLY{i+1}',points,[0.,side,0.],.25,.125+thickness,
                 ['M'+str(n),label],f'{len(points)} No.14 screws through one channel web ply and shared gusset',
                 'A',screw=True)

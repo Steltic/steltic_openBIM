@@ -59,7 +59,7 @@ def dimensions(part):
     return dict(thickness=float(spans[index]),in_plane=sizes,local_points=np.unique(np.round(points,8),axis=0))
 
 
-def verify_plates(fields,variants,parts,instance,materials,cache,template,check):
+def verify_plates(fields,variants,parts,instance,materials,cache,template,check,tongues=()):
     roles=set()
     if 'base_plate_anchors' in variants:roles.update(('base_plate','grout'))
     if variants&{'single_plate_shear','two_plate_shear','two_plate_bolted','two_plate_beam_end'}:roles.add('shear_plate')
@@ -85,6 +85,18 @@ def verify_plates(fields,variants,parts,instance,materials,cache,template,check)
             for rw,width in relevant.get('width_in',[]):
                 for rl,length in relevant.get('length_in',[]):
                     target=sorted([width,length])
+                    if tongues:
+                        from shapely.geometry import Polygon
+                        from shapely.ops import unary_union
+                        from .base_tongue_readback import measure_polygon
+                        evidence=[]
+                        for p in selected:
+                            faces=solid_faces(p.get('geometry',{}))
+                            pieces=[q for face in faces if (q:=Polygon(face[:,:2])).is_valid and q.area>1e-8]
+                            evidence.append(measure_polygon(unary_union(pieces),width,length,tongues))
+                        check('selected_base_plate_plan_size',len(evidence)==1 and all(ok for _,ok in evidence),
+                              {'stock_in':target,'tongues':tongues},[row for row,_ in evidence],rw if rw==rl else [rw,rl])
+                        continue
                     measured=[row['in_plane'] if row else None for row in dims]
                     check('selected_base_plate_plan_size',bool(measured) and all(v is not None and np.allclose(v,target,rtol=0,atol=1e-4) for v in measured),
                           target,measured,rw if rw==rl else [rw,rl])

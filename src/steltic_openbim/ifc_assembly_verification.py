@@ -179,7 +179,12 @@ class Assessment:
         self.crossing_occurrences = Counter()
         self.owned_gussets = []
         self.anchor_measurements = []
+        from .base_tongue_readback import intended_tongues
+        self.required_tongues,tongue_findings=intended_tongues(physical,design_records)
+        self.findings.extend(tongue_findings)
+        self.tongue_measurements={}
         self.brb_core_measurements = []
+        self.brb_bolt_measurements = []
         from .brb_supplier_core import source_requirements
         self.core_requirements = source_requirements(physical['members'],handoff,design_records)
         self.checked_core_ends = Counter()
@@ -423,6 +428,20 @@ class Assessment:
         product = self.rb.assemblies[cid]
         if property_value(product, 'SourceId') != cid:
             raise ValueError('IFC assembly SourceId differs from the occurrence')
+        if cid in self.required_tongues:
+            from .base_tongue_readback import measure_solid
+            source=selected(self.handoff,cid)
+            width=set(source.get(('base_plate','width_in'),[]));length=set(source.get(('base_plate','length_in'),[]))
+            plates=[loc for loc in self.rb.ranges[tid] if loc['kind']=='plate' and loc['id'] in ('P1','BASE','BP','BASE-PLATE','BASE_PLATE')]
+            if len(plates)!=1 or len(width)!=1 or len(length)!=1:
+                self.issue('selected_base_tongue_stock_unresolved')
+            else:
+                _,raw,matrix=self.rb.mesh(product);loc=plates[0]
+                sole=raw.subset(loc['face_start'],loc['face_count']).transformed(inverse@matrix)
+                data,issues=measure_solid(sole,width.pop(),length.pop(),self.required_tongues[cid])
+                self.tongue_measurements[cid]=dict(data,connection=cid,sheet=self.context.get('sheet'))
+                self.counts['actual_integral_base_tongues']+=len(self.required_tongues[cid])
+                for detail in issues:self.issue('selected_actual_base_tongue_differs',detail=detail)
         if any(p['kind']=='anchor' for p in parts.values()):
             from .ifc_anchor_readback import verify_anchors
             anchor_facts,anchor_issues=verify_anchors(self.rb,product,tid,inst,self.members,self.profiles,
@@ -513,6 +532,20 @@ class Assessment:
                 self.counts.update(counts)
                 for finding in issues:self.issue(**finding)
         receivers = {r['id']: r for r in template.get('receivers', [])}
+        directional={k[1]:v for k,v in fields.items() if k[0]=='brb_bolt_pattern' and v}
+        if directional:
+            from .brb_bolt_readback import measure_layout
+            if len(br)!=1 or len(gussets)!=1 or any(len(set(v))!=1 for v in directional.values()):
+                self.issue('directional_brb_bolt_layout_unresolved')
+            else:
+                mid=next(iter(br.values()));m=self.members[mid];gusset=next(iter(gussets))
+                end=min(range(2),key=lambda i:np.linalg.norm(np.subtract(m['axis'][i],inst['origin'])))
+                v=inverse[:3,:3]@np.subtract(m['axis'][1-end],m['axis'][end])
+                bolts=[meshes[k] for k,p in parts.items() if p['kind']=='bolt' and gusset in p.get('connects',[])]
+                evidence,errors=measure_layout(meshes[gusset],bolts,v,{k:values[0] for k,values in directional.items()})
+                self.brb_bolt_measurements.append(dict(evidence,member=mid,end_index=end,connection=cid,sheet=self.context.get('sheet')))
+                self.counts['actual_directional_brb_bolt_groups']+=1
+                for detail in errors:self.issue('actual_directional_brb_bolt_layout_differs',member=mid,detail=detail)
         self.paths(cid, parts, meshes, inst, instance, curves, br, gussets, fields,template.get('source_interfaces',[]))
         crossing_id = connection.get('source_crossing_id',cid)
         if crossing_id in self.crossings:
@@ -909,6 +942,8 @@ def verify_assembly_fit(ifc_path, physical, source_handoff, design_records=()):
     check.counts['checked_fitted_gusset_outlines']=sum('unsupported_area_in2' in r for r in outline_rows)
     check.findings.extend(outline_issues)
     inventory = {m['id'] for m in physical['members'] if brace_kind(m)}
+    for cid in sorted(set(check.required_tongues)-set(check.tongue_measurements)):
+        check.findings.append(dict(code='selected_integral_base_tongue_has_no_measured_sole',connection=cid))
     check.context={}
     for mid in check.core_requirements:
         if mid not in check.checked_members:
@@ -928,4 +963,4 @@ def verify_assembly_fit(ifc_path, physical, source_handoff, design_records=()):
     missing = sorted((mid, end) for mid in inventory for end in (0,1) if (mid,end) not in check.covered_ends)
     for mid, end in missing:
         check.findings.append({'code':'brace_end_has_no_matching_physical_receiver', 'member':mid, 'end_index':end})
-    return {'passed': not check.findings, 'counts': dict(check.counts), 'member_inventory': len(inventory), 'transfer_measurements': check.transfer_measurements, 'gusset_outline_measurements': outline_rows, 'support_weld_measurements': check.support_weld_measurements, 'brb_core_measurements': check.brb_core_measurements, 'anchor_measurements': check.anchor_measurements, 'gusset_clearance_measurements': check.gusset_clearance_measurements, 'unique_ends': 2*len(inventory), 'mapped_ends': len(check.covered_ends), 'crossing_measurements': check.crossing_measurements, 'findings': check.findings, 'numeric_tolerance_in': TOL, 'schema': 'steltic.actual_assembly_fit.v1'}
+    return {'passed': not check.findings, 'counts': dict(check.counts), 'member_inventory': len(inventory), 'transfer_measurements': check.transfer_measurements, 'gusset_outline_measurements': outline_rows, 'support_weld_measurements': check.support_weld_measurements, 'brb_core_measurements': check.brb_core_measurements, 'brb_bolt_measurements': check.brb_bolt_measurements, 'anchor_measurements': check.anchor_measurements, 'base_tongue_measurements': list(check.tongue_measurements.values()), 'gusset_clearance_measurements': check.gusset_clearance_measurements, 'unique_ends': 2*len(inventory), 'mapped_ends': len(check.covered_ends), 'crossing_measurements': check.crossing_measurements, 'findings': check.findings, 'numeric_tolerance_in': TOL, 'schema': 'steltic.actual_assembly_fit.v1'}

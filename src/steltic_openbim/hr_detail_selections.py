@@ -156,7 +156,8 @@ def bolted_brb(ctx):
     if variant in ('brb_bolted','brb_bolted_splice','bolted_brb'):
         required={'count':'count','diameter':'diameter_in','material':'material','rows':'rows','pitch':'pitch_in'}
         values={key:selected.get(('bolt',field)) for key,field in required.items()}
-        if all(value is not None for value in values.values()):return values
+        if all(value is not None for value in values.values()):
+            return with_bolt_pattern(values,selected)
         if not re.search(r'\bBRB end\b[^;|]*\bbolted between two splice plates\b',text,re.I):
             raise ValueError('Incomplete selected bolted BRB arrangement at '+ctx.c['id'])
     if variant=='brb_pinned':return None
@@ -166,8 +167,31 @@ def bolted_brb(ctx):
     if not match:
         raise ValueError('Missing selected bolted BRB pattern for '+ctx.c['id'])
     count,diameter,material,rows,pitch = match.groups()
-    return dict(count=int(selected.get(('bolt','count')) or count),
+    return with_bolt_pattern(dict(count=int(selected.get(('bolt','count')) or count),
                 diameter=float(selected.get(('bolt','diameter_in')) or number(diameter)),
                 material=str(selected.get(('bolt','material')) or material),
                 rows=int(selected.get(('bolt','rows')) or rows),
-                pitch=float(selected.get(('bolt','pitch_in')) or number(pitch)))
+                pitch=float(selected.get(('bolt','pitch_in')) or number(pitch))),selected)
+
+
+def with_bolt_pattern(values,selected):
+    pattern={k[1]:selected.get(k) for k in selected if k[0]=='brb_bolt_pattern'}
+    if not pattern:return values
+    required=('longitudinal_stations','transverse_lines','longitudinal_pitch_in','loaded_end_distance_in',
+              'block_shear_path_length_in','transverse_shear_plane_spacing_in')
+    if any(k not in pattern for k in required):
+        raise ValueError('Incomplete directional HR bolt pattern')
+    n,lines=pattern['longitudinal_stations'],pattern['transverse_lines']
+    if n!=int(n) or lines!=int(lines) or min(n,lines)<2 or n*lines!=values['count']:
+        raise ValueError('Directional HR bolt pattern differs from its selected bolt count')
+    pitch=pattern['longitudinal_pitch_in'];edge=pattern['loaded_end_distance_in']
+    gauge=pattern['transverse_shear_plane_spacing_in']
+    if lines==2:gauge_pitch=gauge
+    elif 'transverse_pitch_in' in pattern:gauge_pitch=pattern['transverse_pitch_in']
+    else:raise ValueError('HR multi-line bolt pattern requires its transverse spacing')
+    if (min(pitch,gauge_pitch)<=values['diameter'] or edge<=0 or
+            abs((n-1)*pitch+edge-pattern['block_shear_path_length_in'])>1e-4 or
+            abs((lines-1)*gauge_pitch-gauge)>1e-4):
+        raise ValueError('Directional HR screw-line spacing or block shear paths disagree')
+    return dict(values,pattern=pattern,along_count=int(n),across_count=int(lines),along_pitch=pitch,
+                across_pitch=gauge_pitch,loaded_edge=edge)

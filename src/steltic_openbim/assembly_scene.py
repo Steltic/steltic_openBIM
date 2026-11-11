@@ -162,7 +162,14 @@ class Assembly:
         return self.part(label,description or 'PL '+' x '.join(f'{v:g}' for v in size),part_faces({'geometry':g},self.profiles),basis,kind,geometry=g)
 
     def polygon(self,label,vertices,thickness,normal=(0,1,0),basis='A',description=None):
-        n=unit(normal);back=[add(p,mul(n,thickness)) for p in vertices]
+        n=unit(normal)
+        # Orient the ring with the extrusion. A valid clockwise drawing
+        # outline otherwise becomes an inward-facing (negative-volume) IFC solid.
+        origin=vertices[0];area=sum(dot(n,cross(sub(a,origin),sub(b,origin)))
+            for a,b in zip(vertices,vertices[1:]+vertices[:1]))
+        if abs(area)<1e-10 or thickness<=0:raise ValueError('Plate has no positive area or thickness: '+label)
+        if area<0:vertices=list(reversed(vertices))
+        back=[add(p,mul(n,thickness)) for p in vertices]
         faces=[list(reversed(vertices)),back]+[[vertices[i],vertices[(i+1)%len(vertices)],back[(i+1)%len(vertices)],back[i]] for i in range(len(vertices))]
         return self.part(label,description or f'Gusset PL t={thickness:g}',faces,basis,polygon=vertices,thickness=thickness,normal=n)
 

@@ -41,6 +41,9 @@ def verify_source_selections(package,drawing_model=None):
     if drawing_model:
         scenes={s['id']:s for s in drawing_model.get('connection_assemblies',drawing_model.get('assemblies',[]))}
     findings=[]
+    from .base_tongue_readback import intended_tongues
+    tongues,tongue_findings=intended_tongues(physical,package.get('design_records',[]))
+    findings.extend(tongue_findings)
     counts=Counter()
     plate_cache={}
     result=dict(passed=False,findings=findings,occurrences_checked=0,selected_comparisons=counts)
@@ -140,7 +143,7 @@ def verify_source_selections(package,drawing_model=None):
                 drawn=[w.get('size') for w in scene['welds'] if w['id'] in {p['id'] for p in welds}]
                 check('drawn_reinforcement_fillet',len(drawn)==len(welds) and all(n==value for n in drawn),value,drawn,rid)
         from .selected_plate_readback import verify_plates
-        verify_plates(fields,variants,parts,instance,materials,plate_cache,t.get('id',cid),check)
+        verify_plates(fields,variants,parts,instance,materials,plate_cache,t.get('id',cid),check,tongues.get(cid,[]))
         directional=any(fields['anchor_pattern',key] for key in ('edge_flange_normal_in','edge_along_flange_in','minimum_edge_in','flange_offset_in'))
         if directional:
             from .anchor_pattern_readback import measure_anchor_pattern

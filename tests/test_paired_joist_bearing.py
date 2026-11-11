@@ -11,6 +11,35 @@ from steltic_openbim.joint_mesh_readback import Mesh
 from steltic_openbim.review_hr_seats import roof
 
 
+def test_shallow_endpost_keeps_six_screws_per_ply_and_distinct_node_plates():
+    from shapely.geometry import Polygon
+    from steltic_openbim.hr_joist_nodes import screw_stations,gussets
+    profiles={'channel':dict(id='channel',family='channel',dimensions=dict(d=2.5,b=1.375,t=.055,lip=.375))}
+    post=dict(id='post',profile_id='channel',axis=[[0,0,0],[0,0,16]],end_offsets=[[0,0,0],[0,0,0]])
+    chord=dict(id='chord',profile_id='channel',axis=[[0,0,0],[30,0,0]],end_offsets=[[0,0,0],[0,0,0]])
+    outlines=[]
+    for elevation,sign in ((0.,1),(16.,-1)):
+        ends=[(1,[0.,0.,sign],post),(2,[1.,0.,0.],chord)]
+        layouts={i:screw_stations(v,[[.7071,0.,sign*.7071]],m,16,5)[:2] for i,v,m in ends}
+        a=Assembly('node',profiles);gussets(a,profiles,ends,layouts)
+        plate=next(p for p in a.parts if p['kind']=='plate')
+        outline=Polygon([(v[0],v[2]+elevation) for v in plate['polygon']])
+        for fastener in a.fasteners:
+            assert len(fastener['points'])==6
+            assert all(outline.buffer(-.49).covers(Point(q[0],q[2]+elevation)) for q in fastener['points'])
+        outlines.append(outline)
+    assert outlines[0].distance(outlines[1])>.0625
+
+
+@pytest.mark.parametrize('reverse',[False,True])
+def test_clockwise_and_counterclockwise_plate_rings_both_bound_positive_material(reverse):
+    a=Assembly('plate',{});ring=[[0,0,0],[3,0,0],[3,0,2],[0,0,2]]
+    p=a.polygon('P',ring[::-1] if reverse else ring,.75)
+    total=sum(float(np.dot(face[0],np.cross(face[i],face[i+1])))/6
+              for face in p['faces'] for i in range(1,len(face)-1))
+    assert total==pytest.approx(4.5)
+
+
 def mesh(part):
     vertices=[];faces=[]
     for polygon in part['faces']:
