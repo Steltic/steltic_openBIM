@@ -79,6 +79,16 @@ def make_stack(ctx,selection,v,station,depth,width):
     hull_pts=[(dot(p,v),dot(p,n)) for p in edges]
     hull_pts.extend([(fit_start,-half),(fit_start,half),(end,-half),(end,half)])
     outline=hull(hull_pts)
+    from .stack_edge_geometry import selected_outline,add_face_bars
+    brace=ctx.ms[0];core=brace.get('supplier_core')
+    fit=ctx.params.get('moving_head_fit')
+    if core and not fit:raise ValueError('Located structured pin stack is missing its two-end movement allocation')
+    dims=ctx.p[ctx.pid]['dimensions']
+    geometry=selected_outline(source,receiver,edges,v,n,dims['h']/2-dims['t'] if fit else None)
+    if geometry:
+        pin_s=geometry['pin_station'];pin=mul(v,pin_s);end=geometry['end_station'];cap_s=end+4.
+        outline=list(geometry['shape'].exterior.coords)[:-1]
+    if fit:cap_s=fit['front_in']
     if abs(4*cheek-source['cheek_weld_perimeter_in'])>1e-6:
         raise ValueError('Selected cheek perimeter and side are inconsistent')
     by_role={r['role']:r for r in rows}
@@ -91,6 +101,8 @@ def make_stack(ctx,selection,v,station,depth,width):
         if row['connected_to']=='host':
             primary=a.polygon(pid,[at(s,d,y) for s,d in reversed(outline)],t,basis='S',
                               description=f'Selected primary gusset {t:g} in; fitted contour around the selected bearing width')
+            if geometry:
+                add_face_bars(a,primary,dict(row,cheek_side_in=cheek),geometry,at,edges,support_welds,v,n)
             for w in support_welds:
                 edge=receiver.get('column_edge' if 'COLUMN' in w['connects'] else 'horizontal_edge',{})
                 if edge and (edge['count_per_leaf']!=2 or abs(math.dist(w['a'],w['b'])-edge['length_in'])>1e-5):
@@ -107,11 +119,13 @@ def make_stack(ctx,selection,v,station,depth,width):
                     if edge:a.welds[-1]['selected_material']=edge['material']
             part=primary
         elif row['connected_to']=='brace_end':
-            tongue_half=max(hole/2+2,cheek/2)
-            part=a.polygon(pid,rectangle(pin_s-hole/2-2,cap_s,-tongue_half,tongue_half,y),t,basis='S',
-                           description=f'Selected supplier tongue {t:g} in with adopted end-cap fit')
-            a.weld('W-'+pid,at(cap_s,-tongue_half,y+t/2),at(cap_s,tongue_half,y+t/2),
-                   [pid,'END-CAP'],basis='A',description='Supplier tongue-to-cap reference line')
+            tongue_half=half if geometry else max(hole/2+2,cheek/2)
+            tongue_end=pin_s-hole/2-(extension if geometry else 2.)
+            part=a.polygon(pid,rectangle(tongue_end,cap_s,-tongue_half,tongue_half,y),t,basis='S',
+                           description=f'Selected supplier tongue {t:g} in with fitted moving head')
+            if not fit:
+                a.weld('W-'+pid,at(cap_s,-tongue_half,y+t/2),at(cap_s,tongue_half,y+t/2),
+                       [pid,'END-CAP'],basis='A',description='Supplier tongue-to-cap reference line')
         else:
             primary=by_role[row['connected_to']]
             if abs(y+t-primary['start'])<1e-6:face=y+t
@@ -125,15 +139,28 @@ def make_stack(ctx,selection,v,station,depth,width):
                 a.welds[-1]['attachment_role']='cheek_perimeter_fillet'
         part.update(selected_material=row['material'],parameters=dict(source_stack_role=role,
                     source_stack_index=row['index'],source_record_id=rid))
-    cap_t=1.;cap_half=max(width/2,grip/2+1);cap_depth=max(depth/2,cheek/2+1)
-    a.polygon('END-CAP',[at(cap_s,side*cap_depth,face*cap_half) for side,face in
-              ((-1,-1),(-1,1),(1,1),(1,-1))],cap_t,normal=v,basis='A',
-              description='Fitted supplier casing end cap on the common clevis stack')
-    start=mul(v,cap_s+cap_t)
-    a.member('BRACE',ctx.pid,start,add(start,mul(v,24)),description='Actual BRB casing trimmed to its supplier end cap')
-    for suffix,side in (('A',-1),('B',1)):
-        a.weld('CAP-W'+suffix,at(cap_s+cap_t,side*depth/2,-width/2),at(cap_s+cap_t,side*depth/2,width/2),
-               ['BRACE','END-CAP'],.375,basis='A',description='Supplier casing/end-cap reference line')
+        if geometry and row['connected_to']=='host':
+            part['parameters'].update(transfer_width_in=geometry['selected_width'],transfer_station_in=geometry['section_station'],
+                transfer_outline_local_sd=[list(q) for q in outline],source_end_extension_from_hole_edge_in=extension,
+                pin_station_in=pin_s,pin_width_in=2*half,wing_width_in=geometry['wing_width_in'],wing_notch_radius_in=geometry['notch_radius_in'],
+                maximum_checked_mean_thornton_length_in=geometry['mean_permitted'])
+    if fit:
+        from .stack_moving_head import moving_head
+        terminal=moving_head(a,brace,fit,rows,ctx.p[ctx.pid],v,n,at,end,half)
+        start=mul(v,terminal)
+        casing=a.member('BRACE',ctx.pid,start,add(start,mul(v,24)),description='Independent BRB casing and axial yielding core')
+        from .brb_supplier_core import show_core
+        show_core(ctx,brace,casing)
+    else:
+        cap_t=1.;cap_half=max(width/2,grip/2+1);cap_depth=max(depth/2,cheek/2+1)
+        a.polygon('END-CAP',[at(cap_s,side*cap_depth,face*cap_half) for side,face in
+                  ((-1,-1),(-1,1),(1,1),(1,-1))],cap_t,normal=v,basis='A',
+                  description='Fitted supplier casing end cap on the common clevis stack')
+        start=mul(v,cap_s+cap_t)
+        a.member('BRACE',ctx.pid,start,add(start,mul(v,24)),description='BRB casing trimmed to its supplier end cap')
+        for suffix,side in (('A',-1),('B',1)):
+            a.weld('CAP-W'+suffix,at(cap_s+cap_t,side*depth/2,-width/2),at(cap_s+cap_t,side*depth/2,width/2),
+                   ['BRACE','END-CAP'],.375,basis='A',description='Supplier casing/end-cap reference line')
     pin_part=a.fastener('PIN',[at(pin_s,0,-grip/2)],[0,1,0],source['pin_diameter_in'],grip,
                         [r['id'] for r in rows],'Selected common pin, diameter and complete grip')
     pin_part.update(functional_kind='pin',selected_material=source['pin_material'],

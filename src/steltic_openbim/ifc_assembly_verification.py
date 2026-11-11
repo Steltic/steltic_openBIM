@@ -36,7 +36,7 @@ def brace_kind(member):
 
 def gusset_part(part):
     params=part.get('parameters', {})
-    if params.get('source_role') in ('base_plate','cap_gusset_support_plate'):return False
+    if params.get('free_edge_bar') or params.get('source_role') in ('base_plate','cap_gusset_support_plate','brb_moving_head','brb_core_extension'):return False
     description = str(params.get('description', '')).lower()
     return part.get('kind') in {'plate', 'gusset'} and ('GUSSET' in part['id'].upper() or 'gusset' in description)
 
@@ -524,7 +524,9 @@ class Assessment:
         present=connection.get('parameters',{}).get('pin_stack')
         selected_stacks=selected_stack_record(self.handoff,cid)
         if present or selected_stacks or any(p.get('parameters',{}).get('source_stack_role') for p in parts.values()):
-            if len(selected_stacks)!=1 or present!=selected_stacks[0][1]:
+            declared={k:v for k,v in (present or {}).items() if k!='source_record_id'}
+            if (len(selected_stacks)!=1 or declared!=selected_stacks[0][1] or
+                    (present or {}).get('source_record_id',selected_stacks[0][0])!=selected_stacks[0][0]):
                 self.issue('ordered_pin_stack_source_binding_differs',records=[r[0] for r in selected_stacks])
             else:
                 rid,stack=selected_stacks[0]
@@ -681,6 +683,20 @@ class Assessment:
                 else:
                     connected[body].add(target);connected[target].add(body)
                 continue
+            if kind=='integral_moving_head':
+                from .stack_section_readback import check_head_contact
+                links=interface.get('connects',[]);mid=bound.get('BRACE')
+                leaf=next((k for k in links if k!='END-CAP'),None)
+                if len(links)!=2 or 'END-CAP' not in links or leaf not in support or not mid:
+                    self.issue('integral_moving_head_lacks_actual_ply',interface=interface['id']);continue
+                m=self.members[mid];end=min(range(2),key=lambda i:np.linalg.norm(np.subtract(m['axis'][i],inst['origin'])))
+                toward=inverse[:3,:3]@np.subtract(m['axis'][1-end],m['axis'][end])
+                detail,failures=check_head_contact(support[leaf],support['END-CAP'],toward)
+                for failure in failures:self.issue('integral_moving_head_contact_differs',ply=leaf,detail=failure,**detail)
+                if not failures:
+                    self.counts['actual_full_clevis_to_head_contacts']+=1
+                    connected[leaf].add('END-CAP');connected['END-CAP'].add(leaf)
+                continue
             if interface.get('kind')=='brb_core_continuation':
                 from .brb_core_readback import meets_axial_core, moving_head_clearance
                 mid=bound.get('BRACE');spec=self.core_requirements.get(mid)
@@ -693,6 +709,16 @@ class Assessment:
                 end=min(range(2),key=lambda i:np.linalg.norm(np.subtract(m['axis'][i],inst['origin'])))
                 pinned=('brb_pinned' in fields.get(('connection','variant'),[]) or
                         any(p['kind']=='pin' for p in parts.values()))
+                from .pin_stack_readback import selected_stack_record
+                stacks=selected_stack_record(self.handoff,cid)
+                if len(stacks)==1:
+                    from .stack_section_readback import check_plate_sections
+                    rid,source=stacks[0];receiver=self.handoff['records'][rid]['data'].get('receiver_selection',{})
+                    away=inverse[:3,:3]@np.subtract(m['axis'][1-end],m['axis'][end])
+                    hosts={k:support[k] for k in ('COLUMN','BEAM','BASE') if k in support}
+                    counts,failures,measurements=check_plate_sections(source,receiver,parts,meshes,away,support['BRACE'],spec['reported_elongation_in'],hosts)
+                    self.counts.update(counts);info['source_pin_plate_sections']=measurements
+                    for finding in failures:self.issue(**finding)
                 if pinned:
                     info.update(moving_head_clearance(support,axis,spec['reported_elongation_in'],errors))
                 if any(p['kind']=='weld' and {'BRACE','END-CAP'}<=set(p.get('connects',[])) for p in parts.values()):

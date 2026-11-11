@@ -1595,7 +1595,36 @@
         "source_bindings": {"type": "object"},
         "material_schedule": {"type": "object"},
         "records": {"type": "object"},
-        "member_selections": {"type": "object"},
+        "member_selections": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["record_id", "source_pointer", "status", "fields"],
+            "properties": {
+              "record_id": {"type": "string", "minLength": 1},
+              "source_pointer": {"type": "string", "minLength": 1},
+              "status": {"type": "string", "minLength": 1},
+              "physical_profile": {"type": "string", "minLength": 1},
+              "axis_in": {"$ref": "#/$defs/axis"},
+              "workpoint_length_in": {"type": "number", "exclusiveMinimum": 0},
+              "yielding_core_length_in": {"type": "number", "exclusiveMinimum": 0},
+              "fields": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["role", "field", "value", "unit", "source"],
+                  "properties": {
+                    "role": {"type": "string", "minLength": 1},
+                    "field": {"type": "string", "minLength": 1},
+                    "unit": {"type": "string"},
+                    "applicability": {"type": "object"},
+                    "source": {"type": "object", "required": ["pointer", "literal"]}
+                  }
+                }
+              }
+            }
+          }
+        },
         "occurrences": {"type": "object"},
         "source_conflicts": {"type": "array"},
           "crossing_interfaces": {"type": "array"},

@@ -26,6 +26,9 @@ def source_core(record):
 def source_requirements(members, handoff, records):
     """Bind each selected core to its own physical member and original design record."""
     recovered = {r['id']: spec for r in records if r['id'].startswith('members/') and (spec := source_core(r))}
+    typed_members=handoff.get('member_selections', {})
+    missing=set(typed_members)-{m['id'] for m in members}
+    if missing:raise ValueError('HR source member selection has no physical member: '+min(missing))
     result = {}
     for member in members:
         mid = member['id']
@@ -33,8 +36,14 @@ def source_requirements(members, handoff, records):
         matches = [recovered[r] for r in bindings if r in recovered]
         if len(matches) > 1:
             raise ValueError('Ambiguous HR core member controls for ' + mid)
-        typed = handoff.get('member_selections', {}).get(mid, {})
-        fields = {f['field']: f['value'] for f in typed.get('fields', []) if f['role'] == 'brb_core'}
+        typed = typed_members.get(mid, {})
+        fields={}
+        for item in typed.get('fields', []):
+            if item['role']!='brb_core':continue
+            key=item['field'];value=item['value']
+            if key in fields and fields[key]!=value:
+                raise ValueError('Conflicting selected BRB core '+key+' for '+mid)
+            fields[key]=value
         if not fields:
             if matches:
                 result[mid] = matches[0]
@@ -42,6 +51,15 @@ def source_requirements(members, handoff, records):
         rid = typed['record_id']
         if rid not in bindings:
             raise ValueError('HR core selection is not bound to member ' + mid)
+        if 'physical_profile' in typed and typed['physical_profile']!=member['profile_id']:
+            raise ValueError('HR selected core profile differs from the physical brace: '+mid)
+        if 'axis_in' in typed:
+            axis=member['axis'];workpoint=math.dist(*axis)
+            if any(math.dist(p,q)>1e-4 for p,q in zip(typed['axis_in'],axis)) or abs(typed['workpoint_length_in']-workpoint)>1e-4:
+                raise ValueError('HR selected core workline differs from the located physical brace: '+mid)
+            expected=workpoint*fields['yielding_length_workpoint_ratio']
+            if abs(typed['yielding_core_length_in']-expected)>1e-4:
+                raise ValueError('HR selected yielding length disagrees with its located workpoints: '+mid)
         spec = dict(record=rid, area_in2=float(fields['area_in2']), material=fields['material'],
                     yielding_length_workpoint_ratio=float(fields['yielding_length_workpoint_ratio']),
                     reported_elongation_in=float(fields.get('reported_elongation_in', 0.)))

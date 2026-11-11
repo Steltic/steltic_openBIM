@@ -23,6 +23,12 @@ def test_integral_tongue_retains_stock_and_finite_source_width():
     assert row==pytest.approx((1,4,0,6.6,26/3))
 
 
+def test_rod_row_uses_its_selected_flange_direction_and_end_distance():
+    text='per flange side 1 row of 2 at 15.8 in, 2.625 in from the plate edges'
+    row=flange_rows(text,21,39,24.3)
+    assert row==pytest.approx((1,2,0,4.725,15.8))
+
+
 def test_selected_upper_cap_stock_and_weld_terminate_on_the_real_column_face():
     a=Assembly('Cap',{})
     stock=dict(width=16,length=39,grout=2,thickness=2,record_id='column-base',material='A572 Gr50')

@@ -69,6 +69,23 @@ def test_hr_controls_survive_suppression_of_generated_core_metadata():
         source_requirements([member],handoff,[record])
 
 
+@pytest.mark.parametrize('mutation',['none','foreign_member','profile','workline','length','duplicate'])
+def test_located_source_core_controls_match_the_actual_member_and_remain_unambiguous(mutation):
+    m=dict(id='brace',profile_id='BRB3',axis=[[10,20,30],[13,24,30]],design_record_ids=['members/brace'])
+    row=dict(record_id='members/brace',physical_profile='BRB3',axis_in=m['axis'],workpoint_length_in=5.,
+             yielding_core_length_in=3.,fields=[dict(role='brb_core',field=k,value=v)
+             for k,v in [('area_in2',3),('material','ASTM A36'),('yielding_length_workpoint_ratio',.6)]])
+    sources={'member_selections':{'brace':row}}
+    if mutation=='foreign_member':sources['member_selections']['other']=row
+    if mutation=='profile':row['physical_profile']='BRB4'
+    if mutation=='workline':row['axis_in']=[[10,20,30],[10,20,35]]
+    if mutation=='length':row['yielding_core_length_in']=2.9
+    if mutation=='duplicate':row['fields'].append(dict(role='brb_core',field='area_in2',value=4))
+    if mutation=='none':assert source_requirements([m],sources,[])['brace']['area_in2']==3
+    else:
+        with pytest.raises(ValueError):source_requirements([m],sources,[])
+
+
 @pytest.mark.parametrize(('gap','valid'),[(3.86,True),(3.60,False),(0.,False),(-1.,False)])
 def test_moving_head_separation_is_measured_on_actual_step(tmp_path,gap,valid):
     assembly=Assembly('clearance',{})

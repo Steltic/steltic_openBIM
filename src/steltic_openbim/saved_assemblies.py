@@ -277,6 +277,8 @@ def repair(package,model):
     common_ends=locate_pairs(package,model)
     from .brb_supplier_core import prepare as prepare_cores,write_cores
     prepare_cores(package,model)
+    from .stack_moving_head import configure_selected_heads
+    configure_selected_heads(package,model)
     bind(model,package)
     for mid,m in members.items():
         corrected=source_members[mid]

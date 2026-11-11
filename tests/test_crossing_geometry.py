@@ -10,6 +10,21 @@ from steltic_openbim.review_assemblies import build_scene
 def volume(faces):return sum(dot(f[0],cross(a,b))/6 for f in faces for a,b in zip(f[1:],f[2:]))
 
 
+def test_end_selections_are_bound_to_the_split_members_only():
+    from steltic_openbim.hr_detail_selections import selected_fields
+    fields=[dict(role='split_brace_slot_weld',field='length_in',value=9,applicability={'crossing_receiver':'split'}),
+            dict(role='split_gusset',field='whitmore_effective_width_in',value=16.4,
+                 applicability={'crossing_receiver':'split'}),
+            dict(role='continuous_brace_slot_weld',field='run',value='all_round_slot',
+                 applicability={'crossing_receiver':'continuous'})]
+    handoff=dict(records={'row':{'fields':fields}},occurrences={'X':{'applications':[dict(
+        record_id='row',selected=[0,1,2],crossing_members={'split':['B1','B2'],'continuous':['A']})]}})
+    c={'id':'X'};p={'source_handoff':handoff}
+    assert selected_fields(p,c,'A')=={('brace_slot_weld','run'):'all_round_slot'}
+    for mid in ('B1','B2'):
+        assert selected_fields(p,c,mid)=={('brace_slot_weld','length_in'):9,('gusset','whitmore_effective_width_in'):16.4}
+
+
 @pytest.mark.parametrize('coordinate',[0,1])
 def test_selected_slot_removes_only_two_walls_with_correct_volume(coordinate):
     profiles={'HSS':dict(family='rhs',dimensions=dict(h=4,b=4,t=.25))}

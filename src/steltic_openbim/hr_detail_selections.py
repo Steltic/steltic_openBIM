@@ -37,7 +37,7 @@ class SelectedFields(dict):
                              for k in self.conflicts)))
 
 
-def selected_fields(package, connection):
+def selected_fields(package, connection, member_id=None):
     """Read only the source fields selected for this particular occurrence."""
     handoff = package.get('source_handoff', {})
     occurrence = handoff.get('occurrences', {}).get(connection['id'], {})
@@ -48,7 +48,12 @@ def selected_fields(package, connection):
         record = handoff['records'][application['record_id']]
         for index in application.get('selected', []):
             field = record['fields'][index]
-            key = (field['role'], field['field'])
+            role=field['role']
+            receiver=field.get('applicability',{}).get('crossing_receiver')
+            if member_id is not None and receiver:
+                if member_id not in application.get('crossing_members',{}).get(receiver,[]):continue
+                role=role.removeprefix(receiver+'_')
+            key = (role, field['field'])
             value = overrides.get((application['record_id'], index), field['value'])
             values.sources.setdefault(key,[]).append({'record_id':application['record_id'],
                 'field_index':index,'pointer':field.get('source',{}).get('pointer'),'value':value})

@@ -217,6 +217,8 @@ def complete_native_hr(original):
         raise ValueError('Native body differs from the authenticated HR source before geometry completion')
     package=copy.deepcopy(original);physical=package['physical']
     prepare_cores(package,physical)
+    from .stack_moving_head import configure_selected_heads
+    if configure_selected_heads(package,physical):write_cores(package,physical)
     members={m['id']:m for m in physical['members']};joints={j['id']:j for j in physical['joints']}
     catalogue={m['id']:m for m in physical['materials']};profiles={p['id']:p for p in physical['profiles']}
     cs={c['id']:c for c in physical['connections']}

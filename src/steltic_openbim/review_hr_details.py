@@ -350,7 +350,7 @@ def base(ctx):
         a.section_axis=2;a.section_at=-le/2;a.dim([bx/2,0,-le],[bx/2,0,0],f'Embedment {le:g} in');return
     match=re.search(r'(?:base plate\s*(?:PL)?|moment base:\s*PL)\s*'+NUMBER+r' x '+NUMBER+r' x '+NUMBER+r' in',txt,re.I)
     t,bx,by=list(map(number,match.groups())) if match else (1,d+8,w+8)
-    layout=flange_rows(txt,bx if match else None)
+    layout=flange_rows(txt,bx if match else None,by if match else None,d)
     from . import stiffened_base
     flange_stiffeners=stiffened_base.selection(txt)
     if (layout or flange_stiffeners) and match:
