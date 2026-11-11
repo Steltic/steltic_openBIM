@@ -86,6 +86,27 @@ class Context:
 
 def build_scene(model,package,c,subtype=''):
     ctx=Context(model,package,c);family=ctx.family
+    if family=='review_garage_flybrace':
+        from .review_cfs17_braces import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_garage_endwall':
+        from .review_cfs17_endwall import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_garage_strap':
+        from .review_cfs17_straps import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_garage_cladding':
+        from .review_cfs17_cladding import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_garage_strut':
+        from .review_cfs17_struts import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_garage_z':
+        from .review_cfs17_secondary import draw
+        draw(ctx);return ctx.finish()
+    if family=='review_garage_primary':
+        from .review_cfs17_primary import draw
+        draw(ctx);return ctx.finish()
     if family=='review_mezzanine29':
         from .review_cfs29_details import draw
         draw(ctx);return ctx.finish()

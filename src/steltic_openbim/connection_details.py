@@ -119,6 +119,15 @@ def prepare(model,package):
         if shape_parameters.get('actual_ag_strap'):
             from .review_cfs_wall_bindings import local_member,signature
             shape_parameters['actual_ag_strap_receivers']=signature([local_member(m,c['point'],shape_parameters['axes'],48) for m in ms])
+        # Unequal garage slopes and finite end cuts cannot share a detail just
+        # because their source sections and bolt groups have the same names.
+        for name,extent,local_axes in (('primary',65,False),('endwall',40,False),
+                ('strut',34,False),('z',26,True),('flybrace',60,True),('strap',50,True)):
+            flag='actual_garage_'+name
+            if shape_parameters.get(flag):
+                from .review_cfs_wall_bindings import local_member,signature
+                frame=shape_parameters['axes'] if local_axes else ([1,0,0],[0,1,0],[0,0,1])
+                shape_parameters[flag+'_receivers']=signature([local_member(m,c['point'],frame,extent) for m in ms])
         if shape_parameters.get('actual_single_channel_primary'):
             from .review_cfs_wall_bindings import local_member,signature
             shape_parameters['actual_single_channel_receivers']=signature([local_member(m,c['point'],([1,0,0],[0,1,0],[0,0,1]),60) for m in ms])
