@@ -220,7 +220,7 @@ class DesignSheets(Sheets):
         if not self.views or self.views[-1]['sheet']!=self.current or self.views[-1].get('linework'):
             # Enlarged opening plans have their own projection, sometimes two on one sheet.
             self.views.append(dict(sheet=self.current,axes=list(axes),bounds_in=[[0,0],[0,0]],
-                                   origin_pt=list(tr([0,0,0])),points_per_inch=s))
+                                   origin_pt=list(tr([0,0,0])),points_per_inch=s,scale_denominator=72/s))
         self.views[-1].update(linework='physical_plan',member_ids=[m['id'] for m in members])
         self.c.addLiteral('/StelticFrame BMC')
         for m in members:

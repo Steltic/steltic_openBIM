@@ -5,6 +5,23 @@ from .joint_mesh_readback import TOL,plane_axes,unit
 from .selected_plate_readback import grade
 
 
+def check_setout(shapes,axis,required,source):
+    if required is None:return {},[]
+    keys=('PIN','END-CAP','BRACE','CORE-END','HEAD-CJP')
+    if not all(k in shapes for k in keys):return {},['The located source-selected pin, casing or moving terminal is absent']
+    v=unit(axis);pin=shapes['PIN'].vertices@v;head=shapes['END-CAP'].vertices@v
+    mouth=float(np.min(shapes['BRACE'].vertices@v));core=shapes['CORE-END'];weld=shapes['HEAD-CJP'];axes=plane_axes(v)
+    actual=dict(pin_station_in=float((np.min(pin)+np.max(pin))/2),head_front_station_in=float(min(head)),
+                head_back_station_in=float(max(head)),casing_face_station_in=mouth,head_to_casing_clearance_in=mouth-float(max(head)))
+    errors=['Actual selected terminal '+k+' differs from HR' for k,value in actual.items() if abs(required[k]-value)>TOL]
+    for k,mesh,side in [('core_terminal_area_in2',core,max),('actual_CJP_area_in2',weld,min)]:
+        measured=end_face(mesh,v,side(mesh.vertices@v),axes).area;actual[k]=measured
+        if abs(measured-required[k])>max(.0002,TOL*max(1.,required[k])):errors.append('Actual checked terminal '+k+' differs from HR')
+    if required['full_travel_in']-TOL>actual['head_to_casing_clearance_in'] or abs(source['reported_elongation_in']-required['full_travel_in'])>TOL:
+        errors.append('Actual head movement falls below the selected physical travel')
+    return actual,errors
+
+
 def check_transitions(core_info,spec):
     intervals=core_info.get('actual_intervals',[]);yielding=core_info.get('measured_yielding_intervals_in',[])
     end_area=spec['area_in2']*spec['terminal']['end_area_ratio']

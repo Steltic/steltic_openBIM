@@ -70,6 +70,15 @@ def configure_selected_heads(package,model):
             if cid is None:continue
             fit=allocated[cid];start,far=member['axis'][end],member['axis'][1-end];length=math.dist(start,far)
             chosen=connections[cid].get('parameters',{}).get('moving_head_fit')
+            from .brb_occurrence_setout import selected_end,head_fit
+            issued=selected_end(spec,member,cid,end)
+            if issued:
+                source_fit=head_fit(issued)
+                if chosen and any(abs(chosen[k]-value)>1e-4 for k,value in source_fit.items()):
+                    raise ValueError('Repeated physical head set-out differs from its individual HR selection at '+cid)
+                if abs(source_fit['required_travel_in']-fit['required_travel_in'])>1e-4:
+                    raise ValueError('Member and end-specific HR stock travel differ at '+cid)
+                chosen=source_fit
             if chosen:
                 if (chosen['front_in']<=0 or chosen['thickness_in']<=0 or chosen['casing_gap_in']+1e-6<fit['required_travel_in']):
                     raise ValueError('Source-located moving head lacks the selected stroke at '+cid)

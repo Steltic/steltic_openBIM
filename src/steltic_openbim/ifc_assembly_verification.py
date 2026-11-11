@@ -746,7 +746,8 @@ class Assessment:
                     connected['BRACE'].add('CORE-END');connected['CORE-END'].add('BRACE')
                 continue
             if kind=='brb_full_cjp':
-                from .brb_terminal_readback import check_cjp
+                from .brb_terminal_readback import check_cjp,check_setout
+                from .brb_occurrence_setout import selected_end
                 from .pin_stack_readback import actual_materials
                 mid=bound.get('BRACE');spec=self.core_requirements.get(mid,{})
                 if not spec.get('terminal'):
@@ -754,6 +755,9 @@ class Assessment:
                 m=self.members[mid];end=min(range(2),key=lambda i:np.linalg.norm(np.subtract(m['axis'][i],inst['origin'])))
                 away=inverse[:3,:3]@np.subtract(m['axis'][1-end],m['axis'][end])
                 evidence,failures=check_cjp(meshes,parts,actual_materials(self.rb.assemblies[cid]),away,spec)
+                measured,wrong=check_setout(support,away,selected_end(spec,m,cid,end),spec)
+                if measured:evidence['located_setout']=measured
+                failures.extend(wrong)
                 for failure in failures:self.issue('actual_brb_full_head_cjp_differs',detail=failure,**evidence)
                 self.brb_core_measurements.append(dict(evidence,member=mid,end_index=end,connection=cid,sheet=self.context.get('sheet')))
                 if not failures:
