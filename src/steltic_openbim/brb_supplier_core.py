@@ -126,6 +126,21 @@ def show_core(ctx,m,part):
     if m.get('section_plies'):
         local=part['member']
         local['section_plies']=core_at_end(m,ctx.c['point'],math.dist(*local['axis']))
+        if m.get('brb_infill_pockets'):
+            from .pilots.model import sub,dot,cross,unit
+            from .bim_assemblies import transformed
+            joint=next(c for c in ctx.package['physical']['connections'] if c['id']==ctx.c['id'])
+            placement=joint['assembly_instance']
+            sy=m['local_y'];sz=cross(unit(sub(m['axis'][1],m['axis'][0])),sy)
+            ly=local['local_y'];lz=cross(unit(sub(local['axis'][1],local['axis'][0])),ly)
+            wy=transformed(ly,placement,True);wz=transformed(lz,placement,True)
+            yy,yz,zy,zz=dot(sy,wy),dot(sy,wz),dot(sz,wy),dot(sz,wz)
+            determinant=yy*zz-yz*zy
+            if abs(abs(determinant)-1.)>1e-5:raise ValueError('Located BRB section and detail projection axes differ')
+            for ply in local['section_plies']:
+                for section in ply['sections']:
+                    ring=[[y*yy+z*zy,y*yz+z*zz] for y,z in section[1]]
+                    section[1]=ring if determinant>0 else list(reversed(ring))
         part['faces']=member_faces(local,ctx.p);part['bounds']=bounds(part['faces'])
     casing=m.get('brb_casing',{})
     if casing:
@@ -177,6 +192,10 @@ def write_cores(package,model):
         fill=infill_plies(m,profiles[m['profile_id']],ply,length,catalog)
         for target in (m,members[m['id']]):
             target['supplier_core']=dict(spec)
+            if 'brb_infill_pockets' in m or target.get('brb_infill_geometry_sha256'):
+                from .bim_assemblies import fingerprint
+                target['brb_infill_pockets']=m.get('brb_infill_pockets',[])
+                target['brb_infill_geometry_sha256']=fingerprint(target['brb_infill_pockets'])
             target['section_plies']=[v for v in target.get('section_plies',[]) if v['id']!='YIELDING-CORE' and
                                     v.get('constituent_id')!='MORTAR-INFILL']+[ply,*fill]
     physical['materials']=list(catalog.values())

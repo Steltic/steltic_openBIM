@@ -39,6 +39,9 @@ def populate(package,model):
         fields=selected_fields(package,c)
         insert=by_role(fields,'transfer_support_transition');splice=by_role(fields,'transfer_post_splice')
         weld=by_role(fields,'transfer_post_gusset_weld')
+        post_plate=by_role(fields,'transfer_post_gusset')
+        fan=post_plate if post_plate.keys()-{'count','thickness_in','material'} else None
+        if fan and not weld:raise ValueError('Post stock fan requires its located flange-tip welds')
         if not (insert or splice or weld):continue
         attached=[members[mid] for mid in c['member_ids']]
         spec={}
@@ -61,6 +64,11 @@ def populate(package,model):
             if len(posts)!=1:raise ValueError('Selected transfer weld needs the located vertical post')
             m=posts[0]
             if weld:spec['post_weld']=dict(weld,member=m['id'])
+            if post_plate:spec['post_plate']=dict(post_plate)
+            if fan:
+                if abs(fan['weld_root_width_in']-profiles[m['profile_id']]['dimensions']['d'])>.001:
+                    raise ValueError('Post fan width at the weld tip differs from the physical post')
+                spec['post_gusset']=dict(fan)
             if splice:
                 upper=[m2 for m2 in attached if m2['kind']=='column' and m2['profile_id'].upper()==splice['upper_section'].upper()]
                 if len(upper)!=1:raise ValueError('Selected transition lacks its mating upper column')

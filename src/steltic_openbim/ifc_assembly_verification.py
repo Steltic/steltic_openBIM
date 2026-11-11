@@ -224,7 +224,7 @@ class Assessment:
             if mid in self.casing_requirements:
                 from .brb_casing_readback import check as check_casing
                 casing,problems=check_casing(self.rb.members[mid],local,self.casing_requirements[mid],
-                                             self.profiles[m['profile_id']],length)
+                                             self.profiles[m['profile_id']],length,m.get('brb_infill_pockets',[]))
                 info['restraint']=casing;self.counts['actual_brb_casings']+=1
                 if self.casing_requirements[mid].get('infill_material'):self.counts['actual_selected_brb_infills']+=1
                 for detail in problems:self.issue('brb_casing_or_infill_differs',member=mid,detail=detail)

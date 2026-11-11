@@ -107,9 +107,20 @@ def draw(ctx):
     for side in (-1, 1):
         name = 'G' + str(side)
         face = side * width/2
-        plate = a.polygon(name, [[x, face - (thickness if side < 0 else 0.), z] for x, z in outline],
-                          thickness, description='Source double gusset, A fitted attachment outline and Whitmore sections')
-        plate['selected_material'] = 'ASTM A572 Grade 50'
+        fan=fabrication.get('post_gusset')
+        if fan:
+            from .transfer_post_plate import post_plate
+            post_axis=next(v for role,v,_,_,_,_ in joins if role==roles[post['member']])
+            if abs(thickness-fan['arm_thickness_in'])>.001:
+                raise ValueError('Original arm thickness differs from the issued post stock')
+            post_plate(a,name,outline,face,side,post_axis,fan,post)
+        else:
+            uniform=fabrication.get('post_plate',{})
+            if uniform and abs(thickness-uniform['thickness_in'])>.001:
+                raise ValueError('Post and connected arm specify different uniform plate stock')
+            plate = a.polygon(name, [[x, face - (thickness if side < 0 else 0.), z] for x, z in outline],
+                              thickness, description='Source double gusset, A fitted attachment outline and Whitmore sections')
+            plate['selected_material'] = uniform.get('material','ASTM A572 Grade 50')
         for role, direction, perp, start, d, spec in joins:
             for sign in (-1, 1):
                 actual_width=width if role in inserts_by_tip else d['bf']

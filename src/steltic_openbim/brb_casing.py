@@ -166,6 +166,7 @@ def prepare_casings(package,model,core_ids):
 
 
 def needs_completion(physical,required):
+    from .bim_assemblies import fingerprint
     profiles={p['id']:p for p in physical['profiles']}
     mats={m['id']:m['specification'] for m in physical['materials']}
     for member in physical['members']:
@@ -178,6 +179,9 @@ def needs_completion(physical,required):
         if spec['infill_material']:
             fill=[p for p in member.get('section_plies',[]) if p.get('constituent_id')=='MORTAR-INFILL']
             if not fill or any(mats.get(p['material_id'])!=spec['infill_material'] for p in fill):return True
+            pockets=member.get('brb_infill_pockets',[])
+            if pockets or member.get('brb_infill_geometry_sha256'):
+                if member.get('brb_infill_geometry_sha256')!=fingerprint(pockets):return True
     return False
 
 
@@ -212,28 +216,45 @@ def bind_receiver_profiles(physical):
         physical['assemblies']=[row for tid,row in templates.items() if tid not in changed or tid in located]
 
 
-def infill_plies(member,profile,core,length,catalog):
-    """Fill the fixed interior around the entire swept steel envelope."""
+def nominal_infill_bands(member,profile,core=None):
+    """Unrelieved mortar strips in the member's local Y/Z plane, in inches."""
     spec=member.get('brb_casing',{})
-    if not spec.get('infill_material'):
-        return []
     # The restrained core moves relative to the casing. A constant unbonded
     # opening encloses the largest actual section at every longitudinal station.
     # The 1/16-in lateral radial allowance is an adopted coordination dimension.
     gap=float(spec.get('core_clearance_in',1/16))
     if not math.isfinite(gap) or gap<=0:
         raise ValueError('BRB infill requires a positive unbonded interface for '+member['id'])
-    y=max(abs(p[0]) for _,ring in core['sections'] for p in ring)+gap
-    z=max(abs(p[1]) for _,ring in core['sections'] for p in ring)+gap
+    if core is None:
+        moving=member['supplier_core']
+        y=max(moving['thickness_in'],moving['end_thickness_in'])/2+gap
+        z=moving['depth_in']/2+gap
+    else:
+        y=max(abs(p[0]) for _,ring in core['sections'] for p in ring)+gap
+        z=max(abs(p[1]) for _,ring in core['sections'] for p in ring)+gap
     d=profile['dimensions'];width=d['b']/2-d['t'];height=d['h']/2-d['t']
     if y>=width or z>=height:
         raise ValueError('Selected BRB core and unbonded interface exceed the actual casing for '+member['id'])
-    mid=material_id(catalog,'infill',spec['infill_material'],spec['source_ids'],'S: HR casing infill material')
-    rows=[]
+    bands={}
     for name,(a,b,c,e) in zip(('BOTTOM','TOP','LEFT','RIGHT'),(
             (-width,-height,width,-z),(-width,z,width,height),(-width,-z,-y,z),(y,-z,width,z))):
-        ring=[[a,b],[c,b],[c,e],[a,e]]
-        rows.append(dict(id='MORTAR-'+name,constituent_id='MORTAR-INFILL',material_id=mid,
+        bands['MORTAR-'+name]=[[a,b],[c,b],[c,e],[a,e]]
+    return bands
+
+
+def infill_plies(member,profile,core,length,catalog):
+    """Fill the fixed interior around the entire swept steel envelope."""
+    spec=member.get('brb_casing',{})
+    if not spec.get('infill_material'):
+        return []
+    bands=nominal_infill_bands(member,profile,core)
+    mid=material_id(catalog,'infill',spec['infill_material'],spec['source_ids'],'S: HR casing infill material')
+    rows=[]
+    for name,ring in bands.items():
+        rows.append(dict(id=name,constituent_id='MORTAR-INFILL',material_id=mid,
                          sections=[[0.,ring],[length,ring]],source_record_ids=spec['source_ids'],
                          basis='S: mortar-filled casing; A: continuous unbonded core opening and sliding allowance'))
+    if member.get('brb_infill_pockets'):
+        from .brb_infill_pockets import subtract_pockets
+        return subtract_pockets(rows,member['brb_infill_pockets'],length)
     return rows

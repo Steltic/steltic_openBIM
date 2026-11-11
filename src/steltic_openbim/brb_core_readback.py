@@ -8,14 +8,19 @@ from .joint_mesh_readback import TOL,plane_axes,unit
 
 def inside_core(section):
     pieces=list(section.geoms) if section.geom_type=='MultiPolygon' else [section]
-    shells=[p for p in pieces if p.geom_type=='Polygon' and len(p.interiors)==1]
+    shells=[p for p in pieces if p.geom_type=='Polygon' and len(p.interiors)>=1]
     if len(shells)!=1 or len(pieces)!=2:
         raise ValueError('Expected a separate core inside one closed hollow casing')
     shell=shells[0]
     core=next(v for v in pieces if v is not shell)
-    opening=Polygon(shell.interiors[0])
-    if core.geom_type!='Polygon' or core.interiors or not opening.buffer(-TOL).covers(core):
+    openings=[ring for ring in shell.interiors if Polygon(ring).buffer(-TOL).covers(core)]
+    if core.geom_type!='Polygon' or core.interiors or len(openings)!=1:
         raise ValueError('BRB core intersects, touches or leaves the actual casing')
+    if len(shell.interiors)>1:
+        # Additional holes may be finite, located pockets for stationary stock.
+        # Retain the measured ring around the actual moving core as the first.
+        opening=openings[0]
+        shell=Polygon(shell.exterior,[opening,*[r for r in shell.interiors if not r.equals(opening)]])
     return core,shell
 
 

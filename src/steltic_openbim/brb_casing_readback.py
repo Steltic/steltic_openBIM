@@ -4,6 +4,7 @@ import re
 
 import numpy as np
 from shapely.geometry import MultiPoint, Polygon
+from shapely.ops import unary_union
 
 from .joint_mesh_readback import Mesh, TOL, matches_rhs_extrusion
 from .pin_stack_readback import actual_materials
@@ -46,7 +47,7 @@ def measured_section(mesh,at):
     return mesh.section([1.,0.,0.],at,([0.,1.,0.],[0.,0.,1.]))
 
 
-def check(product,local,source,profile,length):
+def check(product,local,source,profile,length,pockets=()):
     from .brb_casing import hss_dimensions
     try:
         regions=constituent_meshes(product,local)
@@ -67,6 +68,16 @@ def check(product,local,source,profile,length):
     if not matches_rhs_extrusion(casing,geometry,dims):
         issues.append('Finite actual casing outer dimensions, walls or hollow region differ')
     changes={round(float(x),6) for group in regions.values() for x in group.vertices[:,0]}
+    relief=[]
+    for p in pockets:
+        end=p.get('end_index');depth=p.get('depth_in',0)
+        if end not in (0,1) or not 0<depth<length or not p.get('obstruction_ids'):
+            return {},issues+['Missing stationary stock or invalid BRB infill pocket depth']
+        mask=Polygon(p['polygon_yz_in'])
+        if not mask.is_valid or mask.area<=TOL**2:
+            return {},issues+['Invalid BRB infill pocket projection']
+        start,finish=(0.,depth) if end==0 else (length-depth,length)
+        changes.update((start,finish));relief.append((start,finish,mask))
     yzm=MultiPoint(core.vertices[:,1:]).convex_hull
     mortar=regions.get('MORTAR-INFILL')
     if source.get('infill_material'):
@@ -88,15 +99,20 @@ def check(product,local,source,profile,length):
                          walls_in=[inner[0]-outer[0],inner[1]-outer[1],outer[2]-inner[2],outer[3]-inner[3]])
         if mortar is not None:
             fill=measured_section(mortar,station)
-            if fill.geom_type!='Polygon' or len(fill.interiors)!=1:
+            if fill.geom_type!='Polygon':
                 issues.append('Mortar does not form one finite shell around a separate core opening');continue
-            covered=Polygon(fill.exterior)
-            if covered.symmetric_difference(hole).area>TOL*hole.length:
-                issues.append('Mortar overlaps casing steel or fails to fill the casing interior')
-            hole=Polygon(fill.interiors[0])
+            openings=[Polygon(ring) for ring in fill.interiors if Polygon(ring).buffer(TOL).covers(yzm)]
+            if len(openings)!=1:
+                issues.append('Mortar lacks one continuous unbonded opening around the actual core');continue
+            fixed=hole.difference(openings[0])
+            masks=[shape for start,finish,shape in relief if start<station<finish]
+            if masks:fixed=fixed.difference(unary_union(masks))
+            if fill.symmetric_difference(fixed).area>TOL*hole.length:
+                issues.append('Actual mortar fill or the located terminal pocket footprint/depth differs')
+            hole=openings[0]
         if not hole.buffer(-TOL).covers(yzm):
             issues.append('Fixed restraint intrudes into the swept moving-core envelope')
         else:gaps.append(float(hole.boundary.distance(yzm)))
     return dict(section=source.get('section'),design_mode=source.get('design_mode'),actual_casing_material=assigned.get('MAIN'),
-                actual_casing_dimensions=actual_dims,actual_infill_material=assigned.get('MORTAR-INFILL'),
+                actual_casing_dimensions=actual_dims,actual_infill_material=assigned.get('MORTAR-INFILL'),pockets_checked=len(relief),
                 minimum_transverse_core_clearance_in=min(gaps,default=None)),list(dict.fromkeys(issues))

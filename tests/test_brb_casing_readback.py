@@ -100,3 +100,64 @@ def test_delegated_shell_is_labelled_without_inventing_grade_or_mortar():
     assert m['brb_casing']['material']==DELEGATED_MATERIAL
     assert [row['id'] for row in m['section_plies']]==['YIELDING-CORE']
     assert next(q['specification'] for q in ph['materials'] if q['id']==m['material_id'])==DELEGATED_MATERIAL
+
+
+@pytest.mark.parametrize('defect',['none','short','deep','wrong_end','wrong_face','missing'])
+def test_local_mortar_recess_has_a_finite_checked_end_and_footprint(tmp_path,defect):
+    p=sample();ph=p['physical'];m=ph['members'][0]
+    required=[dict(end_index=1,depth_in=1.75,polygon_yz_in=[[3.,2.],[4.,2.],[4.,3.5],[3.,3.5]],
+                   obstruction_ids=['joint/stationary-edge-bar'])]
+    expected=requirements([m],{},p['design_records'],ph['materials'])[m['id']]
+    prepare(p,ph);m['brb_infill_pockets']=copy.deepcopy(required)
+    pocket=m['brb_infill_pockets'][0]
+    if defect=='short':pocket['depth_in']=.5
+    if defect=='deep':pocket['depth_in']=4.
+    if defect=='wrong_end':pocket['end_index']=0
+    if defect=='wrong_face':pocket['polygon_yz_in']=[[y,-z] for y,z in pocket['polygon_yz_in']]
+    if defect=='missing':m['brb_infill_pockets']=[]
+    write_cores(p,ph)
+    state=initial_state(p,1);write_json(tmp_path/'state.json',state);write_json(tmp_path/'source.json',p)
+    path=tmp_path/'pocket.ifc';export_drawing(tmp_path,path)
+    rb=Readback(path);profile=next(q for q in ph['profiles'] if q['id']==m['profile_id'])
+    info,errors=check(rb.members[m['id']],rb.member(m['id']),expected,profile,120.,required)
+    assert bool(errors)==(defect!='none'),(info,errors)
+    if defect=='none':
+        assert info['pockets_checked']==1
+        assert not core_sections(rb.member(m['id']),6.,72.)[1]
+
+
+def test_end_view_reverses_the_asymmetric_pocket_into_the_located_member_frame():
+    from types import SimpleNamespace
+    from shapely.geometry import Point
+    from test_brb_core_readback import as_mesh
+    from steltic_openbim.assembly_scene import Assembly
+    from steltic_openbim.brb_supplier_core import show_core
+    p=sample();ph=p['physical'];m=ph['members'][0]
+    prepare(p,ph)
+    m['brb_infill_pockets']=[dict(end_index=1,depth_in=1.75,polygon_yz_in=[[3.,2.],[4.,2.],[4.,3.5],[3.,3.5]],
+                                 obstruction_ids=['joint/edge-bar'])]
+    write_cores(p,ph);profiles={q['id']:q for q in ph['profiles']}
+    connection=ph['connections'][0];connection['point']=[120.,0.,0.]
+    connection['assembly_instance']=dict(origin=connection['point'],x_axis=[-1.,0.,0.],y_axis=[0.,1.,0.])
+    assembly=Assembly('Reverse brace-end view',profiles)
+    part=assembly.member('BRACE',m['profile_id'],[0.,0.,0.],[24.,0.,0.],y=[0.,1.,0.])
+    ctx=SimpleNamespace(c=connection,p=profiles,package=p)
+    show_core(ctx,m,part);section=as_mesh(part['faces']).section([1.,0.,0.],.5,([0.,1.,0.],[0.,0.,1.]))
+    assert not section.covers(Point(3.5,-2.8)) and section.covers(Point(3.5,2.8))
+
+
+def test_editing_or_removing_a_completed_pocket_requires_regeneration():
+    from steltic_openbim.brb_casing import needs_completion
+    package=sample()
+    physical=package['physical']
+    member=physical['members'][0]
+    required=requirements([member],{},package['design_records'],physical['materials'])
+    prepare(package,physical)
+    member['brb_infill_pockets']=[dict(end_index=0,depth_in=1.75,
+        polygon_yz_in=[[3.,2.],[4.,2.],[4.,3.5],[3.,3.5]],obstruction_ids=['joint/edge-bar'])]
+    write_cores(package,physical)
+    assert not needs_completion(physical,required)
+    member['brb_infill_pockets'][0]['depth_in']=2.
+    assert needs_completion(physical,required)
+    del member['brb_infill_pockets']
+    assert needs_completion(physical,required)

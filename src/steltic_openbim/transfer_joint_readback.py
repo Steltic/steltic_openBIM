@@ -12,7 +12,7 @@ from .selected_plate_readback import grade
 def transfer_sources(handoff):
     roles={prefix+suffix for prefix in ('transfer_chord','transfer_diagonal','transfer_support')
            for suffix in ('_gusset_weld','_gusset')}
-    roles.update(('transfer_post_gusset_weld','transfer_post_splice','transfer_support_transition'))
+    roles.update(('transfer_post_gusset','transfer_post_gusset_weld','transfer_post_splice','transfer_support_transition'))
     selection={rid:{i for i,f in enumerate(r.get('fields',[])) if f['role'] in roles}
                for rid,r in handoff.get('records',{}).items()}
     return {cid for cid,occurrence in handoff.get('occurrences',{}).items()
@@ -86,7 +86,7 @@ def face_region(mesh, normal, station, basis):
     return unary_union(polygons)
 
 
-def measure_arm(member_mesh, plates, paths, member_axis, width_axis, workpoint, spec, names):
+def measure_arm(member_mesh, plates, paths, member_axis, width_axis, workpoint, spec, names,fan=None):
     axis, normal = unit(member_axis), unit(width_axis)
     perpendicular = unit(np.cross(axis, normal))
     plane = np.column_stack((axis, perpendicular))
@@ -134,7 +134,10 @@ def measure_arm(member_mesh, plates, paths, member_axis, width_axis, workpoint, 
                 issues.append(dict(part=plate,issue='Transfer plate material differs from HR',actual=names.get(plate)))
             # Measure gauge between the two parallel faces at this transfer zone.
             z = ply.vertices @ normal
-            if abs(abs(float(max(z)-min(z)))-spec['thickness'])>TOL:
+            if fan:
+                if abs(fan['arm_thickness_in']-spec['thickness'])>TOL:
+                    issues.append(dict(part=plate,issue='Original arm selection and revised post stock gauge disagree'))
+            elif abs(abs(float(max(z)-min(z)))-spec['thickness'])>TOL:
                 issues.append(dict(part=plate,issue='Transfer plate thickness differs from HR'))
             width = spec.get('whitmore')
             if width:
@@ -151,6 +154,10 @@ def measure_arm(member_mesh, plates, paths, member_axis, width_axis, workpoint, 
 
 
 def node(check, connection, inst, instance, parts, meshes, actual_curves, names, specifications):
+    from .transfer_fabrication_readback import select_roles
+    source=select_roles(check.handoff,connection['id'])
+    post_stock=source.get('transfer_post_gusset',{})
+    fan=post_stock if post_stock.keys()-{'count','thickness_in','material'} else None
     plates = {k:v.transformed(instance) for k,v in meshes.items() if 'gusset' in
               parts[k].get('parameters',{}).get('description','').lower() and parts[k]['kind'] in ('plate','gusset')}
     paths = defaultdict(list)
@@ -186,8 +193,30 @@ def node(check, connection, inst, instance, parts, meshes, actual_curves, names,
         if inserts:
             from .transfer_fabrication_readback import combined_mesh
             body=combined_mesh([body,*inserts])
+        workpoint=connection.get('point',inst['origin'])
         details,errors=measure_arm(body,plates,paths[role],np.subtract(*m['axis'][::-1]),
-                                   m['local_y'],connection.get('point',inst['origin']),specifications.get(mid),names)
+                                   m['local_y'],workpoint,specifications.get(mid),names,fan=fan)
+        if not fan and post_stock and m['kind']=='transfer_vertical':
+            for pname,mesh in plates.items():
+                thickness=float(np.ptp(mesh.vertices@unit(m['local_y'])))
+                if abs(thickness-post_stock['thickness_in'])>TOL or grade(names.get(pname,''))!=grade(post_stock['material']):
+                    errors.append(dict(part=pname,issue='Uniform transfer post stock differs from the issued selection'))
+        if fan and m['kind']=='transfer_vertical':
+            from .transfer_post_readback import measure
+            axis=np.asarray(max(m['axis'],key=lambda x:np.linalg.norm(np.subtract(x,workpoint))))-workpoint
+            normal=unit(m['local_y']);stock=[]
+            if len(plates)!=2 or not source.get('transfer_post_gusset_weld'):
+                errors.append(dict(issue='Post fan lacks its two physical plates or its selected welds'))
+            else:
+                for pname,mesh in plates.items():
+                    side=np.sign(np.mean((mesh.vertices-workpoint)@normal))
+                    facts,bad=measure(mesh,workpoint,side*normal,axis,fan,source['transfer_post_gusset_weld'])
+                    if grade(names.get(pname,''))!=grade(fan['material']):
+                        bad.append('Actual post plate steel differs from HR')
+                    stock.append(dict(plate=pname,**facts))
+                    errors.extend(dict(part=pname,issue=v) for v in bad)
+                check.counts['actual_machined_transfer_post_fans']+=len(stock)
+                rows.append(dict(role='post_gusset_fabrication',member=mid,measurements=[],stock_sections=stock))
         rows.append(dict(role=role,member=mid,measurements=details))
         findings.extend(dict(v,role=role,member=mid) for v in errors)
     from .transfer_fabrication_readback import verify_fabrication
