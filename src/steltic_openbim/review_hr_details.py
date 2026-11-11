@@ -358,6 +358,8 @@ def base(ctx):
     a.member('M1',pid,[0,0,grout+t],[0,0,grout+t+32]);edge=ctx.n(r'rods '+NUMBER+r' in from the plate edges',max(1.5,1.5*dia));rows=max(2,math.ceil(n/2));points=[]
     if layout:
         nrows,ncols,spacing,a1,pitch=layout
+        a1=ctx.selected.get(('anchor_pattern','flange_offset_in')) or a1
+        pitch=ctx.selected.get(('anchor_pattern','spacing_in')) or pitch
         if 2*nrows*ncols!=n:raise ValueError('Source anchor count and flange layout disagree')
         for sg in (-1,1):
             for r in range(nrows):
@@ -368,6 +370,11 @@ def base(ctx):
     anchors=a.fastener('ANCH',points,[0,0,1],dia,embed+grout+t,['CONC','P1'],f'{n} x {dia:g} in {grade} anchor rods; A embedment where source delegates it',basis='S count/diameter/grade; A embedment' if selected_rods else 'A')
     if selected_rods:
         anchors.update(functional_kind='anchor',selected_material=ctx.selected.get(('anchor','material')) or grade)
+    directional={field:ctx.selected.get(('anchor_pattern',field)) for field in
+                 ('edge_flange_normal_in','edge_along_flange_in','minimum_edge_in','flange_offset_in','spacing_in')}
+    if directional['edge_flange_normal_in'] is not None or directional['edge_along_flange_in'] is not None:
+        anchors['parameters']={'source_anchor_pattern':{k:v for k,v in directional.items() if v is not None},
+                               'flange_normal_axis_local':[1,0,0],'flange_row_axis_local':[0,1,0]}
     top_washer=re.search(r'top plate washers PL '+NUMBER+r' x '+NUMBER+r' x '+NUMBER+r' in',txt,re.I)
     washer_dimensions=list(map(number,top_washer.groups())) if top_washer else None
     if not washer_dimensions:

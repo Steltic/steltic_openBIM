@@ -103,7 +103,7 @@ def render_candidate(handoff, drawing_model, output, original_native=None):
     return result
 
 
-def render_native_revision(handoff,output):
+def render_native_revision(handoff,output,approved_layout=None,prior_native=None):
     """Render a newly completed HR job through the ordinary physical drawing path."""
     from .native_hr_completion import complete_native_hr
     from .drawing_workflow import initial_state
@@ -116,21 +116,53 @@ def render_native_revision(handoff,output):
             contract.get('source_bindings',{}).get('native_content_sha256')!=fingerprint({k:v for k,v in original.items() if k!='source_handoff'})):
         raise ValueError('Fresh HR job needs an authenticated matching native handoff')
     if not original['physical']['members']:raise ValueError('Fresh HR physical member geometry is missing')
-    package=complete_native_hr(original)
-    state=initial_state(package,1)
+    retained=None;model=None
+    if approved_layout:
+        import copy
+        from .retained_layout import bind_layout
+        if not prior_native:raise ValueError('Retaining an approved register needs its original native geometry')
+        model=json.loads(read(approved_layout))
+        register=json.loads(read(Path(approved_layout).with_name('drawing_manifest.json')))
+        package=copy.deepcopy(original)
+        retained=bind_layout(json.loads(read(prior_native)),package,model,register)
+        retained['prior_native_file_sha256']=digest_file(prior_native)
+        repaired=repair(package,model)
+        retained['repair']=repaired
+        state=initial_state(package,register['revision']+1)
+        state.update(design_scenario=model['scenario'],drawing_status='design_test',features=model['openings'])
+    else:
+        package=complete_native_hr(original)
+        state=initial_state(package,1)
     state.update(original_hr_sha256=fingerprint(original),source_job=original['building_id'],source_module='HR')
     output.mkdir(parents=True,exist_ok=False)
     write_json(output/'hr_original_source.json',original)
     write_json(output/'source.json',package);write_json(output/'state.json',state)
     write_json(output/'information_requests.json',{'requests':state['requests']})
     write_json(output/'source_validation.json',inspect_package(package))
-    drawing=generate(package,state,output)
-    ifc=export_drawing(output,output/'model.ifc')
+    if model is None:
+        drawing=generate(package,state,output)
+        ifc=export_drawing(output,output/'model.ifc')
+    else:
+        from .review_cases import CASES
+        from .ifc_export import export_structural
+        model['source_sha256']=state['source_model_sha256']
+        if model['pilot'] in CASES:
+            from .review_pdf import render_model
+            drawing=render_model(package,state,output,model,model['connection_assemblies'])
+        else:
+            from .design_pdf import generate as draw_approved
+            drawing=draw_approved(package,state,output,prepared_model=model)
+        ifc=export_structural(output,output/'model.ifc')
+        retained['new_sheet_ids']=[s['number'] for s in drawing['sheets']]
+        retained['missing_prior_sheets']=sorted(set(retained['prior_sheet_ids'])-set(retained['new_sheet_ids']))
+        retained['added_sheets']=sorted(set(retained['new_sheet_ids'])-set(retained['prior_sheet_ids']))
+        write_json(output/'retained_layout.json',retained)
     write_json(output/'ifc_manifest.json',ifc)
     result=dict(schema='steltic.openbim_native_revision',building_id=package['building_id'],
         source_model_sha256=state['source_model_sha256'],original_hr_sha256=state['original_hr_sha256'],
         source_contract_sha256=contract['contract_sha256'],input_handoff_sha256=digest_file(handoff),
         pdf_sha256=drawing['pdf_sha256'],ifc_sha256=ifc['sha256'],analysis_executed=False)
+    if retained:result['retained_layout_sha256']=fingerprint(retained)
     write_json(output/'native_revision_manifest.json',result)
     return result
 
@@ -141,6 +173,8 @@ def main(argv=None):
     mode=parser.add_mutually_exclusive_group(required=True)
     mode.add_argument('--drawing-model',type=Path)
     mode.add_argument('--native-revision',action='store_true',help='Render the new HR physical revision directly')
+    parser.add_argument('--approved-layout',type=Path,help='Retain a checked original sheet register for a connection-only revision')
+    parser.add_argument('--prior-native',type=Path,help='Original geometry for independent connection-only scope comparison')
     parser.add_argument('--output', required=True, type=Path)
     parser.add_argument('--job-root', type=Path,
                         help='Original HR job used to rehash the saved design and report at certification')
@@ -151,7 +185,9 @@ def main(argv=None):
     args = parser.parse_args(argv)
     if not args.candidate_only and args.job_root is None:
         parser.error('--job-root is required for final saved-design delivery verification')
-    result = (render_native_revision(args.handoff,args.output) if args.native_revision else
+    if (args.approved_layout or args.prior_native) and not (args.native_revision and args.approved_layout and args.prior_native):
+        parser.error('--approved-layout and --prior-native must be used together with --native-revision')
+    result = (render_native_revision(args.handoff,args.output,args.approved_layout,args.prior_native) if args.native_revision else
               render_candidate(args.handoff,args.drawing_model,args.output,args.original_native))
     if not args.candidate_only:
         from .delivery_verification import verify_delivery

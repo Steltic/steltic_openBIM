@@ -23,18 +23,38 @@ def test_every_reviewed_brace_has_continuous_gusset_and_physical_end(key):
         for w in s['welds']:
             if 'GUSSET' in w['connects']:
                 assert polygon.buffer(1e-6).covers(LineString([(w[q][0],w[q][2]) for q in ('a','b')])),(key,c['id'],w['id'])
+        material_stations={}
         for f in s['fasteners']:
             for q in f['points']:
-                for name in f['connects']:assert contact(parts[name],f,q),(key,c['id'],f['id'],name)
+                for name in f['connects']:
+                    part=parts[name]
+                    if part.get('holes'):
+                        assert any(math.dist(h['point'],q)<1e-6 and h['axis']==f['axis'] and
+                                   h['diameter_in']>=f['diameter'] for h in part['holes'])
+                        axis=tuple(f['axis']);mkey=name,axis
+                        if mkey not in material_stations:
+                            values=[sum(a*b for a,b in zip(v,axis)) for face in part['faces'] for v in face]
+                            material_stations[mkey]=min(values),max(values)
+                        shaft_start=sum(a*b for a,b in zip(q,axis));lo,hi=material_stations[mkey]
+                        assert lo>=shaft_start-1e-6 and hi<=shaft_start+f['grip']+1e-6
+                    else:assert contact(part,f,q),(key,c['id'],f['id'],name)
         if s['subtype'] in ('apex','link_end'):
-            w=next(w for w in s['welds'] if w['id']=='WGB');centre=[(a+b)/2 for a,b in zip(w['a'],w['b'])]
+            lines=[w for w in s['welds'] if w.get('source_weld_id',w['id'])=='WGB']
+            endpoints=sorted((w[q] for w in lines for q in ('a','b')),key=lambda p:p[0])
+            centre=[(a+b)/2 for a,b in zip(endpoints[0],endpoints[-1])]
             actual=lookup[c['member_ids'][0]];far=max(actual['axis'],key=lambda q:math.dist(q,c['point']));v=[a-b for a,b in zip(far,c['point'])]
             assert centre[0]==pytest.approx(centre[2]*math.hypot(*v[:2])/v[2])
         m=lookup[c['member_ids'][0]];end=min(range(2),key=lambda i:math.dist(m['axis'][i],c['point']))
         assert math.dist([0,0,0],m['end_offsets'][end])==pytest.approx(math.dist([0,0,0],parts['BRACE']['member']['axis'][0]))
         if c['detail_ref']['id']=='review_brb':
-            for name in ('CHEEK0','CHEEK1'):
-                assert all(polygon.buffer(1e-6).covers(Point(q[0],q[2])) for face in parts[name]['faces'] for q in face)
-            assert 'END-CAP' in parts
+            if 'GUSSET-BOLTS' in parts:
+                group=next(f for f in s['fasteners'] if f['id']=='GUSSET-BOLTS')
+                assert group['connects']==['SPLICE0','GUSSET','SPLICE1']
+                assert all(len(parts[name]['holes'])==len(group['points']) for name in group['connects'])
+                assert 'CORE-END' in parts
+            else:
+                for name in ('CHEEK0','CHEEK1'):
+                    assert all(polygon.buffer(1e-6).covers(Point(q[0],q[2])) for face in parts[name]['faces'] for q in face)
+                assert 'END-CAP' in parts
     assert count>0 and fingerprint(package)==source
     before=fingerprint(model);bind(model,package);assert fingerprint(model)==before

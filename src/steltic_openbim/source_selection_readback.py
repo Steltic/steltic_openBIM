@@ -54,6 +54,8 @@ def verify_source_selections(package,drawing_model=None):
     physical=package['physical']
     templates={x['id']:x for x in physical.get('assemblies',[])}
     materials={m['id']:m for m in physical['materials']}
+    members={m['id']:m for m in physical.get('members',[])}
+    profiles={p['id']:p for p in physical.get('profiles',[])}
     scenes={}
     if drawing_model:
         scenes={s['id']:s for s in drawing_model.get('connection_assemblies',drawing_model.get('assemblies',[]))}
@@ -151,7 +153,20 @@ def verify_source_selections(package,drawing_model=None):
                     measured.append(thickness_cache[key])
                 check('selected_gusset_thickness',bool(measured) and all(n is not None and abs(n-value)<1e-4 for n in measured),
                       value,measured,rid)
-        if fields['anchor_pattern','spacing_in'] or fields['anchor_pattern','edge_in']:
+        directional=any(fields['anchor_pattern',key] for key in ('edge_flange_normal_in','edge_along_flange_in','minimum_edge_in','flange_offset_in'))
+        if directional:
+            from .anchor_pattern_readback import measure_anchor_pattern
+            try:
+                measures=measure_anchor_pattern(connection,parts,members,profiles)
+            except (KeyError,ValueError,TypeError) as exc:
+                check('anchor_setout_geometry',False,'measurable base plate, column flanges and rods',str(exc))
+                measures={}
+            for field,values in measures.items():
+                for rid,expected in fields['anchor_pattern',field]:
+                    good=(all(v+1e-4>=expected for v in values) if field=='minimum_edge_in' else
+                          all(abs(v-expected)<1e-4 for v in values))
+                    check('anchor_'+field,bool(values) and good,expected,values,rid)
+        if fields['anchor_pattern','edge_in'] or (fields['anchor_pattern','spacing_in'] and not directional):
             plate=next((p for p in parts if p['id'] in ('P1','BP','BASE-PLATE') and p['kind']=='plate'),{})
             bounds=geometry_bounds(plate)
             pts=[p.get('parameters',{}).get('point') for p in found['anchor']]

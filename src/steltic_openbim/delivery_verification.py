@@ -1,6 +1,7 @@
 """Compulsory independent readback of an HR PDF/IFC delivery revision."""
 import json
 import re
+from time import monotonic
 from pathlib import Path
 
 from .drawing_workflow import fingerprint, write_json
@@ -8,7 +9,29 @@ from .generator_identity import generator_identity
 from .saved_delivery import digest_file
 
 
+def original_consistency_findings(root):
+    root=Path(root);result=root/'design/consistency_result.json'
+    if not result.is_file():return ['Original HR consistency result is missing']
+    status=json.loads(result.read_text(encoding='utf-8-sig'))
+    findings=[]
+    if (str(status.get('result','')).upper()!='PASS' or status.get('n_issues')!=0 or
+            status.get('issues')!=[] or status.get('passed') is False or
+            str(status.get('status','')).lower() in ('failed','stale','incomplete')):
+        findings.append('Original HR consistency evidence is incomplete or failed')
+    for filename,key in [('cfg.py','cfg_sha256'),('design/calc_package.json','calc_package_sha256')]:
+        path=root/filename
+        if not path.is_file() or digest_file(path)!=status.get(key):
+            findings.append('Original HR consistency result differs from '+filename)
+    return findings
+from .ifc_readback_session import readback_session
+
+
 def verify_delivery(output_dir,source_directory=None,job_root=None):
+    with readback_session(Path(output_dir)/'model.ifc'):
+        return _verify_delivery(output_dir,source_directory,job_root)
+
+
+def _verify_delivery(output_dir,source_directory,job_root):
     output=Path(output_dir);source=Path(source_directory or output)
     def read(path):return json.loads(path.read_text(encoding='utf-8-sig'))
     checks={}
@@ -17,11 +40,14 @@ def verify_delivery(output_dir,source_directory=None,job_root=None):
         status='verification_failed',checks=checks,findings=findings,files={},
         source_geometry_scope='HR design-to-drawing and IFC fidelity',generator=generator_identity())
     def run(name,fn):
+        started=monotonic()
+        write_json(output/'delivery_verification_progress.json',dict(running=name,completed=list(checks)))
         try:
             result=fn()
         except Exception as e:
             result={'passed':False,'findings':[{'issue':type(e).__name__+': '+str(e)}]}
         checks[name]=result
+        result['elapsed_seconds']=round(monotonic()-started,3)
         if not result.get('passed'):
             findings.append({'check':name,'count':len(result.get('findings',[])),'detail':result.get('findings',[])[:3]})
         return result
@@ -77,13 +103,17 @@ def verify_delivery(output_dir,source_directory=None,job_root=None):
             problems.append('Installed verification source differs from the IFC producer identity')
         if drawing.get('generator')!=certificate['generator']:
             problems.append('Installed verification source differs from the PDF producer identity')
-        if job_root and (Path(job_root)/'design/consistency_result.json').is_file():
-            status=read(Path(job_root)/'design/consistency_result.json')
-            if status.get('passed') is False or str(status.get('status','')).lower() in ('failed','stale','incomplete'):
-                problems.append('Original HR consistency evidence is incomplete or failed')
+        if job_root:problems.extend(original_consistency_findings(job_root))
         model_file=source/'design_model.json'
         if model_file.exists() and drawing.get('model_sha256')!=fingerprint(read(model_file)):
             problems.append('Serialized drawing model differs from its source-bound drawing manifest')
+        native_manifest=source/'native_revision_manifest.json'
+        if native_manifest.exists() and read(native_manifest).get('retained_layout_sha256'):
+            retained=read(source/'retained_layout.json')
+            if (fingerprint(retained)!=read(native_manifest)['retained_layout_sha256'] or
+                    retained.get('missing_prior_sheets') or
+                    retained.get('new_sheet_ids')!=[s['number'] for s in drawing['sheets']]):
+                problems.append('Approved connection-only drawing register is incomplete or has a changed binding')
         certificate.update(building_id=package['building_id'],source_files=files,
             source_contract_sha256=h.get('contract_sha256'),source_model_sha256=model_hash,
             hr_generator=h.get('source_bindings',{}).get('generator_files'),
@@ -97,16 +127,16 @@ def verify_delivery(output_dir,source_directory=None,job_root=None):
         ifc=read(output/'ifc_manifest.json') if (output/'ifc_manifest.json').exists() else read(output/'report.json')
         model_hash=fingerprint(package)
         run('source_bindings',inputs)
-        from .pdf_verification import verify_dimensions
-        pdf=run('pdf_readback',lambda:verify_dimensions(source,ifc_path=output/'model.ifc'))
-        write_json(output/'pdf_verification.json',pdf)
-        from .ifc_delivery_readback import verify_ifc
-        run('ifc_readback',lambda:verify_ifc(output/'model.ifc',package,model_hash))
         def selection_check():
             from .source_selection_readback import verify_source_selections
             drawing_model=source/'design_model.json'
             return verify_source_selections(package,read(drawing_model) if drawing_model.is_file() else None)
         run('source_selections',selection_check)
+        from .pdf_verification import verify_dimensions
+        pdf=run('pdf_readback',lambda:verify_dimensions(source,ifc_path=output/'model.ifc'))
+        write_json(output/'pdf_verification.json',pdf)
+        from .ifc_delivery_readback import verify_ifc
+        run('ifc_readback',lambda:verify_ifc(output/'model.ifc',package,model_hash))
         from .ifc_brace_readback import verify_member_clearance
         handoff=package.get('source_handoff',{})
         run('brace_member_clearance',lambda:verify_member_clearance(output/'model.ifc',package['physical'],
@@ -115,9 +145,13 @@ def verify_delivery(output_dir,source_directory=None,job_root=None):
             from .ifc_assembly_verification import verify_assembly_fit
             return verify_assembly_fit(output/'model.ifc',package['physical'],package.get('source_handoff',{}))
         run('assembly_fit',assembly_check)
+        for name,path in [('drawings.pdf',source/'drawings.pdf'),('model.ifc',output/'model.ifc')]:
+            if digest_file(path)!=certificate['files'][name]:
+                findings.append(dict(check='artifact_changed_during_readback',detail=name))
     except Exception as e:
         findings.append(dict(check='required_evidence',detail=type(e).__name__+': '+str(e)))
     certificate['passed']=not findings
     if certificate['passed']:certificate['status']='verified'
     write_json(output/'delivery_certificate.json',certificate)
+    write_json(output/'delivery_verification_progress.json',dict(running=None,completed=list(checks),passed=certificate['passed']))
     return certificate

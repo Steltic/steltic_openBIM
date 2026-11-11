@@ -216,6 +216,13 @@ class DesignSheets(Sheets):
 
     def draw_members(self,members,tr,axes,s,mark_mode='groups'):
         marks=defaultdict(list);seen=set()
+        if not members:return marks
+        if not self.views or self.views[-1]['sheet']!=self.current or self.views[-1].get('linework'):
+            # Enlarged opening plans have their own projection, sometimes two on one sheet.
+            self.views.append(dict(sheet=self.current,axes=list(axes),bounds_in=[[0,0],[0,0]],
+                                   origin_pt=list(tr([0,0,0])),points_per_inch=s))
+        self.views[-1].update(linework='physical_plan',member_ids=[m['id'] for m in members])
+        self.c.addLiteral('/StelticFrame BMC')
         for m in members:
             a,b=physical_axis(m);p,q=tr(a),tr(b);seg=tuple(round(v,2) for v in (*p,*q))
             if seg in seen:continue
@@ -234,6 +241,7 @@ class DesignSheets(Sheets):
                 mid=((p[0]+q[0])/2,(p[1]+q[1])/2)
                 self.label(mid[0]+3,mid[1]+3,m['mark'],10,color)
                 self.labels.append(dict(sheet=self.current,member_id=m['id'],mark=m['mark']))
+        self.c.addLiteral('EMC')
         return marks
 
     def representative_marks(self,groups,max_labels=24,reserved=()):
@@ -342,6 +350,8 @@ def section(sh,normal,station,along,title,scale,bounds,origin=(215,340),band=1):
         if clip_axis(a,b,limits):selected.append(m)
     # Clip actual extruded sections, including members crossing the cut plane.
     # Project each unique edge once to avoid heavy duplicate lines at a web/flange.
+    sh.views[-1].update(linework='physical_section',limits_in=limits,member_ids=[m['id'] for m in selected])
+    sh.c.addLiteral('/StelticFrame BMC')
     groups=defaultdict(list);edges=set()
     for m in selected:
         for face in member_faces(m,sh.profiles,limits):
@@ -354,6 +364,7 @@ def section(sh,normal,station,along,title,scale,bounds,origin=(215,340),band=1):
         if clip:
             pts=[tr([a[i]+(b[i]-a[i])*t for i in range(3)]) for t in clip]
             groups[m['mark']].append((m,*pts))
+    sh.c.addLiteral('EMC')
     sh.representative_marks(groups,28)
     # The actual physical member ends (including source eccentricities) define the cut.
     for lev,label,z in sh.m['levels']:

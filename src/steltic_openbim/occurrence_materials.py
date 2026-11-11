@@ -16,6 +16,11 @@ def material_role(part):
         if pid.startswith(('ANCH', 'ROD')) and ('ANCHOR' in desc or kind=='anchor'):return 'anchor'
         if re.search(r'\bA(?:325|490)(?:\b|-)',desc) or kind=='bolt':return 'bolt'
     if pid=='GUSSET':return 'gusset'
+    if pid in ('P1','BASE') and ('BASE PLATE' in desc or 'END BEARING/ANCHOR PLATE' in desc):return 'base_plate'
+    if pid.startswith('CHEEK'):return 'cheek_plate'
+    if pid.startswith('CLEVIS'):return 'clevis_plate'
+    if pid=='KNIFE':return 'knife_plate'
+    if pid.startswith('SPLICE') and kind=='plate':return 'splice_plate'
     if pid.startswith('REINF') and 'SLOT' in desc:return 'slot_reinforcement'
     if pid in ('P1','P2') and ('SHEAR PLATE' in desc or 'ERECTION TAB' in desc):return 'shear_plate'
     return None
@@ -37,9 +42,15 @@ def bind(package,model):
         selected=selected_fields(package,c);roles={}
         for role in set(filter(None,(material_role(p) for p in template['parts']))):
             key=(role,'material')
-            if key in selected.conflicts:continue
-            grade=selected.get(key)
-            if grade:roles[role]=(str(grade),selected.sources[key])
+            origin=selected
+            if role=='base_plate':
+                related={p.get('parameters',{}).get('referenced_connection_id') for p in template['parts']
+                         if material_role(p)==role}-{None}
+                if len(related)==1 and next(iter(related)) in native_connections:
+                    origin=selected_fields(package,native_connections[next(iter(related))])
+            if key in origin.conflicts:continue
+            grade=origin.get(key)
+            if grade:roles[role]=(str(grade),origin.sources[key])
         spec=tuple(sorted((role,grade) for role,(grade,_) in roles.items()))
         if not spec:continue
         c.setdefault('parameters',{})['source_material_fields']={role:refs for role,(_,refs) in roles.items()}

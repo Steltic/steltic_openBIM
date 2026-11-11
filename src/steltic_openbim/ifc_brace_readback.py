@@ -8,6 +8,7 @@ import ifcopenshell.geom
 import ifcopenshell.ifcopenshell_wrapper as wrapper
 from ifcopenshell.util.element import get_psets
 import numpy as np
+from .ifc_readback_session import read_step
 
 
 def verify_member_clearance(ifc_path,physical,crossings=(),source_records=None):
@@ -31,7 +32,7 @@ def verify_member_clearance(ifc_path,physical,crossings=(),source_records=None):
     wanted={m for pair in joints for m in pair}
     crossing_ids={k for c in crossings for k in c['member_ids']}
     wanted.update(crossing_ids)
-    model=ifcopenshell.open(str(ifc_path))
+    model=read_step(ifc_path)
     objects={}
     for cls in ('IfcMember','IfcBeam','IfcColumn','IfcBuildingElementProxy'):
         for product in model.by_type(cls):

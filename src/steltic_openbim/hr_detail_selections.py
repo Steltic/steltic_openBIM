@@ -152,6 +152,14 @@ def reinforcement_weld(ctx):
 def bolted_brb(ctx):
     text = ctx.text
     selected = ctx.selected
+    variant=selected.get(('connection','variant'))
+    if variant in ('brb_bolted','brb_bolted_splice','bolted_brb'):
+        required={'count':'count','diameter':'diameter_in','material':'material','rows':'rows','pitch':'pitch_in'}
+        values={key:selected.get(('bolt',field)) for key,field in required.items()}
+        if all(value is not None for value in values.values()):return values
+        if not re.search(r'\bBRB end\b[^;|]*\bbolted between two splice plates\b',text,re.I):
+            raise ValueError('Incomplete selected bolted BRB arrangement at '+ctx.c['id'])
+    if variant=='brb_pinned':return None
     if not re.search(r'\bBRB end\b[^;|]*\bbolted between two splice plates\b',text,re.I):
         return None
     match = re.search(r'\bwith (\d+)\s*x\s*'+NUMBER+r'\s*in\s+(A(?:325|490)(?:-[NX])?)\s+bolts?\s*\((\d+) rows at '+NUMBER+r'\s*in',text,re.I)

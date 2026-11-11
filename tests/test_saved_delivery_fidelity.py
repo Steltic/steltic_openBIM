@@ -138,3 +138,34 @@ def test_real_hub_reopens_corrupted_pdf_and_preserves_failure_certificate(tmp_pa
     assert not certificate['checks']['pdf_readback']['passed']
     assert 'Drawing PDF digest differs from drawing manifest' in certificate['checks']['source_bindings']['findings']
     assert 'Original HR job evidence is unavailable for this Hub revision' in certificate['checks']['source_bindings']['findings']
+
+
+def test_source_consistency_checks_hr_result_and_both_live_digests(tmp_path):
+    from steltic_openbim.delivery_verification import original_consistency_findings
+    from steltic_openbim.saved_delivery import digest_file
+    design=tmp_path/'design';design.mkdir();cfg=tmp_path/'cfg.py';calc=design/'calc_package.json'
+    cfg.write_bytes(b'height = 2\n');calc.write_bytes(b'{}')
+    result=dict(result='PASS',n_issues=0,issues=[],cfg_sha256=digest_file(cfg),calc_package_sha256=digest_file(calc))
+    path=design/'consistency_result.json';path.write_text(json.dumps(result))
+    assert not original_consistency_findings(tmp_path)
+    path.write_text(json.dumps(dict(result,result='FAIL',n_issues=1,issues=['Incomplete member record'])))
+    assert 'Original HR consistency evidence is incomplete or failed' in original_consistency_findings(tmp_path)
+    path.write_text(json.dumps(result));cfg.write_bytes(b'height = 3\n');calc.write_bytes(b'{"revision":2}')
+    assert len(original_consistency_findings(tmp_path))==2
+
+
+def test_cfs_and_standalone_ifc_store_exports_keep_their_normal_paths(tmp_path):
+    from test_ifc import fixture_ifc
+    from steltic_openbim.drawing_workflow import DrawingStore,initial_state
+    drawings=DrawingStore(tmp_path/'jobs');store=IFCStore(drawings)
+    cfs=json.loads((Path(__file__).parent/'fixtures/synthetic_bim_package.json').read_bytes())
+    cfs['module']='CFS';drawings.publish('CFSJob',cfs,initial_state(cfs,1))
+    _,state=drawings.current('CFSJob')
+    out=store.export('CFSJob',dict(source='steltic',source_sha256=state['source_model_sha256'],revision=1,final=True))
+    assert out['counts']['members']==1 and 'delivery_certificate' not in out
+    f=tmp_path/'incoming.ifc';fixture_ifc(f);initial=store.upload('Independent',f.name,f.read_bytes())
+    state=store.build('Independent',dict(revision=initial['revision'],source_sha256=initial['source_sha256'],
+                                         options={'scope':'all','units':'auto'}))
+    out=store.export('Independent',dict(source='ifc_import',revision=state['revision'],
+                                        source_sha256=state['source_sha256'],final=True))
+    assert not out['schema_errors'] and 'delivery_certificate' not in out

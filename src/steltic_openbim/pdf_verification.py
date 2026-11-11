@@ -33,7 +33,7 @@ def inside(point, box):
     return box[0]-POINT_TOL <= x <= box[2]+POINT_TOL and box[1]-POINT_TOL <= y <= box[3]+POINT_TOL
 
 
-def read_ink(page, parts=None,legends=None):
+def read_ink(page, parts=None,legends=None,wires=None):
     """Interpret the generated PDF operators, including surrounding graphics state."""
     groups = []
     stream = page.get_contents()
@@ -41,7 +41,8 @@ def read_ink(page, parts=None,legends=None):
         return groups
     raw=stream.get_data()
     if (b"/StelticDim" not in raw and (parts is None or b"/StelticPart" not in raw)
-            and (legends is None or b"/StelticLegend" not in raw)):
+            and (legends is None or b"/StelticLegend" not in raw)
+            and (wires is None or (b"/StelticFrame" not in raw and b"/StelticPartWire" not in raw))):
         return groups
     ctm, clipped, stroke, fill, width, text_mode = IDENTITY, False, (0,), (0,), 1, 0
     font, size, tm = None, 0, IDENTITY
@@ -64,6 +65,10 @@ def read_ink(page, parts=None,legends=None):
                 groups.append(active)
                 if clipped:
                     active["errors"].append("dimension inside an unverified clipping path")
+            elif args[0] in ("/StelticFrame","/StelticPartWire") and wires is not None:
+                from .pdf_linework_readback import WireInk
+                active=WireInk(str(args[0]),clipped)
+                wires.append(active)
             elif args[0] == "/StelticPart" and parts is not None:
                 from .pdf_part_verification import FaceInk
                 active=FaceInk(int(args[1]["/N"]),clipped)
@@ -321,7 +326,7 @@ def verify_source(row, model, scenes, openings, native=None):
 
 def verify_dimensions(directory,ifc_path=None):
     directory = Path(directory)
-    result = dict(passed=False,pages_checked=0,dimensions_checked=0,projected_parts_checked=0,legend_rows_checked=0,findings=[])
+    result = dict(passed=False,pages_checked=0,dimensions_checked=0,projected_parts_checked=0,legend_rows_checked=0,framing_members_checked=0,native_projection_parts_checked=0,findings=[])
     findings = result["findings"]
     def finding(sheet, dim, issue):
         findings.append(dict(sheet=sheet,dimension=dim,issue=issue))
@@ -412,6 +417,8 @@ def verify_dimensions(directory,ifc_path=None):
         for key in expected.keys() | found_assembly.keys():
             if expected[key]!=found_assembly[key]:
                 finding(None,str(key),"assembly dimension missing, duplicated or outside declared drawing scope")
+        from .pdf_linework_readback import DrawingLinework
+        linework=DrawingLinework(model,manifest,native)
         with (directory/"drawings.pdf").open("rb") as file:
             pdf = PdfReader(file)
             if len(pdf.pages)!=len(manifest["sheets"]):
@@ -427,7 +434,8 @@ def verify_dimensions(directory,ifc_path=None):
                     finding(sheet,None,"rotated or rescaled PDF page")
                 part_ink=[]
                 legend_ink=[]
-                for group in read_ink(page,part_ink,legend_ink):
+                wires=[]
+                for group in read_ink(page,part_ink,legend_ink,wires):
                     dim = group["id"]
                     row = rows.pop(dim,None)
                     if row is None or row["sheet"]!=sheet:
@@ -455,6 +463,10 @@ def verify_dimensions(directory,ifc_path=None):
                         result["projected_parts_checked"]+=checked
                         for part,issue in issues:
                             finding(sheet,part,issue)
+                checked,parts_checked,wire_issues=linework.check(sheet,wires,tuple(map(float,page.cropbox)))
+                result["framing_members_checked"]+=checked
+                result["native_projection_parts_checked"]+=parts_checked
+                for issue in wire_issues:finding(sheet,None,issue)
                 result["pages_checked"]+=1
         if pages:
             finding(None,None,"dimension refers to an unavailable page")

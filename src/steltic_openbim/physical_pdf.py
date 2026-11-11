@@ -21,6 +21,17 @@ from . import bim_assemblies, bim_bonds
 VERTICAL_KINDS = ('col', 'column', 'post', 'endwall_post', 'chord')
 
 
+def connection_details(connections):
+    families=defaultdict(list)
+    for c in connections:
+        family=c.get('detail_ref',{}).get('id') or '|'.join(c.get('design_record_ids',[])) or c['id']
+        instance=c.get('assembly_instance')
+        key=(family,instance['template_id'],instance['revision']) if instance else (family,)
+        families[key].append(c)
+    return [dict(reference=f'C{i:03}',family=key[0],connections=group)
+            for i,(key,group) in enumerate(families.items(),1)]
+
+
 def drawing_model(package):
     model = copy.deepcopy(physical_view(package))
     model['title'] = package['building_id']
@@ -45,21 +56,9 @@ def drawing_model(package):
     if len(set(levels)) < 2:
         levels += [m['axis'][0][2] for m in members if abs(m['axis'][0][2] - m['axis'][1][2]) < 1e-5]
     model['levels'] = sorted(set(round(v, 6) for v in levels))
-    families = defaultdict(list)
-    for connection in model['connections']:
-        key = connection.get('detail_ref', {}).get('id') or '|'.join(connection.get('design_record_ids', [])) or connection['id']
-        instance=connection.get('assembly_instance')
-        if instance:
-            # A named design family may select several physical templates.
-            # Each selected revision needs its own representative sheet.
-            key=(key,instance['template_id'],instance['revision'])
-        families[key].append(connection)
-    model['details'] = []
-    for i, (key, occurrences) in enumerate(families.items(), 1):
-        ref = f'C{i:03}'
-        model['details'].append(dict(reference=ref, family=key[0] if isinstance(key,tuple) else key, connections=occurrences))
-        for c in occurrences:
-            c['drawing_reference'] = ref
+    model['details']=connection_details(model['connections'])
+    for row in model['details']:
+        for c in row['connections']:c['drawing_reference']=row['reference']
     return model
 
 
@@ -90,6 +89,13 @@ def plot(sh, number, title, members, axes=(0, 1), features=(), z=None):
     scale = next((s for s in (10, 20, 25, 50, 75, 100, 125, 150, 200, 250, 300, 400, 500, 750, 1000) if s >= need), math.ceil(need / 100) * 100)
     sh.start(number, title, '1:' + str(scale))
     tr, _ = sh.grid_view(bounds, axes, scale, origin=(215, 330))
+    sh.views[-1].update(linework='source_axes',member_ids=[m['id'] for m in members])
+    if axes[1]==2:
+        normal=next(i for i in (0,1) if i not in axes)
+        sh.views[-1]['source_plane_in']=members[0]['axis'][0][normal]
+    else:
+        sh.views[-1].update(source_elevation_in=z,base_plan=number=='S100')
+    sh.c.addLiteral('/StelticFrame BMC')
     groups = defaultdict(list)
     for m in members:
         a, b = [tr(p) for p in m['axis']]
@@ -97,6 +103,7 @@ def plot(sh, number, title, members, axes=(0, 1), features=(), z=None):
         if math.dist(a, b) < 2:
             sh.c.setStrokeColor(INK); sh.c.rect(a[0] - 3, a[1] - 3, 6, 6)
         groups[m['mark']].append((m, a, b))
+    sh.c.addLiteral('EMC')
     occupied = []
     for f in features:
         pp = [tr(p) for p in feature_vertices(f)]; color = BLUE if f['confirmed'] else ASSUMED
@@ -187,9 +194,13 @@ def detail(sh, row):
                 q = raw(p)
                 return x+w/2+(q[0]-sum(bounds[0])/2)*scale, y+h/2+(q[1]-sum(bounds[1])/2)*scale
             sh.text(x, y+h+22, label + ' / NTS', 14, font='Helvetica-Bold')
-            for f, ispart in sorted(faces, key=lambda r:r[1]):
-                pp = [tr(p) for p in f]
-                for a, b in zip(pp, pp[1:]+pp[:1]): sh.line(a, b, BLUE if ispart else LIGHT, .8 if ispart else .35)
+            for ispart in (False,True):
+                if ispart and parts: sh.c.addLiteral('/StelticPartWire BMC')
+                for f,part_face in faces:
+                    if part_face!=ispart: continue
+                    pp=[tr(p) for p in f]
+                    for a,b in zip(pp,pp[1:]+pp[:1]): sh.line(a,b,BLUE if ispart else LIGHT,.8 if ispart else .35)
+                if ispart and parts: sh.c.addLiteral('EMC')
             for line in lines:
                 pp = [tr(p) for p in line]
                 for a, b in zip(pp, pp[1:]): sh.line(a, b, ASSUMED, 1.4, [5, 3])
@@ -218,7 +229,7 @@ def detail(sh, row):
                            projection=dict(sheet=sh.current,axes=list(axes),scale=72/scale,origin_pt=tr([0,0,0])),
                            model_points=[a,b])
             sh.views.append(dict(sheet=sh.current, kind='source_connection_assembly' if parts else 'source_connection_reference', axes=list(axes) if axes else None,
-                                 points_per_inch=scale,origin_pt=tr([0,0,0]) if axes else None,
+                                 points_per_inch=scale,origin_pt=tr([0,0,0]),rect_pt=[x,y,w,h],
                                  connection_id=source['id'], part_ids=[p['id'] for p in selected_parts], contextual_member_ids=sorted(linked)))
     else:
         sh.text(85, sh.H-250, 'No located part geometry supplied for this family.', 22, ASSUMED)

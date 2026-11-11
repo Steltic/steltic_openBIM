@@ -7,6 +7,7 @@ import ifcopenshell
 import ifcopenshell.geom
 from ifcopenshell.util.element import get_psets
 import numpy as np
+from .ifc_readback_session import read_step
 
 
 class NativeEvidence:
@@ -39,6 +40,7 @@ class NativeEvidence:
         openings.extend(f for f in state.get('features',[]) if f.get('confirmed'))
         self.drawing_model=dict(grids=grids,levels=[(i,None,round(z,6)) for i,z in enumerate(sorted(levels))],
                                 openings=openings)
+        self.physical=physical
         self.connections={c['id']:c for c in physical['connections']}
         self.templates={t['id']:t for t in physical.get('assemblies',[])}
         self.path=ifc_path or directory/'model.ifc'
@@ -47,7 +49,7 @@ class NativeEvidence:
     @cached_property
     def solids(self):
         # Keep the model alive for geometry conversion and retain exact occurrence associations.
-        self.ifc=ifcopenshell.open(str(self.path))
+        self.ifc=read_step(self.path)
         objects=defaultdict(list)
         for obj in self.ifc.by_type('IfcElement'):
             if obj.Representation is None:

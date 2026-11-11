@@ -188,7 +188,9 @@ def draw_brace(ctx):
             basis='A',description='Source supplier core end meets its casing at the adopted station'))
     elif isbrb:
         dia,pin_material,hole_clearance=pin_selection(ctx)
-        cheek=ctx.n(r'two '+NUMBER+r' in cheek plates',.875);plate=t+2*cheek;breadth=ctx.n(r'width '+NUMBER+r' in',19)
+        cheek=ctx.selected.get(('cheek_plate','thickness_in')) or ctx.n(r'two '+NUMBER+r' in cheek plates',.875)
+        plate=t+2*cheek
+        breadth=ctx.selected.get(('gusset','width_at_hole_in')) or ctx.n(r'width '+NUMBER+r' in',19)
         # The entire pin-bearing cheek clears the support, not just its axis.
         pin_station=max(station+7,interface_station+(breadth/2+2)/abs(v[2]))
         if not upper:pin_station=max(pin_station,(clearance+breadth/2+2)/v[0])

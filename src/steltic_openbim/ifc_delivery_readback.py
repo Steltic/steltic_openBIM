@@ -5,6 +5,7 @@ from collections import defaultdict
 import ifcopenshell
 import ifcopenshell.util.placement
 import ifcopenshell.util.unit
+from .ifc_readback_session import read_step
 import numpy as np
 
 
@@ -82,7 +83,7 @@ def verify_assembly_surface(obj,frame,template,profiles,cache,unit_in):
 
 
 def verify_ifc(path,package,source_sha256):
-    model=ifcopenshell.open(str(path))
+    model=read_step(path)
     unit_in=ifcopenshell.util.unit.calculate_unit_scale(model)/.0254
     project=model.by_type('IfcProject')
     findings=[]

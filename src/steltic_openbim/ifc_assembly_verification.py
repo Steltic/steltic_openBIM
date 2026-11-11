@@ -10,6 +10,7 @@ import ifcopenshell
 import ifcopenshell.util.placement
 import ifcopenshell.util.unit
 import numpy as np
+from .ifc_readback_session import read_step
 from shapely.geometry import Polygon, box
 
 from .joint_mesh_readback import Mesh, TOL, common_plate_section, cross_section, frame, outer_polygon, plane_axes, projected, shared_face_area, transform, unit
@@ -81,7 +82,7 @@ def selected(handoff, connection, member=None, profile=None):
 class Readback:
     def __init__(self, path):
         self.path = Path(path)
-        self.file = ifcopenshell.open(str(path))
+        self.file = read_step(path)
         self.scale = ifcopenshell.util.unit.calculate_unit_scale(self.file) / .0254
         self.raw_meshes = {}
         self.member_views = {}

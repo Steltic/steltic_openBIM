@@ -163,11 +163,17 @@ def complete_native_hr(original):
     pending=[]
     for c in physical['connections']:
         fields=selected_fields(original,c)
-        if not any(k[0]=='brace_slot_weld' for k in fields):continue
+        variants={v['value'] for v in fields.sources.get(('connection','variant'),[])}
+        if not (variants & {'brb_pinned','brb_bolted'} or any(k[0]=='brace_slot_weld' for k in fields)):continue
         placed=parts(c,templates)
         if any('GUSSET' in p['id'].upper() and p.get('geometry') for p in placed):continue
         pending.append(c['id'])
-    if not pending:return original
+    from .physical_pdf import connection_details
+    def bindings_match(physical):
+        return all(c.get('drawing_ref')=='1/'+row['reference'] and
+                   c.get('detail_ref',{}).get('source_drawing')=='1/'+row['reference']
+                   for row in connection_details(physical['connections']) for c in row['connections'])
+    if not pending and bindings_match(physical):return original
     body={k:v for k,v in original.items() if k!='source_handoff'}
     if source['source_bindings'].get('native_content_sha256')!=fingerprint(body):
         raise ValueError('Native body differs from the authenticated HR source before geometry completion')
@@ -177,13 +183,21 @@ def complete_native_hr(original):
     cs={c['id']:c for c in physical['connections']}
     for cid in pending:
         c=cs[cid];j=joints[c['joint_id']]
-        linked=set(c.get('member_ids',[]))|{m['member_id'] for m in j.get('member_ends',[])+j.get('attachments',[])}
+        linked=set(c.get('member_ids',[]))|set(c.get('assembly_instance',{}).get('bindings',{}).values())
+        if not linked:linked={m['member_id'] for m in j.get('member_ends',[])+j.get('attachments',[])}
+        linked.intersection_update(members)
         braces=[members[mid] for mid in linked if members[mid]['kind'] in ('brace','truss_web')]
         supports=[members[mid] for mid in linked if members[mid]['kind'] not in ('brace','truss_web')]
         try:
             if parts(c,templates):raise ValueError('Existing connection constituents need a combined contour and attachment fit')
-            if len(braces)!=1 or len(supports)!=1:raise ValueError('Slotted gusset requires distinct located brace and support attachments')
-            t,frame,offsets,slots=complete_slotted_end(package,c,braces[0],supports[0],j['point'],profiles,catalogue)
+            if len(braces)!=1:raise ValueError('Located connection must select its attached physical brace')
+            variant=selected_fields(package,c).get(('connection','variant'))
+            if variant in ('brb_pinned','brb_bolted'):
+                from .native_brb import build_brb_end
+                t,frame,offsets,slots=build_brb_end(package,c,braces[0],supports,profiles,catalogue,j)
+            else:
+                if len(supports)!=1:raise ValueError('Slotted gusset requires a distinct located support')
+                t,frame,offsets,slots=complete_slotted_end(package,c,braces[0],supports[0],j['point'],profiles,catalogue)
             physical.setdefault('assemblies',[]).append(t)
             c.update(assembly_instance=frame,parts=[],member_ids=sorted(linked))
             braces[0].update(end_offsets=offsets,slots=slots)
@@ -193,4 +207,11 @@ def complete_native_hr(original):
             package['provenance'].setdefault('openbim_translation_findings',[]).append(
                 dict(code='native_joint_geometry',connection_id=cid,detail=str(error),owner='openBIM'))
     physical['materials']=list(catalogue.values())
+    for row in connection_details(physical['connections']):
+        for c in row['connections']:
+            c['drawing_ref']='1/'+row['reference']
+            detail=dict(c.get('detail_ref',{}),source_drawing=c['drawing_ref'])
+            detail.setdefault('id',row['family'])
+            detail.setdefault('revision',c.get('assembly_instance',{}).get('revision') or fingerprint(c.get('parts',[])))
+            c['detail_ref']=detail
     return package

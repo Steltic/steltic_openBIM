@@ -77,3 +77,34 @@ def test_full_height_box_plate_and_taper_remain_in_actual_ifc(tmp_path):
     assert {p.Name:p.Description for p in assigned.MaterialConstituents}=={'MAIN':member['material_id'],'SIDE':'sideplate'}
     member['section_plies'][0]['sections'][-1][1]=ring(.25)
     assert not verify_ifc(path,source,state['source_model_sha256'])['passed']
+
+
+def test_fresh_brb_corner_uses_new_brace_column_and_beam_bindings(tmp_path):
+    source=ordinary_job();ph=source['physical'];beam,brace=ph['members'];c=ph['connections'][0]
+    brace['axis'][1]=[180.,0.,120.]
+    ph['joints'][-1]['point']=brace['axis'][1]
+    beam['end_offsets']=[[0.,0.,-4.],[0.,0.,-4.]]
+    col=dict(copy.deepcopy(beam),id='col',kind='column',axis=[[0.,0.,0.],[0.,0.,140.]],
+             local_y=[0.,1.,0.],end_offsets=[[0.,0.,0.],[0.,0.,0.]])
+    ph['members'].append(col);c['member_ids'].append('col')
+    ph['joints'][0]['member_ends'].append(dict(member_id='col',end='start'))
+    ph['joints'].append(dict(id='roof-column',point=col['axis'][1],member_ends=[dict(member_id='col',end='end')],status='declared'))
+    ph['joint_dispositions'].append(dict(joint_id='roof-column',kind='free_end',reason='Test top'))
+    r=source['source_handoff']['records']['connections/c1']
+    data=[('connection','variant','brb_pinned'),('gusset','thickness_in',.875),('gusset','material','A572 Gr 50'),
+          ('pin','diameter_in',2.5),('pin','material','AISI 4140 Q&T'),('pin_hole','diameter_in',2.5625),
+          ('cheek_plate','thickness_in',.75),('gusset','width_at_hole_in',10.),
+          ('gusset_column_weld','length_in',12.),('gusset_column_weld','size_in',.5),
+          ('gusset_beam_weld','length_in',15.),('gusset_beam_weld','size_in',.375)]
+    r['fields']=[dict(role=k,field=f,value=v,source={'pointer':'/connections/0/components'}) for k,f,v in data]
+    h=source.pop('source_handoff');h.pop('contract_sha256');h['source_bindings']['native_content_sha256']=fingerprint(source)
+    h['occurrences'][c['id']]['applications'][0]['selected']=list(range(len(data)))
+    h['contract_sha256']=fingerprint(h);source['source_handoff']=h
+    result=complete_native_hr(source)
+    assert not result['provenance'].get('openbim_translation_findings')
+    made=result['physical']['connections'][0];t=result['physical']['assemblies'][0]
+    assert made['assembly_instance']['bindings']=={'COLUMN':'col','BEAM':'beam','BRACE':'B'}
+    assert made['drawing_ref']==made['detail_ref']['source_drawing']=='1/C001'
+    assert result['physical']['members'][1]['end_offsets'][0][0]>0
+    assert next(p for p in t['parts'] if p['kind']=='pin')['parameters']['diameter']==2.5
+    assert {p['id'] for p in t['parts'] if p.get('parameters',{}).get('holes')}=={'GUSSET','CHEEK0','CHEEK1','CLEVIS0','CLEVIS1'}

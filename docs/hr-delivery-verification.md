@@ -19,6 +19,8 @@ For a new HR design revision, export its newly selected physical members, joints
 python -m steltic_openbim.saved_delivery --handoff NEW_HANDOFF --native-revision --job-root NEW_JOB --output DELIVERY
 ```
 
+A connection-only redesign can retain an approved drawing layout. Supply `--approved-layout DRAWING_MODEL --prior-native ORIGINAL_BIM` with `--native-revision`. The comparison checks the member worklines, joint locations, panel boundaries and opening polygons against the original. It records specifically revised crossing bars, newly added details and the retained sheet numbers in `retained_layout.json`.
+
 ## Required comparisons
 
 | Comparison | Evidence that the check must read | Examples that must fail |
