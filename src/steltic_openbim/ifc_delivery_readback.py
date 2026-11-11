@@ -108,6 +108,9 @@ def verify_ifc(path,package,source_sha256):
         p=properties(product)
         if p.get('SourceId'):
             products[p['SourceId']].append(product);props[product.id()]=p
+    from .ifc_relationship_readback import check_relations
+    measured,issues=check_relations(model,package,products,props,unit_in)
+    result.update(measured);findings.extend(issues)
     def product_for(ident,cls):
         rows=[p for p in products[ident] if p.is_a()==cls]
         if len(rows)!=1:
@@ -128,7 +131,13 @@ def verify_ifc(path,package,source_sha256):
         if prop.get('Section')!=m['profile_id']:
             flag('ifc_profile',m['id'],'Assigned section differs from the physical source')
         mats=[a.RelatingMaterial.Name for a in obj.HasAssociations if a.is_a('IfcRelAssociatesMaterial') and a.RelatingMaterial.is_a('IfcMaterial')]
-        if mats!=[material.get(m.get('material_id'))]:
+        if m.get('section_plies'):
+            assignments=[a.RelatingMaterial for a in obj.HasAssociations if a.is_a('IfcRelAssociatesMaterial') and a.RelatingMaterial.is_a('IfcMaterialConstituentSet')]
+            actual={x.Name:(x.Description,x.Material.Name) for a in assignments for x in a.MaterialConstituents}
+            plies=[dict(id='MAIN',material_id=m['material_id']),*m['section_plies']]
+            if len(assignments)!=1 or actual!={p['id']:(p['material_id'],material[p['material_id']]) for p in plies}:
+                flag('ifc_member_ply_material',m['id'],'Compound member material graph differs from the selected section plies')
+        elif mats!=[material.get(m.get('material_id'))]:
             flag('ifc_material',m['id'],'Actual material assignment differs from the selected specification')
         pts=body_vertices(obj,vertices,unit_in)
         if not len(pts):

@@ -156,6 +156,9 @@ def member_solids(member,profiles,limits=None):
             faces=[rings[0][::-1],rings[1]]
             faces.extend([rings[0][i],rings[0][(i+1)%len(rings[0])],rings[1][(i+1)%len(rings[0])],rings[1][i]] for i in range(len(rings[0])))
             solids.append(faces)
+    if member.get('section_plies'):
+        from ..hr_boxed_plies import plate_solids
+        solids.extend(plate_solids(member,a,d,lo,hi))
     planes=member.get('terminal_planes',[])
     if planes:
         from ..assembly_scene import clip_faces

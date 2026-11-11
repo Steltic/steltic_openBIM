@@ -5,6 +5,33 @@ from .assembly_scene import bounds
 from .pilots.geometry import member_faces, extrude
 
 
+def column_face_at_gusset(profiles,pid,weak):
+    """Read the actual outer steel face in the gusset plane, including boxed columns."""
+    from shapely.geometry import LineString,Polygon
+    from .pilots.geometry import strips
+    line=LineString([(-1e5,0.),(1e5,0.)]);edges=[]
+    for ring in strips(profiles[pid],profiles):
+        points=[(u,v) if weak else (-v,u) for u,v in ring]
+        cut=Polygon(points).intersection(line)
+        if not cut.is_empty:edges.append(cut.bounds[2])
+    if not edges:raise ValueError('No column steel crosses the selected gusset plane: '+pid)
+    return max(edges)
+
+
+def support_selection(ctx,role,field,part_id,default):
+    from .hr_detail_selections import SelectionConflict
+    try:
+        result=ctx.selected.get((role,field))
+        return default if result is None else result
+    except SelectionConflict as issue:
+        original=next((s for s in ctx.model.get('connection_assemblies',[]) if s['id']==ctx.c.get('assembly_id')),None)
+        weld=next((w for w in (original or {}).get('welds',[]) if w['id']==part_id),None)
+        if not weld:raise
+        issue.record(ctx.package,ctx.c['id'])
+        ctx.a.notes.append('REVIEW REQUIRED. Competing '+role+' '+field+' values. The prior weld dimension is retained.')
+        return math.dist(weld['a'],weld['b']) if field=='length_in' else weld['size']
+
+
 def bound_base_plate(ctx):
     """Locate the separately selected column base in this brace occurrence frame."""
     from .bim_assemblies import transformed
@@ -169,19 +196,44 @@ def fit_detail_slot(assembly, width=None):
     brace['bounds']=bounds(brace['faces'])
 
 
-def bolted_brb_end(assembly, selected, axis, station, thickness, support_station):
+def fit_brb_rows(selected,axis,support_station,column_clearance=None):
+    """Fit the specified row spacing without imposing a second source pitch."""
+    rows=selected['rows'];count=selected['count'];dia=selected['diameter'];pitch=selected['pitch']
+    if rows<1 or count<2*rows or count%rows or pitch<=dia:
+        raise ValueError('Invalid selected BRB bolt count/rows/pitch')
+    edge=max(1.5*dia,2.)
+    other_pitch=selected.get('orthogonal_pitch') or 3*dia
+    across=count//rows
+    choices=[]
+    for row_axis,n_along,n_across,s_along,s_across in (
+            ('transverse',across,rows,other_pitch,pitch),('longitudinal',rows,across,pitch,other_pitch)):
+        width=(n_across-1)*s_across+2*edge
+        start=max(support_station+edge,support_station+(width/2*abs(axis[0])+.125)/abs(axis[2]))
+        if column_clearance is not None:
+            start=max(start,(column_clearance+width/2*abs(axis[2])+.125)/axis[0])
+        far=start+2*edge+(n_along-1)*s_along+max(2*edge,4.)
+        layout=dict(row_axis=row_axis,along_count=n_along,across_count=n_across,
+                    along_pitch=s_along,across_pitch=s_across,adopted_orthogonal_pitch=other_pitch)
+        choices.append((far,start,layout))
+    _,start,layout=min(choices,key=lambda item:item[0])
+    return start,layout
+
+
+def bolted_brb_end(assembly, selected, axis, station, thickness, support_station,layout=None):
     """Two source-selected splice plates join the finite core end to the gusset."""
     count,rows,pitch=selected['count'],selected['rows'],selected['pitch']
     dia=selected['diameter']
     if rows<1 or count<2*rows or count%rows or pitch<=dia:
         raise ValueError('Invalid selected BRB bolt count/rows/pitch')
-    columns=count//rows
+    layout=layout or dict(row_axis='transverse',along_count=count//rows,across_count=rows,
+                          along_pitch=3*dia,across_pitch=pitch,adopted_orthogonal_pitch=3*dia)
+    columns=layout['along_count']
     edge=max(1.5*dia,2.)
-    gauge=max(3*dia,pitch)
-    width=(rows-1)*gauge+2*edge
+    gauge=layout['across_pitch']
+    width=(layout['across_count']-1)*gauge+2*edge
     start=max(station,support_station+edge)
     first=start+edge
-    last=first+(columns-1)*pitch
+    last=first+(columns-1)*layout['along_pitch']
     far=last+edge
     normal=[-axis[2],0,axis[0]]
     def at(s,y,z):
@@ -201,11 +253,12 @@ def bolted_brb_end(assembly, selected, axis, station, thickness, support_station
     assembly.interfaces.append(dict(id='SPLICE-TO-CORE',kind='supplier_interface',basis='A',
         connects=['SPLICE0','CORE-END','SPLICE1'],
         description='Supplier-end engagement outside the source-selected bolted gusset group'))
-    points=[at(first+i*pitch,-thickness/2-splice_t,(j-(rows-1)/2)*gauge)
-            for i in range(columns) for j in range(rows)]
+    points=[at(first+i*layout['along_pitch'],-thickness/2-splice_t,(j-(layout['across_count']-1)/2)*gauge)
+            for i in range(columns) for j in range(layout['across_count'])]
     group=assembly.fastener('GUSSET-BOLTS',points,[0,1,0],dia,thickness+2*splice_t,
         ['SPLICE0','GUSSET','SPLICE1'],f'{count} x {dia:g} in {selected["material"]} source splice bolts')
-    group.update(functional_kind='bolt',selected_material=selected['material'])
-    assembly.notes.append(f'S: {count} x {dia:g} in {selected["material"]} bolts in {rows} rows at {pitch:g} in. A: supplier-end station, cover plate geometry and remaining local set-out.')
+    group.update(functional_kind='bolt',selected_material=selected['material'],parameters=dict(
+        selected_rows=rows,selected_row_spacing_in=pitch,**layout))
+    assembly.notes.append(f'S: {count} x {dia:g} in {selected["material"]} bolts in {rows} rows at {pitch:g} in. A: row spacing oriented {layout["row_axis"]} to the brace; orthogonal spacing {layout["adopted_orthogonal_pitch"]:g} in. The finite group clears its actual supports.')
     contour=[(at(s,0,z)[0],at(s,0,z)[2]) for s in (start,far) for z in (-width/2,width/2)]
     return at(far+supplier_overlap,0,0),contour,[group]

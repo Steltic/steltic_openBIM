@@ -9,7 +9,7 @@ from shapely.ops import unary_union
 
 from steltic_openbim.assembly_scene import Assembly
 from steltic_openbim.connection_cuts import drill_joined_plates
-from steltic_openbim.hr_brace_fit import bolted_brb_end,fit_detail_slot,reinforcement
+from steltic_openbim.hr_brace_fit import bolted_brb_end,fit_brb_rows,fit_detail_slot,reinforcement
 from steltic_openbim.hr_detail_selections import selected_fields,pin_selection
 from steltic_openbim.ifc_store import IFCStore
 from steltic_openbim.pilots.geometry import member_faces
@@ -33,6 +33,24 @@ def test_every_selected_brb_bolt_has_a_real_bore_in_the_gusset_and_both_covers()
                          for face in plate['faces'] if all(abs(q[1]-low)<1e-8 for q in face)])
         assert all(not cap.covers(Point(point[0],point[2])) for point in group['points'])
         assert len(cap.interiors)==8
+
+
+def test_large_source_bolt_group_fits_both_ends_of_the_short_hr23_brace():
+    import math
+    length=math.hypot(150,192)
+    selected=dict(count=44,rows=2,pitch=3.5,diameter=1.125,material='A490-X')
+    consumed=0.
+    for axis,support,column in (([150/length,0.,192/length],0.,29.),
+                                ([150/length,0.,-192/length],27.6*length/192,None)):
+        start,layout=fit_brb_rows(selected,axis,support,column)
+        a=Assembly('Source BRB',{})
+        casing,_,groups=bolted_brb_end(a,selected,axis,start,1.5,support,layout)
+        assert layout['row_axis']=='longitudinal'
+        assert layout['along_count']==2 and layout['along_pitch']==3.5
+        assert layout['across_count']==22 and len(groups[0]['points'])==44
+        assert groups[0]['connects']==['SPLICE0','GUSSET','SPLICE1']
+        consumed+=math.dist(casing,[0.,0.,0.])
+    assert length-consumed>50.
 
 
 def test_actual_hss_slot_uses_selected_width_independent_of_end_relief():
@@ -99,3 +117,24 @@ def test_hub_keeps_bad_hr_artifacts_provisional_and_blocks_final(tmp_path,monkey
     assert result['delivery_status']=='provisional' and result['verification_findings']
     assert (tmp_path/'ifc'/'exports'/result['key']/'delivery_certificate.json').is_file()
     with pytest.raises(ValueError,match='verification failed'):store.export('test',dict(opts,final=True))
+
+
+def test_real_hub_reopens_corrupted_pdf_and_preserves_failure_certificate(tmp_path):
+    from reportlab.pdfgen.canvas import Canvas
+    from steltic_openbim.drawing_workflow import DrawingStore,initial_state
+    package=json.loads((Path(__file__).parent/'fixtures/synthetic_bim_package.json').read_bytes())
+    drawings=DrawingStore(tmp_path/'jobs')
+    drawings.publish('FutureHRJob',package,initial_state(package,1))
+    folder,state=drawings.current('FutureHRJob')
+    altered=Canvas(str(folder/'drawings.pdf'));altered.drawString(72,72,'Changed drawing');altered.save()
+    store=IFCStore(drawings)
+    with pytest.raises(ValueError,match='verification failed'):
+        store.export('FutureHRJob',dict(source='steltic',revision=state['revision'],
+                     source_sha256=state['source_model_sha256'],final=True))
+    export,=(drawings.project('FutureHRJob')/'ifc'/'exports').iterdir()
+    assert (export/'model.ifc').read_bytes().startswith(b'ISO-10303-21')
+    certificate=json.loads((export/'delivery_certificate.json').read_bytes())
+    assert not certificate['passed']
+    assert not certificate['checks']['pdf_readback']['passed']
+    assert 'Drawing PDF digest differs from drawing manifest' in certificate['checks']['source_bindings']['findings']
+    assert 'Original HR job evidence is unavailable for this Hub revision' in certificate['checks']['source_bindings']['findings']

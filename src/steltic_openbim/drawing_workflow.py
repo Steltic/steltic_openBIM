@@ -239,10 +239,18 @@ class DrawingStore:
         directory=base/'revisions'/key
         return directory,json.loads((directory/'state.json').read_text(encoding='utf-8'))
 
-    def publish(self,p,package,state):
+    def publish(self,p,package,state,original_hr=None):
         from .drawing_pdf import generate
         base=self.project(p); key=f'r{state["revision"]:04}-{uuid.uuid4().hex[:12]}'
         directory=base/'revisions'/key; directory.mkdir(parents=True)
+        if original_hr is not None:
+            write_json(directory/'hr_original_source.json',original_hr)
+        elif state.get('original_hr_sha256'):
+            import shutil
+            previous=self.current(p)
+            if previous is None or not (previous[0]/'hr_original_source.json').is_file():
+                raise ValueError('Original HR input is unavailable for this derived revision')
+            shutil.copyfile(previous[0]/'hr_original_source.json',directory/'hr_original_source.json')
         write_json(directory/'source.json',package)
         report=generate(package,state,directory)
         state['sheets']=report['sheets']; state['artifacts']=report.get('artifacts',['drawings.pdf','drawing_manifest.json','information_requests.json'])
@@ -258,6 +266,11 @@ class DrawingStore:
         with self.lock(p):
             current=self.current(p)
             if current and revision!=current[1]['revision']: raise StaleRevision('Refresh before replacing the source package')
+            original=package
+            if original.get('module')=='HR' and original.get('source_handoff'):
+                from .native_hr_completion import complete_native_hr
+                package=complete_native_hr(original)
+            original_hr=original if package is not original else None
             if current and current[1]['source_model_sha256']==fingerprint(package):
                 updated=reconcile_state(package,current[1])
                 if native_source:updated=dict(updated,native_source=native_source)
@@ -267,9 +280,10 @@ class DrawingStore:
                 return self.publish(p,package,updated)
             n=current[1]['revision']+1 if current else 1
             state=initial_state(package,n)
+            if original_hr is not None:state['original_hr_sha256']=fingerprint(original_hr)
             if native_source:state['native_source']=native_source
             if current: state['events']=[dict(revision=n,action='source_replaced',previous_source_model_sha256=current[1]['source_model_sha256'],note='Previous answers retained in revision history; new source starts with provisional proposals.')]
-            return self.publish(p,package,state)
+            return self.publish(p,package,state,original_hr)
 
     def answer(self,p,body):
         with self.lock(p):

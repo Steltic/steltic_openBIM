@@ -259,7 +259,13 @@ def _export_source(directory,destination,source):
             rep=model.create_entity('IfcShapeRepresentation',ContextOfItems=body_context,RepresentationIdentifier='Body',RepresentationType='GeometricCurveSet',Items=[geom])
             ifcopenshell.api.geometry.assign_representation(model,product=obj,representation=rep)
         mat=item.get('material_id')
-        if mat:
+        if mat and item.get('section_plies'):
+            plies=[dict(id='MAIN',material_id=mat),*item['section_plies']]
+            constituents=[model.create_entity('IfcMaterialConstituent',Name=p['id'],Description=p['material_id'],
+                          Category='member_section',Material=material_for(p['material_id'])) for p in plies]
+            assignment=model.create_entity('IfcMaterialConstituentSet',Name=item['id'],MaterialConstituents=constituents)
+            relation('IfcRelAssociatesMaterial','member-plies:'+key,RelatedObjects=[obj],RelatingMaterial=assignment)
+        elif mat:
             material_for(mat)
             material_products[mat].append(obj)
         refs=item.get('design_record_ids',[])

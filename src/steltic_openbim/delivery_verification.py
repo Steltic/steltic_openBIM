@@ -41,8 +41,14 @@ def verify_delivery(output_dir,source_directory=None,job_root=None):
             if (not saved.get('original_native_file_sha256') or saved['original_native_file_sha256']!=bindings.get('native_bim_file_sha256') or
                     not saved.get('original_native_content_sha256') or saved['original_native_content_sha256']!=bindings.get('native_content_sha256')):
                 problems.append('Archived native file or original handoff body lacks a verified matching digest')
-        elif bindings.get('native_content_sha256')!=fingerprint({k:v for k,v in package.items() if k!='source_handoff'}):
-            problems.append('Live physical delivery differs from the original authenticated native handoff')
+        else:
+            original=package
+            if state.get('original_hr_sha256'):
+                original=read(source/'hr_original_source.json')
+                if fingerprint(original)!=state['original_hr_sha256'] or original.get('source_handoff')!=h:
+                    problems.append('Original native snapshot differs from the derived drawing source binding')
+            if bindings.get('native_content_sha256')!=fingerprint({k:v for k,v in original.items() if k!='source_handoff'}):
+                problems.append('Live physical delivery differs from the original authenticated native handoff')
         files=h.get('source_files',{})
         for required in ('design/calc_package.json','design/member_schedule.csv','report.html'):
             if not re.fullmatch(r'[0-9a-f]{64}',str(files.get(required,''))):

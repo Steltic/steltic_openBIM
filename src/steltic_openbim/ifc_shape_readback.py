@@ -41,7 +41,7 @@ def unpack(mesh):
 
 def member_key(member):
     origin=np.asarray(member["axis"][0])
-    fields={key:member[key] for key in ("profile_id","local_y","end_offsets","extrusion_end_offsets","slots","rbs","cope") if key in member}
+    fields={key:member[key] for key in ("profile_id","local_y","end_offsets","extrusion_end_offsets","slots","rbs","cope","section_plies") if key in member}
     fields["axis"]=[[0.,0.,0.],(np.asarray(member["axis"][1])-origin).round(9).tolist()]
     if member.get("terminal_planes"):
         fields["terminal_planes"]=[dict(normal=p["normal"],offset_in=round(p["offset_in"]-float(origin@p["normal"]),9))
@@ -57,6 +57,15 @@ def opening_points(o):
     p[[1,2],ax]+=12*o["width_ft"]
     p[[2,3],ay]+=12*o["height_ft"]
     return p
+
+
+def member_signature(faces,origin):
+    if not faces:
+        return [],np.empty((0,3))
+    first=faces[0][0]
+    # Match the precision of the native IFC coordinate list relative to its map origin.
+    retained=[f for f in faces if len({tuple(round((v-a)*.0254,9) for v,a in zip(p,first)) for p in f})>=3]
+    return [len(f) for f in retained],np.asarray([p for f in retained for p in f])-origin
 
 
 class ShapeReadback:
@@ -93,15 +102,24 @@ class ShapeReadback:
         if cache_key in self.verified:
             return self.verified[cache_key]
         if key not in self.expected:
-            source=member_faces(data,self.profiles)
-            expected=[f for f in source if len(set(tuple(round(x*.0254,9) for x in p) for p in f))>=3]
-            self.expected[key]=([len(f) for f in expected],np.array([p for f in expected for p in f]))
-        counts,coords=self.expected[key]
-        issue=None
-        if any(len(rings)!=1 for rings in faces) or [len(r[0]) for r in faces]!=counts:
-            issue="delivered section faces, voids or cut topology differ from the source member"
-        elif not len(coords) or np.abs(points[np.concatenate([r[0] for r in faces])]-origin-coords).max()>INCH_TOL:
-            issue="delivered section or cut vertices differ from the numeric profile in its member frame"
+            self.expected[key]=member_signature(member_faces(data,self.profiles),np.zeros(3))
+        lengths=[len(r[0]) for r in faces]
+        if any(len(rings)!=1 for rings in faces):
+            return "unexpected void loop in the delivered section face"
+        actual=points[np.concatenate([r[0] for r in faces])]-origin if faces else np.empty((0,3))
+        def compare(expected):
+            counts,coords=expected
+            if lengths!=counts:
+                return "delivered section faces or cut topology differ from the source member"
+            if not len(coords) or np.abs(actual-coords).max()>INCH_TOL:
+                return "delivered section or cut vertices differ from the numeric profile in its member frame"
+            return None
+        issue=compare(self.expected[key])
+        if issue and any(member.get(k) for k in ("slots","terminal_planes","rbs","cope")):
+            # End stations within a few ULPs coalesce in the original world
+            # coordinate frame. A translated replay can choose a different
+            # coincident cap. Compare the exact input before flagging topology.
+            issue=compare(member_signature(member_faces(member,self.profiles),origin))
         self.verified[cache_key]=issue
         return issue
 

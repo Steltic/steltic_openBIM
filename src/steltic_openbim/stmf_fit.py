@@ -67,7 +67,8 @@ def make_scene(source,rows,profiles,records,direction):
     starts={};slots={};outline=[];pending=[];chord_edges=[]
     if column:
         q=column['near'];v=column['axis']
-        a.member(column['role'],column['pid'],add(q,mul(v,-24)),add(q,mul(v,24)),y=column['y'])
+        a.member(column['role'],column['pid'],add(q,mul(v,-24)),add(q,mul(v,24)),y=column['y'],
+                 **({'section_plies':column['plies']} if column.get('plies') else {}))
     def support_distance(r,host):
         v=r['away'];h=host['axis'];n=sub(v,mul(h,dot(v,h)))
         if math.dist(n,[0,0,0])<1e-7:return 0.
@@ -205,8 +206,12 @@ def repair_stmf(package,model):
             rows.append(dict(role=role,mid=mid,pid=m['profile_id'],kind=m['kind'],end=near_i,local_y=y,
                 side=sign*dot(local(normal,frame),[0,1,0]),near=local(near,frame,True),axis=local(axis,frame),
                 away=local(mul(axis,1 if near_i==0 else -1),frame),y=local(y,frame),length=math.dist(*e)))
+            if m.get('section_plies'):
+                from .hr_boxed_plies import cropped_plies
+                station=dot(sub(near,add(e[0],m['end_offsets'][0])),axis)
+                rows[-1]['plies']=cropped_plies(m['section_plies'],station-24,station+24)
         rows.sort(key=lambda r:r['role'])
-        key=(scene['id'],direction,tuple((r['role'],r['pid'],r['kind'],round(r['length'],5),
+        key=(scene['id'],direction,tuple((r['role'],r['pid'],r['kind'],round(r['length'],5),fingerprint(r.get('plies',[])),
             *(round(x,5) for attr in ('near','away','y') for x in r[attr])) for r in rows))
         if key not in cache:
             made,starts,slots=make_scene(scene,rows,profiles,records,direction)

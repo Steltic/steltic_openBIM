@@ -103,10 +103,44 @@ def render_candidate(handoff, drawing_model, output, original_native=None):
     return result
 
 
+def render_native_revision(handoff,output):
+    """Render a newly completed HR job through the ordinary physical drawing path."""
+    from .native_hr_completion import complete_native_hr
+    from .drawing_workflow import initial_state
+    from .drawing_pdf import generate
+    from .ifc_export import export_drawing
+    handoff,output=Path(handoff),Path(output)
+    original=json.loads(read(handoff));contract=original.get('source_handoff',{})
+    if (contract.get('schema')!='steltic.hr_source_handoff' or contract.get('building_id')!=original['building_id'] or
+            contract.get('contract_sha256')!=fingerprint({k:v for k,v in contract.items() if k!='contract_sha256'}) or
+            contract.get('source_bindings',{}).get('native_content_sha256')!=fingerprint({k:v for k,v in original.items() if k!='source_handoff'})):
+        raise ValueError('Fresh HR job needs an authenticated matching native handoff')
+    if not original['physical']['members']:raise ValueError('Fresh HR physical member geometry is missing')
+    package=complete_native_hr(original)
+    state=initial_state(package,1)
+    state.update(original_hr_sha256=fingerprint(original),source_job=original['building_id'],source_module='HR')
+    output.mkdir(parents=True,exist_ok=False)
+    write_json(output/'hr_original_source.json',original)
+    write_json(output/'source.json',package);write_json(output/'state.json',state)
+    write_json(output/'information_requests.json',{'requests':state['requests']})
+    write_json(output/'source_validation.json',inspect_package(package))
+    drawing=generate(package,state,output)
+    ifc=export_drawing(output,output/'model.ifc')
+    write_json(output/'ifc_manifest.json',ifc)
+    result=dict(schema='steltic.openbim_native_revision',building_id=package['building_id'],
+        source_model_sha256=state['source_model_sha256'],original_hr_sha256=state['original_hr_sha256'],
+        source_contract_sha256=contract['contract_sha256'],input_handoff_sha256=digest_file(handoff),
+        pdf_sha256=drawing['pdf_sha256'],ifc_sha256=ifc['sha256'],analysis_executed=False)
+    write_json(output/'native_revision_manifest.json',result)
+    return result
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--handoff', required=True, type=Path)
-    parser.add_argument('--drawing-model', required=True, type=Path)
+    mode=parser.add_mutually_exclusive_group(required=True)
+    mode.add_argument('--drawing-model',type=Path)
+    mode.add_argument('--native-revision',action='store_true',help='Render the new HR physical revision directly')
     parser.add_argument('--output', required=True, type=Path)
     parser.add_argument('--job-root', type=Path,
                         help='Original HR job used to rehash the saved design and report at certification')
@@ -117,7 +151,8 @@ def main(argv=None):
     args = parser.parse_args(argv)
     if not args.candidate_only and args.job_root is None:
         parser.error('--job-root is required for final saved-design delivery verification')
-    result = render_candidate(args.handoff, args.drawing_model, args.output,args.original_native)
+    result = (render_native_revision(args.handoff,args.output) if args.native_revision else
+              render_candidate(args.handoff,args.drawing_model,args.output,args.original_native))
     if not args.candidate_only:
         from .delivery_verification import verify_delivery
         certificate = verify_delivery(args.output,job_root=args.job_root)

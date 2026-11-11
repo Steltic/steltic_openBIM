@@ -27,6 +27,7 @@ def bind(package,model):
     templates={t['id']:t for t in physical['assemblies']}
     scenes={s['id']:s for s in model['connection_assemblies']}
     drawing_connections={c['id']:c for c in model['connections']}
+    native_connections={c['id']:c for c in physical['connections']}
     template_cache={};scene_cache={};scene_variants=defaultdict(list)
     next_sheet=max((int(s['sheet'][1:]) for s in scenes.values() if re.fullmatch(r'C\d+',s['sheet'])),default=0)
     for c in physical['connections']:
@@ -41,6 +42,7 @@ def bind(package,model):
             if grade:roles[role]=(str(grade),selected.sources[key])
         spec=tuple(sorted((role,grade) for role,(grade,_) in roles.items()))
         if not spec:continue
+        c.setdefault('parameters',{})['source_material_fields']={role:refs for role,(_,refs) in roles.items()}
         token=(template['id'],spec)
         if token not in template_cache:
             parts=[]
@@ -52,7 +54,7 @@ def bind(package,model):
                 selection=dict(id=old['id'],selected_material=grade)
                 mid=material_for(selection,kind,old,catalog,[r['record_id'] for r in provenance])
                 params=dict(old.get('parameters',{}),selected_material=grade,
-                            source_material_id=old.get('material_id'),source_material_fields=provenance)
+                            source_material_id=old.get('material_id'),source_material_role=role)
                 parts.append(dict(old,material_id=mid,parameters=params))
             tid=template['id']+'-material-'+fingerprint(spec)[:10]
             built=dict(template,id=tid,parts=parts);built.pop('revision',None)
@@ -90,12 +92,36 @@ def bind(package,model):
         consumed={cid for s in variants for cid in s['occurrences']}
         remaining=[cid for cid in original['occurrences'] if cid not in consumed]
         if remaining:
-            # Drawing-only continuity occurrences still point to the original
-            # page and retain their own source bindings.
-            variants[0]['occurrences'].extend(remaining)
+            # A shared unselected detail keeps its original content and page.
+            # A grade selected on a neighboring occurrence cannot replace it.
+            retained=dict(original,occurrences=remaining,occurrence_count=len(remaining))
+            next_sheet+=1;first=variants[0]
+            first.update(id=f'CD{next_sheet:03}',sheet=f'C{next_sheet:03}',reference=f'1/C{next_sheet:03}')
+            out.append(retained)
         for scene in variants:
             scene['occurrence_count']=len(scene['occurrences'])
             scene['geometry_sha256']=fingerprint([scene['parts'],scene['welds'],scene['interfaces']])
+            for cid in scene['occurrences']:
+                c=native_connections[cid]
+                c.update(assembly_id=scene['id'],drawing_ref=scene['reference'])
+                c['detail_ref']=dict(c['detail_ref'],id=model['pilot']+'/'+scene['id'],source_drawing=scene['reference'],
+                                     revision=scene['geometry_sha256'])
+                if cid in drawing_connections:
+                    drawing_connections[cid].update(assembly_id=scene['id'],drawing_ref=scene['reference'])
         out.extend(variants)
     model['connection_assemblies']=out
+    current={t['id']:t for t in physical['assemblies']}
+    for c in native_connections.values():
+        frame=c.get('assembly_instance')
+        if not frame or not c.get('assembly_id'):continue
+        template=current[frame['template_id']]
+        if template.get('source_detail')!=c['assembly_id']:
+            tid=template['id']+'-detail-'+fingerprint(c['assembly_id'])[:10]
+            if tid not in current:
+                revised=dict(template,id=tid,source_detail=c['assembly_id'])
+                revised['revision']=fingerprint({k:v for k,v in revised.items() if k!='revision'})
+                current[tid]=revised
+            frame.update(template_id=tid,revision=current[tid]['revision'])
+    used={c['assembly_instance']['template_id'] for c in native_connections.values() if c.get('assembly_instance')}
+    physical['assemblies']=[template for tid,template in current.items() if tid in used]
     physical['materials']=list(catalog.values());model['materials']=physical['materials']

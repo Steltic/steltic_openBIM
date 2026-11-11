@@ -79,7 +79,8 @@ def bind(model,package):
 
 def draw_brace(ctx):
     from .hr_detail_selections import pin_selection,bolted_brb,reinforcement_weld
-    from .hr_brace_fit import bolted_brb_end,fit_detail_slot,reinforcement,bound_base_plate,bind_beam_span
+    from .hr_brace_fit import bolted_brb_end,fit_brb_rows,fit_detail_slot,reinforcement,bound_base_plate,bind_beam_span
+    from .hr_brace_fit import column_face_at_gusset,support_selection
     from .connection_cuts import drill_joined_plates
     a,p,pid,txt,par=ctx.a,ctx.p,ctx.pid,ctx.text,ctx.params;kind=par.get('joint','corner');upper=kind in ('apex','link_end');isbrb=ctx.family=='review_brb'
     full_text=txt
@@ -105,14 +106,20 @@ def draw_brace(ctx):
     if par.get('upper_end') and 'upper end:' in txt and not par.get('interface_length'):
         txt=txt.split('upper end:',1)[1];ctx.text=txt
     t=par.get('gusset_thickness',ctx.n(r'(?:corner|apex|base) gusset '+NUMBER+r' in',ctx.n(r'slotted for a '+NUMBER+r' in',.75)));lx=ctx.n(r'(?:beam-edge weld length|beam edge|base-plate weld length|upper-end beam-edge weld) '+NUMBER+r' in',24);lz=ctx.n(r'(?:column-edge weld length|column edge|upper-end column-edge weld) '+NUMBER+r' in',24)
+    t=ctx.selected.get(('gusset','thickness_in')) or t
+    horizontal_role='gusset_base_weld' if kind=='base' and ('gusset_base_weld','length_in') in ctx.selected else 'gusset_beam_weld'
+    lx=support_selection(ctx,horizontal_role,'length_in','WGB',lx)
+    lz=support_selection(ctx,'gusset_column_weld','length_in','WGC',lz)
     if upper:
         length=ctx.n(r'(?:both sides x|flange over) '+NUMBER+r' in',ctx.n(r'apex gusset '+NUMBER+r' in along',36))
         if kind=='link_end':length=ctx.n(r'flange over '+NUMBER+r' in',length)
         length=par.get('interface_length',length)
+        length=support_selection(ctx,'gusset_beam_weld','length_in','WGB',length)
         a.member('BEAM',bp,[beam_x-length/2-10,0,beam_z],[beam_x+length/2+10,0,beam_z]);lx=length;lz=max(24,length*.65)
         vertices=[[beam_x+x,-t/2,z] for x,z in ((-length/2,interface_z),(length/2,interface_z),(length/2-3,interface_z+sign*lz*.4),(3,interface_z+sign*lz),(-length/2+3,interface_z+sign*lz*.4))]
         a.polygon('GUSSET',vertices,t,basis='A',description=f'Source gusset t={t:g}, beam interface L={length:g}; A free-edge outline')
-        w=ctx.n(r'\('+NUMBER+r'-in fillets both sides x',.5);a.weld('WGB',[beam_x-length/2,0,interface_z],[beam_x+length/2,0,interface_z],['BEAM','GUSSET'],w,description='Source apex/link-end interface weld, both sides; A centre at actual brace/flange intersection')
+        w=support_selection(ctx,'gusset_beam_weld','size_in','WGB',ctx.n(r'\('+NUMBER+r'-in fillets both sides x',.5))
+        a.weld('WGB',[beam_x-length/2,0,interface_z],[beam_x+length/2,0,interface_z],['BEAM','GUSSET'],w,description='Source apex/link-end interface weld, both sides; A centre at actual brace/flange intersection')
         # Source web stiffeners at both brace work lines and ends.
         tw=p[bp]['dimensions'].get('tw',.4);tf=p[bp]['dimensions'].get('tf',.6)
         if par.get('doubler_thickness'):
@@ -124,7 +131,7 @@ def draw_brace(ctx):
                 yy=tw/2 if sg>0 else -bf/2+.25;label=f'ST{i}{j}'
                 a.box(label,[x-.25,yy,beam_bottom+tf],[.5,bf/2-tw/2-.25,bd-2*tf],'A','Source-required stiffener, A thickness/station where unspecified');a.weld('W'+label,[x,sg*tw/2,beam_bottom+tf],[x,sg*tw/2,beam_top-tf],['BEAM',label],.25,basis='A')
     else:
-        weak=par.get('weak_axis_gusset',False);column_face=p[cp]['dimensions'].get('tw',.375)/2 if weak else cd/2
+        weak=par.get('weak_axis_gusset',False);column_face=column_face_at_gusset(p,cp,weak)
         a.member('COLUMN',cp,[0,0,-18 if proposal else 0 if kind=='base' else -bd-lz-24],[0,0,lz+12 if proposal else lz+24],y=[1,0,0] if weak else [0,1,0])
         if kind=='base':
             if actual_base:
@@ -160,9 +167,9 @@ def draw_brace(ctx):
         vertices=[[clearance,-t/2,interface_z],[lx+clearance,-t/2,interface_z],[max(lx,18)+clearance,-t/2,interface_z+sign*lz*.65],[clearance,-t/2,interface_z+sign*lz]]
         a.polygon('GUSSET',vertices,t,basis='A',description=f'Source gusset t={t:g}; A fitted perimeter, source UFM edges')
         weld=ctx.n(NUMBER+r'-in E70 fillets both sides',.375)
-        if not par.get('beam_only_gusset'):a.weld('WGC',[column_face,0,interface_z],[column_face,0,interface_z+sign*lz],['COLUMN','GUSSET'],weld,description='Source column-edge weld, both sides')
+        if not par.get('beam_only_gusset'):a.weld('WGC',[column_face,0,interface_z],[column_face,0,interface_z+sign*lz],['COLUMN','GUSSET'],support_selection(ctx,'gusset_column_weld','size_in','WGC',weld),description='Source column-edge weld, both sides')
         else:a.notes.append('S: beam-only gusset; no gusset-to-column weld. A 2t clear gap is drawn at the column face. Source free-edge and rotation-clearance requirements remain.')
-        a.weld('WGB',[clearance,0,interface_z],[lx+clearance,0,interface_z],[host,'GUSSET'],weld,description='Source beam/base edge weld, both sides')
+        a.weld('WGB',[clearance,0,interface_z],[lx+clearance,0,interface_z],[host,'GUSSET'],support_selection(ctx,horizontal_role,'size_in','WGB',weld),description='Source beam/base edge weld, both sides')
     ctx.text=full_text
     station=max(8,min(lx,lz)*.55,abs(interface_z/v[2])+4 if abs(v[2])>1e-8 else 0,
                 (clearance+2)/v[0] if not upper and v[0]>1e-8 else 0)
@@ -173,11 +180,8 @@ def draw_brace(ctx):
         # A long selected support weld does not require a proportionally long
         # offset before the first bolt. Place the complete selected bolt group
         # clear of the actual support and retain usable casing between both ends.
-        edge=max(1.5*selected_bolts['diameter'],2.)
-        half_width=(selected_bolts['rows']-1)*max(3*selected_bolts['diameter'],selected_bolts['pitch'])/2+edge
-        station=interface_station+(half_width*abs(v[0])+.125)/abs(v[2])
-        if not upper:station=max(station,(clearance+half_width*abs(v[2])+.125)/v[0])
-        start,bolt_contour,bolt_groups=bolted_brb_end(a,selected_bolts,v,station,t,interface_station)
+        station,layout=fit_brb_rows(selected_bolts,v,interface_station,None if upper else clearance)
+        start,bolt_contour,bolt_groups=bolted_brb_end(a,selected_bolts,v,station,t,interface_station,layout)
         end=add(start,mul(v,24))
         a.member('BRACE',pid,start,end,description='Source BRB casing with bolted supplier core extension')
         a.interfaces.append(dict(id='CORE-TO-CASING',kind='supplier_interface',connects=['BRACE','CORE-END'],

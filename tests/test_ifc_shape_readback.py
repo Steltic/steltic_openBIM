@@ -65,3 +65,15 @@ def test_actual_host_and_void(tmp_path,defect):
     model,obj=make_body(tmp_path,[boundary],[[] if defect=="filled" else [void]])
     issue=ShapeReadback(physical,1.).check_panel(obj,panel)
     assert bool(issue)==(defect!="none"),issue
+
+
+def test_slotted_translated_chs_retains_native_end_cap_topology(tmp_path):
+    profile=dict(id="CHS",family="chs",dimensions=dict(d=6.,t=.465))
+    member=dict(axis=[[1080.,720.,2226.],[1260.,720.,2376.]],
+                end_offsets=[[7.267373304991176,0.,6.05614442082598],[-33.965596606550555,0.,-28.304663838792127]],
+                local_y=[0.,1.,0.],profile_id="CHS",
+                slots=[dict(start_in=0.,end_in=17.15387090263231,width_in=.8125,section_axis=0),
+                       dict(start_in=165.7022500637919,end_in=180.63419196248475,width_in=.8125,section_axis=0)])
+    faces=member_faces(member,{"CHS":profile})
+    model,obj=make_body(tmp_path,faces,[[] for _ in faces])
+    assert ShapeReadback(dict(profiles=[profile]),1.).check_member(obj,member) is None

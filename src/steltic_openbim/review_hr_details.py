@@ -96,8 +96,8 @@ def draw(ctx):
         bp=pid;bd=effective(p,bp);bf=effective(p,bp,'width');cp,face=support(ctx,bp)
         typed_shear=f=='review_beam' and ctx.selected.get(('shear_plate','thickness_in')) is not None
         if typed_shear:
-            record_ids=list(dict.fromkeys(row['record_id'] for row in ctx.selected.sources[('shear_plate','thickness_in')]))
-            txt=source_text(ctx.package,dict(ctx.c,design_record_ids=record_ids))
+            from .hr_detail_selections import selected_shear_text
+            txt=selected_shear_text(ctx)
         txt,twin=paired_selection(txt,weak=getattr(ctx,'weak_axis_support',False),column=cp)
         n=lambda pattern,default:findnum(pattern,txt,default)
         moment=par.get('moment',False) or f=='review_crane_bracket';gap=0 if moment else n(r'beam end set back (?:\(web side\) )?'+NUMBER+r' in',1) if twin else 1.25
@@ -140,7 +140,7 @@ def draw(ctx):
             # Preserve the source pattern; a mismatched source profile is an error.
             ph=bd-1.5;edge=(ph-(rows-1)*pitch)/2
             if edge<dia*.8:raise ValueError('Source bolt group does not fit '+ctx.model['pilot']+' '+pid+' '+str((rows,cols,dia,pitch)))
-        width=ctx.n(r'bolt line '+NUMBER+r' in from the weld',3)+(cols-1)*gauge+max(2*dia,1.5);tw=p[bp]['dimensions'].get('tw',.375);z=-bd/2-ph/2
+        width=n(r'bolt line '+NUMBER+r' in from the weld',3)+(cols-1)*gauge+max(2*dia,1.5);tw=p[bp]['dimensions'].get('tw',.375);z=-bd/2-ph/2
         plate_edge=max(2*dia,1.5)
         if twin:
             plate_edge=n(NUMBER+r' in beam-end and plate-edge distances',2.25)
@@ -173,7 +173,7 @@ def draw(ctx):
             bolt['functional_kind']='bolt'
             material=ctx.selected.get(('bolt','material'))
             if material:bolt['selected_material']=material
-        weld=ctx.n(r'\('+NUMBER+r' in fillets both sides',.25)
+        weld=n(r'\('+NUMBER+r' in fillets both sides',.25)
         if twin:weld=n(r'(?:with one|\(one) '+NUMBER+r' in (?:E70 )?fillet',.5)
         a.weld('W1',[face,tw/2,z],[face,tw/2,z+ph],[getattr(ctx,'support_attachment','M1'),'P1'],weld,description=f'{weld:g} in fillet both sides to support')
         if paired:a.weld('W2',[face,-tw/2,z],[face,-tw/2,z+ph],['M1','P2'],weld,description='Source second shear-plate support weld')

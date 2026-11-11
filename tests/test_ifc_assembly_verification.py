@@ -7,7 +7,7 @@ import numpy as np
 import pytest
 
 from steltic_openbim.ifc_assembly_verification import Assessment, Readback, grip_engages, same_face, selected, verify_assembly_fit
-from steltic_openbim.joint_mesh_readback import Mesh, cross_section
+from steltic_openbim.joint_mesh_readback import Mesh, common_plate_section, cross_section, shared_face_area
 
 
 def cylinder(radius, low, high, hole=None, x=0.):
@@ -119,6 +119,23 @@ def test_screw_requires_positive_engagement_inside_grip():
     assert grip_engages([-.05,0.,.125,.185],.185)
     assert not grip_engages([-.05,0.,.25,.31],.185)
     assert not grip_engages([0.,.01,.125],.185)
+
+
+@pytest.mark.parametrize('top,overlaps',[(0.,False),(.2,True)])
+def test_actual_gusset_contact_vs_receiver_penetration(tmp_path,top,overlaps):
+    actual=export_readback(tmp_path,{'GUSSET':cuboid([-2,-2,0],[2,2,.4]),'STEEL':cuboid([-3,-3,-1],[3,3,top])})
+    proof=common_plate_section(actual['GUSSET'],actual['STEEL'])
+    assert bool(proof)==overlaps
+    if overlaps:
+        assert proof['common_material_area_in2']==pytest.approx(16.)
+        assert proof['closed_plate'] and proof['closed_member']
+
+
+@pytest.mark.parametrize('face,gap',[(1.,False),(1.1,True)])
+def test_actual_supplier_core_interface_requires_finite_face_contact(tmp_path,face,gap):
+    parts=export_readback(tmp_path,{'CORE':cuboid([0,0,0],[1,2,.5]),'CASING':cuboid([face,0,0],[3,2,.5])})
+    area=shared_face_area(parts['CORE'],parts['CASING'])
+    assert area==pytest.approx(0. if gap else 1.)
 
 
 def test_closed_material_section_retains_bore_and_detects_corrupt_ring():

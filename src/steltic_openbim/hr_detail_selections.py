@@ -70,6 +70,32 @@ def beam_family(components):
     return None
 
 
+def selected_shear_text(ctx):
+    """Use the selected component group inside a multi-detail source record."""
+    from .review_assemblies import source_text
+    handoff=ctx.package['source_handoff']
+    ids=list(dict.fromkeys(r['record_id'] for r in ctx.selected.sources[('shear_plate','thickness_in')]))
+    originals={r['id']:r['data'] for r in ctx.package['design_records']}
+    applications={a['record_id']:a for a in handoff['occurrences'][ctx.c['id']]['applications']}
+    texts=[]
+    for rid in ids:
+        app=applications[rid];record=handoff['records'][rid]
+        group=app.get('beam_end_group',{}).get('selected')
+        if group:
+            rows=[f for f in record['fields'] if f.get('applicability',{}).get('beam_group')
+                  and f['role'] in ('bolt','shear_plate') and f['source']['pointer'].endswith('/components')]
+            matches=[f['source']['span'] for f in rows if f['applicability']['beam_group']==group]
+            if matches:
+                lo=min(span[0] for span in matches);last=max(span[1] for span in matches)
+                components=originals[rid]['components']
+                hi=min((f['source']['span'][0] for f in rows if f['source']['span'][0]>=last and
+                        f['applicability']['beam_group']!=group),default=len(components))
+                texts.append(components[lo:hi])
+                continue
+        texts.append(source_text(ctx.package,dict(ctx.c,design_record_ids=[rid])))
+    return '\n'.join(texts)
+
+
 def first_number(text, patterns):
     for pattern in patterns:
         match = re.search(pattern, text, re.I)

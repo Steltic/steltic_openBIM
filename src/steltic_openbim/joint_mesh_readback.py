@@ -198,3 +198,38 @@ def outer_polygon(section):
 
 def projected(point, axes):
     return Point(float(np.dot(point, axes[0])), float(np.dot(point, axes[1])))
+
+
+def common_plate_section(plate, member):
+    """Find an interior material intersection, retaining real profile and bore voids."""
+    if np.min(np.minimum(plate.vertices.max(0),member.vertices.max(0))-
+              np.maximum(plate.vertices.min(0),member.vertices.min(0)))<=TOL:
+        return None
+    normal=plate.plate_normal; axes=plane_axes(normal)
+    pp=plate.vertices@normal; mp=member.vertices@normal
+    lo,hi=max(float(min(pp)),float(min(mp))),min(float(max(pp)),float(max(mp)))
+    if hi-lo<=TOL:
+        return None
+    stops=sorted({lo,hi,*(float(k) for k in np.r_[pp,mp] if lo+TOL<k<hi-TOL)})
+    for a,b in zip(stops,stops[1:]):
+        if b-a<=TOL:
+            continue
+        station=(a+b)/2
+        area=plate.section(normal,station,axes).intersection(member.section(normal,station,axes)).area
+        if area>TOL:
+            return {'common_material_area_in2':float(area),'interior_station_in':station,'station_interval_in':[a,b],
+                    'closed_plate':plate.closed,'closed_member':member.closed}
+    return None
+
+
+def shared_face_area(a,b):
+    """Area of actual coplanar mating faces. A shared edge or point has zero area."""
+    total=0.
+    for normal,station,u,v,flat,_ in a.planes:
+        for face in b.polygons:
+            if np.max(np.abs(face@normal-station))>TOL:
+                continue
+            projected_face=Polygon(np.column_stack((face@u,face@v)))
+            if projected_face.area>TOL and projected_face.is_valid:
+                total+=flat.intersection(projected_face).area
+    return float(total)

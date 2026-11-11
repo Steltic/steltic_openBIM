@@ -13,6 +13,12 @@ python -m steltic_openbim.saved_delivery --handoff HANDOFF --original-native ORI
 
 The first command runs in the HR environment. The second runs in the openBIM environment and writes the artifacts and their detached verification evidence. A candidate-only render can be used to diagnose a failure. The final drawing-source export in the Hub runs the verification as part of the export.
 
+For a new HR design revision, export its newly selected physical members, joints, attachments, approved architectural openings and source evidence. Use that revision's own job directory to verify its report. This command builds its framing plans, elevations and connection sheets directly from the new handoff.
+
+```shell
+python -m steltic_openbim.saved_delivery --handoff NEW_HANDOFF --native-revision --job-root NEW_JOB --output DELIVERY
+```
+
 ## Required comparisons
 
 | Comparison | Evidence that the check must read | Examples that must fail |

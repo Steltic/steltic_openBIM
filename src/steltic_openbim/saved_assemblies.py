@@ -225,6 +225,8 @@ def repair(package,model):
         raise ValueError('Saved drawing and native member identities disagree')
     for mid,m in members.items():
         source_members[mid]['material_id']=m['material_id']
+    from .hr_boxed_plies import add_column_plies
+    add_column_plies(package,model)
     from .review_hr_brace_ends import bind
     bind(model,package)
     for mid,m in members.items():

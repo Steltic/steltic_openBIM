@@ -12,7 +12,7 @@ import ifcopenshell.util.unit
 import numpy as np
 from shapely.geometry import Polygon, box
 
-from .joint_mesh_readback import Mesh, TOL, cross_section, frame, outer_polygon, plane_axes, projected, transform, unit
+from .joint_mesh_readback import Mesh, TOL, common_plate_section, cross_section, frame, outer_polygon, plane_axes, projected, shared_face_area, transform, unit
 
 
 def property_value(product, name):
@@ -424,7 +424,7 @@ class Assessment:
                 self.issue('reused_template_has_constituent_fit_findings', counts=dict(Counter(self.shared_issues[key])))
         curves = self.rb.curves(cid)
         receivers = {r['id']: r for r in template.get('receivers', [])}
-        self.paths(cid, parts, meshes, inst, instance, curves, br, gussets, fields)
+        self.paths(cid, parts, meshes, inst, instance, curves, br, gussets, fields,template.get('source_interfaces',[]))
         crossing_id = connection.get('source_crossing_id',cid)
         if crossing_id in self.crossings:
             self.crossing_occurrences[crossing_id] += 1
@@ -497,7 +497,7 @@ class Assessment:
         if actual:
             self.issue('extra_other_assembly_reference', count=len(actual))
 
-    def paths(self, cid, parts, meshes, inst, instance, actual_curves, br, gussets, fields):
+    def paths(self, cid, parts, meshes, inst, instance, actual_curves, br, gussets, fields,interfaces=()):
         used = set()
         connected = defaultdict(set)
         logical_welds = defaultdict(list)
@@ -512,6 +512,24 @@ class Assessment:
             member_keys[role] = (map_id, tuple(relative.round(6).flatten()))
             member_shapes[role] = raw.transformed(relative)
         support = dict(meshes, **member_shapes)
+        for interface in interfaces:
+            if interface.get('kind')!='supplier_interface' or 'CORE-END' not in interface.get('connects',[]):
+                continue
+            for role in set(interface['connects'])-{'CORE-END'}:
+                if role not in support or 'CORE-END' not in support:
+                    self.issue('source_supplier_interface_component_missing',interface=interface['id'],target=role)
+                    continue
+                token=('supplier_fit',self.context['template'],role,member_keys.get(role))
+                if token not in self.interface_cache:
+                    core,other=support['CORE-END'],support[role]
+                    self.interface_cache[token]=(shared_face_area(core,other),common_plate_section(core,other))
+                area,common=self.interface_cache[token]
+                self.counts['actual_supplier_interface_mating_faces'] += 1
+                if area<=TOL or common:
+                    self.issue('supplier_core_mating_face_fit_differs',interface=interface['id'],target=role,contact_area_in2=area,material_overlap=common)
+                else:
+                    connected[role].add('CORE-END')
+                    connected['CORE-END'].add(role)
         for pid, part in parts.items():
             links = part.get('connects', [])
             for target in links:
@@ -604,6 +622,15 @@ class Assessment:
                     count=sum(role==selected_role and target==mid for role,target,_ in logical_welds)
                     if count!=expected_count:
                         self.issue('selected_terminal_weld_count_differs', member=mid, role=selected_role, selected=expected_count, actual=count)
+        for pid in gussets:
+            for role in bound.keys()-br.keys():
+                token=('plate_receiver',self.context['template'],pid,member_keys[role])
+                if token not in self.interface_cache:
+                    self.interface_cache[token]=common_plate_section(meshes[pid],member_shapes[role])
+                common=self.interface_cache[token]
+                self.counts['actual_gusset_to_bound_steel_clearances'] += 1
+                if common:
+                    self.issue('gusset_overlaps_bound_receiver_material',gusset=pid,receiver=bound[role],**common)
         for role, mid in br.items():
             targets = connected[role] & gussets
             seen = {role}; frontier = {role}
