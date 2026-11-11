@@ -109,6 +109,14 @@ def build_scene(model,package,c,subtype=''):
         from .review_assemblies import Context
         from .review_hr_kickers import draw
         ctx=Context(model,package,c);draw(ctx);return ctx.finish()
+    if family=='hr_column_base' and not subtype=='embedded':
+        from .review_assemblies import Context
+        from .review_base_selection import flange_rows
+        from .review_hr_details import base
+        ctx=Context(model,package,c)
+        if flange_rows(ctx.text):
+            base(ctx)
+            return ctx.finish()
     located=None
     if par.get('physical_opening_joint'):located='header'
     elif par.get('physical_jamb_base'):located='jamb_base'
@@ -213,14 +221,29 @@ def build_scene(model,package,c,subtype=''):
         if not moment and text:
             hit=re.search(r'(?<![\d.])(\d+)\s*x\s*'+NUMBER+r'\s*in\.?\s+(?:ASTM\s+F3125\s+)?A(?:325|490)',text,re.I)
             if hit:n=int(hit[1]);dia=number(hit[2]);ph=(n-1)*pitch+2*edge
-        ph=min(ph,bd-2.0);edge=(ph-(n-1)*pitch)/2
-        if edge<dia: # Explicit test alternative when a source family does not fit the smaller beam.
+        from .hr_detail_selections import selected_fields
+        sel=selected_fields(package,c) if model['pilot'].startswith('hr') else {}
+        fixed_plate=sel.get(('shear_plate','depth_in'))
+        plate_t=sel.get(('shear_plate','thickness_in')) or plate_t
+        n=int(sel.get(('bolt','count')) or n)
+        dia=sel.get(('bolt','diameter_in')) or dia
+        pitch=sel.get(('bolt','pitch_in')) or pitch
+        ph=fixed_plate if fixed_plate is not None else min(ph,bd-2.0)
+        edge=sel.get(('bolt','vertical_edge_in')) or (ph-(n-1)*pitch)/2
+        if edge<dia and fixed_plate is None and ('bolt','pitch_in') not in sel:
             pitch=max(2.5*dia,(bd-4)/(n-1));ph=(n-1)*pitch+2;edge=1
             note('A: pitch fitted to this member web; retained source count. This variant has no new capacity verification.')
         tw=p[bp]['dimensions'].get('tw',.375);z=beam_z-ph/2
         a.box('P1',[face,tw/2,z],[pw,plate_t,ph],'A' if moment or family=='test_floor_opening' else 'S',description=f'Shear/erection plate {pw:g} x {ph:g} x {plate_t:g}')
-        bolt_x=face+pw-1.75
-        fast('F1',grid(n,1,pitch,origin=(bolt_x,-tw/2,z+edge)),(0,1,0),dia,tw+plate_t,['M2','P1'],f'{n} x {dia:g} in '+('A325' if dia==.75 else 'A490')+' through beam web and P1','A' if moment or family=='test_floor_opening' else 'S')
+        bolt_x=face+pw-(sel.get(('bolt','horizontal_edge_in')) or 1.75)
+        grade=sel.get(('bolt','material')) or ('A325' if dia==.75 else 'A490')
+        fast('F1',grid(n,1,pitch,origin=(bolt_x,-tw/2,z+edge)),(0,1,0),dia,tw+plate_t,['M2','P1'],f'{n} x {dia:g} in {grade} through beam web and P1','S' if fixed_plate is not None else 'A' if moment or family=='test_floor_opening' else 'S')
+        if fixed_plate is not None:
+            a.parts[-1]['selected_material']=grade
+            from .connection_cuts import drill_receivers
+            selected_hole=re.search(r'(?:standard|STD) holes\s*\('+NUMBER+r' in',text,re.I)
+            hole=number(selected_hole[1]) if selected_hole else dia+.0625
+            drill_receivers(a,a.parts[-1],hole)
         a.weld('W1',[face,tw/2,z],[face,tw/2,z+ph],['M1','P1'],.25 if family=='test_floor_opening' else .3125,description='Fillet weld both sides of P1 to support; E70XX')
         a.section_at=bolt_x;a.dim([bolt_x,0,z+edge],[bolt_x,0,z+edge+(n-1)*pitch],f'{n-1} @ {pitch:g} in',offset=-34)
         a.dim([face,0,z],[face+pw,0,z],basis='A' if moment else 'S',offset=-35)

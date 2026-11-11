@@ -20,7 +20,7 @@ def bind(model,package):
         # initial model construction there is no scene ID yet.
         from .hr_detail_selections import selected_fields,SelectionConflict
         selected=selected_fields(package,c)
-        key=(c['assembly_id'],selected.signature()) if c.get('assembly_id') else None
+        key=(c['assembly_id'],selected.signature(),bool(c.get('parameters',{}).get('common_apex_datum'))) if c.get('assembly_id') else None
         if key is None or key not in scenes:
             try:
                 scene=build_scene(model,package,c)
@@ -134,6 +134,7 @@ def draw_brace(ctx):
     # and stiffeners there, while retaining the exact source brace workline.
     interface_station=interface_z/v[2] if abs(v[2])>1e-8 else 0
     beam_x=v[0]*interface_station if upper else 0
+    if par.get('common_apex_datum'):beam_x=0.
     # End-specific source text can prescribe different UFM edges at the two ends.
     if par.get('upper_end') and 'upper end:' in txt and not par.get('interface_length'):
         txt=txt.split('upper end:',1)[1];ctx.text=txt
@@ -242,6 +243,12 @@ def draw_brace(ctx):
         if fold_ratio<=0:raise ValueError('Invalid selected brace-end clearance')
         fold,restrained_edges=restraint_station(a.welds,v)
         station=max(station,fold+fold_ratio*t)
+    if not isbrb:
+        from .slotted_gusset_outline import fitted_outline,width_station
+        effective_width=ctx.selected.get(('gusset','whitmore_effective_width_in'))
+        fit_limits=[(1,sign,interface_z)]
+        if not upper:fit_limits.append((0,1,clearance))
+        station=max(station,width_station(v,effective_width,fit_limits))
     selected_bolts=bolted_brb(ctx) if isbrb else None
     bolt_contour=[];bolt_groups=[]
     if selected_bolts:
@@ -300,14 +307,20 @@ def draw_brace(ctx):
         # Cheeks and pin must be on the same continuous gusset that reaches
         # the beam/column. Previously only slotted-HSS welds extended it.
         outline.extend((pin[0]+sx*(breadth/2+t),pin[2]+sz*(breadth/2+t)) for sx in (-1,1) for sz in (-1,1))
-    for w in a.welds:
-        if w['id'].startswith('WB'):
-            for q in (w['a'],w['b']):
-                for dx,dz in ((-t,0),(t,0),(0,-t),(0,t)):
-                    outline.append((max(clearance if not upper else beam_x-lx/2,q[0]+dx),
-                                    min(interface_z,q[2]+dz) if sign<0 else max(interface_z,q[2]+dz)))
+    else:
+        fixed=[q for w in a.welds if w['id'] in ('WGB','WGC') for q in (w['a'],w['b'])]
+        transfers=[(w['a'],w['b']) for w in a.welds if w['id'].startswith('WB')]
+        outline=fitted_outline(fixed,transfers,start,v,t,effective_width,fit_limits)
     a.parts.remove(gusset)
-    a.polygon('GUSSET',[[x,-t/2,z] for x,z in hull(outline)],t,basis='A',description=gusset['description'])
+    finished=a.polygon('GUSSET',[[x,-t/2,z] for x,z in hull(outline)],t,basis='A',description=gusset['description'])
+    if not isbrb:
+        finished.setdefault('parameters',{})['free_contour_rule']='slotted_attachment_hull'
+        if effective_width:
+            transverse=[-v[2],0.,v[0]]
+            a.dim(add(start,mul(transverse,-effective_width/2)),add(start,mul(transverse,effective_width/2)),
+                  'Selected Whitmore effective width at the transfer section',basis='S',offset=30)
+        if upper or not any(w['id']=='WGC' for w in a.welds):
+            lz=max(sign*(z-interface_z) for _,z in outline)
     if selected_bolts:
         for group in bolt_groups:drill_joined_plates(a,group,selected_bolts['diameter']+.0625,'A 1/16 in diametral fit allowance')
     elif isbrb:
@@ -326,13 +339,19 @@ def draw_brace(ctx):
             dimension(a,v,fold_ratio,fold,dot(start,v),restrained_edges)
     a.section_at=pin[0] if isbrb and not selected_bolts else start[0]+6
     edge_start=beam_x-lx/2 if upper else clearance
-    a.dim([edge_start,0,interface_z],[edge_start+lx,0,interface_z],
-          'Adopted lower free-edge extent' if base_kind=='free' else 'Source support-edge weld' if proposal else f'{lx:g} in source interface length',
-          basis='A' if base_kind=='free' else 'S',offset=-48 if proposal else 24)
+    if base_kind!='free':
+        a.dim([edge_start,0,interface_z],[edge_start+lx,0,interface_z],
+              'Source support-edge weld' if proposal else f'{lx:g} in source interface length',
+              basis='S',offset=-48 if proposal else 24)
+    elif isbrb:
+        a.dim([edge_start,0,interface_z],[edge_start+lx,0,interface_z],
+              'Adopted lower free-edge extent',basis='A',offset=24)
     a.dim([beam_x,0,interface_z],[beam_x,0,interface_z+sign*lz],basis='S' if proposal else 'A',offset=65 if proposal else 40)
     if upper:a.notes.append('A: support weld, doubler and stiffeners centre on the actual brace/flange intersection. Continuous gusset to the attachment; original source checks remain separate.')
     if upper:bind_support_span(ctx,'BEAM',0)
     if not upper:bind_support_span(ctx,'COLUMN',2)
+    from .gusset_support_welds import place_faces
+    place_faces(a,ctx.selected,horizontal_role)
     a.notes.append('Separate source end condition: '+kind+'. Member slot, gusset clearance and free-edge trim follow the attached source record; drawings show the assembled load path. A geometry remains subject to the unchanged design verification requirements.')
 
 

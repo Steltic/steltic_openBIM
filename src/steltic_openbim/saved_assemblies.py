@@ -88,7 +88,7 @@ def native_parts(scene,old_template,materials):
         mid=material_for(weld,'weld',old,materials,scene['source_record_ids'])
         params=dict(weld_type=weld['kind'],size_in=weld['size'] if weld['kind'] in ('fillet','PJP') else None,
                     basis=weld['basis'],description=weld['description'])
-        params.update({k:weld[k] for k in ('source_weld_id','segment_index','selected_total_length_in','segment_count',
+        params.update({k:weld[k] for k in ('source_weld_id','source_weld_side','source_weld_leaf','segment_index','selected_total_length_in','segment_count',
                                            'attachment_role','available_edge_length_in') if k in weld})
         result.append(dict(id=weld['id'],kind='weld',material_id=mid,connects=weld['connects'],
             geometry=dict(type='polyline',points=[weld['a'],weld['b']]),
@@ -174,12 +174,19 @@ def rebuilt_scenes(model,package):
         family=original['family']
         rebuild=family in ('review_brace','review_brb','review_beam','review_pin_beam','review_base','review_wall_base',
                            'review_truss_node','review_truss_heel','review_plan_angle')
+        if model['pilot'].startswith('hr'):
+            if family in ('hr_simple_shear_plate','hr_infill_shear_plate_cope','hr_shear','test_floor_opening'):
+                rebuild=any(('shear_plate','depth_in') in selected_fields(package,by_id[cid]) for cid in original['occurrences'])
+            if family=='hr_column_base' and original.get('subtype')=='exposed':rebuild=True
+            if family=='hr_required_bottom_flange_brace':
+                rebuild=any(by_id[cid].get('parameters',{}).get('physical_hr_kicker') for cid in original['occurrences'])
         if family=='review_rod_clevis':
             rebuild=any(by_id[cid].get('parameters',{}).get('actual_rod_end') for cid in original['occurrences'])
         if family=='review_angle_clip':
             rebuild=any(by_id[cid].get('parameters',{}).get('actual_gable_brace') for cid in original['occurrences'])
         if family=='review_hr_strut_bracing':
-            rebuild=any('source_kicker_angle_deg' in by_id[cid].get('parameters',{}) for cid in original['occurrences'])
+            rebuild=any('source_kicker_angle_deg' in by_id[cid].get('parameters',{}) or
+                        by_id[cid].get('parameters',{}).get('crane_roof_bracing') for cid in original['occurrences'])
         if family=='review_brace_crossing':
             rebuild=any(by_id[cid].get('parameters',{}).get('crossing') for cid in original['occurrences'])
         if not rebuild:
@@ -193,7 +200,7 @@ def rebuilt_scenes(model,package):
                 variant=beam_family(source) or family
                 if variant=='review_beam':
                     c['detail_ref']['id']=variant;c['parameters']['joint']='shear_plate'
-            token=(variant,selected.signature())
+            token=(variant,selected.signature(),bool(c.get('parameters',{}).get('common_apex_datum')))
             groups[token].append(c)
         for group_index,group in enumerate(groups.values()):
             representative=group[0]
@@ -240,6 +247,8 @@ def repair(package,model):
     from .review_gable_bracing import fit_flange_braces
     fit_flange_braces(package,model)
     from .review_hr_brace_ends import bind
+    from .shared_apex import locate_pairs,consolidate
+    common_ends=locate_pairs(package,model)
     bind(model,package)
     for mid,m in members.items():
         corrected=source_members[mid]
@@ -304,6 +313,7 @@ def repair(package,model):
     bind_materials(package,model)
     from .flat_bar_crossings import add_crossings
     added_crossings=add_crossings(package,model)
+    consolidate(package,model,common_ends)
     references=defaultdict(set)
     for c in model['connections']:
         for mid in c['member_ids']:references[mid].add(c['drawing_ref'])

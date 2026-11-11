@@ -5,7 +5,7 @@ from .pilots.model import add, mul, dot, cross, unit
 
 def drill_plate(part, points, axis, diameter, basis,radial_reference=None,skip_disjoint=False):
     """Return real plate-surface triangles and hole walls in the local frame."""
-    from shapely import constrained_delaunay_triangles
+    from shapely import constrained_delaunay_triangles,set_precision
     from shapely.geometry import Polygon, Point
     from shapely.geometry.polygon import orient
     from shapely.ops import unary_union
@@ -34,23 +34,27 @@ def drill_plate(part, points, axis, diameter, basis,radial_reference=None,skip_d
         holes=[h for h in holes if outline.intersection(h).area>1e-8]
         if not holes:return False
     for hole in holes:
-        if not outline.buffer(1e-7).covers(hole):
+        # A member web is split into individual prisms at every cope/slot
+        # station. A valid circular bore may cross this internal strip seam.
+        # Standalone selected plates still require a fully enclosed hole.
+        if not skip_disjoint and not outline.buffer(1e-7).covers(hole):
             raise ValueError('Selected hole leaves plate perimeter: '+part['id'])
-    remaining = outline.difference(unary_union(holes))
-    if remaining.geom_type!='Polygon' or not remaining.is_valid:
+    remaining = set_precision(outline.difference(unary_union(holes)),1e-7)
+    if (remaining.geom_type!='Polygon' and not (skip_disjoint and remaining.geom_type=='MultiPolygon')) or not remaining.is_valid:
         raise ValueError('Hole pattern disconnects plate: '+part['id'])
-    remaining=orient(remaining,sign=1)
+    components=[orient(poly,sign=1) for poly in (remaining.geoms if remaining.geom_type=='MultiPolygon' else [remaining])]
     def point(pair,z):
         return add(add(mul(u,pair[0]),mul(v,pair[1])),mul(axis,z))
     faces=[]
-    for triangle in constrained_delaunay_triangles(remaining).geoms:
-        ring=list(orient(triangle,sign=1).exterior.coords)[:-1]
-        faces.append([point(q,lo) for q in reversed(ring)])
-        faces.append([point(q,hi) for q in ring])
-    for ring in [remaining.exterior,*remaining.interiors]:
-        coords=list(ring.coords)
-        for a,b in zip(coords,coords[1:]):
-            faces.append([point(a,lo),point(b,lo),point(b,hi),point(a,hi)])
+    for component in components:
+        for triangle in constrained_delaunay_triangles(component).geoms:
+            ring=list(orient(triangle,sign=1).exterior.coords)[:-1]
+            faces.append([point(q,lo) for q in reversed(ring)])
+            faces.append([point(q,hi) for q in ring])
+        for ring in [component.exterior,*component.interiors]:
+            coords=list(ring.coords)
+            for a,b in zip(coords,coords[1:]):
+                faces.append([point(a,lo),point(b,lo),point(b,hi),point(a,hi)])
     part['faces']=faces
     part['bounds']=bounds(faces)
     part['geometry']={'type':'mesh','faces':faces}

@@ -103,6 +103,7 @@ def make_stack(ctx,selection,v,station,depth,width):
                            description='Selected primary gusset attachment to actual '+connect[0])
                     a.welds[-1].update(attachment_role='gusset_column_weld' if 'COLUMN' in connect else
                                        'gusset_base_weld' if 'BASE' in connect else 'gusset_beam_weld')
+                    a.welds[-1].update(source_weld_id=w['id'],source_weld_side=(-1,1)[i],source_weld_leaf=pid)
                     if edge:a.welds[-1]['selected_material']=edge['material']
             part=primary
         elif row['connected_to']=='brace_end':

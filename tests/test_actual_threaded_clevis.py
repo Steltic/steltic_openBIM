@@ -45,3 +45,19 @@ def test_actual_integral_forged_jaw(tmp_path,change,expected):
     assert defect==expected
     if not expected:
         assert measurements['contact_area_in2']==pytest.approx(.12)
+
+
+def test_normalized_assembly_drill_reaches_real_interface_check(tmp_path):
+    from steltic_openbim.ifc_assembly_verification import Assessment
+    rb=export_readback(tmp_path,{'R':cylinder(.5,0,15),'B':cylinder(1.5,0,5,.5),'J':cuboid([.7,-.2,-5],[1,.2,0])},reader=True)
+    solids={name:rb.member(key) for name,key in [('BODY','B'),('JAW','J')]}
+    part=dict(id='BODY',kind='rod',parameters=dict(source_role='threaded_clevis_body',thread_major_diameter_in=1.,thread_engagement_in=5.,
+        holes=[dict(point=[0.,0.,0.],axis=[0.,0.,1.],diameter_in=1.)]))
+    parts={'BODY':part,'JAW':dict(id='JAW',kind='plate')};interfaces=[dict(id='T',kind='threaded_clevis',connects=['ROD','BODY']),
+        dict(id='F',kind='integral_forged_clevis',connects=['JAW','BODY'])]
+    check=Assessment(rb,dict(members=[dict(id='R',kind='rod_brace',profile_id='R1')],profiles=[dict(id='R1',dimensions={'d':1.})]),{})
+    check.context={'template':'test'}
+    check.paths('END',parts,solids,{'bindings':{'ROD':'R'}},np.eye(4),[],{},set(),{},interfaces)
+    assert check.counts['actual_threaded_rod_bore_engagements']==1
+    assert check.counts['actual_forged_jaw_mating_faces']==1
+    assert not check.findings

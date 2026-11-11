@@ -22,7 +22,7 @@ def material_role(part):
     if pid=='KNIFE':return 'knife_plate'
     if pid.startswith('SPLICE') and kind=='plate':return 'splice_plate'
     if pid.startswith('REINF') and 'SLOT' in desc:return 'slot_reinforcement'
-    if pid in ('P1','P2') and ('SHEAR PLATE' in desc or 'ERECTION TAB' in desc):return 'shear_plate'
+    if pid in ('P1','P2') and any(s in desc for s in ('SHEAR PLATE','SHEAR/ERECTION PLATE','ERECTION TAB')):return 'shear_plate'
     return None
 
 

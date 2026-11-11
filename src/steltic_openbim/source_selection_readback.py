@@ -33,6 +33,7 @@ def verify_source_selections(package,drawing_model=None):
     records=handoff.get('records',{})
     physical=package['physical']
     templates={x['id']:x for x in physical.get('assemblies',[])}
+    connections={c['id']:c for c in physical['connections']}
     materials={m['id']:m for m in physical['materials']}
     members={m['id']:m for m in physical.get('members',[])}
     profiles={p['id']:p for p in physical.get('profiles',[])}
@@ -52,7 +53,22 @@ def verify_source_selections(package,drawing_model=None):
         instance=connection.get('assembly_instance',{})
         t=templates.get(instance.get('template_id'),{})
         parts=t.get('parts',connection.get('parts',[]))
-        scene=scenes.get(t.get('source_detail'))
+        scene=scenes.get(connection.get('assembly_id',t.get('source_detail')))
+        shared=connection.get('parameters',{}).get('shared_constituents',[])
+        if shared:
+            parts=list(parts)
+            for ref in shared:
+                owner=connections.get(ref['owner_connection_id'],{}).get('assembly_instance',{})
+                owned=templates.get(owner.get('template_id'),{})
+                p=next((p for p in owned.get('parts',[]) if p['id']==ref['owner_part_id']),None)
+                if (p is None or owner.get('revision')!=ref.get('owner_template_revision') or
+                    owned.get('revision')!=owner.get('revision') or owner.get('template_id')!=ref.get('owner_template_id')):
+                    findings.append(dict(issue='shared_source_constituent_missing_or_changed',connection=cid,role=ref.get('role')))
+                else:
+                    # Thickness, material, weld type and selected dimensions are
+                    # intrinsic to the owned part. Its world placement is checked
+                    # independently in the actual IFC assembly verifier.
+                    parts.append(dict(p,id=ref['role']))
         fields=defaultdict(list)
         overrides={(o['record_id'],o['field_index']):o['value'] for o in occurrence.get('overrides',[])}
         for link in occurrence.get('applications',[]):

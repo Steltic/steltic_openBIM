@@ -1015,7 +1015,7 @@ def validate(package):
                 bad("delegated_interface", "Delegated connection needs party, versioned detail and representation", [cid])
         elif not parts and not (detail.get("id") and detail.get("revision")):
             bad("connection_geometry", "Connection needs parts or a versioned design-detail reference", [cid])
-        if package.get('require_connection_parts') and c.get('scope')!='delegated' and not bim_assemblies.has_physical_connection(c,templates,verified_bonds=verified_bonds):
+        if package.get('require_connection_parts') and c.get('scope')!='delegated' and not bim_assemblies.has_physical_connection(c,templates,verified_bonds=verified_bonds,connections=indexes['connections']):
             bad('connection_parts_required','This job requires located physical parts for designed connections; a detail reference alone is incomplete',[cid],'needs_input')
         part_ids = set()
         # Local template geometry/materials were validated once above. Occurrence

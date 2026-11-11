@@ -131,15 +131,27 @@ def draw(ctx):
     for name,member in (('CONT',continuous),('SPLIT-1',low),('SPLIT1',high)):
         direction=unit(vector(sub(*reversed(member['axis'])),axes));inplane=cross(normal,direction)
         d=effective(ctx.p,member['profile_id'])
-        if name=='CONT':start=mul(direction,-slot_half);length=2*slot_half;size=selected['continuous_weld_size_in']
+        role='continuous_brace_slot_weld' if name=='CONT' else 'split_brace_slot_weld'
+        if name=='CONT':
+            length=ctx.selected.get((role,'length_in')) or 2*slot_half
+            start=mul(direction,-length/2);size=selected['continuous_weld_size_in']
         else:
             ends=[point(add(q,o),origin,axes) for q,o in zip(member['axis'],member['end_offsets'])]
             start=min(ends,key=lambda q:math.dist(q,[0,0,0]));direction=unit(start);inplane=cross(normal,direction)
-            length=selected['split_weld_length_in'];size=selected['split_weld_size_in']
+            length=ctx.selected.get((role,'length_in')) or selected['split_weld_length_in'];size=selected['split_weld_size_in']
+        size=ctx.selected.get((role,'size_in')) or size
         for wall in (-1,1):
             for edge in (-1,1):
                 first=add(start,add(mul(inplane,wall*d/2),[0,edge*t/2,0]))
                 a.weld(f'W{len(a.welds)+1:02}',first,add(first,mul(direction,length)),[name,'GUSSET'],size,basis='S' if selected['source_selected'] else 'A',description='Selected slot-edge fillet; actual continuous or split member')
+                a.welds[-1]['attachment_role']=role
+        if name=='CONT' and re.search(r'continuous diagonal and fillet-welded to it all round the slot',ctx.text,re.I):
+            for wall in (-1,1):
+                for station in (0,length):
+                    q=add(add(start,mul(direction,station)),mul(inplane,wall*d/2))
+                    a.weld(f'CONT-RETURN-{wall}-{station:g}',add(q,[0,-t/2,0]),add(q,[0,t/2,0]),
+                           [name,'GUSSET'],size,description='Return fillet closing the selected all-round continuous-member slot')
+                    a.welds[-1]['attachment_role']='continuous_slot_end_return'
     matches=list(re.finditer(r'2 PL '+NUMBER+r' x '+NUMBER+r' x '+NUMBER+r' in',ctx.text))
     for group,match in enumerate(matches[:2]):
         rt,rw,rl=map(number,match.groups())
@@ -149,7 +161,9 @@ def draw(ctx):
             direction=unit(sub(ends[1],ends[0]));mid=[0,0,0]
             if group:
                 start=min(ends,key=lambda q:math.dist(q,[0,0,0]));direction=unit(start)
-                mid=add(start,mul(direction,selected['split_weld_length_in']))
+                slot=next((s for s in member.get('slots',[]) if s.get('connection_id')==ctx.c['id']),None)
+                depth=slot['end_in']-slot['start_in'] if slot else selected['split_weld_length_in']
+                mid=add(start,mul(direction,depth))
             inplane=cross(normal,direction);width=effective(ctx.p,member['profile_id'],'width')
             text=ctx.text[match.end():]
             weld_size=value(r'(?:lines of |with |longitudinal fillets \()?'+NUMBER+r' in E70',text,.1875)
@@ -157,8 +171,22 @@ def draw(ctx):
             for face in (-1,1):
                 x=mul(direction,face);y=inplane
                 first=add(mid,add(mul(x,-rl/2),add(mul(y,-rw/2),[0,face*width/2,0])))
-                label=f'R-{name}-{face}'
-                a.box(label,first,[rl,rw,rt],'S','Source slot reinforcement on the unslotted wall; A local edge fit',x=x,y=y)
+                label=f'REINF-{name}-{face}'
+                plate=a.box(label,first,[rl,rw,rt],'S','Source slot reinforcement on the unslotted wall; A local edge fit',x=x,y=y)
+                typed='split_slot_reinforcement' if group else 'continuous_slot_reinforcement'
+                grade=ctx.selected.get((typed,'material'))
+                if grade:plate['selected_material']=grade
+                if group:
+                    wf='split_reinforcement_fillet'
+                    weld_size=ctx.selected.get((wf,'size_in')) or weld_size
+                    weld_length=ctx.selected.get((wf,'length_each_side_in')) or weld_length
+                    for edge in (-1,1):
+                        centre=add(mid,add(mul(inplane,edge*rw/2),[0,face*width/2,0]))
+                        a.weld(f'W{len(a.welds)+1:02}',add(centre,mul(direction,-weld_length)),
+                               add(centre,mul(direction,weld_length)),[name,label],weld_size,
+                               description='Selected longitudinal reinforcement fillet centered at the actual slot tip')
+                        a.welds[-1]['attachment_role']=wf
+                    continue
                 for end in (-1,1):
                     for edge in (-1,1):
                         start=add(mid,add(mul(direction,end*(rl/2-weld_length)),add(mul(inplane,edge*rw/2),[0,face*width/2,0])))

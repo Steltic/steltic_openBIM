@@ -102,7 +102,10 @@ def draw(ctx):
         points=[]
         for q in (head,add(head,mul(direction,-4))):
             for side in (-1,1):
-                v=add(q,mul(normal,side*2));points.extend([(v[0]+dx,v[2]+dz) for dx,dz in ((-1,-1),(-1,1),(1,-1),(1,1))])
+                # The 4-in attachment is fully inside the 4.5-in slot. An
+                # allowance transverse to this run retains weld-edge stock
+                # without extending the tab into the closed HSS beyond it.
+                v=add(q,mul(normal,side*3));points.append((v[0],v[2]))
         points.extend([(head[0]-4,top+.5),(head[0]+4,top+.5)])
         a.polygon('HEAD'+str(i),[[x,-.25,z] for x,z in hull(points)],.5,normal=[0,1,0],basis='A',description='A slotted kicker head gusset to actual bracing-beam underside')
         a.weld('HW'+str(i),[head[0]-4,0,top+.5],[head[0]+4,0,top+.5],['BRACING','HEAD'+str(i)],.25,basis='A',description='A gusset-to-HSS underside fillet; local wall/capacity unverified')

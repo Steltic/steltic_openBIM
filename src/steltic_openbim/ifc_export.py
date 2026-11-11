@@ -342,7 +342,7 @@ def _export_source(directory,destination,source):
         counts['opening_references']+=1
     joints={j['id']:j for j in physical.get('joints',[])}
     templates=bim_assemblies.index(physical);assembly_meshes={}
-    part_ranges={};constituent_sets={};assemblies_by_template=defaultdict(list)
+    part_ranges={};constituent_sets={};assemblies_by_template=defaultdict(list);connection_objects={}
     counts['connection_assemblies']=0
     for c in connections:
         joint=joints.get(c.get('joint_id'),{})
@@ -394,6 +394,7 @@ def _export_source(directory,destination,source):
                     item.update(geometry_role='reinforcement_bond_reference',
                         description='Declared reinforcement bond reference; actual bars and concrete host are separate products. Development and capacity are not verified.')
             obj=add('IfcElementAssembly',item,faces,located if not faces else (),key='connection:'+c['id'],local_frame=frame)
+            connection_objects[c['id']]=obj
             assemblies_by_template[template['id']].append(obj)
             for mid in sorted(connected):
                 if mid not in member_objects:raise ValueError('Connection references missing exported member: '+mid)
@@ -437,6 +438,15 @@ def _export_source(directory,destination,source):
             # storey and adopted-detail identity. No hardware placement is inferred.
             unlocated_connections.append(c)
             counts['connection_references']+=1
+    for c in connections:
+        refs=c.get('parameters',{}).get('shared_constituents',[])
+        owners=defaultdict(list)
+        for ref in refs:owners[ref['owner_connection_id']].append(ref)
+        for owner,records in owners.items():
+            rel=relation('IfcRelAssignsToProduct','shared-constituents:'+c['id']+':'+owner,
+                Name='Shared assembly constituents',Description=json.dumps(records,sort_keys=True,separators=(',',':')),
+                RelatedObjects=[connection_objects[c['id']]],RelatingProduct=connection_objects[owner])
+            relationship_manifest.append(dict(guid=rel.GlobalId,type=rel.is_a(),source=c['id'],target=owner,role='shared_constituents'))
     for level,items in containment.items():
         ifcopenshell.api.spatial.assign_container(model,products=items,relating_structure=storeys.get(level,building))
     for material,items in material_products.items():

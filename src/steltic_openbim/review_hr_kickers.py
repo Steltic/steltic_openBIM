@@ -83,9 +83,40 @@ def draw(ctx):
                 outline.append(add(v,add(mul(ku,x),mul(depth,z))))
         outline.extend(seams[i]);coords=hull([(dot(sub(v,start),ku),dot(sub(v,start),depth)) for v in outline])
         polygon=[add(start,add(add(mul(ku,x),mul(depth,z)),mul(normal,-thick))) for x,z in coords]
+        host_part=next(part for part in a.parts if part['id']==host)
+        polygon=clear_host(polygon,normal,thick,ku,depth,host_part['member'],ctx.p)
         a.polygon(label,polygon,thick,normal=normal,basis='A',description='A fitted gusset to actual host face; two holes at 3 in pitch, 1.5 in edge envelope; local attachment capacity unverified')
-        a.fastener('B'+str(i),points,normal,.75,.625,['KICKER',label],'A two 3/4 in A325 bolts through the actual angle leg and gusset; 3 in pitch, 1.5 in transverse gauge','A')
+        group=a.fastener('B'+str(i),points,normal,.75,.625,['KICKER',label],'A two 3/4 in A325 bolts through the actual angle leg and gusset; 3 in pitch, 1.5 in transverse gauge','A')
+        from .connection_cuts import drill_receivers
+        drill_receivers(a,group,.8125)
         a.weld('W'+str(i),*seams[i],[host,label],.25,basis='A',description='A 1/4 in gusset fillets to actual '+('bottom flange' if i==0 else 'infill web'))
     a.dim(start,end,'Actual kicker workline / A',basis='A');a.front_axes=(1,2);a.section_axis=2;a.section_at=end[2]
     a.notes.append(kicker['fit_basis'])
     a.notes.append('Receiving beam and infill are shown as dashed outlines in the elevation and isometric so both brace attachments remain visible. Their full physical geometry is retained; this is a drawing display convention.')
+
+
+def clear_host(polygon,normal,thick,u,v,member,profiles):
+    """Trim only material entering an actual flange or web over this tab's thickness."""
+    from shapely import set_precision
+    from shapely.geometry import Polygon,MultiPoint
+    from shapely.ops import unary_union
+    from .assembly_scene import clip_faces
+    from .pilots.geometry import member_solids
+    base=polygon[0];lo=dot(base,normal);hi=lo+thick
+    project=lambda q:(dot(sub(q,base),u),dot(sub(q,base),v))
+    original=Polygon([project(q) for q in polygon]);occupied=[]
+    for solid in member_solids(member,profiles):
+        stations=[dot(q,normal) for face in solid for q in face]
+        if max(stations)<=lo+1e-6 or min(stations)>=hi-1e-6:continue
+        layer=clip_faces(solid,normal,lo)
+        if not layer:continue
+        layer=clip_faces(layer,mul(normal,-1),-hi)
+        if layer:
+            footprint=MultiPoint([project(q) for face in layer for q in face]).convex_hull
+            if footprint.area>1e-8:occupied.append(footprint)
+    if not occupied:return polygon
+    result=set_precision(original.difference(unary_union(occupied)),1e-7)
+    if original.area-result.area<1e-8:return polygon
+    if result.geom_type!='Polygon' or result.interiors:
+        raise ValueError('Receiving member splits the fitted kicker gusset')
+    return [add(base,add(mul(u,x),mul(v,y))) for x,y in list(result.exterior.coords)[:-1]]

@@ -11,6 +11,7 @@ import ifcopenshell.util.placement
 import ifcopenshell.util.unit
 import numpy as np
 from .ifc_readback_session import read_step
+from .shared_constituent_readback import linked_braces,resolve_shared
 from .clevis_readback import forged_fit, thread_fit
 from .weld_extent_readback import actual_inner_slot_tip, each_side_extents
 from .joint_mesh_readback import matches_flat_extrusion, matches_rhs_extrusion
@@ -61,6 +62,7 @@ def grip_engages(ply_hits, grip):
 def selected(handoff, connection, member=None, profile=None):
     result = defaultdict(list)
     application = handoff.get('occurrences', {}).get(connection, {})
+    overrides={(row['record_id'],row['field_index']):row['value'] for row in application.get('overrides',[])}
     for link in application.get('applications', []):
         record = handoff['records'][link['record_id']]
         for index in link.get('selected', []):
@@ -78,7 +80,11 @@ def selected(handoff, connection, member=None, profile=None):
                 if not profile or profile.get('family')!='flat' or (section and
                         (abs(dims.get('width',0)-section[0])>TOL or abs(dims.get('thickness',0)-section[1])>TOL)):
                     continue
-            result[field['role'], field['field']].append(field['value'])
+            role=field['role'];crossing=field.get('applicability',{}).get('crossing_receiver')
+            if crossing and member is not None:
+                if member not in link.get('crossing_members',{}).get(crossing,[]):continue
+                role=role.removeprefix(crossing+'_')
+            result[role,field['field']].append(overrides.get((link['record_id'],index),field['value']))
     return result
 
 
@@ -158,6 +164,8 @@ class Assessment:
         self.members = {m['id']: m for m in physical['members']}
         self.profiles = {p['id']: p for p in physical['profiles']}
         self.templates = {t['id']: t for t in physical.get('assemblies', [])}
+        self.connections = {c['id']:c for c in physical.get('connections',[])}
+        self.shared_brace_bindings = linked_braces(self.connections)
         self.counts = Counter()
         self.findings = []
         self.covered_ends = set()
@@ -167,6 +175,9 @@ class Assessment:
         self.interface_cache = {}
         self.crossings = {row['id']:row for row in handoff.get('crossing_interfaces',[])}
         self.crossing_occurrences = Counter()
+        self.owned_gussets = []
+        self.anchor_measurements = []
+        self.support_weld_measurements = []
         self.gusset_clearance_measurements = []
         self.crossing_measurements = []
         self.context = {}
@@ -376,32 +387,45 @@ class Assessment:
         if not inst:
             return
         template = self.templates[inst['template_id']]
-        parts = {p['id']: p for p in template['parts']}
-        gussets = {pid for pid, p in parts.items() if gusset_part(p)}
+        physical_parts = {p['id']: p for p in template['parts']}
         br = {role: mid for role, mid in inst['bindings'].items() if mid in self.members and brace_kind(self.members[mid])}
         cid, tid = connection['id'], template['id']
+        br = {r:m for r,m in br.items() if not (r.startswith('BRACE-OTHER') and m in self.shared_brace_bindings[cid])}
         self.context = {'connection': cid, 'template': tid, 'sheet': connection.get('drawing_ref')}
         self.counts['all_assembly_occurrences'] += 1
         instance = frame(inst['origin'], inst['x_axis'], inst['y_axis'])
         inverse = np.linalg.inv(instance)
+        shared_parts,shared_meshes,shared_curves=resolve_shared(self,connection,physical_parts,instance)
+        parts={**physical_parts,**shared_parts}
+        gussets = {pid for pid, p in parts.items() if gusset_part(p)}
         product = self.rb.assemblies[cid]
         if property_value(product, 'SourceId') != cid:
             raise ValueError('IFC assembly SourceId differs from the occurrence')
-        if not br and not gussets:
+        if any(p['kind']=='anchor' for p in parts.values()):
+            from .ifc_anchor_readback import verify_anchors
+            anchor_facts,anchor_issues=verify_anchors(self.rb,product,tid,inst,self.members,self.profiles,
+                                                     selected(self.handoff,cid),parts)
+            if anchor_facts:
+                self.anchor_measurements.append(dict(anchor_facts,connection=cid,sheet=self.context.get('sheet')))
+                self.counts['actual_selected_anchor_patterns']+=1
+                self.counts['actual_selected_anchor_bores']+=len(anchor_facts.get('measured_holes',{}))
+            for row in anchor_issues:self.issue('selected_actual_anchor_geometry',**row)
+        if not br and not gussets and not shared_parts:
             self.transport_only(cid,tid,template,parts,product,instance,inverse)
             return
         self.counts['connections'] += 1
-        if any(p.get('geometry',{}).get('type') != 'polyline' for p in parts.values()):
+        if any(p.get('geometry',{}).get('type') != 'polyline' for p in physical_parts.values()):
             map_id, raw, product_matrix = self.rb.mesh(product)
             relative = inverse @ product_matrix
         else:
             map_id,raw,relative = None, Mesh(np.empty((0,3)),()), np.eye(4)
         fields = selected(self.handoff, cid)
         selection_key = tuple(sorted((k, tuple(map(str, values))) for k, values in fields.items()))
-        key = (tid, map_id, tuple(relative.round(5).flatten()), selection_key)
+        key = (tid, map_id, tuple(relative.round(5).flatten()), selection_key,cid if shared_parts else None)
         if key not in self.cache:
             start = len(self.findings)
-            meshes = self.split_actual(tid, raw.transformed(relative), parts)
+            meshes = self.split_actual(tid, raw.transformed(relative), physical_parts)
+            meshes.update(shared_meshes)
             self.cache[key] = meshes
             self.counts['unique_placed_template_checks'] += 1
             sections = {}
@@ -438,7 +462,15 @@ class Assessment:
             meshes = self.cache[key]
             if self.shared_issues[key]:
                 self.issue('reused_template_has_constituent_fit_findings', counts=dict(Counter(self.shared_issues[key])))
-        curves = self.rb.curves(cid)
+        if gussets:
+            from .ifc_shared_gusset_readback import PlacedGusset
+            # Only native face ranges belong to this occurrence. A neighbour
+            # may refer to its steel to complete a second attachment path.
+            for locator in self.rb.ranges.get(tid,[]):
+                key=locator['id']
+                if key in gussets and locator['face_count'] and key in meshes:
+                    self.owned_gussets.append(PlacedGusset(cid,self.context.get('sheet'),key,meshes[key],instance))
+        curves = self.rb.curves(cid)+shared_curves
         from .pin_stack_readback import actual_materials,selected_stack_record,verify_pin_stack
         present=connection.get('parameters',{}).get('pin_stack')
         selected_stacks=selected_stack_record(self.handoff,cid)
@@ -561,10 +593,11 @@ class Assessment:
                     self.issue('clevis_interface_lacks_bound_solid',interface=interface['id'],roles=roles)
                     continue
                 body=bodies[0];target=next(r for r in roles if r!=body)
-                if len(parts[body].get('holes',[]))!=1:
+                holes=parts[body].get('parameters',{}).get('holes',[])
+                if len(holes)!=1:
                     self.issue('threaded_clevis_lacks_single_located_bore',interface=interface['id'],body=body)
                     continue
-                axis=parts[body]['holes'][0]['axis'];par=parts[body]['parameters']
+                axis=holes[0]['axis'];par=parts[body]['parameters']
                 token=(kind,self.context['template'],body,target,member_keys.get(target))
                 if kind=='threaded_clevis':
                     member=self.members.get(bound.get(target),{})
@@ -639,9 +672,9 @@ class Assessment:
                 source_role = 'gusset_column_weld'
             elif logical_id == 'WGB':
                 source_role = 'gusset_base_weld' if 'BASE' in links else 'gusset_beam_weld'
-            elif logical_id.startswith('WR'):
+            elif logical_id.startswith('WR') or part.get('parameters',{}).get('attachment_role')=='split_reinforcement_fillet':
                 source_role = 'reinforcement_fillet'
-            elif attached and set(links) & gussets and (logical_id.startswith('WB') or ('brace_slot_weld','count') in local_fields):
+            elif attached and set(links) & gussets and part.get('parameters',{}).get('attachment_role')!='continuous_slot_end_return' and (logical_id.startswith('WB') or ('brace_slot_weld','count') in local_fields):
                 source_role = 'brace_slot_weld'
             elif attached and set(links) & gussets and ('flat_bar_end_fillet','count') in local_fields:
                 source_role = 'flat_bar_end_fillet'
@@ -652,7 +685,9 @@ class Assessment:
                 for expected_size in local_fields.get((source_role,'size_in'), []):
                     if size is None or abs(float(size)-float(expected_size)) > TOL:
                         self.issue('selected_attachment_weld_size_differs', part=pid, role=source_role, actual=size, selected=expected_size)
-                logical_welds[source_role,attached,logical_id].append(actual_curves[matches[0]])
+                par=part.get('parameters',{})
+                plane=(par.get('source_weld_leaf'),par.get('source_weld_side'))
+                logical_welds[source_role,attached,logical_id,plane].append(actual_curves[matches[0]])
             # Reference curves do not assert a modeled solid weld. A centerline
             # farther than the modeled fillet leg from a named attachment, at
             # an end or segment midpoint, cannot represent contact at that point.
@@ -674,6 +709,11 @@ class Assessment:
                             self.issue('groove_weld_reference_lacks_contact_or_declared_root_opening',part=pid,target=bound.get(target,target),distance_in=max(distances),root_opening_in=reach)
                         else:
                             self.issue('weld_reference_outside_attachment_reach', part=pid, target=bound.get(target,target), distance_in=max(distances), fillet_leg_in=size)
+        from .support_weld_readback import selected_support_sides
+        face_welds,face_errors=selected_support_sides(parts,meshes,instance,measured_welds,fields,gussets)
+        self.counts['actual_two_sided_gusset_support_welds']+=len(face_welds)
+        self.support_weld_measurements.extend(dict(row,connection=cid) for row in face_welds)
+        for row in face_errors:self.issue('selected_gusset_fillet_faces_differ',**row)
         from .gusset_clearance_readback import selected_clearances
         clearances,issues=selected_clearances(self.members,br,member_fields,parts,(inst,instance),meshes,
                                              measured_welds,self.rb,interfaces)
@@ -682,7 +722,7 @@ class Assessment:
         for row in issues:self.issue('selected_gusset_fold_clearance',**row)
         if len(used) != len(actual_curves):
             self.issue('unassigned_actual_reference_curves', count=len(actual_curves)-len(used))
-        for (source_role,attached,logical_id),lines in logical_welds.items():
+        for (source_role,attached,logical_id,plane),lines in logical_welds.items():
             length = sum(float(np.linalg.norm(np.diff(line,axis=0),axis=1).sum()) for line in lines)
             local_fields = member_fields.get(attached,fields)
             selected_lengths = local_fields.get((source_role,'length_in'), [])
@@ -715,7 +755,7 @@ class Assessment:
         for mid,local_fields in member_fields.items():
             for selected_role in ('brace_slot_weld','flat_bar_end_fillet'):
                 for expected_count in set(local_fields.get((selected_role,'count'),[])):
-                    count=sum(role==selected_role and target==mid for role,target,_ in logical_welds)
+                    count=sum(role==selected_role and target==mid for role,target,_,plane in logical_welds)
                     if count!=expected_count:
                         self.issue('selected_terminal_weld_count_differs', member=mid, role=selected_role, selected=expected_count, actual=count)
         for pid in gussets:
@@ -800,6 +840,15 @@ def verify_assembly_fit(ifc_path, physical, source_handoff):
             check.evaluate(connection)
         except (ValueError, RuntimeError, KeyError, IndexError, AttributeError, StopIteration, TypeError) as exc:
             check.issue('assembly_fit_unverified', detail=str(exc), occurrence=connection.get('id'))
+    from .ifc_shared_gusset_readback import check_shared_gussets
+    counts,shared_issues=check_shared_gussets(check.owned_gussets,physical.get('connections',[]))
+    check.counts.update(counts)
+    check.findings.extend(shared_issues)
+    from .gusset_outline_readback import verify_outlines
+    outline_rows,outline_issues=verify_outlines(check,physical.get('connections',[]))
+    check.counts['checked_gusset_transfer_sections']=sum(len(r['transfer_sections']) for r in outline_rows)
+    check.counts['checked_fitted_gusset_outlines']=sum('unsupported_area_in2' in r for r in outline_rows)
+    check.findings.extend(outline_issues)
     inventory = {m['id'] for m in physical['members'] if brace_kind(m)}
     for key in check.crossings:
         if check.crossing_occurrences[key] != 1:
@@ -809,4 +858,4 @@ def verify_assembly_fit(ifc_path, physical, source_handoff):
     missing = sorted((mid, end) for mid in inventory for end in (0,1) if (mid,end) not in check.covered_ends)
     for mid, end in missing:
         check.findings.append({'code':'brace_end_has_no_matching_physical_receiver', 'member':mid, 'end_index':end})
-    return {'passed': not check.findings, 'counts': dict(check.counts), 'member_inventory': len(inventory), 'gusset_clearance_measurements': check.gusset_clearance_measurements, 'unique_ends': 2*len(inventory), 'mapped_ends': len(check.covered_ends), 'crossing_measurements': check.crossing_measurements, 'findings': check.findings, 'numeric_tolerance_in': TOL, 'schema': 'steltic.actual_assembly_fit.v1'}
+    return {'passed': not check.findings, 'counts': dict(check.counts), 'member_inventory': len(inventory), 'gusset_outline_measurements': outline_rows, 'support_weld_measurements': check.support_weld_measurements, 'anchor_measurements': check.anchor_measurements, 'gusset_clearance_measurements': check.gusset_clearance_measurements, 'unique_ends': 2*len(inventory), 'mapped_ends': len(check.covered_ends), 'crossing_measurements': check.crossing_measurements, 'findings': check.findings, 'numeric_tolerance_in': TOL, 'schema': 'steltic.actual_assembly_fit.v1'}

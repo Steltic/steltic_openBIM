@@ -102,6 +102,14 @@ def complete_slotted_end(package,connection,brace,support,point,profiles,catalog
         if station<minimum-1e-6 and math.dist(brace['end_offsets'][end],[0.,0.,0.])>1e-7:
             raise ValueError('Selected finite terminal position violates its linear gusset clearance')
         station=max(station,minimum);start=mul(vl,station)
+    from .slotted_gusset_outline import fitted_outline,width_station
+    effective_width=selected.get(('gusset','whitmore_effective_width_in'))
+    fit_limits=[(0,1,face)]
+    minimum=width_station(vl,effective_width,fit_limits)
+    if station<minimum-1e-6 and math.dist(brace['end_offsets'][end],[0.,0.,0.])>1e-7:
+        raise ValueError('Selected finite terminal position conflicts with the selected effective section')
+    station=max(station,minimum)
+    start=mul(vl,station)
     remaining=dot(sub(original[1-end],point),v)-station
     if remaining<=length+thickness+.0625:raise ValueError('Selected weld and source member leave insufficient terminal length')
     b=a.member('BRACE',brace['profile_id'],start,add(start,mul(vl,min(remaining,length+thickness+5.))),
@@ -109,18 +117,21 @@ def complete_slotted_end(package,connection,brace,support,point,profiles,catalog
     host_axis=local(actual_ends(support)[0],frame,True)
     a.member(support_role,support['profile_id'],[host_axis[0],host_axis[1],lo],[host_axis[0],host_axis[1],hi],
              y=local(support['local_y'],frame))
-    outline=[(face,lo),(face,hi)]
     for side in (-1,1):
         terminal=add(start,mul(normal2,side*extent))
-        finish=add(terminal,mul(vl,length))
-        edge=add(finish,mul(vl,thickness))
-        outline.extend([(terminal[0],terminal[2]),(edge[0],edge[2])])
         for surface in (-1,1):
             q=[terminal[0],surface*thickness/2,terminal[2]]
             a.weld(f'WB{side}{surface}',q,add(q,mul(vl,length)),['BRACE','GUSSET'],size,
                    description='Selected slot-edge fillet on the physical tubular wall')
-    gusset=a.polygon('GUSSET',[[u,-thickness/2,w] for u,w in hull(outline)],thickness,
+    transfers=[(w['a'],w['b']) for w in a.welds if w['id'].startswith('WB')]
+    fixed=[[face,0.,lo],[face,0.,hi]]
+    outline=fitted_outline(fixed,transfers,start,vl,thickness,effective_width,fit_limits)
+    gusset=a.polygon('GUSSET',[[u,-thickness/2,w] for u,w in outline],thickness,
                      description='Source gusset thickness and material; openBIM perimeter fitted to its receivers')
+    gusset.setdefault('parameters',{})['free_contour_rule']='slotted_attachment_hull'
+    if effective_width:
+        a.dim(add(start,mul(normal2,-effective_width/2)),add(start,mul(normal2,effective_width/2)),
+              'Selected Whitmore effective width at the transfer section',basis='S',offset=30)
     gusset['selected_material']=material
     support_size=selected.get((weld_role,'size_in'))
     support_kind=selected.get((weld_role,'kind'))
@@ -129,8 +140,10 @@ def complete_slotted_end(package,connection,brace,support,point,profiles,catalog
                [support_role,'GUSSET'],support_size or 0.,kind=support_kind or 'fillet',
                description='Selected gusset support weld along the actual steel face')
     else:
-        a.interfaces.append(dict(id='GUSSET-SUPPORT',kind='contact',connects=[support_role,'GUSSET'],
+        a.interfaces.append(dict(id='GUSSET-SUPPORT',kind='contact',connects=[support_role,'GUSSET'],segment_in=fixed,
             basis='Located contact between selected receivers; weld sizing remains in HR design evidence'))
+    from .gusset_support_welds import place_faces
+    place_faces(a,selected,weld_role)
     consumables=[m for m in catalogue.values() if 'weld' in m.get('source_item','').lower()]
     for weld in a.welds:
         weld['selected_material']=(consumables[0]['specification'] if len(consumables)==1 else
