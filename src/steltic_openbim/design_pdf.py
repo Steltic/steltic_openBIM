@@ -722,7 +722,10 @@ def generate(package,state,dest,*,prepared_model=None):
     for start in range(0,len(schedule),34):
         chunk=schedule[start:start+34]
         def draw_schedule(chunk=chunk):
-            rows=[[a['mark'],a['kind'].replace('_',' '),a['profile_id'],feet(a['length_in']),str(a['count']),a['basis'],','.join(map(str,a['levels'])),compact_references(a['connection_refs'])] for a in chunk]
+            def section(row):
+                casing=row.get('casing_section')
+                return row['profile_id']+' / '+casing if casing and casing not in row['profile_id'] else row['profile_id']
+            rows=[[a['mark'],a['kind'].replace('_',' '),section(a),feet(a['length_in']),str(a['count']),a['basis'],','.join(map(str,a['levels'])),compact_references(a['connection_refs'])] for a in chunk]
             table(sh,['MARK','MEMBER TYPE','SECTION','WORKLINE LENGTH','QTY','BASIS','LEVELS','END / JOINT DETAILS'],rows,[110,300,410,230,80,80,170,760],row_height=37,font=12)
             sh.text(80,180,'Repeated marks share type, profile, workline length (nearest 1/16 in), basis and connection references. Exact axes and instance positions: member_index.json.',12)
         queue(f'S{601+start//34}','Member mark schedule / '+str(start//34+1),draw_schedule)

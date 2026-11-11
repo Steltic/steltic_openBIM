@@ -211,7 +211,9 @@ def complete_native_hr(original):
     expected_cores=source_requirements(physical['members'],source,original.get('design_records',[]))
     missing_core=any(m['id'] in expected_cores and not any(p['id']=='YIELDING-CORE' for p in m.get('section_plies',[]))
                      for m in physical['members'])
-    if not pending and not missing_core and bindings_match(physical):return original
+    from .brb_casing import requirements as casing_requirements,needs_completion as needs_casing,bind_receiver_profiles
+    casings=casing_requirements(physical['members'],source,original.get('design_records',[]),physical['materials'])
+    if not pending and not missing_core and not needs_casing(physical,casings) and bindings_match(physical):return original
     body={k:v for k,v in original.items() if k!='source_handoff'}
     if source['source_bindings'].get('native_content_sha256')!=fingerprint(body):
         raise ValueError('Native body differs from the authenticated HR source before geometry completion')
@@ -250,6 +252,7 @@ def complete_native_hr(original):
                 dict(code='native_joint_geometry',connection_id=cid,detail=str(error),owner='openBIM'))
     physical['materials']=list(catalogue.values())
     write_cores(package,physical)
+    bind_receiver_profiles(physical)
     for row in connection_details(physical['connections']):
         for c in row['connections']:
             c['drawing_ref']='1/'+row['reference']

@@ -216,7 +216,7 @@ def rebuilt_scenes(model,package):
             attached_cores=[core_members[mid] for mid in c.get('member_ids',[]) if mid in core_members]
             if attached_cores:
                 from .brb_supplier_core import core_at_end
-                token+=(fingerprint([core_at_end(m,c['point'],24.) for m in attached_cores]),)
+                token+=(fingerprint([(m['profile_id'],m.get('brb_casing'),core_at_end(m,c['point'],24.)) for m in attached_cores]),)
             groups[token].append(c)
         for group_index,group in enumerate(groups.values()):
             representative=group[0]

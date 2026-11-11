@@ -135,8 +135,8 @@ def verify_ifc(path,package,source_sha256):
         if m.get('section_plies'):
             assignments=[a.RelatingMaterial for a in obj.HasAssociations if a.is_a('IfcRelAssociatesMaterial') and a.RelatingMaterial.is_a('IfcMaterialConstituentSet')]
             actual={x.Name:(x.Description,x.Material.Name) for a in assignments for x in a.MaterialConstituents}
-            plies=[dict(id='MAIN',material_id=m['material_id']),*m['section_plies']]
-            if len(assignments)!=1 or actual!={p['id']:(p['material_id'],material[p['material_id']]) for p in plies}:
+            plies={'MAIN':m['material_id'],**{p.get('constituent_id',p['id']):p['material_id'] for p in m['section_plies']}}
+            if len(assignments)!=1 or actual!={role:(mid,material[mid]) for role,mid in plies.items()}:
                 flag('ifc_member_ply_material',m['id'],'Compound member material graph differs from the selected section plies')
         elif mats!=[material.get(m.get('material_id'))]:
             flag('ifc_material',m['id'],'Actual material assignment differs from the selected specification')

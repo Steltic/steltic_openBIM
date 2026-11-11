@@ -51,7 +51,7 @@ def source_requirements(members, handoff, records):
         rid = typed['record_id']
         if rid not in bindings:
             raise ValueError('HR core selection is not bound to member ' + mid)
-        if 'physical_profile' in typed and typed['physical_profile']!=member['profile_id']:
+        if 'physical_profile' in typed and typed['physical_profile']!=member.get('source_profile_id',member['profile_id']):
             raise ValueError('HR selected core profile differs from the physical brace: '+mid)
         if 'axis_in' in typed:
             axis=member['axis'];workpoint=math.dist(*axis)
@@ -62,7 +62,7 @@ def source_requirements(members, handoff, records):
                 raise ValueError('HR selected yielding length disagrees with its located workpoints: '+mid)
         spec = dict(record=rid, area_in2=float(fields['area_in2']), material=fields['material'],
                     yielding_length_workpoint_ratio=float(fields['yielding_length_workpoint_ratio']),
-                    reported_elongation_in=float(fields.get('reported_elongation_in', 0.)))
+                    reported_elongation_in=float(fields.get('expected_elongation_in',fields.get('reported_elongation_in',0.))))
         if matches:
             original = matches[0]
             if (original['record'] != rid or abs(original['area_in2'] - spec['area_in2']) > 1e-6 or
@@ -76,6 +76,8 @@ def source_requirements(members, handoff, records):
 
 def prepare(package,model):
     specs=source_requirements(model['members'],package.get('source_handoff',{}),package.get('design_records',[]))
+    from .brb_casing import prepare_casings
+    prepare_casings(package,model,specs)
     profiles={p['id']:p for p in model['profiles']}
     for m in model['members']:
         spec=specs.get(m['id'])
@@ -106,7 +108,7 @@ def rectangular_ring(t,d):
 
 def core_at_end(m,point,display_length):
     from .hr_boxed_plies import cropped_plies
-    plies=[p for p in m.get('section_plies',[]) if p['id']=='YIELDING-CORE']
+    plies=[p for p in m.get('section_plies',[]) if p['id']=='YIELDING-CORE' or p.get('constituent_id')=='MORTAR-INFILL']
     if not plies:return []
     length=plies[0]['sections'][-1][0]
     end=min(range(2),key=lambda i:math.dist(point,m['axis'][i]))
@@ -125,6 +127,11 @@ def show_core(ctx,m,part):
         local=part['member']
         local['section_plies']=core_at_end(m,ctx.c['point'],math.dist(*local['axis']))
         part['faces']=member_faces(local,ctx.p);part['bounds']=bounds(part['faces'])
+    casing=m.get('brb_casing',{})
+    if casing:
+        label='; casing '+(casing.get('section') or 'supplier envelope')+', '+casing['material']
+        if casing.get('infill_material'):label+='; '+casing['infill_material']+' around separated moving core'
+        if label not in part['description']:part['description']+=label
 
 
 def moving_head_projection(assembly,axis,back,gap,spec):
@@ -141,9 +148,11 @@ def moving_head_projection(assembly,axis,back,gap,spec):
 
 def write_cores(package,model):
     from .saved_assemblies import material_for
+    from .brb_casing import infill_plies
     physical=package['physical']
     members={m['id']:m for m in physical['members']}
     catalog={r['id']:r for r in physical['materials']}
+    profiles={r['id']:r for r in model['profiles']}
     for m in model['members']:
         spec=m.get('supplier_core')
         if not spec:
@@ -165,9 +174,11 @@ def write_cores(package,model):
         material=material_for(dict(id='YIELDING-CORE',selected_material=spec['material']),'plate',None,catalog,[spec['record']])
         ply=dict(id='YIELDING-CORE',material_id=material,source_record_ids=[spec['record']],sections=sections,
                  basis='S: core material, yielding area and length from HR. A: rectangular core, end shapes and positions within the supplier casing.')
+        fill=infill_plies(m,profiles[m['profile_id']],ply,length,catalog)
         for target in (m,members[m['id']]):
             target['supplier_core']=dict(spec)
-            target['section_plies']=[v for v in target.get('section_plies',[]) if v['id']!='YIELDING-CORE']+[ply]
+            target['section_plies']=[v for v in target.get('section_plies',[]) if v['id']!='YIELDING-CORE' and
+                                    v.get('constituent_id')!='MORTAR-INFILL']+[ply,*fill]
     physical['materials']=list(catalog.values())
 
 

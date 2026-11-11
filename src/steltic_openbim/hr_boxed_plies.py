@@ -23,7 +23,7 @@ def cropped_plies(plies,lo,hi):
     return result
 
 
-def plate_solids(member,origin,axis,lo,hi):
+def plate_solids(member,origin,axis,lo,hi,roles=None):
     y=member['local_y'];z=cross(axis,y);base=add(origin,mul(axis,lo))
     for ply in cropped_plies(member.get('section_plies',[]),lo,hi):
         knots=ply['sections'];rings=[]
@@ -33,6 +33,7 @@ def plate_solids(member,origin,axis,lo,hi):
         faces=[list(reversed(rings[0])),rings[-1]]
         for a,b in zip(rings,rings[1:]):
             faces.extend([[a[i],a[(i+1)%len(a)],b[(i+1)%len(b)],b[i]] for i in range(len(a))])
+        if roles is not None:roles.append(ply.get('constituent_id',ply['id']))
         yield faces
 
 

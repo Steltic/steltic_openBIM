@@ -19,6 +19,7 @@ import ifcopenshell.validate
 
 from .drawing_workflow import fingerprint
 from .generator_identity import generator_identity
+from . import member_constituents
 from .pilots.geometry import member_faces,part_faces,part_lines
 from . import bim_assemblies, bim_bonds
 
@@ -206,7 +207,7 @@ def _export_source(directory,destination,source):
     warnings=[];objects=[];unlocated_connections=[];property_pool={};mesh_templates={}
     member_objects={};panel_objects={};relationship_manifest=[]
     identity_mapping=model.create_entity('IfcCartesianTransformationOperator3D',LocalOrigin=origin.Location,Scale=1.)
-    def add(cls,item,faces=(),lines=(),key=None,face_holes=(),local_frame=None):
+    def add(cls,item,faces=(),lines=(),key=None,face_holes=(),local_frame=None,face_roles=None):
         key=key or item['id'];obj=entity(cls,item.get('mark') or item['id'],key)
         obj.Description=item.get('description') or item.get('kind') or basis
         obj.ObjectPlacement=model.create_entity('IfcLocalPlacement',RelativePlacement=origin)
@@ -214,7 +215,7 @@ def _export_source(directory,destination,source):
         containment[level_of(item)].append(obj)
         if level_of(item) is None:counts['unassigned_elements']+=1
         if faces:
-            vertices=[];indices=[];holes=[];lookup={}
+            vertices=[];indices=[];holes=[];lookup={};retained_roles=[]
             # Repeated members/parts share a local mesh. Only their recorded
             # translations differ; no rotation, rounding of source placement or
             # change to the section geometry is inferred.
@@ -231,7 +232,9 @@ def _export_source(directory,destination,source):
                 if len(set(row))>=3:
                     indices.append(row)
                     holes.append([index_ring(ring) for ring in face_holes[i]] if face_holes else [])
-            token=(tuple(vertices),tuple(tuple(row) for row in indices),tuple(tuple(tuple(r) for r in rings) for rings in holes))
+                    if face_roles is not None:retained_roles.append(face_roles[i])
+            token=(tuple(vertices),tuple(tuple(row) for row in indices),tuple(tuple(tuple(r) for r in rings) for rings in holes),
+                   tuple(retained_roles))
             if token not in mesh_templates:
                 if any(holes):
                     points=model.create_entity('IfcCartesianPointList3D',CoordList=vertices)
@@ -244,6 +247,7 @@ def _export_source(directory,destination,source):
                 else:
                     template=ifcopenshell.api.geometry.add_mesh_representation(model,context=body_context,vertices=[vertices],faces=[indices])
                 mesh_templates[token]=model.create_entity('IfcRepresentationMap',MappingOrigin=origin,MappedRepresentation=template)
+                member_constituents.add_shape_aspects(model,mesh_templates[token],retained_roles)
             mapped=model.create_entity('IfcMappedItem',MappingSource=mesh_templates[token],MappingTarget=identity_mapping)
             rep=model.create_entity('IfcShapeRepresentation',ContextOfItems=body_context,RepresentationIdentifier='Body',RepresentationType='MappedRepresentation',Items=[mapped])
             if local_frame:
@@ -260,9 +264,9 @@ def _export_source(directory,destination,source):
             ifcopenshell.api.geometry.assign_representation(model,product=obj,representation=rep)
         mat=item.get('material_id')
         if mat and item.get('section_plies'):
-            plies=[dict(id='MAIN',material_id=mat),*item['section_plies']]
-            constituents=[model.create_entity('IfcMaterialConstituent',Name=p['id'],Description=p['material_id'],
-                          Category='member_section',Material=material_for(p['material_id'])) for p in plies]
+            plies=member_constituents.materials(item)
+            constituents=[model.create_entity('IfcMaterialConstituent',Name=role,Description=mid,
+                          Category='member_section',Material=material_for(mid)) for role,mid in plies.items()]
             assignment=model.create_entity('IfcMaterialConstituentSet',Name=item['id'],MaterialConstituents=constituents)
             relation('IfcRelAssociatesMaterial','member-plies:'+key,RelatedObjects=[obj],RelatingMaterial=assignment)
         elif mat:
@@ -294,11 +298,12 @@ def _export_source(directory,destination,source):
         return obj
     for m in members:
         faces=[]
+        roles=[] if m.get('brb_casing') else None
         if not recovered:
-            try:faces=member_faces(m,profiles)
+            try:faces=member_faces(m,profiles,face_roles=roles)
             except (ValueError,KeyError,TypeError,ZeroDivisionError) as ex:warnings.append(dict(id=m['id'],message='Reference axis only: '+str(ex)[:160]))
         cls='IfcColumn' if m['kind'] in ('column','col','stud','post','endwall_post') else 'IfcBeam' if m['kind'] in ('beam','girder','joist','rafter','moment_beam') else 'IfcMember'
-        member_objects[m['id']]=add(cls,m,faces,[m['axis']]);counts['members']+=1;counts['member_surfaces' if faces else 'reference_axes']+=1
+        member_objects[m['id']]=add(cls,m,faces,[m['axis']],face_roles=roles);counts['members']+=1;counts['member_surfaces' if faces else 'reference_axes']+=1
     from .panel_geometry import panel_rings
     cut_openings=set()
     for p in panels:

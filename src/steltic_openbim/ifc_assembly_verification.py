@@ -187,6 +187,8 @@ class Assessment:
         self.brb_bolt_measurements = []
         from .brb_supplier_core import source_requirements
         self.core_requirements = source_requirements(physical['members'],handoff,design_records)
+        from .brb_casing import requirements as casing_requirements
+        self.casing_requirements=casing_requirements(physical['members'],handoff,design_records,physical.get('materials',[]))
         self.checked_core_ends = Counter()
         self.support_weld_measurements = []
         self.gusset_clearance_measurements = []
@@ -219,6 +221,13 @@ class Assessment:
             spec=self.core_requirements[mid]
             required_length=spec['yielding_length_workpoint_ratio']*float(np.linalg.norm(np.subtract(*m['axis'])))
             info,errors=core_sections(local,spec['area_in2'],required_length)
+            if mid in self.casing_requirements:
+                from .brb_casing_readback import check as check_casing
+                casing,problems=check_casing(self.rb.members[mid],local,self.casing_requirements[mid],
+                                             self.profiles[m['profile_id']],length)
+                info['restraint']=casing;self.counts['actual_brb_casings']+=1
+                if self.casing_requirements[mid].get('infill_material'):self.counts['actual_selected_brb_infills']+=1
+                for detail in problems:self.issue('brb_casing_or_infill_differs',member=mid,detail=detail)
             actual=actual_materials(self.rb.members[mid]).get('YIELDING-CORE','')
             if not grade(actual) or grade(actual)!=grade(spec['material']):
                 errors.append('Actual IFC core material differs from HR')

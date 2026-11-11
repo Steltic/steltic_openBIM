@@ -310,7 +310,11 @@ def generate(package, state, dest):
             if selected:
                 section += 1; plot(sh, f'S{section}', f"Frame section / {'XY'[axis]} grid {label}", selected, axes=(1-axis,2))
     for row in model['details']: detail(sh, row)
-    groups = Counter((m['mark'], m['kind'], m.get('profile_id') or 'TBD', round(math.dist(*m['axis']),6)) for m in ms)
+    def section(m):
+        label=m.get('profile_id') or 'TBD'
+        casing=m.get('brb_casing',{}).get('section')
+        return label+' / '+casing if casing and casing not in label else label
+    groups = Counter((m['mark'], m['kind'],section(m), round(math.dist(*m['axis']),6)) for m in ms)
     sh.table('M', 'Member workline schedule', ['Mark','Kind','Section','Workline length','Count','Basis'], [150,240,280,290,120,sh.W-1210],
              [(mark,kind,profile,feet(length),n,'Source-declared geometry; cut length not asserted') for (mark,kind,profile,length),n in sorted(groups.items())])
     if features:

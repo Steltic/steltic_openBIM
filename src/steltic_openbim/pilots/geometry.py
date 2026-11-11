@@ -81,11 +81,15 @@ def clip_axis(a,b,limits):
     return (low,high) if high>low+1e-9 else None
 
 
-def member_faces(member,profiles,limits=None):
-    return [face for solid in member_solids(member,profiles,limits) for face in solid]
+def member_faces(member,profiles,limits=None,*,face_roles=None):
+    roles=[] if face_roles is not None else None
+    solids=member_solids(member,profiles,limits,roles=roles)
+    if face_roles is not None:
+        for role,solid in zip(roles,solids):face_roles.extend([role]*len(solid))
+    return [face for solid in solids for face in solid]
 
 
-def member_solids(member,profiles,limits=None):
+def member_solids(member,profiles,limits=None,*,roles=None):
     """Keep each closed section-strip extrusion distinct for section cuts."""
     extrusion_offsets=member.get('extrusion_end_offsets',member['end_offsets'])
     a,b=[add(p,o) for p,o in zip(member['axis'],extrusion_offsets)]; vector=sub(b,a); extent=length(vector)
@@ -168,21 +172,25 @@ def member_solids(member,profiles,limits=None):
             faces=[rings[0][::-1],rings[1]]
             faces.extend([rings[0][i],rings[0][(i+1)%len(rings[0])],rings[1][(i+1)%len(rings[0])],rings[1][i]] for i in range(len(rings[0])))
             solids.append(faces)
+    if roles is not None:roles.extend(['MAIN']*len(solids))
     if member.get('section_plies'):
         from ..hr_boxed_plies import plate_solids
-        solids.extend(plate_solids(member,a,d,lo,hi))
+        solids.extend(plate_solids(member,a,d,lo,hi,roles))
     planes=member.get('terminal_planes',[])
     if planes:
         from ..assembly_scene import clip_faces
         for plane in planes:
             normal,offset=plane['normal'],plane['offset_in']
-            clipped=[]
-            for solid in solids:
+            clipped=[];kept=[]
+            for index,solid in enumerate(solids):
                 values=[sum(x*y for x,y in zip(q,normal))-offset for face in solid for q in face]
                 if max(values)<=1e-8:continue
                 if min(values)<-1e-8:solid=clip_faces(solid,normal,offset)
-                if solid:clipped.append(solid)
+                if solid:
+                    clipped.append(solid)
+                    if roles is not None:kept.append(roles[index])
             solids=clipped
+            if roles is not None:roles[:]=kept
     if member.get('through_bores'):
         from ..connection_cuts import drill_plate
         groups={}
