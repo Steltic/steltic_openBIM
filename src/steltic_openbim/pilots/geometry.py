@@ -87,14 +87,20 @@ def member_faces(member,profiles,limits=None):
 
 def member_solids(member,profiles,limits=None):
     """Keep each closed section-strip extrusion distinct for section cuts."""
-    a,b=[add(p,o) for p,o in zip(member['axis'],member['end_offsets'])]; vector=sub(b,a); extent=length(vector)
+    extrusion_offsets=member.get('extrusion_end_offsets',member['end_offsets'])
+    a,b=[add(p,o) for p,o in zip(member['axis'],extrusion_offsets)]; vector=sub(b,a); extent=length(vector)
     clip=clip_axis(a,b,limits)
     if clip is None: return []
     lo,hi=[v*extent for v in clip]; d=unit(vector); y=member['local_y']; profile=profiles[member['profile_id']]
     base=strips(profile,profiles); rbs=member.get('rbs'); cope=member.get('cope')
     stations={lo,hi}
     from ..member_slots import validated,cut_sections
-    slots=validated(member.get('slots',[]),extent)
+    slots=member.get('slots',[])
+    if slots and 'extrusion_end_offsets' in member:
+        start=add(member['axis'][0],member['end_offsets'][0])
+        shift=sum((u-v)*w for u,v,w in zip(start,a,d))
+        slots=[dict(slot,start_in=slot['start_in']+shift,end_in=slot['end_in']+shift) for slot in slots]
+    slots=validated(slots,extent)
     if slots and (rbs or cope):raise ValueError('Combined slots and flange cuts require an explicit selected solid')
     for slot in slots:
         for station in (slot['start_in'],slot['end_in']):
@@ -150,6 +156,18 @@ def member_solids(member,profiles,limits=None):
             faces=[rings[0][::-1],rings[1]]
             faces.extend([rings[0][i],rings[0][(i+1)%len(rings[0])],rings[1][(i+1)%len(rings[0])],rings[1][i]] for i in range(len(rings[0])))
             solids.append(faces)
+    planes=member.get('terminal_planes',[])
+    if planes:
+        from ..assembly_scene import clip_faces
+        for plane in planes:
+            normal,offset=plane['normal'],plane['offset_in']
+            clipped=[]
+            for solid in solids:
+                values=[sum(x*y for x,y in zip(q,normal))-offset for face in solid for q in face]
+                if max(values)<=1e-8:continue
+                if min(values)<-1e-8:solid=clip_faces(solid,normal,offset)
+                if solid:clipped.append(solid)
+            solids=clipped
     return solids
 
 

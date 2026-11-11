@@ -634,18 +634,19 @@ def specifications(package,model):
     return out
 
 
-def generate(package,state,dest):
+def generate(package,state,dest,*,prepared_model=None):
     if not all(r['confirmed'] for r in state['requests']):raise ValueError('Design-test sheets require all adopted test answers to remain confirmed')
     from .review_cases import CASES
     if state['design_scenario']['id'] in CASES:
         from .review_pdf import generate as generate_review
         return generate_review(package,state,dest)
-    dest=Path(dest);dest.mkdir(parents=True,exist_ok=True);model=build_model(package,state)
+    dest=Path(dest);dest.mkdir(parents=True,exist_ok=True);model=prepared_model if prepared_model is not None else build_model(package,state)
     from .connection_details import prepare
     from .assembly_pdf import draw_assembly
-    assemblies=prepare(model,package)
+    assemblies=model['connection_assemblies'] if prepared_model is not None else prepare(model,package)
     refinement=' CFS8 roof webs are paired 600S162-54, four-ply at the girder, to match the actual node gusset planes; this is an explicit A refinement to the roof-interface answer.' if model['pilot']=='cfs8' else ''
-    model['assumptions'].append(dict(id='ASSEMBLED-JOINTS',basis='A - user-authorized fictional test input',answer='Develop the source connections as assembled design details. A labels adopted fitting geometry, bracket returns, clip extents, local fastener set-out and erection fittings.'+refinement+' Exact source variant and occurrence mapping is retained in connection_assemblies.json; no new capacity calculation is implied.'))
+    if not any(a['id']=='ASSEMBLED-JOINTS' for a in model['assumptions']):
+        model['assumptions'].append(dict(id='ASSEMBLED-JOINTS',basis='A - user-authorized fictional test input',answer='Develop the source connections as assembled design details. A labels adopted fitting geometry, bracket returns, clip extents, local fastener set-out and erection fittings.'+refinement+' Exact source variant and occurrence mapping is retained in connection_assemblies.json; no new capacity calculation is implied.'))
     sh=DesignSheets(package,state,dest,model);jobs=[]
     def queue(number,title,fn,scale='NTS'):jobs.append((number,title,scale,fn))
     # The complete sheet list is available before the cover is painted.

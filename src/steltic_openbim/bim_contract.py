@@ -241,7 +241,7 @@ def connection_component_findings(package):
         # not a selection of an additional mechanical anchor rod.
         text=re.sub(r'\banchor[- ]reinforcement\b','foundation reinforcement',text,flags=re.I)
         text=re.sub(r'\banchor[- ]plates?\b','uplift end plate',text,flags=re.I)
-        item=r'(?:(?:field|shop|additional|designed|anchor|CJP|PJP)\s+)*(?:bolts?|screws?|welds?|anchors?|rods?|studs?)\b'
+        item=r'(?:(?:field|shop|additional|designed|permanent|anchor|CJP|PJP)\s+)*(?:bolts?|screws?|welds?|anchors?|rods?|studs?)\b'
         text=re.sub(r'\b(?:no|without)\s+'+item+r'(?:\s*(?:,|\bor\b|\band\b)\s*'+item+r')*','',text,flags=re.I)
         return re.sub(r'\b(?:anchor\s+rods?|bolts?|screws?|welds?|anchors?)\s+(?:are\s+)?(?:not required|not used|omitted|unnecessary)\b','',text,flags=re.I)
     def selection_text(value):

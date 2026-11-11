@@ -30,6 +30,8 @@ def screw_diameter(n):return {8:.164,10:.19,12:.216,14:.25}.get(n,.25)
 def dim(profile,axis='depth'):
     d=profile['dimensions']
     if profile['family']=='built_up':return None
+    if profile['family'] in ('chs','round'):
+        return d['d']
     if axis=='depth':return d.get('d',d.get('h',d.get('depth',d.get('width',6))))
     return d.get('bf',d.get('b',d.get('width',6)))
 
@@ -666,8 +668,12 @@ def build_scene(model,package,c,subtype=''):
             if reduced:short_members.append('M'+str(n))
         # One node plate for EVERY actual load-carrying web plane, including all
         # four girder plies. Plate offsets are fitted to the thickest joined web.
+        hr_node=model.get('pilot','').startswith('hr')
+        if hr_node:
+            from .hr_joist_nodes import gussets
+            gussets(a,p,ends,bolt_layouts)
         planes={}
-        for _,_,m in ends:
+        for _,_,m in ([] if hr_node else ends):
             for yy,sign,t in web_faces(p,m['profile_id']):
                 centre=round(yy-sign*t/2,5)
                 old=planes.get((centre,sign),0);planes[centre,sign]=max(old,t)

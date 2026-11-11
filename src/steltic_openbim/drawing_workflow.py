@@ -23,6 +23,9 @@ def fingerprint(value):
 
 
 def write_json(path,value):
+    if Path(path).name == 'drawing_manifest.json' and value.get('pdf_sha256'):
+        from .generator_identity import generator_identity
+        value['generator'] = generator_identity()
     path.write_text(json.dumps(value,indent=2,ensure_ascii=False,allow_nan=False)+'\n',encoding='utf-8')
 
 

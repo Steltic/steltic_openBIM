@@ -190,7 +190,29 @@ class IFCStore:
             if source in ('steltic','structural'):
                 report=worker('export' if source=='steltic' else 'export_structural',folder,dest/'report.json')
             else:report=worker('export_import',folder/'original.ifc',dest/'report.json',folder/'state.json')
+            if source=='steltic' and read(folder/'source.json').get('module')=='HR':
+                # The PDF and source revision remain immutable in the drawing
+                # store. Certify those exact bytes alongside the freshly emitted IFC.
+                capture=state.get('native_source') or {}
+                job_root=None
+                if capture.get('module')=='HR' and capture.get('job') and 'HR' in self.jobs.roots:
+                    try:
+                        expected=self.jobs.path('HR',capture['job'])
+                        job_root=expected.parent.parent if expected.parent.name=='design' else expected.parent
+                    except (ValueError,FileNotFoundError):
+                        # Preserve the provisional pair and its specific missing
+                        # source evidence in the detached delivery certificate.
+                        pass
+                certificate=worker('verify_delivery',dest,dest/'delivery_certificate.json',folder,
+                                   *([job_root] if job_root else []))
+                report.update(delivery_status='verified' if certificate['passed'] else 'provisional',
+                              delivery_certificate='delivery_certificate.json',
+                              verification_findings=certificate['findings'])
+            elif source=='structural':
+                report['delivery_status']='individual_physical_source_export'
             report.update(key=dest.name,source_directory=folder.name);write_json(dest/'report.json',report)
+            if body.get('final') and report.get('delivery_status')=='provisional':
+                raise ValueError('HR delivery verification failed. Inspect the detached delivery certificate and findings.')
             return report
 
     def state(self,p):

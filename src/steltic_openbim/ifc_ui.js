@@ -70,7 +70,10 @@ window.StelticIFC={async mount(root,project,mode){
    }else box.append(card('Load an HR/CFS job above, import a Steltic drawing package, or build an IFC review model first.'));
    for(const r of state.exports){const url=base+'/export/'+r.key;box.append(card(el('h3',{},r.source==='structural'?r.source_module+' / '+r.source_job+' physical export':r.source==='steltic'?'Steltic model export':'Imported IFC with review information'),el('p',{},`${r.schema} · source revision ${r.physical_revision||r.drawing_revision||r.import_revision} · ${r.schema_errors.length?'Schema findings: '+r.schema_errors.length:'Schema validation passed'}`),
      el('p',{},Object.entries(r.counts).map(([k,v])=>k.replaceAll('_',' ')+': '+v.toLocaleString()).join(' · ')),
-     el('div',{class:'ifc-row'},el('a',{href:url+'/model.ifc',class:'ifc-download'},'Download IFC'),el('a',{href:url+'/report.json',target:'_blank'},'Export report')),
+       r.delivery_status==='verified'?el('p',{},'HR drawing and IFC delivery verified.'):
+         r.delivery_status==='provisional'?el('p',{},'Provisional HR export. Review the delivery verification findings.'):null,
+       el('div',{class:'ifc-row'},el('a',{href:url+'/model.ifc',class:'ifc-download'},'Download IFC'),el('a',{href:url+'/report.json',target:'_blank'},'Export report'),
+         r.delivery_certificate?el('a',{href:url+'/delivery_certificate.json',target:'_blank'},'Delivery certificate'):null),
      r.source_validation?el('div',{},el('h4',{},'Source completeness'),el('p',{},r.source_validation.status==='ready'?'No missing data reported by the current package checks.':'Information required: this IFC is provisional even though its file schema is valid.'),report(r.source_validation.findings)):null,
      r.physical_checks?el('div',{},el('h4',{},'Physical source checks'),el('p',{},r.physical_checks.findings.length?'Source-model review required. The IFC retains the supplied geometry.':'No findings in the limited source screens. This does not establish architectural agreement or design approval.'),el('ul',{},r.physical_checks.findings.map(f=>el('li',{},`${f.title}: ${f.count}`)))):null,
      el('ul',{},r.limits.map(t=>el('li',{},t))),r.warnings.length?el('p',{},`${r.warnings.length} geometry warnings — see export report.`):null));}

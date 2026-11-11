@@ -176,7 +176,13 @@ def connection_extras(b,levels):
             if b.key=='hr20':
                 if k%2==0 and support:
                     rid='conn-'+('roof' if k==12 else 'floor')+'-'+pid+('' if k==12 else '-level-'+str(k+1))
-                    if rid in raw and 'pin' in str(raw[rid]).lower():con['detail_ref']['id']='review_pin_beam';con['design_record_ids']=[b.record('connections',rid)];p['joint']='pin_release'
+                    if rid in raw:
+                        from .hr_detail_selections import beam_family
+                        family=beam_family(raw[rid].get('components',''))
+                        if family:
+                            con['detail_ref']['id']=family
+                            con['design_record_ids']=[b.record('connections',rid)]
+                            p['joint']='pin_release' if family=='review_pin_beam' else 'shear_plate'
                 if point[1]==720 and point[2]==216 and point[0] in (720,1080) and pid!='W14X665':
                     con['detail_ref']['id']='review_transfer_slip';p['joint']='horizontal_slip';p['travel_in']=2;attach(con,'conn-diaphragm-level3-transfer')
                 elif 'two-plate' in str([raw.get(r.split('/')[-1],{}) for r in con['design_record_ids']]):p['paired_shear_plates']=True

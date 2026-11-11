@@ -45,6 +45,9 @@ def erection_rods(text):
 
 def flange_rows(text):
     """(rows per flange, rods per row, row pitch, flange gap, rod pitch)."""
+    selected=re.search(r'(\d+) per flange side in one row outside the flanges at '+NUMBER+r' in, '+NUMBER+r' in from the flange face',text,re.I)
+    if selected:
+        return 1,int(selected[1]),0,number(selected[3]),number(selected[2])
     hit=re.search(r'rod layout: (\d+) rods outside each flange in (?:(\d+) rows '+NUMBER+r' in apart of (\d+)|one row of (\d+)).*?a1 = '+NUMBER+r' in.*?rods '+NUMBER+r' in apart',text,re.I)
     if hit:
         _,rows,pitch,cols,one,gap,spacing=hit.groups()

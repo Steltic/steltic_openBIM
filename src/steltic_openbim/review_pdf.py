@@ -120,7 +120,13 @@ def core_plan(sh):
 
 def generate(package,state,dest):
     if not all(r['confirmed'] for r in state['requests']):raise ValueError('Adopt the fictional answers before dimensioned review drawings')
-    dest=Path(dest);dest.mkdir(parents=True,exist_ok=True);m=build_model(package,state);assemblies=prepare(m,package);sh=DesignSheets(package,state,dest,m);jobs=[]
+    model=build_model(package,state)
+    return render_model(package,state,dest,model,prepare(model,package))
+
+
+def render_model(package,state,dest,m,assemblies):
+    """Render an existing, source-bound model with its actual connection scenes."""
+    dest=Path(dest);dest.mkdir(parents=True,exist_ok=True);sh=DesignSheets(package,state,dest,m);jobs=[]
     omitted=omitted_detail_families(m['pilot'])
     published=[a for a in assemblies if a['family'] not in omitted]
     sh.excluded_detail_refs={a['reference'] for a in assemblies if a['family'] in omitted}
