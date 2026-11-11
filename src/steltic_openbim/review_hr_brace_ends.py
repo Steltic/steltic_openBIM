@@ -284,6 +284,17 @@ def draw_brace(ctx):
             a.notes.append(f"S: {core['material']} core, area {core['area_in2']:g} in2; yielding length {core['yielding_length_workpoint_ratio']:g} times the workpoint length. A: internal core and casing coordination sections; supplier transition and qualification retained.")
     elif isbrb:
         dia,pin_material,hole_clearance=pin_selection(ctx)
+        selected_pin_stock=(('cheek_fillet','perimeter_each_in'),('cheek_fillet','size_in'),
+            ('clevis_plate','thickness_in'),('clevis_plate','side_gap_in'),('pin','grip_in'),
+            ('cheek_plate','thickness_in'),('gusset','width_at_hole_in'),('gusset','extension_in'))
+        if all(ctx.selected.get(key) is not None for key in selected_pin_stock):
+            from .ordinary_pin_geometry import draw_selected_eye
+            limits=[(1,sign,interface_z)]
+            if not upper:limits.append((0,1,clearance))
+            draw_selected_eye(ctx,v,horizontal_role,limits,dia,pin_material,dia+(hole_clearance if hole_clearance is not None else .0625))
+            if upper:bind_support_span(ctx,'BEAM',0)
+            else:bind_support_span(ctx,'COLUMN',2)
+            return
         cheek=ctx.selected.get(('cheek_plate','thickness_in')) or ctx.n(r'two '+NUMBER+r' in cheek plates',.875)
         plate=t+2*cheek
         breadth=ctx.selected.get(('gusset','width_at_hole_in')) or ctx.n(r'width '+NUMBER+r' in',19)

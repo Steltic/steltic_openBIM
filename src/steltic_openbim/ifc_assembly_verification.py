@@ -856,6 +856,28 @@ class Assessment:
                             self.issue('groove_weld_reference_lacks_contact_or_declared_root_opening',part=pid,target=bound.get(target,target),distance_in=max(distances),root_opening_in=reach)
                         else:
                             self.issue('weld_reference_outside_attachment_reach', part=pid, target=bound.get(target,target), distance_in=max(distances), fillet_leg_in=size)
+        if (('brb_pinned' in fields.get(('connection','variant'),[]) or
+                    (bound.get('BRACE') in self.core_requirements and ('pin','diameter_in') in fields))
+                and (('gusset','width_at_hole_in') in fields or ('gusset','extension_in') in fields)
+                and not any(p.get('parameters',{}).get('source_stack_role') for p in parts.values())):
+            from .ordinary_pin_readback import measure as measure_ordinary_pin
+            mid=bound.get('BRACE')
+            if mid is None:
+                self.issue('ordinary_pin_selection_lacks_bound_brace')
+            else:
+                m=self.members[mid]
+                end=min(range(2),key=lambda i:np.linalg.norm(np.subtract(m['axis'][i],inst['origin'])))
+                away=inverse[:3,:3]@np.subtract(m['axis'][1-end],m['axis'][end])
+                local_welds={k:transform(line,inverse) for k,line in measured_welds.items()}
+                try:
+                    counts,issues,facts=measure_ordinary_pin(parts,meshes,local_welds,fields,away)
+                except (KeyError,ValueError,TypeError,IndexError) as error:
+                    self.issue('ordinary_pin_geometry_unverified',detail=str(error))
+                else:
+                    self.counts.update(counts)
+                    self.brb_core_measurements.append(dict(member=mid,end_index=end,connection=cid,
+                                                           sheet=self.context.get('sheet'),ordinary_pin_sections=facts))
+                    for finding in issues:self.issue(**finding)
         from .support_weld_readback import selected_support_sides
         face_welds,face_errors=selected_support_sides(parts,meshes,instance,measured_welds,fields,gussets)
         self.counts['actual_two_sided_gusset_support_welds']+=len(face_welds)
