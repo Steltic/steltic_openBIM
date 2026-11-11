@@ -904,6 +904,7 @@
     "provenance": {
       "type": "object",
       "properties": {
+        "openbim_translation_findings": {"type": "array", "items": {"type": "object"}},
         "module": {
           "enum": [
             "HR",

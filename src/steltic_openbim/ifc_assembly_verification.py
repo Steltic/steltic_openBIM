@@ -54,13 +54,26 @@ def grip_engages(ply_hits, grip):
             any(min(b, grip) - max(a, 0.) > TOL for a, b in zip(ply_hits[::2], ply_hits[1::2])))
 
 
-def selected(handoff, connection):
+def selected(handoff, connection, member=None, profile=None):
     result = defaultdict(list)
     application = handoff.get('occurrences', {}).get(connection, {})
     for link in application.get('applications', []):
         record = handoff['records'][link['record_id']]
         for index in link.get('selected', []):
             field = record['fields'][index]
+            attachment = field.get('applicability',{}).get('attachment')
+            if member is not None and attachment == 'slotted_hss' and 'hss_members' in link:
+                if link['hss_members'].get(member) != 'selected':
+                    continue
+            if member is not None and attachment == 'flat_bar_end' and 'flat_bar_members' in link:
+                if link['flat_bar_members'].get(member) != 'selected':
+                    continue
+            if member is not None and attachment == 'flat_bar_end':
+                dims = (profile or {}).get('dimensions',{})
+                section = field['applicability'].get('section_in')
+                if not profile or profile.get('family')!='flat' or (section and
+                        (abs(dims.get('width',0)-section[0])>TOL or abs(dims.get('thickness',0)-section[1])>TOL)):
+                    continue
             result[field['role'], field['field']].append(field['value'])
     return result
 
@@ -146,7 +159,10 @@ class Assessment:
         self.covered_ends = set()
         self.checked_members = set()
         self.cache = {}
+        self.shared_issues = {}
         self.interface_cache = {}
+        self.crossings = {row['id']:row for row in handoff.get('crossing_interfaces',[])}
+        self.crossing_occurrences = Counter()
         self.context = {}
 
     def issue(self, code, **fields):
@@ -223,6 +239,21 @@ class Assessment:
                     self.counts['actual_constituent_face_ranges'] += 1
                     if len(reference) != len(placed.faces) or not all(same_face(a,b) for a,b in zip(placed.polygons, reference)):
                         self.issue('constituent_faces_differ_from_declared_part', part=part['id'])
+                elif geometry.get('type') == 'extruded_profile':
+                    profile = self.profiles[geometry['profile_id']]
+                    if profile.get('family') != 'round':
+                        self.issue('unverified_formed_profile',part=part['id'],profile=profile['id'])
+                        continue
+                    axis=unit(geometry['axis']);offsets=placed.vertices-np.asarray(geometry['origin'])
+                    u=offsets@axis;diameters=2*np.linalg.norm(offsets-u[:,None]*axis,axis=1)
+                    diameter=profile['dimensions']['d']
+                    self.counts['actual_formed_round_profile_checks'] += 1
+                    # A cap can also have a vertex at the circular section center.
+                    rim=diameters[diameters>TOL]
+                    if not len(rim) or max(abs(min(u)),abs(max(u)-geometry['length']),np.max(np.abs(rim-diameter)))>TOL:
+                        self.issue('formed_profile_length_diameter_or_position_differs',part=part['id'],profile=profile['id'])
+                else:
+                    self.issue('unverified_constituent_shape_type',part=part['id'],geometry_type=geometry.get('type'))
         if sorted(used) != list(range(len(mesh.faces))):
             raise ValueError('Overlapping or unassigned actual IFC faces in ' + tid)
         return result
@@ -230,6 +261,7 @@ class Assessment:
     def fastener_checks(self, parts, meshes, fields, gussets):
         bolt_group = []
         shafts = {}
+        axial_intervals = defaultdict(list)
         sections = {}
         for pid, p in parts.items():
             if p['kind'] not in {'pin', 'bolt', 'screw', 'anchor'}:
@@ -242,6 +274,15 @@ class Assessment:
             previous = shafts.setdefault(tuple(np.rint(np.r_[point, axis] / TOL).astype('int64')), pid)
             if previous != pid:
                 self.issue('coincident_fastener_point_and_direction', fastener=pid, other=previous)
+            canonical = axis if axis[np.argmax(np.abs(axis))] > 0 else -axis
+            perpendicular = point-(point@canonical)*canonical
+            key = tuple(np.rint(np.r_[canonical,perpendicular] / TOL).astype('int64'))
+            current = sorted((float(point@canonical),float((point+axis*grip)@canonical)))
+            for other,other_axis,interval in axial_intervals[key]:
+                overlap = min(current[1],interval[1])-max(current[0],interval[0])
+                if np.dot(other_axis,axis)<0 and overlap > TOL:
+                    self.issue('opposed_fastener_shafts_occupy_common_axis',fastener=pid,other=other,shaft_overlap_in=overlap)
+            axial_intervals[key].append((pid,axis,current))
             is_pin = p['kind'] == 'pin' or pid.upper().startswith('PIN')
             targets = [q for q in p.get('connects', []) if q in meshes and parts[q]['kind'] in {'plate', 'gusset', 'steel_plate'}]
             named_gussets = set(targets) & gussets
@@ -343,6 +384,7 @@ class Assessment:
         selection_key = tuple(sorted((k, tuple(map(str, values))) for k, values in fields.items()))
         key = (tid, map_id, tuple(relative.round(5).flatten()), selection_key)
         if key not in self.cache:
+            start = len(self.findings)
             meshes = self.split_actual(tid, raw.transformed(relative), parts)
             self.cache[key] = meshes
             self.counts['unique_placed_template_checks'] += 1
@@ -375,11 +417,18 @@ class Assessment:
                 if common > TOL:
                     self.issue('distinct_gussets_occupy_common_steel', gussets=[a,b], common_section_in2=common, common_thickness_in=hi-lo)
             self.fastener_checks(parts, meshes, fields, gussets)
+            self.shared_issues[key] = [f['code'] for f in self.findings[start:]]
         else:
             meshes = self.cache[key]
+            if self.shared_issues[key]:
+                self.issue('reused_template_has_constituent_fit_findings', counts=dict(Counter(self.shared_issues[key])))
         curves = self.rb.curves(cid)
         receivers = {r['id']: r for r in template.get('receivers', [])}
         self.paths(cid, parts, meshes, inst, instance, curves, br, gussets, fields)
+        crossing_id = connection.get('source_crossing_id',cid)
+        if crossing_id in self.crossings:
+            self.crossing_occurrences[crossing_id] += 1
+            self.crossing(connection,parts,inst,instance,curves,self.crossings[crossing_id])
         for role, mid in br.items():
             self.member_checks(mid)
             _, ends = self.member_frame(mid)
@@ -392,6 +441,23 @@ class Assessment:
                 delta = min(float(np.linalg.norm(x-point)) for x in located)
                 if delta <= TOL:
                     self.covered_ends.add((mid, end_index))
+
+    def crossing(self,connection,parts,inst,instance,curves,source):
+        record = self.handoff['records'][source['record_id']]
+        selections = {f['field']:f['value'] for i in source['selected'] if (f:=record['fields'][i])['role']=='flat_bar_crossing_fillet'}
+        ids=set(source['member_ids']); binds=inst['bindings']
+        if len(ids)!=2 or not ids<=set(binds.values()) or np.linalg.norm(np.asarray(connection.get('point',inst['origin']))-source['point_in'])>TOL:
+            self.issue('source_crossing_members_or_workpoint_differs',crossing_id=source['id'],expected_members=sorted(ids))
+        welds = [p for p in parts.values() if p['kind']=='weld' and ids <= {binds.get(role) for role in p.get('connects',[])}]
+        self.counts['actual_source_crossings'] += 1
+        if len(welds)!=selections.get('count') or not connection.get('drawing_ref'):
+            self.issue('source_crossing_weld_count_or_drawing_locator_missing',crossing_id=source['id'],actual_welds=len(welds),selected_welds=selections.get('count'))
+        for weld in welds:
+            size=weld.get('parameters',{}).get('size_in'); ref=transform(weld['geometry']['points'],instance)
+            line=next((q for q in curves if q.shape==ref.shape and (np.max(np.abs(q-ref))<=TOL or np.max(np.abs(q[::-1]-ref))<=TOL)),None)
+            length=sum(np.linalg.norm(b-a) for a,b in zip(line,line[1:])) if line is not None else None
+            if size is None or length is None or abs(size-selections['size_in'])>TOL or abs(length-selections['length_in'])>TOL:
+                self.issue('source_crossing_weld_size_length_or_reference_differs',part=weld['id'],size_in=size,actual_length_in=length,selected=selections)
 
     def transport_only(self,cid,tid,template,parts,product,instance,inverse):
         """Read each remaining placed assembly body and its declared reference curves."""
@@ -435,6 +501,7 @@ class Assessment:
         used = set()
         connected = defaultdict(set)
         logical_welds = defaultdict(list)
+        member_fields = {mid:selected(self.handoff,cid,mid,self.profiles.get(self.members[mid].get('profile_id'))) for mid in br.values()}
         inverse = np.linalg.inv(instance)
         bound = {r:mid for r,mid in inst.get('bindings',{}).items() if mid in self.rb.members}
         member_shapes = {}
@@ -474,27 +541,34 @@ class Assessment:
                 continue
             source_role = None
             logical_id = part.get('parameters',{}).get('source_weld_id',pid)
+            attached_members = {br[r] for r in links if r in br}
+            attached = next(iter(attached_members)) if len(attached_members)==1 else None
+            local_fields = member_fields.get(attached,fields)
             if logical_id == 'WGC':
                 source_role = 'gusset_column_weld'
             elif logical_id == 'WGB':
                 source_role = 'gusset_base_weld' if 'BASE' in links else 'gusset_beam_weld'
             elif logical_id.startswith('WR'):
                 source_role = 'reinforcement_fillet'
-            elif logical_id.startswith('WB') and any(q in br for q in links):
+            elif attached and set(links) & gussets and (logical_id.startswith('WB') or ('brace_slot_weld','count') in local_fields):
                 source_role = 'brace_slot_weld'
+            elif attached and set(links) & gussets and ('flat_bar_end_fillet','count') in local_fields:
+                source_role = 'flat_bar_end_fillet'
             elif logical_id.startswith('WC') and any(q.startswith('CLEVIS') for q in links):
                 source_role = 'clevis_outer_fillet'
             if source_role:
                 size = part.get('parameters', {}).get('size_in')
-                for expected_size in fields.get((source_role,'size_in'), []):
+                for expected_size in local_fields.get((source_role,'size_in'), []):
                     if size is None or abs(float(size)-float(expected_size)) > TOL:
                         self.issue('selected_attachment_weld_size_differs', part=pid, role=source_role, actual=size, selected=expected_size)
-                logical_welds[source_role,logical_id].append(actual_curves[matches[0]])
+                logical_welds[source_role,attached,logical_id].append(actual_curves[matches[0]])
             # Reference curves do not assert a modeled solid weld. A centerline
             # farther than the modeled fillet leg from a named attachment, at
             # an end or segment midpoint, cannot represent contact at that point.
-            size = part.get('parameters', {}).get('size_in')
-            if size is not None and float(size) > 0:
+            parameters = part.get('parameters', {})
+            size = parameters.get('size_in')
+            reach = float(size) if size is not None else float(parameters.get('root_opening_in',0.))
+            if size is not None or parameters.get('weld_type'):
                 line = transform(actual_curves[matches[0]], inverse)
                 probes = np.vstack((line, (line[1:]+line[:-1])/2))
                 for target in set(links) & support.keys():
@@ -504,13 +578,17 @@ class Assessment:
                         distances = [support[target].point_distance(point) for point in probes]
                         self.interface_cache[token] = distances
                     self.counts['actual_weld_attachment_checks'] += 1
-                    if max(distances) > float(size) + TOL:
-                        self.issue('weld_reference_outside_attachment_reach', part=pid, target=bound.get(target,target), distance_in=max(distances), fillet_leg_in=size)
+                    if max(distances) > reach + TOL:
+                        if size is None:
+                            self.issue('groove_weld_reference_lacks_contact_or_declared_root_opening',part=pid,target=bound.get(target,target),distance_in=max(distances),root_opening_in=reach)
+                        else:
+                            self.issue('weld_reference_outside_attachment_reach', part=pid, target=bound.get(target,target), distance_in=max(distances), fillet_leg_in=size)
         if len(used) != len(actual_curves):
             self.issue('unassigned_actual_reference_curves', count=len(actual_curves)-len(used))
-        for (source_role,logical_id),lines in logical_welds.items():
+        for (source_role,attached,logical_id),lines in logical_welds.items():
             length = sum(float(np.linalg.norm(np.diff(line,axis=0),axis=1).sum()) for line in lines)
-            selected_lengths = fields.get((source_role,'length_in'), []) + fields.get((source_role,'length_each_side_in'), [])
+            local_fields = member_fields.get(attached,fields)
+            selected_lengths = local_fields.get((source_role,'length_in'), []) + local_fields.get((source_role,'length_each_side_in'), [])
             for expected_length in set(selected_lengths):
                 if abs(length-float(expected_length)) > TOL:
                     self.issue('selected_weld_reference_length_differs', part=logical_id, actual=length, selected=expected_length)
@@ -520,10 +598,12 @@ class Assessment:
                     reachable.update(i for i,a in enumerate(lines) if any(np.linalg.norm(pa-pb)<=TOL for j in tuple(reachable) for pa in (a[0],a[-1]) for pb in (lines[j][0],lines[j][-1])))
                 if len(reachable)!=len(lines):
                     self.issue('split_weld_segments_disconnected',part=logical_id,segments=len(lines))
-        for expected_count in set(fields.get(('brace_slot_weld','count'),[])):
-            count=sum(role=='brace_slot_weld' for role,_ in logical_welds)
-            if count!=expected_count:
-                self.issue('selected_slot_weld_count_differs', selected=expected_count, actual=count)
+        for mid,local_fields in member_fields.items():
+            for selected_role in ('brace_slot_weld','flat_bar_end_fillet'):
+                for expected_count in set(local_fields.get((selected_role,'count'),[])):
+                    count=sum(role==selected_role and target==mid for role,target,_ in logical_welds)
+                    if count!=expected_count:
+                        self.issue('selected_terminal_weld_count_differs', member=mid, role=selected_role, selected=expected_count, actual=count)
         for role, mid in br.items():
             targets = connected[role] & gussets
             seen = {role}; frontier = {role}
@@ -552,7 +632,7 @@ class Assessment:
                 if separation > TOL:
                     self.issue('actual_brace_separated_from_attached_gusset', member=mid, gusset=pid, separation_lower_bound_in=separation)
                 source_slots = [slot for slot in self.members[mid].get('slots', []) if slot.get('connection_id') in (None,cid)]
-                for clearance in fields.get(('slot','clearance_in'), []):
+                for clearance in member_fields[mid].get(('slot','clearance_in'), []):
                     if not source_slots:
                         self.issue('selected_brace_slot_missing', member=mid, selected_clearance_in=clearance)
                     for slot in source_slots:
@@ -598,6 +678,11 @@ def verify_assembly_fit(ifc_path, physical, source_handoff):
         except (ValueError, RuntimeError, KeyError, IndexError, AttributeError, StopIteration, TypeError) as exc:
             check.issue('assembly_fit_unverified', detail=str(exc), occurrence=connection.get('id'))
     inventory = {m['id'] for m in physical['members'] if brace_kind(m)}
+    for key in check.crossings:
+        if check.crossing_occurrences[key] != 1:
+            check.findings.append({'code':'required_crossing_occurrence_count','crossing_id':key,'actual':check.crossing_occurrences[key]})
+    for unresolved in source_handoff.get('unresolved_crossing_interfaces',[]):
+        check.findings.append({'code':'required_crossing_geometry_unresolved','source':unresolved})
     missing = sorted((mid, end) for mid in inventory for end in (0,1) if (mid,end) not in check.covered_ends)
     for mid, end in missing:
         check.findings.append({'code':'brace_end_has_no_matching_physical_receiver', 'member':mid, 'end_index':end})

@@ -94,6 +94,10 @@ def draw(ctx):
         # other record's setback or weld. Full source evidence stays in ctx.text.
         from .review_shear_selection import paired as paired_selection
         bp=pid;bd=effective(p,bp);bf=effective(p,bp,'width');cp,face=support(ctx,bp)
+        typed_shear=f=='review_beam' and ctx.selected.get(('shear_plate','thickness_in')) is not None
+        if typed_shear:
+            record_ids=list(dict.fromkeys(row['record_id'] for row in ctx.selected.sources[('shear_plate','thickness_in')]))
+            txt=source_text(ctx.package,dict(ctx.c,design_record_ids=record_ids))
         txt,twin=paired_selection(txt,weak=getattr(ctx,'weak_axis_support',False),column=cp)
         n=lambda pattern,default:findnum(pattern,txt,default)
         moment=par.get('moment',False) or f=='review_crane_bracket';gap=0 if moment else n(r'beam end set back (?:\(web side\) )?'+NUMBER+r' in',1) if twin else 1.25
@@ -109,13 +113,14 @@ def draw(ctx):
                 from .assembly_scene import bounds
                 m['bounds']=bounds(m['faces'])
         rows,cols,dia,pitch,gauge=bolt_data(txt);t=ctx.n(r'(?:single plate|erection tab|web single plate)\s*(?:PL\s*)?'+NUMBER,.375)
-        typed_shear=f=='review_beam' and ctx.selected.get(('shear_plate','thickness_in')) is not None
         if typed_shear:
             t=ctx.selected.get(('shear_plate','thickness_in')) or t
             count=ctx.selected.get(('bolt','count')) or rows*cols
             dia=ctx.selected.get(('bolt','diameter_in')) or dia
             pitch=ctx.selected.get(('bolt','pitch_in')) or pitch
-            if count%cols:raise ValueError('Selected shear bolt count does not fit its columns')
+            cols=ctx.selected.get(('bolt','columns')) or cols
+            gauge=ctx.selected.get(('bolt','gauge_in')) or gauge
+            if count%cols:raise ValueError('Selected shear bolt count does not fit its columns at '+ctx.c['id'])
             rows=int(count//cols)
         if not txt:rows=max(2,min(4,int((bd-3)/3)+1))
         if moment and 'erection tab' in txt:rows,cols,dia,pitch=4,1,.75,3
@@ -147,8 +152,21 @@ def draw(ctx):
             plate['thickness']=t
             grade=ctx.selected.get(('shear_plate','material'))
             if grade:plate['selected_material']=grade
-        paired=bool(twin) or par.get('paired_shear_plates',False);joins=['M2','P1']
-        if paired:a.box('P2',[face,-tw/2-t,z],[width,t,ph],'S','Source second shear plate / double-shear joint');joins.append('P2')
+        paired=bool(twin) or par.get('paired_shear_plates',False)
+        if typed_shear:
+            if ctx.selected.get(('shear_plate','count')) is not None:
+                paired=ctx.selected[('shear_plate','count')]==2
+            elif ('connection','variant') not in ctx.selected.conflicts:
+                variant=ctx.selected.get(('connection','variant'))
+                if variant in ('double_plate_shear','single_plate_shear'):
+                    paired=variant=='double_plate_shear'
+        joins=['M2','P1']
+        if paired:
+            second=a.box('P2',[face,-tw/2-t,z],[width,t,ph],'S','Source second shear plate / double-shear joint')
+            if typed_shear:
+                second['thickness']=t
+                if plate.get('selected_material'):second['selected_material']=plate['selected_material']
+            joins.append('P2')
         if shim:a.box('SHIM',[face+gap,tw/2,z],[width-gap,shim,ph],'S','Source 1/16 in finger shim against beam web');joins.append('SHIM')
         bolt=a.fastener('F1',grid(rows*cols,cols,pitch,gauge,(face+width-plate_edge-(cols-1)*gauge,-tw/2-(t if paired else 0),z+edge)),[0,1,0],dia,tw+shim+t*(2 if paired else 1),joins,f'{rows} rows x {cols}; {dia:g} in '+('A490' if 'A490' in txt else 'A325')+'; source pretension/faying-surface requirements',pattern_basis)
         if typed_shear:

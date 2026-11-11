@@ -6,7 +6,7 @@ import ifcopenshell.api
 import numpy as np
 import pytest
 
-from steltic_openbim.ifc_assembly_verification import Assessment, Readback, grip_engages, same_face
+from steltic_openbim.ifc_assembly_verification import Assessment, Readback, grip_engages, same_face, selected, verify_assembly_fit
 from steltic_openbim.joint_mesh_readback import Mesh, cross_section
 
 
@@ -44,11 +44,13 @@ def export_readback(tmp_path, meshes, references=None, reader=False):
         p=api('root.create_entity',model,ifc_class='IfcMember',name=name)
         shape=api('geometry.add_mesh_representation',model,context=body,vertices=[(mesh.vertices*.0254).tolist()],faces=[[list(f) for f in mesh.faces]])
         api('geometry.assign_representation',model,product=p,representation=shape)
-    for name,line in (references or {}).items():
+    for name,lines in (references or {}).items():
         annotation=api('root.create_entity',model,ifc_class='IfcAnnotation',name=name+':references')
-        points=[model.create_entity('IfcCartesianPoint',Coordinates=tuple(float(x)*.0254 for x in p)) for p in line]
-        curve=model.create_entity('IfcPolyline',Points=points)
-        group=model.create_entity('IfcGeometricCurveSet',Elements=[curve])
+        curves=[]
+        for line in ([lines] if np.asarray(lines).ndim==2 else lines):
+            points=[model.create_entity('IfcCartesianPoint',Coordinates=tuple(float(x)*.0254 for x in p)) for p in line]
+            curves.append(model.create_entity('IfcPolyline',Points=points))
+        group=model.create_entity('IfcGeometricCurveSet',Elements=curves)
         rep=model.create_entity('IfcShapeRepresentation',ContextOfItems=body,RepresentationIdentifier='Reference',RepresentationType='GeometricCurveSet',Items=[group])
         api('geometry.assign_representation',model,product=annotation,representation=rep)
     name=tmp_path/'control.ifc'
@@ -141,3 +143,30 @@ def test_actual_weld_curve_reaches_both_named_parts(tmp_path,offset,expected):
     codes={f['code'] for f in check.findings}
     assert ('weld_reference_outside_attachment_reach' in codes)==expected
     assert check.counts['actual_weld_attachment_checks']==2
+
+
+def test_selected_slots_and_flat_bar_fillets_apply_to_their_own_members():
+    fields=[dict(role='slot',field='clearance_in',value=.125,applicability={'attachment':'slotted_hss'}),
+            dict(role='flat_bar_end_fillet',field='size_in',value=.5,applicability={'attachment':'flat_bar_end','section_in':[1.75,.75]})]
+    handoff={'records':{'R':{'fields':fields}},'occurrences':{'C':{'applications':[{'record_id':'R','selected':[0,1],'hss_members':{'H':'selected'}}]}}}
+    hss=selected(handoff,'C','H',{'family':'rectangular_hollow','dimensions':{}})
+    flat=selected(handoff,'C','F',{'family':'flat','dimensions':{'width':1.75,'thickness':.75}})
+    other=selected(handoff,'C','SMALL',{'family':'flat','dimensions':{'width':1.25,'thickness':.625}})
+    assert set(hss)=={('slot','clearance_in')}
+    assert set(flat)=={('flat_bar_end_fillet','size_in')}
+    assert not other
+
+
+@pytest.mark.parametrize('wrong',[False,True])
+def test_source_crossing_checks_four_actual_ifc_weld_lengths(tmp_path,wrong):
+    lines=[[[0.,float(i),0.],[2. if not wrong or i else 1.5,float(i),0.]] for i in range(4)]
+    rb=export_readback(tmp_path,{'A':cuboid([0,0,0],[3,4,.5])},{'X':lines},reader=True)
+    material=dict(role='flat_bar_crossing_fillet')
+    fields=[dict(material,field=k,value=v) for k,v in [('count',4),('size_in',.25),('length_in',2.)]]
+    src=dict(id='X',record_id='R',selected=[0,1,2],member_ids=['A','B'],point_in=[0,0,0]);handoff={'records':{'R':{'fields':fields}},'crossing_interfaces':[src]}
+    parts={str(i):dict(id=str(i),kind='weld',connects=['A','B'],parameters={'size_in':.25},geometry={'type':'polyline','points':line}) for i,line in enumerate(lines)}
+    check=Assessment(rb,dict(members=[],profiles=[]),handoff)
+    check.crossing({'point':[0,0,0],'drawing_ref':'1/C001'},parts,{'origin':[0,0,0],'bindings':{'A':'A','B':'B'}},np.eye(4),rb.curves('X'),src)
+    assert bool(check.findings)==wrong
+    skipped=verify_assembly_fit(tmp_path/'control.ifc',dict(members=[],profiles=[],connections=[]),handoff)
+    assert not skipped['passed'] and skipped['findings'][0]['code']=='required_crossing_occurrence_count'

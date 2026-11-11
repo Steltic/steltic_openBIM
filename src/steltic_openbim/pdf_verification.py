@@ -33,14 +33,15 @@ def inside(point, box):
     return box[0]-POINT_TOL <= x <= box[2]+POINT_TOL and box[1]-POINT_TOL <= y <= box[3]+POINT_TOL
 
 
-def read_ink(page, parts=None):
+def read_ink(page, parts=None,legends=None):
     """Interpret the generated PDF operators, including surrounding graphics state."""
     groups = []
     stream = page.get_contents()
     if stream is None:
         return groups
     raw=stream.get_data()
-    if b"/StelticDim" not in raw and (parts is None or b"/StelticPart" not in raw):
+    if (b"/StelticDim" not in raw and (parts is None or b"/StelticPart" not in raw)
+            and (legends is None or b"/StelticLegend" not in raw)):
         return groups
     ctm, clipped, stroke, fill, width, text_mode = IDENTITY, False, (0,), (0,), 1, 0
     font, size, tm = None, 0, IDENTITY
@@ -67,6 +68,11 @@ def read_ink(page, parts=None):
                 from .pdf_part_verification import FaceInk
                 active=FaceInk(int(args[1]["/N"]),clipped)
                 parts.append(active)
+            elif args[0] == "/StelticLegend" and legends is not None:
+                active=dict(id=int(args[1]["/N"]),lines=[],text=[],errors=[])
+                legends.append(active)
+                if clipped:
+                    active["errors"].append("legend is inside an unverified clipping path")
         elif op == b"EMC":
             active = tags.pop()
         elif op in (b"RG",b"G",b"K"):
@@ -249,6 +255,29 @@ def verify_source(row, model, scenes, openings, native=None):
         if any(abs(pt[j]-station*scale)>POINT_TOL for pt,station in zip(projected,stations)):
             return ["witness positions disagree with model grid stations"]
         points = None
+    elif kind=="core_extent":
+        import numpy as np
+        from .pilots.geometry import strips
+        profiles={p["id"]:p for p in model["profiles"]}
+        vertices=[]
+        for m in model["members"]:
+            if m["kind"] not in ("wall_closure","composite_wall") or m.get("level")!=1 or m.get("core_group")!=source["group"]:
+                continue
+            a,b=np.array(m["axis"])+np.array(m["end_offsets"])
+            if np.linalg.norm((b-a)[:2])>.001:
+                continue
+            u=np.array(m["local_y"])
+            v=np.cross((b-a)/np.linalg.norm(b-a),u)
+            vertices.extend(a+x*u+y*v for poly in strips(profiles[m["profile_id"]],profiles) for x,y in poly)
+        if not vertices:
+            return ["core extent has no bound vertical plate members"]
+        low,high=np.min(vertices,axis=0),np.max(vertices,axis=0)
+        axis=source["axis"]
+        a=[low[0],low[1],0]
+        b=a.copy()
+        b[axis]=high[axis]
+        points=(a,b)
+        measured=high[axis]-low[axis]
     elif kind=="levels":
         points = row["model_points"]
         levels = {float(v[2]) for v in model["levels"]}
@@ -292,7 +321,7 @@ def verify_source(row, model, scenes, openings, native=None):
 
 def verify_dimensions(directory,ifc_path=None):
     directory = Path(directory)
-    result = dict(passed=False,pages_checked=0,dimensions_checked=0,projected_parts_checked=0,findings=[])
+    result = dict(passed=False,pages_checked=0,dimensions_checked=0,projected_parts_checked=0,legend_rows_checked=0,findings=[])
     findings = result["findings"]
     def finding(sheet, dim, issue):
         findings.append(dict(sheet=sheet,dimension=dim,issue=issue))
@@ -369,6 +398,8 @@ def verify_dimensions(directory,ifc_path=None):
                 finding(None,str(key),"opening coordinate missing, duplicated or extra")
         omitted = set(manifest.get("omitted_detail_references",[]))
         expected = Counter()
+        from .pdf_annotation_readback import expected_legends,check_legend,check_heading
+        legend_pages=expected_legends(scenes.values(),omitted)
         for scene in scenes.values():
             if scene["reference"] in omitted:
                 continue
@@ -387,11 +418,16 @@ def verify_dimensions(directory,ifc_path=None):
                 finding(None,None,"page count differs from sheet register")
             for index,page in enumerate(pdf.pages,1):
                 sheet = manifest["sheets"][index-1]["number"]
+                registered=manifest["sheets"][index-1]
+                if manifest.get("schema")=="steltic.drawing_manifest":
+                    for issue in check_heading(page,registered):
+                        finding(sheet,None,issue)
                 rows = dict(pages.pop(index,{}))
                 if page.rotation or abs(page.user_unit-1)>1e-7:
                     finding(sheet,None,"rotated or rescaled PDF page")
                 part_ink=[]
-                for group in read_ink(page,part_ink):
+                legend_ink=[]
+                for group in read_ink(page,part_ink,legend_ink):
                     dim = group["id"]
                     row = rows.pop(dim,None)
                     if row is None or row["sheet"]!=sheet:
@@ -402,6 +438,12 @@ def verify_dimensions(directory,ifc_path=None):
                     result["dimensions_checked"]+=1
                 for dim in rows:
                     finding(sheet,dim,"missing printed dimension")
+                if sheet in legend_pages or legend_ink:
+                    expected_rows,continuation=legend_pages.pop(sheet,([],False))
+                    checked,issues=check_legend(page,expected_rows,legend_ink,continuation)
+                    result["legend_rows_checked"]+=checked
+                    for row_id,issue in issues:
+                        finding(sheet,row_id,issue)
                 views=fronts.get(sheet,[])
                 if views or part_ink:
                     from .pdf_part_verification import check_parts
@@ -416,6 +458,8 @@ def verify_dimensions(directory,ifc_path=None):
                 result["pages_checked"]+=1
         if pages:
             finding(None,None,"dimension refers to an unavailable page")
+        for sheet in legend_pages:
+            finding(sheet,None,"parts, weld or note continuation sheet is absent")
     except (ValueError,TypeError,KeyError,IndexError,OSError,ArithmeticError,StopIteration,RuntimeError) as exc:
         finding(None,None,f"unreadable PDF evidence: {exc}")
     result["passed"] = not findings
