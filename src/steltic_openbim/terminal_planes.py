@@ -27,12 +27,14 @@ def apply_planes(member, entries):
 
 def saved_cuts(physical, model):
     drawing_scenes={s['id']:s for s in model['connection_assemblies']}
+    drawing_connections={c['id']:c for c in model['connections']}
     source_members={m['id']:m for m in model['members']}
     members={m['id']:m for m in physical['members']}
     planes=defaultdict(list);changed={}
     for c in physical['connections']:
         frame=c.get('assembly_instance')
-        scene=drawing_scenes.get(c.get('assembly_id'))
+        drawing=drawing_connections.get(c['id'],c)
+        scene=drawing_scenes.get(drawing.get('assembly_id'))
         allowed=scene and (scene['family'] in ('review_truss_node','review_truss_heel') or
                            (scene['family']=='review_angle_clip' and c.get('parameters',{}).get('actual_gable_brace')))
         if not frame or not allowed:
@@ -43,7 +45,8 @@ def saved_cuts(physical, model):
             if not cuts or mid not in members:continue
             m=members[mid]
             ends=[add(q,o) for q,o in zip(m['axis'],m['end_offsets'])]
-            distance,end=min((math.dist(q,frame['origin']),i) for span in (m['axis'],ends) for i,q in enumerate(span))
+            workpoint=add(frame['origin'],drawing.get('parameters',{}).get('joist_bearing_setout_in',[0,0,0]))
+            distance,end=min((math.dist(q,workpoint),i) for span in (m['axis'],ends) for i,q in enumerate(span))
             if distance>.01:
                 # A spanning receiver is continuous at this joint.
                 continue

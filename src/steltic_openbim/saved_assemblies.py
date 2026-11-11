@@ -184,6 +184,8 @@ def rebuilt_scenes(model,package):
             rebuild=any(by_id[cid].get('parameters',{}).get('actual_rod_end') for cid in original['occurrences'])
         if family=='review_sliding_post':
             rebuild=any(by_id[cid].get('parameters',{}).get('actual_endwall_base') for cid in original['occurrences'])
+        if family=='review_roof_seat':
+            rebuild=any(by_id[cid].get('parameters',{}).get('joist_bearing_setout_in') for cid in original['occurrences'])
         if family=='review_angle_clip':
             rebuild=any(by_id[cid].get('parameters',{}).get('actual_gable_brace') for cid in original['occurrences'])
         if family=='review_hr_strut_bracing':
@@ -203,7 +205,9 @@ def rebuilt_scenes(model,package):
                 if variant=='review_beam':
                     c['detail_ref']['id']=variant;c['parameters']['joint']='shear_plate'
             params=c.get('parameters',{})
-            token=(variant,selected.signature(),bool(params.get('common_apex_datum')),bool(params.get('grade_diaphragm_interface')))
+            token=(variant,selected.signature(),bool(params.get('common_apex_datum')),
+                   bool(params.get('grade_diaphragm_interface')),params.get('joist_receiver_fit'),
+                   tuple(params.get('joist_bearing_setout_in',[])),params.get('bearing_flange_face_in'))
             groups[token].append(c)
         for group_index,group in enumerate(groups.values()):
             representative=group[0]
@@ -249,6 +253,8 @@ def repair(package,model):
     add_column_plies(package,model)
     from .review_gable_bracing import fit_flange_braces
     fit_flange_braces(package,model)
+    from .hr_joist_nodes import separate_bearing_ends
+    separate_bearing_ends(model)
     from .review_hr_brace_ends import bind
     from .transfer_joint_fit import fit_end_offsets
     fit_end_offsets(model)

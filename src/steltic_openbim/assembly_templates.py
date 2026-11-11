@@ -666,7 +666,9 @@ def build_scene(model,package,c,subtype=''):
         from .truss_node_geometry import receivers,short_screw_layout
         from .pilots.model import dot
         ends=[]
-        for i,(m,receiver) in enumerate(zip(ms,receivers(ms,c['point']))):
+        shift=c.get('parameters',{}).get('joist_bearing_setout_in',[0.,0.,0.])
+        centre=add(c['point'],shift)
+        for i,(m,receiver) in enumerate(zip(ms,receivers(ms,centre))):
             near,far=receiver['axis'];v=unit(sub(far,near))
             a.member('M'+str(i+1),m['profile_id'],near,far,y=receiver['local_y'],basis='A',
                 source_member_index=i,description=m['kind'].replace('_',' ')+' '+m['profile_id'])
@@ -730,6 +732,10 @@ def build_scene(model,package,c,subtype=''):
         a.dim([gusset[0][0],0,gusset[2][0]],[gusset[0][1],0,gusset[2][0]],'Gusset extent (A)','A',offset=-28)
         note('The node includes actual adjoining members and every built-up web ply. A: 1/8 in gussets, screw counts as labelled for each actual web ply, mitre fit with 1/4 in nominal gap, and matching paired/four-ply webs. No supplier capacity approval is inferred.')
         if short_members:note('A short cut-end proposal for '+', '.join(short_members)+': fewer screws fit between the actual opening cut and node mitre. The source workline is preserved. Supplier and engineer capacity verification is required; no six-screw capacity is assigned to this reduced group.')
+        if any(shift):
+            horizontal=0 if abs(shift[0])>=abs(shift[1]) else 1
+            a.translate([shift[horizontal],shift[1-horizontal],shift[2]])
+            note('A: the independent joist end post, chords, webs and gusset are fitted inside their own bearing span at the shared support.')
 
     elif family in ('cfs_delegated_truss_heel_clip','hr_truss_node','hr_stmf_node'):
         cp=pick(('truss_chord','girder_truss','valley_truss'),default_c());wp=pick(('truss_web',),default_c());tp=channel(p,'ASSEMBLY-TRUSS-TRACK',6,2,.1017,0)
