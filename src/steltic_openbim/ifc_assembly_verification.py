@@ -35,7 +35,9 @@ def brace_kind(member):
 
 
 def gusset_part(part):
-    description = str(part.get('parameters', {}).get('description', '')).lower()
+    params=part.get('parameters', {})
+    if params.get('source_role') in ('base_plate','cap_gusset_support_plate'):return False
+    description = str(params.get('description', '')).lower()
     return part.get('kind') in {'plate', 'gusset'} and ('GUSSET' in part['id'].upper() or 'gusset' in description)
 
 
@@ -157,7 +159,7 @@ class Readback:
 
 
 class Assessment:
-    def __init__(self, readback, physical, handoff):
+    def __init__(self, readback, physical, handoff, design_records=()):
         self.rb = readback
         self.physical = physical
         self.handoff = handoff
@@ -177,6 +179,10 @@ class Assessment:
         self.crossing_occurrences = Counter()
         self.owned_gussets = []
         self.anchor_measurements = []
+        self.brb_core_measurements = []
+        from .brb_supplier_core import source_requirements
+        self.core_requirements = source_requirements(physical['members'],handoff,design_records)
+        self.checked_core_ends = Counter()
         self.support_weld_measurements = []
         self.gusset_clearance_measurements = []
         self.crossing_measurements = []
@@ -201,6 +207,19 @@ class Assessment:
         basis, ends = self.member_frame(mid)
         local = self.rb.member(mid).transformed(np.linalg.inv(basis))
         length = float(np.linalg.norm(ends[1] - ends[0]))
+        if mid in self.core_requirements:
+            from .brb_core_readback import core_sections
+            from .pin_stack_readback import actual_materials
+            from .selected_plate_readback import grade
+            spec=self.core_requirements[mid]
+            required_length=spec['yielding_length_workpoint_ratio']*float(np.linalg.norm(np.subtract(*m['axis'])))
+            info,errors=core_sections(local,spec['area_in2'],required_length)
+            actual=actual_materials(self.rb.members[mid]).get('YIELDING-CORE','')
+            if not grade(actual) or grade(actual)!=grade(spec['material']):
+                errors.append('Actual IFC core material differs from HR')
+            self.brb_core_measurements.append(dict(info,member=mid,actual_material=actual))
+            self.counts['actual_brb_core_sections']+=1
+            for detail in errors:self.issue('brb_yielding_core_differs',member=mid,detail=detail)
         if not any(m.get(k) for k in ('miters', 'end_cuts', 'terminal_planes')):
             cap = [float(local.vertices[:, 0].min()), float(local.vertices[:, 0].max())]
             self.counts['actual_member_cap_checks'] += 1
@@ -629,6 +648,30 @@ class Assessment:
                 else:
                     connected[body].add(target);connected[target].add(body)
                 continue
+            if interface.get('kind')=='brb_core_continuation':
+                from .brb_core_readback import meets_axial_core, moving_head_clearance
+                mid=bound.get('BRACE');spec=self.core_requirements.get(mid)
+                if not spec or 'BRACE' not in support or 'CORE-END' not in support:
+                    self.issue('brb_core_continuation_missing',interface=interface['id'])
+                    continue
+                m=self.members[mid]
+                axis=inverse[:3,:3]@np.subtract(*m['axis'][::-1])
+                info,errors=meets_axial_core(support['BRACE'],support['CORE-END'],axis,spec['area_in2'])
+                end=min(range(2),key=lambda i:np.linalg.norm(np.subtract(m['axis'][i],inst['origin'])))
+                pinned=('brb_pinned' in fields.get(('connection','variant'),[]) or
+                        any(p['kind']=='pin' for p in parts.values()))
+                if pinned:
+                    info.update(moving_head_clearance(support,axis,spec['reported_elongation_in'],errors))
+                if any(p['kind']=='weld' and {'BRACE','END-CAP'}<=set(p.get('connects',[])) for p in parts.values()):
+                    errors.append('Moving core head is welded to the restraining casing')
+                self.counts['actual_brb_core_end_contacts']+=1
+                self.brb_core_measurements.append(dict(info,member=mid,end_index=end,connection=cid,
+                                                       sheet=self.context.get('sheet')))
+                for detail in errors:self.issue('brb_core_end_fit_differs',member=mid,detail=detail,**info)
+                if not errors:
+                    self.checked_core_ends[mid,end]+=1
+                    connected['BRACE'].add('CORE-END');connected['CORE-END'].add('BRACE')
+                continue
             if interface.get('kind')!='supplier_interface' or 'CORE-END' not in interface.get('connects',[]):
                 continue
             for role in set(interface['connects'])-{'CORE-END'}:
@@ -638,7 +681,8 @@ class Assessment:
                 token=('supplier_fit',self.context['template'],role,member_keys.get(role))
                 if token not in self.interface_cache:
                     core,other=support['CORE-END'],support[role]
-                    self.interface_cache[token]=(shared_face_area(core,other),common_plate_section(core,other))
+                    common=common_plate_section(other,core) if role.startswith('SPLICE') else common_plate_section(core,other)
+                    self.interface_cache[token]=(shared_face_area(core,other),common)
                 area,common=self.interface_cache[token]
                 self.counts['actual_supplier_interface_mating_faces'] += 1
                 if area<=TOL or common:
@@ -840,10 +884,10 @@ class Assessment:
                         self.issue('actual_gusset_misses_finite_slot', member=mid, gusset=pid, plate_stations_in=[min(extent),max(extent)])
 
 
-def verify_assembly_fit(ifc_path, physical, source_handoff):
+def verify_assembly_fit(ifc_path, physical, source_handoff, design_records=()):
     """Verify every applicable connection and report individual unsupported IDs."""
     try:
-        check = Assessment(Readback(ifc_path), physical, source_handoff)
+        check = Assessment(Readback(ifc_path), physical, source_handoff, design_records)
     except (OSError, ValueError, RuntimeError, KeyError) as exc:
         return {'passed': False, 'findings': [{'code': 'assembly_readback_unavailable', 'message': str(exc)}]}
     for connection in physical.get('connections', []):
@@ -855,12 +899,24 @@ def verify_assembly_fit(ifc_path, physical, source_handoff):
     counts,shared_issues=check_shared_gussets(check.owned_gussets,physical.get('connections',[]))
     check.counts.update(counts)
     check.findings.extend(shared_issues)
+    from .base_hardware_clearance import check as check_base_hardware
+    total,hardware_issues=check_base_hardware(check)
+    check.counts['actual_base_hardware_gusset_pairs']=total
+    check.findings.extend(hardware_issues)
     from .gusset_outline_readback import verify_outlines
     outline_rows,outline_issues=verify_outlines(check,physical.get('connections',[]))
     check.counts['checked_gusset_transfer_sections']=sum(len(r['transfer_sections']) for r in outline_rows)
     check.counts['checked_fitted_gusset_outlines']=sum('unsupported_area_in2' in r for r in outline_rows)
     check.findings.extend(outline_issues)
     inventory = {m['id'] for m in physical['members'] if brace_kind(m)}
+    check.context={}
+    for mid in check.core_requirements:
+        if mid not in check.checked_members:
+            check.findings.append(dict(code='selected_brb_core_has_no_verified_section',member=mid))
+        for end in (0,1):
+            count=check.checked_core_ends[mid,end]
+            if count!=1:
+                check.findings.append(dict(code='selected_brb_core_end_continuation_count',member=mid,end_index=end,actual=count))
     checked_transfer={r['connection'] for r in check.transfer_measurements}
     for cid in sorted(check.transfer_sources-checked_transfer):
         check.findings.append(dict(code='selected_transfer_node_has_no_actual_assembly',connection=cid))
@@ -872,4 +928,4 @@ def verify_assembly_fit(ifc_path, physical, source_handoff):
     missing = sorted((mid, end) for mid in inventory for end in (0,1) if (mid,end) not in check.covered_ends)
     for mid, end in missing:
         check.findings.append({'code':'brace_end_has_no_matching_physical_receiver', 'member':mid, 'end_index':end})
-    return {'passed': not check.findings, 'counts': dict(check.counts), 'member_inventory': len(inventory), 'transfer_measurements': check.transfer_measurements, 'gusset_outline_measurements': outline_rows, 'support_weld_measurements': check.support_weld_measurements, 'anchor_measurements': check.anchor_measurements, 'gusset_clearance_measurements': check.gusset_clearance_measurements, 'unique_ends': 2*len(inventory), 'mapped_ends': len(check.covered_ends), 'crossing_measurements': check.crossing_measurements, 'findings': check.findings, 'numeric_tolerance_in': TOL, 'schema': 'steltic.actual_assembly_fit.v1'}
+    return {'passed': not check.findings, 'counts': dict(check.counts), 'member_inventory': len(inventory), 'transfer_measurements': check.transfer_measurements, 'gusset_outline_measurements': outline_rows, 'support_weld_measurements': check.support_weld_measurements, 'brb_core_measurements': check.brb_core_measurements, 'anchor_measurements': check.anchor_measurements, 'gusset_clearance_measurements': check.gusset_clearance_measurements, 'unique_ends': 2*len(inventory), 'mapped_ends': len(check.covered_ends), 'crossing_measurements': check.crossing_measurements, 'findings': check.findings, 'numeric_tolerance_in': TOL, 'schema': 'steltic.actual_assembly_fit.v1'}

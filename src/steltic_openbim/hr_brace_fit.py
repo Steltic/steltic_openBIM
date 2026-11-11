@@ -59,13 +59,15 @@ def bound_base_plate(ctx):
         faces=plate['faces'] if plate else part_faces(part,ctx.p)
     else:faces=part_faces(part,ctx.p)
     axes=(frame['x_axis'],frame['y_axis'],cross(frame['x_axis'],frame['y_axis']))
-    points=[]
+    located=[]
     for face in faces:
+        ring=[]
         for q in face:
             world=sub(transformed(q,other),frame['origin'])
-            points.append([dot(world,axis) for axis in axes])
-    if not points:return None
-    return [(min(q[i] for q in points),max(q[i] for q in points)) for i in range(3)],matches[0]['id'],part['id']
+            ring.append([dot(world,axis) for axis in axes])
+        located.append(ring)
+    if not located:return None
+    return bounds(located),matches[0]['id'],part['id'],located
 
 
 def bind_support_span(ctx,label,coordinate):
@@ -229,7 +231,7 @@ def fit_brb_rows(selected,axis,support_station,column_clearance=None):
     return start,layout
 
 
-def bolted_brb_end(assembly, selected, axis, station, thickness, support_station,layout=None,casing_depth=None):
+def bolted_brb_end(assembly, selected, axis, station, thickness, support_station,layout=None,casing_depth=None,core=None):
     """Two source-selected splice plates join the finite core end to the gusset."""
     count,rows,pitch=selected['count'],selected['rows'],selected['pitch']
     dia=selected['diameter']
@@ -256,13 +258,18 @@ def bolted_brb_end(assembly, selected, axis, station, thickness, support_station
     # selected bolts pass through both splice plates and the central gusset.
     # The supplier extension joins the far (unbolted) ends of the outer plies.
     supplier_overlap=max(2*edge,4.)
+    tail=far+supplier_overlap
+    if core:
+        from .brb_supplier_core import extension
+        splice_end=extension(assembly,axis,far+.0625,tail,width,thickness,core)
+    else:
+        splice_end=tail
+        edge_width=max(width,casing_depth or width)
+        end_points=[at(s,-thickness/2,d) for s,d in ((far+.0625,-width/2),(tail,-edge_width/2),
+                                                    (tail,edge_width/2),(far+.0625,width/2))]
+        assembly.polygon('CORE-END',end_points,thickness,basis='A',description='Supplier core extension between splice plates')
     for i,y in enumerate((-thickness/2-splice_t,thickness/2)):
-        plate('SPLICE'+str(i),start,far+supplier_overlap,y,splice_t,'Source splice plate; openBIM fit thickness and outline')
-    edge_width=max(width,casing_depth or width)
-    end_points=[at(s,-thickness/2,d) for s,d in ((far+.0625,-width/2),(far+supplier_overlap,-edge_width/2),
-                                                (far+supplier_overlap,edge_width/2),(far+.0625,width/2))]
-    assembly.polygon('CORE-END',end_points,thickness,basis='A',
-                     description='Supplier core extension between the outer splice plates, meeting the actual casing walls')
+        plate('SPLICE'+str(i),start,splice_end,y,splice_t,'Source splice plate; openBIM fit thickness and outline')
     assembly.interfaces.append(dict(id='SPLICE-TO-CORE',kind='supplier_interface',basis='A',
         connects=['SPLICE0','CORE-END','SPLICE1'],
         description='Supplier-end engagement outside the source-selected bolted gusset group'))

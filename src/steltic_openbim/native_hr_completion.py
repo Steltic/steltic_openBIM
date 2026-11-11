@@ -207,11 +207,16 @@ def complete_native_hr(original):
         return all(c.get('drawing_ref')=='1/'+row['reference'] and
                    c.get('detail_ref',{}).get('source_drawing')=='1/'+row['reference']
                    for row in connection_details(physical['connections']) for c in row['connections'])
-    if not pending and bindings_match(physical):return original
+    from .brb_supplier_core import prepare as prepare_cores, source_requirements, write_cores
+    expected_cores=source_requirements(physical['members'],source,original.get('design_records',[]))
+    missing_core=any(m['id'] in expected_cores and not any(p['id']=='YIELDING-CORE' for p in m.get('section_plies',[]))
+                     for m in physical['members'])
+    if not pending and not missing_core and bindings_match(physical):return original
     body={k:v for k,v in original.items() if k!='source_handoff'}
     if source['source_bindings'].get('native_content_sha256')!=fingerprint(body):
         raise ValueError('Native body differs from the authenticated HR source before geometry completion')
     package=copy.deepcopy(original);physical=package['physical']
+    prepare_cores(package,physical)
     members={m['id']:m for m in physical['members']};joints={j['id']:j for j in physical['joints']}
     catalogue={m['id']:m for m in physical['materials']};profiles={p['id']:p for p in physical['profiles']}
     cs={c['id']:c for c in physical['connections']}
@@ -242,6 +247,7 @@ def complete_native_hr(original):
             package['provenance'].setdefault('openbim_translation_findings',[]).append(
                 dict(code='native_joint_geometry',connection_id=cid,detail=str(error),owner='openBIM'))
     physical['materials']=list(catalogue.values())
+    write_cores(package,physical)
     for row in connection_details(physical['connections']):
         for c in row['connections']:
             c['drawing_ref']='1/'+row['reference']

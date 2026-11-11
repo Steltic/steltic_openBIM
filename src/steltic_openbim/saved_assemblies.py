@@ -167,6 +167,7 @@ def crop_existing_receivers(receivers,frame,members):
 def rebuilt_scenes(model,package):
     """Keep existing sheet identity. Split only when a selected variant differs."""
     by_id={c['id']:c for c in model['connections']}
+    core_members={m['id']:m for m in model['members'] if m.get('supplier_core')}
     records={r['id']:r['data'] for r in package['design_records']}
     changed={};out=[]
     next_number=max((int(s['sheet'][1:]) for s in model['connection_assemblies'] if re.fullmatch(r'C\d+',s['sheet'])),default=0)+1
@@ -175,6 +176,8 @@ def rebuilt_scenes(model,package):
         rebuild=family in ('review_brace','review_brb','review_beam','review_pin_beam','review_base','review_wall_base',
                            'review_truss_node','review_truss_heel','review_plan_angle','review_transfer_truss')
         if model['pilot'].startswith('hr'):
+            if family=='review_splice':
+                rebuild=any('per side in one vertical line' in records.get(r,{}).get('components','') or 'CJP groove welds of both flanges and the web' in records.get(r,{}).get('components','') for cid in original['occurrences'] for r in by_id[cid].get('design_record_ids',[]))
             if family in ('hr_simple_shear_plate','hr_infill_shear_plate_cope','hr_shear','test_floor_opening'):
                 rebuild=any(('shear_plate','depth_in') in selected_fields(package,by_id[cid]) for cid in original['occurrences'])
             if family=='hr_column_base' and original.get('subtype')=='exposed':rebuild=True
@@ -207,7 +210,13 @@ def rebuilt_scenes(model,package):
             params=c.get('parameters',{})
             token=(variant,selected.signature(),bool(params.get('common_apex_datum')),
                    bool(params.get('grade_diaphragm_interface')),params.get('joist_receiver_fit'),
-                   tuple(params.get('joist_bearing_setout_in',[])),params.get('bearing_flange_face_in'))
+                   tuple(params.get('joist_bearing_setout_in',[])),params.get('bearing_flange_face_in'),
+                   tuple((v['axis'],v['sign'],v['width_in'],v['length_in'],v['source_record_id'])
+                         for v in params.get('integral_gusset_tongues',[])))
+            attached_cores=[core_members[mid] for mid in c.get('member_ids',[]) if mid in core_members]
+            if attached_cores:
+                from .brb_supplier_core import core_at_end
+                token+=(fingerprint([core_at_end(m,c['point'],24.) for m in attached_cores]),)
             groups[token].append(c)
         for group_index,group in enumerate(groups.values()):
             representative=group[0]
@@ -228,6 +237,8 @@ def rebuilt_scenes(model,package):
                          geometry_sha256=fingerprint([scene['parts'],scene['welds'],scene['interfaces']]))
             for c in group:
                 c.update(assembly_id=sid,drawing_ref=scene['reference'])
+                if representative.get('parameters',{}).get('selected_hinge_member_cuts'):
+                    c.setdefault('parameters',{})['selected_hinge_member_cuts']=copy.deepcopy(representative['parameters']['selected_hinge_member_cuts'])
                 if not unresolved:
                     changed[c['id']]=scene
             out.append(scene)
@@ -260,14 +271,26 @@ def repair(package,model):
     fit_end_offsets(model)
     from .shared_apex import locate_pairs,consolidate
     from .brace_base_attachment import locate_grade_interfaces
+    from .base_plate_extensions import locate as locate_base_tongues
+    locate_base_tongues(package,model)
     locate_grade_interfaces(package,model)
     common_ends=locate_pairs(package,model)
+    from .brb_supplier_core import prepare as prepare_cores,write_cores
+    prepare_cores(package,model)
     bind(model,package)
     for mid,m in members.items():
         corrected=source_members[mid]
         for field in ('end_offsets','slots'):
             if field in corrected:m[field]=copy.deepcopy(corrected[field])
+    write_cores(package,model)
     changed=rebuilt_scenes(model,package)
+    from .selected_beam_hinge import bind_cuts
+    drawings={c['id']:c for c in model['connections']}
+    for c in physical['connections']:
+        drawing=drawings.get(c['id'],{});spec=drawing.get('parameters',{}).get('selected_hinge_member_cuts')
+        if spec:
+            c.setdefault('parameters',{})['selected_hinge_member_cuts']=copy.deepcopy(spec)
+            bind_cuts(c,c['assembly_instance'],members,source_members)
     from .connection_cuts import bind_member_bores
     bind_member_bores(physical,model,changed)
     from .terminal_planes import saved_cuts
@@ -327,6 +350,8 @@ def repair(package,model):
     from .flat_bar_crossings import add_crossings
     added_crossings=add_crossings(package,model)
     consolidate(package,model,common_ends)
+    from .base_plate_extensions import share_supports
+    share_supports(package,model)
     references=defaultdict(set)
     for c in model['connections']:
         for mid in c['member_ids']:references[mid].add(c['drawing_ref'])

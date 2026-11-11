@@ -83,6 +83,15 @@ def resolve_shared(check,connection,own_parts,instance):
         receivers={r for r,m in oi.get('bindings',{}).items() if m in check.members and not brace_kind(check.members[m])}
         expected_welds={p['id'] for p in owner_parts.values() if p['kind']=='weld' and set(p.get('connects',[]))&map_roles.keys()
                         and set(p.get('connects',[]))<=receivers|map_roles.keys()}
+        if all(ref.get('sharing_kind')=='column_base_support' for ref in group):
+            # The secondary draws its own gusset weld to the primary's sole.
+            # Column-to-sole and anchor attachments remain on the primary.
+            mid=group[0].get('column_id')
+            if (map_roles!={'P1':'BASE'} or not mid or local_bindings.get('COLUMN')!=mid or
+                    mid not in oi['bindings'].values() or check.members.get(mid,{}).get('kind')!='column' or
+                    owner.get('detail_ref',{}).get('legacy_family') not in ('review_base','review_wall_base')):
+                raise ValueError('Secondary gusset sole does not share its actual column with the base owner')
+            expected_welds=set()
         if welds!=expected_welds:
             raise ValueError('Shared support weld coverage differs for '+owner_id+': '+str(sorted(welds^expected_welds)))
         ref_lines=check.rb.curves(owner_id)

@@ -43,8 +43,14 @@ def erection_rods(text):
         selected_size=bool(selected),edge_min=number(edge[1]) if edge else 2)
 
 
-def flange_rows(text):
+def flange_rows(text,flange_width=None):
     """(rows per flange, rods per row, row pitch, flange gap, rod pitch)."""
+    hit=re.search(r'rods in two rows, (\d+) per row, '+NUMBER+r' in from the flange faces',text,re.I)
+    edge=re.search(r'rods '+NUMBER+r' in from the plate edges',text,re.I)
+    if hit and edge and flange_width is not None:
+        count=int(hit[1]);usable=flange_width-2*number(edge[1])
+        if count<2 or usable<=0:raise ValueError('Selected anchor row does not fit the flange-parallel stock')
+        return 1,count,0,number(hit[2]),usable/(count-1)
     selected=re.search(r'(\d+) per flange side in one row outside the flanges at '+NUMBER+r' in, '+NUMBER+r' in from the flange face',text,re.I)
     if selected:
         return 1,int(selected[1]),0,number(selected[3]),number(selected[2])

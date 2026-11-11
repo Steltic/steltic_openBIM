@@ -143,7 +143,8 @@ def _verify_delivery(output_dir,source_directory,job_root):
             handoff.get('crossing_interfaces',[]),handoff.get('records',{})))
         def assembly_check():
             from .ifc_assembly_verification import verify_assembly_fit
-            return verify_assembly_fit(output/'model.ifc',package['physical'],package.get('source_handoff',{}))
+            return verify_assembly_fit(output/'model.ifc',package['physical'],package.get('source_handoff',{}),
+                                       package.get('design_records',[]))
         run('assembly_fit',assembly_check)
         for name,path in [('drawings.pdf',source/'drawings.pdf'),('model.ifc',output/'model.ifc')]:
             if digest_file(path)!=certificate['files'][name]:

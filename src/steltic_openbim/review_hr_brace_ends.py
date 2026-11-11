@@ -126,11 +126,13 @@ def draw_brace(ctx):
     v=unit([horizontal,0,delta[2]]);sign=1 if v[2]>=0 else -1
     actual_base=bound_base_plate(ctx) if kind=='base' else None
     grade_interface=par.get('grade_diaphragm_interface')
-    from .brace_base_attachment import base_attachment,collar
+    from .brace_base_attachment import base_attachment,collar,cap_plate,add_cap_plate
     base_spec=base_attachment(ctx,cp) if kind=='base' else None
+    cap_stock=cap_plate(ctx) if kind=='base' and not actual_base and not base_spec else None
     base_kind=base_spec['kind'] if base_spec else None
     interface_z=(beam_bottom if sign<0 else beam_top) if kind!='base' else actual_base[0][2][1] if actual_base else 0
     if base_kind in ('free','collar'):interface_z=base_spec.get('clearance',0.)
+    if cap_stock:interface_z=cap_stock['grout']+cap_stock['thickness']
     # Top-of-steel is the analysis workpoint. On a downward brace the actual
     # flange intersection is farther into the bay; centre its support strip
     # and stiffeners there, while retaining the exact source brace workline.
@@ -181,6 +183,9 @@ def draw_brace(ctx):
             if grade_interface:
                 a.notes.append(grade_interface)
                 host=None
+            elif cap_stock:
+                add_cap_plate(a,cap_stock,column_face)
+                host='BASE'
             elif base_kind=='collar':
                 plate=collar(a,base_spec,column_face,effective(p,cp,'width'),interface_z)
                 plate['selected_material']=ctx.selected.get(('gusset','material'))
@@ -189,15 +194,15 @@ def draw_brace(ctx):
                 a.notes.append(f"S: lower gusset edge stays {base_spec['clearance']:g} in clear of the cap with no foundation attachment.")
                 host=None
             elif actual_base:
-                stock,connection,part=actual_base
-                base=a.box('BASE',[pair[0] for pair in stock],[hi-lo for lo,hi in stock],'S',
-                           'Located view of the separately selected column base plate')
+                _,connection,part,faces=actual_base
+                base=a.part('BASE','Located view of the separately selected column base plate',
+                            faces,'S','plate',geometry={'type':'mesh','faces':faces})
                 base['parameters']={'referenced_connection_id':connection,'referenced_part_id':part}
                 host='BASE'
             else:
                 a.box('BASE',[-cd-4,-bf/2-6,-1.5],[cd+column_face+lx+4,bf+12,1.5],'A','Local base support envelope including the complete selected gusset edge')
                 host='BASE'
-            if not grade_interface and base_kind not in ('free','collar'):
+            if not grade_interface and not cap_stock and base_kind not in ('free','collar'):
                 a.box('CONC',[-cd-8,-bf/2-10,-12],[cd+lx+12,bf+20,10.5],'A','Foundation context',kind='concrete')
         elif proposal:
             seat=proposal['seat_thickness_in'];width=proposal['seat_width_in']
@@ -264,11 +269,19 @@ def draw_brace(ctx):
         # offset before the first bolt. Place the complete selected bolt group
         # clear of the actual support and retain usable casing between both ends.
         station,layout=fit_brb_rows(selected_bolts,v,interface_station,None if upper else clearance)
-        start,bolt_contour,bolt_groups=bolted_brb_end(a,selected_bolts,v,station,t,interface_station,layout,effective(p,pid))
+        core=bm.get('supplier_core')
+        start,bolt_contour,bolt_groups=bolted_brb_end(a,selected_bolts,v,station,t,interface_station,layout,effective(p,pid),core)
         end=add(start,mul(v,24))
-        a.member('BRACE',pid,start,end,description='Source BRB casing with bolted supplier core extension')
-        a.interfaces.append(dict(id='CORE-TO-CASING',kind='supplier_interface',connects=['BRACE','CORE-END'],
-            basis='A',description='Source supplier core end meets its casing at the adopted station'))
+        shown=a.member('BRACE',pid,start,end,description='BRB casing and axial core with bolted supplier end')
+        if core:
+            from .brb_supplier_core import show_core
+            show_core(ctx,bm,shown)
+        a.interfaces.append(dict(id='CORE-CONTINUATION' if core else 'CORE-TO-CASING',
+            kind='brb_core_continuation' if core else 'supplier_interface',connects=['BRACE','CORE-END'],
+            basis='A',description='Exposed end meets the axial steel core. Casing and core remain separate.' if core else
+            'Source supplier core end and delegated casing envelope at the adopted station'))
+        if core:
+            a.notes.append(f"S: {core['material']} core, area {core['area_in2']:g} in2; yielding length {core['yielding_length_workpoint_ratio']:g} times the workpoint length. A: internal core and casing coordination sections; supplier transition and qualification retained.")
     elif isbrb:
         dia,pin_material,hole_clearance=pin_selection(ctx)
         cheek=ctx.selected.get(('cheek_plate','thickness_in')) or ctx.n(r'two '+NUMBER+r' in cheek plates',.875)
@@ -277,14 +290,23 @@ def draw_brace(ctx):
         # The entire pin-bearing cheek clears the support, not just its axis.
         pin_station=max(station+7,interface_station+(breadth/2+2)/abs(v[2]))
         if not upper:pin_station=max(pin_station,(clearance+breadth/2+2)/v[0])
-        pin=mul(v,pin_station);start=add(pin,mul(v,13));end=add(start,mul(v,24))
-        a.member('BRACE',pid,start,end,description='Source BRB core; A supplier casing ends at its adopted end cap')
+        pin=mul(v,pin_station);back=add(pin,mul(v,13));core=bm.get('supplier_core')
+        gap=core['reported_elongation_in']+.25 if core else 0.
+        start=add(back,mul(v,gap));end=add(start,mul(v,24))
+        shown=a.member('BRACE',pid,start,end,description='BRB restraint casing around the separate yielding core')
         normal=[-v[2],0,v[0]];depth=effective(p,pid);width=effective(p,pid,'width')
         cap=add(pin,mul(v,12))
-        a.polygon('END-CAP',[add(cap,add(mul(normal,ss*depth/2),[0,yy*width/2,0])) for ss,yy in ((-1,-1),(-1,1),(1,1),(1,-1))],1,normal=v,basis='A',description='A 1in supplier casing end cap; local capacity and BRB qualification remain delegated')
-        for side in (-1,1):
-            aa=add(start,add(mul(normal,side*depth/2),[0,-width/2,0]));bb=add(aa,[0,width,0])
-            a.weld('CAP-W'+str(side),aa,bb,['BRACE','END-CAP'],.375,basis='A',description='A supplier casing/end-cap fillet; not a source-tested connection')
+        a.polygon('END-CAP',[add(cap,add(mul(normal,ss*depth/2),[0,yy*width/2,0])) for ss,yy in ((-1,-1),(-1,1),(1,1),(1,-1))],1,normal=v,basis='A',description='Moving supplier clevis head plate' if core else 'Supplier casing end cap')
+        if core:
+            from .brb_supplier_core import moving_head_projection,show_core
+            show_core(ctx,bm,shown)
+            moving_head_projection(a,v,back,gap,core)
+            a.dim(back,start,'Casing clearance at moving head',basis='A')
+            a.notes.append(f"S: {core['material']} yielding core, {core['area_in2']:g} in2 over {core['yielding_length_workpoint_ratio']:g} times workpoint length. A: core projection and clear casing at moving head. Supplier qualification retained.")
+        else:
+            for side in (-1,1):
+                aa=add(start,add(mul(normal,side*depth/2),[0,-width/2,0]));bb=add(aa,[0,width,0])
+                a.weld('CAP-W'+str(side),aa,bb,['BRACE','END-CAP'],.375,basis='A',description='Supplier casing/end-cap reference')
         for j,sg in enumerate((-1,1)):
             yy=t/2 if sg>0 else -t/2-cheek
             a.box('CHEEK'+str(j),[pin[0]-breadth/2,yy,pin[2]-breadth/2],[breadth,cheek,breadth],'A','Source cheek thickness/width; A perimeter and pin position')

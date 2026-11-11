@@ -251,6 +251,8 @@ def pin_beam(ctx):
     from .hr_detail_selections import pin_selection,outer_clevis_weld
     from .connection_cuts import drill_joined_plates
     a,p,pid,txt=ctx.a,ctx.p,ctx.pid,ctx.text;d=effective(p,pid);bf=effective(p,pid,'width');tf=p[pid]['dimensions']['tf'];tw=p[pid]['dimensions']['tw'];cp,face=support(ctx,pid)
+    from .selected_beam_hinge import draw as selected_beam_pin
+    if selected_beam_pin(ctx,face):return
     pin,pin_material,hole_clearance=pin_selection(ctx)
     stub=ctx.n(r'beam stub '+NUMBER+r' in',ctx.n(NUMBER+r' in beam stub',22));kt=ctx.n(r'knife plate (?:PL )?'+NUMBER+r' in',2);ct=ctx.n(r'two clevis plates (?:PL )?'+NUMBER+r' in',1.5);lk=ctx.n(r'Lk = '+NUMBER+r' in',ctx.n(r'inserted '+NUMBER+r' in between the stub flanges',10));lc=ctx.n(r'Lc = '+NUMBER+r' in',ctx.n(r'inserted '+NUMBER+r' in between the beam flanges',10))
     outer_size=outer_clevis_weld(ctx)
@@ -348,7 +350,7 @@ def base(ctx):
         a.section_axis=2;a.section_at=-le/2;a.dim([bx/2,0,-le],[bx/2,0,0],f'Embedment {le:g} in');return
     match=re.search(r'(?:base plate\s*(?:PL)?|moment base:\s*PL)\s*'+NUMBER+r' x '+NUMBER+r' x '+NUMBER+r' in',txt,re.I)
     t,bx,by=list(map(number,match.groups())) if match else (1,d+8,w+8)
-    layout=flange_rows(txt)
+    layout=flange_rows(txt,bx if match else None)
     from . import stiffened_base
     flange_stiffeners=stiffened_base.selection(txt)
     if (layout or flange_stiffeners) and match:
@@ -356,7 +358,14 @@ def base(ctx):
         # Local X is the column depth direction, not the first printed size.
         t,by,bx=list(map(number,match.groups()))
     selected_rods=rods(txt);n,dia,grade=selected_rods or (4,.75,'F1554 Grade 36 (A)');embed=ctx.n(r'embedment\s*(?:hef = )?'+NUMBER,18);grout=ctx.n(r'on '+NUMBER+r' in (?:non-shrink )?grout',2)
-    a.box('CONC',[-bx/2-8,-by/2-8,-embed-6],[bx+16,by+16,embed+6],'A','Foundation context',kind='concrete');a.box('GROUT',[-bx/2,-by/2,0],[bx,by,grout],'S','Source grout',kind='grout');a.box('P1',[-bx/2,-by/2,grout],[bx,by,t],'S' if match else 'A','Base plate')
+    a.box('CONC',[-bx/2-8,-by/2-8,-embed-6],[bx+16,by+16,embed+6],'A','Foundation context',kind='concrete')
+    a.box('GROUT',[-bx/2,-by/2,0],[bx,by,grout],'S','Source grout',kind='grout')
+    tongues=ctx.params.get('integral_gusset_tongues')
+    if tongues:
+        from .base_plate_extensions import add as add_stock
+        add_stock(a,bx,by,grout,t,tongues)
+    else:
+        a.box('P1',[-bx/2,-by/2,grout],[bx,by,t],'S' if match else 'A','Base plate')
     context_height=max(32,flange_stiffeners['height']+4) if flange_stiffeners else 32
     a.member('M1',pid,[0,0,grout+t],[0,0,grout+t+context_height]);edge=ctx.n(r'rods '+NUMBER+r' in from the plate edges',max(1.5,1.5*dia));rows=max(2,math.ceil(n/2));points=[]
     if flange_stiffeners:
@@ -381,6 +390,7 @@ def base(ctx):
     diameter=ctx.selected.get(('anchor_hole','diameter_in'))
     if diameter is None:
         hole=re.search(NUMBER+r'[- ]in(?:ch)?(?: diameter| dia\.?)? (?:rod |anchor )?holes?\s*\(AISC Manual Table 14-2',txt,re.I)
+        if not hole:hole=re.search(r'\brod holes '+NUMBER+r' in\b',txt,re.I)
         if hole:diameter=number(hole[1])
     if diameter is not None:
         if diameter<dia:raise ValueError('Selected base plate hole is smaller than the anchor diameter')
@@ -458,6 +468,8 @@ def base(ctx):
     a.section_axis=2;a.section_at=grout+t/2;a.dim([-bx/2,0,grout],[bx/2,0,grout],f'{bx:g} in plate');a.dim([points[0][0],0,grout+t+5],[points[1][0],0,grout+t+5],basis='A',offset=30)
 
 def splice(ctx):
+    from .selected_column_splice import selected,cjp_paths
+    if ctx.family=='review_splice' and selected(ctx):return
     a,p,pid,txt=ctx.a,ctx.p,ctx.pid,ctx.text;lower=ctx.ms[1]['profile_id'] if len(ctx.ms)>1 else pid;d=effective(p,pid);ld=effective(p,lower);w=effective(p,pid,'width')
     a.member('M1',lower,[0,0,-30],[0,0,0]);a.member('M2',pid,[0,0,.0625],[0,0,30])
     if ctx.family=='review_column_continuity':
@@ -477,7 +489,7 @@ def splice(ctx):
                     for edge in (-1,1):a.weld(f'WB{j}{index}{edge}',[edge*pw/2,offset,z0],[edge*pw/2,offset,z1],['M1' if index==0 else 'M2',name],kind='CJP',description='Boxing side plate to column flange tips')
                 if len(names)==2:a.weld(f'BOX-SPLICE{j}',[-pw/2,sg*(w+boxing)/2,0],[pw/2,sg*(w+boxing)/2,0],names,kind='CJP',basis='S' if 'side plates spliced' in txt else 'A',description='Side-plate splice at the shaft splice datum')
         from .review_splice_parts import transition,erection
-        transition(ctx,lower);erection(ctx,lower)
+        transition(ctx,lower);erection(ctx,lower);cjp_paths(ctx)
         a.section_axis=2;a.section_at=-12 if any(q['id']=='DIVISION' for q in a.parts) else 4;a.dim([-d/2,0,15],[d/2,0,15],'Upper shaft depth',basis='S',offset=-30)
         a.notes.append('Splice world elevation and source floor offset are in the occurrence index. Source CJP requirements remain authoritative; temporary erection fit and installation sequence shown as A.')
         return
