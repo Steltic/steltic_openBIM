@@ -22,7 +22,7 @@ def plate_group(role,parts):
         desc=p.get('parameters',{}).get('description','').lower()
         if role=='grout':return p['kind']=='grout' or name=='GROUT'
         if p['kind']!='plate':return False
-        if role=='base_plate':return name in ('P1','BP','BASE-PLATE','BASE_PLATE') or desc.strip()=='base plate'
+        if role=='base_plate':return name in ('P1','BP','BASE','BASE-PLATE','BASE_PLATE') or desc.strip()=='base plate'
         if role=='shear_plate':return name in ('P1','P2','TAB','TAB1','TAB2') or 'shear plate / erection tab' in desc
         if role=='cheek_plate':return 'CHEEK' in name or 'cheek plate' in desc
         if role=='clevis_plate':return 'CLEVIS' in name or 'clevis plate' in desc

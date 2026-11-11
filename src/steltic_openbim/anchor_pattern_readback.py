@@ -30,7 +30,7 @@ def unit(vec):
 def measure_anchor_pattern(connection,parts,members,profiles):
     instance=connection.get('assembly_instance',{})
     bindings=instance.get('bindings',{}).values() if instance else connection.get('member_ids',[])
-    columns=[members[v] for v in set(bindings) if v in members and members[v]['kind'] in ('column','col')]
+    columns=[members[v] for v in set(bindings) if v in members and members[v]['kind'] in ('column','col','endwall_post')]
     if len(columns)!=1:
         raise ValueError('Cannot identify one bound physical column')
     col=columns[0]
@@ -47,7 +47,7 @@ def measure_anchor_pattern(connection,parts,members,profiles):
     col_axes=np.array([normal,along]).T
     translation=(np.asarray(instance.get('origin',[0,0,0]))-a)@col_axes
     matrix=local_to_world@col_axes
-    plates=[p for p in parts if p['kind']=='plate' and (p['id'].upper() in ('P1','BP','BASE-PLATE','BASE_PLATE')
+    plates=[p for p in parts if p['kind']=='plate' and (p['id'].upper() in ('P1','BP','BASE','BASE-PLATE','BASE_PLATE')
             or p.get('parameters',{}).get('description','').strip().lower()=='base plate')]
     if len(plates)!=1:
         raise ValueError('Cannot identify one physical base plate')

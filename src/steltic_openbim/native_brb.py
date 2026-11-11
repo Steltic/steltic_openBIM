@@ -11,12 +11,17 @@ from .saved_assemblies import native_parts,receivers
 from .stmf_fit import local
 
 
-def build_brb_end(package,c,brace,supports,profiles,catalogue,joint):
+def build_corner_end(package,c,brace,supports,profiles,catalogue,joint,*,slotted=False):
     p=package['physical'];point=joint['point'];selected=selected_fields(package,c)
     variant=selected.get(('connection','variant'))
-    if variant not in ('brb_pinned','brb_bolted'):raise ValueError('BRB attachment topology is unspecified')
+    if slotted:
+        if (profiles[brace['profile_id']]['family'] not in ('rhs','chs') or
+            selected.get(('brace_slot_weld','count'))!=4 or not selected.get(('brace_slot_weld','size_in')) or
+            not selected.get(('brace_slot_weld','length_in'))):
+            raise ValueError('Slotted brace requires a tube and the four selected attachment lines, size and length')
+    elif variant not in ('brb_pinned','brb_bolted'):raise ValueError('BRB attachment topology is unspecified')
     t=selected.get(('gusset','thickness_in'));grade=selected.get(('gusset','material'))
-    if not t or not grade:raise ValueError('BRB connection requires selected gusset thickness and material')
+    if not t or not grade:raise ValueError('Brace connection requires selected gusset thickness and material')
     cols=[m for m in supports if m['kind'] in ('column','col','post')]
     beams=[m for m in supports if m['kind'] in ('beam','girder','moment_beam','transfer_chord')]
     if len(cols)>1 or len(beams)>1 or not (cols or beams):
@@ -45,7 +50,10 @@ def build_brb_end(package,c,brace,supports,profiles,catalogue,joint):
         if not existing:raise ValueError('Located BRB base needs its selected column base plate extent and placement')
     rows=[brace,*cols,*beams]
     context=dict(pilot='hr_native',members=rows,profiles=list(profiles.values()),panels=p['panels'])
-    target=dict(c,point=point,member_ids=[m['id'] for m in rows],parameters=par,detail_ref={'id':'review_brb'})
+    if slotted and abs(dot(brace['local_y'],y))<1.-1e-7:
+        raise ValueError('The two-receiver joint needs its physical tube roll and oblique slot aligned')
+    target=dict(c,point=point,member_ids=[m['id'] for m in rows],parameters=par,
+                detail_ref={'id':'review_brace' if slotted else 'review_brb'})
     original=c.get('assembly_instance');c['assembly_instance']=frame
     try:
         ctx=Context(context,package,target);draw_brace(ctx)
@@ -81,4 +89,10 @@ def build_brb_end(package,c,brace,supports,profiles,catalogue,joint):
                   source_record_ids=c['design_record_ids'],parts=native,receivers=rr,source_interfaces=scene['interfaces'])
     template['revision']=fingerprint(template)
     frame.update(template_id=tid,revision=template['revision'],bindings=bindings)
-    return template,frame,offsets,list(brace.get('slots',[]))
+    cuts=list(brace.get('slots',[]))
+    if slotted:
+        from .native_hr_completion import located_slot
+        shape=next((q for q in local_brace.get('slots',[]) if q.get('end_in',0)>q.get('start_in',0)),None)
+        if not shape:raise ValueError('The corner gusset does not enter the finite tube end')
+        cuts=located_slot(brace,c['id'],end,offsets,shape,0)
+    return template,frame,offsets,cuts

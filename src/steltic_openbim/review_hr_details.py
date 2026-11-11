@@ -349,14 +349,23 @@ def base(ctx):
     match=re.search(r'(?:base plate\s*(?:PL)?|moment base:\s*PL)\s*'+NUMBER+r' x '+NUMBER+r' x '+NUMBER+r' in',txt,re.I)
     t,bx,by=list(map(number,match.groups())) if match else (1,d+8,w+8)
     layout=flange_rows(txt)
-    if layout and match:
+    from . import stiffened_base
+    flange_stiffeners=stiffened_base.selection(txt)
+    if (layout or flange_stiffeners) and match:
         # The source uses DG1 B (parallel to flange) x N (depth direction).
         # Local X is the column depth direction, not the first printed size.
         t,by,bx=list(map(number,match.groups()))
     selected_rods=rods(txt);n,dia,grade=selected_rods or (4,.75,'F1554 Grade 36 (A)');embed=ctx.n(r'embedment\s*(?:hef = )?'+NUMBER,18);grout=ctx.n(r'on '+NUMBER+r' in (?:non-shrink )?grout',2)
     a.box('CONC',[-bx/2-8,-by/2-8,-embed-6],[bx+16,by+16,embed+6],'A','Foundation context',kind='concrete');a.box('GROUT',[-bx/2,-by/2,0],[bx,by,grout],'S','Source grout',kind='grout');a.box('P1',[-bx/2,-by/2,grout],[bx,by,t],'S' if match else 'A','Base plate')
-    a.member('M1',pid,[0,0,grout+t],[0,0,grout+t+32]);edge=ctx.n(r'rods '+NUMBER+r' in from the plate edges',max(1.5,1.5*dia));rows=max(2,math.ceil(n/2));points=[]
-    if layout:
+    context_height=max(32,flange_stiffeners['height']+4) if flange_stiffeners else 32
+    a.member('M1',pid,[0,0,grout+t],[0,0,grout+t+context_height]);edge=ctx.n(r'rods '+NUMBER+r' in from the plate edges',max(1.5,1.5*dia));rows=max(2,math.ceil(n/2));points=[]
+    if flange_stiffeners:
+        stiffened_base.add(a,flange_stiffeners,d,w,grout+t)
+        gap=ctx.selected.get(('anchor_pattern','stiffener_offset_in')) or flange_stiffeners['outside']
+        points=[[sg*(d/2+station),side*(w/2+gap),-embed] for sg in (-1,1)
+                for station in flange_stiffeners['stations'] for side in (-1,1)]
+        if len(points)!=n:raise ValueError('Stiffened-base row stations do not account for every selected rod')
+    elif layout:
         nrows,ncols,spacing,a1,pitch=layout
         a1=ctx.selected.get(('anchor_pattern','flange_offset_in')) or a1
         pitch=ctx.selected.get(('anchor_pattern','spacing_in')) or pitch
@@ -406,7 +415,15 @@ def base(ctx):
         if bottom_washer:
             size=number(bottom_washer[1]);washer=a.box('WASHER-END-'+str(j),[q[0]-size/2,q[1]-size/2,-embed],[size,size,.5],'S plan size; A thickness','Source embedded-end square washer, A 1/2 in thickness')
             drill_plate(washer,[q],[0,0,1],dia+.0625,'A 1/16 in diametral embedded washer clearance')
-    a.weld('W1',[-d/2,-w/2,grout+t],[d/2,-w/2,grout+t],['M1','P1'],kind='CJP' if 'CJP' in txt else 'fillet',description='Column-to-plate weld per source flange/web specification')
+    if re.search(r'column flanges and web CJP-welded to the base plate',txt,re.I) and p[pid]['family']=='i':
+        tf=p[pid]['dimensions']['tf'];z=grout+t
+        for side in (-1,1):
+            x=side*(d-tf)/2
+            a.weld('COLUMN-FLANGE-'+str(side),[x,-w/2,z],[x,w/2,z],['M1','P1'],kind='CJP',
+                   description='Selected column flange CJP at the base plate')
+        a.weld('COLUMN-WEB',[-d/2+tf,0,z],[d/2-tf,0,z],['M1','P1'],kind='CJP',description='Selected column web CJP at the base plate')
+    else:
+        a.weld('W1',[-d/2,-w/2,grout+t],[d/2,-w/2,grout+t],['M1','P1'],kind='CJP' if 'CJP' in txt else 'fillet',description='Column-to-plate weld per source flange/web specification')
     if 'lug' in txt:
         primary=re.search(r'shear lug:?\s+(.*?)\bPL '+NUMBER+r' x '+NUMBER+r' in, '+NUMBER+r' in embedded',txt,re.I)
         secondary=re.search(r'second arm PL '+NUMBER+r' x '+NUMBER+r' in',txt,re.I)

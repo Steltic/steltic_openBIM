@@ -120,14 +120,23 @@ def draw(ctx):
     tail=selected['end_distance_in']+selected['split_weld_length_in']
     half_width=selected['proposed_width_in']/2;slot_half=selected['continuous_slot_length_in']/2
     depth=effective(ctx.p,continuous['profile_id']);half_depth=effective(ctx.p,high['profile_id'])
-    end_normal=cross(normal,u);tail_points=[add(mul(u,tail),mul(end_normal,side*max(half_depth/2+1,half_width))) for side in (-1,1)]
+    # The selected centre width applies at the through member. Each split
+    # tongue covers its own wall welds. Carrying the full centre width to
+    # both tongue tips produces loose triangles beyond the uncut through tube.
+    end_normal=cross(normal,u)
+    tail_points=[add(mul(u,tail),mul(end_normal,side*(half_depth/2+t))) for side in (-1,1)]
     tail_points.sort(key=lambda q:dot(q,v));tl,tr=tail_points
     h=depth/2
     # A free-edge outline joins the retained centre width to each selected half.
     # The small flare at each continuous-tube wall follows its selected slot.
     local=lambda x,z:add(mul(v,x),mul(n,z))
     polygon=[local(-half_width,0),local(-slot_half,-h),mul(tr,-1),mul(tl,-1),local(slot_half,-h),local(half_width,0),local(slot_half,h),tr,tl,local(-slot_half,h)]
-    a.polygon('GUSSET',[add(q,[0,-t/2,0]) for q in polygon],t,basis='A',description=f'S selected thickness {t:g} in; A fitted free-edge outline and end clearance' if selected['source_selected'] else f'A proposed {t:g} in centre gusset; source has no centre-connection selection')
+    from .review_hr_kickers import clear_host
+    fitted=[add(q,[0,-t/2,0]) for q in polygon]
+    for receiver in a.parts:
+        if receiver.get('member'):
+            fitted=clear_host(fitted,normal,t,[1,0,0],[0,0,1],receiver['member'],ctx.p)
+    a.polygon('GUSSET',fitted,t,basis='A',description=f'S selected thickness {t:g} in; A free edges fitted to the finite slots in all three members' if selected['source_selected'] else f'A proposed {t:g} in centre gusset; source has no centre-connection selection')
     for name,member in (('CONT',continuous),('SPLIT-1',low),('SPLIT1',high)):
         direction=unit(vector(sub(*reversed(member['axis'])),axes));inplane=cross(normal,direction)
         d=effective(ctx.p,member['profile_id'])
@@ -153,6 +162,19 @@ def draw(ctx):
                            [name,'GUSSET'],size,description='Return fillet closing the selected all-round continuous-member slot')
                     a.welds[-1]['attachment_role']='continuous_slot_end_return'
     matches=list(re.finditer(r'2 PL '+NUMBER+r' x '+NUMBER+r' x '+NUMBER+r' in',ctx.text))
+    ratio=ctx.selected.get(('brace_end_clearance','depths'))
+    if ratio and selected.get('end_distance_basis')=='S':
+        from .brace_linear_clearance import dimension
+        restraints=[w for w in a.welds if w.get('attachment_role')=='continuous_brace_slot_weld']
+        ids=[w['id'] for w in restraints]
+        for name,member in (('SPLIT-1',low),('SPLIT1',high)):
+            ends=[point(add(q,o),origin,axes) for q,o in zip(member['axis'],member['end_offsets'])]
+            cap=min(ends,key=lambda q:math.dist(q,[0,0,0]));direction=unit(cap)
+            fold=max(dot(q,direction) for w in restraints for q in (w['a'],w['b']))
+            dimension(a,direction,ratio,fold,dot(cap,direction),ids)
+            a.interfaces.append(dict(id='FOLD-'+name,kind='linear_gusset_clearance',
+                brace=name,gusset='GUSSET',restrained_welds=ids,connects=[name,'GUSSET','CONT'],
+                basis='S',description='Split brace clearance to the far ends of the continuous brace slot welds'))
     for group,match in enumerate(matches[:2]):
         rt,rw,rl=map(number,match.groups())
         selected_members=[('CONT',continuous)] if group==0 else [('SPLIT-1',low),('SPLIT1',high)]

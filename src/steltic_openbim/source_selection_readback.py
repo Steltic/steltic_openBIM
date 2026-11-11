@@ -155,7 +155,7 @@ def verify_source_selections(package,drawing_model=None):
                           all(abs(v-expected)<1e-4 for v in values))
                     check('anchor_'+field,bool(values) and good,expected,values,rid)
         if fields['anchor_pattern','edge_in'] or (fields['anchor_pattern','spacing_in'] and not directional):
-            plate=next((p for p in parts if p['id'] in ('P1','BP','BASE-PLATE') and p['kind']=='plate'),{})
+            plate=next((p for p in parts if p['id'] in ('P1','BP','BASE','BASE-PLATE','BASE_PLATE') and p['kind']=='plate'),{})
             bounds=geometry_bounds(plate)
             pts=[p.get('parameters',{}).get('point') for p in found['anchor']]
             if bounds and pts and all(pts):

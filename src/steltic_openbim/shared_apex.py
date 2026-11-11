@@ -20,8 +20,7 @@ def locate_pairs(package,model):
     for c in physical['connections']:
         inst=c.get('assembly_instance',{});bindings=inst.get('bindings',{})
         if c.get('parameters',{}).get('joint')=='apex' and 'BRACE' in bindings and 'BEAM' in bindings:
-            brace_direction=next((m for m in c['member_ids'] if m==bindings['BRACE']),None)
-            if not brace_direction:continue
+            if bindings['BRACE'] not in c['member_ids']:continue
             # Both the top and the underside of this beam can receive a pair.
             # Neither a workpoint nor a beam ID distinguishes the two faces.
             upper=drawing[c['id']].get('parameters',{}).get('upper_end')
@@ -145,6 +144,7 @@ def build_pair(c1,c2,t1,t2,s1,s2):
     scenes=[]
     for own,partner,own_frame,other_frame in ((s1,s2,pi,si),(s2,s1,si,pi)):
         new_plate=part_at(plate,pi,own_frame)
+        if own is s2:new_plate.update(representation_role='context_only',shared_joint_context=True)
         replacement=dict(own,parts=[new_plate if p['id']=='GUSSET' else p for p in own['parts']])
         partner_brace=part_at(next(p for p in partner['parts'] if p['id']=='BRACE'),other_frame,own_frame)
         partner_brace.update(id='BRACE-OTHER',description='Other physical brace sharing this apex gusset',representation_role='context_only')

@@ -1,0 +1,159 @@
+"""Measure the delivered flange-tip contacts and effective sections of a transfer-truss node."""
+from collections import defaultdict
+
+import numpy as np
+from shapely.geometry import LineString, Polygon
+from shapely.ops import unary_union
+
+from .joint_mesh_readback import TOL, transform, unit
+from .selected_plate_readback import grade
+
+
+def transfer_sources(handoff):
+    roles={prefix+suffix for prefix in ('transfer_chord','transfer_diagonal','transfer_support')
+           for suffix in ('_gusset_weld','_gusset')}
+    selection={rid:{i for i,f in enumerate(r.get('fields',[])) if f['role'] in roles}
+               for rid,r in handoff.get('records',{}).items()}
+    return {cid for cid,occurrence in handoff.get('occurrences',{}).items()
+            if any(not selection.get(a['record_id'],set()).isdisjoint(a.get('selected',[]))
+                   for a in occurrence.get('applications',[]))}
+
+
+def arm_selections(handoff,cid,bindings,members):
+    expected,errors={},[]
+    choices={'transfer_chord':'transfer_chord','transfer_diagonal':'transfer_diagonal','transfer_support':'column'}
+    for app in handoff.get('occurrences',{}).get(cid,{}).get('applications',[]):
+        rec=handoff['records'][app['record_id']]
+        chosen=[rec['fields'][i] for i in app.get('selected',[])]
+        for prefix,kind in choices.items():
+            gusset={v['field']:v['value'] for v in chosen if v['role']==prefix+'_gusset'}
+            weld={v['field']:v['value'] for v in chosen if v['role']==prefix+'_gusset_weld'}
+            if not gusset and not weld:
+                continue
+            try:
+                if gusset.get('count')!=2 or weld.get('count')!=4:
+                    raise ValueError('Unsupported number of selected plates or fillets')
+                spec=dict(thickness=gusset['thickness_in'],count=weld['count'],length=weld['length_in'],size=weld['size_in'],
+                          material=gusset.get('material'),whitmore=gusset.get('whitmore_effective_width_in'),
+                          metal=weld['material'])
+                if kind!='column' and not spec['whitmore']:
+                    raise ValueError('Missing selected transfer section width')
+                section=rec.get('member_section',{}).get('value')
+                ids=app.get('transfer_members',{}).get(prefix,[])
+                if not ids or len(set(ids))!=len(ids) or any(mid not in bindings.values() or mid not in members or
+                        members[mid]['kind']!=kind or (section and members[mid]['profile_id'].upper()!=section.upper())
+                        for mid in ids):
+                    raise ValueError('Transfer source has no applicable physical receiver')
+                for mid in ids:
+                    if mid in expected and spec!=expected[mid]:
+                        raise ValueError('Different selected transfer requirements for the same arm')
+                    expected[mid]=spec
+            except (KeyError,ValueError) as exc:
+                errors.append(dict(source=app['record_id'],issue=str(exc)))
+    for mid in bindings.values():
+        if members.get(mid,{}).get('kind') in ('transfer_chord','transfer_diagonal') and mid not in expected:
+            errors.append(dict(member=mid,issue='Transfer arm lacks bound HR flange-tip and plate selections'))
+    return expected,errors
+
+
+def face_region(mesh, normal, station, basis):
+    polygons = []
+    for face in mesh.polygons:
+        if np.max(np.abs(face @ normal - station)) <= TOL:
+            shape = Polygon(face @ basis)
+            if shape.is_valid and shape.area > TOL**2:
+                polygons.append(shape)
+    return unary_union(polygons)
+
+
+def measure_arm(member_mesh, plates, paths, member_axis, width_axis, workpoint, spec, names):
+    axis, normal = unit(member_axis), unit(width_axis)
+    perpendicular = unit(np.cross(axis, normal))
+    plane = np.column_stack((axis, perpendicular))
+    center = np.asarray(workpoint) @ plane
+    position = member_mesh.vertices @ normal
+    sides = [float(min(position)), float(max(position))]
+    rows, issues, occupied = [], [], set()
+    for part, plate, world, size, weld_grade in paths:
+        if plate not in plates:
+            issues.append(dict(part=part, issue='Transfer weld lacks an actual plate'))
+            continue
+        s = world @ normal
+        side = next((i for i, y in enumerate(sides) if np.max(np.abs(s-y)) <= TOL), None)
+        if side is None:
+            issues.append(dict(part=part, issue='Transfer weld leaves its actual flange-tip plane'))
+            continue
+        y = sides[side]
+        ply = plates[plate]
+        region = face_region(ply, normal, y, plane)
+        contact = region.intersection(face_region(member_mesh, normal, y, plane))
+        points = world @ plane
+        line = LineString(points)
+        actual_length = float(line.length)
+        lateral = float(np.mean(points[:, 1])-center[1])
+        leg = (side, 1 if lateral > 0 else -1)
+        if min(abs(lateral), actual_length) <= TOL or np.ptp(points[:,1]) > TOL or leg in occupied:
+            issues.append(dict(part=part, issue='Duplicate or misaligned transfer flange-tip fillet', side=side))
+        occupied.add(leg)
+        if contact.area <= TOL*TOL or not contact.buffer(TOL).covers(line):
+            issues.append(dict(part=part, issue='Transfer fillet is not seated on both actual steel faces for its full length'))
+        row = dict(part=part, plate=plate, flange_plane_in=y, weld_length_in=actual_length, weld_size_in=size,
+                   contact_area_in2=float(contact.area))
+        if spec:
+            if size is None or abs(size-spec['size'])>TOL or abs(actual_length-spec['length'])>TOL:
+                issues.append(dict(part=part,issue='Transfer fillet size or length differs from HR',measured=row))
+            if spec.get('metal') and spec['metal'].upper() not in str(weld_grade).upper():
+                issues.append(dict(part=part,issue='Transfer fillet electrode differs from HR',actual=weld_grade))
+            if spec.get('material') and grade(names.get(plate,''))!=grade(spec['material']):
+                issues.append(dict(part=plate,issue='Transfer plate material differs from HR',actual=names.get(plate)))
+            # Measure gauge between the two parallel faces at this transfer zone.
+            z = ply.vertices @ normal
+            if abs(abs(float(max(z)-min(z)))-spec['thickness'])>TOL:
+                issues.append(dict(part=plate,issue='Transfer plate thickness differs from HR'))
+            width = spec.get('whitmore')
+            if width:
+                # The joint-side end of the physical weld group is its transfer station.
+                station = min(points[:,0],key=lambda x:abs(x-center[0]))
+                probe = LineString([(station,center[1]-width/2),(station,center[1]+width/2)])
+                row['required_centered_section_in'] = width
+                if not region.buffer(TOL).covers(probe):
+                    issues.append(dict(part=plate,issue='Selected Whitmore section does not fit the actual plate',width_in=width))
+        rows.append(row)
+    if len(rows)!=(spec or {}).get('count',4) or len(occupied)!=4 or len({q['plate'] for q in rows})!=2:
+        issues.append(dict(issue='Transfer arm lacks one distinct longitudinal weld at each of its four flange tips'))
+    return rows,issues
+
+
+def node(check, connection, inst, instance, parts, meshes, actual_curves, names, specifications):
+    plates = {k:v.transformed(instance) for k,v in meshes.items() if 'gusset' in
+              parts[k].get('parameters',{}).get('description','').lower() and parts[k]['kind'] in ('plate','gusset')}
+    paths = defaultdict(list)
+    expected = {role for role, mid in inst['bindings'].items() if mid in specifications}
+    findings, rows = [], []
+    for key, part in parts.items():
+        if part['kind']!='weld':
+            continue
+        links=set(part.get('connects',[])); targets=links & plates.keys()
+        receivers=links & inst['bindings'].keys()
+        if len(targets)!=1 or len(receivers)!=1:
+            continue
+        role=next(iter(receivers))
+        expected.add(role)
+        predicted = transform(part['geometry']['points'],instance)
+        lines = [q for q in actual_curves if q.shape==predicted.shape and
+                 min(np.max(np.abs(q-predicted)),np.max(np.abs(q[::-1]-predicted)))<=TOL]
+        if len(lines)!=1:
+            findings.append(dict(part=key,issue='Cannot uniquely locate the actual transfer weld trajectory'))
+            continue
+        paths[role].append((key,next(iter(targets)),lines[0],part.get('parameters',{}).get('size_in'),names.get(key)))
+    for role in sorted(expected):
+        mid=inst['bindings'][role]
+        if mid not in check.members or mid not in check.rb.members:
+            findings.append(dict(role=role,issue='Actual transfer receiver is missing'))
+            continue
+        m=check.members[mid]
+        details,errors=measure_arm(check.rb.member(mid),plates,paths[role],np.subtract(*m['axis'][::-1]),
+                                   m['local_y'],connection.get('point',inst['origin']),specifications.get(mid),names)
+        rows.append(dict(role=role,member=mid,measurements=details))
+        findings.extend(dict(v,role=role,member=mid) for v in errors)
+    return rows,findings

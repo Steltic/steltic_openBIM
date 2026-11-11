@@ -96,7 +96,7 @@ def draw(ctx):
 
 
 def clear_host(polygon,normal,thick,u,v,member,profiles):
-    """Trim only material entering an actual flange or web over this tab's thickness."""
+    """Trim a plate to finite section material present across its full thickness."""
     from shapely import set_precision
     from shapely.geometry import Polygon,MultiPoint
     from shapely.ops import unary_union
@@ -118,5 +118,5 @@ def clear_host(polygon,normal,thick,u,v,member,profiles):
     result=set_precision(original.difference(unary_union(occupied)),1e-7)
     if original.area-result.area<1e-8:return polygon
     if result.geom_type!='Polygon' or result.interiors:
-        raise ValueError('Receiving member splits the fitted kicker gusset')
+        raise ValueError('Receiving member splits the fitted gusset or traps an interior cut')
     return [add(base,add(mul(u,x),mul(v,y))) for x,y in list(result.exterior.coords)[:-1]]

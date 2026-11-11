@@ -156,20 +156,7 @@ def complete_slotted_end(package,connection,brace,support,point,profiles,catalog
         gusset['description']+=f'; linear brace-end clearance {station-fold:.4f} in (selected minimum {fold_ratio:g}t)'
     new_offsets=copy.deepcopy(brace['end_offsets'])
     new_offsets[end]=sub(transformed(start,frame),axis[end])
-    new_ends=[add(p,o) for p,o in zip(axis,new_offsets)]
-    finite_length=math.dist(*new_ends)
-    prior_length=math.dist(*original)
-    shift=dot(sub(new_ends[0],original[0]),unit(sub(original[1],original[0])))
-    other=[]
-    for cut in brace.get('slots',[]):
-        if cut.get('connection_id')==connection['id']:continue
-        depth=cut['end_in']-cut['start_in']
-        lo=0. if abs(cut['start_in'])<1e-6 else finite_length-depth if abs(cut['end_in']-prior_length)<1e-6 else cut['start_in']-shift
-        if lo< -1e-7 or lo+depth>finite_length+1e-7:raise ValueError('New cutback conflicts with an existing machining feature')
-        other.append(dict(cut,start_in=lo,end_in=lo+depth))
-    depth=slot['end_in']
-    slot.update(connection_id=connection['id'],section_axis=slot_axis,start_in=finite_length-depth if end else 0.,
-                end_in=finite_length if end else depth)
+    cuts=located_slot(brace,connection['id'],end,new_offsets,slot,slot_axis)
     scene=a.result();scene['source_record_ids']=connection['design_record_ids']
     made=native_parts(scene,{'parts':[]},catalogue)
     receivers=[dict(id=p['id'],kind='member',profile_id=p['profile_id'],axis=p['member']['axis'],
@@ -179,7 +166,28 @@ def complete_slotted_end(package,connection,brace,support,point,profiles,catalog
                   parts=made,receivers=receivers,source_record_ids=connection['design_record_ids'],source_interfaces=a.interfaces)
     template['revision']=fingerprint(template)
     frame.update(template_id=tid,revision=template['revision'],bindings={'BRACE':brace['id'],support_role:support['id']})
-    return template,frame,new_offsets,other+[slot]
+    return template,frame,new_offsets,cuts
+
+
+def located_slot(brace,connection_id,end,offsets,new_slot,section_axis):
+    original=actual_ends(brace)
+    final=[add(p,o) for p,o in zip(brace['axis'],offsets)]
+    length=math.dist(*final);prior=math.dist(*original)
+    shift=dot(sub(final[0],original[0]),unit(sub(original[1],original[0])))
+    slots=[]
+    for cut in brace.get('slots',[]):
+        if cut.get('connection_id')==connection_id:continue
+        depth=cut['end_in']-cut['start_in']
+        if abs(cut['start_in'])<1e-6:lo=0.
+        elif abs(cut['end_in']-prior)<1e-6:lo=length-depth
+        else:lo=cut['start_in']-shift
+        if lo< -1e-7 or lo+depth>length+1e-7:raise ValueError('New cutback conflicts with an existing machining feature')
+        slots.append(dict(cut,start_in=lo,end_in=lo+depth))
+    depth=new_slot['end_in']-new_slot['start_in']
+    if depth>=length:raise ValueError('Selected slot consumes the remaining brace')
+    slots.append(dict(new_slot,connection_id=connection_id,section_axis=section_axis,
+                      start_in=length-depth if end else 0.,end_in=length if end else depth))
+    return slots
 
 
 def complete_native_hr(original):
@@ -218,9 +226,10 @@ def complete_native_hr(original):
             if parts(c,templates):raise ValueError('Existing connection constituents need a combined contour and attachment fit')
             if len(braces)!=1:raise ValueError('Located connection must select its attached physical brace')
             variant=selected_fields(package,c).get(('connection','variant'))
-            if variant in ('brb_pinned','brb_bolted'):
-                from .native_brb import build_brb_end
-                t,frame,offsets,slots=build_brb_end(package,c,braces[0],supports,profiles,catalogue,j)
+            is_brb=variant in ('brb_pinned','brb_bolted')
+            if is_brb or len(supports)==2:
+                from .native_brb import build_corner_end
+                t,frame,offsets,slots=build_corner_end(package,c,braces[0],supports,profiles,catalogue,j,slotted=not is_brb)
             else:
                 if len(supports)!=1:raise ValueError('Slotted gusset requires a distinct located support')
                 t,frame,offsets,slots=complete_slotted_end(package,c,braces[0],supports[0],j['point'],profiles,catalogue)

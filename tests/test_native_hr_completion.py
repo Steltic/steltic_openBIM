@@ -108,3 +108,31 @@ def test_fresh_brb_corner_uses_new_brace_column_and_beam_bindings(tmp_path):
     assert result['physical']['members'][1]['end_offsets'][0][0]>0
     assert next(p for p in t['parts'] if p['kind']=='pin')['parameters']['diameter']==2.5
     assert {p['id'] for p in t['parts'] if p.get('parameters',{}).get('holes')}=={'GUSSET','CHEEK0','CHEEK1','CLEVIS0','CLEVIS1'}
+
+
+def test_ordinary_slotted_corner_authors_one_contour_for_both_real_receivers(tmp_path):
+    source=ordinary_job();ph=source['physical'];beam,brace=ph['members'];c=ph['connections'][0]
+    beam['end_offsets']=[[0.,0.,-4.],[0.,0.,-4.]]
+    col=dict(copy.deepcopy(beam),id='col',kind='column',axis=[[0,0,0],[0,0,90]],
+             local_y=[0.,1.,0.],end_offsets=[[0,0,0],[0,0,0]])
+    ph['members'].append(col);c['member_ids'].append('col')
+    ph['joints'][0]['member_ends'].append(dict(member_id='col',end='start'))
+    ph['joints'].append(dict(id='ctop',point=[0,0,90],member_ends=[dict(member_id='col',end='end')],status='declared'))
+    ph['joint_dispositions'].append(dict(joint_id='ctop',kind='free_end',reason='Free column top at test roof'))
+    h=source.pop('source_handoff');h.pop('contract_sha256');fields=h['records']['connections/c1']['fields']
+    fields.extend(dict(role=role,field=field,value=value,source={'pointer':'/connections/0/components'})
+        for role,field,value in [('connection','variant','slotted_hss_gusset'),('gusset_column_weld','length_in',8.),
+                                 ('gusset_column_weld','size_in',.25),('gusset_column_weld','faces',2),
+                                 ('gusset_beam_weld','faces',2),('brace_end_clearance','depths',2)])
+    h['occurrences'][c['id']]['applications'][0]['selected']=list(range(len(fields)))
+    h['source_bindings']['native_content_sha256']=fingerprint(source);h['contract_sha256']=fingerprint(h);source['source_handoff']=h
+    result=complete_native_hr(source)
+    assert not result['provenance'].get('openbim_translation_findings')
+    made=result['physical']['connections'][0];template=result['physical']['assemblies'][0]
+    assert made['assembly_instance']['bindings']=={'COLUMN':'col','BEAM':'beam','BRACE':'B'}
+    assert {q['id'] for q in template['parts'] if q.get('parameters',{}).get('source_weld_side')}=={'WGB','WGC','WGB-FACE2','WGC-FACE2'}
+    assert result['physical']['members'][1]['slots'][0]['connection_id']==c['id']
+    directory=tmp_path/'new-corner';directory.mkdir()
+    write_json(directory/'state.json',initial_state(result,1));write_json(directory/'source.json',result)
+    path=directory/'model.ifc';export_drawing(directory,path)
+    readback=verify_ifc(path,result,fingerprint(result));assert readback['passed'],readback

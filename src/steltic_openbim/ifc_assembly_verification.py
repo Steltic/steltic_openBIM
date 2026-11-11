@@ -180,6 +180,9 @@ class Assessment:
         self.support_weld_measurements = []
         self.gusset_clearance_measurements = []
         self.crossing_measurements = []
+        self.transfer_measurements = []
+        from .transfer_joint_readback import transfer_sources
+        self.transfer_sources = transfer_sources(handoff)
         self.context = {}
 
     def issue(self, code, **fields):
@@ -410,7 +413,8 @@ class Assessment:
                 self.counts['actual_selected_anchor_patterns']+=1
                 self.counts['actual_selected_anchor_bores']+=len(anchor_facts.get('measured_holes',{}))
             for row in anchor_issues:self.issue('selected_actual_anchor_geometry',**row)
-        if not br and not gussets and not shared_parts:
+        transfer=cid in self.transfer_sources or connection.get('detail_ref',{}).get('legacy_family')=='review_transfer_truss'
+        if not br and not gussets and not shared_parts and not transfer:
             self.transport_only(cid,tid,template,parts,product,instance,inverse)
             return
         self.counts['connections'] += 1
@@ -472,6 +476,13 @@ class Assessment:
                     self.owned_gussets.append(PlacedGusset(cid,self.context.get('sheet'),key,meshes[key],instance))
         curves = self.rb.curves(cid)+shared_curves
         from .pin_stack_readback import actual_materials,selected_stack_record,verify_pin_stack
+        if transfer:
+            from .transfer_joint_readback import arm_selections,node
+            specs,source_issues=arm_selections(self.handoff,cid,inst['bindings'],self.members)
+            rows,failures=node(self,connection,inst,instance,parts,meshes,curves,actual_materials(product),specs)
+            self.counts['actual_transfer_flange_fillets']+=sum(len(r['measurements']) for r in rows)
+            self.transfer_measurements.append(dict(connection=cid,arms=rows))
+            for info in source_issues+failures:self.issue('transfer_truss_joint_fit',**info)
         present=connection.get('parameters',{}).get('pin_stack')
         selected_stacks=selected_stack_record(self.handoff,cid)
         if present or selected_stacks or any(p.get('parameters',{}).get('source_stack_role') for p in parts.values()):
@@ -850,6 +861,9 @@ def verify_assembly_fit(ifc_path, physical, source_handoff):
     check.counts['checked_fitted_gusset_outlines']=sum('unsupported_area_in2' in r for r in outline_rows)
     check.findings.extend(outline_issues)
     inventory = {m['id'] for m in physical['members'] if brace_kind(m)}
+    checked_transfer={r['connection'] for r in check.transfer_measurements}
+    for cid in sorted(check.transfer_sources-checked_transfer):
+        check.findings.append(dict(code='selected_transfer_node_has_no_actual_assembly',connection=cid))
     for key in check.crossings:
         if check.crossing_occurrences[key] != 1:
             check.findings.append({'code':'required_crossing_occurrence_count','crossing_id':key,'actual':check.crossing_occurrences[key]})
@@ -858,4 +872,4 @@ def verify_assembly_fit(ifc_path, physical, source_handoff):
     missing = sorted((mid, end) for mid in inventory for end in (0,1) if (mid,end) not in check.covered_ends)
     for mid, end in missing:
         check.findings.append({'code':'brace_end_has_no_matching_physical_receiver', 'member':mid, 'end_index':end})
-    return {'passed': not check.findings, 'counts': dict(check.counts), 'member_inventory': len(inventory), 'gusset_outline_measurements': outline_rows, 'support_weld_measurements': check.support_weld_measurements, 'anchor_measurements': check.anchor_measurements, 'gusset_clearance_measurements': check.gusset_clearance_measurements, 'unique_ends': 2*len(inventory), 'mapped_ends': len(check.covered_ends), 'crossing_measurements': check.crossing_measurements, 'findings': check.findings, 'numeric_tolerance_in': TOL, 'schema': 'steltic.actual_assembly_fit.v1'}
+    return {'passed': not check.findings, 'counts': dict(check.counts), 'member_inventory': len(inventory), 'transfer_measurements': check.transfer_measurements, 'gusset_outline_measurements': outline_rows, 'support_weld_measurements': check.support_weld_measurements, 'anchor_measurements': check.anchor_measurements, 'gusset_clearance_measurements': check.gusset_clearance_measurements, 'unique_ends': 2*len(inventory), 'mapped_ends': len(check.covered_ends), 'crossing_measurements': check.crossing_measurements, 'findings': check.findings, 'numeric_tolerance_in': TOL, 'schema': 'steltic.actual_assembly_fit.v1'}

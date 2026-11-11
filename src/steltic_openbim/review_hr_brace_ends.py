@@ -20,7 +20,8 @@ def bind(model,package):
         # initial model construction there is no scene ID yet.
         from .hr_detail_selections import selected_fields,SelectionConflict
         selected=selected_fields(package,c)
-        key=(c['assembly_id'],selected.signature(),bool(c.get('parameters',{}).get('common_apex_datum'))) if c.get('assembly_id') else None
+        params=c.get('parameters',{})
+        key=(c['assembly_id'],selected.signature(),bool(params.get('common_apex_datum')),bool(params.get('grade_diaphragm_interface'))) if c.get('assembly_id') else None
         if key is None or key not in scenes:
             try:
                 scene=build_scene(model,package,c)
@@ -124,6 +125,7 @@ def draw_brace(ctx):
     delta=sub(far,ctx.c['point']);horizontal=math.hypot(delta[0],delta[1])
     v=unit([horizontal,0,delta[2]]);sign=1 if v[2]>=0 else -1
     actual_base=bound_base_plate(ctx) if kind=='base' else None
+    grade_interface=par.get('grade_diaphragm_interface')
     from .brace_base_attachment import base_attachment,collar
     base_spec=base_attachment(ctx,cp) if kind=='base' else None
     base_kind=base_spec['kind'] if base_spec else None
@@ -141,6 +143,7 @@ def draw_brace(ctx):
     t=par.get('gusset_thickness',ctx.n(r'(?:corner|apex|base) gusset '+NUMBER+r' in',ctx.n(r'slotted for a '+NUMBER+r' in',.75)));lx=ctx.n(r'(?:beam-edge weld length|beam edge|base-plate weld length|upper-end beam-edge weld) '+NUMBER+r' in',24);lz=ctx.n(r'(?:column-edge weld length|column edge|upper-end column-edge weld) '+NUMBER+r' in',24)
     t=ctx.selected.get(('gusset','thickness_in')) or t
     horizontal_role='gusset_base_weld' if kind=='base' and ('gusset_base_weld','length_in') in ctx.selected else 'gusset_beam_weld'
+    if base_spec and base_spec.get('horizontal_fillet') is not None:horizontal_role='gusset_base_weld'
     if base_spec:
         lz=base_spec['column_length']
         if base_kind!='free':lx=base_spec['horizontal_length']
@@ -172,10 +175,13 @@ def draw_brace(ctx):
                 a.box(label,[x-.25,yy,beam_bottom+tf],[.5,bf/2-tw/2-.25,bd-2*tf],'A','Source-required stiffener, A thickness/station where unspecified');a.weld('W'+label,[x,sg*tw/2,beam_bottom+tf],[x,sg*tw/2,beam_top-tf],['BEAM',label],.25,basis='A')
     else:
         weak=par.get('weak_axis_gusset',False);column_face=column_face_at_gusset(p,cp,weak)
-        column_lo=-18 if proposal else -(base_spec or {}).get('thickness',0.) if kind=='base' else -bd-lz-24
+        column_lo=-18 if proposal or grade_interface else -(base_spec or {}).get('thickness',0.) if kind=='base' else -bd-lz-24
         a.member('COLUMN',cp,[0,0,column_lo],[0,0,lz+12 if proposal else lz+24],y=[1,0,0] if weak else [0,1,0])
         if kind=='base':
-            if base_kind=='collar':
+            if grade_interface:
+                a.notes.append(grade_interface)
+                host=None
+            elif base_kind=='collar':
                 plate=collar(a,base_spec,column_face,effective(p,cp,'width'),interface_z)
                 plate['selected_material']=ctx.selected.get(('gusset','material'))
                 host='COLLAR'
@@ -191,7 +197,7 @@ def draw_brace(ctx):
             else:
                 a.box('BASE',[-cd-4,-bf/2-6,-1.5],[cd+column_face+lx+4,bf+12,1.5],'A','Local base support envelope including the complete selected gusset edge')
                 host='BASE'
-            if base_kind not in ('free','collar'):
+            if not grade_interface and base_kind not in ('free','collar'):
                 a.box('CONC',[-cd-8,-bf/2-10,-12],[cd+lx+12,bf+20,10.5],'A','Foundation context',kind='concrete')
         elif proposal:
             seat=proposal['seat_thickness_in'];width=proposal['seat_width_in']
@@ -220,12 +226,14 @@ def draw_brace(ctx):
         weld=ctx.n(NUMBER+r'-in E70 fillets both sides',.375)
         if not par.get('beam_only_gusset'):
             kind_gc=base_spec['column_kind'] if base_spec else ctx.selected.get(('gusset_column_weld','kind')) or 'fillet'
-            weld_gc=(base_spec or {}).get('fillet') or support_selection(ctx,'gusset_column_weld','size_in','WGC',weld)
+            weld_gc=(base_spec or {}).get('column_fillet') or (base_spec or {}).get('fillet') or support_selection(ctx,'gusset_column_weld','size_in','WGC',weld)
             a.weld('WGC',[column_face,0,interface_z],[column_face,0,interface_z+sign*lz],['COLUMN','GUSSET'],weld_gc,
-                   kind=kind_gc,description='Source column-edge weld, both sides')
+                   kind=kind_gc,basis='A' if grade_interface else 'S',
+                   description='Corner column-edge selection shown for coordination; grade attachment requires a source decision'
+                   if grade_interface else 'Source column-edge weld, both sides')
         else:a.notes.append('S: beam-only gusset; no gusset-to-column weld. A 2t clear gap is drawn at the column face. Source free-edge and rotation-clearance requirements remain.')
         if host:
-            weld_gb=(base_spec or {}).get('fillet') or support_selection(ctx,horizontal_role,'size_in','WGB',weld)
+            weld_gb=(base_spec or {}).get('horizontal_fillet') or (base_spec or {}).get('fillet') or support_selection(ctx,horizontal_role,'size_in','WGB',weld)
             a.weld('WGB',[clearance,0,interface_z],[lx+clearance,0,interface_z],[host,'GUSSET'],weld_gb,
                    kind=ctx.selected.get((horizontal_role,'kind')) or 'fillet',description='Source horizontal gusset attachment')
     ctx.text=full_text
@@ -290,6 +298,8 @@ def draw_brace(ctx):
     else:
         station=max(station,interface_station+(effective(p,pid)/2*abs(v[0])+2*t)/abs(v[2]))
         if not upper:station=max(station,(clearance+effective(p,pid)/2*abs(v[2])+t)/v[0])
+        source_station=ctx.selected.get(('brace_end_clearance','workpoint_station_in')) or (base_spec or {}).get('workpoint_station')
+        if source_station is not None:station=source_station
         start=mul(v,station);end=add(start,mul(v,wl+24))
         a.member('BRACE',pid,start,end,description='Source slotted brace section '+pid+'; A finite end cut on its original workline')
         weld=ctx.selected.get(('brace_slot_weld','size_in')) or ctx.n(r'(?:four |\(four lines\) )'+NUMBER+r' in E70',ctx.n(NUMBER+r'-in \(four lines\)',.375));th=effective(p,pid)/2
@@ -339,7 +349,7 @@ def draw_brace(ctx):
             dimension(a,v,fold_ratio,fold,dot(start,v),restrained_edges)
     a.section_at=pin[0] if isbrb and not selected_bolts else start[0]+6
     edge_start=beam_x-lx/2 if upper else clearance
-    if base_kind!='free':
+    if base_kind!='free' and not grade_interface:
         a.dim([edge_start,0,interface_z],[edge_start+lx,0,interface_z],
               'Source support-edge weld' if proposal else f'{lx:g} in source interface length',
               basis='S',offset=-48 if proposal else 24)
@@ -351,7 +361,10 @@ def draw_brace(ctx):
     if upper:bind_support_span(ctx,'BEAM',0)
     if not upper:bind_support_span(ctx,'COLUMN',2)
     from .gusset_support_welds import place_faces
-    place_faces(a,ctx.selected,horizontal_role)
+    fields=ctx.selected
+    if base_spec and base_spec.get('faces'):
+        fields={**fields,('gusset_column_weld','faces'):base_spec['faces'],(horizontal_role,'faces'):base_spec['faces']}
+    place_faces(a,fields,horizontal_role)
     a.notes.append('Separate source end condition: '+kind+'. Member slot, gusset clearance and free-edge trim follow the attached source record; drawings show the assembled load path. A geometry remains subject to the unchanged design verification requirements.')
 
 

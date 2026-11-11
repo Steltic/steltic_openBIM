@@ -85,11 +85,25 @@ def base(ctx):
     a,p=ctx.a,ctx.p;post=ctx.ms[0];y=post['local_y'];axes=(cross(y,[0,0,1]),y,[0,0,1]);part=extract(ctx,post,'POST',axes,32)
     a.box('CONC',[-15,-15,-18],[30,30,18],'A','A foundation envelope; source concrete 4 ksi',kind='concrete')
     a.box('GROUT',[-9,-7.5,0],[18,15,2],'S','Source 2 in non-shrink grout')
-    a.box('BASE',[-9,-7.5,2],[18,15,.75],'S','Source 3/4 x 15 x 18 in A572 Gr 50 base plate')
-    for i,(x,y) in enumerate(((-7.5,-6.125),(-7.5,6.125),(7.5,-6.125),(7.5,6.125))):
-        name='WASHER'+str(i);a.box(name,[x-1,y-1,2.75],[2,2,.25],'S','Source 1/4 x 2 x 2 in welded plate washer; 1-5/16 in plate hole retained in specification')
-        a.fastener('ANCH'+str(i),[[x,y,-12]],[0,0,1],.75,15,['CONC','BASE',name],
-            'S 3/4 in F1554-36 anchor; S 12.25 in transverse gauge; A 15 in longitudinal gauge and 12 in embedment',basis='S count/diameter/grade; A embedment/longitudinal set-out')
+    plate=a.box('BASE',[-9,-7.5,2],[18,15,.75],'S','Source 3/4 x 15 x 18 in A572 Gr 50 base plate')
+    plate['selected_material']='ASTM A572 Gr 50'
+    from .review_base_selection import flange_rows
+    from .connection_cuts import drill_plate
+    layout=flange_rows(ctx.text)
+    if not layout or layout[:2]!=(1,2):raise ValueError('Locate the selected pair of rods outside each end-post flange')
+    offset=ctx.selected.get(('anchor_pattern','flange_offset_in')) or layout[3]
+    pitch=ctx.selected.get(('anchor_pattern','spacing_in')) or layout[4]
+    half=p[post['profile_id']]['dimensions']['d']/2+offset
+    points=[[x,y,-12] for x in (-half,half) for y in (-pitch/2,pitch/2)]
+    hole=ctx.selected.get(('anchor_hole','diameter_in')) or 1.3125
+    drill_plate(plate,points,[0,0,1],hole,'S end-wall base anchor holes')
+    for i,(x,y,_) in enumerate(points):
+        name='WASHER'+str(i);washer=a.box(name,[x-1,y-1,2.75],[2,2,.25],'S','Source 1/4 x 2 x 2 in welded plate washer')
+        washer_hole=ctx.selected.get(('washer_hole','diameter_in'))
+        drill_plate(washer,[[x,y,0]],[0,0,1],washer_hole or .8125,'S selected washer bore' if washer_hole else 'A 1/16 in diametral clearance')
+        anchor=a.fastener('ANCH'+str(i),[[x,y,-12]],[0,0,1],.75,15,['CONC','BASE',name],
+            f'S 3/4 in F1554-36 anchor; {pitch:g} in transverse gauge, {offset:g} in beyond the flange; A 12 in embedment',basis='S count, diameter, grade and set-out; A embedment')
+        anchor.update(functional_kind='anchor',selected_material='ASTM F1554-36')
         for j,(u,v) in enumerate((([-1,-1],[1,-1]),([1,-1],[1,1]),([1,1],[-1,1]),([-1,1],[-1,-1]))):
             a.weld(f'WW{i}-{j}',[x+u[0],y+u[1],2.75],[x+v[0],y+v[1],2.75],['BASE',name],.1875,description='Source all-round plate-washer fillet')
         a.cylinder('END-NUT'+str(i),[x,y,-12],[0,0,1],1.35,1,'A','A heavy hex anchor-end nut envelope; source embedded nut requirement')
@@ -98,4 +112,4 @@ def base(ctx):
         xx=bounds[0][0 if sign<0 else 1]
         a.weld('POST'+str(sign),[xx,bounds[1][0],2.75],[xx,bounds[1][1],2.75],['POST','BASE'],.25,basis='A',description='A 1/4 in post-end fillet; source pinned base arrangement')
     a.dim([-9,0,2],[9,0,2],'S 18 in plate');a.section_axis=2;a.section_at=2.375
-    a.notes.append('S: base plate, 2 in grout, four F1554-36 anchors, welded plate washers and embedded nuts. A: 15 in longitudinal anchor gauge, 12 in embedment and post-end weld. The source 12.25 in transverse gauge and 1-3/8 in plate-edge distance are retained; its separate 1.67 in flange-clearance statement is not consistent with this actual W12X40 orientation and is retained as a source-coordination issue, not silently substituted.')
+    a.notes.append('The four source rods are located from the two actual W-shape flange faces and the transverse gauge. The plate, grout, rod holes, welded washers and embedded nuts retain the column-base selection. Embedment and post-end weld are adopted fit dimensions.')

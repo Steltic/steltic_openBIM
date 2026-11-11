@@ -22,6 +22,9 @@ def draw(ctx):
     else:gable(ctx)
 
 def transfer_truss(ctx):
+    if ctx.c.get('parameters',{}).get('located_transfer_ends'):
+        from .transfer_joint_scene import draw
+        return draw(ctx)
     a,p=ctx.a,ctx.p;point=ctx.c['point'];vertices=[];joins=[]
     for j,m in enumerate(ctx.ms):
         other=max(m['axis'],key=lambda q:math.dist(q,point));v=unit(sub(other,point));v=unit([v[0],0,v[2]]);length=118 if m['kind']!='column' else 100

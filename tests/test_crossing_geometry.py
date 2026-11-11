@@ -35,8 +35,50 @@ def test_each_crossing_has_one_continuous_and_two_actual_halves(key,count):
         assert all(any(math.dist(q,c['point'])<1e-6 for q in h['axis']) for h in halves)
     scene=build_scene(m,p,cs[0]);parts={part['id']:part for part in scene['parts']}
     assert all(parts[label]['member']['slots'] for label in ('CONT','SPLIT-1','SPLIT1'))
-    assert len([w for w in scene['welds'] if w['connects']==['CONT','GUSSET']])==4
+    through=[w for w in scene['welds'] if w['connects']==['CONT','GUSSET']]
+    assert len([w for w in through if w.get('attachment_role')=='continuous_brace_slot_weld'])==4
+    assert len([w for w in through if w.get('attachment_role')=='continuous_slot_end_return'])==(4 if key=='hr21' else 0)
     if key=='hr33':
         assert not cs[0]['design_record_ids'] and cs[0]['engineering_status']=='not_checked'
         assert all(w['basis']=='A' for w in scene['welds'])
     else:assert cs[0]['parameters']['crossing']['source_selected']
+
+
+def test_shallow_crossing_gusset_clears_each_uncut_tube_and_meets_its_welds():
+    from types import SimpleNamespace
+    import numpy as np
+    from shapely.geometry import Point
+    from steltic_openbim.assembly_scene import Assembly
+    from steltic_openbim.joint_mesh_readback import Mesh
+    from steltic_openbim.pilots.model import mul,unit
+    from steltic_openbim.review_crossings import draw
+
+    profiles={'HSS':dict(id='HSS',family='rhs',dimensions=dict(h=9,b=9,t=.5))}
+    through=unit([330,0,168]);split=unit([330,0,-168])
+    cutback=11.3392857143;slot=43.6785714286
+    def tube(name,d,lo,hi,cut_lo,cut_hi):
+        return dict(id=name,kind='brace',profile_id='HSS',axis=[mul(d,lo),mul(d,hi)],
+                    local_y=[0,1,0],end_offsets=[[0,0,0],[0,0,0]],slots=[
+                        dict(start_in=cut_lo-lo,end_in=cut_hi-lo,width_in=.875,section_axis=0)])
+    members=[tube('A',through,-100,100,-slot/2,slot/2),
+             tube('B1',split,-100,-cutback,-cutback-9.5,-cutback),
+             tube('B2',split,cutback,100,cutback,cutback+9.5)]
+    selected=dict(thickness_in=.75,end_distance_in=cutback,split_weld_length_in=9,
+                  proposed_width_in=slot-1,source_width_in=None,source_selected=True,
+                  continuous_slot_length_in=slot,continuous_weld_size_in=.3125,split_weld_size_in=.3125)
+    assembly=Assembly('HSS crossing',profiles)
+    draw(SimpleNamespace(a=assembly,p=profiles,params={'crossing':selected},ms=members,
+                         c=dict(id='X',point=[0,0,0],member_ids=['A','B1','B2']),selected={},text=''))
+    def section(part):
+        vertices=[];faces=[]
+        for ring in part['faces']:
+            faces.append(tuple(range(len(vertices),len(vertices)+len(ring))))
+            vertices.extend(ring)
+        return Mesh(np.asarray(vertices),tuple(faces)).section([0,1,0],0,([1,0,0],[0,0,1]))
+    by_id={p['id']:p for p in assembly.parts}
+    gusset=section(by_id['GUSSET'])
+    for role in ('CONT','SPLIT-1','SPLIT1'):
+        assert section(by_id[role]).intersection(gusset).area<1e-4
+        for weld in (w for w in assembly.welds if w['connects']==[role,'GUSSET']):
+            for x,y,z in (weld['a'],weld['b']):
+                assert gusset.distance(Point(x,z))<1e-4

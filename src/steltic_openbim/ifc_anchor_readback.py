@@ -46,7 +46,7 @@ def verify_anchors(rb,entity,template,frame,members,profiles,fields,parts):
     diameters=set(fields.get(('anchor_hole','diameter_in'),[]))
     if not (directional or diameters):return {},[]
     plate_ids=[p['id'] for p in parts.values() if p['kind']=='plate' and
-               (p['id'].upper() in ('P1','BP','BASE-PLATE','BASE_PLATE') or
+               (p['id'].upper() in ('P1','BP','BASE','BASE-PLATE','BASE_PLATE') or
                 p.get('parameters',{}).get('description','').strip().lower()=='base plate')]
     if len(plate_ids)!=1:raise ValueError('The actual anchor pattern needs one identified base plate')
     plate_id=plate_ids[0]
@@ -66,7 +66,7 @@ def verify_anchors(rb,entity,template,frame,members,profiles,fields,parts):
         facts.update(measured_holes=holes,selected_hole_diameter_in=target)
         findings.extend(issues)
     if directional:
-        bound=[m for m in set(frame['bindings'].values()) if m in members and members[m]['kind'] in ('column','col')]
+        bound=[m for m in set(frame['bindings'].values()) if m in members and members[m]['kind'] in ('column','col','endwall_post')]
         if len(bound)!=1:raise ValueError('The anchor pattern needs one identified IFC column')
         col=members[bound[0]]
         profile=profiles[col['profile_id']]

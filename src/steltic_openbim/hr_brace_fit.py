@@ -119,7 +119,7 @@ def bind_support_span(ctx,label,coordinate):
                 a=add(start,mul(delta,t0)),b=add(start,mul(delta,t1)),
                 connects=[role if r==label else r for r in weld['connects']]))
         for index,segment in enumerate(segments):
-            segment.update(source_weld_id=weld['id'],segment_index=index,
+            segment.update(source_weld_id=weld.get('source_weld_id',weld['id']),segment_index=index,
                 selected_total_length_in=math.dist(start,end),segment_count=len(segments))
         revised.extend(segments)
     a.welds=revised

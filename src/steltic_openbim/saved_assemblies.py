@@ -173,7 +173,7 @@ def rebuilt_scenes(model,package):
     for original in model['connection_assemblies']:
         family=original['family']
         rebuild=family in ('review_brace','review_brb','review_beam','review_pin_beam','review_base','review_wall_base',
-                           'review_truss_node','review_truss_heel','review_plan_angle')
+                           'review_truss_node','review_truss_heel','review_plan_angle','review_transfer_truss')
         if model['pilot'].startswith('hr'):
             if family in ('hr_simple_shear_plate','hr_infill_shear_plate_cope','hr_shear','test_floor_opening'):
                 rebuild=any(('shear_plate','depth_in') in selected_fields(package,by_id[cid]) for cid in original['occurrences'])
@@ -182,6 +182,8 @@ def rebuilt_scenes(model,package):
                 rebuild=any(by_id[cid].get('parameters',{}).get('physical_hr_kicker') for cid in original['occurrences'])
         if family=='review_rod_clevis':
             rebuild=any(by_id[cid].get('parameters',{}).get('actual_rod_end') for cid in original['occurrences'])
+        if family=='review_sliding_post':
+            rebuild=any(by_id[cid].get('parameters',{}).get('actual_endwall_base') for cid in original['occurrences'])
         if family=='review_angle_clip':
             rebuild=any(by_id[cid].get('parameters',{}).get('actual_gable_brace') for cid in original['occurrences'])
         if family=='review_hr_strut_bracing':
@@ -200,7 +202,8 @@ def rebuilt_scenes(model,package):
                 variant=beam_family(source) or family
                 if variant=='review_beam':
                     c['detail_ref']['id']=variant;c['parameters']['joint']='shear_plate'
-            token=(variant,selected.signature(),bool(c.get('parameters',{}).get('common_apex_datum')))
+            params=c.get('parameters',{})
+            token=(variant,selected.signature(),bool(params.get('common_apex_datum')),bool(params.get('grade_diaphragm_interface')))
             groups[token].append(c)
         for group_index,group in enumerate(groups.values()):
             representative=group[0]
@@ -247,7 +250,11 @@ def repair(package,model):
     from .review_gable_bracing import fit_flange_braces
     fit_flange_braces(package,model)
     from .review_hr_brace_ends import bind
+    from .transfer_joint_fit import fit_end_offsets
+    fit_end_offsets(model)
     from .shared_apex import locate_pairs,consolidate
+    from .brace_base_attachment import locate_grade_interfaces
+    locate_grade_interfaces(package,model)
     common_ends=locate_pairs(package,model)
     bind(model,package)
     for mid,m in members.items():
