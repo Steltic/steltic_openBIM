@@ -121,27 +121,67 @@ def apply(b):
     b.note('GABLE-FLANGE-BRACING','S: paired L2-1/2x2-1/2x1/4 at 45 degrees, 41.8 in rafter braces and 37.8 in column braces, 3/8 x 4-1/2 x 9 in rafter and 3/8 x 4-1/4 x 8 in column partial stiffeners, 3/16 in fillets both sides, two 3/4 in pretensioned A325 bolts at 1-3/8 in gage, 3 in pitch and 1.25 in end distance. A: actual purlin/girt positions, extra lines at brace stations, 36 in end cantilevers, fitted web shims and supplier clips/bolts. Source supplier stiffness/strength requirements remain outstanding verification; geometry acceptance does not certify them. Source asks for a shorter knee column brace but gives no length; the scheduled 37.8 in bound is shown explicitly as A fit.')
 
 
+def fit_flange_braces(package,model):
+    """Mount each equal-leg angle on the accessible face of its secondary web."""
+    physical=package['physical']
+    members={m['id']:m for m in physical['members']}
+    drawing={m['id']:m for m in model['members']}
+    profiles={p['id']:p for p in physical['profiles']}
+    contexts={}
+    for connection in model['connections']:
+        par=connection.get('parameters',{})
+        if par.get('actual_gable_brace'):
+            contexts.setdefault(connection['member_ids'][0],{})[par['end']]=connection
+    for mid,ends_c in contexts.items():
+        foot,head=ends_c['foot'],ends_c['head']
+        m=members[mid];host=members[head['member_ids'][1]];angle=profiles[m['profile_id']]
+        if profiles[host['profile_id']]['family']!='z':continue
+        if angle['family']!='angle' or abs(angle['dimensions']['b']-angle['dimensions']['h'])>1e-6:
+            raise ValueError('Flange brace needs an explicit unequal-leg angle roll at '+mid)
+        u=unit(sub(m['axis'][1],m['axis'][0]));wy=host['local_y']
+        wz=cross(unit(sub(host['axis'][1],host['axis'][0])),wy)
+        clear=mul(wy,1 if dot(u,wz)>0 else -1)
+        old_face=mul(foot['parameters']['primary_h'],-foot['parameters']['brace_side'])
+        if dot(clear,old_face)>.99999:continue
+        if dot(clear,old_face)>-.99999:raise ValueError('Oblique gable web needs a located shoe: '+mid)
+        gauge=m['local_y'];shift=mul(sub(clear,old_face),.1875)
+        # The reflected equal-angle section swaps its identical legs. Its
+        # actual tip and gage stay on the same sides of the primary web.
+        for connection in (foot,head):
+            connection['parameters'].update(physical_face_normal=clear,bolt_gauge_axis=gauge,brace_plane_shift=shift)
+        offsets=[add(q,shift) for q in m['end_offsets']]
+        for row in (m,drawing[mid]):
+            row.update(local_y=clear,end_offsets=offsets,
+                       physical_fit_basis='Open face of the actual Z web; original angle, length, slope, bolt gauge and workline retained')
+
+
 def brace(ctx):
     a,p,par=ctx.a,ctx.p,ctx.params;m,host=ctx.ms;origin=ctx.c['point'];h=par['primary_h'];n=par['depth_axis'];sg=par['brace_side'];normal=mul(h,-sg);u=unit(sub(*m['axis'][::-1]));vy=m['local_y']
-    extract(ctx,m,'BRACE',AXES,55);extract(ctx,host,'HOST',AXES,70)
+    normal=par.get('physical_face_normal',normal);vy=par.get('bolt_gauge_axis',vy)
+    shift=par.get('brace_plane_shift',[0,0,0])
+    angle=extract(ctx,m,'BRACE',AXES,55);extract(ctx,host,'HOST',AXES,70)
     end=par['end'];t=.375
     if end=='foot':
         centre=point(par['primary_origin'],origin,AXES);d=p[host['profile_id']]['dimensions'];low=-d['d']/2+d['tf'];x=sg*d['tw']/2
+        from .assembly_scene import clip_part
+        web_normal=mul(X,sg);face=dot(centre,web_normal)+d['tw']/2
+        if min(dot(q,web_normal) for f in angle['faces'] for q in f)<face-1e-6:
+            clip_part(angle,web_normal,face)
         verts=[add(centre,add(add(mul(X,xx),mul(n,zz)),mul(h,-t/2))) for xx,zz in ((x,low),(x+sg*par['plate_width'],low),(x+sg*par['plate_width'],low+par['plate_height']),(x,low+par['plate_height']))]
         a.polygon('STIFFENER',verts,t,normal=h,basis='S',description='Source partial-depth stiffener at actual web and compression flange')
         for face in (-1,1):
             v=add(centre,add(mul(X,x),mul(h,face*t/2)))
             a.weld(f'WEB{face}',add(v,mul(n,low)),add(v,mul(n,low+par['plate_height'])),['HOST','STIFFENER'],.1875,description='S3/16 in fillet both sides along actual web')
             a.weld(f'FLANGE{face}',add(v,mul(n,low)),add(add(v,mul(n,low)),mul(X,sg*par['plate_width'])),['HOST','STIFFENER'],.1875,description='S3/16 in fillet both sides along compression flange')
-        pts=[add(add(mul(u,distance),mul(vy,1.375)),mul(normal,-t)) for distance in (1.25,4.25)]
+        pts=[add(shift,add(add(mul(u,distance),mul(vy,1.375)),mul(normal,-t))) for distance in (1.25,4.25)]
         a.fastener('BOLTS',pts,normal,.75,t+.25,['STIFFENER','BRACE'],'S two 3/4 in A325 pretensioned Class A STD; 3 in pitch,1.25 end,1-3/8 gage')
     else:
         sheet=p[host['profile_id']]['dimensions']['t'];shim=.1875-sheet/2
         # The angle lies on the same source stiffener plane at both ends.
         # Its far end therefore needs an explicit fitted shim at the thin web.
-        v=[add(add(mul(u,x),mul(vy,y)),mul(normal,-shim)) for x,y in ((-6,0),(-.25,0),(-.25,2.5),(-6,2.5))]
+        v=[add(shift,add(add(mul(u,x),mul(vy,y)),mul(normal,-shim))) for x,y in ((-6,0),(-.25,0),(-.25,2.5),(-6,2.5))]
         a.polygon('SHIM',v,shim,normal=normal,basis='A',description='A fitted supplier web shim; exact thickness closes the source stiffener-to-web plane difference')
-        pts=[add(add(mul(u,-distance),mul(vy,1.375)),mul(normal,-shim-sheet)) for distance in (1.25,4.25)]
+        pts=[add(shift,add(add(mul(u,-distance),mul(vy,1.375)),mul(normal,-shim-sheet))) for distance in (1.25,4.25)]
         a.fastener('BOLTS',pts,normal,.75,sheet+shim+.25,['HOST','SHIM','BRACE'],'A two 3/4 in supplier bolts at source 3 in pitch and1.25 in end distance',basis='A')
     a.front_axes=(0,2) if abs(h[1])>.5 else (0,1);a.section_axis=max(range(3),key=lambda i:abs(u[i]));a.section_at=0
     a.notes.append('S source angle and primary stiffener/bolts; A receiving supplier section, web shim and clip system. Actual member extracts are used at both ends. Source supplier stiffness and local strength checks remain required.')

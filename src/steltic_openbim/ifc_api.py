@@ -70,7 +70,7 @@ def router(drawings,source_roots=None):
 
     @r.get('/api/project/{p}/ifc/export/{key}/{filename}')
     def exported_file(p,key,filename):
-        if not re.fullmatch(r'e-[a-f0-9]{32}',key) or filename not in ('model.ifc','report.json'):raise HTTPException(404)
+        if not re.fullmatch(r'e-[a-f0-9]{32}',key) or filename not in ('model.ifc','report.json','delivery_certificate.json'):raise HTTPException(404)
         path=invoke(store.root,p)/'exports'/key/filename
         if not path.is_file() or not (path.parent/'report.json').is_file():raise HTTPException(404)
         return FileResponse(path,filename=p+'.ifc' if filename.endswith('.ifc') else filename,

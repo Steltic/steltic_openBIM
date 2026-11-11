@@ -66,7 +66,7 @@ def parts(connection,templates,*,world=False):
     return result
 
 
-def has_physical_connection(connection,templates,*,verified_bonds=()):
+def has_physical_connection(connection,templates,*,verified_bonds=(),connections=None):
     """Solid hardware or an explicit weld joining two real receiver members.
 
     A direct welded joint need not invent a plate/bolt solid. A text callout,
@@ -79,12 +79,26 @@ def has_physical_connection(connection,templates,*,verified_bonds=()):
     placement=connection.get('assembly_instance',{});template=templates.get(placement.get('template_id'),{})
     receivers={r['id'] for r in template.get('receivers',[]) if r.get('kind')=='member'}
     bindings=placement.get('bindings',{})
+    shared={}
+    for link in connection.get('parameters',{}).get('shared_constituents',[]):
+        owner=(connections or {}).get(link.get('owner_connection_id'))
+        if not owner or owner is connection or owner.get('joint_id')!=connection.get('joint_id'):continue
+        frame=owner.get('assembly_instance',{});target=templates.get(frame.get('template_id'),{})
+        if (not finite(frame.get('origin')) or not finite(placement.get('origin')) or
+                math.dist(frame['origin'],placement['origin'])>1e-4 or
+                link.get('owner_template_id')!=target.get('id') or
+                link.get('owner_template_revision')!=target.get('revision') or frame.get('revision')!=target.get('revision')):continue
+        if not any(row.get('connection_id')==connection['id'] and row.get('member_id') in bindings.values()
+                   for row in owner.get('parameters',{}).get('shared_brace_ends',[])):continue
+        target_part=next((p for p in target.get('parts',[]) if p['id']==link.get('owner_part_id')),None)
+        if target_part and target_part.get('geometry',{}).get('type')=='mesh' and target_part['geometry'].get('faces'):
+            shared[link['role']]=target_part
     for part in components:
         if part.get('kind')!='weld':continue
         points=part.get('geometry',{}).get('points',[])
         if len(points)<2 or not all(finite(p) for p in points) or math.dist(points[0],points[-1])<1e-8:continue
         joined={bindings[r] for r in part.get('connects',[]) if r in receivers and r in bindings}
-        if len(joined)>=2:return True
+        if len(joined)>=2 or (joined and any(r in shared for r in part.get('connects',[]))):return True
     return False
 
 

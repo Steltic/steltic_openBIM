@@ -85,8 +85,11 @@ def physical_extras(b,levels):
         from .review_hr import nearest
         for i,(point,ms) in enumerate(nodes.items()):
             col=nearest(b,point,('column',));refs=[b.record('connections','conn-floor-W14X665'),b.record('connections','conn-brace-W14X665')]
-            if col:refs.append(b.record('connections','conn-truss-support-C2-C5'))
-            b.connection('TRANSFER-NODE-'+str(i),'review_transfer_truss',point,ms+([col] if col else []),refs,parameters={'support':bool(col),'joint':'support' if col else 'panel'})
+            support_id=b.record('connections','conn-truss-support-C2-C5')
+            support_detail=b.records.get(support_id,{}).get('data',{}).get('components','')
+            at_support=bool(col and re.search(r'\b'+re.escape(col['profile_id'])+r' flange tips',support_detail,re.I))
+            if at_support:refs.append(support_id)
+            b.connection('TRANSFER-NODE-'+str(i),'review_transfer_truss',point,ms+([col] if col else []),refs,parameters={'support':at_support,'joint':'support' if at_support else 'panel'})
         b.note('TRANSFER-RELEASE','S: Level-2 bottom chord is separated from slab by slip sheet and has no studs; adjacent C2-C3/C4-C5 beams have horizontal long slots at truss ends. Only Level 3 transfers the discontinuous Grid C frame shear. The drawing does not introduce a rigid diaphragm attachment at the lower nodes.')
         # This schedule variant has no location in the final source model:
         # the two W14X665 verticals are Level-2/3 transfer posts, followed by
@@ -176,7 +179,13 @@ def connection_extras(b,levels):
             if b.key=='hr20':
                 if k%2==0 and support:
                     rid='conn-'+('roof' if k==12 else 'floor')+'-'+pid+('' if k==12 else '-level-'+str(k+1))
-                    if rid in raw and 'pin' in str(raw[rid]).lower():con['detail_ref']['id']='review_pin_beam';con['design_record_ids']=[b.record('connections',rid)];p['joint']='pin_release'
+                    if rid in raw:
+                        from .hr_detail_selections import beam_family
+                        family=beam_family(raw[rid].get('components',''))
+                        if family:
+                            con['detail_ref']['id']=family
+                            con['design_record_ids']=[b.record('connections',rid)]
+                            p['joint']='pin_release' if family=='review_pin_beam' else 'shear_plate'
                 if point[1]==720 and point[2]==216 and point[0] in (720,1080) and pid!='W14X665':
                     con['detail_ref']['id']='review_transfer_slip';p['joint']='horizontal_slip';p['travel_in']=2;attach(con,'conn-diaphragm-level3-transfer')
                 elif 'two-plate' in str([raw.get(r.split('/')[-1],{}) for r in con['design_record_ids']]):p['paired_shear_plates']=True

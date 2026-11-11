@@ -261,4 +261,7 @@ def build_model(package,state):
     ag_cladding(b)
     from .review_cfs6_floor_panels import bind_bearing_clearances
     bind_bearing_clearances(b)
+    if any(c['detail_ref']['id']=='review_transfer_truss' for c in b.connections):
+        from .transfer_joint_fit import fit_end_offsets
+        fit_end_offsets(dict(connections=b.connections,members=b.members,profiles=list(b.profiles.values())))
     return b.finish()

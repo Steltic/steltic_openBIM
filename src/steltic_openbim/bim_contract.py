@@ -241,7 +241,7 @@ def connection_component_findings(package):
         # not a selection of an additional mechanical anchor rod.
         text=re.sub(r'\banchor[- ]reinforcement\b','foundation reinforcement',text,flags=re.I)
         text=re.sub(r'\banchor[- ]plates?\b','uplift end plate',text,flags=re.I)
-        item=r'(?:(?:field|shop|additional|designed|anchor|CJP|PJP)\s+)*(?:bolts?|screws?|welds?|anchors?|rods?|studs?)\b'
+        item=r'(?:(?:field|shop|additional|designed|permanent|anchor|CJP|PJP)\s+)*(?:bolts?|screws?|welds?|anchors?|rods?|studs?)\b'
         text=re.sub(r'\b(?:no|without)\s+'+item+r'(?:\s*(?:,|\bor\b|\band\b)\s*'+item+r')*','',text,flags=re.I)
         return re.sub(r'\b(?:anchor\s+rods?|bolts?|screws?|welds?|anchors?)\s+(?:are\s+)?(?:not required|not used|omitted|unnecessary)\b','',text,flags=re.I)
     def selection_text(value):
@@ -1015,7 +1015,7 @@ def validate(package):
                 bad("delegated_interface", "Delegated connection needs party, versioned detail and representation", [cid])
         elif not parts and not (detail.get("id") and detail.get("revision")):
             bad("connection_geometry", "Connection needs parts or a versioned design-detail reference", [cid])
-        if package.get('require_connection_parts') and c.get('scope')!='delegated' and not bim_assemblies.has_physical_connection(c,templates,verified_bonds=verified_bonds):
+        if package.get('require_connection_parts') and c.get('scope')!='delegated' and not bim_assemblies.has_physical_connection(c,templates,verified_bonds=verified_bonds,connections=indexes['connections']):
             bad('connection_parts_required','This job requires located physical parts for designed connections; a detail reference alone is incomplete',[cid],'needs_input')
         part_ids = set()
         # Local template geometry/materials were validated once above. Occurrence

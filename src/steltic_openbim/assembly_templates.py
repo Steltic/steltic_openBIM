@@ -30,6 +30,8 @@ def screw_diameter(n):return {8:.164,10:.19,12:.216,14:.25}.get(n,.25)
 def dim(profile,axis='depth'):
     d=profile['dimensions']
     if profile['family']=='built_up':return None
+    if profile['family'] in ('chs','round'):
+        return d['d']
     if axis=='depth':return d.get('d',d.get('h',d.get('depth',d.get('width',6))))
     return d.get('bf',d.get('b',d.get('width',6)))
 
@@ -107,6 +109,14 @@ def build_scene(model,package,c,subtype=''):
         from .review_assemblies import Context
         from .review_hr_kickers import draw
         ctx=Context(model,package,c);draw(ctx);return ctx.finish()
+    if family=='hr_column_base' and not subtype=='embedded':
+        from .review_assemblies import Context
+        from .review_base_selection import flange_rows
+        from .review_hr_details import base
+        ctx=Context(model,package,c)
+        if flange_rows(ctx.text):
+            base(ctx)
+            return ctx.finish()
     located=None
     if par.get('physical_opening_joint'):located='header'
     elif par.get('physical_jamb_base'):located='jamb_base'
@@ -211,14 +221,29 @@ def build_scene(model,package,c,subtype=''):
         if not moment and text:
             hit=re.search(r'(?<![\d.])(\d+)\s*x\s*'+NUMBER+r'\s*in\.?\s+(?:ASTM\s+F3125\s+)?A(?:325|490)',text,re.I)
             if hit:n=int(hit[1]);dia=number(hit[2]);ph=(n-1)*pitch+2*edge
-        ph=min(ph,bd-2.0);edge=(ph-(n-1)*pitch)/2
-        if edge<dia: # Explicit test alternative when a source family does not fit the smaller beam.
+        from .hr_detail_selections import selected_fields
+        sel=selected_fields(package,c) if model['pilot'].startswith('hr') else {}
+        fixed_plate=sel.get(('shear_plate','depth_in'))
+        plate_t=sel.get(('shear_plate','thickness_in')) or plate_t
+        n=int(sel.get(('bolt','count')) or n)
+        dia=sel.get(('bolt','diameter_in')) or dia
+        pitch=sel.get(('bolt','pitch_in')) or pitch
+        ph=fixed_plate if fixed_plate is not None else min(ph,bd-2.0)
+        edge=sel.get(('bolt','vertical_edge_in')) or (ph-(n-1)*pitch)/2
+        if edge<dia and fixed_plate is None and ('bolt','pitch_in') not in sel:
             pitch=max(2.5*dia,(bd-4)/(n-1));ph=(n-1)*pitch+2;edge=1
             note('A: pitch fitted to this member web; retained source count. This variant has no new capacity verification.')
         tw=p[bp]['dimensions'].get('tw',.375);z=beam_z-ph/2
         a.box('P1',[face,tw/2,z],[pw,plate_t,ph],'A' if moment or family=='test_floor_opening' else 'S',description=f'Shear/erection plate {pw:g} x {ph:g} x {plate_t:g}')
-        bolt_x=face+pw-1.75
-        fast('F1',grid(n,1,pitch,origin=(bolt_x,-tw/2,z+edge)),(0,1,0),dia,tw+plate_t,['M2','P1'],f'{n} x {dia:g} in '+('A325' if dia==.75 else 'A490')+' through beam web and P1','A' if moment or family=='test_floor_opening' else 'S')
+        bolt_x=face+pw-(sel.get(('bolt','horizontal_edge_in')) or 1.75)
+        grade=sel.get(('bolt','material')) or ('A325' if dia==.75 else 'A490')
+        fast('F1',grid(n,1,pitch,origin=(bolt_x,-tw/2,z+edge)),(0,1,0),dia,tw+plate_t,['M2','P1'],f'{n} x {dia:g} in {grade} through beam web and P1','S' if fixed_plate is not None else 'A' if moment or family=='test_floor_opening' else 'S')
+        if fixed_plate is not None:
+            a.parts[-1]['selected_material']=grade
+            from .connection_cuts import drill_receivers
+            selected_hole=re.search(r'(?:standard|STD) holes\s*\('+NUMBER+r' in',text,re.I)
+            hole=number(selected_hole[1]) if selected_hole else dia+.0625
+            drill_receivers(a,a.parts[-1],hole)
         a.weld('W1',[face,tw/2,z],[face,tw/2,z+ph],['M1','P1'],.25 if family=='test_floor_opening' else .3125,description='Fillet weld both sides of P1 to support; E70XX')
         a.section_at=bolt_x;a.dim([bolt_x,0,z+edge],[bolt_x,0,z+edge+(n-1)*pitch],f'{n-1} @ {pitch:g} in',offset=-34)
         a.dim([face,0,z],[face+pw,0,z],basis='A' if moment else 'S',offset=-35)
@@ -641,7 +666,9 @@ def build_scene(model,package,c,subtype=''):
         from .truss_node_geometry import receivers,short_screw_layout
         from .pilots.model import dot
         ends=[]
-        for i,(m,receiver) in enumerate(zip(ms,receivers(ms,c['point']))):
+        shift=c.get('parameters',{}).get('joist_bearing_setout_in',[0.,0.,0.])
+        centre=add(c['point'],shift)
+        for i,(m,receiver) in enumerate(zip(ms,receivers(ms,centre))):
             near,far=receiver['axis'];v=unit(sub(far,near))
             a.member('M'+str(i+1),m['profile_id'],near,far,y=receiver['local_y'],basis='A',
                 source_member_index=i,description=m['kind'].replace('_',' ')+' '+m['profile_id'])
@@ -661,13 +688,22 @@ def build_scene(model,package,c,subtype=''):
                     along=sum(x*y for x,y in zip(normal,v));crossing=abs(sum(x*y for x,y in zip(normal,across)))
                     bolt_start=max(bolt_start,(.75*crossing+.75)/max(along,.01))
             last=max(dot(q,v) for q in part['member']['axis'])
-            stations,offsets,reduced=short_screw_layout(v,normals,last,math.ceil(bolt_start*2)/2)
+            usual=math.ceil(bolt_start*2)/2
+            if model.get('pilot','').startswith('hr'):
+                from .hr_joist_nodes import screw_stations
+                stations,offsets,reduced=screw_stations(v,normals,m,last,usual)
+            else:
+                stations,offsets,reduced=short_screw_layout(v,normals,last,usual)
             bolt_layouts[n]=(stations,offsets)
             if reduced:short_members.append('M'+str(n))
         # One node plate for EVERY actual load-carrying web plane, including all
         # four girder plies. Plate offsets are fitted to the thickest joined web.
+        hr_node=model.get('pilot','').startswith('hr')
+        if hr_node:
+            from .hr_joist_nodes import gussets
+            gussets(a,p,ends,bolt_layouts)
         planes={}
-        for _,_,m in ends:
+        for _,_,m in ([] if hr_node else ends):
             for yy,sign,t in web_faces(p,m['profile_id']):
                 centre=round(yy-sign*t/2,5)
                 old=planes.get((centre,sign),0);planes[centre,sign]=max(old,t)
@@ -701,6 +737,10 @@ def build_scene(model,package,c,subtype=''):
         a.dim([gusset[0][0],0,gusset[2][0]],[gusset[0][1],0,gusset[2][0]],'Gusset extent (A)','A',offset=-28)
         note('The node includes actual adjoining members and every built-up web ply. A: 1/8 in gussets, screw counts as labelled for each actual web ply, mitre fit with 1/4 in nominal gap, and matching paired/four-ply webs. No supplier capacity approval is inferred.')
         if short_members:note('A short cut-end proposal for '+', '.join(short_members)+': fewer screws fit between the actual opening cut and node mitre. The source workline is preserved. Supplier and engineer capacity verification is required; no six-screw capacity is assigned to this reduced group.')
+        if any(shift):
+            horizontal=0 if abs(shift[0])>=abs(shift[1]) else 1
+            a.translate([shift[horizontal],shift[1-horizontal],shift[2]])
+            note('A: the independent joist end post, chords, webs and gusset are fitted inside their own bearing span at the shared support.')
 
     elif family in ('cfs_delegated_truss_heel_clip','hr_truss_node','hr_stmf_node'):
         cp=pick(('truss_chord','girder_truss','valley_truss'),default_c());wp=pick(('truss_web',),default_c());tp=channel(p,'ASSEMBLY-TRUSS-TRACK',6,2,.1017,0)

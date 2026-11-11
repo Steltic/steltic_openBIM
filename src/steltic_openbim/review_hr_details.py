@@ -94,6 +94,10 @@ def draw(ctx):
         # other record's setback or weld. Full source evidence stays in ctx.text.
         from .review_shear_selection import paired as paired_selection
         bp=pid;bd=effective(p,bp);bf=effective(p,bp,'width');cp,face=support(ctx,bp)
+        typed_shear=f=='review_beam' and ctx.selected.get(('shear_plate','thickness_in')) is not None
+        if typed_shear:
+            from .hr_detail_selections import selected_shear_text
+            txt=selected_shear_text(ctx)
         txt,twin=paired_selection(txt,weak=getattr(ctx,'weak_axis_support',False),column=cp)
         n=lambda pattern,default:findnum(pattern,txt,default)
         moment=par.get('moment',False) or f=='review_crane_bracket';gap=0 if moment else n(r'beam end set back (?:\(web side\) )?'+NUMBER+r' in',1) if twin else 1.25
@@ -109,6 +113,15 @@ def draw(ctx):
                 from .assembly_scene import bounds
                 m['bounds']=bounds(m['faces'])
         rows,cols,dia,pitch,gauge=bolt_data(txt);t=ctx.n(r'(?:single plate|erection tab|web single plate)\s*(?:PL\s*)?'+NUMBER,.375)
+        if typed_shear:
+            t=ctx.selected.get(('shear_plate','thickness_in')) or t
+            count=ctx.selected.get(('bolt','count')) or rows*cols
+            dia=ctx.selected.get(('bolt','diameter_in')) or dia
+            pitch=ctx.selected.get(('bolt','pitch_in')) or pitch
+            cols=ctx.selected.get(('bolt','columns')) or cols
+            gauge=ctx.selected.get(('bolt','gauge_in')) or gauge
+            if count%cols:raise ValueError('Selected shear bolt count does not fit its columns at '+ctx.c['id'])
+            rows=int(count//cols)
         if not txt:rows=max(2,min(4,int((bd-3)/3)+1))
         if moment and 'erection tab' in txt:rows,cols,dia,pitch=4,1,.75,3
         if f=='review_crane_bracket':
@@ -120,23 +133,47 @@ def draw(ctx):
             a.notes.append('A: fictional existing joint survey answer: paired bolted web angles and flange cover/seat plates. No welding to existing A36 steel is shown; source survey and weldability requirements remain.')
         ph=(rows-1)*pitch+2*max(dia*1.5,1.5);edge=(ph-(rows-1)*pitch)/2
         if twin:t,ph=map(number,twin.groups());edge=(ph-(rows-1)*pitch)/2
-        if ph>bd-2:
+        if typed_shear and ctx.selected.get(('shear_plate','depth_in')) is not None:
+            ph=ctx.selected[('shear_plate','depth_in')];edge=(ph-(rows-1)*pitch)/2
+            if edge<dia/2:raise ValueError('Selected bolt group and plate depth conflict')
+        elif ph>bd-2:
             # Preserve the source pattern; a mismatched source profile is an error.
             ph=bd-1.5;edge=(ph-(rows-1)*pitch)/2
             if edge<dia*.8:raise ValueError('Source bolt group does not fit '+ctx.model['pilot']+' '+pid+' '+str((rows,cols,dia,pitch)))
-        width=ctx.n(r'bolt line '+NUMBER+r' in from the weld',3)+(cols-1)*gauge+max(2*dia,1.5);tw=p[bp]['dimensions'].get('tw',.375);z=-bd/2-ph/2
+        width=n(r'bolt line '+NUMBER+r' in from the weld',3)+(cols-1)*gauge+max(2*dia,1.5);tw=p[bp]['dimensions'].get('tw',.375);z=-bd/2-ph/2
         plate_edge=max(2*dia,1.5)
         if twin:
             plate_edge=n(NUMBER+r' in beam-end and plate-edge distances',2.25)
             width=gap+plate_edge+(cols-1)*gauge+plate_edge
         pattern_basis='S' if re.search(r'\b(?:bolts|erection tab|column\(s\))\b',txt,re.I) else 'A'
         shim=.0625 if twin else 0
-        a.box('P1',[face,tw/2+shim,z],[width,t,ph],pattern_basis,'Shear plate / erection tab; A fitted width where unprovided')
-        paired=bool(twin) or par.get('paired_shear_plates',False);joins=['M2','P1']
-        if paired:a.box('P2',[face,-tw/2-t,z],[width,t,ph],'S','Source second shear plate / double-shear joint');joins.append('P2')
+        plate=a.box('P1',[face,tw/2+shim,z],[width,t,ph],pattern_basis,'Shear plate / erection tab; A fitted width where unprovided')
+        if typed_shear:
+            plate['thickness']=t
+            grade=ctx.selected.get(('shear_plate','material'))
+            if grade:plate['selected_material']=grade
+        paired=bool(twin) or par.get('paired_shear_plates',False)
+        if typed_shear:
+            if ctx.selected.get(('shear_plate','count')) is not None:
+                paired=ctx.selected[('shear_plate','count')]==2
+            elif ('connection','variant') not in ctx.selected.conflicts:
+                variant=ctx.selected.get(('connection','variant'))
+                if variant in ('double_plate_shear','single_plate_shear'):
+                    paired=variant=='double_plate_shear'
+        joins=['M2','P1']
+        if paired:
+            second=a.box('P2',[face,-tw/2-t,z],[width,t,ph],'S','Source second shear plate / double-shear joint')
+            if typed_shear:
+                second['thickness']=t
+                if plate.get('selected_material'):second['selected_material']=plate['selected_material']
+            joins.append('P2')
         if shim:a.box('SHIM',[face+gap,tw/2,z],[width-gap,shim,ph],'S','Source 1/16 in finger shim against beam web');joins.append('SHIM')
-        a.fastener('F1',grid(rows*cols,cols,pitch,gauge,(face+width-plate_edge-(cols-1)*gauge,-tw/2-(t if paired else 0),z+edge)),[0,1,0],dia,tw+shim+t*(2 if paired else 1),joins,f'{rows} rows x {cols}; {dia:g} in '+('A490' if 'A490' in txt else 'A325')+'; source pretension/faying-surface requirements',pattern_basis)
-        weld=ctx.n(r'\('+NUMBER+r' in fillets both sides',.25)
+        bolt=a.fastener('F1',grid(rows*cols,cols,pitch,gauge,(face+width-plate_edge-(cols-1)*gauge,-tw/2-(t if paired else 0),z+edge)),[0,1,0],dia,tw+shim+t*(2 if paired else 1),joins,f'{rows} rows x {cols}; {dia:g} in '+('A490' if 'A490' in txt else 'A325')+'; source pretension/faying-surface requirements',pattern_basis)
+        if typed_shear:
+            bolt['functional_kind']='bolt'
+            material=ctx.selected.get(('bolt','material'))
+            if material:bolt['selected_material']=material
+        weld=n(r'\('+NUMBER+r' in fillets both sides',.25)
         if twin:weld=n(r'(?:with one|\(one) '+NUMBER+r' in (?:E70 )?fillet',.5)
         a.weld('W1',[face,tw/2,z],[face,tw/2,z+ph],[getattr(ctx,'support_attachment','M1'),'P1'],weld,description=f'{weld:g} in fillet both sides to support')
         if paired:a.weld('W2',[face,-tw/2,z],[face,-tw/2,z+ph],['M1','P2'],weld,description='Source second shear-plate support weld')
@@ -211,8 +248,14 @@ def draw(ctx):
     else:raise ValueError(f)
 
 def pin_beam(ctx):
+    from .hr_detail_selections import pin_selection,outer_clevis_weld
+    from .connection_cuts import drill_joined_plates
     a,p,pid,txt=ctx.a,ctx.p,ctx.pid,ctx.text;d=effective(p,pid);bf=effective(p,pid,'width');tf=p[pid]['dimensions']['tf'];tw=p[pid]['dimensions']['tw'];cp,face=support(ctx,pid)
-    stub=ctx.n(r'beam stub '+NUMBER+r' in',22);pin=ctx.n(r'pin '+NUMBER+r' in dia',3);kt=ctx.n(r'knife plate '+NUMBER+r' in',2);ct=ctx.n(r'two clevis plates '+NUMBER+r' in',1.5);lk=ctx.n(r'Lk = '+NUMBER+r' in',10);lc=ctx.n(r'Lc = '+NUMBER+r' in',10)
+    from .selected_beam_hinge import draw as selected_beam_pin
+    if selected_beam_pin(ctx,face):return
+    pin,pin_material,hole_clearance=pin_selection(ctx)
+    stub=ctx.n(r'beam stub '+NUMBER+r' in',ctx.n(NUMBER+r' in beam stub',22));kt=ctx.n(r'knife plate (?:PL )?'+NUMBER+r' in',2);ct=ctx.n(r'two clevis plates (?:PL )?'+NUMBER+r' in',1.5);lk=ctx.n(r'Lk = '+NUMBER+r' in',ctx.n(r'inserted '+NUMBER+r' in between the stub flanges',10));lc=ctx.n(r'Lc = '+NUMBER+r' in',ctx.n(r'inserted '+NUMBER+r' in between the beam flanges',10))
+    outer_size=outer_clevis_weld(ctx)
     h=d-2*tf-.125;px=face+stub+.5;insertion=face+stub-lk;gap=.0625
     # End webs are absent over the inserted knife/clevis plates; source full profiles resume outside this zone.
     a.member('M2',pid,[face,0,-d/2],[insertion,0,-d/2],description='Source beam stub, intact web')
@@ -223,9 +266,11 @@ def pin_beam(ctx):
     for j,sign in enumerate((-1,1)):
         yy=kt/2+gap if sign>0 else -kt/2-gap-ct
         a.box('CLEVIS'+str(j),[px-5.5,yy,-d/2-h/2],[lc+6,ct,h],'S','Source clevis plate')
-        a.weld('WC'+str(j),[face+stub+1,yy,-tf],[face+stub+1+lc,yy,-tf],['CLEVIS'+str(j),'BEAM1'],.6875,description='Source outer-face clevis-to-flange fillet; both flange levels')
+        a.weld('WC'+str(j),[face+stub+1,yy,-tf],[face+stub+1+lc,yy,-tf],['CLEVIS'+str(j),'BEAM1'],outer_size if outer_size is not None else .6875,basis='S' if outer_size is not None else 'A',description='Outer-face clevis-to-flange fillet; both flange levels')
     a.box('TRANS',[face+stub+1+lc-.5,-bf/2,-d+tf],[.5,bf,d-2*tf],'S','Web-to-clevis transverse plate')
-    a.fastener('PIN',[[px,-kt/2-gap-ct,-d/2]],[0,1,0],pin,kt+2*gap+2*ct,['KNIFE','CLEVIS0','CLEVIS1'],f'{pin:g} in AISI 4140 Q&T pin, double shear; A retaining washers')
+    group=a.fastener('PIN',[[px,-kt/2-gap-ct,-d/2]],[0,1,0],pin,kt+2*gap+2*ct,['KNIFE','CLEVIS0','CLEVIS1'],f'{pin:g} in {pin_material} pin, double shear; A retaining washers')
+    group.update(functional_kind='pin',selected_material=pin_material)
+    drill_joined_plates(a,group,pin+(hole_clearance if hole_clearance is not None else .0625),'S selected pin-hole clearance' if hole_clearance is not None else 'A 1/16 in diametral fit allowance')
     a.weld('WK',[insertion,0,-d+tf],[insertion,0,-tf],['KNIFE','M2'],kind='CJP',description='Source knife to cut stub web CJP')
     a.weld('WS',[face,-bf/2,0],[face,bf/2,0],['M1','M2'],kind='CJP',description='Stub flange/web CJP to column')
     a.weld('WT',[face+stub+1+lc,-bf/2,-d/2],[face+stub+1+lc,bf/2,-d/2],['TRANS','M3'],.1875,description='Transverse plate fillet to web and clevis ends')
@@ -305,16 +350,34 @@ def base(ctx):
         a.section_axis=2;a.section_at=-le/2;a.dim([bx/2,0,-le],[bx/2,0,0],f'Embedment {le:g} in');return
     match=re.search(r'(?:base plate\s*(?:PL)?|moment base:\s*PL)\s*'+NUMBER+r' x '+NUMBER+r' x '+NUMBER+r' in',txt,re.I)
     t,bx,by=list(map(number,match.groups())) if match else (1,d+8,w+8)
-    layout=flange_rows(txt)
-    if layout and match:
+    layout=flange_rows(txt,bx if match else None,by if match else None,d)
+    from . import stiffened_base
+    flange_stiffeners=stiffened_base.selection(txt)
+    if (layout or flange_stiffeners) and match:
         # The source uses DG1 B (parallel to flange) x N (depth direction).
         # Local X is the column depth direction, not the first printed size.
         t,by,bx=list(map(number,match.groups()))
     selected_rods=rods(txt);n,dia,grade=selected_rods or (4,.75,'F1554 Grade 36 (A)');embed=ctx.n(r'embedment\s*(?:hef = )?'+NUMBER,18);grout=ctx.n(r'on '+NUMBER+r' in (?:non-shrink )?grout',2)
-    a.box('CONC',[-bx/2-8,-by/2-8,-embed-6],[bx+16,by+16,embed+6],'A','Foundation context',kind='concrete');a.box('GROUT',[-bx/2,-by/2,0],[bx,by,grout],'S','Source grout');a.box('P1',[-bx/2,-by/2,grout],[bx,by,t],'S' if match else 'A','Base plate')
-    a.member('M1',pid,[0,0,grout+t],[0,0,grout+t+32]);edge=ctx.n(r'rods '+NUMBER+r' in from the plate edges',max(1.5,1.5*dia));rows=max(2,math.ceil(n/2));points=[]
-    if layout:
+    a.box('CONC',[-bx/2-8,-by/2-8,-embed-6],[bx+16,by+16,embed+6],'A','Foundation context',kind='concrete')
+    a.box('GROUT',[-bx/2,-by/2,0],[bx,by,grout],'S','Source grout',kind='grout')
+    tongues=ctx.params.get('integral_gusset_tongues')
+    if tongues:
+        from .base_plate_extensions import add as add_stock
+        add_stock(a,bx,by,grout,t,tongues)
+    else:
+        a.box('P1',[-bx/2,-by/2,grout],[bx,by,t],'S' if match else 'A','Base plate')
+    context_height=max(32,flange_stiffeners['height']+4) if flange_stiffeners else 32
+    a.member('M1',pid,[0,0,grout+t],[0,0,grout+t+context_height]);edge=ctx.n(r'rods '+NUMBER+r' in from the plate edges',max(1.5,1.5*dia));rows=max(2,math.ceil(n/2));points=[]
+    if flange_stiffeners:
+        stiffened_base.add(a,flange_stiffeners,d,w,grout+t)
+        gap=ctx.selected.get(('anchor_pattern','stiffener_offset_in')) or flange_stiffeners['outside']
+        points=[[sg*(d/2+station),side*(w/2+gap),-embed] for sg in (-1,1)
+                for station in flange_stiffeners['stations'] for side in (-1,1)]
+        if len(points)!=n:raise ValueError('Stiffened-base row stations do not account for every selected rod')
+    elif layout:
         nrows,ncols,spacing,a1,pitch=layout
+        a1=ctx.selected.get(('anchor_pattern','flange_offset_in')) or a1
+        pitch=ctx.selected.get(('anchor_pattern','spacing_in')) or pitch
         if 2*nrows*ncols!=n:raise ValueError('Source anchor count and flange layout disagree')
         for sg in (-1,1):
             for r in range(nrows):
@@ -322,7 +385,23 @@ def base(ctx):
         if any(abs(q[0])+dia/2>bx/2 or abs(q[1])+dia/2>by/2 for q in points):raise ValueError('Source anchor layout falls outside base plate')
     else:
         for i in range(n):points.append([(-1 if i%2==0 else 1)*(bx/2-edge),-by/2+edge+(i//2)*(by-2*edge)/(rows-1),-embed])
-    a.fastener('ANCH',points,[0,0,1],dia,embed+grout+t,['CONC','P1'],f'{n} x {dia:g} in {grade} anchor rods; A embedment where source delegates it',basis='S count/diameter/grade; A embedment' if selected_rods else 'A')
+    anchors=a.fastener('ANCH',points,[0,0,1],dia,embed+grout+t,['CONC','P1'],f'{n} x {dia:g} in {grade} anchor rods; A embedment where source delegates it',basis='S count/diameter/grade; A embedment' if selected_rods else 'A')
+    from .connection_cuts import drill_plate
+    diameter=ctx.selected.get(('anchor_hole','diameter_in'))
+    if diameter is None:
+        hole=re.search(NUMBER+r'[- ]in(?:ch)?(?: diameter| dia\.?)? (?:rod |anchor )?holes?\s*\(AISC Manual Table 14-2',txt,re.I)
+        if not hole:hole=re.search(r'\brod holes '+NUMBER+r' in\b',txt,re.I)
+        if hole:diameter=number(hole[1])
+    if diameter is not None:
+        if diameter<dia:raise ValueError('Selected base plate hole is smaller than the anchor diameter')
+        drill_plate(next(part for part in a.parts if part['id']=='P1'),points,[0,0,1],diameter,'S selected anchor hole diameter')
+    if selected_rods:
+        anchors.update(functional_kind='anchor',selected_material=ctx.selected.get(('anchor','material')) or grade)
+    directional={field:ctx.selected.get(('anchor_pattern',field)) for field in
+                 ('edge_flange_normal_in','edge_along_flange_in','minimum_edge_in','flange_offset_in','spacing_in')}
+    if directional['edge_flange_normal_in'] is not None or directional['edge_along_flange_in'] is not None:
+        anchors['parameters']={'source_anchor_pattern':{k:v for k,v in directional.items() if v is not None},
+                               'flange_normal_axis_local':[1,0,0],'flange_row_axis_local':[0,1,0]}
     top_washer=re.search(r'top plate washers PL '+NUMBER+r' x '+NUMBER+r' x '+NUMBER+r' in',txt,re.I)
     washer_dimensions=list(map(number,top_washer.groups())) if top_washer else None
     if not washer_dimensions:
@@ -336,30 +415,61 @@ def base(ctx):
     for j,q in enumerate(points):
         if washer_dimensions:
             wt,wx,wy=washer_dimensions;wid='WASHER-TOP-'+str(j)
-            a.box(wid,[q[0]-wx/2,q[1]-wy/2,grout+t],[wx,wy,wt],'S','Source top plate washer; anchor hole represented by rod axis')
+            washer=a.box(wid,[q[0]-wx/2,q[1]-wy/2,grout+t],[wx,wy,wt],'S','Source top plate washer at the actual anchor')
+            washer_hole=ctx.selected.get(('washer_hole','diameter_in')) or dia+.0625
+            drill_plate(washer,[q],[0,0,1],washer_hole,'S selected washer hole' if ctx.selected.get(('washer_hole','diameter_in')) else 'A 1/16 in diametral washer clearance')
             size=ctx.n(r'welded to the base plate with '+NUMBER+r' in fillets',.25)
             corners=[[q[0]+sx*wx/2,q[1]+sy*wy/2,grout+t] for sx,sy in ((-1,-1),(1,-1),(1,1),(-1,1))]
             if re.search(r'washer.*?welded to the base plate',txt,re.I):
                 for k in range(4):a.weld(wid+'-W'+str(k),corners[k],corners[(k+1)%4],[wid,'P1'],size,description='Source washer all-round fillet')
         if bottom_washer:
-            size=number(bottom_washer[1]);a.box('WASHER-END-'+str(j),[q[0]-size/2,q[1]-size/2,-embed],[size,size,.5],'S plan size; A thickness','Source embedded-end square washer; A 1/2 in thickness, anchor hole represented by rod axis')
-    a.weld('W1',[-d/2,-w/2,grout+t],[d/2,-w/2,grout+t],['M1','P1'],kind='CJP' if 'CJP' in txt else 'fillet',description='Column-to-plate weld per source flange/web specification')
+            size=number(bottom_washer[1]);washer=a.box('WASHER-END-'+str(j),[q[0]-size/2,q[1]-size/2,-embed],[size,size,.5],'S plan size; A thickness','Source embedded-end square washer, A 1/2 in thickness')
+            drill_plate(washer,[q],[0,0,1],dia+.0625,'A 1/16 in diametral embedded washer clearance')
+    if re.search(r'column flanges and web CJP-welded to the base plate',txt,re.I) and p[pid]['family']=='i':
+        tf=p[pid]['dimensions']['tf'];z=grout+t
+        for side in (-1,1):
+            x=side*(d-tf)/2
+            a.weld('COLUMN-FLANGE-'+str(side),[x,-w/2,z],[x,w/2,z],['M1','P1'],kind='CJP',
+                   description='Selected column flange CJP at the base plate')
+        a.weld('COLUMN-WEB',[-d/2+tf,0,z],[d/2-tf,0,z],['M1','P1'],kind='CJP',description='Selected column web CJP at the base plate')
+    else:
+        a.weld('W1',[-d/2,-w/2,grout+t],[d/2,-w/2,grout+t],['M1','P1'],kind='CJP' if 'CJP' in txt else 'fillet',description='Column-to-plate weld per source flange/web specification')
     if 'lug' in txt:
-        primary=re.search(r'shear lug:\s*(?:ASTM\s+\w+\s+)?PL '+NUMBER+r' x '+NUMBER+r' in, '+NUMBER+r' in embedded',txt,re.I)
+        primary=re.search(r'shear lug:?\s+(.*?)\bPL '+NUMBER+r' x '+NUMBER+r' in, '+NUMBER+r' in embedded',txt,re.I)
         secondary=re.search(r'second arm PL '+NUMBER+r' x '+NUMBER+r' in',txt,re.I)
         arms=lug_arms(txt)
         (lt,lw,le),(rt,rw,_)=arms or ((.75,min(d,16),4),(.75,min(d,16),4))
-        a.box('LUGX',[-lw/2,-lt/2,-le],[lw,lt,grout+le],'S' if arms else 'A','Source main shear lug; centered below base')
+        if primary:lt,lw,le=map(number,primary.groups()[1:])
+        lt=ctx.selected.get(('shear_lug','thickness_in')) or lt
+        lw=ctx.selected.get(('shear_lug','width_in')) or lw
+        le=ctx.selected.get(('shear_lug','embedment_in')) or le
+        width_axis=[1.,0.,0.];normal=[0.,1.,0.]
+        world=ctx.selected.get(('shear_lug','face_normal'))
+        written=re.search(r'shear lug has a face normal along world ([XY])\b',txt,re.I)
+        if world is None and written:world=[1.,0.,0.] if written[1].upper()=='X' else [0.,1.,0.]
+        if world is not None:
+            instance=next((c.get('assembly_instance') for c in ctx.package['physical']['connections'] if c['id']==ctx.c['id']),None)
+            if not instance:raise ValueError('Selected shear lug direction needs a located base')
+            normal=unit([dot(world,instance['x_axis']),dot(world,instance['y_axis']),0.])
+            width_axis=[normal[1],-normal[0],0.]
+        start=add(add(mul(width_axis,-lw/2),mul(normal,-lt/2)),[0,0,-le])
+        lug=a.box('LUGX',start,[lw,lt,grout+le],'S' if arms or primary else 'A','Main shear lug centered below the base',
+                  x=width_axis,y=normal)
+        lug['parameters']=dict(source_role='shear_lug',thickness_in=lt,width_in=lw,embedment_in=le)
+        material=ctx.selected.get(('shear_lug','material')) or (primary[1].strip() if primary else None)
+        if material:lug['selected_material']=material
         # The crossing arm is split at the main plate, avoiding duplicate steel.
-        for sg in (-1,1):
+        for sg in ((-1,1) if arms or secondary or not primary else ()):
             start=lt/2 if sg>0 else -rw/2;span=(rw-lt)/2
             if span<=0:raise ValueError('Crossing shear-lug arm cannot fit around main plate')
             label='LUGY'+str(sg);a.box(label,[-rt/2,start,-le],[rt,span,grout+le],'S' if arms else 'A','Source crossing lug arm, fitted to main plate')
             a.weld('WL'+str(sg),[-rt/2,start,grout],[-rt/2,start+span,grout],[label,'P1'],kind='CJP')
-        a.weld('WL',[-lw/2,0,grout],[lw/2,0,grout],['LUGX','P1'],kind='CJP')
+        a.weld('WL',add(mul(width_axis,-lw/2),[0,0,grout]),add(mul(width_axis,lw/2),[0,0,grout]),['LUGX','P1'],kind='CJP')
     a.section_axis=2;a.section_at=grout+t/2;a.dim([-bx/2,0,grout],[bx/2,0,grout],f'{bx:g} in plate');a.dim([points[0][0],0,grout+t+5],[points[1][0],0,grout+t+5],basis='A',offset=30)
 
 def splice(ctx):
+    from .selected_column_splice import selected,cjp_paths
+    if ctx.family=='review_splice' and selected(ctx):return
     a,p,pid,txt=ctx.a,ctx.p,ctx.pid,ctx.text;lower=ctx.ms[1]['profile_id'] if len(ctx.ms)>1 else pid;d=effective(p,pid);ld=effective(p,lower);w=effective(p,pid,'width')
     a.member('M1',lower,[0,0,-30],[0,0,0]);a.member('M2',pid,[0,0,.0625],[0,0,30])
     if ctx.family=='review_column_continuity':
@@ -379,7 +489,7 @@ def splice(ctx):
                     for edge in (-1,1):a.weld(f'WB{j}{index}{edge}',[edge*pw/2,offset,z0],[edge*pw/2,offset,z1],['M1' if index==0 else 'M2',name],kind='CJP',description='Boxing side plate to column flange tips')
                 if len(names)==2:a.weld(f'BOX-SPLICE{j}',[-pw/2,sg*(w+boxing)/2,0],[pw/2,sg*(w+boxing)/2,0],names,kind='CJP',basis='S' if 'side plates spliced' in txt else 'A',description='Side-plate splice at the shaft splice datum')
         from .review_splice_parts import transition,erection
-        transition(ctx,lower);erection(ctx,lower)
+        transition(ctx,lower);erection(ctx,lower);cjp_paths(ctx)
         a.section_axis=2;a.section_at=-12 if any(q['id']=='DIVISION' for q in a.parts) else 4;a.dim([-d/2,0,15],[d/2,0,15],'Upper shaft depth',basis='S',offset=-30)
         a.notes.append('Splice world elevation and source floor offset are in the occurrence index. Source CJP requirements remain authoritative; temporary erection fit and installation sequence shown as A.')
         return

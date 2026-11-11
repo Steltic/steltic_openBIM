@@ -18,6 +18,10 @@ def main():
     elif action=='export_structural':
         from .ifc_export import export_structural
         result=export_structural(source,Path(output).with_name('model.ifc'))
+    elif action=='verify_delivery':
+        from .delivery_verification import verify_delivery
+        verify_delivery(source,source_directory=args[0],job_root=args[1] if len(args)>1 else None)
+        return
     elif action=='export_import':
         from .ifc_export import export_import
         result=export_import(source,Path(output).with_name('model.ifc'),json.loads(Path(args[0]).read_text(encoding='utf-8')))

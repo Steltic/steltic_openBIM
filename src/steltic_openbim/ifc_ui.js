@@ -65,12 +65,27 @@ window.StelticIFC={async mount(root,project,mode){
    if(state.drawing)source.append(el('option',{value:'steltic'},`Steltic drawing model · revision ${state.drawing.revision}`));
    if(['built','reviewed'].includes(state.imported?.status))source.append(el('option',{value:'ifc_import'},`Imported IFC · revision ${state.imported.revision}`));
    const selectedState=()=>source.value==='structural'?state.structural:source.value==='steltic'?state.drawing:state.imported;
-   if(source.options.length){const info=el('p'),update=()=>{const s=selectedState();info.textContent=source.value==='ifc_import'?'Retains every original IFC object, including those outside the preview selection. Adds review notes and applies an explicitly selected length-unit interpretation.':s.representation==='captured_source_worklines'?'This source contains captured reference axes. The IFC identifies them as axes; physical member set-out and connection parts remain TBD.':'Exports supplied member surfaces, panel surfaces and located connection parts. Unlocated assemblies remain metadata. Valid coplanar openings cut their explicitly declared host panels; opening boundaries are also retained as references. Members are not cut.'};source.onchange=update;update();
-     const generate=el('button',{class:'primary',onclick:()=>run(generate,()=>{const s=selectedState();return post('/export',{source:source.value,revision:s.revision,source_sha256:s.source_sha256})})},'Generate IFC');box.append(card(el('h3',{},'Export source'),source,info,generate));
+   if(source.options.length){
+     const info=el('p');
+     const finalHR=()=>source.value==='steltic'&&state.drawing?.source_module==='HR';
+     const generate=el('button',{class:'primary',onclick:()=>run(generate,async()=>{
+       const s=selectedState();
+       try { await post('/export',{source:source.value,revision:s.revision,source_sha256:s.source_sha256,final:finalHR()}); }
+       catch(e){await refresh();throw e;}
+     })});
+     const update=()=>{
+       generate.textContent=finalHR()?'Verify HR drawing and IFC delivery':'Generate IFC';
+       info.textContent=finalHR()?'Read back the finished drawing and IFC against this HR source revision.':source.value==='structural'&&state.structural.source_module==='HR'?'Individual IFC export. Select the HR drawing revision for completion and its delivery certificate.':source.value==='ifc_import'?'Retains the uploaded IFC objects and selected review information.':'Exports the located geometry and declared physical interfaces.';
+     };
+     if(state.drawing?.source_module==='HR')source.value='steltic';
+     source.onchange=update;update();box.append(card(el('h3',{},'Export source'),source,info,generate));
    }else box.append(card('Load an HR/CFS job above, import a Steltic drawing package, or build an IFC review model first.'));
    for(const r of state.exports){const url=base+'/export/'+r.key;box.append(card(el('h3',{},r.source==='structural'?r.source_module+' / '+r.source_job+' physical export':r.source==='steltic'?'Steltic model export':'Imported IFC with review information'),el('p',{},`${r.schema} · source revision ${r.physical_revision||r.drawing_revision||r.import_revision} · ${r.schema_errors.length?'Schema findings: '+r.schema_errors.length:'Schema validation passed'}`),
      el('p',{},Object.entries(r.counts).map(([k,v])=>k.replaceAll('_',' ')+': '+v.toLocaleString()).join(' · ')),
-     el('div',{class:'ifc-row'},el('a',{href:url+'/model.ifc',class:'ifc-download'},'Download IFC'),el('a',{href:url+'/report.json',target:'_blank'},'Export report')),
+       r.delivery_status==='verified'?el('p',{},'HR drawing and IFC delivery verified.'):
+         r.delivery_status==='provisional'?el('p',{},'Provisional HR export. Review the delivery verification findings.'):null,
+       el('div',{class:'ifc-row'},el('a',{href:url+'/model.ifc',class:'ifc-download'},'Download IFC'),el('a',{href:url+'/report.json',target:'_blank'},'Export report'),
+         r.delivery_certificate?el('a',{href:url+'/delivery_certificate.json',target:'_blank'},'Delivery certificate'):null),
      r.source_validation?el('div',{},el('h4',{},'Source completeness'),el('p',{},r.source_validation.status==='ready'?'No missing data reported by the current package checks.':'Information required: this IFC is provisional even though its file schema is valid.'),report(r.source_validation.findings)):null,
      r.physical_checks?el('div',{},el('h4',{},'Physical source checks'),el('p',{},r.physical_checks.findings.length?'Source-model review required. The IFC retains the supplied geometry.':'No findings in the limited source screens. This does not establish architectural agreement or design approval.'),el('ul',{},r.physical_checks.findings.map(f=>el('li',{},`${f.title}: ${f.count}`)))):null,
      el('ul',{},r.limits.map(t=>el('li',{},t))),r.warnings.length?el('p',{},`${r.warnings.length} geometry warnings — see export report.`):null));}

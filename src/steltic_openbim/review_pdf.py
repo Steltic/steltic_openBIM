@@ -109,8 +109,10 @@ def core_plan(sh):
     marks=sh.draw_members(selected,tr,(0,1),s);sh.representative_marks(marks,12)
     for name,rows in sorted(groups.items()):
         x0,x1=min(q[0] for q in rows),max(q[0] for q in rows);y0,y1=min(q[1] for q in rows),max(q[1] for q in rows)
-        sh.dim(tr([x0,y0,0]),tr([x1,y0,0]),-25,value=x1-x0,basis='S',ref=name+' outer X extent')
-        sh.dim(tr([x0,y0,0]),tr([x0,y1,0]),25,value=y1-y0,basis='S',ref=name+' outer Y extent')
+        for axis,end,offset in ((0,[x1,y0,0],-25),(1,[x0,y1,0],25)):
+            sh.dim(tr([x0,y0,0]),tr(end),offset,value=end[axis]-[x0,y0][axis],basis='S',
+                   ref=name+' outer '+'XY'[axis]+' extent',source=dict(kind='core_extent',group=name,axis=axis),
+                   model_points=[[x0,y0,0],end])
         sh.label(*tr([(x0+x1)/2,(y0+y1)/2,0]),name+' core pier',13,BLUE)
     sh.panel_notes(['L1 core footprint from the actual steel plate profiles; source outside dimensions shown.',
         'Each pier has two steel faceplates and a source 1 in free-end closure. Overall wall thickness is 18 in; concrete infill is omitted from this steel set-out view.',
@@ -120,7 +122,13 @@ def core_plan(sh):
 
 def generate(package,state,dest):
     if not all(r['confirmed'] for r in state['requests']):raise ValueError('Adopt the fictional answers before dimensioned review drawings')
-    dest=Path(dest);dest.mkdir(parents=True,exist_ok=True);m=build_model(package,state);assemblies=prepare(m,package);sh=DesignSheets(package,state,dest,m);jobs=[]
+    model=build_model(package,state)
+    return render_model(package,state,dest,model,prepare(model,package))
+
+
+def render_model(package,state,dest,m,assemblies):
+    """Render an existing, source-bound model with its actual connection scenes."""
+    dest=Path(dest);dest.mkdir(parents=True,exist_ok=True);sh=DesignSheets(package,state,dest,m);jobs=[]
     omitted=omitted_detail_families(m['pilot'])
     published=[a for a in assemblies if a['family'] not in omitted]
     sh.excluded_detail_refs={a['reference'] for a in assemblies if a['family'] in omitted}
@@ -216,13 +224,18 @@ def generate(package,state,dest):
                 for row,(cells,rh) in enumerate(items):
                     if row%2==0:sh.c.setFillColor('#f1f4f4');sh.c.rect(70,y-rh+10,sum(widths),rh,fill=1,stroke=0)
                     x=70
-                    for lines,w in zip(cells,widths):
-                        for j,line in enumerate(lines):sh.text(x+8,y-j*(font+3),line,font)
+                    for col,(lines,w) in enumerate(zip(cells,widths)):
+                        for j,line in enumerate(lines):
+                            if prefix=='S' and start==301 and col>=4:
+                                sh.opening_cell(x+8,y-j*(font+3),line,font,opening_by_id[cells[0][0]],
+                                                ('x_ft','y_ft','z_ft','width_ft','height_ft')[col-4])
+                            else:sh.text(x+8,y-j*(font+3),line,font)
                         x+=w
                     y-=rh
                 if y<145:raise ValueError('Flexible table overflow')
             queue(f'{prefix}{start+i:03}',title+f' / {i+1}',draw)
     opening_rows=[];opening_hosts={p['id']:p for p in m['panels']}
+    opening_by_id={f['id']:f for f in m['openings']}
     for f in m['openings']:
         opening_rows.append([f['id'],f['kind']+' / '+f.get('basis','A'),str(opening_level(f,opening_hosts)),f['plane'].upper(),*[feet(f[n]*12) for n in ('x_ft','y_ft','z_ft','width_ft','height_ft')]])
     tables(['ID','TYPE / BASIS','LEVEL','PLANE','X','Y','Z','WIDTH','HEIGHT'],opening_rows,[270,250,90,90,280,280,280,280,280],'S',301,'Dimensioned opening coordinate schedule')

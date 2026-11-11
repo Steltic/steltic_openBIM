@@ -18,6 +18,8 @@ import ifcopenshell.api.unit
 import ifcopenshell.validate
 
 from .drawing_workflow import fingerprint
+from .generator_identity import generator_identity
+from . import member_constituents
 from .pilots.geometry import member_faces,part_faces,part_lines
 from . import bim_assemblies, bim_bonds
 
@@ -103,6 +105,15 @@ def _export_source(directory,destination,source):
     recovered=state.get('representation')=='captured_source_worklines'
     if not structural and (directory/'design_model.json').is_file():
         physical=json.loads((directory/'design_model.json').read_text(encoding='utf-8'));basis='Adopted fictional design geometry'
+        manifest_path=directory/'drawing_manifest.json'
+        if not manifest_path.is_file():
+            raise ValueError('A serialized drawing model requires its source-bound drawing manifest')
+        manifest=json.loads(manifest_path.read_text(encoding='utf-8'))
+        if manifest.get('model_sha256')!=fingerprint(physical) or manifest.get('source_model_sha256')!=state['source_model_sha256']:
+            raise ValueError('The drawing model or its source differs from the drawing manifest')
+        pdf=directory/'drawings.pdf'
+        if not pdf.is_file() or hashlib.sha256(pdf.read_bytes()).hexdigest()!=manifest.get('pdf_sha256'):
+            raise ValueError('The delivered drawing PDF differs from the drawing manifest')
     elif recovered:
         from .source_worklines import build
         physical=build(package);physical['profiles']=package['physical']['profiles'];basis='Captured reference axes; physical placement remains TBD'
@@ -181,7 +192,14 @@ def _export_source(directory,destination,source):
             rows += [dict(label=label,direction='V',points_in=[(xmin,y,0),(xmax,y,0)]) for label,y in gy]
             add_grid(rows,grid_basis)
     profiles={p['id']:p for p in physical.get('profiles',[])}
-    materials={};material_source={m['id']:m for m in package['physical'].get('materials',[])}
+    materials={};material_source={m['id']:m for m in physical.get('materials',[])}
+    def material_for(material_id):
+        if material_id not in materials:
+            record=material_source.get(material_id)
+            if not record or not record.get('specification'):
+                raise ValueError('Unknown material specification for '+str(material_id))
+            materials[material_id]=ifcopenshell.api.material.add_material(model,name=record['specification'])
+        return materials[material_id]
     containment=defaultdict(list);material_products=defaultdict(list)
     origin=model.create_entity('IfcAxis2Placement3D',Location=model.create_entity('IfcCartesianPoint',Coordinates=(0.,0.,0.)))
     records={r['id']:r for r in package.get('design_records',[])}
@@ -189,7 +207,7 @@ def _export_source(directory,destination,source):
     warnings=[];objects=[];unlocated_connections=[];property_pool={};mesh_templates={}
     member_objects={};panel_objects={};relationship_manifest=[]
     identity_mapping=model.create_entity('IfcCartesianTransformationOperator3D',LocalOrigin=origin.Location,Scale=1.)
-    def add(cls,item,faces=(),lines=(),key=None,face_holes=(),local_frame=None):
+    def add(cls,item,faces=(),lines=(),key=None,face_holes=(),local_frame=None,face_roles=None):
         key=key or item['id'];obj=entity(cls,item.get('mark') or item['id'],key)
         obj.Description=item.get('description') or item.get('kind') or basis
         obj.ObjectPlacement=model.create_entity('IfcLocalPlacement',RelativePlacement=origin)
@@ -197,7 +215,7 @@ def _export_source(directory,destination,source):
         containment[level_of(item)].append(obj)
         if level_of(item) is None:counts['unassigned_elements']+=1
         if faces:
-            vertices=[];indices=[];holes=[];lookup={}
+            vertices=[];indices=[];holes=[];lookup={};retained_roles=[]
             # Repeated members/parts share a local mesh. Only their recorded
             # translations differ; no rotation, rounding of source placement or
             # change to the section geometry is inferred.
@@ -214,7 +232,9 @@ def _export_source(directory,destination,source):
                 if len(set(row))>=3:
                     indices.append(row)
                     holes.append([index_ring(ring) for ring in face_holes[i]] if face_holes else [])
-            token=(tuple(vertices),tuple(tuple(row) for row in indices),tuple(tuple(tuple(r) for r in rings) for rings in holes))
+                    if face_roles is not None:retained_roles.append(face_roles[i])
+            token=(tuple(vertices),tuple(tuple(row) for row in indices),tuple(tuple(tuple(r) for r in rings) for rings in holes),
+                   tuple(retained_roles))
             if token not in mesh_templates:
                 if any(holes):
                     points=model.create_entity('IfcCartesianPointList3D',CoordList=vertices)
@@ -227,6 +247,7 @@ def _export_source(directory,destination,source):
                 else:
                     template=ifcopenshell.api.geometry.add_mesh_representation(model,context=body_context,vertices=[vertices],faces=[indices])
                 mesh_templates[token]=model.create_entity('IfcRepresentationMap',MappingOrigin=origin,MappedRepresentation=template)
+                member_constituents.add_shape_aspects(model,mesh_templates[token],retained_roles)
             mapped=model.create_entity('IfcMappedItem',MappingSource=mesh_templates[token],MappingTarget=identity_mapping)
             rep=model.create_entity('IfcShapeRepresentation',ContextOfItems=body_context,RepresentationIdentifier='Body',RepresentationType='MappedRepresentation',Items=[mapped])
             if local_frame:
@@ -242,10 +263,14 @@ def _export_source(directory,destination,source):
             rep=model.create_entity('IfcShapeRepresentation',ContextOfItems=body_context,RepresentationIdentifier='Body',RepresentationType='GeometricCurveSet',Items=[geom])
             ifcopenshell.api.geometry.assign_representation(model,product=obj,representation=rep)
         mat=item.get('material_id')
-        if mat:
-            if mat not in materials:
-                spec=material_source.get(mat,{}).get('specification',mat)
-                materials[mat]=ifcopenshell.api.material.add_material(model,name=str(spec))
+        if mat and item.get('section_plies'):
+            plies=member_constituents.materials(item)
+            constituents=[model.create_entity('IfcMaterialConstituent',Name=role,Description=mid,
+                          Category='member_section',Material=material_for(mid)) for role,mid in plies.items()]
+            assignment=model.create_entity('IfcMaterialConstituentSet',Name=item['id'],MaterialConstituents=constituents)
+            relation('IfcRelAssociatesMaterial','member-plies:'+key,RelatedObjects=[obj],RelatingMaterial=assignment)
+        elif mat:
+            material_for(mat)
             material_products[mat].append(obj)
         refs=item.get('design_record_ids',[])
         property_set(model,obj,dict(SourceId=item['id'],MemberMark=item.get('mark'),Section=item.get('profile_id'),
@@ -273,11 +298,12 @@ def _export_source(directory,destination,source):
         return obj
     for m in members:
         faces=[]
+        roles=[] if m.get('brb_casing') else None
         if not recovered:
-            try:faces=member_faces(m,profiles)
+            try:faces=member_faces(m,profiles,face_roles=roles)
             except (ValueError,KeyError,TypeError,ZeroDivisionError) as ex:warnings.append(dict(id=m['id'],message='Reference axis only: '+str(ex)[:160]))
         cls='IfcColumn' if m['kind'] in ('column','col','stud','post','endwall_post') else 'IfcBeam' if m['kind'] in ('beam','girder','joist','rafter','moment_beam') else 'IfcMember'
-        member_objects[m['id']]=add(cls,m,faces,[m['axis']]);counts['members']+=1;counts['member_surfaces' if faces else 'reference_axes']+=1
+        member_objects[m['id']]=add(cls,m,faces,[m['axis']],face_roles=roles);counts['members']+=1;counts['member_surfaces' if faces else 'reference_axes']+=1
     from .panel_geometry import panel_rings
     cut_openings=set()
     for p in panels:
@@ -321,6 +347,7 @@ def _export_source(directory,destination,source):
         counts['opening_references']+=1
     joints={j['id']:j for j in physical.get('joints',[])}
     templates=bim_assemblies.index(physical);assembly_meshes={}
+    part_ranges={};constituent_sets={};assemblies_by_template=defaultdict(list);connection_objects={}
     counts['connection_assemblies']=0
     for c in connections:
         joint=joints.get(c.get('joint_id'),{})
@@ -339,6 +366,23 @@ def _export_source(directory,destination,source):
             if template['id'] not in assembly_meshes:
                 solids=[part_faces(p,profiles) for p in template['parts']]
                 curves=[part_lines(p) for p in template['parts']]
+                ranges=[];constituents=[];face_offset=0;curve_offset=0
+                origin_point=next((faces[0][0] for faces in solids if faces),[0.,0.,0.])
+                for part,part_solid,part_curves in zip(template['parts'],solids,curves):
+                    # add() drops rings which collapse below its meter-coordinate
+                    # serialization precision. Address the faces actually emitted.
+                    face_count=sum(len({tuple(round((v-o)*INCH,9) for v,o in zip(q,origin_point))
+                                        for q in face})>=3 for face in part_solid)
+                    ranges.append(dict(id=part['id'],kind=part['kind'],material_id=part.get('material_id'),
+                        face_start=face_offset,face_count=face_count,curve_start=curve_offset,curve_count=len(part_curves)))
+                    face_offset+=face_count;curve_offset+=len(part_curves)
+                    if part.get('material_id'):
+                        constituents.append(model.create_entity('IfcMaterialConstituent',Name=part['id'],
+                            Description=part['material_id'],Category=part['kind'],Material=material_for(part['material_id'])))
+                part_ranges[template['id']]=ranges
+                if constituents:
+                    constituent_sets[template['id']]=model.create_entity('IfcMaterialConstituentSet',
+                        Name=template['id'],MaterialConstituents=constituents)
                 curves.extend([[line] for line in bim_bonds.reference_lines(template)])
                 assembly_meshes[template['id']]=([f for fs in solids for f in fs],[line for ls in curves for line in ls],sum(bool(fs) for fs in solids),sum(bool(ls) for ls in curves))
             faces,lines,solid_count,curve_count=assembly_meshes[template['id']]
@@ -355,6 +399,8 @@ def _export_source(directory,destination,source):
                     item.update(geometry_role='reinforcement_bond_reference',
                         description='Declared reinforcement bond reference; actual bars and concrete host are separate products. Development and capacity are not verified.')
             obj=add('IfcElementAssembly',item,faces,located if not faces else (),key='connection:'+c['id'],local_frame=frame)
+            connection_objects[c['id']]=obj
+            assemblies_by_template[template['id']].append(obj)
             for mid in sorted(connected):
                 if mid not in member_objects:raise ValueError('Connection references missing exported member: '+mid)
                 rel=relation('IfcRelConnectsElements','connection:'+c['id']+':'+mid,Name='Declared structural connection',RelatingElement=obj,RelatedElement=member_objects[mid])
@@ -397,11 +443,25 @@ def _export_source(directory,destination,source):
             # storey and adopted-detail identity. No hardware placement is inferred.
             unlocated_connections.append(c)
             counts['connection_references']+=1
+    for c in connections:
+        refs=c.get('parameters',{}).get('shared_constituents',[])
+        owners=defaultdict(list)
+        for ref in refs:owners[ref['owner_connection_id']].append(ref)
+        for owner,records in owners.items():
+            rel=relation('IfcRelAssignsToProduct','shared-constituents:'+c['id']+':'+owner,
+                Name='Shared assembly constituents',Description=json.dumps(records,sort_keys=True,separators=(',',':')),
+                RelatedObjects=[connection_objects[c['id']]],RelatingProduct=connection_objects[owner])
+            relationship_manifest.append(dict(guid=rel.GlobalId,type=rel.is_a(),source=c['id'],target=owner,role='shared_constituents'))
     for level,items in containment.items():
         ifcopenshell.api.spatial.assign_container(model,products=items,relating_structure=storeys.get(level,building))
     for material,items in material_products.items():
         ifcopenshell.api.material.assign_material(model,products=items,material=materials[material])
+    for tid,material_set in constituent_sets.items():
+        relation('IfcRelAssociatesMaterial','assembly-materials:'+tid,RelatedObjects=assemblies_by_template[tid],
+                 RelatingMaterial=material_set)
+    generator=generator_identity()
     property_set(model,project,dict(SourceModelSHA256=state['source_model_sha256'],**revision_properties,Basis=basis,
+        Generator={k:v for k,v in generator.items() if k!='files'},
         SupplementProvenance=state.get('supplement_provenance'),
         SourceModule=state.get('source_module'),SourceJob=state.get('source_job'),
         SourceReadiness=source_validation['status'],SourceFindings=source_validation['findings'],GeometryWarnings=warnings,
@@ -414,7 +474,8 @@ def _export_source(directory,destination,source):
         DesignRecords=package.get('design_records',[]),
         ConnectionSchedules=[r for r in package.get('design_records',[]) if r['table']=='connections'],
         UnlocatedConnectionReferences=unlocated_connections,Interfaces=package['physical'].get('interfaces',[]),
-        AssemblyTemplates=physical.get('assemblies',[]),InformationDecisions=package.get('information'),SourceRelationships=relationship_manifest,
+        AssemblyTemplates=physical.get('assemblies',[]),AssemblyPartRepresentations=part_ranges,
+        InformationDecisions=package.get('information'),SourceRelationships=relationship_manifest,
         SourceProfiles=physical.get('profiles',[]),SourceMaterials=physical.get('materials',[]),
         SourceJoints=physical.get('joints',[]),SourceCoverage=physical.get('coverage',{}),
         SourceAnalysisOnly=physical.get('analysis_only',[]),SourceRecordDispositions=physical.get('record_dispositions',[]),
@@ -426,16 +487,17 @@ def _export_source(directory,destination,source):
     property_set(model,project,dict(Status=physical_checks['status'],Findings=physical_checks['findings'],
         StructuralDesignApproval=False,Limits=physical_checks['limits']),name='Steltic_PhysicalChecks')
     model.header.file_name.name=destination.name
-    model.header.file_name.originating_system='Steltic openBIM 0.8.17'
+    model.header.file_name.originating_system='Steltic openBIM '+generator['version']+' '+generator['source_sha256'][:12]
     model.write(str(destination));errors=schema_errors(destination)
     if errors:raise ValueError('Generated IFC failed schema validation: '+str(errors[:3]))
     reopened=ifcopenshell.open(str(destination))
     if len(reopened.by_type('IfcElement'))+len(reopened.by_type('IfcAnnotation'))!=len(objects):raise ValueError('IFC round-trip product count changed')
     return dict(schema='IFC4',source=source,**({'physical_revision':state['revision'],'source_job':state['source_job'],'source_module':state['source_module']} if structural else {'drawing_revision':state['revision']}),source_sha256=state['source_model_sha256'],
         counts=counts,objects=objects,relationships=relationship_manifest,warnings=warnings,physical_checks=physical_checks,source_validation=source_validation,
+        generator=generator,
         source_evidence=state.get('source_evidence'),source_status=status,schema_errors=errors,mesh_templates=len(mesh_templates),shared_property_values=len(property_pool),sha256=hashlib.sha256(destination.read_bytes()).hexdigest(),
         limits=['Coordination IFC, not an editable Revit family library or a fabrication issue.',
-                'Panels are surfaces; their thickness is metadata. Valid coplanar openings cut explicitly related host panels, with source boundaries retained as annotations. Members are not cut. Unconfirmed proposals remain request metadata.',
+                'Panels are surfaces. Coplanar hosted openings cut their panel. Member solids include declared slots, copes and reduced sections. Unconfirmed proposals remain request metadata.',
                 'Unlocated connection assemblies are metadata only. Captured worklines remain reference axes where physical set-out is unknown.',
                 'Connection reference polylines are annotations with source detail notes, not fabricated plate or weld solids.',
                 'Objects without a source-declared storey remain contained in the building, with coordinates and parent-connection identity retained; they are not silently assigned to Level 1.'])

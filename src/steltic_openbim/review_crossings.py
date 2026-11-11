@@ -109,6 +109,7 @@ def apply(builder):
 
 def draw(ctx):
     from .review_receiver_geometry import horizontal_frame,extract,vector,point
+    from .hr_detail_selections import selected_fields
     a=ctx.a;selected=ctx.params['crossing'];continuous,low,high=ctx.ms
     axes=horizontal_frame(sub(*reversed(continuous['axis'])))
     normal=[0,1,0];origin=ctx.c['point'];t=selected['thickness_in'];extent=max(45,selected['end_distance_in']+selected['split_weld_length_in']+20)
@@ -117,30 +118,93 @@ def draw(ctx):
     v=unit(vector(sub(*reversed(continuous['axis'])),axes));n=cross(normal,v)
     u=unit(vector(sub(*reversed(high['axis'])),axes))
     if dot(u,n)<0:u=mul(u,-1)
-    tail=selected['end_distance_in']+selected['split_weld_length_in']+1
+    tail=selected['end_distance_in']+selected['split_weld_length_in']
     half_width=selected['proposed_width_in']/2;slot_half=selected['continuous_slot_length_in']/2
     depth=effective(ctx.p,continuous['profile_id']);half_depth=effective(ctx.p,high['profile_id'])
-    end_normal=cross(normal,u);tail_points=[add(mul(u,tail),mul(end_normal,side*max(half_depth/2+1,half_width))) for side in (-1,1)]
+    # The selected centre width applies at the through member. Each split
+    # tongue covers its own wall welds. Carrying the full centre width to
+    # both tongue tips produces loose triangles beyond the uncut through tube.
+    end_normal=cross(normal,u)
+    tail_points=[add(mul(u,tail),mul(end_normal,side*(half_depth/2+t))) for side in (-1,1)]
     tail_points.sort(key=lambda q:dot(q,v));tl,tr=tail_points
     h=depth/2
     # A free-edge outline joins the retained centre width to each selected half.
     # The small flare at each continuous-tube wall follows its selected slot.
     local=lambda x,z:add(mul(v,x),mul(n,z))
     polygon=[local(-half_width,0),local(-slot_half,-h),mul(tr,-1),mul(tl,-1),local(slot_half,-h),local(half_width,0),local(slot_half,h),tr,tl,local(-slot_half,h)]
-    a.polygon('GUSSET',[add(q,[0,-t/2,0]) for q in polygon],t,basis='A',description=f'S selected thickness {t:g} in; A fitted free-edge outline and end clearance' if selected['source_selected'] else f'A proposed {t:g} in centre gusset; source has no centre-connection selection')
+    # Keep any selected transfer width at the actual joint-side weld station
+    # of each split HSS. The continuous tube has no end at this workpoint.
+    from shapely.geometry import Polygon,MultiPoint
+    from shapely.ops import unary_union
+    shapes=[Polygon([(q[0],q[2]) for q in polygon])]
+    for member in (low,high):
+        width=selected_fields(getattr(ctx,'package',{}),ctx.c,member['id']).get(('gusset','whitmore_effective_width_in'))
+        if width is None:continue
+        ends=[point(add(q,o),origin,axes) for q,o in zip(member['axis'],member['end_offsets'])]
+        start=min(ends,key=lambda q:math.dist(q,[0,0,0]));direction=unit(start)
+        across=cross(normal,direction);end=add(start,mul(direction,selected['split_weld_length_in']))
+        support=[(0.,0.)]
+        for centre,radius in ((start,width/2),(end,half_depth/2+t)):
+            for side in (-1,1):
+                q=add(centre,mul(across,side*radius));support.append((q[0],q[2]))
+        shapes.append(MultiPoint(support).convex_hull)
+    if len(shapes)>1:
+        grown=unary_union(shapes)
+        if grown.geom_type!='Polygon' or grown.interiors:raise ValueError('Selected split-arm transfer widths require disconnected stock')
+        polygon=[[x,0,z] for x,z in list(grown.exterior.coords)[:-1]]
+    from .review_hr_kickers import clear_host
+    fitted=[add(q,[0,-t/2,0]) for q in polygon]
+    for receiver in a.parts:
+        if receiver.get('member'):
+            fitted=clear_host(fitted,normal,t,[1,0,0],[0,0,1],receiver['member'],ctx.p)
+    a.polygon('GUSSET',fitted,t,basis='A',description=f'S selected thickness {t:g} in; A free edges fitted to the finite slots in all three members' if selected['source_selected'] else f'A proposed {t:g} in centre gusset; source has no centre-connection selection')
     for name,member in (('CONT',continuous),('SPLIT-1',low),('SPLIT1',high)):
         direction=unit(vector(sub(*reversed(member['axis'])),axes));inplane=cross(normal,direction)
         d=effective(ctx.p,member['profile_id'])
-        if name=='CONT':start=mul(direction,-slot_half);length=2*slot_half;size=selected['continuous_weld_size_in']
+        role='continuous_brace_slot_weld' if name=='CONT' else 'split_brace_slot_weld'
+        if name=='CONT':
+            selected_length=ctx.selected.get((role,'length_in'))
+            length=selected_length or 2*slot_half
+            start=mul(direction,-length/2);size=selected['continuous_weld_size_in']
         else:
             ends=[point(add(q,o),origin,axes) for q,o in zip(member['axis'],member['end_offsets'])]
             start=min(ends,key=lambda q:math.dist(q,[0,0,0]));direction=unit(start);inplane=cross(normal,direction)
-            length=selected['split_weld_length_in'];size=selected['split_weld_size_in']
+            length=ctx.selected.get((role,'length_in')) or selected['split_weld_length_in'];size=selected['split_weld_size_in']
+        selected_size=ctx.selected.get((role,'size_in'));size=selected_size or size
+        weld_basis='S' if selected['source_selected'] else 'A'
+        if name=='CONT':
+            run=ctx.selected.get((role,'run'))
+            if not selected_length and not selected_size:
+                weld_basis='S all-round path; A local size and length' if run=='all_round_slot' else 'A continuous wall-slot seal and local setout'
+            elif not selected_size:weld_basis='S length; A weld size'
+            elif not selected_length:weld_basis='S weld size; A full slot length'
         for wall in (-1,1):
             for edge in (-1,1):
                 first=add(start,add(mul(inplane,wall*d/2),[0,edge*t/2,0]))
-                a.weld(f'W{len(a.welds)+1:02}',first,add(first,mul(direction,length)),[name,'GUSSET'],size,basis='S' if selected['source_selected'] else 'A',description='Selected slot-edge fillet; actual continuous or split member')
+                a.weld(f'W{len(a.welds)+1:02}',first,add(first,mul(direction,length)),[name,'GUSSET'],size,
+                       basis=weld_basis,description='Continuous wall-slot fillet' if name=='CONT' else 'Split HSS end-to-gusset fillet')
+                a.welds[-1]['attachment_role']=role
+        if name=='CONT' and re.search(r'continuous diagonal and fillet-welded to it all round the slot',ctx.text,re.I):
+            for wall in (-1,1):
+                for station in (0,length):
+                    q=add(add(start,mul(direction,station)),mul(inplane,wall*d/2))
+                    a.weld(f'CONT-RETURN-{wall}-{station:g}',add(q,[0,-t/2,0]),add(q,[0,t/2,0]),
+                           [name,'GUSSET'],size,description='Return fillet closing the selected all-round continuous-member slot')
+                    a.welds[-1]['attachment_role']='continuous_slot_end_return'
     matches=list(re.finditer(r'2 PL '+NUMBER+r' x '+NUMBER+r' x '+NUMBER+r' in',ctx.text))
+    ratio=ctx.selected.get(('brace_end_clearance','depths'))
+    if ratio and selected.get('end_distance_basis')=='S':
+        from .brace_linear_clearance import dimension
+        restraints=[w for w in a.welds if w.get('attachment_role')=='continuous_brace_slot_weld']
+        ids=[w['id'] for w in restraints]
+        for name,member in (('SPLIT-1',low),('SPLIT1',high)):
+            ends=[point(add(q,o),origin,axes) for q,o in zip(member['axis'],member['end_offsets'])]
+            cap=min(ends,key=lambda q:math.dist(q,[0,0,0]));direction=unit(cap)
+            fold=max(dot(q,direction) for w in restraints for q in (w['a'],w['b']))
+            dimension(a,direction,ratio,fold,dot(cap,direction),ids)
+            a.interfaces.append(dict(id='FOLD-'+name,kind='linear_gusset_clearance',
+                brace=name,gusset='GUSSET',restrained_welds=ids,connects=[name,'GUSSET','CONT'],
+                basis='S',description='Split brace clearance to the far ends of the continuous brace slot welds'))
     for group,match in enumerate(matches[:2]):
         rt,rw,rl=map(number,match.groups())
         selected_members=[('CONT',continuous)] if group==0 else [('SPLIT-1',low),('SPLIT1',high)]
@@ -149,7 +213,9 @@ def draw(ctx):
             direction=unit(sub(ends[1],ends[0]));mid=[0,0,0]
             if group:
                 start=min(ends,key=lambda q:math.dist(q,[0,0,0]));direction=unit(start)
-                mid=add(start,mul(direction,selected['split_weld_length_in']))
+                slot=next((s for s in member.get('slots',[]) if s.get('connection_id')==ctx.c['id']),None)
+                depth=slot['end_in']-slot['start_in'] if slot else selected['split_weld_length_in']
+                mid=add(start,mul(direction,depth))
             inplane=cross(normal,direction);width=effective(ctx.p,member['profile_id'],'width')
             text=ctx.text[match.end():]
             weld_size=value(r'(?:lines of |with |longitudinal fillets \()?'+NUMBER+r' in E70',text,.1875)
@@ -157,8 +223,22 @@ def draw(ctx):
             for face in (-1,1):
                 x=mul(direction,face);y=inplane
                 first=add(mid,add(mul(x,-rl/2),add(mul(y,-rw/2),[0,face*width/2,0])))
-                label=f'R-{name}-{face}'
-                a.box(label,first,[rl,rw,rt],'S','Source slot reinforcement on the unslotted wall; A local edge fit',x=x,y=y)
+                label=f'REINF-{name}-{face}'
+                plate=a.box(label,first,[rl,rw,rt],'S','Source slot reinforcement on the unslotted wall; A local edge fit',x=x,y=y)
+                typed='split_slot_reinforcement' if group else 'continuous_slot_reinforcement'
+                grade=ctx.selected.get((typed,'material'))
+                if grade:plate['selected_material']=grade
+                if group:
+                    wf='split_reinforcement_fillet'
+                    weld_size=ctx.selected.get((wf,'size_in')) or weld_size
+                    weld_length=ctx.selected.get((wf,'length_each_side_in')) or weld_length
+                    for edge in (-1,1):
+                        centre=add(mid,add(mul(inplane,edge*rw/2),[0,face*width/2,0]))
+                        a.weld(f'W{len(a.welds)+1:02}',add(centre,mul(direction,-weld_length)),
+                               add(centre,mul(direction,weld_length)),[name,label],weld_size,
+                               description='Selected longitudinal reinforcement fillet centered at the actual slot tip')
+                        a.welds[-1]['attachment_role']=wf
+                    continue
                 for end in (-1,1):
                     for edge in (-1,1):
                         start=add(mid,add(mul(direction,end*(rl/2-weld_length)),add(mul(inplane,edge*rw/2),[0,face*width/2,0])))

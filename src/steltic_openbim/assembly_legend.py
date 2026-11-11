@@ -75,7 +75,8 @@ def number(scene,index):return f"{scene['sheet']}N{index:02}"
 def draw(sh,scene,index=0):
     from reportlab.pdfbase.pdfmetrics import stringWidth
     layout=pages(sh,scene);x,y=(1210,774) if index==0 else (80,sh.H-195)
-    for row in layout[index]:
+    for row_index,row in enumerate(layout[index]):
+        sh.c.addLiteral(f'/StelticLegend << /N {row_index} >> BDC')
         if not row['note']:
             size=min(11,11*56/max(1,stringWidth(row['label'],'Helvetica-Bold',11)))
             sh.text(x,y,row['label'],size,font='Helvetica-Bold')
@@ -83,6 +84,7 @@ def draw(sh,scene,index=0):
         for line in row['lines']:
             sh.text(x+(0 if row['note'] else 98),y,line,10);y-=row['step']
         y-=row['gap']
+        sh.c.addLiteral('EMC')
     if y<190:raise ValueError('Assembly legend pagination overflow '+scene['id'])
     if index+1<len(layout):sh.text(x,186,'Parts and notes continue on '+number(scene,index+1),11,font='Helvetica-Bold')
     sh.text(x,170,'Source variant and exact assembly geometry: connection_assemblies.json / '+scene['id'],10)

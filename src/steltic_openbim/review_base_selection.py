@@ -43,8 +43,22 @@ def erection_rods(text):
         selected_size=bool(selected),edge_min=number(edge[1]) if edge else 2)
 
 
-def flange_rows(text):
+def flange_rows(text,flange_width=None,normal_length=None,column_depth=None):
     """(rows per flange, rods per row, row pitch, flange gap, rod pitch)."""
+    hit=re.search(r'rods in two rows, (\d+) per row, '+NUMBER+r' in from the flange faces',text,re.I)
+    edge=re.search(r'rods '+NUMBER+r' in from the plate edges',text,re.I)
+    if hit and edge and flange_width is not None:
+        count=int(hit[1]);usable=flange_width-2*number(edge[1])
+        if count<2 or usable<=0:raise ValueError('Selected anchor row does not fit the flange-parallel stock')
+        return 1,count,0,number(hit[2]),usable/(count-1)
+    hit=re.search(r'per flange side 1 row of (\d+) at '+NUMBER+r' in, '+NUMBER+r' in from the plate edges',text,re.I)
+    if hit and normal_length is not None and column_depth is not None:
+        gap=normal_length/2-column_depth/2-number(hit[3])
+        if gap<=0:raise ValueError('Selected rod station is inside the column flange')
+        return 1,int(hit[1]),0,gap,number(hit[2])
+    selected=re.search(r'(\d+) per flange side in one row outside the flanges at '+NUMBER+r' in, '+NUMBER+r' in from the flange face',text,re.I)
+    if selected:
+        return 1,int(selected[1]),0,number(selected[3]),number(selected[2])
     hit=re.search(r'rod layout: (\d+) rods outside each flange in (?:(\d+) rows '+NUMBER+r' in apart of (\d+)|one row of (\d+)).*?a1 = '+NUMBER+r' in.*?rods '+NUMBER+r' in apart',text,re.I)
     if hit:
         _,rows,pitch,cols,one,gap,spacing=hit.groups()

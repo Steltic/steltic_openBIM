@@ -18,8 +18,14 @@ def bounds(faces):
 
 def clip_part(part,normal,offset):
     """Keep dot(point,normal)>=offset; used for physically separated mitre ends."""
+    clean=clip_faces(part['faces'],normal,offset)
+    part['faces']=clean;part['bounds']=bounds(clean);part.setdefault('cut_planes',[]).append(dict(normal=normal,offset=offset))
+
+
+def clip_faces(source,normal,offset):
+    """Intersect one closed polyhedron with a half-space and close its cap."""
     faces=[]
-    for face in part['faces']:
+    for face in source:
         out=[]
         for a,b in zip(face,face[1:]+face[:1]):
             da,db=dot(a,normal)-offset,dot(b,normal)-offset
@@ -58,7 +64,7 @@ def clip_part(part,normal,offset):
                 segments.pop(i);found=True;break
             if not found:break
         if len(chain)>=4 and math.dist(chain[-1],chain[0])<1e-6:clean.append(chain[:-1])
-    part['faces']=clean;part['bounds']=bounds(clean);part.setdefault('cut_planes',[]).append(dict(normal=normal,offset=offset))
+    return clean
 
 
 def reflect_z(assembly):
@@ -156,7 +162,14 @@ class Assembly:
         return self.part(label,description or 'PL '+' x '.join(f'{v:g}' for v in size),part_faces({'geometry':g},self.profiles),basis,kind,geometry=g)
 
     def polygon(self,label,vertices,thickness,normal=(0,1,0),basis='A',description=None):
-        n=unit(normal);back=[add(p,mul(n,thickness)) for p in vertices]
+        n=unit(normal)
+        # Orient the ring with the extrusion. A valid clockwise drawing
+        # outline otherwise becomes an inward-facing (negative-volume) IFC solid.
+        origin=vertices[0];area=sum(dot(n,cross(sub(a,origin),sub(b,origin)))
+            for a,b in zip(vertices,vertices[1:]+vertices[:1]))
+        if abs(area)<1e-10 or thickness<=0:raise ValueError('Plate has no positive area or thickness: '+label)
+        if area<0:vertices=list(reversed(vertices))
+        back=[add(p,mul(n,thickness)) for p in vertices]
         faces=[list(reversed(vertices)),back]+[[vertices[i],vertices[(i+1)%len(vertices)],back[(i+1)%len(vertices)],back[i]] for i in range(len(vertices))]
         return self.part(label,description or f'Gusset PL t={thickness:g}',faces,basis,polygon=vertices,thickness=thickness,normal=n)
 

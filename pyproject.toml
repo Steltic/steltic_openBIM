@@ -4,17 +4,17 @@ build-backend = "hatchling.build"
 
 [project]
 name = "steltic-openbim"
-version = "0.8.91"
+version = "0.8.92"
 description = "Steltic physical-data contract and validation for design drawings and IFC"
 requires-python = ">=3.10"
 dependencies = ["jsonschema>=4.23"]
 
 [project.optional-dependencies]
 review = ["matplotlib>=3.9"]
-drawings = ["reportlab>=4.2"]
+drawings = ["reportlab>=4.2", "shapely>=2.1", "pypdf>=5"]
 ifc = ["ifcopenshell==0.9.0.post1"]
-hub = ["reportlab>=4.2", "filelock>=3.13", "fastapi>=0.110", "httpx>=0.27", "uvicorn>=0.27", "python-multipart>=0.0.9", "ifcopenshell==0.9.0.post1"]
-test = ["pytest>=8", "reportlab>=4.2", "filelock>=3.13", "pypdf>=5", "fastapi>=0.110", "httpx>=0.27", "python-multipart>=0.0.9", "ifcopenshell==0.9.0.post1"]
+hub = ["reportlab>=4.2", "shapely>=2.1", "pypdf>=5", "filelock>=3.13", "fastapi>=0.110", "httpx>=0.27", "uvicorn>=0.27", "python-multipart>=0.0.9", "ifcopenshell==0.9.0.post1"]
+test = ["pytest>=8", "reportlab>=4.2", "shapely>=2.1", "filelock>=3.13", "pypdf>=5", "fastapi>=0.110", "httpx>=0.27", "python-multipart>=0.0.9", "ifcopenshell==0.9.0.post1"]
 
 [project.scripts]
 steltic-openbim = "steltic_openbim.__main__:main"

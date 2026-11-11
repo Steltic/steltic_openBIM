@@ -37,6 +37,8 @@ def hull(points):
 class Context:
     def __init__(self,model,package,c):
         self.model=model;self.package=package;self.c=c;self.text=source_text(package,c);self.params=c.get('parameters',{})
+        from .hr_detail_selections import selected_fields
+        self.selected=selected_fields(package,c)
         lookup={m['id']:m for m in model['members']};self.ms=[lookup[i] for i in c['member_ids']];self.pid=self.ms[0]['profile_id'];self.family=c['detail_ref']['id']
         self.a=Assembly(c.get('title',self.family.removeprefix('review_').replace('_',' ').upper()),{p['id']:p for p in model['profiles']});self.p=self.a.profiles
         profiles=' / '.join(dict.fromkeys(m['profile_id'] for m in self.ms))

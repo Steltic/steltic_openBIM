@@ -112,28 +112,48 @@ class DesignSheets(Sheets):
             y=self.wrap(x,y,item,width,13,19)-18
         return y
 
-    def dim(self,a,b,offset,label=None,value=None,basis='S',ref='',size=11):
+    def dim(self,a,b,offset,label=None,value=None,basis='S',ref='',size=11,
+            source=None,projection=None,model_points=None):
         dx,dy=b[0]-a[0],b[1]-a[1];ln=math.hypot(dx,dy)
         if ln<.1:return
         vx,vy=dx/ln,dy/ln;nx,ny=-vy,vx
+        label=label or feet(value)
+        tag=f'D{len(self.dimensions)+1}'
+        # Mark the actual ink, so the independent reader can isolate each dimension.
+        self.c.addLiteral(f'/StelticDim << /ID /{tag} >> BDC')
         p=(a[0]+nx*offset,a[1]+ny*offset);q=(b[0]+nx*offset,b[1]+ny*offset)
         for src,dst in ((a,p),(b,q)):
             self.line((src[0]+nx*3*(1 if offset>=0 else -1),src[1]+ny*3*(1 if offset>=0 else -1)),(dst[0]+nx*4*(1 if offset>=0 else -1),dst[1]+ny*4*(1 if offset>=0 else -1)),GREY,.45)
         self.line(p,q,GREY,.55)
         for pt in (p,q):self.line((pt[0]-vx*3-nx*3,pt[1]-vy*3-ny*3),(pt[0]+vx*3+nx*3,pt[1]+vy*3+ny*3),INK,.8)
-        label=label or feet(value)
         angle=math.degrees(math.atan2(dy,dx))
         if angle>90:angle-=180
         elif angle<=-90:angle+=180
         c=self.c;c.saveState();c.translate((p[0]+q[0])/2,(p[1]+q[1])/2);c.rotate(angle)
         self.center(0,5,label,size,ASSUMED if basis=='A' else INK);c.restoreState()
-        self.dimensions.append(dict(sheet=self.current,value_in=value,text=label,basis=basis,reference=ref))
+        self.c.addLiteral('EMC')
+        projection=projection or getattr(self,'grid_projection',None)
+        if projection and projection.get('sheet')!=self.current:
+            projection=None
+        self.dimensions.append(dict(id=tag,sheet=self.current,page=self.page,value_in=value,
+            text=label,basis=basis,reference=ref,witnesses_pt=[list(a),list(b)],offset_pt=offset,
+            font_size_pt=size,source=source,projection=projection,model_points=model_points))
 
     def label(self,x,y,t,size=10,color=INK):
         from reportlab.pdfbase.pdfmetrics import stringWidth
         w=stringWidth(ascii_text(t),'Helvetica',size)
         self.c.setFillColor('white');self.c.rect(x-2,y-2,w+4,size+3,fill=1,stroke=0)
         self.text(x,y,t,size,color)
+
+    def opening_cell(self,x,y,text,size,opening,field):
+        tag=f'D{len(self.dimensions)+1}'
+        self.c.addLiteral(f'/StelticDim << /ID /{tag} >> BDC')
+        self.text(x,y,text,size)
+        self.c.addLiteral('EMC')
+        self.dimensions.append(dict(id=tag,page=self.page,sheet=self.current,text=text,
+            value_in=opening[field]*12,basis='A' if opening.get('basis') else 'S',
+            reference=opening['id']+' '+field,font_size_pt=size,anchor_pt=[x,y],
+            source=dict(kind='opening_cell',id=opening['id'],field=field)))
 
     def bubble(self,x,y,t,r=13):
         self.c.setStrokeColor(GREY);self.c.setFillColor('white');self.c.circle(x,y,r,fill=1,stroke=1);self.center(x,y-4,t,11)
@@ -147,8 +167,11 @@ class DesignSheets(Sheets):
     def grid_view(self,bounds,axes,scale,origin=(215,280),grid_axes=True,grids=None):
         u,v=axes;s=72/scale;x,y=origin;(u0,u1),(v0,v1)=bounds
         def tr(p):return x+(p[u]-u0)*s,y+(p[v]-v0)*s
+        self.grid_projection=dict(sheet=self.current,axes=list(axes),scale=scale,
+            origin_pt=[x-u0*s,y-v0*s],bounds_in=bounds)
         w,h=(u1-u0)*s,(v1-v0)*s
-        self.views.append(dict(sheet=self.current,axes=list(axes),bounds_in=bounds,scale_denominator=scale,points_per_inch=s))
+        self.views.append(dict(sheet=self.current,axes=list(axes),bounds_in=bounds,origin_pt=list(origin),
+                               grid_axes=grid_axes,scale_denominator=scale,points_per_inch=s))
         bar_offset=145;caption_offset=65
         if grid_axes:
             for axis,horizontal in ((u,True),(v,False)):
@@ -178,12 +201,14 @@ class DesignSheets(Sheets):
                     is_short=(b-a)*s<40
                     offset=dim_offset+(34 if previous_short else 20) if is_short else dim_offset
                     previous_short=is_short and not previous_short
-                    self.dim(pa,pb,-offset if horizontal else offset,value=b-a,ref='Grid '+n1+'-'+n2,size=10)
+                    self.dim(pa,pb,-offset if horizontal else offset,value=b-a,ref='Grid '+n1+'-'+n2,size=10,
+                             source=dict(kind='grid',axis=axis,names=[n1,n2],override=grids is not None))
                 if gs:
                     a,b=gs[0][1],gs[-1][1]
                     pa=(x+(a-u0)*s,y) if horizontal else (x,y+(a-v0)*s)
                     pb=(x+(b-u0)*s,y) if horizontal else (x,y+(b-v0)*s)
-                    self.dim(pa,pb,-overall_offset if horizontal else overall_offset,value=b-a,ref='Overall grid dimension',size=12)
+                    self.dim(pa,pb,-overall_offset if horizontal else overall_offset,value=b-a,ref='Overall grid dimension',size=12,
+                             source=dict(kind='grid',axis=axis,names=[gs[0][0],gs[-1][0]],override=grids is not None))
         self.text(x,y+h+caption_offset,'Scale 1:'+str(scale)+' at A1 | Workline dimensions',12,GREY)
         bar=120 if scale<=100 else 240
         self.line((x,y-bar_offset),(x+bar*s,y-bar_offset),INK,3);self.text(x,y-bar_offset-20,'0',10);self.text(x+bar*s-15,y-bar_offset-20,feet(bar),10)
@@ -191,6 +216,13 @@ class DesignSheets(Sheets):
 
     def draw_members(self,members,tr,axes,s,mark_mode='groups'):
         marks=defaultdict(list);seen=set()
+        if not members:return marks
+        if not self.views or self.views[-1]['sheet']!=self.current or self.views[-1].get('linework'):
+            # Enlarged opening plans have their own projection, sometimes two on one sheet.
+            self.views.append(dict(sheet=self.current,axes=list(axes),bounds_in=[[0,0],[0,0]],
+                                   origin_pt=list(tr([0,0,0])),points_per_inch=s,scale_denominator=72/s))
+        self.views[-1].update(linework='physical_plan',member_ids=[m['id'] for m in members])
+        self.c.addLiteral('/StelticFrame BMC')
         for m in members:
             a,b=physical_axis(m);p,q=tr(a),tr(b);seg=tuple(round(v,2) for v in (*p,*q))
             if seg in seen:continue
@@ -209,6 +241,7 @@ class DesignSheets(Sheets):
                 mid=((p[0]+q[0])/2,(p[1]+q[1])/2)
                 self.label(mid[0]+3,mid[1]+3,m['mark'],10,color)
                 self.labels.append(dict(sheet=self.current,member_id=m['id'],mark=m['mark']))
+        self.c.addLiteral('EMC')
         return marks
 
     def representative_marks(self,groups,max_labels=24,reserved=()):
@@ -317,18 +350,23 @@ def section(sh,normal,station,along,title,scale,bounds,origin=(215,340),band=1):
         if clip_axis(a,b,limits):selected.append(m)
     # Clip actual extruded sections, including members crossing the cut plane.
     # Project each unique edge once to avoid heavy duplicate lines at a web/flange.
+    sh.views[-1].update(linework='physical_section',limits_in=limits,member_ids=[m['id'] for m in selected])
+    sh.c.addLiteral('/StelticFrame BMC')
     groups=defaultdict(list);edges=set()
     for m in selected:
         for face in member_faces(m,sh.profiles,limits):
             pts=[tr(p) for p in face]
             for a,b in zip(pts,pts[1:]+pts[:1]):
-                key=tuple(sorted((tuple(round(v,2) for v in a),tuple(round(v,2) for v in b))))
+                # Use page-coordinate precision when deduplicating clipped section edges.
+                # A short edge can otherwise share a key with a zero-length projection.
+                key=tuple(sorted((tuple(round(v,6) for v in a),tuple(round(v,6) for v in b))))
                 if key in edges:continue
                 edges.add(key);sh.line(a,b,ASSUMED if m['basis']=='A' else INK,.45)
         a,b=physical_axis(m);clip=clip_axis(a,b,limits)
         if clip:
             pts=[tr([a[i]+(b[i]-a[i])*t for i in range(3)]) for t in clip]
             groups[m['mark']].append((m,*pts))
+    sh.c.addLiteral('EMC')
     sh.representative_marks(groups,28)
     # The actual physical member ends (including source eccentricities) define the cut.
     for lev,label,z in sh.m['levels']:
@@ -338,7 +376,7 @@ def section(sh,normal,station,along,title,scale,bounds,origin=(215,340),band=1):
     levels=[z for _,_,z in sh.m['levels'] if bounds[1][0]<=z<=bounds[1][1]]
     for a,b in zip(levels,levels[1:]):
         p=[0,0,a];q=[0,0,b];p[along]=q[along]=bounds[0][0];p[normal]=q[normal]=station
-        sh.dim(tr(p),tr(q),70,value=b-a,ref='Level interval')
+        sh.dim(tr(p),tr(q),70,value=b-a,ref='Level interval',source=dict(kind='levels'),model_points=[p,q])
     sh.panel_notes([title,f'Cut at {"XYZ"[normal]}={feet(station)}. The section shows members in the stated plane; line weights and member marks distinguish repeated framing.',
         'Dimensioned level datums are workpoints/FFLs as named. Steel edges use physical section offsets; dimensions do not imply cut lengths.',
         'Opening and interface details: S3xx. Assembled connections: C-series. Source specifications are carried in S7xx.',
@@ -370,14 +408,13 @@ def opening_schedule(sh):
     rows=[];opening_hosts={p['id']:p for p in sh.m['panels']}
     for f in sh.m['openings']:
         rows.append([f['id'],f['kind']+(' / A' if f.get('basis') else ' / S'),str(opening_level(f,opening_hosts)),f['plane'].upper(),*[feet(f[k]*12) for k in ('x_ft','y_ft','z_ft','width_ft','height_ft')]])
-        for key in ('x_ft','y_ft','z_ft','width_ft','height_ft'):
-            sh.dimensions.append(dict(sheet=sh.current,value_in=f[key]*12,text=feet(f[key]*12),basis='A' if f.get('basis') else 'S',reference=f['id']+' '+key))
-    table(sh,headers,rows,[120,330,100,100,205,205,205,225,225],x=80,y=sh.H-185,row_height=25,font=11)
+    table(sh,headers,rows,[120,330,100,100,205,205,205,225,225],x=80,y=sh.H-185,row_height=25,font=11,
+          openings=sh.m['openings'])
     sh.text(80,195,'Coordinates are the lower-left opening corner in the named plane, relative to the main XYZ origin. XY clear height is the second plan dimension.',12)
     sh.text(80,170,'A openings and their headers/trimmers are assumed test inputs; S openings are retained from the source. Levels for wall openings name the storey.',12,ASSUMED)
 
 
-def table(sh,headers,rows,widths,x=70,y=None,row_height=30,font=12):
+def table(sh,headers,rows,widths,x=70,y=None,row_height=30,font=12,openings=None):
     y=y or sh.H-185;xx=x
     for label,w in zip(headers,widths):sh.text(xx+7,y,label,font,font='Helvetica-Bold');xx+=w
     sh.line((x,y-12),(x+sum(widths),y-12),INK,.8);y-=row_height
@@ -385,10 +422,14 @@ def table(sh,headers,rows,widths,x=70,y=None,row_height=30,font=12):
         if i%2==0:
             sh.c.setFillColor('#f1f4f4');sh.c.rect(x,y-8,sum(widths),row_height,fill=1,stroke=0)
         xx=x
-        for value,w in zip(row,widths):
+        for col,(value,w) in enumerate(zip(row,widths)):
             lines=sh.lines(value,w-14,font)
             if len(lines)>2:raise ValueError('Table cell exceeds its allocated row: '+str(value))
-            for j,line in enumerate(lines):sh.text(xx+7,y-j*(font+2),line,font)
+            for j,line in enumerate(lines):
+                if openings is not None and col>=4:
+                    sh.opening_cell(xx+7,y-j*(font+2),line,font,openings[i],
+                                    ('x_ft','y_ft','z_ft','width_ft','height_ft')[col-4])
+                else:sh.text(xx+7,y-j*(font+2),line,font)
             xx+=w
         y-=row_height
     if y<145:raise ValueError('Table overflows drawing border on '+sh.current)
@@ -408,8 +449,11 @@ def opening_detail(sh):
         selected=[m for m in sh.m['members'] if m.get('assumption_id')==f['query_id'] and ('TEST-'+f['id']+'-') in m['id']]
         groups=sh.draw_members(selected,tr,axes,s);sh.representative_marks(groups,6)
         sh.opening(f,tr,13)
-        sh.dim(tr(verts[0]),tr(verts[1]),-65,value=f['width_ft']*12,basis='A',ref=f['id']+' clear width',size=14)
-        sh.dim(tr(verts[0]),tr(verts[3]),65,value=f['height_ft']*12,basis='A',ref=f['id']+' clear height',size=14)
+        view=dict(sheet=sh.current,axes=list(axes),scale=scale,origin_pt=[ox-lo[axes[0]]*s,oy-lo[axes[1]]*s])
+        for field,end,offset in [('width_ft',1,-65),('height_ft',3,65)]:
+            sh.dim(tr(verts[0]),tr(verts[end]),offset,value=f[field]*12,basis='A',
+                   ref=f['id']+' clear '+field[:-3],size=14,source=dict(kind='opening',id=f['id'],field=field),
+                   projection=view,model_points=[verts[0],verts[end]])
         sh.text(ox-50,sh.H-205,f['id']+' / '+f['kind'].upper()+' - 1:'+str(scale),20,font='Helvetica-Bold')
         y=480
         for m in selected[:6]:
@@ -428,7 +472,10 @@ def interfaces(sh):
         s=8;ox,oy=1000,720
         sh.c.setStrokeColor(INK);sh.c.rect(ox-half*s,oy,2*half*s,150)
         face=ox-(half+14)*s;sh.line((face,oy-80),(face,oy+250),ASSUMED,2)
-        sh.dim((face,oy+150),(ox-half*s,oy+150),80,value=14,basis='A',ref='HR-SEPARATION',size=16)
+        sh.dim((face,oy+150),(ox-half*s,oy+150),80,value=14,basis='A',ref='HR-SEPARATION',size=16,
+               source=dict(kind='west_separation',assumption='HR-SEPARATION'),
+               projection=dict(sheet=sh.current,axes=[0,2],scale=72/s,origin_pt=[ox,oy]),
+               model_points=[[-half-14,0,150/s],[-half,0,150/s]])
         sh.text(face-240,oy+280,'EXISTING WING FACE (A)',18);sh.text(ox-60,oy-130,'GRID 1',16)
         sh.panel_notes(['14 in assumed clear seismic/coordination separation measured from the largest outer column envelope at the west face.',
             'Existing-building face X = '+feet(-half-14)+'. The dimension is a fictional test coordination answer, not an existing-building survey.',
@@ -600,18 +647,19 @@ def specifications(package,model):
     return out
 
 
-def generate(package,state,dest):
+def generate(package,state,dest,*,prepared_model=None):
     if not all(r['confirmed'] for r in state['requests']):raise ValueError('Design-test sheets require all adopted test answers to remain confirmed')
     from .review_cases import CASES
     if state['design_scenario']['id'] in CASES:
         from .review_pdf import generate as generate_review
         return generate_review(package,state,dest)
-    dest=Path(dest);dest.mkdir(parents=True,exist_ok=True);model=build_model(package,state)
+    dest=Path(dest);dest.mkdir(parents=True,exist_ok=True);model=prepared_model if prepared_model is not None else build_model(package,state)
     from .connection_details import prepare
     from .assembly_pdf import draw_assembly
-    assemblies=prepare(model,package)
+    assemblies=model['connection_assemblies'] if prepared_model is not None else prepare(model,package)
     refinement=' CFS8 roof webs are paired 600S162-54, four-ply at the girder, to match the actual node gusset planes; this is an explicit A refinement to the roof-interface answer.' if model['pilot']=='cfs8' else ''
-    model['assumptions'].append(dict(id='ASSEMBLED-JOINTS',basis='A - user-authorized fictional test input',answer='Develop the source connections as assembled design details. A labels adopted fitting geometry, bracket returns, clip extents, local fastener set-out and erection fittings.'+refinement+' Exact source variant and occurrence mapping is retained in connection_assemblies.json; no new capacity calculation is implied.'))
+    if not any(a['id']=='ASSEMBLED-JOINTS' for a in model['assumptions']):
+        model['assumptions'].append(dict(id='ASSEMBLED-JOINTS',basis='A - user-authorized fictional test input',answer='Develop the source connections as assembled design details. A labels adopted fitting geometry, bracket returns, clip extents, local fastener set-out and erection fittings.'+refinement+' Exact source variant and occurrence mapping is retained in connection_assemblies.json; no new capacity calculation is implied.'))
     sh=DesignSheets(package,state,dest,model);jobs=[]
     def queue(number,title,fn,scale='NTS'):jobs.append((number,title,scale,fn))
     # The complete sheet list is available before the cover is painted.
@@ -674,7 +722,10 @@ def generate(package,state,dest):
     for start in range(0,len(schedule),34):
         chunk=schedule[start:start+34]
         def draw_schedule(chunk=chunk):
-            rows=[[a['mark'],a['kind'].replace('_',' '),a['profile_id'],feet(a['length_in']),str(a['count']),a['basis'],','.join(map(str,a['levels'])),compact_references(a['connection_refs'])] for a in chunk]
+            def section(row):
+                casing=row.get('casing_section')
+                return row['profile_id']+' / '+casing if casing and casing not in row['profile_id'] else row['profile_id']
+            rows=[[a['mark'],a['kind'].replace('_',' '),section(a),feet(a['length_in']),str(a['count']),a['basis'],','.join(map(str,a['levels'])),compact_references(a['connection_refs'])] for a in chunk]
             table(sh,['MARK','MEMBER TYPE','SECTION','WORKLINE LENGTH','QTY','BASIS','LEVELS','END / JOINT DETAILS'],rows,[110,300,410,230,80,80,170,760],row_height=37,font=12)
             sh.text(80,180,'Repeated marks share type, profile, workline length (nearest 1/16 in), basis and connection references. Exact axes and instance positions: member_index.json.',12)
         queue(f'S{601+start//34}','Member mark schedule / '+str(start//34+1),draw_schedule)

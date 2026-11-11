@@ -69,13 +69,18 @@ def draw_view(sh,scene,mode,rect,title):
             for face in part['faces']:
                 points=[tr(project(p)) for p in face]
                 for aa,bb in zip(points,points[1:]+points[:1]):sh.line(aa,bb,'#aab5b4',.5,[5,4])
+    part_numbers={id(part):i for i,part in enumerate(parts)}
     for part,face in polys:
+        if mode=='front':
+            sh.c.addLiteral(f'/StelticPart << /N {part_numbers[id(part)]} >> BDC')
         fill,stroke=COLORS.get(part['kind'],COLORS['plate'])
         if (mode!='section' and part.get('drawing_style')=='outline') or (mode=='iso' and part.get('drawing_style')=='outline_iso'):
             pts=[tr(q) for q in face]
             for aa,bb in zip(pts,pts[1:]+pts[:1]):sh.line(aa,bb,'#8da7b3',.5,[5,3])
-            continue
-        path_polygon(sh.c,[tr(p) for p in face],fill,stroke,.7 if part['kind']=='member' else .6,edge_flags.get(id(face)))
+        else:
+            path_polygon(sh.c,[tr(p) for p in face],fill,stroke,.7 if part['kind']=='member' else .6,edge_flags.get(id(face)))
+        if mode=='front':
+            sh.c.addLiteral('EMC')
     if mode=='front' and scene['family']=='review_transfer_truss':
         for part in parts:
             if part['kind']!='member':continue
@@ -140,13 +145,20 @@ def draw_view(sh,scene,mode,rect,title):
             sh.line(point,(tx-8 if right else tx+width+8,ty+3),'#6d858f',.55)
             sh.label(tx,ty,label,size,'#a54841' if part['kind']=='weld' else '#8c6022' if part['basis']=='A' else '#294e63')
     if mode in ('front','section'):
-        for d in scene['dimensions']:
+        for index,d in enumerate(scene['dimensions']):
             if d['view']!=mode:continue
             pa,pb=project(d['a']),project(d['b'])
+            for actual,witness in zip(d.get('witness_origins',[]),(pa,pb)):
+                sh.c.line(*tr(project(actual)),*tr(witness))
             if math.dist(pa[:2],pb[:2])<.01:continue
             from .design_pdf import inches
             label=(d['label']+' / ' if d['label'] else '')+inches(d['value_in'])+' ['+d['basis']+']'
-            sh.dim(tr(pa),tr(pb),d['offset'],label=label,value=d['value_in'],basis=d['basis'],ref=scene['reference'])
+            if abs(math.dist(pa[:2],pb[:2])-d['value_in'])>.03125:
+                label+=' (true length)'
+            sh.dim(tr(pa),tr(pb),d['offset'],label=label,value=d['value_in'],basis=d['basis'],ref=scene['reference'],
+                   source=dict(kind='assembly',id=scene['id'],index=index,view=mode),
+                   projection=dict(sheet=sh.current,axes=axes,scale=denom,origin_pt=[ox,oy]),
+                   model_points=[d['a'],d['b']])
     if mode=='front':
         # Cut-plane trace is a true geometric slice, not a second view of a flat plate.
         if scene['section_axis'] in axes:
@@ -156,7 +168,7 @@ def draw_view(sh,scene,mode,rect,title):
             aa,bb=project(weld['a']),project(weld['b']);sh.line(tr(aa),tr(bb),'#ae4742',2)
             if not rail_welds:
                 pt=tr([(aa[i]+bb[i])/2 for i in range(3)]);sh.label(pt[0]+7,pt[1]+4,weld['id'],10,'#a54841')
-    sh.views.append(dict(sheet=sh.current,kind='connection_'+mode,assembly_id=scene['id'],scale_denominator=denom,points_per_inch=scale,
+    sh.views.append(dict(sheet=sh.current,kind='connection_'+mode,assembly_id=scene['id'],scale_denominator=denom,points_per_inch=scale,rect_pt=list(rect),
                          section_axis=scene['section_axis'] if mode=='section' else None,section_at=scene['section_at'] if mode=='section' else None))
 
 

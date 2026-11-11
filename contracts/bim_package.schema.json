@@ -904,6 +904,7 @@
     "provenance": {
       "type": "object",
       "properties": {
+        "openbim_translation_findings": {"type": "array", "items": {"type": "object"}},
         "module": {
           "enum": [
             "HR",
@@ -1583,6 +1584,25 @@
     },
     "layout_evidence": {
       "type": "object"
+    },
+    "source_handoff": {
+      "type": "object",
+      "properties": {
+        "schema": {"const": "steltic.hr_source_handoff"},
+        "version": {"const": 1},
+        "building_id": {"type": "string", "minLength": 1},
+        "source_files": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}},
+        "source_bindings": {"type": "object"},
+        "material_schedule": {"type": "object"},
+        "records": {"type": "object"},
+        "occurrences": {"type": "object"},
+        "source_conflicts": {"type": "array"},
+          "crossing_interfaces": {"type": "array"},
+          "unresolved_crossing_interfaces": {"type": "array"},
+        "contract_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      },
+      "required": ["schema", "version", "building_id", "source_files", "source_bindings", "material_schedule", "records", "occurrences", "source_conflicts", "contract_sha256"],
+      "additionalProperties": false
     },
     "source_findings": {
       "type": "array",
