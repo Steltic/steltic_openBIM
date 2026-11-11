@@ -64,7 +64,7 @@ def build_brb_end(package,c,brace,supports,profiles,catalogue,joint):
             if len(set(concrete))==1:part['selected_material']=concrete[0]
             else:part['representation_role']='context_only'
     for weld in scene['welds']:
-        weld['selected_material']=welds[0] if len(set(welds))==1 else 'Weld consumable grade unspecified in HR handoff'
+        weld.setdefault('selected_material',welds[0] if len(set(welds))==1 else 'Weld consumable grade unspecified in HR handoff')
     local_brace=next(part['member'] for part in scene['parts'] if part['id']=='BRACE')
     offset=sub(transformed(local_brace['axis'][0],frame),brace['axis'][end])
     old=brace['end_offsets'][end]

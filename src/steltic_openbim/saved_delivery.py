@@ -129,7 +129,8 @@ def render_native_revision(handoff,output,approved_layout=None,prior_native=None
         repaired=repair(package,model)
         retained['repair']=repaired
         state=initial_state(package,register['revision']+1)
-        state.update(design_scenario=model['scenario'],drawing_status='design_test',features=model['openings'])
+        state.update(schema='steltic.ifc_physical_source',source_status='design_test',representation='physical_geometry',
+                     design_scenario=model['scenario'],drawing_status='design_test',features=model['openings'])
     else:
         package=complete_native_hr(original)
         state=initial_state(package,1)

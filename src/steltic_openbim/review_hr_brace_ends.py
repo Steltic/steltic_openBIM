@@ -77,13 +77,41 @@ def bind(model,package):
             model['assumptions'].append(dict(id=aid,answer='A: brace/casing ends follow their original source worklines and terminate at the modeled slot or supplier clevis. Apex support strips and stiffeners are centred at the actual flange intersection. Continuous gusset outlines, BRB end caps and clevis geometry are accepted fictional fits; source dimensions and qualification requirements remain separate.'))
 
 
+def add_slot_reinforcement(ctx,profile,start,v,slot_end,txt):
+    from .hr_detail_selections import reinforcement_weld
+    from .hr_brace_fit import reinforcement
+    a=ctx.a
+    match=re.search(r'(?:two PL|2 PL) '+NUMBER+r' x '+NUMBER+r'(?: x '+NUMBER+r')?',txt)
+    selected_reinforcement=[ctx.selected.get(('slot_reinforcement',field)) for field in ('thickness_in','width_in','length_in')]
+    if match or all(selected_reinforcement):
+        rt=selected_reinforcement[0] or number(match[1])
+        rw=selected_reinforcement[1] or number(match[2])
+        rl=selected_reinforcement[2] or (number(match[3]) if match[3] else 20)
+        half_weld=ctx.selected.get(('reinforcement_fillet','length_each_side_in'))
+        line_length=2*half_weld if half_weld is not None else rl
+        if line_length>rl+1e-6:
+            raise ValueError('Selected reinforcement weld exceeds plate length at '+ctx.c['id'])
+        for j,sg in enumerate((-1,1)):
+            origin=add(start,mul(v,slot_end-rl/2))
+            plate,edges=reinforcement(a,'REINF'+str(j),profile,origin,v,sg,rw,rt,rl)
+            grade=ctx.selected.get(('slot_reinforcement','material'))
+            if grade:plate['selected_material']=grade
+            size=reinforcement_weld(ctx)
+            for edge,point in enumerate(edges):
+                q=add(point,mul(v,(rl-line_length)/2))
+                a.weld('WR'+str(j)+('-B' if edge else ''),q,add(q,mul(v,line_length)),['BRACE','REINF'+str(j)],size if size is not None else .3125,basis='S' if size is not None else 'A',description='Reinforcement longitudinal fillet')
+
+
 def draw_brace(ctx):
-    from .hr_detail_selections import pin_selection,bolted_brb,reinforcement_weld
-    from .hr_brace_fit import bolted_brb_end,fit_brb_rows,fit_detail_slot,reinforcement,bound_base_plate,bind_beam_span
+    from .hr_detail_selections import pin_selection,bolted_brb
+    from .hr_brace_fit import bolted_brb_end,fit_brb_rows,fit_detail_slot,bound_base_plate,bind_support_span
     from .hr_brace_fit import column_face_at_gusset,support_selection
     from .connection_cuts import drill_joined_plates
+    from .hr_pin_stack import selected_stack,selected_receiver,make_stack
     a,p,pid,txt,par=ctx.a,ctx.p,ctx.pid,ctx.text,ctx.params;kind=par.get('joint','corner');upper=kind in ('apex','link_end');isbrb=ctx.family=='review_brb'
     full_text=txt
+    stack=selected_stack(ctx) if isbrb else None
+    stack_receiver=selected_receiver(ctx,stack) if stack else {}
     cp=ctx.select(('column',));bp=ctx.select(('beam','moment_beam','girder','transfer_chord'));cd=effective(p,cp);bd=effective(p,bp);bf=effective(p,bp,'width')
     proposal=par.get('unsupported_base_corner')
     if proposal:
@@ -96,7 +124,11 @@ def draw_brace(ctx):
     delta=sub(far,ctx.c['point']);horizontal=math.hypot(delta[0],delta[1])
     v=unit([horizontal,0,delta[2]]);sign=1 if v[2]>=0 else -1
     actual_base=bound_base_plate(ctx) if kind=='base' else None
+    from .brace_base_attachment import base_attachment,collar
+    base_spec=base_attachment(ctx,cp) if kind=='base' else None
+    base_kind=base_spec['kind'] if base_spec else None
     interface_z=(beam_bottom if sign<0 else beam_top) if kind!='base' else actual_base[0][2][1] if actual_base else 0
+    if base_kind in ('free','collar'):interface_z=base_spec.get('clearance',0.)
     # Top-of-steel is the analysis workpoint. On a downward brace the actual
     # flange intersection is farther into the bay; centre its support strip
     # and stiffeners there, while retaining the exact source brace workline.
@@ -108,8 +140,15 @@ def draw_brace(ctx):
     t=par.get('gusset_thickness',ctx.n(r'(?:corner|apex|base) gusset '+NUMBER+r' in',ctx.n(r'slotted for a '+NUMBER+r' in',.75)));lx=ctx.n(r'(?:beam-edge weld length|beam edge|base-plate weld length|upper-end beam-edge weld) '+NUMBER+r' in',24);lz=ctx.n(r'(?:column-edge weld length|column edge|upper-end column-edge weld) '+NUMBER+r' in',24)
     t=ctx.selected.get(('gusset','thickness_in')) or t
     horizontal_role='gusset_base_weld' if kind=='base' and ('gusset_base_weld','length_in') in ctx.selected else 'gusset_beam_weld'
-    lx=support_selection(ctx,horizontal_role,'length_in','WGB',lx)
-    lz=support_selection(ctx,'gusset_column_weld','length_in','WGC',lz)
+    if base_spec:
+        lz=base_spec['column_length']
+        if base_kind!='free':lx=base_spec['horizontal_length']
+    else:
+        lx=support_selection(ctx,horizontal_role,'length_in','WGB',lx)
+        lz=support_selection(ctx,'gusset_column_weld','length_in','WGC',lz)
+    if stack_receiver:
+        lx=stack_receiver['horizontal_edge']['length_in']
+        lz=stack_receiver['column_edge']['length_in']
     if upper:
         length=ctx.n(r'(?:both sides x|flange over) '+NUMBER+r' in',ctx.n(r'apex gusset '+NUMBER+r' in along',36))
         if kind=='link_end':length=ctx.n(r'flange over '+NUMBER+r' in',length)
@@ -132,16 +171,27 @@ def draw_brace(ctx):
                 a.box(label,[x-.25,yy,beam_bottom+tf],[.5,bf/2-tw/2-.25,bd-2*tf],'A','Source-required stiffener, A thickness/station where unspecified');a.weld('W'+label,[x,sg*tw/2,beam_bottom+tf],[x,sg*tw/2,beam_top-tf],['BEAM',label],.25,basis='A')
     else:
         weak=par.get('weak_axis_gusset',False);column_face=column_face_at_gusset(p,cp,weak)
-        a.member('COLUMN',cp,[0,0,-18 if proposal else 0 if kind=='base' else -bd-lz-24],[0,0,lz+12 if proposal else lz+24],y=[1,0,0] if weak else [0,1,0])
+        column_lo=-18 if proposal else -(base_spec or {}).get('thickness',0.) if kind=='base' else -bd-lz-24
+        a.member('COLUMN',cp,[0,0,column_lo],[0,0,lz+12 if proposal else lz+24],y=[1,0,0] if weak else [0,1,0])
         if kind=='base':
-            if actual_base:
+            if base_kind=='collar':
+                plate=collar(a,base_spec,column_face,effective(p,cp,'width'),interface_z)
+                plate['selected_material']=ctx.selected.get(('gusset','material'))
+                host='COLLAR'
+            elif base_kind=='free':
+                a.notes.append(f"S: lower gusset edge stays {base_spec['clearance']:g} in clear of the cap with no foundation attachment.")
+                host=None
+            elif actual_base:
                 stock,connection,part=actual_base
                 base=a.box('BASE',[pair[0] for pair in stock],[hi-lo for lo,hi in stock],'S',
                            'Located view of the separately selected column base plate')
                 base['parameters']={'referenced_connection_id':connection,'referenced_part_id':part}
+                host='BASE'
             else:
                 a.box('BASE',[-cd-4,-bf/2-6,-1.5],[cd+column_face+lx+4,bf+12,1.5],'A','Local base support envelope including the complete selected gusset edge')
-            a.box('CONC',[-cd-8,-bf/2-10,-12],[cd+lx+12,bf+20,10.5],'A','Foundation context',kind='concrete');host='BASE'
+                host='BASE'
+            if base_kind not in ('free','collar'):
+                a.box('CONC',[-cd-8,-bf/2-10,-12],[cd+lx+12,bf+20,10.5],'A','Foundation context',kind='concrete')
         elif proposal:
             seat=proposal['seat_thickness_in'];width=proposal['seat_width_in']
             st=proposal['stiffener_thickness_in'];height=proposal['stiffener_depth_in']
@@ -167,13 +217,31 @@ def draw_brace(ctx):
         vertices=[[clearance,-t/2,interface_z],[lx+clearance,-t/2,interface_z],[max(lx,18)+clearance,-t/2,interface_z+sign*lz*.65],[clearance,-t/2,interface_z+sign*lz]]
         a.polygon('GUSSET',vertices,t,basis='A',description=f'Source gusset t={t:g}; A fitted perimeter, source UFM edges')
         weld=ctx.n(NUMBER+r'-in E70 fillets both sides',.375)
-        if not par.get('beam_only_gusset'):a.weld('WGC',[column_face,0,interface_z],[column_face,0,interface_z+sign*lz],['COLUMN','GUSSET'],support_selection(ctx,'gusset_column_weld','size_in','WGC',weld),description='Source column-edge weld, both sides')
+        if not par.get('beam_only_gusset'):
+            kind_gc=base_spec['column_kind'] if base_spec else ctx.selected.get(('gusset_column_weld','kind')) or 'fillet'
+            weld_gc=(base_spec or {}).get('fillet') or support_selection(ctx,'gusset_column_weld','size_in','WGC',weld)
+            a.weld('WGC',[column_face,0,interface_z],[column_face,0,interface_z+sign*lz],['COLUMN','GUSSET'],weld_gc,
+                   kind=kind_gc,description='Source column-edge weld, both sides')
         else:a.notes.append('S: beam-only gusset; no gusset-to-column weld. A 2t clear gap is drawn at the column face. Source free-edge and rotation-clearance requirements remain.')
-        a.weld('WGB',[clearance,0,interface_z],[lx+clearance,0,interface_z],[host,'GUSSET'],support_selection(ctx,horizontal_role,'size_in','WGB',weld),description='Source beam/base edge weld, both sides')
+        if host:
+            weld_gb=(base_spec or {}).get('fillet') or support_selection(ctx,horizontal_role,'size_in','WGB',weld)
+            a.weld('WGB',[clearance,0,interface_z],[lx+clearance,0,interface_z],[host,'GUSSET'],weld_gb,
+                   kind=ctx.selected.get((horizontal_role,'kind')) or 'fillet',description='Source horizontal gusset attachment')
     ctx.text=full_text
     station=max(8,min(lx,lz)*.55,abs(interface_z/v[2])+4 if abs(v[2])>1e-8 else 0,
                 (clearance+2)/v[0] if not upper and v[0]>1e-8 else 0)
+    if stack:
+        make_stack(ctx,stack,v,station,effective(p,pid),effective(p,pid,'width'))
+        if upper:bind_support_span(ctx,'BEAM',0)
+        else:bind_support_span(ctx,'COLUMN',2)
+        return
     wl=ctx.selected.get(('brace_slot_weld','length_in')) or ctx.n(r'welds? x '+NUMBER+r' in',12)
+    fold_ratio=ctx.selected.get(('brace_end_clearance','depths')) if not isbrb else None
+    if fold_ratio is not None:
+        from .brace_linear_clearance import restraint_station
+        if fold_ratio<=0:raise ValueError('Invalid selected brace-end clearance')
+        fold,restrained_edges=restraint_station(a.welds,v)
+        station=max(station,fold+fold_ratio*t)
     selected_bolts=bolted_brb(ctx) if isbrb else None
     bolt_contour=[];bolt_groups=[]
     if selected_bolts:
@@ -181,7 +249,7 @@ def draw_brace(ctx):
         # offset before the first bolt. Place the complete selected bolt group
         # clear of the actual support and retain usable casing between both ends.
         station,layout=fit_brb_rows(selected_bolts,v,interface_station,None if upper else clearance)
-        start,bolt_contour,bolt_groups=bolted_brb_end(a,selected_bolts,v,station,t,interface_station,layout)
+        start,bolt_contour,bolt_groups=bolted_brb_end(a,selected_bolts,v,station,t,interface_station,layout,effective(p,pid))
         end=add(start,mul(v,24))
         a.member('BRACE',pid,start,end,description='Source BRB casing with bolted supplier core extension')
         a.interfaces.append(dict(id='CORE-TO-CASING',kind='supplier_interface',connects=['BRACE','CORE-END'],
@@ -222,24 +290,6 @@ def draw_brace(ctx):
             for edge in (-1,1):
                 # Four distinct slot-edge lines, two at each HSS wall.
                 off=[-v[2]*th*side,edge*t/2,v[0]*th*side];aa=add(start,off);a.weld(f'WB{side}{edge}',aa,add(aa,mul(v,wl)),['BRACE','GUSSET'],weld,description=f'Source slot weld L={wl:g}; four lines')
-        match=re.search(r'(?:two PL|2 PL) '+NUMBER+r' x '+NUMBER+r'(?: x '+NUMBER+r')?',txt)
-        if match:
-            rt=ctx.selected.get(('slot_reinforcement','thickness_in')) or number(match[1])
-            rw=ctx.selected.get(('slot_reinforcement','width_in')) or number(match[2])
-            rl=ctx.selected.get(('slot_reinforcement','length_in')) or (number(match[3]) if match[3] else 20)
-            half_weld=ctx.selected.get(('reinforcement_fillet','length_each_side_in'))
-            line_length=2*half_weld if half_weld is not None else rl
-            if line_length>rl+1e-6:
-                raise ValueError('Selected reinforcement weld exceeds plate length at '+ctx.c['id'])
-            for j,sg in enumerate((-1,1)):
-                origin=add(start,mul(v,wl-rl/2))
-                plate,edges=reinforcement(a,'REINF'+str(j),p[pid],origin,v,sg,rw,rt,rl)
-                grade=ctx.selected.get(('slot_reinforcement','material'))
-                if grade:plate['selected_material']=grade
-                size=reinforcement_weld(ctx)
-                for edge,point in enumerate(edges):
-                    q=add(point,mul(v,(rl-line_length)/2))
-                    a.weld('WR'+str(j)+('-B' if edge else ''),q,add(q,mul(v,line_length)),['BRACE','REINF'+str(j)],size if size is not None else .3125,basis='S' if size is not None else 'A',description='Reinforcement longitudinal fillet')
     # Free edges are authored fit geometry. Enclose the actual brace slot welds
     # while retaining the source support-edge lengths and plate thickness.
     gusset=next(q for q in a.parts if q['id']=='GUSSET')
@@ -268,13 +318,21 @@ def draw_brace(ctx):
         slot_clearance=ctx.selected.get(('slot','clearance_in'))
         if width is None and slot_clearance is not None:width=t+slot_clearance
         fit_detail_slot(a,width)
+        brace=next(q for q in a.parts if q['id']=='BRACE')
+        slot=brace['member'].get('slots',[])
+        if slot:add_slot_reinforcement(ctx,p[pid],start,v,slot[0]['end_in'],txt)
+        if fold_ratio is not None:
+            from .brace_linear_clearance import dimension
+            dimension(a,v,fold_ratio,fold,dot(start,v),restrained_edges)
     a.section_at=pin[0] if isbrb and not selected_bolts else start[0]+6
     edge_start=beam_x-lx/2 if upper else clearance
     a.dim([edge_start,0,interface_z],[edge_start+lx,0,interface_z],
-          'Source support-edge weld' if proposal else f'{lx:g} in source interface length',offset=-48 if proposal else 24)
+          'Adopted lower free-edge extent' if base_kind=='free' else 'Source support-edge weld' if proposal else f'{lx:g} in source interface length',
+          basis='A' if base_kind=='free' else 'S',offset=-48 if proposal else 24)
     a.dim([beam_x,0,interface_z],[beam_x,0,interface_z+sign*lz],basis='S' if proposal else 'A',offset=65 if proposal else 40)
     if upper:a.notes.append('A: support weld, doubler and stiffeners centre on the actual brace/flange intersection. Continuous gusset to the attachment; original source checks remain separate.')
-    if upper:bind_beam_span(ctx)
+    if upper:bind_support_span(ctx,'BEAM',0)
+    if not upper:bind_support_span(ctx,'COLUMN',2)
     a.notes.append('Separate source end condition: '+kind+'. Member slot, gusset clearance and free-edge trim follow the attached source record; drawings show the assembled load path. A geometry remains subject to the unchanged design verification requirements.')
 
 

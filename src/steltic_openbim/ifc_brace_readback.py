@@ -75,7 +75,15 @@ def verify_member_clearance(ifc_path,physical,crossings=(),source_records=None):
                 issue={'issue':'crossing has no pair of identifiable source and IFC bars'}
             else:
                 selected={}
-                if source_records is not None:
+                if crossing.get('kind')=='flat_bar_crossing_plate':
+                    from .ifc_plate_crossing import plate_selection
+                    try:
+                        selected=plate_selection(crossing,source_records[crossing['record_id']])
+                    except (KeyError,IndexError,ValueError,TypeError) as exc:
+                        result['findings'].append(dict(crossing=crossing['id'],members=ids,
+                            issue='Plated crossing lacks an unambiguous HR selection',detail=str(exc)))
+                        continue
+                elif source_records is not None:
                     fields=source_records[crossing['record_id']]['fields']
                     selected={fields[i]['field']:fields[i]['value'] for i in crossing['selected']
                               if fields[i]['role']=='flat_bar_crossing_fillet'}

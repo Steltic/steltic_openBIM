@@ -86,11 +86,7 @@ def complete_slotted_end(package,connection,brace,support,point,profiles,catalog
     if math.dist(brace['end_offsets'][end],[0.,0.,0.])>1e-7:
         station=dot(sub(original[end],point),v)
     start=mul(vl,station)
-    remaining=dot(sub(original[1-end],point),v)-station
-    if remaining<=length+thickness+.0625:raise ValueError('Selected weld and source member leave insufficient terminal length')
     a=Assembly('Slotted brace to '+support['kind'],profiles)
-    b=a.member('BRACE',brace['profile_id'],start,add(start,mul(vl,min(remaining,length+thickness+5.))),
-               y=local(brace['local_y'],frame))
     support_role='COLUMN' if support['kind'] in ('column','post','col') else 'BEAM'
     weld_role='gusset_column_weld' if support_role=='COLUMN' else 'gusset_beam_weld'
     support_length=selected.get((weld_role,'length_in'))
@@ -98,6 +94,18 @@ def complete_slotted_end(package,connection,brace,support,point,profiles,catalog
     if limits[1]-limits[0]<support_length:raise ValueError('Selected support weld exceeds the finite receiving member')
     centre=start[2];lo=min(max(centre-support_length/2,limits[0]),limits[1]-support_length)
     hi=lo+support_length
+    fold_ratio=selected.get(('brace_end_clearance','depths'))
+    if fold_ratio is not None:
+        if fold_ratio<=0:raise ValueError('Invalid selected linear brace-end clearance')
+        fold=max(dot(q,vl) for q in ([face,0.,lo],[face,0.,hi]))
+        minimum=fold+fold_ratio*thickness
+        if station<minimum-1e-6 and math.dist(brace['end_offsets'][end],[0.,0.,0.])>1e-7:
+            raise ValueError('Selected finite terminal position violates its linear gusset clearance')
+        station=max(station,minimum);start=mul(vl,station)
+    remaining=dot(sub(original[1-end],point),v)-station
+    if remaining<=length+thickness+.0625:raise ValueError('Selected weld and source member leave insufficient terminal length')
+    b=a.member('BRACE',brace['profile_id'],start,add(start,mul(vl,min(remaining,length+thickness+5.))),
+               y=local(brace['local_y'],frame))
     host_axis=local(actual_ends(support)[0],frame,True)
     a.member(support_role,support['profile_id'],[host_axis[0],host_axis[1],lo],[host_axis[0],host_axis[1],hi],
              y=local(support['local_y'],frame))
@@ -128,6 +136,11 @@ def complete_slotted_end(package,connection,brace,support,point,profiles,catalog
         weld['selected_material']=(consumables[0]['specification'] if len(consumables)==1 else
                                   'Weld consumable grade unspecified in the HR handoff')
     slot=slot_for_gusset(a,b,gusset,thickness,width)
+    if fold_ratio is not None:
+        from .brace_linear_clearance import dimension
+        restrained=[w['id'] for w in a.welds if support_role in w['connects'] and 'GUSSET' in w['connects']]
+        dimension(a,vl,fold_ratio,fold,station,restrained)
+        gusset['description']+=f'; linear brace-end clearance {station-fold:.4f} in (selected minimum {fold_ratio:g}t)'
     new_offsets=copy.deepcopy(brace['end_offsets'])
     new_offsets[end]=sub(transformed(start,frame),axis[end])
     new_ends=[add(p,o) for p,o in zip(axis,new_offsets)]

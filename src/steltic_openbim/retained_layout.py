@@ -29,7 +29,7 @@ def bind_layout(prior,package,model,manifest):
     counts={key:compare_rows(key,old[key],native[key],attrs) for key,attrs in fields.items()}
     old_members={m['id']:m for m in old['members']}
     crossings={mid for r in package.get('source_handoff',{}).get('crossing_interfaces',[])
-               if r['kind']=='flat_bar_crossing' for mid in r['member_ids']}
+               if r['kind'] in ('flat_bar_crossing','flat_bar_crossing_plate') for mid in r['member_ids']}
     old_profiles={p['id']:p for p in old['profiles']};profiles={p['id']:p for p in native['profiles']}
     changed={}
     for m in native['members']:
@@ -54,18 +54,29 @@ def bind_layout(prior,package,model,manifest):
     compare_rows('connections',old['connections'],native['connections'],('point','joint_id','member_ids'))
     previous={c['id']:c for c in old['connections']}
     drawing={c['id']:c for c in model['connections']}
+    prior_records={r['id']:r for r in prior.get('design_records',[])}
+    revised_records={r['id']:r for r in package.get('design_records',[])}
+    revised_templates={t['id']:t for t in native.get('assemblies',[])}
+    revised_connections=[]
     for c in native['connections']:
         target=drawing.get(c['id']);prev=previous[c['id']]
         if target is None:raise ValueError('Retained layout lacks required connection '+c['id'])
         if c.get('assembly_instance')!=prev.get('assembly_instance'):
-            raise ValueError('Revised connection specifies a new placement or template: '+c['id'])
+            old_frame=prev.get('assembly_instance') or {};frame=c.get('assembly_instance') or {}
+            locator=('origin','x_axis','y_axis','bindings')
+            changed_records=[r for r in c['design_record_ids'] if revised_records.get(r)!=prior_records.get(r)]
+            template=revised_templates.get(frame.get('template_id'),{})
+            if (any(frame.get(k)!=old_frame.get(k) for k in locator) or not changed_records or
+                    not template or template.get('revision')!=frame.get('revision')):
+                raise ValueError('Revised connection lacks an authenticated change at its retained placement: '+c['id'])
+            revised_connections.append(dict(connection_id=c['id'],record_ids=changed_records,template=frame['template_id']))
         target['parameters']=copy.deepcopy(c.get('parameters',{}))
         target['design_record_ids']=list(c['design_record_ids'])
         if 'source_record_selections' in c:
             target['source_record_selections']=copy.deepcopy(c['source_record_selections'])
     current={m['id']:m for m in native['members']}
     for m in model['members']:
-        m['design_record_ids']=list(current[m['id']]['design_record_ids'])
+        m['design_record_ids']=list(current[m['id']].get('design_record_ids',[]))
         m['profile_id']=current[m['id']]['profile_id']
     if changed:
         model['profiles']=copy.deepcopy(native['profiles'])
@@ -80,7 +91,7 @@ def bind_layout(prior,package,model,manifest):
                                      levels=sorted({members[mid]['level'] for mid in ids})))
         model['member_schedule']=schedule
     model['title']=package['building_id']
-    return dict(unchanged=counts,revised_crossing_members=changed,existing_physical_connections=len(previous),
+    return dict(unchanged=counts,revised_crossing_members=changed,revised_connection_templates=revised_connections,existing_physical_connections=len(previous),
                 approved_drawing_occurrences=len(drawing),prior_building_id=prior['building_id'],
                 approved_model_sha256=manifest['model_sha256'],prior_sheet_count=len(manifest['sheets']),
                 prior_sheet_ids=[s['number'] for s in manifest['sheets']])

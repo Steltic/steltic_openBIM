@@ -171,6 +171,17 @@ def member_solids(member,profiles,limits=None):
                 if min(values)<-1e-8:solid=clip_faces(solid,normal,offset)
                 if solid:clipped.append(solid)
             solids=clipped
+    if member.get('through_bores'):
+        from ..connection_cuts import drill_plate
+        groups={}
+        for cut in member['through_bores']:
+            key=(tuple(cut['axis']),cut['diameter_in'])
+            groups.setdefault(key,[]).append(cut['point'])
+        for (normal,diameter),points in groups.items():
+            for i,faces in enumerate(solids):
+                piece={'id':member.get('id','member'),'faces':faces}
+                if drill_plate(piece,points,normal,diameter,'Located through-bolt bore',skip_disjoint=True):
+                    solids[i]=piece['faces']
     return solids
 
 

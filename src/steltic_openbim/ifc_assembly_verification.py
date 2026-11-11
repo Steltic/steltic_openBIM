@@ -11,6 +11,9 @@ import ifcopenshell.util.placement
 import ifcopenshell.util.unit
 import numpy as np
 from .ifc_readback_session import read_step
+from .clevis_readback import forged_fit, thread_fit
+from .weld_extent_readback import actual_inner_slot_tip, each_side_extents
+from .joint_mesh_readback import matches_flat_extrusion, matches_rhs_extrusion
 from shapely.geometry import Polygon, box
 
 from .joint_mesh_readback import Mesh, TOL, common_plate_section, cross_section, frame, outer_polygon, plane_axes, projected, shared_face_area, transform, unit
@@ -164,6 +167,8 @@ class Assessment:
         self.interface_cache = {}
         self.crossings = {row['id']:row for row in handoff.get('crossing_interfaces',[])}
         self.crossing_occurrences = Counter()
+        self.gusset_clearance_measurements = []
+        self.crossing_measurements = []
         self.context = {}
 
     def issue(self, code, **fields):
@@ -242,6 +247,16 @@ class Assessment:
                         self.issue('constituent_faces_differ_from_declared_part', part=part['id'])
                 elif geometry.get('type') == 'extruded_profile':
                     profile = self.profiles[geometry['profile_id']]
+                    if profile.get('family') in ('rhs','rectangular_hollow') and not any(profile['dimensions'].get(k) for k in ('r','radius','outer_radius')):
+                        self.counts['actual_formed_rhs_profile_checks']+=1
+                        if not matches_rhs_extrusion(placed,geometry,profile['dimensions']):
+                            self.issue('formed_rhs_profile_walls_or_position_differ',part=part['id'],profile=profile['id'])
+                        continue
+                    if profile.get('family')=='flat':
+                        self.counts['actual_formed_flat_profile_checks']+=1
+                        if not matches_flat_extrusion(placed,geometry,profile['dimensions']):
+                            self.issue('formed_flat_profile_shape_or_position_differs',part=part['id'],profile=profile['id'])
+                        continue
                     if profile.get('family') != 'round':
                         self.issue('unverified_formed_profile',part=part['id'],profile=profile['id'])
                         continue
@@ -424,12 +439,23 @@ class Assessment:
             if self.shared_issues[key]:
                 self.issue('reused_template_has_constituent_fit_findings', counts=dict(Counter(self.shared_issues[key])))
         curves = self.rb.curves(cid)
+        from .pin_stack_readback import actual_materials,selected_stack_record,verify_pin_stack
+        present=connection.get('parameters',{}).get('pin_stack')
+        selected_stacks=selected_stack_record(self.handoff,cid)
+        if present or selected_stacks or any(p.get('parameters',{}).get('source_stack_role') for p in parts.values()):
+            if len(selected_stacks)!=1 or present!=selected_stacks[0][1]:
+                self.issue('ordered_pin_stack_source_binding_differs',records=[r[0] for r in selected_stacks])
+            else:
+                rid,stack=selected_stacks[0]
+                counts,issues=verify_pin_stack(rid,stack,parts,meshes,actual_materials(product),curves,inverse)
+                self.counts.update(counts)
+                for finding in issues:self.issue(**finding)
         receivers = {r['id']: r for r in template.get('receivers', [])}
         self.paths(cid, parts, meshes, inst, instance, curves, br, gussets, fields,template.get('source_interfaces',[]))
         crossing_id = connection.get('source_crossing_id',cid)
         if crossing_id in self.crossings:
             self.crossing_occurrences[crossing_id] += 1
-            self.crossing(connection,parts,inst,instance,curves,self.crossings[crossing_id])
+            self.crossing(connection,parts,inst,instance,curves,self.crossings[crossing_id],meshes)
         for role, mid in br.items():
             self.member_checks(mid)
             _, ends = self.member_frame(mid)
@@ -443,14 +469,26 @@ class Assessment:
                 if delta <= TOL:
                     self.covered_ends.add((mid, end_index))
 
-    def crossing(self,connection,parts,inst,instance,curves,source):
+    def crossing(self,connection,parts,inst,instance,curves,source,meshes):
         record = self.handoff['records'][source['record_id']]
         selections = {f['field']:f['value'] for i in source['selected'] if (f:=record['fields'][i])['role']=='flat_bar_crossing_fillet'}
         ids=set(source['member_ids']); binds=inst['bindings']
         if len(ids)!=2 or not ids<=set(binds.values()) or np.linalg.norm(np.asarray(connection.get('point',inst['origin']))-source['point_in'])>TOL:
             self.issue('source_crossing_members_or_workpoint_differs',crossing_id=source['id'],expected_members=sorted(ids))
-        welds = [p for p in parts.values() if p['kind']=='weld' and ids <= {binds.get(role) for role in p.get('connects',[])}]
         self.counts['actual_source_crossings'] += 1
+        if source.get('kind')=='flat_bar_crossing_plate':
+            from .ifc_plate_crossing import delivered_plate_crossing
+            if not connection.get('drawing_ref'):
+                self.issue('source_crossing_drawing_locator_missing',crossing_id=source['id'])
+            facts,issues=delivered_plate_crossing(self.rb,source,record,inst['template_id'],parts,
+                (inst,instance),curves,meshes,self.members,connection['id'])
+            self.crossing_measurements.append(dict(facts,crossing=source['id']))
+            self.counts['actual_plated_crossing_bar_interfaces']+=len(facts.get('interfaces',{}))
+            self.counts['actual_plated_crossing_welds']+=facts.get('checked_welds',0)
+            for issue in issues:
+                self.issue('source_crossing_plate_geometry_differs',crossing_id=source['id'],detail=issue)
+            return
+        welds = [p for p in parts.values() if p['kind']=='weld' and ids <= {binds.get(role) for role in p.get('connects',[])}]
         if len(welds)!=selections.get('count') or not connection.get('drawing_ref'):
             self.issue('source_crossing_weld_count_or_drawing_locator_missing',crossing_id=source['id'],actual_welds=len(welds),selected_welds=selections.get('count'))
         for weld in welds:
@@ -502,6 +540,7 @@ class Assessment:
         used = set()
         connected = defaultdict(set)
         logical_welds = defaultdict(list)
+        measured_welds = {}
         member_fields = {mid:selected(self.handoff,cid,mid,self.profiles.get(self.members[mid].get('profile_id'))) for mid in br.values()}
         inverse = np.linalg.inv(instance)
         bound = {r:mid for r,mid in inst.get('bindings',{}).items() if mid in self.rb.members}
@@ -514,6 +553,38 @@ class Assessment:
             member_shapes[role] = raw.transformed(relative)
         support = dict(meshes, **member_shapes)
         for interface in interfaces:
+            kind=interface.get('kind')
+            if kind in ('threaded_clevis','integral_forged_clevis'):
+                roles=interface.get('connects',[])
+                bodies=[r for r in roles if parts.get(r,{}).get('parameters',{}).get('source_role')=='threaded_clevis_body']
+                if len(roles)!=2 or len(bodies)!=1 or any(r not in support for r in roles):
+                    self.issue('clevis_interface_lacks_bound_solid',interface=interface['id'],roles=roles)
+                    continue
+                body=bodies[0];target=next(r for r in roles if r!=body)
+                if len(parts[body].get('holes',[]))!=1:
+                    self.issue('threaded_clevis_lacks_single_located_bore',interface=interface['id'],body=body)
+                    continue
+                axis=parts[body]['holes'][0]['axis'];par=parts[body]['parameters']
+                token=(kind,self.context['template'],body,target,member_keys.get(target))
+                if kind=='threaded_clevis':
+                    member=self.members.get(bound.get(target),{})
+                    diameter=self.profiles.get(member.get('profile_id'),{}).get('dimensions',{}).get('d')
+                    if not diameter or abs((par.get('thread_major_diameter_in') or 0)-diameter)>TOL or not par.get('thread_engagement_in'):
+                        self.issue('clevis_thread_lacks_bound_rod_size_or_declared_engagement',interface=interface['id'],body=body)
+                        continue
+                    self.counts['actual_threaded_rod_bore_engagements']+=1
+                    if token not in self.interface_cache:
+                        self.interface_cache[token]=thread_fit(support[body],support[target],axis,diameter,par['thread_engagement_in'])
+                else:
+                    self.counts['actual_forged_jaw_mating_faces']+=1
+                    if token not in self.interface_cache:
+                        self.interface_cache[token]=forged_fit(support[body],support[target],axis)
+                defect,measurements=self.interface_cache[token]
+                if defect:
+                    self.issue(defect,interface=interface['id'],target=bound.get(target,target),**measurements)
+                else:
+                    connected[body].add(target);connected[target].add(body)
+                continue
             if interface.get('kind')!='supplier_interface' or 'CORE-END' not in interface.get('connects',[]):
                 continue
             for role in set(interface['connects'])-{'CORE-END'}:
@@ -558,6 +629,7 @@ class Assessment:
             used.add(matches[0])
             if part['kind'] != 'weld':
                 continue
+            measured_welds[pid] = actual_curves[matches[0]]
             source_role = None
             logical_id = part.get('parameters',{}).get('source_weld_id',pid)
             attached_members = {br[r] for r in links if r in br}
@@ -602,15 +674,38 @@ class Assessment:
                             self.issue('groove_weld_reference_lacks_contact_or_declared_root_opening',part=pid,target=bound.get(target,target),distance_in=max(distances),root_opening_in=reach)
                         else:
                             self.issue('weld_reference_outside_attachment_reach', part=pid, target=bound.get(target,target), distance_in=max(distances), fillet_leg_in=size)
+        from .gusset_clearance_readback import selected_clearances
+        clearances,issues=selected_clearances(self.members,br,member_fields,parts,(inst,instance),meshes,
+                                             measured_welds,self.rb,interfaces)
+        self.counts['actual_selected_fold_clearances']+=len(clearances)
+        self.gusset_clearance_measurements.extend(dict(row,connection=cid,sheet=self.context.get('sheet')) for row in clearances)
+        for row in issues:self.issue('selected_gusset_fold_clearance',**row)
         if len(used) != len(actual_curves):
             self.issue('unassigned_actual_reference_curves', count=len(actual_curves)-len(used))
         for (source_role,attached,logical_id),lines in logical_welds.items():
             length = sum(float(np.linalg.norm(np.diff(line,axis=0),axis=1).sum()) for line in lines)
             local_fields = member_fields.get(attached,fields)
-            selected_lengths = local_fields.get((source_role,'length_in'), []) + local_fields.get((source_role,'length_each_side_in'), [])
+            selected_lengths = local_fields.get((source_role,'length_in'), [])
             for expected_length in set(selected_lengths):
                 if abs(length-float(expected_length)) > TOL:
                     self.issue('selected_weld_reference_length_differs', part=logical_id, actual=length, selected=expected_length)
+            for each in set(local_fields.get((source_role,'length_each_side_in'),[])):
+                member=self.members.get(attached,{})
+                slots=[s for s in member.get('slots',[]) if s.get('connection_id')==cid]
+                if len(slots)!=1:
+                    self.issue('selected_each_side_weld_has_no_located_slot',part=logical_id,member=attached)
+                    continue
+                basis,ends=self.member_frame(attached)
+                token=('actual_slot_tip',attached,cid)
+                if token not in self.interface_cache:
+                    local=self.rb.member(attached).transformed(np.linalg.inv(basis))
+                    self.interface_cache[token]=actual_inner_slot_tip(local,slots[0])
+                tip=self.interface_cache[token]
+                extents=each_side_extents(lines,ends[0],basis[:3,0],tip)
+                self.counts['actual_each_side_weld_extents']+=1
+                if any(abs(value-each)>TOL for value in extents) or abs(length-2*each)>2*TOL:
+                    self.issue('selected_weld_extents_about_actual_slot_tip_differ',part=logical_id,member=attached,
+                               actual_slot_tip_in=tip,measured_sides_in=list(extents),selected_each_in=each,actual_length_in=length)
             if len(lines)>1:
                 reachable={0}
                 for _ in range(len(lines)):
@@ -714,4 +809,4 @@ def verify_assembly_fit(ifc_path, physical, source_handoff):
     missing = sorted((mid, end) for mid in inventory for end in (0,1) if (mid,end) not in check.covered_ends)
     for mid, end in missing:
         check.findings.append({'code':'brace_end_has_no_matching_physical_receiver', 'member':mid, 'end_index':end})
-    return {'passed': not check.findings, 'counts': dict(check.counts), 'member_inventory': len(inventory), 'unique_ends': 2*len(inventory), 'mapped_ends': len(check.covered_ends), 'findings': check.findings, 'numeric_tolerance_in': TOL, 'schema': 'steltic.actual_assembly_fit.v1'}
+    return {'passed': not check.findings, 'counts': dict(check.counts), 'member_inventory': len(inventory), 'gusset_clearance_measurements': check.gusset_clearance_measurements, 'unique_ends': 2*len(inventory), 'mapped_ends': len(check.covered_ends), 'crossing_measurements': check.crossing_measurements, 'findings': check.findings, 'numeric_tolerance_in': TOL, 'schema': 'steltic.actual_assembly_fit.v1'}

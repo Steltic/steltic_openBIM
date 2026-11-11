@@ -68,6 +68,7 @@ def draw(ctx):
         from .review_crane_roof_bracing import draw as crane_roof
         return crane_roof(ctx)
     a,p=ctx.a,ctx.p;beam,support,strut,kicker=ctx.ms;origin=ctx.c['point'];sign=ctx.params['sign'];plate=.375
+    from .connection_cuts import drill_receivers
     for label,m,extent in (('BEAM',beam,30),('ADJACENT',support,30),('STRUT',strut,150),('KICKER',kicker,90)):
         part=extract(ctx,m,label,AXES,extent)
         if label in ('BEAM','ADJACENT'):part['drawing_style']='outline'
@@ -75,8 +76,9 @@ def draw(ctx):
     for i,(host,label,normal,q) in enumerate(((beam,'BEAM',sign,line[0]),(support,'ADJACENT',-sign,line[1]))):
         d=p[host['profile_id']]['dimensions'];webface=q[0]-normal*plate;name='ENDPLATE'+str(i)
         a.box(name,[min(webface,q[0]),-4.25,z-2.25],[plate,8.5,4.5],'A','A fitted 3/8 in HSS end plate bolted to actual beam web')
-        a.fastener('EB'+str(i),[[q[0],v,z] for v in (-2.75,2.75)],[-normal,0,0],.75,plate+d['tw'],[label,name],
+        fastener=a.fastener('EB'+str(i),[[q[0],v,z] for v in (-2.75,2.75)],[-normal,0,0],.75,plate+d['tw'],[label,name],
                    'A two 3/4 in A325 bolts through end plate and beam web; 5.5 in gauge; capacity unverified',basis='A')
+        drill_receivers(a,fastener,.8125)
         for side in (-1,1):
             a.weld(f'EW{i}H{side}',[q[0],-2,z+side*2],[q[0],2,z+side*2],['STRUT',name],.1875,basis='A',description='A 3/16 in continuous HSS end-to-plate fillet')
             a.weld(f'EW{i}V{side}',[q[0],side*2,z-2],[q[0],side*2,z+2],['STRUT',name],.1875,basis='A',description='A 3/16 in continuous HSS end-to-plate fillet')
@@ -88,9 +90,27 @@ def draw(ctx):
         centres=[add(end,mul(travel,s)) for s in stations]
         pts=[(q[0]+dx,q[2]+dz) for q in centres for dx,dz in ((-1.5,-1.5),(-1.5,1.5),(1.5,-1.5),(1.5,1.5))]
         pts.extend((q[0],q[2]) for q in seams[i]);name='GUSSET'+str(i)
-        a.polygon(name,[[x,y,zz] for x,zz in hull(pts)],plate,basis='A',description='A external kicker side gusset fitted to the actual receiving surface')
-        a.fastener('KB'+str(i),[[q[0],y+plate,q[2]] for q in centres],[0,-1,0],.75,3+plate,['KICKER',name],
+        from shapely.geometry import Polygon
+        from shapely.ops import unary_union
+        from .pilots.geometry import strips
+        from .pilots.model import cross
+        outline=Polygon(hull(pts))
+        for steel in (beam,support):
+            ends_local=[point(q,origin,AXES) for q in ends(steel)]
+            axis=unit(sub(ends_local[1],ends_local[0]))
+            if abs(axis[1])<.99999:raise ValueError('Kicker needs a located transverse receiver web')
+            if not min(q[1] for q in ends_local)-plate<y<max(q[1] for q in ends_local)+plate:continue
+            near=ends_local[0];wy=steel['local_y'];wz=cross(axis,wy)
+            sections=[Polygon([(near[0]+u*wy[0]+v*wz[0],near[2]+u*wy[2]+v*wz[2]) for u,v in ring])
+                      for ring in strips(p[steel['profile_id']],p)]
+            outline=outline.difference(unary_union(sections))
+        if outline.geom_type!='Polygon' or outline.interiors:
+            raise ValueError('The retained kicker gusset cannot fit around both receiving sections')
+        a.polygon(name,[[x,y,zz] for x,zz in list(outline.exterior.coords)[:-1]],plate,basis='A',
+                  description='External kicker side gusset coped to the actual receiving sections')
+        fastener=a.fastener('KB'+str(i),[[q[0],y+plate,q[2]] for q in centres],[0,-1,0],.75,3+plate,['KICKER',name],
                    'A two 3/4 in A325 through-bolts through both HSS walls and external gusset; local HSS wall/bolt design unverified',basis='A')
+        drill_receivers(a,fastener,.8125)
         a.weld('KW'+str(i),*seams[i],[host,name],.25,basis='A',description='A 1/4 in gusset fillets at actual '+('beam bottom flange' if i==0 else 'HSS strut side wall'))
     a.dim([0,0,z+7],[sign*120,0,z+7],'S 10 ft support worklines',basis='S');a.dim(foot,head,'S 45 deg / A end fit',basis='A')
     a.front_axes=(0,2);a.section_axis=0;a.section_at=line[0][0]

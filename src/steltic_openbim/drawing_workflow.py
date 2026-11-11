@@ -139,7 +139,7 @@ def initial_state(package,revision):
     verdict=inspect_package(package)
     if verdict['status']=='invalid': raise ValueError('Invalid physical geometry: '+ '; '.join(f['message'] for f in verdict['findings'] if f['severity']=='error')[:1500])
     requests=initial_requests(package)
-    return dict(schema='steltic.drawing_workflow',version=1,revision=revision,building_id=package['building_id'],
+    return dict(schema='steltic.drawing_workflow',version=1,revision=revision,building_id=package['building_id'],source_module=package['module'],
         source_model_sha256=fingerprint(package),source_readiness=verdict['status'],drawing_status='provisional' if requests else 'source_geometry',
         can_generate=True,requests=requests,features=initial_features(package,requests),events=[],
         policy={'proposals_accepted_for_drawing':True,'unconfirmed_dimensions':'TBD - resolve query',

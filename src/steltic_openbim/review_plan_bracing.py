@@ -143,9 +143,12 @@ def draw(ctx):
         a.polygon('PLATE',vertices,.375,normal=[0,0,1],basis='S dimensions / A set-out',description=f'S 3/8 x 8 x {width} in leg-point plate; A local orientation/position')
         # Weld only where the plate overlaps the actual supporting top flange.
         along=dot(centre,u);across=dot(sub(host['axis'][0],origin),v);bf=p[host['profile_id']]['dimensions']['bf']
-        for j,side in enumerate((-1,1)):
-            line=across+side*(bf/2-.25)
-            a.weld('W'+str(j),add(mul(u,along-width/2),mul(v,line)),add(mul(u,along+width/2),mul(v,line)),[label,'PLATE'],.25,basis='A',description='A 1/4 in local plate-to-actual-top-flange fit; source connection capacity requirement retained')
+        lower=max(across-bf/2,dot(centre,v)-4);upper=min(across+bf/2,dot(centre,v)+4)
+        lo,hi=sorted(dot(sub(q,origin),u) for q in host['axis'])
+        start=max(along-width/2,lo);finish=min(along+width/2,hi)
+        if lower>=upper or start>=finish:raise ValueError('No finite support contact for the selected leg-point plate')
+        for j,line in enumerate((lower,upper)):
+            a.weld('W'+str(j),add(mul(u,start),mul(v,line)),add(mul(u,finish),mul(v,line)),[label,'PLATE'],.25,basis='A',description='Adopted 1/4 in fillet on the actual common edge of leg-point plate and vessel-beam flange')
         a.dim(vertices[0],vertices[1],'Source plate length')
         if par.get('supplier_foot_point'):
             foot=point(par['supplier_foot_point'],origin,AXES)

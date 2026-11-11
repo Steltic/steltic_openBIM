@@ -51,9 +51,16 @@ def bound_base_plate(ctx):
     template=next((t for t in physical['assemblies'] if t['id']==other['template_id']),None)
     part=next((p for p in (template or {}).get('parts',[]) if p['id']=='P1' and 'base plate' in p.get('parameters',{}).get('description','').lower()),None)
     if not part:return None
+    base_c=next((c for c in ctx.model.get('connections',[]) if c['id']==matches[0]['id']),None)
+    if base_c:
+        from .assembly_templates import build_scene
+        base=build_scene(ctx.model,ctx.package,base_c)
+        plate=next((q for q in base['parts'] if q['id']==part['id']),None)
+        faces=plate['faces'] if plate else part_faces(part,ctx.p)
+    else:faces=part_faces(part,ctx.p)
     axes=(frame['x_axis'],frame['y_axis'],cross(frame['x_axis'],frame['y_axis']))
     points=[]
-    for face in part_faces(part,ctx.p):
+    for face in faces:
         for q in face:
             world=sub(transformed(q,other),frame['origin'])
             points.append([dot(world,axis) for axis in axes])
@@ -61,53 +68,56 @@ def bound_base_plate(ctx):
     return [(min(q[i] for q in points),max(q[i] for q in points)) for i in range(3)],matches[0]['id'],part['id']
 
 
-def bind_beam_span(ctx):
-    """Split a continuous-looking drawing host at its real physical piece boundaries."""
+def bind_support_span(ctx,label,coordinate):
+    """Bind each finite weld segment to the piece occupying its full station interval."""
     from .pilots.model import cross
     a=ctx.a
-    beam=next((p for p in a.parts if p['id']=='BEAM'),None)
-    if not beam:return
+    host=next((p for p in a.parts if p['id']==label),None)
+    if not host:return
     physical=ctx.package.get('physical',{})
     c=next((c for c in physical.get('connections',[]) if c['id']==ctx.c['id']),None)
-    frame=(c or {}).get('assembly_instance',{});bound=frame.get('bindings',{}).get('BEAM')
+    frame=(c or {}).get('assembly_instance',{});bound=frame.get('bindings',{}).get(label)
     if not bound:return
     axes=(frame['x_axis'],frame['y_axis'],cross(frame['x_axis'],frame['y_axis']))
     def local(q):return [dot(sub(q,frame['origin']),v) for v in axes]
-    span=sorted(p[0] for p in beam['member']['axis']);z=beam['member']['axis'][0][2];pieces=[]
+    start=host['member']['axis'][0];span=sorted(p[coordinate] for p in host['member']['axis']);pieces=[]
+    transverse=[i for i in range(3) if i!=coordinate]
+    def station(at):
+        point=list(start);point[coordinate]=at;return point
     for m in physical['members']:
-        if m['profile_id']!=beam['profile_id']:continue
+        if m['profile_id']!=host['profile_id']:continue
         ends=[local(add(p,o)) for p,o in zip(m['axis'],m['end_offsets'])]
-        if any(abs(p[1])>.01 or abs(p[2]-z)>.01 for p in ends):continue
-        lo,hi=sorted(p[0] for p in ends);lo=max(lo,span[0]);hi=min(hi,span[1])
+        if any(abs(p[i]-start[i])>.01 for i in transverse for p in ends):continue
+        lo,hi=sorted(p[coordinate] for p in ends);lo=max(lo,span[0]);hi=min(hi,span[1])
         if hi-lo>.01:pieces.append((lo,hi,m['id'],[dot(m['local_y'],v) for v in axes]))
     if len(pieces)<2 or not any(row[2]==bound for row in pieces):return
     pieces.sort();ranges=[]
     # Overlapping source members at one station need an explicit occupancy
     # decision; the source renderer cannot assign one continuous weld twice.
     if any(b[0]<a[1]-.01 for a,b in zip(pieces,pieces[1:])):return
-    a.parts.remove(beam)
+    a.parts.remove(host)
     for i,(lo,hi,mid,y) in enumerate(pieces):
-        role='BEAM' if mid==bound else f'BEAM-PIECE-{i+1}'
-        part=a.member(role,beam['profile_id'],[lo,0,z],[hi,0,z],y=y,description='Actual contiguous beam receiver')
+        role=label if mid==bound else f'{label}-PIECE-{i+1}'
+        part=a.member(role,host['profile_id'],station(lo),station(hi),y=y,description='Actual contiguous '+label.lower()+' receiver')
         part['located_extension']=mid!=bound
         ranges.append((lo,hi,role))
     revised=[]
     for weld in a.welds:
-        if 'BEAM' not in weld['connects']:
+        if label not in weld['connects']:
             revised.append(weld);continue
         start,end=weld['a'],weld['b'];delta=sub(end,start)
-        if abs(delta[0])<1e-7:
-            piece=next((r for r in ranges if r[0]-.01<=start[0]<=r[1]+.01),None)
-            if piece:weld['connects']=[piece[2] if r=='BEAM' else r for r in weld['connects']]
+        if abs(delta[coordinate])<1e-7:
+            piece=next((r for r in ranges if r[0]-.01<=start[coordinate]<=r[1]+.01),None)
+            if piece:weld['connects']=[piece[2] if r==label else r for r in weld['connects']]
             revised.append(weld);continue
         segments=[]
         for lo,hi,role in ranges:
-            t0,t1=sorted(((lo-start[0])/delta[0],(hi-start[0])/delta[0]))
+            t0,t1=sorted(((lo-start[coordinate])/delta[coordinate],(hi-start[coordinate])/delta[coordinate]))
             t0=max(t0,0.);t1=min(t1,1.)
             if t1-t0<1e-7:continue
-            segments.append(dict(weld,id=weld['id'] if role=='BEAM' else weld['id']+'-'+role,
+            segments.append(dict(weld,id=weld['id'] if role==label else weld['id']+'-'+role,
                 a=add(start,mul(delta,t0)),b=add(start,mul(delta,t1)),
-                connects=[role if r=='BEAM' else r for r in weld['connects']]))
+                connects=[role if r==label else r for r in weld['connects']]))
         for index,segment in enumerate(segments):
             segment.update(source_weld_id=weld['id'],segment_index=index,
                 selected_total_length_in=math.dist(start,end),segment_count=len(segments))
@@ -219,7 +229,7 @@ def fit_brb_rows(selected,axis,support_station,column_clearance=None):
     return start,layout
 
 
-def bolted_brb_end(assembly, selected, axis, station, thickness, support_station,layout=None):
+def bolted_brb_end(assembly, selected, axis, station, thickness, support_station,layout=None,casing_depth=None):
     """Two source-selected splice plates join the finite core end to the gusset."""
     count,rows,pitch=selected['count'],selected['rows'],selected['pitch']
     dia=selected['diameter']
@@ -248,8 +258,11 @@ def bolted_brb_end(assembly, selected, axis, station, thickness, support_station
     supplier_overlap=max(2*edge,4.)
     for i,y in enumerate((-thickness/2-splice_t,thickness/2)):
         plate('SPLICE'+str(i),start,far+supplier_overlap,y,splice_t,'Source splice plate; openBIM fit thickness and outline')
-    plate('CORE-END',far+.0625,far+supplier_overlap,-thickness/2,thickness,
-          'Supplier core-end extension fitted between the outer splice plates')
+    edge_width=max(width,casing_depth or width)
+    end_points=[at(s,-thickness/2,d) for s,d in ((far+.0625,-width/2),(far+supplier_overlap,-edge_width/2),
+                                                (far+supplier_overlap,edge_width/2),(far+.0625,width/2))]
+    assembly.polygon('CORE-END',end_points,thickness,basis='A',
+                     description='Supplier core extension between the outer splice plates, meeting the actual casing walls')
     assembly.interfaces.append(dict(id='SPLICE-TO-CORE',kind='supplier_interface',basis='A',
         connects=['SPLICE0','CORE-END','SPLICE1'],
         description='Supplier-end engagement outside the source-selected bolted gusset group'))

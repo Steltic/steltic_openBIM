@@ -187,6 +187,14 @@ def repair_stmf(package,model):
     profiles={r['id']:r for r in physical['profiles']};source={m['id']:m for m in model['members']}
     original={s['id']:s for s in model['connection_assemblies']}
     records={r['id']:r['data'] for r in package['design_records']}
+    crossing_plies={}
+    for interface in package.get('source_handoff',{}).get('crossing_interfaces',[]):
+        if interface['kind']!='flat_bar_crossing_plate':continue
+        normal=unit(interface['plate']['normal'])
+        for face in interface['member_faces']:
+            mid=face['member_id'];sign=face['face_sign'];thick=interface['plate']['thickness_in']
+            if sign not in (-1,1) or not thick>0:raise ValueError('Invalid crossing plate face or thickness at '+interface['id'])
+            crossing_plies[mid]=(normal,sign,thick)
     connections={c['id']:c for c in model['connections']};cache={};variants=defaultdict(list);changed={};edits=defaultdict(dict)
     for c in physical['connections']:
         scene=original.get(c.get('assembly_id'));frame=c.get('assembly_instance',{})
@@ -200,6 +208,10 @@ def repair_stmf(package,model):
             sign=1 if axis[along]*axis[2]>0 else -1
             is_flat=profiles[m['profile_id']]['family']=='flat' and m['kind']=='truss_web'
             offset=mul(normal,sign*profiles[m['profile_id']]['dimensions']['thickness']/2) if is_flat else [0,0,0]
+            if mid in crossing_plies:
+                selected_normal,face,thick=crossing_plies[mid]
+                offset=mul(selected_normal,face*(thick+profiles[m['profile_id']]['dimensions']['thickness'])/2)
+                sign=face*(1 if dot(selected_normal,normal)>0 else -1)
             y=unit(cross(normal,axis)) if is_flat else m['local_y']
             near=add(e[near_i],offset)
             if m['kind']=='column':near=add(e[0],mul(axis,dot(sub(frame['origin'],e[0]),axis)))

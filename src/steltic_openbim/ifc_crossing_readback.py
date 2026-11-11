@@ -44,6 +44,17 @@ def check_crossing(crossing,members,meshes,measurements,selection=None):
                 "faces_at_crossing":[len(p) for p in surfaces]}
     left,right=sorted(surfaces,key=lambda p:p[0][0])
     gap=right[0][0]-left[1][0]
+    if crossing.get('kind')=='flat_bar_crossing_plate':
+        target=(selection or {}).get('plate_thickness_in')
+        overlap=left[1][1].intersection(right[0][1])
+        facts=dict(crossing=crossing['id'],members=ids,actual_bar_face_separation_in=gap,
+                   selected_plate_thickness_in=target,projected_bar_overlap_area_in2=float(overlap.area))
+        measurements.append(facts)
+        if target is None or target<=0 or abs(gap-target)>LINEAR_IN:
+            return dict(facts,issue='Facing bar surfaces do not admit the selected crossing plate thickness')
+        if overlap.area<=LINEAR_IN**2 or overlap.distance(Point(0.,0.))>LINEAR_IN:
+            return dict(facts,issue='Both IFC bars must span the selected plated workpoint')
+        return None
     if gap < -LINEAR_IN:
         return {"issue":"actual flat bars penetrate at the specified crossing","penetration_in":-gap}
     if gap > LINEAR_IN:

@@ -368,6 +368,14 @@ def base(ctx):
     else:
         for i in range(n):points.append([(-1 if i%2==0 else 1)*(bx/2-edge),-by/2+edge+(i//2)*(by-2*edge)/(rows-1),-embed])
     anchors=a.fastener('ANCH',points,[0,0,1],dia,embed+grout+t,['CONC','P1'],f'{n} x {dia:g} in {grade} anchor rods; A embedment where source delegates it',basis='S count/diameter/grade; A embedment' if selected_rods else 'A')
+    from .connection_cuts import drill_plate
+    diameter=ctx.selected.get(('anchor_hole','diameter_in'))
+    if diameter is None:
+        hole=re.search(NUMBER+r'[- ]in(?:ch)?(?: diameter| dia\.?)? (?:rod |anchor )?holes?\s*\(AISC Manual Table 14-2',txt,re.I)
+        if hole:diameter=number(hole[1])
+    if diameter is not None:
+        if diameter<dia:raise ValueError('Selected base plate hole is smaller than the anchor diameter')
+        drill_plate(next(part for part in a.parts if part['id']=='P1'),points,[0,0,1],diameter,'S selected anchor hole diameter')
     if selected_rods:
         anchors.update(functional_kind='anchor',selected_material=ctx.selected.get(('anchor','material')) or grade)
     directional={field:ctx.selected.get(('anchor_pattern',field)) for field in
@@ -388,27 +396,48 @@ def base(ctx):
     for j,q in enumerate(points):
         if washer_dimensions:
             wt,wx,wy=washer_dimensions;wid='WASHER-TOP-'+str(j)
-            a.box(wid,[q[0]-wx/2,q[1]-wy/2,grout+t],[wx,wy,wt],'S','Source top plate washer; anchor hole represented by rod axis')
+            washer=a.box(wid,[q[0]-wx/2,q[1]-wy/2,grout+t],[wx,wy,wt],'S','Source top plate washer at the actual anchor')
+            washer_hole=ctx.selected.get(('washer_hole','diameter_in')) or dia+.0625
+            drill_plate(washer,[q],[0,0,1],washer_hole,'S selected washer hole' if ctx.selected.get(('washer_hole','diameter_in')) else 'A 1/16 in diametral washer clearance')
             size=ctx.n(r'welded to the base plate with '+NUMBER+r' in fillets',.25)
             corners=[[q[0]+sx*wx/2,q[1]+sy*wy/2,grout+t] for sx,sy in ((-1,-1),(1,-1),(1,1),(-1,1))]
             if re.search(r'washer.*?welded to the base plate',txt,re.I):
                 for k in range(4):a.weld(wid+'-W'+str(k),corners[k],corners[(k+1)%4],[wid,'P1'],size,description='Source washer all-round fillet')
         if bottom_washer:
-            size=number(bottom_washer[1]);a.box('WASHER-END-'+str(j),[q[0]-size/2,q[1]-size/2,-embed],[size,size,.5],'S plan size; A thickness','Source embedded-end square washer; A 1/2 in thickness, anchor hole represented by rod axis')
+            size=number(bottom_washer[1]);washer=a.box('WASHER-END-'+str(j),[q[0]-size/2,q[1]-size/2,-embed],[size,size,.5],'S plan size; A thickness','Source embedded-end square washer, A 1/2 in thickness')
+            drill_plate(washer,[q],[0,0,1],dia+.0625,'A 1/16 in diametral embedded washer clearance')
     a.weld('W1',[-d/2,-w/2,grout+t],[d/2,-w/2,grout+t],['M1','P1'],kind='CJP' if 'CJP' in txt else 'fillet',description='Column-to-plate weld per source flange/web specification')
     if 'lug' in txt:
-        primary=re.search(r'shear lug:\s*(?:ASTM\s+\w+\s+)?PL '+NUMBER+r' x '+NUMBER+r' in, '+NUMBER+r' in embedded',txt,re.I)
+        primary=re.search(r'shear lug:?\s+(.*?)\bPL '+NUMBER+r' x '+NUMBER+r' in, '+NUMBER+r' in embedded',txt,re.I)
         secondary=re.search(r'second arm PL '+NUMBER+r' x '+NUMBER+r' in',txt,re.I)
         arms=lug_arms(txt)
         (lt,lw,le),(rt,rw,_)=arms or ((.75,min(d,16),4),(.75,min(d,16),4))
-        a.box('LUGX',[-lw/2,-lt/2,-le],[lw,lt,grout+le],'S' if arms else 'A','Source main shear lug; centered below base')
+        if primary:lt,lw,le=map(number,primary.groups()[1:])
+        lt=ctx.selected.get(('shear_lug','thickness_in')) or lt
+        lw=ctx.selected.get(('shear_lug','width_in')) or lw
+        le=ctx.selected.get(('shear_lug','embedment_in')) or le
+        width_axis=[1.,0.,0.];normal=[0.,1.,0.]
+        world=ctx.selected.get(('shear_lug','face_normal'))
+        written=re.search(r'shear lug has a face normal along world ([XY])\b',txt,re.I)
+        if world is None and written:world=[1.,0.,0.] if written[1].upper()=='X' else [0.,1.,0.]
+        if world is not None:
+            instance=next((c.get('assembly_instance') for c in ctx.package['physical']['connections'] if c['id']==ctx.c['id']),None)
+            if not instance:raise ValueError('Selected shear lug direction needs a located base')
+            normal=unit([dot(world,instance['x_axis']),dot(world,instance['y_axis']),0.])
+            width_axis=[normal[1],-normal[0],0.]
+        start=add(add(mul(width_axis,-lw/2),mul(normal,-lt/2)),[0,0,-le])
+        lug=a.box('LUGX',start,[lw,lt,grout+le],'S' if arms or primary else 'A','Main shear lug centered below the base',
+                  x=width_axis,y=normal)
+        lug['parameters']=dict(source_role='shear_lug',thickness_in=lt,width_in=lw,embedment_in=le)
+        material=ctx.selected.get(('shear_lug','material')) or (primary[1].strip() if primary else None)
+        if material:lug['selected_material']=material
         # The crossing arm is split at the main plate, avoiding duplicate steel.
-        for sg in (-1,1):
+        for sg in ((-1,1) if arms or secondary or not primary else ()):
             start=lt/2 if sg>0 else -rw/2;span=(rw-lt)/2
             if span<=0:raise ValueError('Crossing shear-lug arm cannot fit around main plate')
             label='LUGY'+str(sg);a.box(label,[-rt/2,start,-le],[rt,span,grout+le],'S' if arms else 'A','Source crossing lug arm, fitted to main plate')
             a.weld('WL'+str(sg),[-rt/2,start,grout],[-rt/2,start+span,grout],[label,'P1'],kind='CJP')
-        a.weld('WL',[-lw/2,0,grout],[lw/2,0,grout],['LUGX','P1'],kind='CJP')
+        a.weld('WL',add(mul(width_axis,-lw/2),[0,0,grout]),add(mul(width_axis,lw/2),[0,0,grout]),['LUGX','P1'],kind='CJP')
     a.section_axis=2;a.section_at=grout+t/2;a.dim([-bx/2,0,grout],[bx/2,0,grout],f'{bx:g} in plate');a.dim([points[0][0],0,grout+t+5],[points[1][0],0,grout+t+5],basis='A',offset=30)
 
 def splice(ctx):

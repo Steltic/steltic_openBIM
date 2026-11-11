@@ -33,22 +33,25 @@ def saved_cuts(physical, model):
     for c in physical['connections']:
         frame=c.get('assembly_instance')
         scene=drawing_scenes.get(c.get('assembly_id'))
-        if not frame or not scene or scene['family'] not in ('review_truss_node','review_truss_heel'):
+        allowed=scene and (scene['family'] in ('review_truss_node','review_truss_heel') or
+                           (scene['family']=='review_angle_clip' and c.get('parameters',{}).get('actual_gable_brace')))
+        if not frame or not allowed:
             continue
         for part in scene['parts']:
             cuts=part.get('cut_planes',[])
             mid=frame['bindings'].get(part['id'])
             if not cuts or mid not in members:continue
             m=members[mid]
-            end=min(range(2),key=lambda i:math.dist(m['axis'][i],frame['origin']))
-            if math.dist(m['axis'][end],frame['origin'])>.01:
+            ends=[add(q,o) for q,o in zip(m['axis'],m['end_offsets'])]
+            distance,end=min((math.dist(q,frame['origin']),i) for span in (m['axis'],ends) for i,q in enumerate(span))
+            if distance>.01:
                 # A spanning receiver is continuous at this joint.
                 continue
             for cut in cuts:
                 n=transformed(cut['normal'],frame,True)
                 planes[mid].append(dict(normal=n,offset_in=dot(frame['origin'],n)+cut['offset'],
                     end=end,connection_id=c['id'],receiver_id=part['id'],
-                    basis='Accepted local truss receiver miter in the actual occurrence frame'))
+                    basis='Fitted local receiver end cut in the actual occurrence frame'))
             changed[c['id']]=scene
     for mid,rows in planes.items():
         apply_planes(members[mid],rows)

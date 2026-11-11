@@ -81,11 +81,25 @@ def end(ctx):
         aa=add(anchor,add(mul(hd,-6),mul(n,sg*.25)));bb=add(anchor,add(mul(hd,6),mul(n,sg*.25)))
         a.weld('GW'+str(sg),aa,bb,['HOST','GUSSET'],.25,description='S1/4 in gusset-to-actual-web fillet; A12 in local length')
     for i,off in enumerate((-.875,.375)):
-        points=[add(pin,add(add(mul(u,x),mul(v,y)),mul(n,off))) for x,y in ((-3,-2),(10,-2),(10,2),(-3,2))]
+        points=[add(pin,add(add(mul(u,x),mul(v,y)),mul(n,off))) for x,y in ((-3,-2),(8,-2),(8,2),(-3,2))]
         a.polygon('CLEVIS'+str(i),points,.5,normal=n,basis='A',description='A forged supplier jaw envelope;1/8 in clearance each side of source gusset')
-    a.cylinder('BODY',add(pin,mul(u,8)),u,3,5,'A','A threaded forged clevis body envelope')
-    a.fastener('PIN',[add(pin,mul(n,-.875))],n,1.25,1.75,['CLEVIS0','GUSSET','CLEVIS1'],'S1-1/4 in source clevis pin; A grip')
-    a.interfaces.append(dict(id='THREAD',kind='threaded_clevis',connects=['ROD','BODY','CLEVIS0','CLEVIS1'],basis='A',description='A forged jaws/body and threaded rod engagement; no welded rod or supplier capacity approval'))
+    from .connection_cuts import drill_plate,drill_joined_plates
+    bore=add(pin,mul(u,8))
+    body=a.cylinder('BODY',bore,u,3,5,'A','Threaded supplier clevis body with the actual rod bore')
+    rod_diameter=p[rod['profile_id']]['dimensions']['d']
+    drill_plate(body,[bore],u,rod_diameter,'S rod major diameter; A threaded bore envelope',rod['local_y'])
+    body['parameters']=dict(source_role='threaded_clevis_body',thread_major_diameter_in=rod_diameter,
+                            thread_engagement_in=5.,fit_basis='A supplier threaded envelope')
+    pin_group=a.fastener('PIN',[add(pin,mul(n,-.875))],n,1.25,1.75,['CLEVIS0','GUSSET','CLEVIS1'],'S1-1/4 in source clevis pin; A grip')
+    pin_group['functional_kind']='pin'
+    grade=ctx.selected.get(('pin','material'))
+    pin_group['selected_material']=grade or 'Steel pin; supplier alloy unspecified in HR source'
+    drill_joined_plates(a,pin_group,1.3125,'A 1/16 in diametral pin fit')
+    a.interfaces.append(dict(id='THREAD',kind='threaded_clevis',connects=['ROD','BODY'],basis='A',
+                            description='Threaded rod engages the actual clevis bore over 5 inches'))
+    for jaw in ('CLEVIS0','CLEVIS1'):
+        a.interfaces.append(dict(id='FORGED-'+jaw,kind='integral_forged_clevis',connects=[jaw,'BODY'],
+                                basis='A',description='The forged jaw meets the clevis body at the body end face'))
     a.front_axes=(0,2) if abs(n[1])>.5 else (0,1);a.section_axis=max(range(3),key=lambda i:abs(u[i]));a.section_at=pin[a.section_axis]
     a.dim(shift,pin,'A16 in pin station',basis='A');a.notes.append('Actual rod axis, cutback and host web are shown. S pin diameter, gusset thickness and fillet size. A forged parts, plate outline, weld length and transverse offset require supplier/local capacity verification.')
 

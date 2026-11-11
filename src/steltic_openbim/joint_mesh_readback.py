@@ -13,6 +13,76 @@ from shapely.ops import polygonize, unary_union
 TOL = 1e-4  # inch, coordinate/serialization allowance only
 
 
+def matches_flat_extrusion(mesh, geometry, dimensions):
+    """Every actual face must cover the named finite rectangular extrusion."""
+    if not mesh.closed:
+        return False
+    x,y=unit(geometry['axis']),unit(geometry['local_y'])
+    if abs(x@y)>1e-6:
+        return False
+    basis=np.column_stack((x,y,unit(np.cross(x,y))))
+    vertices=(mesh.vertices-np.asarray(geometry['origin']))@basis
+    width,thickness=dimensions['width'],dimensions['thickness']
+    low=np.array([0,-width/2,-thickness/2]);high=np.array([geometry['length'],width/2,thickness/2])
+    if np.any(high<=low) or np.any(vertices<low-TOL) or np.any(vertices>high+TOL):
+        return False
+    regions={(i,side):[] for i in range(3) for side in (0,1)}
+    for face in mesh.faces:
+        ring=vertices[list(face)]
+        supporting=[(i,side) for i in range(3) for side,limit in enumerate((low[i],high[i])) if np.max(np.abs(ring[:,i]-limit))<=TOL]
+        if len(supporting)!=1:
+            return False
+        axis,side=supporting[0];in_plane=[j for j in range(3) if j!=axis]
+        surface=Polygon(ring[:,in_plane])
+        if not surface.is_valid or surface.area<=0:
+            return False
+        regions[axis,side].append(surface)
+    for (axis,side),surfaces in regions.items():
+        i,j=(k for k in range(3) if k!=axis)
+        target=Polygon([(low[i],low[j]),(high[i],low[j]),(high[i],high[j]),(low[i],high[j])])
+        if not surfaces or unary_union(surfaces).symmetric_difference(target).area>TOL*target.length:
+            return False
+    return True
+
+
+def matches_rhs_extrusion(mesh, geometry, dimensions):
+    """Check the actual prismatic walls and continuous internal void of a sharp-corner RHS."""
+    x,y=unit(geometry['axis']),unit(geometry['local_y'])
+    if not mesh.closed or abs(x@y)>1e-6:
+        return False
+    width,height,wall=dimensions['b'],dimensions['h'],dimensions['t']
+    if wall<=0 or 2*wall>=min(width,height):
+        return False
+    basis=np.column_stack((x,y,unit(np.cross(x,y))))
+    vertices=(mesh.vertices-np.asarray(geometry['origin']))@basis
+    local=Mesh(vertices,mesh.faces)
+    length=geometry['length']
+    if max(abs(min(vertices[:,0])),abs(max(vertices[:,0])-length))>TOL:
+        return False
+    # Any face between the end planes must be extruded along the member's axis.
+    # Compound wall seams can remain in the mesh, so union their planar section.
+    for face in local.polygons:
+        low,high=min(face[:,0]),max(face[:,0])
+        if high-low<=TOL:
+            if min(abs(low),abs(high-length))>TOL:
+                return False
+            continue
+        normal=np.sum(np.cross(face,np.roll(face,-1,axis=0)),axis=0)
+        if np.linalg.norm(normal)<1e-9 or abs(unit(normal)[0])>1e-6:
+            return False
+    def rectangle(w,h):
+        return Polygon([(-w/2,-h/2),(w/2,-h/2),(w/2,h/2),(-w/2,h/2)])
+    expected=rectangle(width,height).difference(rectangle(width-2*wall,height-2*wall))
+    stations=sorted(set(np.round(vertices[:,0],5)))
+    for lo,hi in zip(stations,stations[1:]):
+        if hi-lo<=TOL:
+            continue
+        actual=local.section([1,0,0],(lo+hi)/2,([0,1,0],[0,0,1]))
+        if actual.symmetric_difference(expected).area>TOL*expected.length:
+            return False
+    return True
+
+
 def unit(vector):
     result = np.asarray(vector, dtype=float)
     length = np.linalg.norm(result)

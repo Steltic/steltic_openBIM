@@ -21,7 +21,7 @@ def material_for(part,kind,old,materials,record_ids):
     if selected:
         spec=str(selected)
         candidates=[m for m in materials.values() if m.get('specification')==spec]
-        if kind=='pin' and '4140' in spec:
+        if kind=='pin' and '4140' in spec and not re.search(r'\b(?:A434|CLASS)\b',spec,re.I):
             candidates += [m for m in materials.values() if 'pin' in m.get('source_item','').lower()
                            and '4140' in m.get('specification','') and 'A572' not in m['specification']]
         if candidates:
@@ -172,7 +172,17 @@ def rebuilt_scenes(model,package):
     next_number=max((int(s['sheet'][1:]) for s in model['connection_assemblies'] if re.fullmatch(r'C\d+',s['sheet'])),default=0)+1
     for original in model['connection_assemblies']:
         family=original['family']
-        if family not in ('review_brace','review_brb','review_beam','review_pin_beam','review_base','review_wall_base','review_truss_node','review_truss_heel'):
+        rebuild=family in ('review_brace','review_brb','review_beam','review_pin_beam','review_base','review_wall_base',
+                           'review_truss_node','review_truss_heel','review_plan_angle')
+        if family=='review_rod_clevis':
+            rebuild=any(by_id[cid].get('parameters',{}).get('actual_rod_end') for cid in original['occurrences'])
+        if family=='review_angle_clip':
+            rebuild=any(by_id[cid].get('parameters',{}).get('actual_gable_brace') for cid in original['occurrences'])
+        if family=='review_hr_strut_bracing':
+            rebuild=any('source_kicker_angle_deg' in by_id[cid].get('parameters',{}) for cid in original['occurrences'])
+        if family=='review_brace_crossing':
+            rebuild=any(by_id[cid].get('parameters',{}).get('crossing') for cid in original['occurrences'])
+        if not rebuild:
             out.append(original);continue
         groups=defaultdict(list)
         for cid in original['occurrences']:
@@ -227,6 +237,8 @@ def repair(package,model):
         source_members[mid]['material_id']=m['material_id']
     from .hr_boxed_plies import add_column_plies
     add_column_plies(package,model)
+    from .review_gable_bracing import fit_flange_braces
+    fit_flange_braces(package,model)
     from .review_hr_brace_ends import bind
     bind(model,package)
     for mid,m in members.items():
@@ -234,6 +246,8 @@ def repair(package,model):
         for field in ('end_offsets','slots'):
             if field in corrected:m[field]=copy.deepcopy(corrected[field])
     changed=rebuilt_scenes(model,package)
+    from .connection_cuts import bind_member_bores
+    bind_member_bores(physical,model,changed)
     from .terminal_planes import saved_cuts
     changed.update(saved_cuts(physical,model))
     from .stmf_fit import repair_stmf

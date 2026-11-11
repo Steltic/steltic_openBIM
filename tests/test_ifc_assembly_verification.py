@@ -183,7 +183,7 @@ def test_source_crossing_checks_four_actual_ifc_weld_lengths(tmp_path,wrong):
     src=dict(id='X',record_id='R',selected=[0,1,2],member_ids=['A','B'],point_in=[0,0,0]);handoff={'records':{'R':{'fields':fields}},'crossing_interfaces':[src]}
     parts={str(i):dict(id=str(i),kind='weld',connects=['A','B'],parameters={'size_in':.25},geometry={'type':'polyline','points':line}) for i,line in enumerate(lines)}
     check=Assessment(rb,dict(members=[],profiles=[]),handoff)
-    check.crossing({'point':[0,0,0],'drawing_ref':'1/C001'},parts,{'origin':[0,0,0],'bindings':{'A':'A','B':'B'}},np.eye(4),rb.curves('X'),src)
+    check.crossing({'point':[0,0,0],'drawing_ref':'1/C001'},parts,{'origin':[0,0,0],'bindings':{'A':'A','B':'B'}},np.eye(4),rb.curves('X'),src,{})
     assert bool(check.findings)==wrong
     skipped=verify_assembly_fit(tmp_path/'control.ifc',dict(members=[],profiles=[],connections=[]),handoff)
     assert not skipped['passed'] and skipped['findings'][0]['code']=='required_crossing_occurrence_count'

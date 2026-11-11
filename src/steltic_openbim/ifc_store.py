@@ -86,6 +86,10 @@ class IFCStore:
                 raise StaleRevision('The structural source changed. Refresh before importing.')
             module,job=body.get('module'),body.get('job')
             package,source_evidence=self.jobs.load_current(module,job)
+            if module=='HR':
+                from .native_hr_completion import complete_native_hr
+                original=package
+                package=complete_native_hr(original)
             initial=initial_state(package,old[1]['revision']+1 if old else 1)
             if (old and old[1]['source_model_sha256']==fingerprint(package) and old[1]['source_job']==job and old[1]['source_module']==module
                     and old[1]['source_readiness']==initial['source_readiness'] and old[1]['requests']==initial['requests']
@@ -100,6 +104,9 @@ class IFCStore:
                          counts={k:len(v) for k,v in package['physical'].items() if isinstance(v,list)})
             dest=self.root(p)/'structural'/f'r{state["revision"]:04}-{uuid.uuid4().hex[:12]}'
             dest.mkdir(parents=True)
+            if module=='HR' and package is not original:
+                state['original_hr_sha256']=fingerprint(original)
+                write_json(dest/'hr_original_source.json',original)
             write_json(dest/'source.json',package);write_json(dest/'state.json',state)
             pointer=self.root(p)/('structural-'+uuid.uuid4().hex+'.tmp')
             write_json(pointer,dict(directory=dest.name))
@@ -185,6 +192,11 @@ class IFCStore:
             if current is None:raise ValueError('Choose an available HR/CFS job source, Steltic drawing set or built IFC review')
             folder,state=current;sha=state['source_model_sha256'] if source in ('steltic','structural') else state['source_sha256']
             if body.get('revision')!=state['revision'] or body.get('source_sha256')!=sha:raise StaleRevision('The source changed. Refresh before exporting.')
+            if source=='structural' and state.get('source_module')=='HR' and body.get('final'):
+                drawing=self.drawings.current(p)
+                if not drawing or sha not in (drawing[1].get('original_hr_sha256'),drawing[1].get('source_model_sha256')):
+                    raise ValueError('Final HR delivery requires a drawing revision for this physical source')
+                source='steltic';folder,state=drawing
             if source=='ifc_import' and state['status'] not in ('built','reviewed'):raise ValueError('Build the imported IFC review model first')
             dest=self.root(p)/'exports'/('e-'+uuid.uuid4().hex);dest.mkdir(parents=True)
             if source in ('steltic','structural'):
@@ -224,7 +236,8 @@ class IFCStore:
             folder,state=current;meta=read(folder/'inspection.json')
             result['imported']=dict(state,directory=folder.name,inspection={k:v for k,v in meta.items() if k!='products'})
         if drawing:
-            _,s=drawing;result['drawing']=dict(revision=s['revision'],source_sha256=s['source_model_sha256'],status=s['drawing_status'],
+            folder,s=drawing;result['drawing']=dict(revision=s['revision'],source_sha256=s['source_model_sha256'],status=s['drawing_status'],
+                source_module=(s.get('native_source') or {}).get('module') or s.get('source_module') or s.get('module'),
                 representation=s.get('representation','physical_geometry'),counts=s.get('drawing_counts',{}))
         for f in sorted((self.root(p)/'imports').glob('*/state.json')):
             s=read(f);result['history'].append({k:s[k] for k in ('revision','filename','status','source_sha256')})

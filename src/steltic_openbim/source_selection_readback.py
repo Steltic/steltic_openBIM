@@ -1,7 +1,6 @@
 """Compare occurrence-selected HR connection fields with the native and drawing assemblies."""
 from collections import Counter,defaultdict
 import re
-import numpy as np
 
 
 def alloys(value):
@@ -29,25 +28,6 @@ def geometry_bounds(part):
     return None
 
 
-def plate_thickness(part):
-    g=part.get('geometry',{})
-    if g.get('type')=='box':
-        return min(g['size'])
-    faces=g.get('faces',[])
-    if not faces:return None
-    verts=np.vstack(faces)
-    normals=set()
-    for face in faces:
-        ring=np.asarray(face)
-        n=np.cross(ring,np.roll(ring,-1,axis=0)).sum(axis=0)
-        length=np.linalg.norm(n)
-        if length>1e-8:
-            n=n/length
-            if n[np.argmax(np.abs(n))]<0:n=-n
-            normals.add(tuple(np.round(n,8)))
-    return min((np.ptp(verts@normal) for normal in normals),default=None)
-
-
 def verify_source_selections(package,drawing_model=None):
     handoff=package.get('source_handoff',{})
     records=handoff.get('records',{})
@@ -61,7 +41,7 @@ def verify_source_selections(package,drawing_model=None):
         scenes={s['id']:s for s in drawing_model.get('connection_assemblies',drawing_model.get('assemblies',[]))}
     findings=[]
     counts=Counter()
-    thickness_cache={}
+    plate_cache={}
     result=dict(passed=False,findings=findings,occurrences_checked=0,selected_comparisons=counts)
     if not records and any(c.get('design_record_ids') for c in physical['connections']):
         findings.append(dict(issue='HR connection source selections are missing'))
@@ -143,16 +123,8 @@ def verify_source_selections(package,drawing_model=None):
             if scene:
                 drawn=[w.get('size') for w in scene['welds'] if w['id'] in {p['id'] for p in welds}]
                 check('drawn_reinforcement_fillet',len(drawn)==len(welds) and all(n==value for n in drawn),value,drawn,rid)
-        if variants & {'brb_pinned','brb_bolted','slotted_hss_gusset'}:
-            for rid,value in fields['gusset','thickness_in']:
-                plates=[p for p in parts if 'GUSSET' in p['id'].upper() and p['kind']=='plate']
-                measured=[]
-                for p in plates:
-                    key=(t.get('id',cid),p['id'])
-                    if key not in thickness_cache:thickness_cache[key]=plate_thickness(p)
-                    measured.append(thickness_cache[key])
-                check('selected_gusset_thickness',bool(measured) and all(n is not None and abs(n-value)<1e-4 for n in measured),
-                      value,measured,rid)
+        from .selected_plate_readback import verify_plates
+        verify_plates(fields,variants,parts,instance,materials,plate_cache,t.get('id',cid),check)
         directional=any(fields['anchor_pattern',key] for key in ('edge_flange_normal_in','edge_along_flange_in','minimum_edge_in','flange_offset_in'))
         if directional:
             from .anchor_pattern_readback import measure_anchor_pattern

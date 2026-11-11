@@ -117,7 +117,7 @@ def draw(ctx):
     v=unit(vector(sub(*reversed(continuous['axis'])),axes));n=cross(normal,v)
     u=unit(vector(sub(*reversed(high['axis'])),axes))
     if dot(u,n)<0:u=mul(u,-1)
-    tail=selected['end_distance_in']+selected['split_weld_length_in']+1
+    tail=selected['end_distance_in']+selected['split_weld_length_in']
     half_width=selected['proposed_width_in']/2;slot_half=selected['continuous_slot_length_in']/2
     depth=effective(ctx.p,continuous['profile_id']);half_depth=effective(ctx.p,high['profile_id'])
     end_normal=cross(normal,u);tail_points=[add(mul(u,tail),mul(end_normal,side*max(half_depth/2+1,half_width))) for side in (-1,1)]

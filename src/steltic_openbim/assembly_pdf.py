@@ -148,6 +148,8 @@ def draw_view(sh,scene,mode,rect,title):
         for index,d in enumerate(scene['dimensions']):
             if d['view']!=mode:continue
             pa,pb=project(d['a']),project(d['b'])
+            for actual,witness in zip(d.get('witness_origins',[]),(pa,pb)):
+                sh.c.line(*tr(project(actual)),*tr(witness))
             if math.dist(pa[:2],pb[:2])<.01:continue
             from .design_pdf import inches
             label=(d['label']+' / ' if d['label'] else '')+inches(d['value_in'])+' ['+d['basis']+']'
