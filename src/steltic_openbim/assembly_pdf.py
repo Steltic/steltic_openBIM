@@ -140,13 +140,18 @@ def draw_view(sh,scene,mode,rect,title):
             sh.line(point,(tx-8 if right else tx+width+8,ty+3),'#6d858f',.55)
             sh.label(tx,ty,label,size,'#a54841' if part['kind']=='weld' else '#8c6022' if part['basis']=='A' else '#294e63')
     if mode in ('front','section'):
-        for d in scene['dimensions']:
+        for index,d in enumerate(scene['dimensions']):
             if d['view']!=mode:continue
             pa,pb=project(d['a']),project(d['b'])
             if math.dist(pa[:2],pb[:2])<.01:continue
             from .design_pdf import inches
             label=(d['label']+' / ' if d['label'] else '')+inches(d['value_in'])+' ['+d['basis']+']'
-            sh.dim(tr(pa),tr(pb),d['offset'],label=label,value=d['value_in'],basis=d['basis'],ref=scene['reference'])
+            if abs(math.dist(pa[:2],pb[:2])-d['value_in'])>.03125:
+                label+=' (true length)'
+            sh.dim(tr(pa),tr(pb),d['offset'],label=label,value=d['value_in'],basis=d['basis'],ref=scene['reference'],
+                   source=dict(kind='assembly',id=scene['id'],index=index,view=mode),
+                   projection=dict(sheet=sh.current,axes=axes,scale=denom,origin_pt=[ox,oy]),
+                   model_points=[d['a'],d['b']])
     if mode=='front':
         # Cut-plane trace is a true geometric slice, not a second view of a flat plate.
         if scene['section_axis'] in axes:

@@ -216,13 +216,18 @@ def generate(package,state,dest):
                 for row,(cells,rh) in enumerate(items):
                     if row%2==0:sh.c.setFillColor('#f1f4f4');sh.c.rect(70,y-rh+10,sum(widths),rh,fill=1,stroke=0)
                     x=70
-                    for lines,w in zip(cells,widths):
-                        for j,line in enumerate(lines):sh.text(x+8,y-j*(font+3),line,font)
+                    for col,(lines,w) in enumerate(zip(cells,widths)):
+                        for j,line in enumerate(lines):
+                            if prefix=='S' and start==301 and col>=4:
+                                sh.opening_cell(x+8,y-j*(font+3),line,font,opening_by_id[cells[0][0]],
+                                                ('x_ft','y_ft','z_ft','width_ft','height_ft')[col-4])
+                            else:sh.text(x+8,y-j*(font+3),line,font)
                         x+=w
                     y-=rh
                 if y<145:raise ValueError('Flexible table overflow')
             queue(f'{prefix}{start+i:03}',title+f' / {i+1}',draw)
     opening_rows=[];opening_hosts={p['id']:p for p in m['panels']}
+    opening_by_id={f['id']:f for f in m['openings']}
     for f in m['openings']:
         opening_rows.append([f['id'],f['kind']+' / '+f.get('basis','A'),str(opening_level(f,opening_hosts)),f['plane'].upper(),*[feet(f[n]*12) for n in ('x_ft','y_ft','z_ft','width_ft','height_ft')]])
     tables(['ID','TYPE / BASIS','LEVEL','PLANE','X','Y','Z','WIDTH','HEIGHT'],opening_rows,[270,250,90,90,280,280,280,280,280],'S',301,'Dimensioned opening coordinate schedule')
