@@ -27,7 +27,8 @@ def allocate_ends(member, ends, opposite_trim=None):
     # Keep a finite transition between the checked yielding length and each full
     # end. A notch is machined in the moving head wherever the stationary eye enters it.
     total = sum(nose + .125 + head_thickness + gap for _, nose in limits)+(opposite_trim or 0.)
-    inset = max(0., (total - nonyielding + .5) / len(limits))
+    required_ends=2*core.get('terminal',{}).get('minimum_transition_length_in',.25)
+    inset = max(0., (total - nonyielding + required_ends) / len(limits))
     return {cid:dict(front_in=nose+.125-inset, thickness_in=head_thickness,
                      required_travel_in=travel, casing_gap_in=gap)
             for cid,nose in limits}
@@ -68,6 +69,12 @@ def configure_selected_heads(package,model):
             cid=indexes.get((mid,end))
             if cid is None:continue
             fit=allocated[cid];start,far=member['axis'][end],member['axis'][1-end];length=math.dist(start,far)
+            chosen=connections[cid].get('parameters',{}).get('moving_head_fit')
+            if chosen:
+                if (chosen['front_in']<=0 or chosen['thickness_in']<=0 or chosen['casing_gap_in']+1e-6<fit['required_travel_in']):
+                    raise ValueError('Source-located moving head lacks the selected stroke at '+cid)
+                fit=dict(chosen,required_travel_in=fit['required_travel_in'])
+            fit.update(connection_id=cid,workpoint_in=start)
             length_trim=fit['front_in']+fit['thickness_in']+fit['casing_gap_in']
             offset=[(b-a)*length_trim/length for a,b in zip(start,far)]
             for target in (member,physical_members[mid]):
@@ -151,6 +158,11 @@ def moving_head(a, brace, sourced, rows, profile, axis, normal, at, end, eye_hal
     dims=profile['dimensions'];hy=dims['b']/2-dims['t'];hd=dims['h']/2-dims['t']
     fixed_ids={r['id'] for r in rows if r['connected_to']!='brace_end'}
     fixed=fixed_plates(a.parts,fixed_ids,axis,normal)
+    if core.get('terminal') and brace.get('brb_casing',{}).get('infill_material'):
+        from .brb_casing import nominal_infill_bands
+        from .brb_infill_fit import fit_pockets
+        fit_pockets(brace,sourced['connection_id'],sourced['workpoint_in'],fixed,terminal,travel,
+                    nominal_infill_bands(brace,profile))
     shell=box(-dims['b']/2,-dims['h']/2,dims['b']/2,dims['h']/2).difference(box(-hy,-hd,hy,hd))
     # The pin fixes the moving tongues to the gusset locally. The separate
     # casing may approach this joint by the full reported axial elongation.
@@ -177,7 +189,9 @@ def moving_head(a, brace, sourced, rows, profile, axis, normal, at, end, eye_hal
     carrier=box(-cy,-cd,cy,cd);core_tip=box(-core['end_thickness_in']/2,-core['depth_in']/2,
                                          core['end_thickness_in']/2,core['depth_in']/2)
     if not carrier.covers(core_tip):raise ValueError('Core transition falls outside the casing opening')
-    stations=[back]
+    terminal_selection=core.get('terminal')
+    required_area=core['area_in2']*(terminal_selection['end_area_ratio'] if terminal_selection else 1.)
+    stations=[back,back+.5] if terminal_selection else [back]
     for _,y0,y1,foot in fixed:
         if max(y0,-cy)>min(y1,cy):continue
         strip=foot.intersection(box(back,-cd-.0625,terminal,cd+.0625))
@@ -189,13 +203,48 @@ def moving_head(a, brace, sourced, rows, profile, axis, normal, at, end, eye_hal
     layers=[]
     for lo,hi in zip(stations,stations[1:]):
         section=carrier.difference(obstacles(fixed,lo,hi))
-        if section.area<core['area_in2']-1e-6:raise ValueError('Machined supplier projection is smaller than its selected yielding core')
+        if terminal_selection and lo<back+.5-1e-6:
+            # Machine the A36 fork at its root to the actual available net head
+            # face. This removes material above the adjacent stationary cheek
+            # pockets, giving the full remaining throat real steel on both sides.
+            section=section.intersection(head)
+        if section.area<required_area-1e-6:raise ValueError('Machined supplier projection is smaller than its selected end section')
         layers.append((lo,hi,section,1.,1.))
     layers.append((stations[-1],terminal,carrier,core['end_thickness_in']/(2*cy),core['depth_in']/(2*cd)))
     first=layers[0][2];contact=first.intersection(head).area
-    if contact+1e-6<core['area_in2']:raise ValueError('Clevis head misses its moving axial-core projection')
+    if contact+1e-6<required_area:raise ValueError('Clevis head misses its selected moving axial-core end section')
     moving_head_projection(a,axis,mul(axis,back),gap,core)
     proj=next(q for q in a.parts if q['id']=='CORE-END')
+    if terminal_selection:
+        # A finite volume of deposited weld metal replaces the joined surface
+        # region, joining the whole A36 transition to the Grade 50 moving head.
+        # The weld throat is its full machined end face. The axial width here is
+        # the represented fusion zone, not the specified effective throat.
+        weld_width=.1875;split=back+weld_width
+        if gap<=weld_width:raise ValueError('Insufficient stock for selected full-penetration joint')
+        fused=[];remaining=[]
+        for lo,hi,section,sy,sd in layers:
+            if lo<split:
+                hi_w=min(hi,split);f=(hi_w-lo)/(hi-lo)
+                fused.append((lo,hi_w,section,1+(sy-1)*f,1+(sd-1)*f))
+            if hi>split:
+                if lo<split and (sy!=1. or sd!=1.):
+                    from shapely.affinity import scale
+                    f=(split-lo)/(hi-lo);yy=1+(sy-1)*f;dd=1+(sd-1)*f
+                    remaining.append((split,hi,scale(section,xfact=yy,yfact=dd,origin=(0,0)),sy/yy,sd/dd))
+                else:remaining.append((max(lo,split),hi,section,sy,sd))
+        if not fused or not remaining or first.difference(head.buffer(1e-5)).area>1e-4:
+            raise ValueError('The complete source-selected weld face is not supported by the moving head')
+        seam=a.part('HEAD-CJP','Complete-joint-penetration groove weld across the machined supplier core/head end',
+                    rectangular_layers(fused,at),'S','weld',selected_material=terminal_selection['head_joint_electrode'],
+                    connects=['END-CAP','CORE-END'])
+        seam['parameters']=dict(source_role='brb_core_head_cjp',weld_type='CJP',electrode=terminal_selection['head_joint_electrode'],
+                                selected_end_area_in2=required_area,required_full_face_in2=first.area,
+                                represented_fusion_width_in=weld_width,source_record_id=core['record'])
+        joined=next(i for i in a.interfaces if i['id']=='MOVING-HEAD-TO-CORE')
+        joined.update(kind='brb_full_cjp',connects=['END-CAP','HEAD-CJP','CORE-END'],
+                      description='Continuous complete-joint-penetration groove weld to both measured full steel faces')
+        layers=remaining
     proj['faces']=rectangular_layers(layers,at);proj['bounds']=bounds(proj['faces'])
     for k in ('polygon','normal','thickness'):proj.pop(k,None)
     proj['description']='Machined core fork from moving head to the finite axial-core end, inside the clear casing opening'

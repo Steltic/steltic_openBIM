@@ -130,20 +130,39 @@ def check_plate_sections(source,receiver,parts,meshes,axis,casing=None,required_
             if intrudes>TOL*max(1.,shape.length):
                 issues.append(dict(code='selected_moving_tongue_intrudes_receiving_member',ply=k,host=host,overlap_in2=intrudes))
     if casing is not None and required_travel>0:
-        start=float(min(casing.vertices@v));sample=start+min(.02,(float(max(casing.vertices@v))-start)/1000.)
-        try:_,shell=inside_core(casing.section(v,sample,(y,n)))
-        except ValueError as err:issues.append(dict(code='actual_supplier_casing_section_unresolved',detail=str(err)));shell=None
+        start=float(min(casing.vertices@v));limit=min(float(max(casing.vertices@v)),start+24.)
+        cuts=sorted({round(float(s),6) for s in casing.vertices@v if start+TOL<s<limit-TOL}|{start,limit})
+        material=[]
+        for a,b in zip(cuts,cuts[1:]):
+            if b-a<=TOL:continue
+            # A mortar relief has a finite depth and may leave another real hole
+            # in the annular stock. Locate the steel core at the source workline
+            # and use all other measured material at each actual interval.
+            fixed_sections=[]
+            for ratio in (.15,.5,.85):
+                section=casing.section(v,a+(b-a)*ratio,(y,n))
+                pieces=list(section.geoms) if section.geom_type=='MultiPolygon' else [section]
+                central=[p for p in pieces if p.covers(Point(0,0))]
+                if len(central)!=1 or len(pieces)<2:
+                    issues.append(dict(code='actual_supplier_casing_section_unresolved',interval_in=[a,b]));break
+                fixed_sections.append(unary_union([p for p in pieces if p is not central[0]]))
+            if len(fixed_sections)!=3:continue
+            shell=fixed_sections[1]
+            if any(shell.symmetric_difference(other).area>4*TOL*max(1.,shell.length) for other in fixed_sections):
+                issues.append(dict(code='actual_fixed_casing_changes_inside_finite_interval',interval_in=[a,b]));continue
+            material.append((a,b,shell))
         for k,lo,hi,section in fixed:
-            for role in ('END-CAP','CORE-END'):
+            for role in ('END-CAP','CORE-END','HEAD-CJP'):
                 if role not in meshes:continue
                 projection=_clipped_projection(meshes[role],y,lo,hi,(v,n))
                 intrusion=section.intersection(projection.buffer(-TOL)).area
                 if intrusion>TOL*max(1.,section.length):
                     issues.append(dict(code='actual_moving_head_or_core_intersects_stationary_pin_steel',part=role,stationary_part=k,overlap_in2=intrusion))
-            if shell is None:continue
-            projection=_clipped_projection(meshes[k],v,start-required_travel,start+24+required_travel,(y,n))
-            overlap=shell.intersection(projection.buffer(-TOL)).area
-            if overlap>TOL*max(1.,shell.length):
-                issues.append(dict(code='actual_stationary_pin_steel_intersects_swept_casing',part=k,full_travel_in=required_travel,overlap_in2=overlap))
+            for a,b,shell in material:
+                projection=_clipped_projection(meshes[k],v,a-required_travel,b+required_travel,(y,n))
+                overlap=shell.intersection(projection.buffer(-TOL)).area
+                if overlap>TOL*max(1.,shell.length):
+                    issues.append(dict(code='actual_stationary_pin_steel_intersects_swept_casing',part=k,
+                        full_travel_in=required_travel,axial_material_interval_in=[a-start,b-start],overlap_in2=overlap))
             counts['actual_stationary_pin_stock_travel_checks']+=1
     return counts,issues,evidence

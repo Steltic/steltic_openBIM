@@ -11,6 +11,18 @@ from .saved_assemblies import native_parts,receivers
 from .stmf_fit import local
 
 
+def weld_consumable(weld,selected,catalogue):
+    """Resolve this joint's electrode before considering the dated project schedule."""
+    role=weld.get('attachment_role')
+    specific=selected.get((role,'material')) if role else None
+    if weld.get('selected_material') or specific:return weld.get('selected_material') or specific
+    scheduled={m['specification'] for m in catalogue.values() if m.get('source_schedule') and
+               m.get('source_item','').strip().lower() in ('weld','welds','weld metal','welding electrodes')}
+    if len(scheduled)==1:return scheduled.pop()
+    generic={m['specification'] for m in catalogue.values() if 'weld' in m.get('source_item','').lower()}
+    return generic.pop() if len(generic)==1 else 'Weld consumable grade unspecified in HR handoff'
+
+
 def build_corner_end(package,c,brace,supports,profiles,catalogue,joint,*,slotted=False):
     p=package['physical'];point=joint['point'];selected=selected_fields(package,c)
     variant=selected.get(('connection','variant'))
@@ -63,7 +75,6 @@ def build_corner_end(package,c,brace,supports,profiles,catalogue,joint,*,slotted
     scene=ctx.a.result();scene['source_record_ids']=c['design_record_ids']
     # These are physical geometry decisions. Retain each specifically named
     # constituent grade; use the selected connection steel for its fitted plies.
-    welds=[m['specification'] for m in catalogue.values() if 'weld' in m.get('source_item','').lower()]
     for part in scene['parts']:
         if part['kind']=='plate' and not part.get('selected_material'):
             part['selected_material']=grade
@@ -72,7 +83,7 @@ def build_corner_end(package,c,brace,supports,profiles,catalogue,joint,*,slotted
             if len(set(concrete))==1:part['selected_material']=concrete[0]
             else:part['representation_role']='context_only'
     for weld in scene['welds']:
-        weld.setdefault('selected_material',welds[0] if len(set(welds))==1 else 'Weld consumable grade unspecified in HR handoff')
+        weld['selected_material']=weld_consumable(weld,selected,catalogue)
     local_brace=next(part['member'] for part in scene['parts'] if part['id']=='BRACE')
     offset=sub(transformed(local_brace['axis'][0],frame),brace['axis'][end])
     old=brace['end_offsets'][end]

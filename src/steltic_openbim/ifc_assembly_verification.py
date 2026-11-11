@@ -221,6 +221,9 @@ class Assessment:
             spec=self.core_requirements[mid]
             required_length=spec['yielding_length_workpoint_ratio']*float(np.linalg.norm(np.subtract(*m['axis'])))
             info,errors=core_sections(local,spec['area_in2'],required_length)
+            if spec.get('terminal'):
+                from .brb_terminal_readback import check_transitions
+                evidence,failures=check_transitions(info,spec);info.update(evidence);errors.extend(failures)
             if mid in self.casing_requirements:
                 from .brb_casing_readback import check as check_casing
                 casing,problems=check_casing(self.rb.members[mid],local,self.casing_requirements[mid],
@@ -712,6 +715,8 @@ class Assessment:
                 if not spec or 'BRACE' not in support or 'CORE-END' not in support:
                     self.issue('brb_core_continuation_missing',interface=interface['id'])
                     continue
+                if spec.get('terminal') and sum(i.get('kind')=='brb_full_cjp' for i in interfaces)!=1:
+                    self.issue('selected_brb_head_cjp_missing_or_duplicated',member=mid)
                 m=self.members[mid]
                 axis=inverse[:3,:3]@np.subtract(*m['axis'][::-1])
                 info,errors=meets_axial_core(support['BRACE'],support['CORE-END'],axis,spec['area_in2'])
@@ -739,6 +744,21 @@ class Assessment:
                 if not errors:
                     self.checked_core_ends[mid,end]+=1
                     connected['BRACE'].add('CORE-END');connected['CORE-END'].add('BRACE')
+                continue
+            if kind=='brb_full_cjp':
+                from .brb_terminal_readback import check_cjp
+                from .pin_stack_readback import actual_materials
+                mid=bound.get('BRACE');spec=self.core_requirements.get(mid,{})
+                if not spec.get('terminal'):
+                    self.issue('brb_head_cjp_lacks_selected_terminal',interface=interface['id']);continue
+                m=self.members[mid];end=min(range(2),key=lambda i:np.linalg.norm(np.subtract(m['axis'][i],inst['origin'])))
+                away=inverse[:3,:3]@np.subtract(m['axis'][1-end],m['axis'][end])
+                evidence,failures=check_cjp(meshes,parts,actual_materials(self.rb.assemblies[cid]),away,spec)
+                for failure in failures:self.issue('actual_brb_full_head_cjp_differs',detail=failure,**evidence)
+                self.brb_core_measurements.append(dict(evidence,member=mid,end_index=end,connection=cid,sheet=self.context.get('sheet')))
+                if not failures:
+                    self.counts['actual_brb_fused_head_joints']+=1
+                    connected['END-CAP'].add('HEAD-CJP');connected['HEAD-CJP'].update(['END-CAP','CORE-END']);connected['CORE-END'].add('HEAD-CJP')
                 continue
             if interface.get('kind')!='supplier_interface' or 'CORE-END' not in interface.get('connects',[]):
                 continue

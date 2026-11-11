@@ -19,8 +19,17 @@ def source_core(record):
     strokes=[float(m[1]) for check in data.get('checks',[]) if
              (m:=re.search(r'brace elongation ([\d.]+) in',check.get('limit_state',''),re.I))]
     grade=area[2].upper()
-    return dict(record=record['id'],area_in2=float(area[1]),material=grade if grade.startswith('ASTM') else 'ASTM '+grade,
+    result=dict(record=record['id'],area_in2=float(area[1]),material=grade if grade.startswith('ASTM') else 'ASTM '+grade,
                 yielding_length_workpoint_ratio=ratios.pop(),reported_elongation_in=max(strokes,default=0.))
+    terminal=data.get('brb_core_terminal')
+    if terminal:
+        if (abs(result['yielding_length_workpoint_ratio']-terminal['yielding_length_workpoint_ratio'])>1e-6 or
+                terminal['minimum_transition_length_in']<=0 or terminal['end_area_ratio']<=1 or
+                terminal['core_material'].upper().removeprefix('ASTM ')!=grade.removeprefix('ASTM ') or
+                terminal['head_joint_weld'].upper()!='CJP' or not terminal['head_joint_electrode']):
+            raise ValueError('Contradictory shaped core-terminal selection at '+record['id'])
+        result['terminal']=dict(terminal)
+    return result
 
 
 def source_requirements(members, handoff, records):
@@ -70,6 +79,7 @@ def source_requirements(members, handoff, records):
                     original['material'].upper().removeprefix('ASTM ') != spec['material'].upper().removeprefix('ASTM ')):
                 raise ValueError('Typed HR core disagrees with the bound HR design record for ' + mid)
             spec['reported_elongation_in'] = max(spec['reported_elongation_in'], original['reported_elongation_in'])
+            if 'terminal' in original:spec['terminal']=dict(original['terminal'])
         result[mid] = spec
     return result
 
@@ -95,7 +105,7 @@ def prepare(package,model):
         inside_depth=d['h']-2*d['t']
         depth=min(2*math.sqrt(spec['area_in2']),inside_depth-.5)
         thickness=spec['area_in2']/depth
-        end_thickness=thickness+.25
+        end_thickness=thickness*spec['terminal']['end_area_ratio'] if spec.get('terminal') else thickness+.25
         if end_thickness>inside_width-.5 or not 0<spec['yielding_length_workpoint_ratio']<1:
             raise ValueError('Selected BRB core cannot fit inside its casing for '+m['id'])
         m['supplier_core']=dict(spec,depth_in=depth,thickness_in=thickness,end_thickness_in=end_thickness,
@@ -180,7 +190,10 @@ def write_cores(package,model):
         taper=min(max(reserve,0.),max(1.,d/2))
         full=rectangular_ring(spec['end_thickness_in'],d)
         yield_ring=rectangular_ring(t,d)
-        if taper>1e-6:
+        if spec.get('terminal'):
+            from .brb_terminal import shaped_sections
+            sections=shaped_sections(spec,length)
+        elif taper>1e-6:
             sections=[[0.,full],[reserve-taper,full],[reserve,yield_ring],
                       [length-reserve,yield_ring],[length-reserve+taper,full],[length,full]]
             sections=[v for i,v in enumerate(sections) if not i or v[0]-sections[i-1][0]>1e-7]
