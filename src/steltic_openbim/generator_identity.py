@@ -3,7 +3,7 @@ import hashlib
 from pathlib import Path
 
 
-VERSION = '0.8.99'
+VERSION = '0.8.100'
 
 
 def generator_identity():
