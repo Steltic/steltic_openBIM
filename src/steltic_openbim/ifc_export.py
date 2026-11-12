@@ -124,6 +124,10 @@ def _export_source(directory,destination,source):
     physical['openings']=[dict(o,vertices=opening_boundary(o)) for o in physical.get('openings',[])]
     from .physical_review import review_physical
     physical_checks=review_physical(physical)
+    fits = beam_end_fits(package['physical']) if package.get('module') == 'HR' and not recovered else {}
+    if fits:
+        from .ifc_rafter_gussets import rod_gusset_view
+        physical = rod_gusset_view(physical, fits)
     model=ifcopenshell.file(schema='IFC4')
     def entity(cls,label,key):
         obj=ifcopenshell.api.root.create_entity(model,ifc_class=cls,name=str(label))
@@ -297,7 +301,6 @@ def _export_source(directory,destination,source):
         if connection_part:row.update(connection_id=item['connection_id'],joint_id=item.get('joint_id'),source_level=item.get('level'))
         objects.append(row)
         return obj
-    fits = beam_end_fits(package['physical']) if package.get('module') == 'HR' and not recovered else {}
     for m in members:
         faces=[]
         roles=[] if m.get('brb_casing') else None

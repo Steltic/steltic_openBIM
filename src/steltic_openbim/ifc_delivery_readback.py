@@ -98,6 +98,9 @@ def verify_ifc(path,package,source_sha256):
     from .ifc_shape_readback import ShapeReadback
     from .ifc_beam_ends import beam_end_fits, fitted_member
     fits = beam_end_fits(physical) if package.get('module') == 'HR' else {}
+    if fits:
+        from .ifc_rafter_gussets import rod_gusset_view
+        physical = rod_gusset_view(physical, fits)
     shapes=ShapeReadback(physical,unit_in)
     if project[0].Name!=package['building_id'] or project_props.get('SourceModelSHA256')!=source_sha256:
         flag('ifc_identity',project[0].Name,'Source job or model digest differs')

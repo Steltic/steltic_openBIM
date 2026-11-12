@@ -110,6 +110,7 @@ def beam_end_fits(physical):
     members = {m['id']: m for m in physical['members']}
     profiles = {p['id']: p for p in physical['profiles']}
     fits = defaultdict(list)
+    gusset_welds = beam_weld_points(physical, members)
     for c, family, mid, host, role, template in end_connections(physical):
         m, receiver = members[mid], members[host]
         joint = c['point']
@@ -157,6 +158,22 @@ def beam_end_fits(physical):
                 point = transformed(local, frame)
                 normal = inward
             cut['plane'] = plane(normal, point)
+            weld = gusset_welds.get((c.get('joint_id'), mid))
+            if weld and receiver['kind'] in COLUMNS and family in BEAM_DETAILS:
+                # The longitudinal gusset weld can run all the way to the
+                # column. The beam flange must cover that selected weld even
+                # where the stand-alone shear detail shows an erection gap.
+                if section == 'i':
+                    half = dims['tw']/2 if weak else dims['d']/2
+                    if weak and c.get('parameters',{}).get('boxing_t'):
+                        half = dims['bf']/2+c['parameters']['boxing_t']
+                elif section == 'rhs':
+                    half = dims['b' if weak else 'h']/2
+                else:
+                    half = None
+                if half is not None:
+                    face = dot(centre,normal)+half
+                    fit_welded_plies(cut, m, profiles[m['profile_id']], weld, face)
             if family == 'review_chamfer':
                 # The approved local detail also trims the column and boxing
                 # behind the back of the diagonal face plate, over its height.
@@ -187,6 +204,55 @@ def beam_end_fits(physical):
         fits[mid].append(cut)
     add_topological_receivers(physical, members, profiles, fits)
     return dict(fits)
+
+
+def beam_weld_points(physical, members):
+    """Located weld extents shared by the gusset and a named beam occurrence."""
+    templates = {t['id']: t for t in physical.get('assemblies', [])}
+    by_template = {}
+    result = defaultdict(list)
+    for c in physical.get('connections', []):
+        frame = c.get('assembly_instance', {})
+        tid = frame.get('template_id')
+        if tid not in templates:
+            continue
+        if tid not in by_template:
+            by_template[tid] = [(p.get('connects', []), p['geometry']['points']) for p in templates[tid].get('parts', [])
+                if p.get('kind') == 'weld' and p.get('geometry',{}).get('type') == 'polyline'
+                and (p.get('parameters',{}).get('attachment_role') == 'gusset_beam_weld'
+                     or any('GUSSET' in tag.upper() for tag in p.get('connects', [])))]
+        for roles, points in by_template[tid]:
+            for role in roles:
+                mid = frame.get('bindings', {}).get(role)
+                if members.get(mid,{}).get('kind') in BEAMS:
+                    result[c.get('joint_id'),mid].extend(transformed(q,frame) for q in points)
+    return result
+
+
+def fit_welded_plies(cut, member, profile, weld, column_face):
+    """Carry each welded ply to its weld and preserve the other plies' fit-up."""
+    normal = cut['plane']['normal']
+    gap_station = cut['plane']['offset_in']
+    if profile['family'] != 'i' or column_face >= gap_station:
+        return
+    origin, _, _, z = receiver_frame(member)
+    half_depth = profile['dimensions']['d']/2
+    clear = half_depth - profile['dimensions']['tf']
+    z0 = dot(origin,z)
+    stops = [gap_station]*3  # bottom flange, web, top flange
+    for point in weld:
+        height = dot(sub(point,origin),z)
+        ply = 0 if height <= -clear+1e-6 else 2 if height >= clear-1e-6 else 1
+        stops[ply] = min(stops[ply], max(column_face,dot(point,normal)))
+    nearest = min(stops)
+    cut['plane']['offset_in'] = nearest
+    above_lower = dict(normal=z,offset_in=z0-clear)
+    below_lower = dict(normal=mul(z,-1),offset_in=-z0+clear)
+    above_upper = dict(normal=z,offset_in=z0+clear)
+    below_upper = dict(normal=mul(z,-1),offset_in=-z0-clear)
+    for stop, other_plies in zip(stops, ([above_lower],[below_lower,above_upper],[below_upper])):
+        if stop > nearest+1e-7:
+            cut['recesses'].append([dict(normal=normal,offset_in=stop),*other_plies])
 
 
 def add_topological_receivers(physical, members, profiles, fits):
