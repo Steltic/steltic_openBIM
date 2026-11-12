@@ -151,6 +151,7 @@ class Assembly:
             if 'geometry' in part:part['geometry']=transform_geometry(part['geometry'],frame)
             if 'member' in part:part['member']['axis']=[add(p,delta) for p in part['member']['axis']]
             if 'points' in part:part['points']=[add(p,delta) for p in part['points']]
+            for hole in part.get('holes',[]):hole['point']=add(hole['point'],delta)
             if 'polygon' in part:part['polygon']=[add(p,delta) for p in part['polygon']]
             for cut in part.get('cut_planes',[]):cut['offset']+=dot(delta,cut['normal'])
         for fastener in self.fasteners:fastener['points']=[add(p,delta) for p in fastener['points']]

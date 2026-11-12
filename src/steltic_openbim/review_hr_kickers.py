@@ -64,9 +64,12 @@ def draw(ctx):
     if dot(sub(start,support_point),webnormal)<0:webnormal=mul(webnormal,-1)
     webface=add(support_point,mul(webnormal,ctx.p[support['profile_id']]['dimensions']['tw']/2))
     denom=dot(su,normal)
+    # The web meets the nearest face of an oblique tab. Clipping a square
+    # tab to the web moves its opposite edge away from this contact line.
+    contact_offset=0. if dot(normal,webnormal)<0 else -thick
     if abs(denom)<1e-7:
-        if abs(dot(sub(webface,start),normal)+thick)>1e-5:raise ValueError('Parallel kicker gusset must actually lap the selected web face')
-    else:webface=add(webface,mul(su,(-thick-dot(sub(webface,start),normal))/denom))
+        if abs(dot(sub(webface,start),normal)-contact_offset)>1e-5:raise ValueError('Parallel kicker gusset must actually lap the selected web face')
+    else:webface=add(webface,mul(su,(contact_offset-dot(sub(webface,start),normal))/denom))
     side=1 if start[1]>0 else -1;half=ctx.p[beam['profile_id']]['dimensions']['bf']/2
     lower_mid=[0,side*(half-1.5),0]
     lower_mid[0]=(-thick-dot(sub(lower_mid,start),normal))/normal[0] if abs(normal[0])>1e-7 else 0
@@ -119,4 +122,7 @@ def clear_host(polygon,normal,thick,u,v,member,profiles):
     if original.area-result.area<1e-8:return polygon
     if result.geom_type!='Polygon' or result.interiors:
         raise ValueError('Receiving member splits the fitted gusset or traps an interior cut')
+    # Clipping at a flange can introduce an extra collinear vertex. Remove it
+    # before drilling so the IFC triangulation has no zero-area sliver faces.
+    result=result.simplify(1e-6,preserve_topology=True)
     return [add(base,add(mul(u,x),mul(v,y))) for x,y in list(result.exterior.coords)[:-1]]

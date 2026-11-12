@@ -41,3 +41,13 @@ def test_hr6_anchor_reinforcement_is_not_embedded_column_reinforcement():
     assert embedment(text) is None
     assert rods(text)[:2]==(4,3)
     assert lug_arms(text)==((6.25,24,12),(2.25,8,12))
+
+
+def test_braced_base_uses_checked_weld_precision_and_one_sided_stock():
+    from steltic_openbim.base_plate_extensions import base_edge_layout,frame_extension
+    records={row['id']:row for row in evidence('hr30')['calc']['connections']}
+    base=records['conn-base-lateral_col-W14X159']
+    assert frame_extension(base)==('Y',30,6.5)
+    assert lug_arms(base['components'])==((3.25,20,7),(1.5,12,7))
+    assert base_edge_layout(records['conn-brace-base-Y-HSS5X5X3/8'])==pytest.approx(14.33)
+    assert base_edge_layout(records['conn-brace-base-X-HSS4-1/2X4-1/2X3/8'])==pytest.approx(7.)

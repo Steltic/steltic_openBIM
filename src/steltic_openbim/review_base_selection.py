@@ -74,6 +74,11 @@ def flange_rows(text,flange_width=None,normal_length=None,column_depth=None):
 
 def lug_arms(text):
     """Return explicit (thickness, width, embedment) for both crossing arms."""
+    split=re.search(r'cruciform shear lug: PL '+NUMBER+r' x '+NUMBER+r' in \(continuous\).*?a second plate PL '+
+                    NUMBER+r' in, '+NUMBER+r' in tip to tip, in two arms.*?'+NUMBER+r' in embedded below the grout',text,re.I)
+    if split:
+        t,w,rt,rw,depth=map(number,split.groups())
+        return (t,w,depth),(rt,rw,depth)
     main=re.search(r'shear lug:\s*(?:ASTM\s+\w+\s+)?PL '+NUMBER+r' x '+NUMBER+r' in, '+NUMBER+r' in embedded',text,re.I)
     other=re.search(r'second arm PL '+NUMBER+r' x '+NUMBER+r' in',text,re.I)
     if main:

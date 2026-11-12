@@ -202,7 +202,7 @@ def draw_brace(ctx):
             else:
                 a.box('BASE',[-cd-4,-bf/2-6,-1.5],[cd+column_face+lx+4,bf+12,1.5],'A','Local base support envelope including the complete selected gusset edge')
                 host='BASE'
-            if not grade_interface and not cap_stock and base_kind not in ('free','collar'):
+            if not grade_interface and not cap_stock and base_kind not in ('free','collar') and not (actual_base and (base_spec or {}).get('bearing_at_workpoint')):
                 a.box('CONC',[-cd-8,-bf/2-10,-12],[cd+lx+12,bf+20,10.5],'A','Foundation context',kind='concrete')
         elif proposal:
             seat=proposal['seat_thickness_in'];width=proposal['seat_width_in']

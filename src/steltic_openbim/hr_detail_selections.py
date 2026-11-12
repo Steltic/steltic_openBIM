@@ -97,7 +97,7 @@ def selected_shear_text(ctx):
                         f['applicability']['beam_group']!=group),default=len(components))
                 texts.append(components[lo:hi])
                 continue
-        texts.append(source_text(ctx.package,dict(ctx.c,design_record_ids=[rid])))
+        texts.append(source_text(ctx.package,dict(ctx.c,design_record_ids=[rid]),located_selection=True))
     return '\n'.join(texts)
 
 
@@ -107,6 +107,20 @@ def first_number(text, patterns):
         if match:
             return number(match[1])
     return None
+
+
+def located_collector_fit(ctx,text):
+    """Use the issued hole, eccentricity and both end distances of a scheduled plate."""
+    occurrence=ctx.package.get('source_handoff',{}).get('occurrences',{}).get(ctx.c['id'],{})
+    if not any(app.get('selected') and app.get('interface_application',{}).get('role')=='scheduled_collector'
+               for app in occurrence.get('applications',[])):return None
+    fit=re.search(r'standard holes \('+NUMBER+r' in\), e = '+NUMBER+
+                  r' in; vertical edge distance '+NUMBER+r' in, horizontal edge distance '+
+                  NUMBER+r' in on the plate and '+NUMBER+r' in to the beam end',text,re.I)
+    if fit is None:return None
+    hole,line,vertical,plate_edge,beam_edge=map(number,fit.groups())
+    if line<beam_edge:raise ValueError('Selected collector bolt line precedes the beam end')
+    return dict(hole=hole,line=line,vertical=vertical,plate_edge=plate_edge,gap=line-beam_edge)
 
 
 def pin_selection(ctx):
