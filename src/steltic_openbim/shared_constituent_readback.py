@@ -98,6 +98,13 @@ def resolve_shared(check,connection,own_parts,instance):
                     or owner.get('detail_ref',{}).get('legacy_family')!='review_transfer_truss'):
                 raise ValueError('Transverse floor tab references a different transfer panel')
             expected_welds=set()
+        if all(ref.get('sharing_kind')=='transfer_girder_slip' for ref in group):
+            slip=connection.get('parameters',{}).get('sliding_receiver',{})
+            if (owner_id!=slip.get('parent_connection_id') or
+                    map_roles!={slip.get('negative_fan'):'FAN-L',slip.get('positive_fan'):'FAN-R'} or
+                    owner.get('detail_ref',{}).get('legacy_family')!='review_transfer_truss'):
+                raise ValueError('Sliding diaphragm must share both side plates at its transfer node')
+            expected_welds=set()
         if welds!=expected_welds:
             raise ValueError('Shared support weld coverage differs for '+owner_id+': '+str(sorted(welds^expected_welds)))
         ref_lines=check.rb.curves(owner_id)
