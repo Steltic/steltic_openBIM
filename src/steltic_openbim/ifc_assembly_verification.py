@@ -900,7 +900,7 @@ class Assessment:
                     self.brb_core_measurements.append(dict(member=mid,end_index=end,connection=cid,
                                                            sheet=self.context.get('sheet'),ordinary_pin_sections=facts))
                     for finding in issues:self.issue(**finding)
-        for rid in self.connections[cid].get('design_record_ids',[]):
+        for rid in self.connections.get(cid, {}).get('design_record_ids', []):
             if rid not in self.sliding_receivers:continue
             from .transfer_slip_readback import measure
             curves={k:transform(v,inverse) for k,v in measured_welds.items()}
