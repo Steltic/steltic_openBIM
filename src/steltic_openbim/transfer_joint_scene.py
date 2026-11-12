@@ -13,6 +13,11 @@ def selections(ctx):
     result = {}
     for rid in ctx.c['design_record_ids']:
         row = rows.get(rid, {})
+        if rid==ctx.c.get('parameters',{}).get('transfer_node_design',{}).get('record_id'):
+            # This record supplies the post fan, splice or insert through the
+            # occurrence's structured selectors. The intersecting chord and
+            # diagonal have their own original double-gusset records.
+            continue
         category = row.get('type', '').lower()
         component = row.get('components', '')
         if 'transfer truss' not in category or 'flange tips' not in component.lower():

@@ -18,7 +18,8 @@ def measure(mesh, pin, normal, axis, schedule, post_weld):
     facts=dict(stock_depth_in=float(max(distances)-contact))
     errors=[]
     base=schedule['arm_thickness_in'];depth=schedule['thickness_in']
-    ratio=schedule['outside_taper_run_per_rise'];radius=schedule['blend_radius_in']
+    ratio=schedule['outside_taper_run_per_rise']
+    radius=schedule['blend_radius_in'] if 'blend_radius_in' in schedule else schedule['minimum_blend_radius_in']
     if not mesh.closed or footprint.geom_type!='Polygon' or footprint.interiors:
         return facts,['The post plate is open, perforated or lacks its single inner bearing face']
     if abs(facts['stock_depth_in']-depth)>TOL:

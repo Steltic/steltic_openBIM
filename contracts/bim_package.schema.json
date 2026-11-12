@@ -1220,6 +1220,7 @@
               "kind": {
                 "enum": [
                   "free_end",
+                  "scope_boundary",
                   "continuous_member",
                   "bearing_interface",
                   "shared_connection"

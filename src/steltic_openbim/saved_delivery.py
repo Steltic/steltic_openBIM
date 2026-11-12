@@ -127,6 +127,9 @@ def render_native_revision(handoff,output,approved_layout=None,prior_native=None
         retained=bind_layout(json.loads(read(prior_native)),package,model,register)
         retained['prior_native_file_sha256']=digest_file(prior_native)
         repaired=repair(package,model)
+        from .steel_grade_scope import apply as limit_steel
+        scope=limit_steel(package,model,register)
+        if scope:retained['steel_delivery_scope']=scope
         retained['repair']=repaired
         state=initial_state(package,register['revision']+1)
         state.update(schema='steltic.ifc_physical_source',source_status='design_test',representation='physical_geometry',
@@ -155,7 +158,8 @@ def render_native_revision(handoff,output,approved_layout=None,prior_native=None
             drawing=draw_approved(package,state,output,prepared_model=model)
         ifc=export_structural(output,output/'model.ifc')
         retained['new_sheet_ids']=[s['number'] for s in drawing['sheets']]
-        retained['missing_prior_sheets']=sorted(set(retained['prior_sheet_ids'])-set(retained['new_sheet_ids']))
+        withdrawn=retained.get('steel_delivery_scope',{}).get('withdrawn_detail_sheets',[])
+        retained['missing_prior_sheets']=sorted(set(retained['prior_sheet_ids'])-set(retained['new_sheet_ids'])-set(withdrawn))
         retained['added_sheets']=sorted(set(retained['new_sheet_ids'])-set(retained['prior_sheet_ids']))
         write_json(output/'retained_layout.json',retained)
     write_json(output/'ifc_manifest.json',ifc)

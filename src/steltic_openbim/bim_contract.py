@@ -148,8 +148,17 @@ def joint_disposition_findings(package,*,verified_bonds=None):
         kind = declaration.get('kind'); point = joint.get('point')
         if not vector(point): continue
         ends = joint.get('member_ends',[]); attachments = joint.get('attachments',[])
-        if kind not in ('free_end','continuous_member','bearing_interface','shared_connection'):
-            bad('joint_disposition_kind','Classify this unconnected joint as free_end, continuous_member, bearing_interface or shared_connection; a typical-detail note is not a located occurrence',jid)
+        if kind not in ('free_end','continuous_member','bearing_interface','shared_connection','scope_boundary'):
+            bad('joint_disposition_kind','Classify the physical joint or provide a source-bound delivery boundary',jid)
+        elif kind=='scope_boundary':
+            refs=[records.get(r,{}) for r in declaration.get('design_record_ids',[])]
+            member_id=ends[0].get('member_id') if len(ends)==1 else None
+            def at_limit(record):
+                scope=record.get('data',{}).get('steel_delivery_scope',{})
+                return (not record.get('waived') and isinstance(scope,dict) and number(scope.get('grade_in')) and
+                        member_id in scope.get('clipped_columns',[]) and abs(point[2]-scope['grade_in'])<=1e-5)
+            if members.get(member_id,{}).get('kind')!='column' or attachments or not refs or not all(at_limit(r) for r in refs):
+                bad('joint_scope_boundary','Published column end must meet its named HR steel delivery limit',jid)
         elif kind == 'free_end':
             if len(ends) != 1 or attachments:
                 bad('joint_free_end','A free-end exception needs exactly one physical member end and no support attachments',jid)

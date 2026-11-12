@@ -24,7 +24,7 @@ def intended_tongues(physical,records):
         match=re.search(r'(?:plate\s+)?extended on the bay side by a\s+'+NUMBER+
                         r'\s+in wide tongue\s+'+NUMBER+r'\s+in long',text,re.I)
         if match:selected[r['id']]=tuple(number(v) for v in match.groups())
-        if re.match(r'base plate\s+PL\b',text,re.I):base_records.add(r['id'])
+        if re.match(r'(?:base plate\s+|moment base:\s*)PL\b',text,re.I):base_records.add(r['id'])
     result=defaultdict(list);findings=[]
     if not selected and not (layouts and extensions):return result,findings
     members={m['id']:m for m in physical['members']}

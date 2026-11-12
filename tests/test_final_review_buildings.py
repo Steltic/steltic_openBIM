@@ -74,11 +74,15 @@ def test_tower_interface_changes_from_continuous_podium_to_clear_joint(key):
     assert any(s['family']=='review_tower_podium' for s in scenes)
     assert any(s['family']=='review_tower_joint' for s in scenes)
 
-def test_cellar_continuity_and_roof_damper_are_explicit_supplements():
+def test_hr3_steel_begins_at_grade():
     _,m=case('hr3')
-    cellar=[mm for mm in m['members'] if min(q[2]+mm['end_offsets'][i][2] for i,q in enumerate(mm['axis']))==-144]
-    assert cellar and all(mm['basis']=='A' for mm in cellar)
-    assert all(min(q[2] for q in mm['axis'])==0 for mm in cellar)  # Analysis workline stays at grade.
+    columns=[mm for mm in m['members'] if mm['kind']=='column']
+    lows=[min(p[2]+o[2] for p,o in zip(mm['axis'],mm['end_offsets'])) for mm in columns]
+    assert min(lows)==0 and lows.count(0)==35
+    assert min(level[2] for level in m['levels'])==0
+    assert not any(c['detail_ref']['id']=='review_base' for c in m['connections'])
+
+def test_roof_damper_is_an_explicit_supplement():
     _,damper=case('hr26');beams=[mm for mm in damper['members'] if mm['id'].startswith('TMD-SUPPORT-')]
     assert len(beams)==2 and all(math.dist(*mm['axis'])==360 for mm in beams)
     assert abs(beams[0]['axis'][0][0]-beams[1]['axis'][0][0])==120

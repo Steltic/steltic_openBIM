@@ -143,6 +143,13 @@ def bearing(ctx):
 def slip(ctx):
     from .review_hr_details import draw as standard
     ctx.params['moment']=False;ctx.family='review_beam';standard(ctx);ctx.family='review_transfer_slip'
+    if ctx.params.get('transfer_floor_tab_design'):
+        ctx.a.notes.append('Transverse W24 floor tab on the outer post panel. The longitudinal diaphragm release is on the two girders in the truss plane.')
+        return
+    if ctx.params.get('travel_in'):
+        from .connection_cuts import drill_receivers
+        group=next(p for p in ctx.a.parts if p['id']=='F1')
+        drill_receivers(ctx.a,group,group['diameter']+.125,plate_travel=ctx.params['travel_in'])
     ctx.a.notes.append('S: horizontal long slots isolate the Level-2 transfer-truss node from the floor diaphragm. A: 2 in free movement, 3 in long slots with plate washers and snug fit. Gravity shear transfers through the bolt shanks; no axial lock across the slot is assumed.')
     for f in ctx.a.fasteners:f['slot']=dict(direction=[1,0,0],length_in=3,travel_in=2,basis='A')
     ctx.a.interfaces.append(dict(id='SLIP',kind='horizontal_slotted_connection',connects=['M2','P1'],travel_in=2,basis='A',description='Source axial release; A travel and slot dimensions'))

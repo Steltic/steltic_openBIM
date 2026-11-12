@@ -114,7 +114,13 @@ def inserts(assembly,role,direction,perp,spec):
 
 def stiffen(assembly,role,direction,perp,spec,inserts_by_tip):
     d=spec['original'];stiff=spec['stiffener'];weld=spec['stiffener_weld']
-    radius=stiff['cope_radius_in'];thickness=stiff['thickness_in'];offset=stiff['offset_from_workpoint_in']
+    radius=stiff['cope_radius_in'];thickness=stiff['thickness_in']
+    if 'lower_station_in' in stiff or 'upper_station_in' in stiff:
+        stations=(stiff['lower_station_in'],stiff['upper_station_in'])
+    else:
+        offset=stiff['offset_from_workpoint_in'];stations=(-offset,offset)
+    if stations[0]+thickness>stations[1] or max(abs(v) for v in stations)+thickness/2>spec['length_in']/2+1e-6:
+        raise ValueError('Selected stiffener stations overlap or fall outside the flange inserts')
     half=(d['d']-2*d['tf'])/2;inner=d['tw']/2;outer=d['bf']/2+spec['projection_in']
     seam=outer-spec['width_in']
     if min(half,outer-inner)<=radius or thickness<=0:
@@ -128,7 +134,7 @@ def stiffen(assembly,role,direction,perp,spec,inserts_by_tip):
     for i in range(1,80):
         theta=math.pi*(80-i)/160
         outline.append((inner+radius*math.cos(theta),-half+radius*math.sin(theta)))
-    for s in (-offset,offset):
+    for s in stations:
         for side in (-1,1):
             name=f'STIFF-{s:g}-{side}'
             pts=[at(s-thickness/2,side*w,z) for w,z in outline]
@@ -149,10 +155,11 @@ def stiffen(assembly,role,direction,perp,spec,inserts_by_tip):
 def splice_welds(assembly,spec,roles):
     post,top=roles[spec['member']],roles[spec['upper']]
     d=spec['finished'];width,depth,tf=d['bf'],d['d'],d['tf']
+    metal=spec['weld_material'] if 'weld_material' in spec else spec['material']
     for i,location in enumerate((-(depth-tf)/2,(depth-tf)/2)):
         assembly.weld('POST-FLANGE-CJP'+str(i),[location,-width/2,0.],[location,width/2,0.],
                       [post,top],0.,kind='CJP',basis='S',description='Post and upper column flange groove weld')
-        assembly.welds[-1]['selected_material']=spec['material']
+        assembly.welds[-1]['selected_material']=metal
     assembly.weld('POST-WEB-CJP',[-depth/2+tf,0.,0.],[depth/2-tf,0.,0.],
                   [post,top],0.,kind='CJP',basis='S',description='Post and upper column web groove weld')
-    assembly.welds[-1]['selected_material']=spec['material']
+    assembly.welds[-1]['selected_material']=metal

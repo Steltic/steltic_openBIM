@@ -115,6 +115,8 @@ def draw_brace(ctx):
     stack_receiver=selected_receiver(ctx,stack) if stack else {}
     cp=ctx.select(('column',));bp=ctx.select(('beam','moment_beam','girder','transfer_chord'));cd=effective(p,cp);bd=effective(p,bp);bf=effective(p,bp,'width')
     proposal=par.get('unsupported_base_corner')
+    from .transfer_chord_bridge import geometry as bridge_geometry,add_parts as add_bridge,split_weld as split_bridge_weld
+    bridge=bridge_geometry(ctx)
     if proposal:
         bp=proposal['source_beam_profile'];bd=effective(p,bp);bf=effective(p,bp,'width')
     beam_z=par.get('beam_centroid_z',-bd/2);beam_top=beam_z+bd/2;beam_bottom=beam_z-bd/2
@@ -128,11 +130,14 @@ def draw_brace(ctx):
     grade_interface=par.get('grade_diaphragm_interface')
     from .brace_base_attachment import base_attachment,collar,cap_plate,add_cap_plate
     base_spec=base_attachment(ctx,cp) if kind=='base' else None
+    rail=par.get('grade_rail')
+    if rail:base_spec=dict(rail,kind='grade_rail',column_kind='fillet')
     cap_stock=cap_plate(ctx) if kind=='base' and not actual_base and not base_spec else None
     base_kind=base_spec['kind'] if base_spec else None
     interface_z=(beam_bottom if sign<0 else beam_top) if kind!='base' else actual_base[0][2][1] if actual_base else 0
     if base_kind in ('free','collar'):interface_z=base_spec.get('clearance',0.)
     if cap_stock:interface_z=cap_stock['grout']+cap_stock['thickness']
+    if rail:interface_z=rail['bottom_plate_in']+rail['web_height_in']+rail['top_plate_in']
     # Top-of-steel is the analysis workpoint. On a downward brace the actual
     # flange intersection is farther into the bay; centre its support strip
     # and stiffeners there, while retaining the exact source brace workline.
@@ -180,7 +185,11 @@ def draw_brace(ctx):
         column_lo=-18 if proposal or grade_interface else -(base_spec or {}).get('thickness',0.) if kind=='base' else -bd-lz-24
         a.member('COLUMN',cp,[0,0,column_lo],[0,0,lz+12 if proposal else lz+24],y=[1,0,0] if weak else [0,1,0])
         if kind=='base':
-            if grade_interface:
+            if rail:
+                from .grade_steel import add_rail
+                add_rail(a,rail,column_face)
+                host='BASE'
+            elif grade_interface:
                 a.notes.append(grade_interface)
                 host=None
             elif cap_stock:
@@ -202,7 +211,7 @@ def draw_brace(ctx):
             else:
                 a.box('BASE',[-cd-4,-bf/2-6,-1.5],[cd+column_face+lx+4,bf+12,1.5],'A','Local base support envelope including the complete selected gusset edge')
                 host='BASE'
-            if not grade_interface and not cap_stock and base_kind not in ('free','collar') and not (actual_base and (base_spec or {}).get('bearing_at_workpoint')):
+            if not grade_interface and not cap_stock and base_kind not in ('free','collar','grade_rail') and not (actual_base and (base_spec or {}).get('bearing_at_workpoint')):
                 a.box('CONC',[-cd-8,-bf/2-10,-12],[cd+lx+12,bf+20,10.5],'A','Foundation context',kind='concrete')
         elif proposal:
             seat=proposal['seat_thickness_in'];width=proposal['seat_width_in']
@@ -224,7 +233,10 @@ def draw_brace(ctx):
                    [column_face,width/2,-seat/2],['COLUMN','SEAT'],.375,basis='A',
                    description='A seat-to-column fillet, top/bottom; capacity unverified')
             a.notes.append(proposal['basis']);host='SEAT'
-        else:a.member('BEAM',bp,[column_face,0,beam_z],[column_face+lx+24,0,beam_z]);host='BEAM'
+        else:
+            start_x=bridge['chord_cut_station_in'] if bridge else column_face
+            a.member('BEAM',bp,[start_x,0,beam_z],[column_face+lx+24,0,beam_z]);host='BEAM'
+            if bridge:add_bridge(a,bridge,column_face,interface_z)
         clearance=column_face+(2*t if par.get('beam_only_gusset') else 0)
         vertices=[[clearance,-t/2,interface_z],[lx+clearance,-t/2,interface_z],[max(lx,18)+clearance,-t/2,interface_z+sign*lz*.65],[clearance,-t/2,interface_z+sign*lz]]
         a.polygon('GUSSET',vertices,t,basis='A',description=f'Source gusset t={t:g}; A fitted perimeter, source UFM edges')
@@ -239,7 +251,8 @@ def draw_brace(ctx):
         else:a.notes.append('S: beam-only gusset; no gusset-to-column weld. A 2t clear gap is drawn at the column face. Source free-edge and rotation-clearance requirements remain.')
         if host:
             weld_gb=(base_spec or {}).get('horizontal_fillet') or (base_spec or {}).get('fillet') or support_selection(ctx,horizontal_role,'size_in','WGB',weld)
-            a.weld('WGB',[clearance,0,interface_z],[lx+clearance,0,interface_z],[host,'GUSSET'],weld_gb,
+            edge_start=clearance+(bridge['weld_offset_in'] if bridge else 0)
+            a.weld('WGB',[edge_start,0,interface_z],[lx+edge_start,0,interface_z],[host,'GUSSET'],weld_gb,
                    kind=ctx.selected.get((horizontal_role,'kind')) or 'fillet',description='Source horizontal gusset attachment')
     ctx.text=full_text
     station=max(8,min(lx,lz)*.55,abs(interface_z/v[2])+4 if abs(v[2])>1e-8 else 0,
@@ -380,6 +393,7 @@ def draw_brace(ctx):
         if fold_ratio is not None:
             from .brace_linear_clearance import dimension
             dimension(a,v,fold_ratio,fold,dot(start,v),restrained_edges)
+        if bridge:split_bridge_weld(a,bridge)
     a.section_at=pin[0] if isbrb and not selected_bolts else start[0]+6
     edge_start=beam_x-lx/2 if upper else clearance
     if base_kind!='free' and not grade_interface:

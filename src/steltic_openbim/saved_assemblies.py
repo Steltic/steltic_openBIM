@@ -176,6 +176,9 @@ def rebuilt_scenes(model,package):
         rebuild=family in ('review_brace','review_brb','review_beam','review_pin_beam','review_base','review_wall_base',
                            'review_truss_node','review_truss_heel','review_plan_angle','review_transfer_truss')
         if model['pilot'].startswith('hr'):
+            if family=='review_transfer_slip':
+                rebuild=any(by_id[cid].get('parameters',{}).get('transfer_floor_tab_design') or
+                            ('shear_plate','depth_in') in selected_fields(package,by_id[cid]) for cid in original['occurrences'])
             if family=='review_splice':
                 rebuild=any('per side in one vertical line' in records.get(r,{}).get('components','') or 'CJP groove welds of both flanges and the web' in records.get(r,{}).get('components','') for cid in original['occurrences'] for r in by_id[cid].get('design_record_ids',[]))
             if family in ('hr_simple_shear_plate','hr_infill_shear_plate_cope','hr_shear','test_floor_opening'):
@@ -213,6 +216,8 @@ def rebuilt_scenes(model,package):
                    tuple(params.get('joist_bearing_setout_in',[])),params.get('bearing_flange_face_in'),
                    tuple((v['axis'],v['sign'],v['width_in'],v['length_in'],v['source_record_id'])
                          for v in params.get('integral_gusset_tongues',[])))
+            if params.get('transfer_floor_tab_design'):
+                token+=(fingerprint(params['transfer_floor_tab_design']['outer_face']),)
             attached_cores=[core_members[mid] for mid in c.get('member_ids',[]) if mid in core_members]
             if attached_cores:
                 from .brb_supplier_core import core_at_end
@@ -271,6 +276,8 @@ def repair(package,model):
     fit_end_offsets(model)
     from .transfer_revision import populate as locate_transfer_fabrication
     locate_transfer_fabrication(package,model)
+    from .transfer_floor import place as place_tabs,bind as bind_tabs
+    place_tabs(package,model)
     from .shared_apex import locate_pairs,consolidate
     from .brace_base_attachment import locate_grade_interfaces
     from .base_plate_extensions import locate as locate_base_tongues
@@ -356,6 +363,7 @@ def repair(package,model):
     consolidate(package,model,common_ends)
     from .base_plate_extensions import share_supports
     share_supports(package,model)
+    bind_tabs(package,model)
     references=defaultdict(set)
     for c in model['connections']:
         for mid in c['member_ids']:references[mid].add(c['drawing_ref'])

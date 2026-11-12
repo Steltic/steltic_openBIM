@@ -625,8 +625,12 @@ def specifications(package,model):
     for c in model['connections']:
         for rid in c.get('design_record_ids',[]):refs[rid].add(c['drawing_ref'])
     out=[]
+    retired=set(model.get('steel_delivery_scope',{}).get('retired_records',[]))
     for r in package['design_records']:
         if r['id'] not in refs and not r['id'].startswith('connections/'):continue
+        if r['id'] in retired:
+            out.append(dict(id=r['id'],references=[],text='Archived HR record outside the issued steel scope at the grade slab.'))
+            continue
         data=r['data']
         if data.get('rows'):
             for i,row in enumerate(data['rows']):
