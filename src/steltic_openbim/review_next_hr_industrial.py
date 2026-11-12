@@ -32,8 +32,11 @@ def equipment(b,levels):
            ('SKID',2,[(x,y) for x in (264,456) for y in (300,420)],'W16X26','L3X3X1/4',2)]
     for label,k,points,pid,diag,count in specs:
         z=levels[k];beams={}
-        for j,y in enumerate(sorted({p[1] for p in points})):
-            m=b.member(f'{label}-BEAM-{j}',pid,'equipment_beam',[240,y,z],[480,y,z],k,records=[b.record('connections',f'conn-{label.lower()}-beam-{pid}')]);m['end_offsets']=[[0,0,-b.depth(pid)/2]]*2;beams[y]=m
+        # Skid reactions land on grids B/C; the vessel lands on grids 2/3.
+        across=0 if label=='SKID' else 1
+        for j,station in enumerate(sorted({p[across] for p in points})):
+            ends=([[station,240,z],[station,480,z]] if across==0 else [[240,station,z],[480,station,z]])
+            m=b.member(f'{label}-BEAM-{j}',pid,'equipment_beam',*ends,k,records=[b.record('connections',f'conn-{label.lower()}-beam-{pid}')]);m['end_offsets']=[[0,0,-b.depth(pid)/2]]*2;beams[station]=m
             for end,point in enumerate(m['axis']):
                 support=nearest(b,point,('beam','girder'))
                 b.connection(m['id']+':'+str(end),'review_beam',point,[m]+([support] if support else []),[b.record('connections',f'conn-{label.lower()}-beam-{pid}')])
@@ -41,7 +44,7 @@ def equipment(b,levels):
             target=[240 if x<360 else 480,240 if label=='VESSEL' or y<360 else 480,z]
             angle(f'{label}-DIAG-{j}',diag,[x,y,z],target,k,f'conn-{label.lower()}-leg-diagonal-{diag}',count)
             leg=b.member(f'{label}-LEG-{j}','HSS4X4X1/4','equipment_leg',[x,y,z+.75],[x,y,z+48],k,'A')
-            b.connection(leg['id']+'-FOOT','review_equipment_foot',[x,y,z],[leg,beams[y]],parameters={'equipment':label})
+            b.connection(leg['id']+'-FOOT','review_equipment_foot',[x,y,z],[leg,beams[(x,y)[across]]],parameters={'equipment':label})
         if label=='VESSEL':
             for j,x in enumerate(sorted({p[0] for p in points})):
                 angle('VESSEL-TIE-'+str(j),'L3X3X1/4',[x,240-offset,z],[x,240+offset,z],k,'conn-vessel-leg-tie-L3X3X1/4')

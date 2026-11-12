@@ -95,6 +95,9 @@ def verify_ifc(path,package,source_sha256):
         flag('ifc_project',None,'Expected one source project')
         return result
     project_props=properties(project[0]);physical=package['physical']
+    if package.get('module')=='HR':
+        from .hr_connection_frames import coordinated_connections
+        physical = coordinated_connections(physical)
     from .ifc_shape_readback import ShapeReadback
     from .ifc_beam_ends import beam_end_fits, fitted_member
     fits = beam_end_fits(physical) if package.get('module') == 'HR' else {}
@@ -115,7 +118,7 @@ def verify_ifc(path,package,source_sha256):
         if p.get('SourceId'):
             products[p['SourceId']].append(product);props[product.id()]=p
     from .ifc_relationship_readback import check_relations
-    measured,issues=check_relations(model,package,products,props,unit_in)
+    measured,issues=check_relations(model,dict(package,physical=physical),products,props,unit_in)
     result.update(measured);findings.extend(issues)
     def product_for(ident,cls):
         rows=[p for p in products[ident] if p.is_a()==cls]

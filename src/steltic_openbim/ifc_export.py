@@ -121,10 +121,14 @@ def _export_source(directory,destination,source):
     else:
         from .source_worklines import physical_view
         physical=physical_view(package);basis='Source-declared design coordination geometry'
+    from .hr_connection_frames import coordinated_connections
+    hr_source = package.get('module')=='HR' and not recovered
+    if hr_source:
+        physical = coordinated_connections(physical)
     physical['openings']=[dict(o,vertices=opening_boundary(o)) for o in physical.get('openings',[])]
     from .physical_review import review_physical
     physical_checks=review_physical(physical)
-    fits = beam_end_fits(package['physical']) if package.get('module') == 'HR' and not recovered else {}
+    fits = beam_end_fits(physical if structural else coordinated_connections(package['physical'])) if hr_source else {}
     if fits:
         from .ifc_rafter_gussets import rod_gusset_view
         physical = rod_gusset_view(physical, fits)
@@ -468,7 +472,7 @@ def _export_source(directory,destination,source):
     property_set(model,project,dict(SourceModelSHA256=state['source_model_sha256'],**revision_properties,Basis=basis,
         Generator={k:v for k,v in generator.items() if k!='files'},
         SupplementProvenance=state.get('supplement_provenance'),
-        SourceModule=state.get('source_module'),SourceJob=state.get('source_job'),
+        SourceModule=state.get('source_module') or package.get('module'),SourceJob=state.get('source_job'),
         SourceReadiness=source_validation['status'],SourceFindings=source_validation['findings'],GeometryWarnings=warnings,
         SourceFreshnessChecked=state.get('source_evidence',{}).get('source_freshness_checked',False),
         ReferenceSystem=reference or None,RequireConnectionParts=package.get('require_connection_parts',False),

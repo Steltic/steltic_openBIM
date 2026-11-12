@@ -216,12 +216,16 @@ def beam_weld_points(physical, members):
         tid = frame.get('template_id')
         if tid not in templates:
             continue
-        if tid not in by_template:
-            by_template[tid] = [(p.get('connects', []), p['geometry']['points']) for p in templates[tid].get('parts', [])
+        params = c.get('parameters', {})
+        quadrant = params.get('physical_plan_brace') and params.get('joint')=='column_quadrant'
+        key = (tid, bool(quadrant))
+        if key not in by_template:
+            by_template[key] = [(p.get('connects', []), p['geometry']['points']) for p in templates[tid].get('parts', [])
                 if p.get('kind') == 'weld' and p.get('geometry',{}).get('type') == 'polyline'
                 and (p.get('parameters',{}).get('attachment_role') == 'gusset_beam_weld'
+                     or (quadrant and 'PLATE' in p.get('connects', []))
                      or any('GUSSET' in tag.upper() for tag in p.get('connects', [])))]
-        for roles, points in by_template[tid]:
+        for roles, points in by_template[key]:
             for role in roles:
                 mid = frame.get('bindings', {}).get(role)
                 if members.get(mid,{}).get('kind') in BEAMS:

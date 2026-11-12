@@ -107,7 +107,11 @@ def build(b):
             if b.key=='hr32':candidates=[r for r in records if ('existing' in r if k<=3 else f'L{k}-' in r)]
             if b.key=='hr16' and k==3:candidates=['floor-W16X36'];span_axis=0;other=1
             if b.key=='hr20' and k in (1,2):candidates=[r for r in records if f'level{k+1}-' in r]
-            if b.key=='hr35':candidates=[r for r in records if 'W12X16' in r]
+            if b.key=='hr35':
+                candidates=[r for r in records if 'W12X16' in r]
+                # Written skid-bay framing spans between the X girders on B/C.
+                if k==2 and lo==[240,240] and hi==[480,480]:
+                    span_axis,other=1,0
             if b.key=='hr8' and k==5 and lo[1]>=720:candidates=[r for r in records if 'terrace' in r]
             if b.key=='hr10' and k==3:
                 upper={tuple(q) for q in c['PRESENT']['4']}

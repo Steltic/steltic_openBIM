@@ -440,6 +440,16 @@ class Assessment:
         product = self.rb.assemblies[cid]
         if property_value(product, 'SourceId') != cid:
             raise ValueError('IFC assembly SourceId differs from the occurrence')
+        if connection.get('located_shear_joint') and self.profiles[self.members[inst['bindings']['M2']]['profile_id']]['family']=='i':
+            from .ifc_shear_joint_readback import measure
+            branch = self.members[inst['bindings']['M2']]
+            support = self.members[inst['bindings']['M1']]
+            bolts,welds,issues = measure(self.rb,connection,template,branch,support,self.profiles[branch['profile_id']])
+            self.counts['located_shear_joints'] += 1
+            self.counts['measured_branch_web_bolts'] += bolts
+            self.counts['measured_support_welds'] += welds
+            for part,message in issues:
+                self.issue('actual_shear_joint_hardware',part=part,detail=message)
         if cid in self.required_tongues:
             from .base_tongue_readback import measure_solid
             source=selected(self.handoff,cid)
@@ -1002,8 +1012,11 @@ def verify_assembly_fit(ifc_path, physical, source_handoff, design_records=()):
     """Verify every applicable connection and report individual unsupported IDs."""
     try:
         from .ifc_rafter_gussets import rod_gusset_view
-        physical = rod_gusset_view(physical)
-        check = Assessment(Readback(ifc_path), physical, source_handoff, design_records)
+        from .hr_connection_frames import coordinated_connections
+        rb = Readback(ifc_path)
+        if property_value(rb.file.by_type('IfcProject')[0], 'SourceModule')=='HR':
+            physical = coordinated_connections(physical)
+        check = Assessment(rb, rod_gusset_view(physical), source_handoff, design_records)
     except (OSError, ValueError, RuntimeError, KeyError) as exc:
         return {'passed': False, 'findings': [{'code': 'assembly_readback_unavailable', 'message': str(exc)}]}
     for connection in physical.get('connections', []):
