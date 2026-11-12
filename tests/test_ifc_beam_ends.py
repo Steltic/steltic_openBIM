@@ -120,3 +120,18 @@ def test_shared_gusset_weld_reaches_column_with_web_erection_gap(z,other):
     assert v[np.isclose(v[:,2],other),0].min()==pytest.approx(8.25)
     # Web vertices at its own side-face width reach only the selected gap.
     assert v[np.isclose(abs(v[:,1]),.25),0].min()==pytest.approx(8.25)
+
+
+def test_named_plan_quadrant_weld_keeps_finite_top_flange_footprint():
+    beam=member('B','beam',[[0,0,24],[120,0,24]],[0,1,0])
+    col=member('S','column',[[0,0,0],[0,0,96]],[0,1,0])
+    p=model(beam,col,8.25)
+    p['assemblies'].append(dict(id='Q',receivers=[],parts=[dict(kind='weld',connects=['HOST1','PLATE'],
+        geometry=dict(type='polyline',points=[[8.04,0,31],[17.04,0,31]]))]))
+    p['connections'].append(dict(id='quadrant',joint_id='J',point=[0,0,24],member_ids=['B','S'],
+        parameters=dict(physical_plan_brace=True,joint='column_quadrant'),
+        assembly_instance=dict(template_id='Q',bindings=dict(HOST1='B'),origin=[0,0,0],
+                               x_axis=[1,0,0],y_axis=[0,1,0])))
+    v=vertices(p,beam)
+    assert v[np.isclose(v[:,2],31),0].min()==pytest.approx(8.04)
+    assert v[np.isclose(v[:,2],17),0].min()==pytest.approx(8.25)

@@ -12,6 +12,8 @@ from .ifc_readback_session import read_step
 
 
 def verify_member_clearance(ifc_path,physical,crossings=(),source_records=None):
+    from .hr_skid_bay import skid_bay_view
+    physical = skid_bay_view(physical)
     members={m['id']:m for m in physical['members']}
     brace_ids={key for key,m in members.items() if any(token in m['kind'] for token in
               ('brace','truss_web','diagonal','lateral_strut'))}
