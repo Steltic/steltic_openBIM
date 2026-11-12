@@ -177,7 +177,7 @@ def rebuilt_scenes(model,package):
                            'review_truss_node','review_truss_heel','review_plan_angle','review_transfer_truss')
         if model['pilot'].startswith('hr'):
             if family=='review_transfer_slip':
-                rebuild=any(by_id[cid].get('parameters',{}).get('transfer_floor_tab_design') or
+                rebuild=any(by_id[cid].get('parameters',{}).get('sliding_receiver') or by_id[cid].get('parameters',{}).get('transfer_floor_tab_design') or
                             ('shear_plate','depth_in') in selected_fields(package,by_id[cid]) for cid in original['occurrences'])
             if family=='review_splice':
                 rebuild=any('per side in one vertical line' in records.get(r,{}).get('components','') or 'CJP groove welds of both flanges and the web' in records.get(r,{}).get('components','') for cid in original['occurrences'] for r in by_id[cid].get('design_record_ids',[]))
@@ -278,6 +278,8 @@ def repair(package,model):
     locate_transfer_fabrication(package,model)
     from .transfer_floor import place as place_tabs,bind as bind_tabs
     place_tabs(package,model)
+    from . import transfer_girder_slip
+    transfer_girder_slip.place(package,model)
     from .shared_apex import locate_pairs,consolidate
     from .brace_base_attachment import locate_grade_interfaces
     from .base_plate_extensions import locate as locate_base_tongues
@@ -364,6 +366,7 @@ def repair(package,model):
     from .base_plate_extensions import share_supports
     share_supports(package,model)
     bind_tabs(package,model)
+    transfer_girder_slip.bind(package)
     references=defaultdict(set)
     for c in model['connections']:
         for mid in c['member_ids']:references[mid].add(c['drawing_ref'])

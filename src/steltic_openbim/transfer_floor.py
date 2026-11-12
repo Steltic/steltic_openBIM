@@ -8,6 +8,7 @@ def draw(ctx):
     from .connection_cuts import drill_receivers
     from .review_hr_details import support
     a=ctx.a;spec=ctx.params['transfer_floor_tab_design'];face=spec['outer_face']
+    a.title='TRANSVERSE FLOOR TAB | '+ctx.pid
     loc=next(c['assembly_instance'] for c in ctx.package['physical']['connections'] if c['id']==ctx.c['id'])
     stock=spec['selected_components']['transfer_floor_tab_receiver'];ray=loc['x_axis']
     if dot(face['plane_normal'],ray)<.99999:raise ValueError('Transfer tab faces away from its floor beam')

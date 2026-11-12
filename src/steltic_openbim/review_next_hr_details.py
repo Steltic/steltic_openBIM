@@ -141,6 +141,9 @@ def bearing(ctx):
     a.fastener('BOLTS',[[x,y,-tf] for x in (-cd/2-1,cd/2+1) for y in (-cw/2-1,cw/2+1)],[0,0,1],1,tf+1.5,['GIRDER','BEARING'],'A four 1 in A325 positioning bolts','A');a.dim([-cd/2-2,0,1.5],[cd/2+2,0,1.5],basis='A');a.section_at=cd/2
 
 def slip(ctx):
+    if ctx.params.get('sliding_receiver'):
+        from .transfer_girder_slip import draw as draw_slip
+        return draw_slip(ctx)
     from .review_hr_details import draw as standard
     ctx.params['moment']=False;ctx.family='review_beam';standard(ctx);ctx.family='review_transfer_slip'
     if ctx.params.get('transfer_floor_tab_design'):
