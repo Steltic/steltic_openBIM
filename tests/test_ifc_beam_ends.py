@@ -102,3 +102,21 @@ def test_reference_only_member_does_not_require_a_support_fit():
     col=member('S','column',[[0,0,0],[0,0,96]],[0,1,0])
     del beam['end_offsets']
     assert not beam_end_fits(model(beam,col)).get('B')
+
+
+@pytest.mark.parametrize('z,other',[(17.,31.),(31.,17.)])
+def test_shared_gusset_weld_reaches_column_with_web_erection_gap(z,other):
+    beam=member('B','beam',[[0,0,24],[120,0,24]],[0,1,0])
+    col=member('S','column',[[0,0,0],[0,0,96]],[0,1,0])
+    p=model(beam,col,8.25)
+    p['assemblies'].append(dict(id='G',receivers=[],parts=[dict(kind='weld',connects=['BEAM','GUSSET'],
+        geometry=dict(type='polyline',points=[[7,.25,z],[35,.25,z]]),
+        parameters=dict(attachment_role='gusset_beam_weld'))]))
+    p['connections'].append(dict(id='gusset',joint_id='J',point=[0,0,24],member_ids=['B','S'],
+        assembly_instance=dict(template_id='G',bindings=dict(BEAM='B'),origin=[0,0,0],
+                               x_axis=[1,0,0],y_axis=[0,1,0])))
+    v=vertices(p,beam)
+    assert v[np.isclose(v[:,2],z),0].min()==pytest.approx(7.)
+    assert v[np.isclose(v[:,2],other),0].min()==pytest.approx(8.25)
+    # Web vertices at its own side-face width reach only the selected gap.
+    assert v[np.isclose(abs(v[:,1]),.25),0].min()==pytest.approx(8.25)
