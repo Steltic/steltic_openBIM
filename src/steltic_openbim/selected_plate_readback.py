@@ -27,7 +27,9 @@ def plate_group(role,parts):
         if role=='cheek_plate':return 'CHEEK' in name or 'cheek plate' in desc
         if role=='clevis_plate':return 'CLEVIS' in name or 'clevis plate' in desc
         if role=='knife_plate':return 'KNIFE' in name or 'knife plate' in desc
-        if role=='gusset':return 'GUSSET' in name or desc.strip()=='gusset plate'
+        if role=='gusset':
+            if p.get('parameters',{}).get('free_edge_bar'):return False
+            return 'GUSSET' in name or desc.strip()=='gusset plate'
         return False
     return [p for p in parts if belongs(p)]
 

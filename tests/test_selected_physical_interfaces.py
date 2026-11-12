@@ -107,6 +107,27 @@ def test_transfer_collectors_use_the_explicit_saved_line_checks_when_csv_axial_i
     assert all('connections/diaphragm-chords-L9' not in c['design_record_ids'] for c in m['connections'] if c['detail_ref']['id']=='review_deck_studs')
 
 
+def test_reinforced_courtyard_collector_has_four_bored_plies_and_perimeter_welds():
+    package,model=building('hr11')
+    c=next(c for c in model['connections'] if c['id']=='hr:element:880:1')
+    rid='connections/collector-irregularity-lines'
+    values=[('shear_plate','thickness_in',1.),('shear_plate','depth_in',19.75),('bolt','count',5),
+            ('bolt','diameter_in',1.5),('bolt','pitch_in',4.)]
+    fields=[dict(role=r,field=k,value=v) for r,k,v in values]
+    package=dict(package,source_handoff={'records':{rid:{'fields':fields}},'occurrences':{c['id']:{
+        'applications':[dict(record_id=rid,selected=list(range(len(fields))),interface_application={'role':'scheduled_collector'})]}}})
+    scene=build_scene(model,package,c);parts={p['id']:p for p in scene['parts']}
+    bolt=parts['F1']
+    assert set(bolt['connects'])=={'M2','P1','RP0','RP1'}
+    assert bolt['points'][0][1]==pytest.approx(parts['RP0']['bounds'][1][0])
+    assert bolt['points'][0][1]+bolt['grip']==pytest.approx(parts['P1']['bounds'][1][1])
+    assert parts['P1']['bounds'][1][0]==pytest.approx(parts['RP1']['bounds'][1][1])
+    for name in ('RP0','RP1','P1'):
+        assert len(parts[name]['holes'])==5 and all(h['diameter_in']==1.625 for h in parts[name]['holes'])
+    wraps=[w for w in scene['welds'] if {'RP0','RP1'}.intersection(w['connects'])]
+    assert len(wraps)==8 and all(w['size']==.3125 for w in wraps)
+
+
 def test_top_and_bottom_rockers_keep_beam_datum_and_clear_the_actual_post():
     p,m=building('hr9');members={v['id']:v for v in m['members']};profiles={v['id']:v for v in m['profiles']};seen=set()
     for c in m['connections']:

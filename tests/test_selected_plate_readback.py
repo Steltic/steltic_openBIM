@@ -43,3 +43,13 @@ def test_selected_cheek_plate_pair():
     assert verify_source_selections(p)['passed']
     pair.pop(0)
     assert any(f['issue']=='selected_cheek_plate_count' for f in verify_source_selections(p)['findings'])
+
+
+def test_reinforced_gusset_uses_main_plate_stock():
+    primary=plate('GUSSET',[18,1.25,16])
+    edge=plate('GUSSET-EDGE-1-1',[3,.75,12])
+    edge['parameters']=dict(free_edge_bar=True,source_primary_gusset='GUSSET')
+    package=source('brb_pinned',[('gusset','thickness_in',1.25)],[primary,edge,dict(id='PIN',kind='pin')])
+    assert verify_source_selections(package)['passed']
+    primary['geometry']['size'][1]=1.
+    assert any(f['issue']=='selected_gusset_thickness' for f in verify_source_selections(package)['findings'])
