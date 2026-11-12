@@ -6,6 +6,29 @@ from shapely.geometry import Polygon
 from steltic_openbim.assembly_scene import Assembly
 from steltic_openbim.stmf_fit import slotted_end_selection
 from steltic_openbim.stmf_opposed_gussets import fit_opposed
+from steltic_openbim.stmf_receivers import stiffen_chord, support_welds
+
+
+@pytest.mark.parametrize('toward', [-1, 1])
+def test_chord_backing_fits_opposite_side_of_web_and_reaches_both_flanges(toward):
+    assembly=Assembly('STMF receiver',{})
+    d=dict(d=11.1,tf=1.12,tw=.68,bf=10.3)
+    spec=dict(rib_depth_in=4.5,rib_t_in=1.5,diaphragm_t_in=2.75,flange_root_clip_in=.875,
+              max_pitch_in=6.,material='A572 Grade 50',fillet_in=.625)
+    face=toward*d['tw']/2
+    start,end=[0,0,face],[-20,0,face]
+    support_welds(assembly,'M0',start,end,.75,spec)
+    stiffen_chord(assembly,'M0',start,end,toward,d,spec)
+    assert [w['a'][1] for w in assembly.welds[:2]]==[-.375,.375]
+    assert {w['size'] for w in assembly.welds[:2]}=={.625}
+    diaphragms=[p for p in assembly.parts if p['id'].startswith('M0-D')]
+    assert len(diaphragms)==4
+    assert len(assembly.parts)-len(diaphragms)==3
+    for p in diaphragms:
+        assert p['bounds'][1]==pytest.approx([-4.43,4.43])
+        assert p['bounds'][2]==pytest.approx(sorted((-face,-face-toward*4.5)))
+        assert p['selected_material']==spec['material']
+    assert len([w for w in assembly.welds if w['kind']=='CJP'])==21
 
 
 def source(width=18.969655):

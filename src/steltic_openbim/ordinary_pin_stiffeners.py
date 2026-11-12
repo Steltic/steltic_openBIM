@@ -84,7 +84,16 @@ def cut_strips(shape,support,keepout,width,limits,cheek_fillet):
         if rows:stock=stock.difference(unary_union(rows))
         geoms=stock.geoms if hasattr(stock,'geoms') else [stock]
         rows.extend(orient(poly,sign=1) for poly in geoms if poly.geom_type=='Polygon' and poly.area>.01)
-    return rows
+    # The intersection of tangential cheek and stock boundaries can leave
+    # consecutive vertices coincident at the mesh contract's precision.
+    # Clean the planar cut before triangulating either face or its edge walls.
+    from shapely import set_precision
+    cleaned=[]
+    for poly in rows:
+        stock=set_precision(poly,grid_size=1.e-6)
+        pieces=stock.geoms if hasattr(stock,'geoms') else [stock]
+        cleaned.extend(orient(piece,sign=1) for piece in pieces if piece.area>.01)
+    return cleaned
 
 
 def add_face_stock(assembly,shape,cheek,welds,source,at,limits,axis):

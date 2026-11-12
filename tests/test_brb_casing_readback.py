@@ -79,7 +79,12 @@ def test_same_core_area_can_have_two_selected_shells_and_disjoint_schedule_marks
     record['data']['checks'][1]['limit_state']='global stability of casing (steel HSS8X8X1/4 A500 Gr C)'
     p['design_records'].append(record)
     m=copy.deepcopy(ph);m['member_schedule']=[dict(mark='BR1',member_ids=[a['id'],b['id']],count=2)]
+    next(pr for pr in m['profiles'] if pr['id']=='BRB6').pop('status')
+    next(pr for pr in ph['profiles'] if pr['id']=='BRB6')['declaration_source']='physical_inputs.json#/declarations'
     prepare(p,m)
+    for row in ph['profiles']:
+        if row.get('casing_section'):
+            assert row['status']=='declared' and row['declaration_source']=='physical_inputs.json#/declarations'
     assert len({row['profile_id'] for row in m['members']})==2
     assert [row['source_profile_id'] for row in m['members']]==['BRB6']*2
     assert [(r['mark'],r['casing_section'],r['count']) for r in m['member_schedule']]==[

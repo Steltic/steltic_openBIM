@@ -73,7 +73,7 @@ def end_selection(records,profile,direction,vertical,existing,role):
     raise ValueError('Missing selected STMF weld/slot record for '+direction+' '+profile)
 
 
-def make_scene(source,rows,profiles,records,direction):
+def make_scene(source,rows,profiles,records,direction,receiver=None):
     a=Assembly(source['title'],profiles);webs=[r for r in rows if r['kind']=='truss_web']
     chords=[r for r in rows if r['kind']=='truss_chord']
     column=next((r for r in rows if r['kind']=='column'),None)
@@ -95,7 +95,8 @@ def make_scene(source,rows,profiles,records,direction):
     starts={};slots={};outline=[];pending=[];chord_edges=[];widths=[]
     if column:
         q=column['near'];v=column['axis']
-        a.member(column['role'],column['pid'],add(q,mul(v,-24)),add(q,mul(v,24)),y=column['y'],
+        reach=max(24.,receiver['column_length_in']+2) if receiver else 24.
+        a.member(column['role'],column['pid'],add(q,mul(v,-reach)),add(q,mul(v,reach)),y=column['y'],
                  **({'section_plies':column['plies']} if column.get('plies') else {}))
     def support_distance(r,host):
         v=r['away'];h=host['axis'];n=sub(v,mul(h,dot(v,h)))
@@ -131,9 +132,16 @@ def make_scene(source,rows,profiles,records,direction):
         if webs:
             toward=1 if sum(w['away'][2] for w in webs)>0 else -1
             webface=r['near'][2]+toward*profiles[r['pid']]['dimensions']['tw']/2
-            edge=[q[0],gy,webface];other=add(edge,mul(r['away'],min(10.,r['length']-d)))
+            contact=10.
+            if receiver and not column:
+                short=next(w for w in webs if w.get('column_end_diagonal'))
+                contact=receiver['short_chord_length_in' if short['away'][0]*r['away'][0]>0 else 'long_chord_length_in']
+                if contact>r['length']-d:raise ValueError('Selected support is longer than the available chord')
+            edge=[q[0],gy,webface];other=add(edge,mul(r['away'],min(contact,r['length']-d)))
             chord_edges.append((r['role'],edge,other))
             outline.extend([(edge[0],edge[2]),(other[0],other[2])])
+            if column and receiver:
+                outline.append((edge[0],edge[2]+toward*receiver['column_length_in']))
     if not webs and not column:
         # Adjacent chord webs need not be at the same elevation or have the
         # same thickness. Fit the lower/upper edge of one splice gusset to
@@ -267,8 +275,18 @@ def make_scene(source,rows,profiles,records,direction):
                 outline.extend([(start[0],start[2]),(finish[0]+v[0]*t,finish[2]+v[2]*t)])
     if webs:
         for role,edge,other in chord_edges:
-            a.weld('G-'+role,edge,other,[role,'GUSSET'],.3125,basis='A',
-                   description='Gusset to actual chord web; openBIM fit weld path')
+            if receiver:
+                from .stmf_receivers import support_welds,stiffen_chord
+                if column:
+                    end=[edge[0],gy,edge[2]+toward*receiver['column_length_in']]
+                    support_welds(a,column['role'],edge,end,t,receiver)
+                else:
+                    support_welds(a,role,edge,other,t,receiver)
+                    dims=profiles[next(r['pid'] for r in chords if r['role']==role)]['dimensions']
+                    stiffen_chord(a,role,edge,other,toward,dims,receiver)
+            else:
+                a.weld('G-'+role,edge,other,[role,'GUSSET'],.3125,basis='A',
+                       description='Gusset to actual chord web; openBIM fit weld path')
         poly=hull(outline)
         terminal_cuts=[(r,part,s) for r,part,s in pending if s.get('tip_overrun') is not None]
         if terminal_cuts:
@@ -304,6 +322,8 @@ def make_scene(source,rows,profiles,records,direction):
             part['member']['slots']=[slot];part['faces']=member_faces(part['member'],profiles);part['bounds']=bounds(part['faces'])
             slots[r['role']]=slot
     a.notes.append('Explicit source welds and slot widths follow the selected vertical, diagonal or flat-bar detail; remaining terminal stations and gusset perimeter are openBIM fits.')
+    if receiver:
+        a.notes.extend(receiver['column_notes' if column else 'chord_notes'])
     scene=dict(source,**{k:v for k,v in a.result().items() if k not in ('id','reference','sheet')})
     scene['source_record_ids']=sorted(references)
     if widths:scene['checked_transfer_sections_xz_in']=widths
@@ -334,6 +354,10 @@ def repair_stmf(package,model):
         scene=original.get(c.get('assembly_id'));frame=c.get('assembly_instance',{})
         if not scene or scene['family'] not in ('review_stmf_node','review_stmf_end'):continue
         direction=c['parameters']['direction'];along=0 if direction=='X' else 1;other=1-along
+        receivers=[records[rid]['stmf_receiver'] for rid in c.get('design_record_ids',[])
+                   if rid in records and 'stmf_receiver' in records[rid]]
+        if len(receivers)>1:raise ValueError('Multiple selected STMF receivers at '+c['id'])
+        receiver=next(iter(receivers),None)
         normal=[float(i==other) for i in range(3)];rows=[]
         for role,mid in frame['bindings'].items():
             m=members.get(mid)
@@ -355,17 +379,18 @@ def repair_stmf(package,model):
             if m.get('section_plies'):
                 from .hr_boxed_plies import cropped_plies
                 station=dot(sub(near,add(e[0],m['end_offsets'][0])),axis)
-                rows[-1]['plies']=cropped_plies(m['section_plies'],station-24,station+24)
+                reach=max(24.,receiver['column_length_in']+2) if receiver and m['kind']=='column' else 24.
+                rows[-1]['plies']=cropped_plies(m['section_plies'],station-reach,station+reach)
             if m['kind']=='truss_web' and profiles[m['profile_id']]['family']=='rhs':
                 rows[-1]['slotted_selection']=slotted_end_selection(package.get('source_handoff',{}),c['id'],mid,
                                                                    m['profile_id'],abs(axis[2])>.999)
                 rows[-1]['column_end_diagonal']=mid in terminal_diagonals
         rows.sort(key=lambda r:r['role'])
-        key=(scene['id'],direction,tuple((r['role'],r['pid'],r['kind'],tuple(sorted(r.get('slotted_selection',{}).items())),
+        key=(scene['id'],direction,fingerprint(receiver),tuple((r['role'],r['pid'],r['kind'],tuple(sorted(r.get('slotted_selection',{}).items())),
             r.get('column_end_diagonal',False),round(r['length'],5),fingerprint(r.get('plies',[])),
             *(round(x,5) for attr in ('near','away','y') for x in r[attr])) for r in rows))
         if key not in cache:
-            made,starts,slots=make_scene(scene,rows,profiles,records,direction)
+            made,starts,slots=make_scene(scene,rows,profiles,records,direction,receiver)
             made['occurrences']=[];variants[scene['id']].append(made);cache[key]=(made,starts,slots)
         made,starts,slots=cache[key];made['occurrences'].append(c['id']);changed[c['id']]=made
         for r in rows:

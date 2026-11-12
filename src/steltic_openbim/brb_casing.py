@@ -106,6 +106,7 @@ def prepare_casings(package,model,core_ids):
         return
     catalog={m['id']:m for m in physical['materials']}
     originals={p['id']:p for p in model['profiles']}
+    declared={p['id']:p for p in physical['profiles']}
     members={m['id']:m for m in physical['members']}
     groups=defaultdict(set)
     for m in model['members']:
@@ -121,7 +122,7 @@ def prepare_casings(package,model,core_ids):
         old=originals[base]
         section=spec['section']
         pid=base if len(groups[base])==1 else base+' / '+(section or 'supplier casing')
-        selected=copy.deepcopy(old)
+        selected=copy.deepcopy({**declared[base], **old})
         selected['id']=pid
         if section:
             selected.update(family='rhs',dimensions=hss_dimensions(section),casing_section=section,
