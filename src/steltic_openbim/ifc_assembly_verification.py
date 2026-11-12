@@ -418,7 +418,8 @@ class Assessment:
                 if radius is not None and abs(2 * radius - diameter) > 4*TOL:
                     self.issue('actual_shaft_diameter_differs', fastener=pid, ply=target, measured_in=2*radius, declared_in=diameter)
             if is_pin and 'brb_pinned' in fields.get(('connection', 'variant'), []):
-                required = {q for q in parts if q.upper().startswith(('GUSSET','CHEEK','CLEVIS')) and parts[q]['kind'] == 'plate'}
+                required = {q for q,p in parts.items() if p['kind']=='plate' and
+                            (gusset_part(p) or q.upper().startswith(('CHEEK','CLEVIS')))}
                 if not required <= set(targets) or not named_gussets:
                     self.issue('pin_omits_declared_bearing_ply', fastener=pid, missing=sorted(required-set(targets)))
                 for expected in fields.get(('pin', 'diameter_in'), []):
