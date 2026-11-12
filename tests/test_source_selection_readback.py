@@ -32,3 +32,20 @@ def test_source_selections(error):
     if error=='printed_weld':scene['welds'][0]['size']=.6875
     if error=='missing_shaft':parts.pop(0)
     assert verify_source_selections(p,dict(assemblies=[scene]))['passed']==(error=='none')
+def test_located_collector_uses_its_own_source_text_and_hole_pattern():
+    from types import SimpleNamespace
+    from steltic_openbim.hr_detail_selections import selected_fields,selected_shear_text,located_collector_fit
+    from steltic_openbim.review_assemblies import source_text
+    from steltic_openbim.review_cases import evidence
+    rid='connections/collector-irregularity-lines'
+    raw=next(r for r in evidence('hr14')['calc']['connections'] if r['id']==rid.split('/')[-1])
+    field={'role':'shear_plate','field':'thickness_in','value':.75}
+    app={'record_id':rid,'selected':[0],'interface_application':{'role':'scheduled_collector'}}
+    c={'id':'collector-end','design_record_ids':[rid]}
+    package={'design_records':[{'id':rid,'data':raw}],'source_handoff':{
+        'records':{rid:{'fields':[field]}},'occurrences':{c['id']:{'applications':[app]}}}}
+    ctx=SimpleNamespace(c=c,package=package,selected=selected_fields(package,c))
+    assert not source_text(package,c)
+    text=selected_shear_text(ctx)
+    assert '5 x 1.125 in A490-X bolts' in text
+    assert located_collector_fit(ctx,text)==dict(hole=1.25,line=3.,vertical=1.5,plate_edge=2.25,gap=.75)

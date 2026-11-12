@@ -85,9 +85,16 @@ def test_pilot_kicker_bolts_cross_the_angle_leg_and_gusset_and_welds_reach_hosts
                 assert poly.covers(Point(dot(sub(q,plate['polygon'][0]),u),dot(sub(q,plate['polygon'][0]),v)))
         for weld in scene['welds']:
             host=parts[weld['connects'][0]]['member']
+            tab=parts[weld['connects'][1]]
+            origin=tab['polygon'][0];normal=tab['normal']
+            u=unit(sub(tab['polygon'][1],origin));v=cross(normal,u)
+            footprint=Polygon([(dot(sub(q,origin),u),dot(sub(q,origin),v)) for q in tab['polygon']])
             for position in (weld['a'],weld['b']):
                 section,point=section_point(host,position)
                 assert section.distance(point)<1e-6,'Gusset weld is detached from its actual host'
+                offset=sub(position,origin)
+                assert -1e-6<=dot(offset,normal)<=tab['thickness']+1e-6
+                assert footprint.distance(Point(dot(offset,u),dot(offset,v)))<1e-6
     assert checked>1
 
 

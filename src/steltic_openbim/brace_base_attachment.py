@@ -64,10 +64,12 @@ def base_attachment(ctx,column):
         bottom_fillet=re.search(r'top of the base plate \('+NUMBER+
             r' in from the flange face, base-edge fillets '+NUMBER+r' in both faces',text,re.I)
         if column_fillet and bottom_fillet:
+            from .base_plate_extensions import base_edge_layout
+            checked_length=base_edge_layout(records[rid])
             return dict(kind='base',record_id=rid,column_kind='fillet',
                 column_length=number(column_fillet[1]),column_fillet=number(column_fillet[2]),
-                horizontal_length=number(bottom_fillet[1]),horizontal_fillet=number(bottom_fillet[2]),
-                workpoint_station=value(text,r'brace end'),faces=2)
+                horizontal_length=checked_length or number(bottom_fillet[1]),horizontal_fillet=number(bottom_fillet[2]),
+                workpoint_station=value(text,r'brace end'),bearing_at_workpoint=checked_length is not None,faces=2)
         if not re.match(r'base (?:corner )?gusset\b',text,re.I):continue
         tongue=re.search(r'welded to the base plate \('+NUMBER+r' in\) and the column flange \('+NUMBER+r' in\)',text,re.I)
         both=re.search(NUMBER+r' in E\d+ fillets both sides',text,re.I)

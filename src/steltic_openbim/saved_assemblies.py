@@ -209,7 +209,7 @@ def rebuilt_scenes(model,package):
                     c['detail_ref']['id']=variant;c['parameters']['joint']='shear_plate'
             params=c.get('parameters',{})
             token=(variant,selected.signature(),bool(params.get('common_apex_datum')),
-                   bool(params.get('grade_diaphragm_interface')),params.get('joist_receiver_fit'),
+                   bool(params.get('grade_diaphragm_interface')),bool(params.get('bearing_at_workpoint')),params.get('joist_receiver_fit'),
                    tuple(params.get('joist_bearing_setout_in',[])),params.get('bearing_flange_face_in'),
                    tuple((v['axis'],v['sign'],v['width_in'],v['length_in'],v['source_record_id'])
                          for v in params.get('integral_gusset_tongues',[])))

@@ -7,6 +7,31 @@ from steltic_openbim.ifc_beam_ends import beam_end_fits, fitted_member
 from steltic_openbim.pilots.geometry import member_faces
 
 
+def test_drilled_web_keeps_square_copes_and_six_open_midspan_bores():
+    from shapely.geometry import Point
+    from steltic_openbim.pilots.geometry import member_solids
+    from test_brb_core_readback import as_mesh
+    steel=member('B','infill',[[120.,0.,169.6],[120.,480.,169.6]],[-1,0,0])
+    profile=dict(id='W',family='i',dimensions=dict(d=20.8,bf=8.22,tw=.375,tf=.522))
+    steel['terminal_planes']=[dict(normal=[0,1,0],offset_in=1.465),dict(normal=[0,-1,0],offset_in=-478.535)]
+    steel['ifc_end_recesses']=[[dict(normal=[0,sign,0],offset_in=stop),dict(normal=[0,0,-1],offset_in=-178.91)]
+                              for sign,stop in [(1,3.77),(-1,-476.23)]]
+    stations=[centre+offset for centre in (120,240,360) for offset in (-2.75,2.75)]
+    steel['through_bores']=[dict(point=[120.,s,176.978],axis=[1,0,0],diameter_in=.8125) for s in stations]
+    solids=member_solids(steel,{'W':profile})
+    for faces in solids:
+        points=np.array([p for f in faces for p in f])
+        if np.ptp(points[:,1])<3.:
+            # These undrilled terminal web pieces are rectangular prisms.
+            # Projected drill triangulation previously split their end caps.
+            assert len(faces)==6 and all(len(face)==4 for face in faces)
+    mesh=as_mesh(member_faces(steel,{'W':profile}))
+    section=mesh.section([1.,0.,0.],120.,([0.,1.,0.],[0.,0.,1.]))
+    for station in stations:
+        assert not section.covers(Point(station,176.978))
+        assert section.covers(Point(station+.5,176.978))
+
+
 def member(mid, kind, axis, y):
     return dict(id=mid,kind=kind,axis=axis,local_y=y,profile_id='W',end_offsets=[[0,0,0],[0,0,0]])
 

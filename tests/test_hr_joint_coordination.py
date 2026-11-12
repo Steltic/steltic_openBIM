@@ -7,6 +7,33 @@ from steltic_openbim.hr_connection_frames import beam_connection_view
 from steltic_openbim.hr_skid_bay import reviewed_bay
 
 
+def test_both_opening_header_ends_attach_to_the_finite_trimmer():
+    from steltic_openbim.ifc_beam_ends import beam_end_fits
+    wp=[0,0,0]
+    def member(mid,kind,end,y):
+        return dict(id=mid,kind=kind,profile_id='W',axis=[wp,end],local_y=y,end_offsets=[[0,0,0]]*2)
+    support=member('S','opening_trimmer',[0,-30,0],[1,0,0])
+    left=member('L','opening_trimmer',[-30,0,0],[0,-1,0])
+    right=member('R','opening_header',[30,0,0],[0,1,0])
+    def detail(mid):
+        return dict(id=mid+'-connection',point=wp,joint_id='J',member_ids=[mid,'S'],detail_ref=dict(legacy_family='test_floor_opening'),
+                    assembly_instance=dict(template_id='T',origin=wp,x_axis=[0,-1,0],y_axis=[1,0,0],bindings=dict(M1=mid,M2='S')))
+    template=dict(id='T',parts=[],receivers=[dict(id='M1',kind='member',axis=[[0,-10,0],[0,10,0]]),
+                                            dict(id='M2',kind='member',axis=[[1.5,0,0],[12,0,0]])])
+    joint=dict(id='J',point=wp,attachments=[],member_ends=[dict(member_id=mid,end='start') for mid in ('S','L','R')])
+    physical=dict(members=[support,left,right],profiles=[dict(id='W',family='i',dimensions=dict(d=18.,tw=.32,tf=.5,bf=6.))],
+                  joints=[joint],connections=[detail('L'),detail('R')],assemblies=[template])
+    view=beam_connection_view(physical)
+    assert beam_connection_view(view) is view
+    fits=beam_end_fits(view)
+    assert not fits.get('S')
+    for c in view['connections']:
+        f=c['assembly_instance']
+        assert f['bindings']==dict(M1='S',M2=c['member_ids'][0])
+        assert transformed([0,1,0],f)==[0,-1,0]
+        assert len(fits[f['bindings']['M2']])==1
+
+
 @pytest.mark.parametrize('end,sign', [('start',1),('end',-1)])
 def test_equal_section_tee_binds_fixed_hardware_to_branch(end,sign):
     joint = [0,0,0]

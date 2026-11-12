@@ -11,23 +11,30 @@ from .joint_mesh_readback import TOL,unit
 
 
 def intended_tongues(physical,records):
+    from .base_plate_extensions import frame_extension,base_edge_layout
     selected={}
     base_records=set()
+    layouts=set()
+    extensions={}
     for r in records:
-        text=r.get('data',{}).get('components','')
+        data=r.get('data',{})
+        text=data.get('components','')
+        if base_edge_layout(data) is not None:layouts.add(r['id'])
+        if (spec:=frame_extension(data)) is not None:extensions[r['id']]=spec
         match=re.search(r'(?:plate\s+)?extended on the bay side by a\s+'+NUMBER+
                         r'\s+in wide tongue\s+'+NUMBER+r'\s+in long',text,re.I)
         if match:selected[r['id']]=tuple(number(v) for v in match.groups())
         if re.match(r'base plate\s+PL\b',text,re.I):base_records.add(r['id'])
     result=defaultdict(list);findings=[]
-    if not selected:return result,findings
+    if not selected and not (layouts and extensions):return result,findings
     members={m['id']:m for m in physical['members']}
     bases=defaultdict(list)
     for c in physical['connections']:
         if base_records.intersection(c.get('design_record_ids',[])):
             for mid in c.get('member_ids',[]):bases[mid].append(c)
     for c in physical['connections']:
-        for record in selected.keys() & set(c.get('design_record_ids',[])):
+        for record in (selected.keys() | layouts) & set(c.get('design_record_ids',[])):
+            if record in layouts and c.get('parameters',{}).get('joint')!='base':continue
             try:
                 inst=c['assembly_instance'];col=inst['bindings']['COLUMN'];brace=members[inst['bindings']['BRACE']]
                 wp=np.array(c.get('point',inst['origin']),dtype=float)
@@ -39,7 +46,13 @@ def intended_tongues(physical,records):
                 v=ends[1-end]-ends[end];axes=np.array([frame['x_axis'],frame['y_axis']])
                 projected=unit(axes@v);index=int(np.argmax(abs(projected)))
                 if abs(projected[1-index])>TOL:raise ValueError('Bay direction is oblique to the rectangular stock')
-                width,length=selected[record]
+                if record in layouts:
+                    owner_record=next((rid for rid in base['design_record_ids'] if rid in extensions),None)
+                    if owner_record is None:continue
+                    world_axis,width,length=extensions[owner_record]
+                    if abs(unit(v[:2])['XY'.index(world_axis)])<1-TOL:continue
+                    record=owner_record
+                else:width,length=selected[record]
                 result[base['id']].append(dict(axis=index,sign=int(np.sign(projected[index])),width_in=width,
                     length_in=length,record=record,brace=c['id'],sheet=c.get('drawing_ref')))
             except (KeyError,ValueError) as error:

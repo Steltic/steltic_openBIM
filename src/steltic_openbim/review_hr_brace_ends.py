@@ -202,7 +202,7 @@ def draw_brace(ctx):
             else:
                 a.box('BASE',[-cd-4,-bf/2-6,-1.5],[cd+column_face+lx+4,bf+12,1.5],'A','Local base support envelope including the complete selected gusset edge')
                 host='BASE'
-            if not grade_interface and not cap_stock and base_kind not in ('free','collar'):
+            if not grade_interface and not cap_stock and base_kind not in ('free','collar') and not (actual_base and (base_spec or {}).get('bearing_at_workpoint')):
                 a.box('CONC',[-cd-8,-bf/2-10,-12],[cd+lx+12,bf+20,10.5],'A','Foundation context',kind='concrete')
         elif proposal:
             seat=proposal['seat_thickness_in'];width=proposal['seat_width_in']
@@ -389,7 +389,13 @@ def draw_brace(ctx):
     elif isbrb:
         a.dim([edge_start,0,interface_z],[edge_start+lx,0,interface_z],
               'Adopted lower free-edge extent',basis='A',offset=24)
-    a.dim([beam_x,0,interface_z],[beam_x,0,interface_z+sign*lz],basis='S' if proposal else 'A',offset=65 if proposal else 40)
+    checked_base=base_spec and base_spec.get('bearing_at_workpoint')
+    a.dim([beam_x,0,interface_z],[beam_x,0,interface_z+sign*lz],basis='S' if proposal or checked_base else 'A',offset=65 if proposal else 40)
+    if checked_base:
+        a.dim([0,0,0],start,'Workpoint to brace cut',basis='S')
+        if actual_base:
+            lower,upper_edge=actual_base[0][0]
+            a.notes.append(f'S: plate top at workpoint; brace-side edge {upper_edge:g} in and opposite edge {-lower:g} in from column centre.')
     if upper:a.notes.append('A: support weld, doubler and stiffeners centre on the actual brace/flange intersection. Continuous gusset to the attachment; original source checks remain separate.')
     if upper:bind_support_span(ctx,'BEAM',0)
     if not upper:bind_support_span(ctx,'COLUMN',2)

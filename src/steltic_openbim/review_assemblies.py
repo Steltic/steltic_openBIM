@@ -4,12 +4,12 @@ from .assembly_scene import Assembly,clip_part
 from .assembly_templates import NUMBER,number,findnum,grid,effective,web_faces,channel,flat,tube,rod,screw_diameter
 from .pilots.model import add,sub,mul,unit,dot,cross
 
-def source_text(package,c):
+def source_text(package,c,*,located_selection=False):
     lookup={r['id']:r['data'] for r in package['design_records']};chunks=[]
     for rid in c.get('design_record_ids',[]):
         # Governing-line summaries retain applicability in the source register;
         # their example bolt group must not override a member-specific detail.
-        if rid.endswith('/collector-irregularity-lines'):continue
+        if rid.endswith('/collector-irregularity-lines') and not located_selection:continue
         row=lookup.get(rid,{})
         for key in ('components','selection','detail','design_note','type','note'):
             selected=next((s for s in c.get('source_record_selections',[]) if s['record_id']==rid and s['field']==key),None)
