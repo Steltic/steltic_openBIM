@@ -96,6 +96,8 @@ def verify_ifc(path,package,source_sha256):
         return result
     project_props=properties(project[0]);physical=package['physical']
     from .ifc_shape_readback import ShapeReadback
+    from .ifc_beam_ends import beam_end_fits, fitted_member
+    fits = beam_end_fits(physical) if package.get('module') == 'HR' else {}
     shapes=ShapeReadback(physical,unit_in)
     if project[0].Name!=package['building_id'] or project_props.get('SourceModelSHA256')!=source_sha256:
         flag('ifc_identity',project[0].Name,'Source job or model digest differs')
@@ -119,13 +121,16 @@ def verify_ifc(path,package,source_sha256):
             return None
         return rows[0]
     vertices={}
+    member_products = {}
     for m in physical['members']:
         cls=('IfcColumn' if m['kind'] in ('column','col','stud','post','endwall_post') else
              'IfcBeam' if m['kind'] in ('beam','girder','joist','rafter','moment_beam') else 'IfcMember')
         obj=product_for(m['id'],cls)
         if obj is None:continue
+        member_products[m['id']] = obj
         result['members_checked']+=1
-        shape_issue=shapes.check_member(obj,m)
+        body = fitted_member(m, fits.get(m['id']))
+        shape_issue=shapes.check_member(obj,body)
         if shape_issue:
             flag('ifc_member_solid',m['id'],shape_issue)
         prop=props[obj.id()]
@@ -147,8 +152,8 @@ def verify_ifc(path,package,source_sha256):
         e=np.asarray(m['axis'],float)+np.asarray(m['end_offsets'],float)
         ray=e[1]-e[0];length=np.linalg.norm(ray);ray/=length
         stations=(pts-e[0])@ray
-        if m.get('terminal_planes'):
-            for cut in m['terminal_planes']:
+        if body.get('terminal_planes'):
+            for cut in body['terminal_planes']:
                 distances=pts@np.asarray(cut['normal'])-cut['offset_in']
                 if distances.min() < -1e-4:
                     flag('ifc_terminal_plane',m['id'],'Actual material extends across a selected terminal plane')
@@ -164,6 +169,12 @@ def verify_ifc(path,package,source_sha256):
             if bounds.min()>1e-4 or bounds.max() < -1e-4:
                 flag('ifc_member_location',m['id'],'Body is transversely displaced from its section reference')
                 break
+    if package.get('module') == 'HR':
+        from .ifc_beam_readback import verify_joint_clearance
+        counts, issues = verify_joint_clearance(physical, member_products, shapes)
+        result.update(counts)
+        result['beam_fitted_ends'] = len({(mid, f['end']) for mid, rows in fits.items() for f in rows if 'end' in f})
+        findings.extend(issues)
     for panel in physical.get('panels',[]):
         # Panel roles can produce IfcWall, IfcSlab or IfcPlate with the same
         # source identifier as a separate member. Keep their namespaces typed.

@@ -202,6 +202,37 @@ def member_solids(member,profiles,limits=None,*,roles=None):
                 piece={'id':member.get('id','member'),'faces':faces}
                 if drill_plate(piece,points,normal,diameter,'Located through-bolt bore',skip_disjoint=True):
                     solids[i]=piece['faces']
+    for recess in member.get('ifc_end_recesses', []):
+        from ..assembly_scene import clip_faces
+        from .model import dot
+        kept = []
+        kept_roles = []
+        for i, solid in enumerate(solids):
+            def distances(piece, p):
+                return [dot(q,p['normal'])-p['offset_in'] for face in piece for q in face]
+            if any(min(distances(solid,p)) >= -1e-8 for p in recess):
+                pieces = [solid]
+            else:
+                pieces = []
+                remainder = solid
+                for p in recess:
+                    values = distances(remainder,p)
+                    if min(values) >= -1e-8:
+                        pieces.append(remainder)
+                        break
+                    if max(values) > 1e-8:
+                        pieces.append(clip_faces(remainder,p['normal'],p['offset_in']))
+                        remainder = clip_faces(remainder,mul(p['normal'],-1),-p['offset_in'])
+                        if not remainder:
+                            break
+            for piece in pieces:
+                if piece:
+                    kept.append(piece)
+                    if roles is not None:
+                        kept_roles.append(roles[i])
+        solids = kept
+        if roles is not None:
+            roles[:] = kept_roles
     return solids
 
 
