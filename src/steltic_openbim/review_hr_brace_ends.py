@@ -368,7 +368,11 @@ def draw_brace(ctx):
         transfers=[(w['a'],w['b']) for w in a.welds if w['id'].startswith('WB')]
         outline=fitted_outline(fixed,transfers,start,v,t,effective_width,fit_limits)
     a.parts.remove(gusset)
-    finished=a.polygon('GUSSET',[[x,-t/2,z] for x,z in hull(outline)],t,basis='A',description=gusset['description'])
+    outline=hull(outline)
+    if selected_bolts and 'pattern' in selected_bolts:
+        from .brb_loaded_edge import fit_loaded_edge
+        outline=fit_loaded_edge(outline,bolt_contour,v,a.welds)
+    finished=a.polygon('GUSSET',[[x,-t/2,z] for x,z in outline],t,basis='A',description=gusset['description'])
     if not isbrb:
         finished.setdefault('parameters',{})['free_contour_rule']='slotted_attachment_hull'
         if effective_width:
