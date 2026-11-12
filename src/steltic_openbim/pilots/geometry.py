@@ -191,17 +191,6 @@ def member_solids(member,profiles,limits=None,*,roles=None):
                     if roles is not None:kept.append(roles[index])
             solids=clipped
             if roles is not None:roles[:]=kept
-    if member.get('through_bores'):
-        from ..connection_cuts import drill_plate
-        groups={}
-        for cut in member['through_bores']:
-            key=(tuple(cut['axis']),cut['diameter_in'])
-            groups.setdefault(key,[]).append(cut['point'])
-        for (normal,diameter),points in groups.items():
-            for i,faces in enumerate(solids):
-                piece={'id':member.get('id','member'),'faces':faces}
-                if drill_plate(piece,points,normal,diameter,'Located through-bolt bore',skip_disjoint=True):
-                    solids[i]=piece['faces']
     for recess in member.get('ifc_end_recesses', []):
         from ..assembly_scene import clip_faces
         from .model import dot
@@ -233,6 +222,19 @@ def member_solids(member,profiles,limits=None,*,roles=None):
         solids = kept
         if roles is not None:
             roles[:] = kept_roles
+    # Fit each solid before triangulating its drilled faces. Clipping through
+    # the triangles of an already drilled web leaves overlapping cap faces.
+    if member.get('through_bores'):
+        from ..connection_cuts import drill_plate
+        groups={}
+        for cut in member['through_bores']:
+            key=(tuple(cut['axis']),cut['diameter_in'])
+            groups.setdefault(key,[]).append(cut['point'])
+        for (normal,diameter),points in groups.items():
+            for i,faces in enumerate(solids):
+                piece={'id':member.get('id','member'),'faces':faces}
+                if drill_plate(piece,points,normal,diameter,'Located through-bolt bore',skip_disjoint=True):
+                    solids[i]=piece['faces']
     return solids
 
 

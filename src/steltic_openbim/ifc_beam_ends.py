@@ -86,8 +86,8 @@ def end_connections(physical):
         joint = joints.get(jid, {})
         end_ids = {e['member_id'] for e in joint.get('member_ends', [])}
         crossing = [m for m in end_ids if members[m]['kind'] in BEAMS]
-        through = set()
-        if len(crossing) >= 3 and not any(members[r[3]]['kind'] in COLUMNS for r in rows):
+        through = {r[3] for r in rows if r[1]=='test_floor_opening' and r[0].get('located_shear_joint')}
+        if not through and len(crossing) >= 3 and not any(members[r[3]]['kind'] in COLUMNS for r in rows):
             released = {r[2] for r in rows if r[0].get('parameters', {}).get('released_major_end')}
             rays = {mid: unit(sub(*reversed(members[mid]['axis']))) for mid in crossing}
             candidates = []

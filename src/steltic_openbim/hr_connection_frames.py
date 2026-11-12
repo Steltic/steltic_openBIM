@@ -1,4 +1,5 @@
 """Place HR shear details using the terminating and through members at the joint."""
+from collections import defaultdict
 from math import dist
 
 from .bim_assemblies import fingerprint, transformed
@@ -41,16 +42,56 @@ def place_template(template, frame, members, variants):
     return dict(frame, template_id=tid, revision=variants[tid]['revision'])
 
 
+def opening_corner_frames(physical,members,joints):
+    """Two shear tabs connect the opposed header ends to one finite trimmer."""
+    groups=defaultdict(list)
+    for c in physical.get('connections',[]):
+        if c.get('detail_ref',{}).get('legacy_family')=='test_floor_opening':
+            groups[c.get('joint_id')].append(c)
+    frames={}
+    for joint_id,pair in groups.items():
+        joint=joints.get(joint_id,{})
+        ends_at_joint=joint.get('member_ends',[])
+        if len(pair)!=2 or len(ends_at_joint)!=3 or joint.get('attachments'):continue
+        ids={e['member_id'] for e in ends_at_joint}
+        if sorted(members[i]['kind'] for i in ids)!=['opening_header','opening_trimmer','opening_trimmer']:continue
+        common=set(pair[0]['member_ids']) & set(pair[1]['member_ids'])
+        if len(common)!=1 or set(pair[0]['member_ids']) | set(pair[1]['member_ids'])!=ids:continue
+        support=common.pop()
+        rays={}
+        for end in ends_at_joint:
+            mid=end['member_id'];i=0 if end['end']=='start' else 1
+            axis=members[mid]['axis']
+            rays[mid]=unit(sub(axis[1-i],axis[i]))
+        left,right=sorted(ids-{support})
+        if dot(rays[left],rays[right])>-.99999 or abs(dot(rays[left],rays[support]))>1e-5:continue
+        if len({members[i]['profile_id'] for i in ids})!=1:continue
+        for c in pair:
+            branch=next(i for i in c['member_ids'] if i!=support)
+            # P1 lies on the positive local Y face of the branch web. Point
+            # that face into the finite supporting web on both sides.
+            frames[c['id']]=dict(x_axis=rays[branch],y_axis=rays[support],bindings=dict(M1=support,M2=branch))
+    return frames
+
+
 def beam_connection_view(physical):
     members = {m['id']:m for m in physical.get('members', [])}
     joints = {j['id']:j for j in physical.get('joints', [])}
     templates = {t['id']:t for t in physical.get('assemblies', [])}
     variants, changed = {}, {}
+    corners=opening_corner_frames(physical,members,joints)
     for c in physical.get('connections', []):
         if c.get('detail_ref', {}).get('legacy_family') not in ('review_beam','test_floor_opening'):
             continue
         frame = c.get('assembly_instance', {})
         roles = frame.get('bindings', {})
+        if c['id'] in corners:
+            target=corners[c['id']]
+            if not all(frame.get(k)==v for k,v in target.items()):
+                frame=place_template(templates[frame['template_id']],dict(frame,**target),members,variants)
+            if frame is not c['assembly_instance'] or not c.get('located_shear_joint'):
+                changed[c['id']]=dict(c,assembly_instance=frame,located_shear_joint=True)
+            continue
         joint = joints.get(c.get('joint_id'), {})
         end = next((e for e in joint.get('member_ends', []) if e['member_id']==roles.get('M1')), None)
         if not end or not any(a['member_id']==roles.get('M2') and 0 < a.get('station',0) < 1

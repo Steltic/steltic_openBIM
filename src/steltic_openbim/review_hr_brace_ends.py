@@ -389,7 +389,13 @@ def draw_brace(ctx):
     elif isbrb:
         a.dim([edge_start,0,interface_z],[edge_start+lx,0,interface_z],
               'Adopted lower free-edge extent',basis='A',offset=24)
-    a.dim([beam_x,0,interface_z],[beam_x,0,interface_z+sign*lz],basis='S' if proposal else 'A',offset=65 if proposal else 40)
+    checked_base=base_spec and base_spec.get('bearing_at_workpoint')
+    a.dim([beam_x,0,interface_z],[beam_x,0,interface_z+sign*lz],basis='S' if proposal or checked_base else 'A',offset=65 if proposal else 40)
+    if checked_base:
+        a.dim([0,0,0],start,'Workpoint to brace cut',basis='S')
+        if actual_base:
+            lower,upper_edge=actual_base[0][0]
+            a.notes.append(f'S: plate top at workpoint; brace-side edge {upper_edge:g} in and opposite edge {-lower:g} in from column centre.')
     if upper:a.notes.append('A: support weld, doubler and stiffeners centre on the actual brace/flange intersection. Continuous gusset to the attachment; original source checks remain separate.')
     if upper:bind_support_span(ctx,'BEAM',0)
     if not upper:bind_support_span(ctx,'COLUMN',2)
