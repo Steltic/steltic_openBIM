@@ -46,6 +46,10 @@ def member_key(member):
     if member.get("terminal_planes"):
         fields["terminal_planes"]=[dict(normal=p["normal"],offset_in=round(p["offset_in"]-float(origin@p["normal"]),9))
                                    for p in member["terminal_planes"]]
+    if member.get("ifc_end_recesses"):
+        fields["ifc_end_recesses"] = [
+            [dict(normal=p["normal"], offset_in=round(p["offset_in"]-float(origin@p["normal"]),9)) for p in recess]
+            for recess in member["ifc_end_recesses"]]
     if member.get('through_bores'):
         fields['through_bores']=[dict(h,point=(np.asarray(h['point'])-origin).tolist()) for h in member['through_bores']]
     return origin,fields,json.dumps(fields,sort_keys=True)
@@ -117,7 +121,7 @@ class ShapeReadback:
                 return "delivered section or cut vertices differ from the numeric profile in its member frame"
             return None
         issue=compare(self.expected[key])
-        if issue and any(member.get(k) for k in ("slots","terminal_planes","rbs","cope","through_bores")):
+        if issue and any(member.get(k) for k in ("slots","terminal_planes","ifc_end_recesses","rbs","cope","through_bores")):
             # End stations within a few ULPs coalesce in the original world
             # coordinate frame. A translated replay can choose a different
             # coincident cap. Compare the exact input before flagging topology.

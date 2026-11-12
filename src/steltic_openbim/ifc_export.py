@@ -22,6 +22,7 @@ from .generator_identity import generator_identity
 from . import member_constituents
 from .pilots.geometry import member_faces,part_faces,part_lines
 from . import bim_assemblies, bim_bonds
+from .ifc_beam_ends import beam_end_fits, fitted_member
 
 INCH=.0254
 
@@ -296,11 +297,12 @@ def _export_source(directory,destination,source):
         if connection_part:row.update(connection_id=item['connection_id'],joint_id=item.get('joint_id'),source_level=item.get('level'))
         objects.append(row)
         return obj
+    fits = beam_end_fits(package['physical']) if package.get('module') == 'HR' and not recovered else {}
     for m in members:
         faces=[]
         roles=[] if m.get('brb_casing') else None
         if not recovered:
-            try:faces=member_faces(m,profiles,face_roles=roles)
+            try:faces=member_faces(fitted_member(m,fits.get(m['id'])),profiles,face_roles=roles)
             except (ValueError,KeyError,TypeError,ZeroDivisionError) as ex:warnings.append(dict(id=m['id'],message='Reference axis only: '+str(ex)[:160]))
         cls='IfcColumn' if m['kind'] in ('column','col','stud','post','endwall_post') else 'IfcBeam' if m['kind'] in ('beam','girder','joist','rafter','moment_beam') else 'IfcMember'
         member_objects[m['id']]=add(cls,m,faces,[m['axis']],face_roles=roles);counts['members']+=1;counts['member_surfaces' if faces else 'reference_axes']+=1
