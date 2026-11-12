@@ -16,7 +16,7 @@ def post_plate(assembly, name, outline, contact_y, side, v, schedule, weld):
     base = schedule['arm_thickness_in']
     full = schedule['thickness_in']
     slope = schedule['outside_taper_run_per_rise']
-    radius = schedule['blend_radius_in']
+    radius = schedule['blend_radius_in'] if 'blend_radius_in' in schedule else schedule['minimum_blend_radius_in']
     near = weld['start_in']
     far = near + weld['length_in']
     width = schedule['weld_root_width_in'] / 2
@@ -72,7 +72,7 @@ def post_plate(assembly, name, outline, contact_y, side, v, schedule, weld):
         faces.append([point(a,0.),point(b,0.),point(b,thick(b)),point(a,thick(a))])
     part=assembly.part(name,'Monolithic double gusset with a machined post fan and outboard taper',
                        faces,'S','plate',selected_material=schedule['material'])
-    part['parameters']=dict(source_role='transfer_post_gusset',description=part['description'],
+    part['parameters']=dict(source_role='transfer_post_gusset',description=part['description'],thickness=full,
         arm_thickness_in=base,post_thickness_in=full,minimum_blend_radius_in=radius,
         outside_taper_run_per_rise=slope,inner_bearing_plane_in=contact_y,
         post_shoulder_width_in=2*shoulder,stock_beyond_calculated_fan_in=radius)

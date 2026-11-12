@@ -52,6 +52,9 @@ def locate(package,model):
         brace=native[occurrence['id']]['assembly_instance']
         base=bases.get((brace['bindings']['COLUMN'],tuple(occurrence['point'])))
         if not base:raise ValueError('Selected bay-side base tongue lacks its column base: '+occurrence['id'])
+        if records[chosen].get('grade_steel',{}).get('bearing_at_workpoint'):
+            base['parameters']['bearing_at_workpoint']=True
+            native[base['id']].setdefault('parameters',{})['bearing_at_workpoint']=True
         if chosen in layouts:
             base['parameters']['bearing_at_workpoint']=True
             native[base['id']].setdefault('parameters',{})['bearing_at_workpoint']=True

@@ -178,7 +178,7 @@ class Assembly:
         g=dict(type='cylinder',origin=list(origin),axis=unit(axis),radius=diameter/2,length=length)
         return self.part(label,description or f'Rod dia {diameter:g}',part_faces({'geometry':g},self.profiles),basis,kind,geometry=g)
 
-    def fastener(self,label,points,axis,diameter,grip,connects,description,basis='S',screw=False):
+    def fastener(self,label,points,axis,diameter,grip,connects,description,basis='S',screw=False,shaft_only=False):
         """Points locate the near grip face; grip is the actual joined-ply envelope.
 
         Head/nut envelopes are illustrative; grip is not a procurement length.
@@ -189,6 +189,9 @@ class Assembly:
         for p in points:
             g=dict(type='cylinder',origin=list(p),axis=n,radius=diameter/2,length=grip)
             faces+=part_faces({'geometry':g},self.profiles)
+            if shaft_only:
+                centres.append(add(p,mul(n,grip/2)))
+                continue
             # Hex head, and a nut on through bolts; screw tips are shown beyond grip.
             yy=unit(cross([0,0,1],n)) if abs(n[2])<.99 else [1,0,0]
             poly=[[diameter*.9*math.cos(i*math.pi/3),diameter*.9*math.sin(i*math.pi/3)] for i in range(6)]

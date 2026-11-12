@@ -3,7 +3,7 @@ from .assembly_scene import bounds
 from .pilots.model import add, mul, dot, cross, unit
 
 
-def drill_plate(part, points, axis, diameter, basis,radial_reference=None,skip_disjoint=False):
+def drill_plate(part, points, axis, diameter, basis,radial_reference=None,skip_disjoint=False,slot_travel=0.):
     """Return real plate-surface triangles and hole walls in the local frame."""
     from shapely import constrained_delaunay_triangles,set_precision
     from shapely.geometry import Polygon, Point
@@ -30,6 +30,10 @@ def drill_plate(part, points, axis, diameter, basis,radial_reference=None,skip_d
     outline = unary_union(caps)
     radius = diameter/2
     holes = [Point(dot(q,u),dot(q,v)).buffer(radius,quad_segs=8) for q in points]
+    if slot_travel:
+        from shapely.geometry import LineString
+        if slot_travel<0 or radial_reference is None:raise ValueError('A slot needs a travel direction and positive travel')
+        holes=[LineString([(dot(q,u)-slot_travel/2,dot(q,v)),(dot(q,u)+slot_travel/2,dot(q,v))]).buffer(radius,quad_segs=8) for q in points]
     if skip_disjoint:
         holes=[h for h in holes if outline.intersection(h).area>1e-8]
         if not holes:return False
@@ -58,18 +62,21 @@ def drill_plate(part, points, axis, diameter, basis,radial_reference=None,skip_d
     part['faces']=faces
     part['bounds']=bounds(faces)
     part['geometry']={'type':'mesh','faces':faces}
+    slot=dict(slot_travel_in=slot_travel,slot_axis=list(u)) if slot_travel else {}
     part.setdefault('holes',[]).extend(dict(point=list(q),axis=list(axis),
-        diameter_in=diameter,basis=basis) for q in points)
+        diameter_in=diameter,basis=basis,**slot) for q in points)
     return True
 
 
-def drill_receivers(assembly,group,diameter):
+def drill_receivers(assembly,group,diameter,plate_travel=0.):
     """Keep one hole set on the sheet's receiver and the installed member."""
     from .pilots.geometry import member_faces
-    drill_joined_plates(assembly,group,diameter,'A selected-bolt fit allowance')
     parts={p['id']:p for p in assembly.parts}
     for role in group['connects']:
         part=parts.get(role,{})
+        if part.get('kind')=='plate':
+            drill_plate(part,group['points'],group['axis'],diameter,'Source release; horizontal slot setout' if plate_travel else 'A selected-bolt fit allowance',
+                        radial_reference=[1,0,0] if plate_travel else None,slot_travel=plate_travel)
         if not part.get('member'):continue
         member=part['member'];drills=member.setdefault('through_bores',[])
         drills.extend(dict(point=q,axis=group['axis'],diameter_in=diameter,fastener=group['id'])

@@ -49,13 +49,7 @@ def beam_record(b,m,raw,default,levels):
 def physical_extras(b,levels):
     from .review_hr import nearest
     if b.key=='hr3':
-        for m in b.members:
-            if m['kind']=='column' and m['level']==1:
-                low=min(m['axis'],key=lambda q:q[2]);low[2]=-144;m['basis']='A';m['setout_basis']='S column section/continuity; A cellar footing datum'
-                rid=b.record('members','cellar-col-'+m['profile_id'])
-                if rid:m['design_record_ids'].append(rid);b.used_records.add(rid)
-        b.levels.insert(0,(-1,'CELLAR FOOTING / A',-144))
-        b.note('CELLAR','S: cellar columns continue through grade and story 1 without a splice at grade. A: cellar footing datum -12 ft, consistent with the source approximate 34 ft shaft to the first splice; grade slab and foundation walls receive the source base shear. No cellar lateral analysis is invented.')
+        b.note('STEEL-GRADE-LIMIT','The steel review begins at the grade slab. Column sections and splice stations above grade follow the HR design.')
     if b.key=='hr19':
         pieces=[m for m in b.members if m['profile_id']=='PG84X1108'];first=min(pieces,key=lambda m:min(q[0] for q in m['axis']))
         first['axis']=[min((q for m in pieces for q in m['axis']),key=lambda q:q[0]),max((q for m in pieces for q in m['axis']),key=lambda q:q[0])]
@@ -129,7 +123,6 @@ def connections(b,levels):
         if fam in ('review_column_continuity','review_base'):
             short='conn-lateral_col-'+pid
             if short in raw and any(t in str(raw[short]).lower() for t in ('no field splice','no column splice','one piece')):attach(c,short)
-            if b.key=='hr3':attach(c,'conn-cellar-col-'+pid)
             if b.key=='hr19' and pid=='W36X925':attach(c,'conn-transfer-support-col-W36X925')
     if b.key=='hr17':
         for k,z in enumerate(levels[1:],1):

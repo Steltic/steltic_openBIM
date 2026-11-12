@@ -92,6 +92,12 @@ def resolve_shared(check,connection,own_parts,instance):
                     owner.get('detail_ref',{}).get('legacy_family') not in ('review_base','review_wall_base')):
                 raise ValueError('Secondary gusset sole does not share its actual column with the base owner')
             expected_welds=set()
+        if all(ref.get('sharing_kind')=='transfer_floor_tab' for ref in group):
+            tab=connection.get('parameters',{}).get('transfer_floor_tab_design',{})
+            if (owner_id!=tab.get('parent_connection_id') or map_roles!={tab.get('receiver_plate'):'PANEL'}
+                    or owner.get('detail_ref',{}).get('legacy_family')!='review_transfer_truss'):
+                raise ValueError('Transverse floor tab references a different transfer panel')
+            expected_welds=set()
         if welds!=expected_welds:
             raise ValueError('Shared support weld coverage differs for '+owner_id+': '+str(sorted(welds^expected_welds)))
         ref_lines=check.rb.curves(owner_id)

@@ -1,6 +1,7 @@
 """Resolve an embedded-column gusset to its collar or selected cap clearance."""
 import re
 from .assembly_templates import NUMBER,number
+from .grade_steel import selection
 
 
 def value(text,pattern):
@@ -18,6 +19,10 @@ def locate_grade_interfaces(package,model):
     records={r['id']:r['data'] for r in package.get('design_records',[])}
     for c in model['connections']:
         if c.get('parameters',{}).get('joint')!='base' or c['detail_ref']['id'] not in ('review_brace','review_brb'):continue
+        rail=selection(records,c)
+        if rail:
+            c['parameters']['grade_rail']=rail
+            continue
         bound=[members[mid] for mid in c['member_ids']]
         columns=[m for m in bound if m['kind']=='column']
         if len(columns)!=1 or any(m['kind'] not in ('brace','column') for m in bound):continue

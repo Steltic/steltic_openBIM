@@ -229,7 +229,8 @@ def connect_primary(b,levels):
                 refs=[b.record('connections',rid)] if rid else []
                 extra=b.record('connections','conn-column-base-segment-'+pid)
                 if extra:refs.append(extra)
-                b.connection(m['id']+':base','review_base',low,[m],refs,parameters={'existing_grillage':b.key=='hr32'})
+                if b.key!='hr3':
+                    b.connection(m['id']+':base','review_base',low,[m],refs,parameters={'existing_grillage':b.key=='hr32'})
                 continuous=[r for r in raw if r.endswith('-'+record_pid) and 'base-' not in r and re.search(r'\bno (?:field |column )?splice\b',str(raw[r].get('components','')),re.I)]
                 for r in continuous:
                     ref=b.record('connections',r)

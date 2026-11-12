@@ -399,7 +399,16 @@ class Assessment:
                         for declaration in parts[target].get('parameters',{}).get('holes',[]):
                             hole_point = projected(declaration['point'],axes)
                             if hole_point.distance(center) <= TOL:
-                                expected = [*expected,declaration['diameter_in']]
+                                if declaration.get('slot_travel_in'):
+                                    from shapely.geometry import LineString
+                                    vector=np.asarray(declaration['slot_axis'])
+                                    direction=np.asarray([np.dot(vector,v) for v in axes])
+                                    shift=direction*declaration['slot_travel_in']/2
+                                    xy=np.asarray([center.x,center.y])
+                                    outline=LineString([xy-shift,xy+shift]).buffer(declaration['diameter_in']/2,quad_segs=8)
+                                    if hole.hausdorff_distance(outline)>4*TOL:
+                                        self.issue('actual_slot_size_or_axis_differs',fastener=pid,ply=target)
+                                else:expected = [*expected,declaration['diameter_in']]
                         for size in set(expected):
                             if np.max(np.abs(2*radii-float(size))) > 4*TOL:
                                 self.issue('actual_bore_diameter_or_center_differs', fastener=pid, ply=target, actual_diameter_range_in=[2*min(radii),2*max(radii)], selected_in=size)

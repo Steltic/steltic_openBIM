@@ -82,6 +82,9 @@ def support(ctx,bp):
 
 def draw(ctx):
     a,p,pid,txt,par,f=ctx.a,ctx.p,ctx.pid,ctx.text,ctx.params,ctx.family
+    if par.get('transfer_floor_tab_design'):
+        from .transfer_floor import draw as draw_tab
+        return draw_tab(ctx)
     if par.get('actual_composite_core'):
         from .review_composite_core import draw as core
         return core(ctx)
@@ -409,8 +412,17 @@ def base(ctx):
         else:
             alt=re.search(r'(?:with )?PL '+NUMBER+r' x '+NUMBER+r' x '+NUMBER+r' in plate washers on the base plate',txt,re.I)
             if alt:washer_dimensions=list(map(number,alt.groups()))
-    washer_grip=washer_dimensions[0] if washer_dimensions and ctx.params.get('bearing_at_workpoint') else 0.
-    anchors=a.fastener('ANCH',points,[0,0,1],dia,embed+grout+t+washer_grip,['CONC','P1'],f'{n} x {dia:g} in {grade} anchor rods; A embedment where source delegates it',basis='S count/diameter/grade; A embedment' if selected_rods else 'A')
+    hardware=ctx.params.get('grade_anchor_hardware')
+    if hardware:
+        source=next(r['data'] for r in ctx.package['design_records'] if r['id'] in ctx.c['design_record_ids'] and r['data'].get('grade_anchor_hardware'))
+        if source['grade_anchor_hardware']!=hardware:raise ValueError('Base hardware differs from the issued grade schedule')
+        a.notes.append(source['design_note'])
+        for row in source['checks']:
+            if 'demand' in row and 'capacity' in row:
+                a.notes.append(f"S: {row['limit_state']}. Required {row['demand']:g}, available {row['capacity']:g} {row['units']}.")
+    washer_grip=washer_dimensions[0] if washer_dimensions and (hardware or ctx.params.get('bearing_at_workpoint')) else 0.
+    projection=hardware['nut_height_in']+hardware['rod_projection_in'] if hardware else 0.
+    anchors=a.fastener('ANCH',points,[0,0,1],dia,embed+grout+t+washer_grip+projection,['CONC','P1'],f'{n} x {dia:g} in {grade} anchor rods; A embedment where source delegates it',basis='S count/diameter/grade; A embedment' if selected_rods else 'A',shaft_only=bool(hardware))
     from .connection_cuts import drill_plate
     diameter=ctx.selected.get(('anchor_hole','diameter_in'))
     if diameter is None:
@@ -432,8 +444,12 @@ def base(ctx):
         if washer_dimensions:
             wt,wx,wy=washer_dimensions;wid='WASHER-TOP-'+str(j)
             washer=a.box(wid,[q[0]-wx/2,q[1]-wy/2,grout+t],[wx,wy,wt],'S','Source top plate washer at the actual anchor')
-            washer_hole=ctx.selected.get(('washer_hole','diameter_in')) or dia+.0625
-            drill_plate(washer,[q],[0,0,1],washer_hole,'S selected washer hole' if ctx.selected.get(('washer_hole','diameter_in')) else 'A 1/16 in diametral washer clearance')
+            washer_hole=ctx.selected.get(('washer_hole','diameter_in')) or (hardware['washer_bore_in'] if hardware else dia+.0625)
+            drill_plate(washer,[q],[0,0,1],washer_hole,'S selected washer hole' if hardware or ctx.selected.get(('washer_hole','diameter_in')) else 'A 1/16 in diametral washer clearance')
+            if hardware:
+                from .grade_steel import add_nut
+                washer['selected_material']=hardware['washer_material']
+                add_nut(a,j,q,grout+t+wt,dia,hardware)
             size=ctx.n(r'welded to the base plate with '+NUMBER+r' in fillets',.25)
             corners=[[q[0]+sx*wx/2,q[1]+sy*wy/2,grout+t] for sx,sy in ((-1,-1),(1,-1),(1,1),(-1,1))]
             if re.search(r'washer.*?welded to the base plate',txt,re.I):

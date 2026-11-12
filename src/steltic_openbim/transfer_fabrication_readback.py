@@ -124,14 +124,17 @@ def verify_fabrication(check,c,inst,matrix,parts,meshes,curves,names):
         if stiff:
             ids=[k for k,p in parts.items() if p.get('parameters',{}).get('source_role')=='transfer_support_stiffener']
             inner=dims['tw']/2;outer=dims['bf']/2+tip['projection_in'];half=dims['d']/2-dims['tf']
-            radius=stiff['cope_radius_in'];thickness=stiff['thickness_in'];offset=stiff['offset_from_workpoint_in']
+            radius=stiff['cope_radius_in'];thickness=stiff['thickness_in']
+            stations=((stiff['lower_station_in'],stiff['upper_station_in']) if 'lower_station_in' in stiff else
+                      (-stiff['offset_from_workpoint_in'],stiff['offset_from_workpoint_in']))
+            welds=source['transfer_support_stiffener_weld']
             weld_metal=source['transfer_support_stiffener_weld']['material']
             occupied=set();measured=[]
             for k in ids:
                 steel=localized(meshes[k].transformed(matrix),wp,axes)
                 lo,hi=steel.vertices.min(axis=0),steel.vertices.max(axis=0)
                 side=1 if (lo[0]+hi[0])/2>0 else -1
-                station=offset if (lo[2]+hi[2])/2>0 else -offset
+                station=min(stations,key=lambda s:abs((lo[2]+hi[2])/2-s))
                 expected=box(*[min(side*inner,side*outer),-half,max(side*inner,side*outer),half])
                 for corner in (-half,half):
                     expected=expected.difference(Point(side*inner,corner).buffer(radius,quad_segs=80))
@@ -149,8 +152,8 @@ def verify_fabrication(check,c,inst,matrix,parts,meshes,curves,names):
                 lengths=[float(actual.intersection(edge.buffer(TOL,cap_style=2)).length) for edge in source_edges]
                 if (len(host_lines)!=3 or len(tip_lines)!=2 or
                         any(e.difference(actual.buffer(TOL)).length>TOL for e in source_edges) or
-                        abs(lengths[0]-stiff['net_web_contact_in'])>TOL or
-                        any(abs(l-stiff['net_flange_contact_in'])>TOL for l in lengths[1:])):
+                        abs(lengths[0]-(stiff['net_web_contact_in'] if 'net_web_contact_in' in stiff else welds['web_length_in']))>TOL or
+                        any(abs(l-(stiff['net_flange_contact_in'] if 'net_flange_contact_in' in stiff else welds['flange_length_in']))>TOL for l in lengths[1:])):
                     issues.append(dict(issue='Actual stiffener groove welds fail their complete web or composite flange contact',part=k,measured_edges_in=lengths))
                 measured.append(dict(part=k,station_in=station,web_flange_edge_lengths_in=lengths,sections=values))
             if len(occupied)!=stiff['count']:issues.append(dict(issue='Wrong number of transverse stiffeners at the support',actual=len(occupied)))
@@ -172,7 +175,8 @@ def verify_fabrication(check,c,inst,matrix,parts,meshes,curves,names):
         w=w_shape(after)
         if full.symmetric_difference(w).area>TOL*w.length:
             issues.append(dict(issue='Post and upper column terminal surfaces do not fully meet at the workpoint'))
-        paths=matching_welds(parts,{post,upper},matrix,curves,names,splice['material'],issues)
+        metal=splice['weld_material'] if 'weld_material' in splice else splice['material']
+        paths=matching_welds(parts,{post,upper},matrix,curves,names,metal,issues)
         local=[(path-wp)@np.column_stack(axes) for path in paths]
         bf,dep,tf=after['bf'],after['d'],after['tf']
         spans=[LineString([(-bf/2,h),(bf/2,h)]) for h in (-(dep-tf)/2,(dep-tf)/2)]
