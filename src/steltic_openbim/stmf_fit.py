@@ -323,6 +323,13 @@ def make_scene(source,rows,profiles,records,direction,receiver=None):
             slots[r['role']]=slot
     a.notes.append('Explicit source welds and slot widths follow the selected vertical, diagonal or flat-bar detail; remaining terminal stations and gusset perimeter are openBIM fits.')
     if receiver:
+        for r,_,s in pending:
+            if 'tip_overrun' in s:
+                a.notes.append(f"{r['role']} has four {s['size']:g} in fillets, {s['length']:g} in effective each. "
+                               f"Slot width {t+s['clearance']:g} in. Cut each slot {s['tip_overrun']:g} in beyond the weld.")
+        if not column:
+            for role,p,q in chord_edges:
+                a.notes.append(f"{role} has {math.dist(p,q):g} in of gusset weld on each face.")
         a.notes.extend(receiver['column_notes' if column else 'chord_notes'])
     scene=dict(source,**{k:v for k,v in a.result().items() if k not in ('id','reference','sheet')})
     scene['source_record_ids']=sorted(references)

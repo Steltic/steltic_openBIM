@@ -39,6 +39,7 @@ def stiffen_chord(assembly, role, start, end, toward, dims, spec):
                   (-gap/2,depth), (-gap/2,clip)]
         part = assembly.polygon(key, [point(x, dy, dz) for dy, dz in border], diaphragm,
                       normal=[1,0,0], basis='S', description='Clipped transverse chord diaphragm')
+        part['annotation_group'] = f'{role}-D1..D{count}'
         part['selected_material'] = spec['material']
         for side, suffix in ((-1,'A'),(1,'B')):
             seam(key+'-F'+suffix,point(x+diaphragm/2,side*gap/2,clip),
@@ -51,6 +52,7 @@ def stiffen_chord(assembly, role, start, end, toward, dims, spec):
         plate = assembly.polygon(spine, [point(xx,-rib/2,dz) for xx,dz in
                               ((x0,0),(x1,0),(x1,depth),(x0,depth))],
                               rib,basis='S',description='Longitudinal chord-web backing rib')
+        plate['annotation_group'] = f'{role}-R1..R{count - 1}'
         plate['selected_material'] = spec['material']
         seam(spine+'-WEB',point(x0,0,0),point(x1,0,0),role,spine)
         seam(spine+'-D1',point(x0,0,0),point(x0,0,depth),spine,key)
