@@ -1001,6 +1001,8 @@ class Assessment:
 def verify_assembly_fit(ifc_path, physical, source_handoff, design_records=()):
     """Verify every applicable connection and report individual unsupported IDs."""
     try:
+        from .ifc_rafter_gussets import rod_gusset_view
+        physical = rod_gusset_view(physical)
         check = Assessment(Readback(ifc_path), physical, source_handoff, design_records)
     except (OSError, ValueError, RuntimeError, KeyError) as exc:
         return {'passed': False, 'findings': [{'code': 'assembly_readback_unavailable', 'message': str(exc)}]}
