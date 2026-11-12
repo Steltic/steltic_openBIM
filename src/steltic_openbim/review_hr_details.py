@@ -155,8 +155,11 @@ def draw(ctx):
             plate_edge=n(NUMBER+r' in beam-end and plate-edge distances',2.25)
             width=gap+plate_edge+(cols-1)*gauge+plate_edge
         pattern_basis='S' if re.search(r'\b(?:bolts|erection tab|column\(s\))\b',txt,re.I) else 'A'
+        reinforcement=re.search(r'beam web reinforcing plates PL '+NUMBER+r' x '+NUMBER+r' x '+NUMBER,txt,re.I)
+        reinforcement_t=number(reinforcement[1]) if reinforcement else 0.
         shim=.0625 if twin else 0
-        plate=a.box('P1',[face,tw/2+shim,z],[width,t,ph],pattern_basis,'Shear plate / erection tab; A fitted width where unprovided')
+        plate_y=tw/2+reinforcement_t+shim
+        plate=a.box('P1',[face,plate_y,z],[width,t,ph],pattern_basis,'Shear plate / erection tab; A fitted width where unprovided')
         if typed_shear:
             plate['thickness']=t
             grade=ctx.selected.get(('shear_plate','material'))
@@ -171,21 +174,27 @@ def draw(ctx):
                     paired=variant=='double_plate_shear'
         joins=['M2','P1']
         if paired:
-            second=a.box('P2',[face,-tw/2-t,z],[width,t,ph],'S','Source second shear plate / double-shear joint')
+            second=a.box('P2',[face,-tw/2-reinforcement_t-t,z],[width,t,ph],'S','Source second shear plate / double-shear joint')
             if typed_shear:
                 second['thickness']=t
                 if plate.get('selected_material'):second['selected_material']=plate['selected_material']
             joins.append('P2')
-        if shim:a.box('SHIM',[face+gap,tw/2,z],[width-gap,shim,ph],'S','Source 1/16 in finger shim against beam web');joins.append('SHIM')
-        bolt=a.fastener('F1',grid(rows*cols,cols,pitch,gauge,(face+width-plate_edge-(cols-1)*gauge,-tw/2-(t if paired else 0),z+edge)),[0,1,0],dia,tw+shim+t*(2 if paired else 1),joins,f'{rows} rows x {cols}; {dia:g} in '+('A490' if 'A490' in txt else 'A325')+'; source pretension/faying-surface requirements',pattern_basis)
+        if reinforcement:
+            from .review_shear_selection import add_web_reinforcement
+            joins.extend(add_web_reinforcement(a,reinforcement,txt,face+gap,-bd/2,tw))
+        if shim:a.box('SHIM',[face+gap,tw/2+reinforcement_t,z],[width-gap,shim,ph],'S','Source 1/16 in finger shim at beam web');joins.append('SHIM')
+        near=-tw/2-reinforcement_t-(t if paired else 0)
+        grip=tw+2*reinforcement_t+shim+t*(2 if paired else 1)
+        bolt=a.fastener('F1',grid(rows*cols,cols,pitch,gauge,(face+width-plate_edge-(cols-1)*gauge,near,z+edge)),[0,1,0],dia,grip,joins,f'{rows} rows x {cols}; {dia:g} in '+('A490' if 'A490' in txt else 'A325')+'; source pretension/faying-surface requirements',pattern_basis)
         if typed_shear:
             bolt['functional_kind']='bolt'
             material=ctx.selected.get(('bolt','material'))
             if material:bolt['selected_material']=material
         weld=n(r'\('+NUMBER+r' in fillets both sides',.25)
         if twin:weld=n(r'(?:with one|\(one) '+NUMBER+r' in (?:E70 )?fillet',.5)
-        a.weld('W1',[face,tw/2,z],[face,tw/2,z+ph],[getattr(ctx,'support_attachment','M1'),'P1'],weld,description=f'{weld:g} in fillet both sides to support')
-        if paired:a.weld('W2',[face,-tw/2,z],[face,-tw/2,z+ph],['M1','P2'],weld,description='Source second shear-plate support weld')
+        first_weld_y=tw/2+reinforcement_t
+        a.weld('W1',[face,first_weld_y,z],[face,first_weld_y,z+ph],[getattr(ctx,'support_attachment','M1'),'P1'],weld,description=f'{weld:g} in fillet both sides to support')
+        if paired:a.weld('W2',[face,-first_weld_y,z],[face,-first_weld_y,z+ph],['M1','P2'],weld,description='Source second shear-plate support weld')
         surface=getattr(ctx,'support_surface',None)
         if surface:
             normal=surface['normal'];offset=surface['offset'];sign=1 if normal[0]>0 else -1
@@ -204,7 +213,7 @@ def draw(ctx):
         if twin:
             for w in a.welds:
                 if w['id'] not in ('W1','W2'):continue
-                for q in (w['a'],w['b']):q[1]=tw/2+shim+t if w['id']=='W1' else -tw/2-t
+                for q in (w['a'],w['b']):q[1]=plate_y+t if w['id']=='W1' else near
                 w['description']='Source one fillet on the outer face only; inner face not welded'
             a.notes.append('S: paired shear plates spaced t_w + 1/16 in, source finger shim fitted at one web face before pretensioning. One-sided outer fillets only; bolted beam web restrains plate rotation.')
         if collector:
@@ -235,11 +244,6 @@ def draw(ctx):
         match=re.search(r'(?<!no )doubler plate\s*(?:PL\s*)?'+NUMBER+r' in',txt,re.I)
         if match:
             thick=number(match[1]);a.box('DP',column_point([-cd/2+tf,ct/2,-bd-6]),[cd-2*tf,thick,bd+12],'S','Column web doubler; source extension 6 in',**column_axes);a.weld('WD',column_point([-cd/2+tf,ct/2,-bd-6]),column_point([-cd/2+tf,ct/2,6]),['M1','DP'],.375,kind='PJP',description='Source doubler groove/fillet weld system; see attached record')
-        reinforcing=re.search(r'beam web reinforcing plates PL '+NUMBER+r' x '+NUMBER+r' x '+NUMBER,txt,re.I)
-        if reinforcing:
-            rt,rh,rl=map(number,reinforcing.groups())
-            for j,sg in enumerate((-1,1)):
-                yy=tw/2 if sg>0 else -tw/2-rt;a.box('RP'+str(j),[face+gap,yy,-bd/2-rh/2],[rl,rt,rh],'S','Source beam-web reinforcement');a.weld('WR'+str(j),[face+gap,yy,-bd/2-rh/2],[face+gap+rl,yy,-bd/2-rh/2],['M2','RP'+str(j)],.3125,description='5/16 in fillet all around reinforcement')
         a.section_at=face+width-2;a.dim([face,0,z],[face+width,0,z],basis='A');a.dim([face+width,0,z+edge],[face+width,0,z+edge+(rows-1)*pitch],f'{rows-1} @ {pitch:g} in',offset=40)
         if rbs:a.dim([face+rbs['a_in'],0,1],[face+rbs['a_in']+rbs['b_in'],0,1],f'RBS b={rbs["b_in"]:g}; c={rbs["c_in"]:g} in',offset=30)
     elif f=='review_pin_beam':pin_beam(ctx)
