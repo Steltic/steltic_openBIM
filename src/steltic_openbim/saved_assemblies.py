@@ -180,7 +180,10 @@ def rebuilt_scenes(model,package):
                 rebuild=any(by_id[cid].get('parameters',{}).get('sliding_receiver') or by_id[cid].get('parameters',{}).get('transfer_floor_tab_design') or
                             ('shear_plate','depth_in') in selected_fields(package,by_id[cid]) for cid in original['occurrences'])
             if family=='review_splice':
-                rebuild=any('per side in one vertical line' in records.get(r,{}).get('components','') or 'CJP groove welds of both flanges and the web' in records.get(r,{}).get('components','') for cid in original['occurrences'] for r in by_id[cid].get('design_record_ids',[]))
+                from .bolted_splice_selection import flange_selection
+                # A bolted splice whose flange bolt group comes from the record is rebuilt, so the IFC template
+                # carries the same bolts as the drawn detail.
+                rebuild=any('per side in one vertical line' in records.get(r,{}).get('components','') or 'CJP groove welds of both flanges and the web' in records.get(r,{}).get('components','') or flange_selection(records.get(r,{}).get('components','')) for cid in original['occurrences'] for r in by_id[cid].get('design_record_ids',[]))
             if family in ('hr_simple_shear_plate','hr_infill_shear_plate_cope','hr_shear','test_floor_opening'):
                 rebuild=any(('shear_plate','depth_in') in selected_fields(package,by_id[cid]) for cid in original['occurrences'])
             if family=='hr_column_base' and original.get('subtype')=='exposed':rebuild=True
