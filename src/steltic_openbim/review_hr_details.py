@@ -389,7 +389,10 @@ def base(ctx):
         from .base_plate_extensions import add as add_stock
         add_stock(a,bx,by,grout,t,tongues)
     else:
-        a.box('P1',[-bx/2,-by/2,grout],[bx,by,t],'S' if match else 'A','Base plate')
+        # Holes drilled later turn this box into a cut plate whose legend row no longer lists a size, so the
+        # selected stock is stated in the description itself.
+        stock=' PL '+' x '.join(format(number(v),'g') for v in match.groups())+' in' if match else ''
+        a.box('P1',[-bx/2,-by/2,grout],[bx,by,t],'S' if match else 'A','Base plate'+stock)
     context_height=max(32,flange_stiffeners['height']+4) if flange_stiffeners else 32
     a.member('M1',pid,[0,0,grout+t],[0,0,grout+t+context_height]);edge=ctx.n(r'rods '+NUMBER+r' in from the plate edges',max(1.5,1.5*dia));rows=max(2,math.ceil(n/2));points=[]
     if flange_stiffeners:

@@ -4,7 +4,7 @@ from .assembly_templates import NUMBER, number
 
 _CAP_PLATE = re.compile(r'cap plate PL ' + NUMBER + r' in\b', re.I)
 _CAP_FILLET = re.compile(r'cap plate[^;]*?welded all around with ' + NUMBER + r' in fillets', re.I)
-_CONTINUITY_WEB = re.compile(NUMBER + r' in fillets both sides to the column web', re.I)
+_CONTINUITY_WEB = re.compile(NUMBER + r' in fillets both sides to the column web|to the web with web fillets of ' + NUMBER + r' in\b', re.I)
 _COLUMN_BASE_FILLET = re.compile(r'column welded to the base plate with ' + NUMBER + r' in (?:E70(?:XX)? )?fillets', re.I)
 _COLUMN_BASE_CJP = re.compile(r'column (?:flanges and web )?(?:is )?(?:CJP[- ]welded|welded)[^;]*?(?:to the (?:base )?plate)[^;]*?CJP|column flanges and web CJP-welded to the base plate', re.I)
 
@@ -22,7 +22,7 @@ def cap_perimeter_fillet(text):
 def continuity_web_fillet(text):
     """The stated fillet between a continuity plate and the column web, or None when HR does not state one."""
     match = _CONTINUITY_WEB.search(str(text))
-    return number(match[1]) if match else None
+    return number(match[1] or match[2]) if match else None
 
 
 def column_to_base_weld(text):
