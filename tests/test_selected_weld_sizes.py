@@ -24,6 +24,8 @@ def test_source_wording_is_read():
     cap = selected('hr21', 'conn-gravity_col-W14X90')
     assert cap_plate_thickness(cap) == .75 and cap_perimeter_fillet(cap) == .25
     assert continuity_web_fillet(selected('hr16', 'conn-roof-W21X57')) == .4375
+    # OMF wording: '... and to the web with web fillets of 5/16 in on both faces'
+    assert continuity_web_fillet(selected('hr32', 'conn-floor-W24X62')) == .3125
     assert column_to_base_weld(selected('hr35', 'conn-base-lateral_col-W10X39')) == ('fillet', .3125)
 
 

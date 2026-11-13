@@ -162,9 +162,10 @@ def build(b):
         if m['kind'] in ('beam','infill','moment_beam','girder'):
             depth=b.depth(m['profile_id']);m['end_offsets']=[[0,0,-depth/2],[0,0,-depth/2]]
     # Grid coordinates come from source column workpoints, not truss panel points.
+    from .source_grid_labels import labelled
     for i,axis in enumerate(('x','y')):
         values=sorted({round(p[i],4) for m in b.members if m['kind']=='column' for p in m['axis']})
-        b.grids[axis]=[(str(j+1) if i==0 else chr(65+j),x) for j,x in enumerate(values)]
+        b.grids[axis]=labelled(values,b.config,i)
 
 def nearest(b,point,kinds,exclude=()):
     best=None;dist=1e30
