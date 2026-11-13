@@ -105,7 +105,14 @@ def cap(ctx):
     a,p,pid=ctx.a,ctx.p,ctx.pid;d=effective(p,pid);w=effective(p,pid,'width');t=.75;match=re.search(r'PL '+NUMBER+r' x '+NUMBER+r' x '+NUMBER+r' in (?:closure|cap)',ctx.text)
     if match:t,bx,by=map(number,match.groups())
     else:bx,by=d+2,w+2
-    a.member('COLUMN',pid,[0,0,-30],[0,0,0]);cap_pid=flat(p,bx,t);a.member('CAP',cap_pid,[0,-by/2,t/2],[0,by/2,t/2],y=[-1,0,0],basis='S' if match else 'A',representation_role='assembly_component',description='Column closure / cap plate');a.weld('WC',[-d/2,-w/2,0],[d/2,-w/2,0],['COLUMN','CAP'],.25 if ctx.params.get('bearing_girder') else .3125,description='Source continuous cap perimeter weld')
+    from .selected_weld_sizes import cap_plate_thickness,cap_perimeter_fillet
+    stated_t=None if match else cap_plate_thickness(ctx.text);stated_weld=cap_perimeter_fillet(ctx.text)
+    if stated_t:t=stated_t
+    cap_basis='S' if match else 'S thickness; A plan outline' if stated_t else 'A'
+    cap_text='Column closure / cap plate'+(f'; source PL {t:g} in' if stated_t else '')
+    a.member('COLUMN',pid,[0,0,-30],[0,0,0]);cap_pid=flat(p,bx,t);a.member('CAP',cap_pid,[0,-by/2,t/2],[0,by/2,t/2],y=[-1,0,0],basis=cap_basis,representation_role='assembly_component',description=cap_text)
+    if stated_weld:a.weld('WC',[-d/2,-w/2,0],[d/2,-w/2,0],['COLUMN','CAP'],stated_weld,description='Source continuous cap perimeter weld')
+    else:a.weld('WC',[-d/2,-w/2,0],[d/2,-w/2,0],['COLUMN','CAP'],.25 if ctx.params.get('bearing_girder') else .3125,basis='A',description='Continuous cap perimeter weld; A size where the source states none')
     if ctx.params.get('bearing_girder'):
         bp=ctx.ms[1]['profile_id'];bd=effective(p,bp);bt=p[bp]['dimensions']['tf'];a.member('GIRDER',bp,[-24,0,t+bd/2],[24,0,t+bd/2]);a.fastener('BG',[[0,y,t+bt] for y in (-2,2)],[0,0,-1],.75,bt+t,['GIRDER','CAP'],'S two 3/4 in A325 bearing bolts; A gauge');a.interfaces.append(dict(id='BEARING',kind='bearing',connects=['GIRDER','CAP'],basis='S',description='Source girder flange bearing on cap'))
     if ctx.params.get('stiffened'):
