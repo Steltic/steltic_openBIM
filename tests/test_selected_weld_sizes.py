@@ -72,3 +72,16 @@ def test_hr16_continuity_plate_web_fillets_are_the_selected_size():
         assert all(w['basis'] == 'S' for w in welds)
         checked += 1
     assert checked
+
+
+def test_base_plate_row_states_the_selected_stock():
+    """The drilled base plate is no longer a plain box, so its size must be in the part description."""
+    wanted = {'connections/conn-base-gravity_col-W14X90': 'PL 0.875 x 18 x 23 in', 'connections/conn-base-lateral_col-W14X90': 'PL 1.5 x 18 x 23 in'}
+    seen = set()
+    for scene in scenes('hr21'):
+        for record, stock in wanted.items():
+            if record in scene['source_record_ids'] and any(p['id'] == 'P1' for p in scene['parts']):
+                plate = next(p for p in scene['parts'] if p['id'] == 'P1')
+                assert plate['description'].startswith('Base plate ' + stock), plate['description']
+                seen.add(record)
+    assert seen == set(wanted)
