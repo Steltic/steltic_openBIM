@@ -236,11 +236,13 @@ def draw(ctx):
         match=re.search(r'continuity plates\s*(?:2 x PL\s*)?'+NUMBER+r' in',txt,re.I)
         if match and 'no continuity plates' not in txt:
             thick=number(match[1]);j=0
+            from .selected_weld_sizes import continuity_web_fillet
+            web_fillet=continuity_web_fillet(txt)
             for zz in (-bd,0):
                 for sign in (-1,1):
                     yy=ct/2 if sign>0 else -cw/2+.25;j+=1
                     a.box(f'CP{j}',column_point([-cd/2+tf,yy,zz-thick/2]),[cd-2*tf,cw/2-ct/2-.25,thick],'S','Column continuity plate',**column_axes)
-                    a.weld(f'WC{j}',column_point([-cd/2+tf,yy,zz]),column_point([cd/2-tf,yy,zz]),['M1',f'CP{j}'],max(.1875,min(.75,thick*.75)),description='Continuity weld; full source flange/web weld specification in source register')
+                    a.weld(f'WC{j}',column_point([-cd/2+tf,yy,zz]),column_point([cd/2-tf,yy,zz]),['M1',f'CP{j}'],web_fillet or max(.1875,min(.75,thick*.75)),basis='S' if web_fillet else 'A',description=('Source continuity plate to column web fillet, both sides' if web_fillet else 'Continuity weld; A size where the source states no web fillet')+'; full source flange/web weld specification in source register')
         match=re.search(r'(?<!no )doubler plate\s*(?:PL\s*)?'+NUMBER+r' in',txt,re.I)
         if match:
             thick=number(match[1]);a.box('DP',column_point([-cd/2+tf,ct/2,-bd-6]),[cd-2*tf,thick,bd+12],'S','Column web doubler; source extension 6 in',**column_axes);a.weld('WD',column_point([-cd/2+tf,ct/2,-bd-6]),column_point([-cd/2+tf,ct/2,6]),['M1','DP'],.375,kind='PJP',description='Source doubler groove/fillet weld system; see attached record')
@@ -469,7 +471,10 @@ def base(ctx):
                    description='Selected column flange CJP at the base plate')
         a.weld('COLUMN-WEB',[-d/2+tf,0,z],[d/2-tf,0,z],['M1','P1'],kind='CJP',description='Selected column web CJP at the base plate')
     else:
-        a.weld('W1',[-d/2,-w/2,grout+t],[d/2,-w/2,grout+t],['M1','P1'],kind='CJP' if 'CJP' in txt else 'fillet',description='Column-to-plate weld per source flange/web specification')
+        from .selected_weld_sizes import column_to_base_weld
+        stated=column_to_base_weld(txt)
+        if stated and stated[0]=='fillet':a.weld('W1',[-d/2,-w/2,grout+t],[d/2,-w/2,grout+t],['M1','P1'],stated[1],description='Source column-to-plate fillet all round')
+        else:a.weld('W1',[-d/2,-w/2,grout+t],[d/2,-w/2,grout+t],['M1','P1'],kind='CJP' if (stated and stated[0]=='CJP') or (not stated and 'CJP' in txt) else 'fillet',description='Column-to-plate weld per source flange/web specification')
     if 'lug' in txt:
         primary=re.search(r'shear lug:?\s+(.*?)\bPL '+NUMBER+r' x '+NUMBER+r' in, '+NUMBER+r' in embedded',txt,re.I)
         secondary=re.search(r'second arm PL '+NUMBER+r' x '+NUMBER+r' in',txt,re.I)
@@ -548,9 +553,11 @@ def splice(ctx):
         a.notes.append('Splice world elevation and source floor offset are in the occurrence index. Source CJP requirements remain authoritative; temporary erection fit and installation sequence shown as A.')
         return
     dia=ctx.n(NUMBER+r' in (?:ASTM F3125 )?A325',.875);t=ctx.n(r'flange (?:plates?|plate splice)\s*(?:PL)?\s*'+NUMBER,.75);width=w
-    match=re.search(r'PL '+NUMBER+r' x '+NUMBER+r' in outside each flange with (\d+) x',txt)
-    flange_count=8 if ctx.model['pilot']=='hr32' else 4
-    if match:t,width,flange_count=number(match[1]),number(match[2]),int(match[3])
+    from .bolted_splice_selection import flange_selection
+    selection=flange_selection(txt)
+    flange_count=8 if ctx.model['pilot']=='hr32' else 4;count_basis='A'
+    if selection:t,width,flange_count,dia,count_basis=selection['thickness_in'],selection['width_in'],selection['bolts_per_flange_per_side'],selection['diameter_in'],'S'
+    bolt_text=f"{flange_count} x {dia:g} in"+(' '+selection['grade'] if selection and selection['grade'] else '')+" bolts each side per flange"
     for j,sg in enumerate((-1,1)):
         xx=max(d,ld)/2 if sg>0 else -max(d,ld)/2-t;label='FP'+str(j);a.box(label,[xx,-width/2,-15],[t,width,30],'A','Source flange splice plate; A fitted length')
         for end,zz in enumerate((-6,6)):
@@ -558,7 +565,7 @@ def splice(ctx):
             shape=pid if end else lower;filler=(max(d,ld)-effective(p,shape))/2
             if filler>.01:
                 fill=f'FILL{j}{end}';start=max(d,ld)/2-filler if sg>0 else -max(d,ld)/2;a.box(fill,[start,-width/2,-14 if end==0 else .1],[filler,width,13.9],'A','A milled filler to actual flange face')
-            a.fastener(f'F{j}{end}',pts,[-sg,0,0],dia,t+filler+p[shape]['dimensions'].get('tf',.5),[label,'M2' if end else 'M1']+([fill] if filler>.01 else []),f'{flange_count} bolts each side per flange; source grade / A set-out','A')
+            a.fastener(f'F{j}{end}',pts,[-sg,0,0],dia,t+filler+p[shape]['dimensions'].get('tf',.5),[label,'M2' if end else 'M1']+([fill] if filler>.01 else []),bolt_text+('; A set-out' if count_basis=='S' else '; source grade / A count and set-out'),'S count/diameter/grade; A set-out' if count_basis=='S' else 'A')
     tw=p[pid]['dimensions'].get('tw',.5)
     for j,sg in enumerate((-1,1)):
         yy=tw/2 if sg>0 else -tw/2-.375;a.box('WP'+str(j),[-3.5,yy,-10],[7,.375,20],'A','Web splice cover')
