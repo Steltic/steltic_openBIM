@@ -36,6 +36,12 @@ def material_for(part,kind,old,materials,record_ids):
     # corresponding source role. A mixed catalog is not a single selection.
     candidates=[m for m in materials.values()
                 if kind in m.get('source_item','').lower() and m['id'].startswith('gold-material-')]
+    if len(candidates)>1:
+        # The schedule row that names the product (Plates and bars) is the grade.
+        # Rows that only qualify it (notch toughness of plates) are not a second grade.
+        named=[m for m in candidates if m['source_item'].lower().startswith(kind)]
+        if len(named)==1:
+            candidates=named
     if len(candidates)==1:
         return candidates[0]['id']
     raise ValueError('No selected material for '+kind+' '+part['id'])
