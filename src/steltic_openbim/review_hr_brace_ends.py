@@ -78,11 +78,22 @@ def bind(model,package):
             model['assumptions'].append(dict(id=aid,answer='A: brace/casing ends follow their original source worklines and terminate at the modeled slot or supplier clevis. Apex support strips and stiffeners are centred at the actual flange intersection. Continuous gusset outlines, BRB end caps and clevis geometry are accepted fictional fits; source dimensions and qualification requirements remain separate.'))
 
 
+def stated_reinforcement(txt):
+    """The slot reinforcing pair as the record states it.
+
+    A record may state the pair twice: first by thickness and width for the
+    net-section check, then in full with its length. The full statement is
+    the plate that is fabricated.
+    """
+    stated=list(re.finditer(r'(?:two PL|2 PL) '+NUMBER+r' x '+NUMBER+r'(?: x '+NUMBER+r')?',txt))
+    return next((m for m in stated if m[3]),stated[0] if stated else None)
+
+
 def add_slot_reinforcement(ctx,profile,start,v,slot_end,txt):
     from .hr_detail_selections import reinforcement_weld
     from .hr_brace_fit import reinforcement
     a=ctx.a
-    match=re.search(r'(?:two PL|2 PL) '+NUMBER+r' x '+NUMBER+r'(?: x '+NUMBER+r')?',txt)
+    match=stated_reinforcement(txt)
     selected_reinforcement=[ctx.selected.get(('slot_reinforcement',field)) for field in ('thickness_in','width_in','length_in')]
     if match or all(selected_reinforcement):
         rt=selected_reinforcement[0] or number(match[1])
