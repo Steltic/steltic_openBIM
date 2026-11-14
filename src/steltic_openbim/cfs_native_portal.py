@@ -92,7 +92,12 @@ def portal_model(package):
         if m['kind'] == 'strap' and m.get('plane') in ('wall', 'roof'):
             a, b = m['axis']
             straps.append(dict(id=m['id'], plane=m['plane'], bay=m.get('bay'), a=a, b=b, profile=m['profile_id'], column_line=nearest((a[0] + b[0]) / 2.0) if m['plane'] == 'wall' else None))
-    return dict(frames=rows, types=types, column_x=col_x, exterior_x=ext, lines=list(lines.values()), straps=straps,
+    struts = []
+    for m in ph['members']:
+        if m['kind'] == 'strut':
+            a, b = m['axis']
+            struts.append(dict(id=m['id'], a=a, b=b, profile=m['profile_id'], column_line=nearest((a[0] + b[0]) / 2.0), z=a[2]))
+    return dict(frames=rows, types=types, column_x=col_x, exterior_x=ext, lines=list(lines.values()), straps=straps, struts=struts,
                 y=[r['y_in'] for r in rows], top=max(q['b'][1] for r in rows for q in r['members']))
 
 
@@ -221,6 +226,12 @@ def draw_base_plan(sh, package, model, number, feet):
         txt = 'XB on column line %s: %d braced bays, %d straps %s (X pattern, tension only).' % (chr(65 + pm['column_x'].index(cl)), nb, cnt, prof)
         sh.text(x, y, txt, 11); y -= 16
         sh.cells.append(dict(sheet=number, schedule='strap_counts', record=None, text=txt, cells=['wall', chr(65 + pm['column_x'].index(cl)), prof, str(nb), str(cnt)]))
+    for st in pm['struts']:
+        sh.line(tr(st['a'][1], st['a'][0]), tr(st['b'][1], st['b'][0]), BLUE, 1.2)
+    for (cl, prof, z), cnt in sorted(Counter((st['column_line'], st['profile'], round(st['z'], 2)) for st in pm['struts']).items()):
+        txt = 'Struts (blue) on column line %s at %s above the base: %d x %s.' % (chr(65 + pm['column_x'].index(cl)), feet(z), cnt, prof)
+        sh.text(x, y, txt, 11); y -= 16
+        sh.cells.append(dict(sheet=number, schedule='strut_counts', record=None, text=txt, cells=[chr(65 + pm['column_x'].index(cl)), prof, str(cnt)]))
     sh.text(x, y, 'Column bases: see the base detail and the anchorage schedule. Foundations by others.', 11, GREY)
 
 
@@ -301,7 +312,8 @@ def draw_frame(sh, package, model, number, ftype, feet, num):
     for q in ftype['members']:
         ends[(round(q['a'][0], 2), round(q['a'][1], 2))].append(q['kind']); ends[(round(q['b'][0], 2), round(q['b'][1], 2))].append(q['kind'])
     for (x_, z_), kinds in sorted(ends.items()):
-        fam = 'column base' if (kinds == ['column'] and z_ < 1.0) else ('knee bracket' if ('column' in kinds and 'rafter' in kinds) else ('apex bracket' if kinds.count('rafter') == 2 else None))
+        fam = 'column base' if (kinds == ['column'] and z_ < 1.0) else (('valley bracket' if (kinds.count('rafter') == 2 and 'valley bracket' in refs) else 'knee bracket') if ('column' in kinds and 'rafter' in kinds)
+                                                                    else ('apex bracket' if kinds.count('rafter') == 2 else None))
         if fam and fam in refs:
             c = tr(x_, z_)
             sh.c.setFillColor('#ffffff'); sh.c.rect(c[0] + 16, c[1] + 12, 44, 17, stroke=0, fill=1)
@@ -359,6 +371,11 @@ def draw_side(sh, package, model, number, cl, feet):
     st = [s for s in pm['straps'] if s['plane'] == 'wall' and abs(s['column_line'] - cl) < 0.01]
     for s in st:
         sh.line(tr(s['a'][1], s['a'][2]), tr(s['b'][1], s['b'][2]), ACCENT, 1.3)
+    doors = [d for d in (package['design_context']['physical_design'].get('doors') or []) if pm['column_x'][int(d['line']) - 1] == cl]
+    for d in doors:
+        mid = (ys[int(d['bay']) - 1] + ys[int(d['bay'])]) / 2.0; hw = float(d['width_ft']) * 6.0; hh = float(d['height_ft']) * 12.0
+        sh.poly([tr(mid - hw, 0.0), tr(mid + hw, 0.0), tr(mid + hw, hh), tr(mid - hw, hh)], GREY, 0.8, dash=[6, 3])
+        c = tr(mid, hh / 2.0); sh.text(c[0], c[1], 'DOOR', 9, GREY, 'Helvetica-Bold', 'middle')
     for a, b in zip(ys, ys[1:]):
         sh.dim(tr(a, 0.0), tr(b, 0.0), b - a, offset=(0, -46), kind='frame_spacing', size=8)
     sh.dim(tr(ys[0], 0.0), tr(ys[-1], 0.0), ys[-1] - ys[0], offset=(0, -84), kind='building_length')
@@ -378,6 +395,12 @@ def draw_side(sh, package, model, number, cl, feet):
         txt = 'Wall bracing (accent): %d straps %s in %d braced bays.' % (cnt, prof, len({s['bay'] for s in st if s['profile'] == prof}))
         sh.text(x, y, txt, 11); y -= 16
         sh.cells.append(dict(sheet=number, schedule='side_counts', record=None, text=txt, cells=[label, 'straps', prof, str(cnt)]))
+    if doors:
+        sizes = sorted({(float(d['width_ft']), float(d['height_ft'])) for d in doors})
+        txt = 'Door openings (dashed): %d, %s, in bays %s; door framing by the building supplier, girts below the door head stop at the door bays.' % (
+            len(doors), ' and '.join('%s x %s' % (feet(w * 12.0), feet(h * 12.0)) for w, h in sizes), ', '.join(str(d['bay']) for d in sorted(doors, key=lambda d: d['bay'])))
+        sh.text(x, y, txt, 11); y -= 16
+        sh.cells.append(dict(sheet=number, schedule='door_counts', record=None, text=txt, cells=[label, str(len(doors))]))
     if not gir and not st:
         sh.text(x, y, 'No girts or wall bracing on this line (open side).', 11, GREY)
 

@@ -633,6 +633,9 @@ def verify(directory, job_root, *, report_name='report.html'):
                        and (':' not in v[0] or line_of(sid) == v[0].split(':')[1])]
                 nlines = len({(src_of[sid].get('host_line'), src_of[sid].get('line')) for sid in ids})
                 c.expect(str(len(ids)) == v[3] and str(nlines) == v[2], '%s %s: drawing lists %s lines / %s members, IFC has %d / %d' % (v[0], v[1], v[2], v[3], nlines, len(ids)))
+            elif cell['schedule'] == 'strut_counts':
+                ids = [sid for sid, src in src_of.items() if src.get('kind') == 'strut' and prods[next(k for k in prods if k[1] == sid and k[0] in member_cls)]['props'].get('Section') == v[1] and line_of(sid) == v[0]]
+                c.expect(str(len(ids)) == v[2], 'struts on line %s: drawing lists %s x %s, IFC has %d' % (v[0], v[2], v[1], len(ids)))
             elif cell['schedule'] == 'strap_counts':
                 ids = [sid for sid, src in src_of.items() if src.get('kind') == 'strap' and src.get('plane') == v[0] and prods[next(k for k in prods if k[1] == sid and k[0] in member_cls)]['props'].get('Section') == v[2]
                        and (v[1] == '-' or line_of(sid) == v[1])]
@@ -641,20 +644,30 @@ def verify(directory, job_root, *, report_name='report.html'):
             if any(src.get('kind') == kind for src in src_of.values()):
                 c.expect(kind in seen_kinds, 'the drawings give no line count for the %ss of the model' % kind)
         # scheduled strap size against the strap measured in the IFC, and the selected frame make-up against the IFC section
+        if any(src.get('kind') == 'strut' for src in src_of.values()):
+            c.expect(any(cell['schedule'] == 'strut_counts' for cell in dmodel['cells']), 'the drawings give no count for the struts of the model')
         for where in ('wall', 'roof'):
-            sel_ = (pd.get('bracing') or {}).get(where)
-            if not sel_:
+            entries = (pd.get('bracing') or {}).get(where)
+            entries = entries if isinstance(entries, list) else ([entries] if entries else [])
+            if not entries:
                 continue
             ids = [sid for sid, src in src_of.items() if src.get('kind') == 'strap' and src.get('plane') == where]
-            c.expect(len(ids) == 2 * len(sel_['bays']) * len({src_of[sid].get('host_line') for sid in ids}) * int(sel_.get('panels', 1)), '%s bracing: strap count in the IFC does not match X-bracing in the selected bays' % where)
-            for sid in ids[:4]:
-                m = next(q for q in ph['members'] if q['id'] == sid)
-                pts = prods[next(k for k in prods if k[1] == sid and k[0] in member_cls)]['points']
-                axm = unit([b_ - a_ for a_, b_ in zip(*m['axis'])]); lym = unit(m['local_y'])
-                c.expect(abs(extent(pts, lym) - sel_['width_in']) <= TOL_IN and abs(extent(pts, cross(axm, lym)) - sel_['t_in']) <= TOL_IN, 'strap %s: selected %g x %.4f in., IFC %.3f x %.4f in.' % (sid, sel_['width_in'], sel_['t_in'], extent(pts, lym), extent(pts, cross(axm, lym))))
-            rec = records.get(sel_['record'])
-            row = next((q for q in (rec or {}).get('data', {}).get('rows', []) if q.get('id') == 'strap-' + where), None)
-            c.expect(row is not None and abs(row['width_in'] - sel_['width_in']) < 1e-9 and row['n_screws'] == sel_['n_screws'], '%s bracing: the modelled strap differs from the scheduled strap row' % where)
+            want = 0
+            for sel_ in entries:
+                row_id = sel_.get('row') or 'strap-' + where
+                mine = [sid for sid in ids if src_of[sid].get('schedule_row') == row_id]
+                nlines = len(sel_['lines']) if sel_.get('lines') else len({src_of[sid].get('host_line') for sid in mine})
+                want += 2 * len(sel_['bays']) * nlines * int(sel_.get('panels', 1))
+                c.expect(len(mine) == 2 * len(sel_['bays']) * nlines * int(sel_.get('panels', 1)), '%s bracing %s: %d straps in the IFC, X-bracing in the selected bays needs %d' % (where, row_id, len(mine), 2 * len(sel_['bays']) * nlines * int(sel_.get('panels', 1))))
+                for sid in mine[:4]:
+                    m = next(q for q in ph['members'] if q['id'] == sid)
+                    pts = prods[next(k for k in prods if k[1] == sid and k[0] in member_cls)]['points']
+                    axm = unit([b_ - a_ for a_, b_ in zip(*m['axis'])]); lym = unit(m['local_y'])
+                    c.expect(abs(extent(pts, lym) - sel_['width_in']) <= TOL_IN and abs(extent(pts, cross(axm, lym)) - sel_['t_in']) <= TOL_IN, 'strap %s: selected %g x %.4f in., IFC %.3f x %.4f in.' % (sid, sel_['width_in'], sel_['t_in'], extent(pts, lym), extent(pts, cross(axm, lym))))
+                rec = records.get(sel_['record'])
+                row = next((q for q in (rec or {}).get('data', {}).get('rows', []) if q.get('id') == row_id), None)
+                c.expect(row is not None and abs(row['width_in'] - sel_['width_in']) < 1e-9 and row['n_screws'] == sel_['n_screws'], '%s bracing: the modelled strap differs from the scheduled strap row %s' % (where, row_id))
+            c.expect(len(ids) == want, '%s bracing: %d straps in the IFC, %d selected' % (where, len(ids), want))
         for key, kind in (('column', 'column'), ('rafter', 'rafter')):
             sel_ = pd['frame'][key]
             want = ('%dx%s' % (sel_['n'], sel_['section'])) if int(sel_['n']) > 1 else sel_['section']
