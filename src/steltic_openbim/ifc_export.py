@@ -367,11 +367,13 @@ def _export_source(directory,destination,source):
             frame=c['assembly_instance'];template=templates[frame['template_id']]
             # Member and panel IDs have separate namespaces. Retain receiver
             # types even when a member and its concrete host share an ID.
-            bound_panels=set()
+            bound_panels=set();bound_interfaces=set()
             for receiver in template.get('receivers',[]):
                 ident=frame.get('bindings',{}).get(receiver['id'])
                 if ident is not None:
-                    (bound_panels if receiver.get('kind')=='panel' else connected).add(ident)
+                    # A delegated/existing interface is a declared scope boundary, not a
+                    # modelled member: retain the binding as data instead of a product relation.
+                    (bound_panels if receiver.get('kind')=='panel' else bound_interfaces if receiver.get('kind')=='interface' else connected).add(ident)
             if template['id'] not in assembly_meshes:
                 solids=[part_faces(p,profiles) for p in template['parts']]
                 curves=[part_lines(p) for p in template['parts']]
@@ -397,6 +399,7 @@ def _export_source(directory,destination,source):
             faces,lines,solid_count,curve_count=assembly_meshes[template['id']]
             item=dict(c,level=source_level,connection_id=c['id'],connected_member_ids=sorted(connected),connected_panel_ids=sorted(bound_panels),
                       description='Located connection assembly; individual component identities and selections are retained in its versioned template')
+            if bound_interfaces:item['connected_interface_ids']=sorted(bound_interfaces)
             located=[[bim_assemblies.transformed(p,frame) for p in line] for line in lines]
             if not faces and lines:
                 # A welded joint may contain no additional solid: the actual
@@ -469,6 +472,7 @@ def _export_source(directory,destination,source):
         relation('IfcRelAssociatesMaterial','assembly-materials:'+tid,RelatedObjects=assemblies_by_template[tid],
                  RelatingMaterial=material_set)
     generator=generator_identity()
+    compact=bool(state.get('compact_project_sources'))
     property_set(model,project,dict(SourceModelSHA256=state['source_model_sha256'],**revision_properties,Basis=basis,
         Generator={k:v for k,v in generator.items() if k!='files'},
         SupplementProvenance=state.get('supplement_provenance'),
@@ -483,12 +487,13 @@ def _export_source(directory,destination,source):
         DesignRecords=package.get('design_records',[]),
         ConnectionSchedules=[r for r in package.get('design_records',[]) if r['table']=='connections'],
         UnlocatedConnectionReferences=unlocated_connections,Interfaces=package['physical'].get('interfaces',[]),
-        AssemblyTemplates=physical.get('assemblies',[]),AssemblyPartRepresentations=part_ranges,
+        AssemblyTemplates=_compact_templates(physical.get('assemblies',[])) if compact else physical.get('assemblies',[]),
+        AssemblyPartRepresentations=_digest(part_ranges) if compact else part_ranges,
         InformationDecisions=package.get('information'),SourceRelationships=relationship_manifest,
         SourceProfiles=physical.get('profiles',[]),SourceMaterials=physical.get('materials',[]),
-        SourceJoints=physical.get('joints',[]),SourceCoverage=physical.get('coverage',{}),
+        SourceJoints=_digest(physical.get('joints',[])) if compact else physical.get('joints',[]),SourceCoverage=physical.get('coverage',{}),
         SourceAnalysisOnly=physical.get('analysis_only',[]),SourceRecordDispositions=physical.get('record_dispositions',[]),
-        SourceJointDispositions=physical.get('joint_dispositions',[]),
+        SourceJointDispositions=_digest(physical.get('joint_dispositions',[])) if compact else physical.get('joint_dispositions',[]),
         UnassignedConnectionParts=counts['unassigned_connection_parts'],
         UnassignedElements=counts['unassigned_elements'],
         SourceOpenings=physical.get('openings',[]),SourceOpeningCoordinateUnits='inch',
@@ -532,3 +537,20 @@ def export_import(source,destination,state):
         limits=['All original source objects retained; preview selection does not delete IFC objects.',
                 'Explicit unit overrides change interpretation without rescaling coordinates or map-conversion metadata.',
                 'Review notes do not establish structural adequacy. Source schema issues are reported without claiming to repair them.'])
+
+
+def _digest(value):
+    """Count and fingerprint of a source list that the delivery carries in source.json instead of inside the IFC."""
+    import hashlib
+    raw=json.dumps(value,sort_keys=True,separators=(',',':'),ensure_ascii=False).encode('utf-8')
+    return dict(count=len(value),sha256=hashlib.sha256(raw).hexdigest(),carried_by='delivery source model (source.json), same fingerprint as SourceModelSha256')
+
+
+def _compact_templates(templates):
+    """Assembly templates without their part geometry: identity, revision, records, basis and part counts by kind."""
+    out=[]
+    for t in templates:
+        kinds={}
+        for p in t.get('parts',[]): kinds[p.get('kind')]=kinds.get(p.get('kind'),0)+1
+        out.append(dict(id=t.get('id'),revision=t.get('revision'),source_record_ids=t.get('source_record_ids',[]),basis=t.get('basis'),part_count=len(t.get('parts',[])),parts_by_kind=dict(sorted(kinds.items()))))
+    return out

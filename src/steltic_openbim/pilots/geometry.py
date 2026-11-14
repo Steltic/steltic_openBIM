@@ -39,7 +39,10 @@ def strips(profile,profiles):
             y0,y1=sorted([sign*(h/2-t),sign*h/2])
             result.append(rect(x0,y0,x1,y1))
             if lip:
-                angle=math.radians(profile.get('lip_angle_deg',90)); a=[direction*(b-t/2),sign*(h/2-t/2)]
+                # Legacy placement centres the lip on the flange tip (overall width b + t/2). A profile that
+                # declares lip_inside keeps the lip within the nominal flange width b.
+                inset=t/2 if profile.get('lip_inside') else 0
+                angle=math.radians(profile.get('lip_angle_deg',90)); a=[direction*(b-t/2-inset),sign*(h/2-t/2)]
                 v=[-direction*math.cos(angle)*lip,-sign*math.sin(angle)*lip]; n=unit([-v[1],v[0]])
                 result.append([add(a,mul(n,-t/2)),add(a,mul(n,t/2)),add(add(a,v),mul(n,t/2)),add(add(a,v),mul(n,-t/2))])
         return result
@@ -252,7 +255,8 @@ def part_faces(part,profiles):
         return extrude([[0,0],[sx,0],[sx,sy],[0,sy]],a,b,x)  # local z cross x == y
     if kind=='cylinder':
         axis=g['axis']; y=unit(cross([0,0,1],axis)) if abs(axis[2])<.99 else [1,0,0]
-        poly=[[g['radius']*math.cos(i*math.pi/6),g['radius']*math.sin(i*math.pi/6)] for i in range(12)]
+        n=int(g.get('segments',12))  # a source may ask for a coarser prism on small fasteners; 12 sides otherwise
+        poly=[[g['radius']*math.cos(i*2*math.pi/n),g['radius']*math.sin(i*2*math.pi/n)] for i in range(n)]
         return extrude(poly,a,add(a,mul(axis,g['length'])),y)
     if kind=='extruded_profile':
         return [f for poly in strips(profiles[g['profile_id']],profiles) for f in extrude(poly,a,add(a,mul(g['axis'],g['length'])),g['local_y'])]
