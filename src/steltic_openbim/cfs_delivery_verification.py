@@ -413,6 +413,10 @@ def verify(directory, job_root, *, report_name='report.html'):
         if 'b' in d:
             c.expect(abs(extent(p['points'], lz) - d['d']) <= TOL_IN, 'member %s: IFC depth %.3f in., design %.3f in.' % (m['id'], extent(p['points'], lz), d['d']))
             c.expect(abs(extent(p['points'], ly) - d['b']) <= TOL_IN, 'member %s: IFC flange width %.3f in., design %.3f in.' % (m['id'], extent(p['points'], ly), d['b']))
+        elif 'width' in d:                      # flat strap (width x thickness) or truss envelope (width x depth)
+            other = d.get('thickness', d.get('depth'))
+            c.expect(abs(extent(p['points'], ly) - d['width']) <= TOL_IN, 'member %s: IFC width %.3f in., design %.3f in.' % (m['id'], extent(p['points'], ly), d['width']))
+            c.expect(abs(extent(p['points'], lz) - other) <= TOL_IN, 'member %s: IFC thickness/depth %.3f in., design %.3f in.' % (m['id'], extent(p['points'], lz), other))
         else:
             c.expect(abs(extent(p['points'], lz) - d['d']) <= 0.05 * d['d'] + TOL_IN, 'member %s: IFC diameter %.3f in., design %.3f in.' % (m['id'], extent(p['points'], lz), d['d']))
         mid = [sum(q[i] for q in p['points']) / len(p['points']) for i in range(3)]
@@ -497,7 +501,7 @@ def verify(directory, job_root, *, report_name='report.html'):
     checks.append(c)
 
     # ---- F. drawings <-> IFC ----
-    c = Check('drawings_match_ifc', 'member schedule counts, wall elevation counts and detail occurrence counts printed on the drawings against products counted in the IFC')
+    c = Check('drawings_match_ifc', 'member schedule counts, wall elevation counts, wall / braced-bay types and detail occurrence counts printed on the drawings against the selections and the products counted in the IFC')
     ifc_groups = Counter()
     ifc_line = Counter()
     ifc_family = Counter()
@@ -529,6 +533,37 @@ def verify(directory, job_root, *, report_name='report.html'):
     for det in dmodel['details']:
         c.expect(det['occurrences'] - det['delegated'] == ifc_family.get(det['family'], 0), 'detail %s (%s): drawing lists %d located occurrences, IFC has %d assemblies'
                  % (det['reference'], det['family'], det['occurrences'] - det['delegated'], ifc_family.get(det['family'], 0)))
+    # wall types: the type scheduled on the drawings for each wall line and storey against the selection and the IFC products
+    tsel = {}
+    for t in list(dmodel.get('wall_types', [])) + list(dmodel.get('strap_types', [])):
+        for key, k in t['used']:
+            tsel[(key, int(k))] = t
+    for key, line in pd['wall_lines'].items():
+        normal = [0.0, 1.0, 0.0] if line['direction'] == 'X' else [1.0, 0.0, 0.0]
+        for ks, st in line['stories'].items():
+            nseg = len(st.get('segments_ft', []))
+            sp, sh_ = st.get('strap'), st.get('sheathing')
+            if not nseg or not (sp or sh_):
+                continue
+            t = tsel.get((key, int(ks)))
+            if not c.expect(t is not None, 'wall %s storey %s has no wall type on the drawings' % (key, ks)):
+                continue
+            if sp:
+                c.expect(abs(t.get('width_in', -1) - sp['width_in']) < 1e-6 and abs(t.get('t_in', -1) - round(float(sp['t_in']), 4)) < 1e-6 and t.get('faces') == sp['faces']
+                         and t.get('n_strap') == sp['n_strap'] and t.get('n_gusset') == sp['n_gusset'] and t.get('screw') == sp['screw'],
+                         'wall %s storey %s: drawing strap type %s differs from the selected strap' % (key, ks, t.get('mark')))
+                straps = [p for (cls, sid), p in prods.items() if cls in member_cls and sid.startswith('B:%s:S%s:' % (key, ks))]
+                c.expect(len(straps) == 2 * sp['faces'] * nseg, 'wall %s storey %s: %d straps selected (X each face of %d bays), IFC has %d' % (key, ks, 2 * sp['faces'] * nseg, nseg, len(straps)))
+                for p in straps[:4]:
+                    c.expect(abs(extent(p['points'], normal) - sp['t_in']) <= TOL_IN, 'strap on %s storey %s: scheduled thickness %.4f in., IFC %.4f in.' % (key, ks, sp['t_in'], extent(p['points'], normal)))
+                ends = [p for (cls, sid), p in prods.items() if cls == 'IfcElementAssembly' and sid.startswith('C:B:%s:S%s:' % (key, ks))]
+                c.expect(len(ends) == 2 * len(straps), 'wall %s storey %s: %d strap end connections expected, IFC has %d' % (key, ks, 2 * len(straps), len(ends)))
+            else:
+                c.expect(abs(t.get('thickness_in', -1) - round(float(sh_['thickness_in']), 4)) < 1e-6 and t.get('faces') == sh_['faces'] and abs(t.get('edge_in', -1) - sh_['edge_in']) < 1e-6
+                         and t.get('screw') == sh_['screw'] and t.get('sheathing_material') == sh_['material'],
+                         'wall %s storey %s: drawing wall type %s differs from the selected sheathing' % (key, ks, t.get('mark')))
+                pans = [p for (cls, sid), p in prods.items() if cls != 'IfcElementAssembly' and sid.startswith('P:%s:S%s:G' % (key, ks))]
+                c.expect(len(pans) == sh_['faces'] * nseg, 'wall %s storey %s: %d sheathing panels selected, IFC has %d' % (key, ks, sh_['faces'] * nseg, len(pans)))
     # rod diameters and sheathing thickness: schedule text against measured IFC geometry
     for key, line in pd['wall_lines'].items():
         for ks, st in line['stories'].items():

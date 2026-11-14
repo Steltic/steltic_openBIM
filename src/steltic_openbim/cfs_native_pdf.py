@@ -47,10 +47,7 @@ def num(v, nd=2):
     if v is None or isinstance(v, bool):
         return '-'
     if isinstance(v, (int, float)):
-        f = float(v)
-        if abs(f - round(f)) < 1e-9 and abs(f) >= 100:
-            return '%d' % round(f)
-        return ('%.' + str(nd) + 'f') % f
+        return ('%.' + str(nd) + 'f') % float(v)          # fixed decimals, exactly as the report prints the value
     return str(v)
 
 
@@ -80,11 +77,17 @@ def station(P0, u, p):
 
 
 def wall_type_key(st):
+    """Sheathed segment: ('S', material, thickness, faces, edge, field, screw, stud, track); strap-braced bay:
+    ('B', material, width, thickness, faces, strap screws, screw, gusset screws, gusset thickness, track)."""
     sh = st.get('sheathing')
-    if not sh:
-        return None
-    return (sh['material'], round(float(sh['thickness_in']), 4), int(sh['faces']), float(sh['edge_in']), float(sh['field_in']), sh['screw'],
-            st['segment_stud']['section'], st['track']['section'])
+    if sh:
+        return ('S', sh['material'], round(float(sh['thickness_in']), 4), int(sh['faces']), float(sh['edge_in']), float(sh['field_in']), sh['screw'],
+                st['segment_stud']['section'], st['track']['section'])
+    sp = st.get('strap')
+    if sp:
+        return ('B', sp['material'], float(sp['width_in']), round(float(sp['t_in']), 4), int(sp['faces']), int(sp['n_strap']), sp['screw'], int(sp['n_gusset']),
+                round(float(sp['gusset']['t_in']), 4), st['track']['section'])
+    return None
 
 
 def drawing_model(package):
@@ -102,11 +105,16 @@ def drawing_model(package):
             k = wall_type_key(st)
             if k is not None:
                 types.setdefault(k, []).append((key, int(ks)))
-    order = sorted(types, key=lambda k: (-k[2], k[3], -k[1]))
+    order = sorted([k for k in types if k[0] == 'S'], key=lambda k: (-k[3], k[4], -k[2], k[1]))
     tmark = {k: 'SW%d' % i for i, k in enumerate(order, 1)}
     for k in order:
-        model['wall_types'].append(dict(mark=tmark[k], sheathing_material=k[0], thickness_in=k[1], faces=k[2], edge_in=k[3], field_in=k[4], screw=k[5],
-                                        stud=k[6], track=k[7], used=sorted(set(types[k]))))
+        model['wall_types'].append(dict(mark=tmark[k], sheathing_material=k[1], thickness_in=k[2], faces=k[3], edge_in=k[4], field_in=k[5], screw=k[6],
+                                        stud=k[7], track=k[8], used=sorted(set(types[k]))))
+    model['strap_types'] = []
+    for i, k in enumerate(sorted([k for k in types if k[0] == 'B'], key=lambda k: (-k[4] * k[2] * k[3], k[1])), 1):
+        tmark[k] = 'SB%d' % i
+        model['strap_types'].append(dict(mark=tmark[k], material=k[1], width_in=k[2], t_in=k[3], faces=k[4], n_strap=k[5], screw=k[6], n_gusset=k[7], gusset_t_in=k[8], track=k[9],
+                                         used=sorted(set(types[k]))))
     by_line = defaultdict(list)
     for m in ph['members']:
         if m.get('wall_line'):
@@ -132,6 +140,17 @@ def drawing_model(package):
             st = line['stories'][str(p['storey'])]
             segs.append(dict(id=p['id'], storey=p['storey'], face=p.get('face'), segment=p.get('segment'), s0=min(ss), s1=max(ss), z0=min(zz), z1=max(zz),
                              type=tmark[wall_type_key(st)], thickness=p['thickness'], records=p.get('design_record_ids', [])))
+        bays = defaultdict(list)
+        for m in by_line.get(key, []):
+            if m['kind'] == 'strap':
+                bays[(m['storey'], m.get('segment'))].append(m)
+        for (k_, si), ms in sorted(bays.items()):
+            st = line['stories'][str(k_)]
+            a_, b_ = st['segments_ft'][si - 1]
+            zz = [v[2] for m in ms for v in m['axis']]
+            segs.append(dict(id='bay:%s:S%d:G%d' % (key, k_, si), storey=k_, face='+', segment=si, s0=a_ * 12.0 - line['start_ft'] * 12.0, s1=b_ * 12.0 - line['start_ft'] * 12.0, z0=min(zz), z1=max(zz),
+                             type=tmark[wall_type_key(st)], strap=True, straps=sorted(m['id'] for m in ms), records=sorted({r for m in ms for r in m.get('design_record_ids', [])}),
+                             diagonals=[(station(P0, u, m['axis'][0]), m['axis'][0][2], station(P0, u, m['axis'][1]), m['axis'][1][2]) for m in ms if m.get('face') == '+']))
         ops = []
         for o in openings.get(key, []):
             ss = [station(P0, u, v) for v in o['vertices']]; zz = [v[2] for v in o['vertices']]
@@ -148,7 +167,7 @@ def drawing_model(package):
     groups = defaultdict(list)
     for m in ph['members']:
         groups[(m['kind'], m.get('role') or m['kind'], m['profile_id'], m['material_id'])].append(m)
-    prefix = {'stud': 'S', 'bottom_track': 'T', 'top_track': 'T', 'joist': 'J', 'header': 'H', 'tie_rod': 'R'}
+    prefix = {'stud': 'S', 'bottom_track': 'T', 'top_track': 'T', 'joist': 'J', 'header': 'H', 'tie_rod': 'R', 'strap': 'B'}
     counters = Counter()
     for key in sorted(groups):
         pf = prefix.get(key[0], 'M'); counters[pf] += 1
@@ -191,14 +210,22 @@ def schedules(package, model, records):
     out = OrderedDict()
     pd = package['design_context']['physical_design']
     tmark = {}
-    for t in model['wall_types']:
+    for t in model['wall_types'] + model['strap_types']:
         for key, k in t['used']:
             tmark[(key, k)] = t['mark']
     rows = []
     for t in model['wall_types']:
         rows.append(dict(record=None, cells=[t['mark'], '%s, %s' % (_spec(pd, t['sheathing_material']), frac_in(t['thickness_in'])), 'both faces' if t['faces'] == 2 else 'one face',
                                            '%s at %s in. o.c. edges, %s in. o.c. field' % (t['screw'], num(t['edge_in'], 0), num(t['field_in'], 0)), t['stud'], t['track']]))
-    out['wall_types'] = dict(title='Shear wall types', headers=['Type', 'Sheathing', 'Faces', 'Sheathing screws', 'Segment studs', 'Track'], widths=[110, 560, 170, 620, 230, 230], rows=rows)
+    if rows:
+        out['wall_types'] = dict(title='Shear wall types', headers=['Type', 'Sheathing', 'Faces', 'Sheathing screws', 'Segment studs', 'Track'], widths=[110, 560, 170, 620, 230, 230], rows=rows)
+    rows = []
+    for t in model['strap_types']:
+        rows.append(dict(record=None, cells=[t['mark'], '%s in. x %s in. flat strap, %s' % (num(t['width_in'], 0), num(t['t_in'], 4), _spec(pd, t['material'])), 'both faces' if t['faces'] == 2 else 'one face',
+                                           '%d %s screws to a %s in. gusset plate each strap end' % (t['n_strap'], t['screw'], num(t['gusset_t_in'], 4)), '%d %s screws gusset to chord studs and track' % (t['n_gusset'], t['screw']), t['track']]))
+    if rows:
+        out['strap_types'] = dict(title='Strap-braced bay types (X-bracing, tension-only)', headers=['Type', 'Strap (each diagonal)', 'Faces', 'Strap end connection', 'Gusset connection', 'Track'],
+                                  widths=[110, 640, 170, 560, 520, 230], rows=rows)
     rows = []
     for key, wl in model['wall_lines'].items():
         if not wl['analysis_line']:
@@ -206,13 +233,14 @@ def schedules(package, model, records):
         d, name = wl['analysis_line'].split(':')
         for k in sorted(wl['stories']):
             st = wl['stories'][k]
-            if not st.get('sheathing'):
+            sel_ = st.get('sheathing') or st.get('strap')
+            if not sel_:
                 continue
-            rid = st['sheathing']['record']; w = _rec(records, rid)
+            rid = sel_['record']; w = _rec(records, rid)
             segs = st.get('segments_ft', [])
             rows.append(dict(record=rid, cells=[key.split(':', 1)[1], str(k), tmark[(key, k)], '%d x %s' % (len(segs), feet((segs[0][1] - segs[0][0]) * 12.0)) if segs else '-',
                                               num(w.get('v_design_plf'), 0), num(w.get('vn_plf'), 0), num(w.get('capacity'), 0), num(w.get('DC'), 2)]))
-    out['wall_lines'] = dict(title='Shear wall schedule (by wall line and storey)', headers=['Wall line', 'Storey', 'Type', 'Sheathed segments', 'v design (lb/ft)', 'vn (lb/ft)', 'phi vn (lb/ft)', 'D/C'],
+    out['wall_lines'] = dict(title='Shear wall schedule (by wall line and storey)', headers=['Wall line', 'Storey', 'Type', 'Segments / braced bays', 'v design (lb/ft)', 'vn (lb/ft)', 'phi vn (lb/ft)', 'D/C'],
                              widths=[200, 120, 120, 300, 240, 220, 240, 150], rows=rows)
     rows = []
     seen = set()
@@ -236,7 +264,7 @@ def schedules(package, model, records):
         rid = st['anchor']['record']; a = _rec(records, rid)
         rows.append(dict(record=rid, cells=[wl['analysis_line'].split(':')[1], '%s in. dia. %s at %s in. o.c.' % (frac_dia(st['anchor']['d_in']), _spec(pd, st['anchor']['material']), num(st['anchor']['spacing_in'], 0)),
                                           num(a.get('v_design_plf'), 0), num(a.get('v_capacity_plf'), 0), num(a.get('T_design_kip'), 1), num(a.get('DC'), 2)]))
-    out['anchorage'] = dict(title='Base anchorage schedule (sheathed segments, storey 1)', headers=['Wall line', 'Bottom-track anchors', 'v design (lb/ft)', 'phi v (lb/ft)', 'Rod T design (kip)', 'D/C'],
+    out['anchorage'] = dict(title='Base anchorage schedule (wall segments, storey 1)', headers=['Wall line', 'Bottom-track anchors', 'v design (lb/ft)', 'phi v (lb/ft)', 'Rod T design (kip)', 'D/C'],
                             widths=[150, 760, 240, 220, 260, 130], rows=rows)
     rows = []
     for r in package.get('design_records', []):
@@ -516,7 +544,7 @@ def draw_plan(sh, package, model, number, title, storey, floor=None):
         for zn in floor['zones']:
             cx, cy = sum(zn['x_ft']) * 6.0, sum(zn['y_ft']) * 6.0
             p = tr(cx, cy)
-            lbl = '%s at %s in. o.c.' % (zn['joist']['section'], num(zn['joist']['spacing_in'], 0))
+            lbl = '%s at %s in. o.c.' % (zn['joist'].get('section') or zn['joist']['designation'], num(zn['joist']['spacing_in'], 0))
             half = 0.32 * (zn['y_ft'][1] - zn['y_ft'][0] if zn['span'] == 'Y' else zn['x_ft'][1] - zn['x_ft'][0]) * 12.0
             a = tr(cx, cy - half) if zn['span'] == 'Y' else tr(cx - half, cy); b = tr(cx, cy + half) if zn['span'] == 'Y' else tr(cx + half, cy)
             sh.line(a, b, BLUE, 1.0)
@@ -572,13 +600,16 @@ def draw_plan(sh, package, model, number, title, storey, floor=None):
     x = W - MARGIN - 590; y = H - MARGIN - 60
     sh.text(x, y, 'LEGEND', 13, font='Helvetica-Bold'); y -= 26
     sh.line((x, y + 4), (x + 60, y + 4), INK, 1.5); sh.text(x + 76, y, 'Stud wall on its wall line (storey %d)' % storey, 11); y -= 22
-    sh.poly([(x, y), (x + 60, y), (x + 60, y + 8), (x, y + 8)], ACCENT, 0.6, fill=ACCENT); sh.text(x + 76, y, 'Sheathed shear-wall segment and type', 11); y -= 22
+    sh.poly([(x, y), (x + 60, y), (x + 60, y + 8), (x, y + 8)], ACCENT, 0.6, fill=ACCENT); sh.text(x + 76, y, ('Sheathed shear-wall segment and type' if model['wall_types'] else 'Strap-braced bay and type') if not (model['wall_types'] and model['strap_types']) else 'Shear-wall segment or strap-braced bay and type', 11); y -= 22
     sh.c.setStrokeColor(INK); sh.c.setFillColor('#ffffff'); sh.c.circle(x + 30, y + 4, 2.6, stroke=1, fill=1); sh.text(x + 76, y, 'Tie-down rod', 11); y -= 22
     sh.line((x, y + 4), (x + 60, y + 4), BLUE, 0.8, [3, 2]); sh.text(x + 76, y, 'Wall opening (header over)', 11); y -= 22
     if floor:
         sh.line((x, y + 4), (x + 60, y + 4), LIGHT, 0.6); sh.text(x + 76, y, 'Joist (every joist drawn); arrow = span direction', 11); y -= 22
     y -= 14
-    sh.text(x, y, 'SHEAR WALL TYPES', 13, font='Helvetica-Bold'); y -= 24
+    sh.text(x, y, 'SHEAR WALL TYPES' if model['wall_types'] else 'BRACED BAY TYPES', 13, font='Helvetica-Bold'); y -= 24
+    for t in model['strap_types']:
+        y = sh.wrap(x, y, '%s: %s in. x %s in. strap, %s; %d %s screws each strap end' % (t['mark'], num(t['width_in'], 0), num(t['t_in'], 4), 'both faces' if t['faces'] == 2 else 'one face',
+                                                                                         t['n_strap'], t['screw']), 560, 10.5) - 5
     for t in model['wall_types']:
         y = sh.wrap(x, y, '%s: %s, %s; %s at %s in. edges / %s in. field; studs %s' % (t['mark'], _spec(pd, t['sheathing_material']), 'both faces' if t['faces'] == 2 else 'one face',
                                                                                          t['screw'], num(t['edge_in'], 0), num(t['field_in'], 0), t['stud']), 560, 10.5) - 5
@@ -613,8 +644,12 @@ def draw_elevation(sh, package, model, wl, number):
         if pn.get('face') != '+':
             continue
         q = [tr(pn['s0'], pn['z0']), tr(pn['s1'], pn['z0']), tr(pn['s1'], pn['z1']), tr(pn['s0'], pn['z1'])]
-        sh.poly(q, ACCENT, 0.9, fill=FILL)
-        cx, cy = (q[0][0] + q[1][0]) / 2.0, (q[0][1] + q[2][1]) / 2.0
+        if pn.get('strap'):
+            for x0, z0, x1, z1 in pn['diagonals']:
+                sh.line(tr(x0, z0), tr(x1, z1), ACCENT, 1.6)
+        else:
+            sh.poly(q, ACCENT, 0.9, fill=FILL)
+        cx, cy = (q[0][0] + q[1][0]) / 2.0, (q[0][1] + q[2][1]) / 2.0 + (14 if pn.get('strap') else 0)
         sh.c.setFillColor('#ffffff'); sh.c.rect(cx - 24, cy - 8, 48, 18, stroke=0, fill=1)
         sh.text(cx, cy - 3, pn['type'], 11.5, ACCENT, 'Helvetica-Bold', 'middle')
     counts = Counter()
@@ -754,6 +789,9 @@ def draw_detail(sh, package, model, det, number):
             lz = bim_assemblies.cross(ux, lyl)
             if 'b' in d:
                 y0, y1, z0, z1 = (-d.get('t', 0.0) / 2.0, d['b'] - d.get('t', 0.0) / 2.0, -d['d'] / 2.0, d['d'] / 2.0)
+            elif 'width' in d:                      # flat strap (width x thickness) or a truss envelope (width x depth)
+                hz = d.get('thickness', d.get('depth', 0.0)) / 2.0
+                y0, y1, z0, z1 = (-d['width'] / 2.0, d['width'] / 2.0, -hz, hz)
             else:
                 y0, y1, z0, z1 = (-d['d'] / 2.0, d['d'] / 2.0, -d['d'] / 2.0, d['d'] / 2.0)
             cs = [[e[q] + yy * lyl[q] + zz * lz[q] for q in range(3)] for e in (a, b) for yy in (y0, y1) for zz in (z0, z1)]
@@ -827,7 +865,7 @@ def generate(package, state, dest):
     sh.close(); sh.c.save()
     pdf = dest / 'drawings.pdf'
     model_out = dict(schema='steltic.cfs_drawing_model', version=1, building_id=package['building_id'], source_model_sha256=fingerprint(package),
-                     levels=model['levels'], wall_types=model['wall_types'], marks=model['marks'], details=model['details'],
+                     levels=model['levels'], wall_types=model['wall_types'], strap_types=model['strap_types'], marks=model['marks'], details=model['details'],
                      wall_lines=[dict(key=w['key'], label=w['label'], direction=w['direction'], pos_in=w['pos_in'], start_in=w['start_in'], length_in=w['length_in'], grid=w['grid']) for w in model['wall_lines'].values()],
                      sheets=sh.rows, cells=sh.cells, dimensions=sh.dimensions)
     write_json(dest / 'cfs_drawing_model.json', model_out)
