@@ -421,7 +421,7 @@ def verify(directory, job_root, *, report_name='report.html'):
         fy = sorted({round(m['axis'][0][1], 4) for m in ph['members'] if m['kind'] in ('column', 'rafter') and m.get('frame') is not None})
         cx = sorted({round(m['axis'][0][0], 4) for m in ph['members'] if m['kind'] == 'column'})
         c.expect(len(plan_pages) >= 2, 'portal drawing set needs a base plan and a roof plan')
-        side_pages = [page_of[s['number']] for s in dmodel['sheets'] if s['title'].startswith('Side wall elevation')]
+        side_pages = [page_of[s['number']] for s in dmodel['sheets'] if s['title'].startswith(('Side wall elevation', 'Column line elevation'))]
         frame_pages = [page_of[s['number']] for s in dmodel['sheets'] if s['title'].startswith('Portal frame elevation')]
         c.expect(bool(frame_pages), 'portal drawing set has no frame elevation')
         c.expect(len(side_pages) == 2, 'portal drawing set needs the two side-wall elevations')
@@ -690,11 +690,13 @@ def verify(directory, job_root, *, report_name='report.html'):
             for k in prods:
                 if k[0] in member_cls and src_of.get(k[1], {}).get('kind') in ('column', 'rafter'):
                     c.expect(src_of[k[1]].get('scope') == 'existing_context', 'existing frame member %s is not marked as existing context in the IFC' % k[1])
-        for key, kind in (() if pd['frame'].get('existing') else (('column', 'column'), ('rafter', 'rafter'))):
+        kinds_ = (() if pd['frame'].get('existing') else (('column', 'column'), ('rafter', 'rafter'))) + ((('knee_brace', 'knee_brace'),) if pd['frame'].get('knee_brace') else ())
+        for key, kind in kinds_:
             sel_ = pd['frame'][key]
-            want = ('%dx%s' % (sel_['n'], sel_['section'])) if int(sel_['n']) > 1 else sel_['section']
+            want = (('%dx%s' % (sel_['n'], sel_['section'])) if int(sel_['n']) > 1 else sel_['section']) + ('/box' if sel_.get('arrangement') == 'box' else '')
+            want_ifc = want + ('@%g' % float(sel_['pair_spacing_in']) if sel_.get('pair_spacing_in') else '')       # pairs set apart to line up with the column boxes
             got = {prods[k]['props'].get('Section') for k in prods if k[0] in member_cls and src_of.get(k[1], {}).get('kind') == kind}
-            c.expect(got == {want}, '%s make-up: selected %s, IFC sections %s' % (key, want, sorted(got)))
+            c.expect(got == {want_ifc}, '%s make-up: selected %s, IFC sections %s' % (key, want_ifc, sorted(got)))
             rec = records.get(sel_['record'])
             c.expect(rec is not None and rec['data'].get('section') == want, '%s make-up differs from its calculation record' % key)
     # wall types: the type scheduled on the drawings for each wall line and storey against the selection and the IFC products

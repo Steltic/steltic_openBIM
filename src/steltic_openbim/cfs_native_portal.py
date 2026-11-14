@@ -337,6 +337,13 @@ def draw_frame(sh, package, model, number, ftype, feet, num):
     for (x_, z_), kinds in sorted(ends.items()):
         fam = 'column base' if (kinds == ['column'] and z_ < 1.0) else (('valley bracket' if (kinds.count('rafter') == 2 and 'valley bracket' in refs) else 'knee bracket') if ('column' in kinds and 'rafter' in kinds)
                                                                     else ('apex bracket' if kinds.count('rafter') == 2 else None))
+        if fam is None and kinds == ['column'] and 'column head connection' in refs:        # canopy: the rafter runs over the column head
+            fam = 'column head connection'
+        if fam is None and 'knee_brace' in kinds and 'knee brace end connection' in refs:
+            fam = 'knee brace end connection'
+        if fam not in refs and 'knee_brace' in kinds and 'knee brace end connection' in refs:
+            fam = 'knee brace end connection'
+
         if fam and fam in refs:
             c = tr(x_, z_)
             sh.c.setFillColor('#ffffff'); sh.c.rect(c[0] + 16, c[1] + 12, 44, 17, stroke=0, fill=1)
@@ -405,7 +412,7 @@ def draw_side(sh, package, model, number, cl, feet):
     sh.dim(tr(ys[-1], 0.0), tr(ys[-1], eave), eave, offset=(70, 0), kind='eave_height')
     x = MARGIN + 60; y = MARGIN + TITLE_H + 150
     label = chr(65 + pm['column_x'].index(cl))
-    sh.text(x, y, 'SIDE WALL ON COLUMN LINE %s' % label, 13, font='Helvetica-Bold'); y -= 20
+    sh.text(x, y, ('SIDE WALL ON COLUMN LINE %s' if any(ln['kind'] == 'girt' for ln in pm['lines']) else 'COLUMN LINE %s') % label, 13, font='Helvetica-Bold'); y -= 20
     txt = '%d columns.' % len(cols)
     sh.text(x, y, txt, 11); y -= 16
     sh.cells.append(dict(sheet=number, schedule='side_counts', record=None, text=txt, cells=[label, 'columns', '-', str(len(cols))]))
@@ -443,5 +450,6 @@ def sheet_plan(model):
     for i, t in enumerate(pm['types'], 1):
         plan.append(('S-%d' % (200 + i), 'Portal frame elevation %s: %s' % (t['mark'], t['label']), ('portal_frame', t)))
     for i, cl in enumerate(pm['exterior_x'], 1):
-        plan.append(('S-%d' % (250 + i), 'Side wall elevation: column line %s' % chr(65 + pm['column_x'].index(cl)), ('portal_side', cl)))
+        walled = any(ln['kind'] == 'girt' for ln in pm['lines'])                      # an open canopy has column lines but no side walls
+        plan.append(('S-%d' % (250 + i), '%s: column line %s' % ('Side wall elevation' if walled else 'Column line elevation (open, no walls)', chr(65 + pm['column_x'].index(cl))), ('portal_side', cl)))
     return plan
