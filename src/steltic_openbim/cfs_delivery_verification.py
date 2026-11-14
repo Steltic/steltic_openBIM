@@ -110,7 +110,7 @@ def read_report(path):
     return rows, text
 
 
-def read_ifc(path):
+def read_ifc(path, part_key=False):
     """Products of the IFC with their property sets, placement and mesh extents, without a geometry kernel."""
     import ifcopenshell
     f = ifcopenshell.open(str(path))
@@ -178,7 +178,8 @@ def read_ifc(path):
                 world = [[(loc[i] + p[i]) * to_in for i in range(3)] for p in pts]
             else:
                 world = None
-            products[(cls if cls != 'IfcBuildingElementProxy' else 'IfcProxy', sid)] = dict(cls=cls, props=ps, points=world, materials=materials.get(o.id(), []),
+            key = cls if cls != 'IfcBuildingElementProxy' else 'IfcProxy'
+            products[(key, ps.get('CompositePart'), sid) if part_key else (key, sid)] = dict(cls=cls, props=ps, points=world, materials=materials.get(o.id(), []),
                                                                                          origin=[v * to_in for v in loc])
     storeys = [(s.Name, float(s.Elevation or 0.0) * to_in) for s in f.by_type('IfcBuildingStorey')]
     grids = {}
@@ -498,6 +499,10 @@ def verify(directory, job_root, *, report_name='report.html'):
             c.expect(abs(extent(p['points'], lz) - wz) <= TOL_IN, 'member %s: IFC depth %.3f in., design %.3f in.' % (m['id'], extent(p['points'], lz), wz))
             c.expect(abs(extent(p['points'], ly) - wy) <= TOL_IN, 'member %s: IFC overall width %.3f in., design %.3f in.' % (m['id'], extent(p['points'], ly), wy))
             d = dict(d=wz, b=wy)
+        elif fam == 'rhs':                      # hollow section: centred on its workline
+            c.expect(abs(extent(p['points'], lz) - d['h']) <= TOL_IN, 'member %s: IFC depth %.3f in., design %.3f in.' % (m['id'], extent(p['points'], lz), d['h']))
+            c.expect(abs(extent(p['points'], ly) - d['b']) <= TOL_IN, 'member %s: IFC width %.3f in., design %.3f in.' % (m['id'], extent(p['points'], ly), d['b']))
+            d = dict(d=d['h'], b=d['b'], centred=True)
         elif 'b' in d:
             c.expect(abs(extent(p['points'], lz) - d['d']) <= TOL_IN, 'member %s: IFC depth %.3f in., design %.3f in.' % (m['id'], extent(p['points'], lz), d['d']))
             c.expect(abs(extent(p['points'], ly) - d['b']) <= TOL_IN, 'member %s: IFC flange width %.3f in., design %.3f in.' % (m['id'], extent(p['points'], ly), d['b']))

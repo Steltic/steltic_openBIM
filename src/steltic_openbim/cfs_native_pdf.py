@@ -503,6 +503,8 @@ class Sheets(object):
 # sheets
 # ------------------------------------------------------------------------------------------
 
+SYSTEM_NAMES = {'sbmf': 'cold-formed steel special bolted moment frames (AISI S400 E4)'}
+
 def draw_cover(sh, package, model, register):
     ctx = package.get('design_context', {})
     sh.start('G-001', 'General notes, design basis and drawing list')
@@ -514,7 +516,7 @@ def draw_cover(sh, package, model, register):
     wb = ctx.get('wind_basis') or {}
     seis = ctx.get('seismic') if isinstance(ctx.get('seismic'), dict) else {}
     gh = ctx.get('governing_hazard') if isinstance(ctx.get('governing_hazard'), dict) else {}
-    basis = [('Design standards', ctx.get('code')), ('Seismic force-resisting system', str(ctx.get('system') or '').replace('_', ' ')),
+    basis = [('Design standards', ctx.get('code')), ('Seismic force-resisting system', SYSTEM_NAMES.get(str(ctx.get('system') or ''), str(ctx.get('system') or '').replace('_', ' '))),
              ('Seismic weight W / base shear V', '%s kip / %s kip (Cs = %s)' % (num(elf.get('W_kip'), 1), num(elf.get('V_kip'), 1), num(elf.get('Cs'), 4)) if elf else None),
              ('Redundancy factor', num(ctx.get('rho'), 2) if ctx.get('rho') is not None else None),
              ('Basic wind speed / exposure', '%s mph / %s (qh = %s psf)' % (num(wb.get('V_mph'), 0), wb.get('exposure'), num(wb.get('qh_psf'), 2)) if wb.get('V_mph') is not None else None),
@@ -864,7 +866,7 @@ def draw_detail(sh, package, model, det, number):
         m = members[mid]
         a, b = local(m['axis'][0]), local(m['axis'][1])
         d = profiles[m['profile_id']]['dimensions']
-        if profiles[m['profile_id']]['family'] in ('built_up', 'z'):
+        if profiles[m['profile_id']]['family'] in ('built_up', 'z', 'rhs'):
             wy, wz = portal.profile_extents(profiles[m['profile_id']], profiles)
             d = dict(env_w=wy, env_d=wz)
         half = max(d['env_w'], d['env_d']) / 2.0 if 'env_w' in d else (max(d.get('d', 0.0), d.get('b', 0.0)) / 2.0 if 'b' in d else d.get('d', 1.0) / 2.0)

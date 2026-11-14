@@ -31,6 +31,8 @@ def profile_extents(profile, profiles):
         return max(hi) - min(lo), depth
     if fam == 'channel':
         return d['b'], d['d']
+    if fam == 'rhs':
+        return d['b'], d['h']
     if fam == 'z':
         return 2.0 * d['b'] - d['t'], d['d']
     if fam == 'flat':
@@ -339,6 +341,8 @@ def draw_frame(sh, package, model, number, ftype, feet, num):
                                                                     else ('apex bracket' if kinds.count('rafter') == 2 else None))
         if fam is None and kinds == ['column'] and 'column head connection' in refs:        # canopy: the rafter runs over the column head
             fam = 'column head connection'
+        if 'bolted moment connection' in refs and z_ >= 1.0 and 'column' in kinds:           # bolted moment frame: beam end at, or beam running past, a column top
+            fam = 'bolted moment connection'
         if fam is None and 'knee_brace' in kinds and 'knee brace end connection' in refs:
             fam = 'knee brace end connection'
         if fam not in refs and 'knee_brace' in kinds and 'knee brace end connection' in refs:
