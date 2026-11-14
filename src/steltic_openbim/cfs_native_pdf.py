@@ -250,7 +250,7 @@ def schedules(package, model, records):
     rows = []
     seen = set()
     for key, wl in model['wall_lines'].items():
-        st = wl['stories'].get(1) or {}
+        st = wl['stories'].get(min(wl['stories'])) if wl['stories'] else {}
         if not st.get('rod') or wl['analysis_line'] in seen:
             continue
         seen.add(wl['analysis_line'])
@@ -262,7 +262,7 @@ def schedules(package, model, records):
                             widths=[150, 600, 190, 180, 120, 300, 200, 190, 120], rows=rows)
     rows = []; seen = set()
     for key, wl in model['wall_lines'].items():
-        st = wl['stories'].get(1) or {}
+        st = wl['stories'].get(min(wl['stories'])) if wl['stories'] else {}
         if not st.get('anchor') or wl['analysis_line'] in seen:
             continue
         seen.add(wl['analysis_line'])
