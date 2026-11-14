@@ -112,11 +112,21 @@
               "minItems": 3,
               "maxItems": 3,
               "uniqueItems": true,
-              "items": {"type": "integer", "minimum": 0, "maximum": 2}
+              "items": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 2
+              }
             },
-            "basis": {"type": "string", "minLength": 1}
+            "basis": {
+              "type": "string",
+              "minLength": 1
+            }
           },
-          "required": ["axis_order", "basis"],
+          "required": [
+            "axis_order",
+            "basis"
+          ],
           "additionalProperties": false,
           "description": "Explicit relabelling of saved analysis coordinates into the physical reference frame: physical[i]=analysis[axis_order[i]]. No scaling, translation, rotation angles or omitted axes. Exact interval, extent and coverage checks still apply."
         },
@@ -459,6 +469,11 @@
             "radius": {
               "type": "number",
               "exclusiveMinimum": 0
+            },
+            "segments": {
+              "type": "integer",
+              "minimum": 3,
+              "maximum": 64
             }
           },
           "required": [
@@ -904,7 +919,12 @@
     "provenance": {
       "type": "object",
       "properties": {
-        "openbim_translation_findings": {"type": "array", "items": {"type": "object"}},
+        "openbim_translation_findings": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
         "module": {
           "enum": [
             "HR",
@@ -1589,50 +1609,138 @@
     "source_handoff": {
       "type": "object",
       "properties": {
-        "schema": {"const": "steltic.hr_source_handoff"},
-        "version": {"const": 1},
-        "building_id": {"type": "string", "minLength": 1},
-        "source_files": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}},
-        "source_bindings": {"type": "object"},
-        "material_schedule": {"type": "object"},
-        "records": {"type": "object"},
+        "schema": {
+          "const": "steltic.hr_source_handoff"
+        },
+        "version": {
+          "const": 1
+        },
+        "building_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_files": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "source_bindings": {
+          "type": "object"
+        },
+        "material_schedule": {
+          "type": "object"
+        },
+        "records": {
+          "type": "object"
+        },
         "member_selections": {
           "type": "object",
           "additionalProperties": {
             "type": "object",
-            "required": ["record_id", "source_pointer", "status", "fields"],
+            "required": [
+              "record_id",
+              "source_pointer",
+              "status",
+              "fields"
+            ],
             "properties": {
-              "record_id": {"type": "string", "minLength": 1},
-              "source_pointer": {"type": "string", "minLength": 1},
-              "status": {"type": "string", "minLength": 1},
-              "physical_profile": {"type": "string", "minLength": 1},
-              "axis_in": {"$ref": "#/$defs/axis"},
-              "workpoint_length_in": {"type": "number", "exclusiveMinimum": 0},
-              "yielding_core_length_in": {"type": "number", "exclusiveMinimum": 0},
+              "record_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "source_pointer": {
+                "type": "string",
+                "minLength": 1
+              },
+              "status": {
+                "type": "string",
+                "minLength": 1
+              },
+              "physical_profile": {
+                "type": "string",
+                "minLength": 1
+              },
+              "axis_in": {
+                "$ref": "#/$defs/axis"
+              },
+              "workpoint_length_in": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "yielding_core_length_in": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
               "fields": {
                 "type": "array",
                 "items": {
                   "type": "object",
-                  "required": ["role", "field", "value", "unit", "source"],
+                  "required": [
+                    "role",
+                    "field",
+                    "value",
+                    "unit",
+                    "source"
+                  ],
                   "properties": {
-                    "role": {"type": "string", "minLength": 1},
-                    "field": {"type": "string", "minLength": 1},
-                    "unit": {"type": "string"},
-                    "applicability": {"type": "object"},
-                    "source": {"type": "object", "required": ["pointer", "literal"]}
+                    "role": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "field": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "unit": {
+                      "type": "string"
+                    },
+                    "applicability": {
+                      "type": "object"
+                    },
+                    "source": {
+                      "type": "object",
+                      "required": [
+                        "pointer",
+                        "literal"
+                      ]
+                    }
                   }
                 }
               }
             }
           }
         },
-        "occurrences": {"type": "object"},
-        "source_conflicts": {"type": "array"},
-          "crossing_interfaces": {"type": "array"},
-          "unresolved_crossing_interfaces": {"type": "array"},
-        "contract_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        "occurrences": {
+          "type": "object"
+        },
+        "source_conflicts": {
+          "type": "array"
+        },
+        "crossing_interfaces": {
+          "type": "array"
+        },
+        "unresolved_crossing_interfaces": {
+          "type": "array"
+        },
+        "contract_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
       },
-      "required": ["schema", "version", "building_id", "source_files", "source_bindings", "material_schedule", "records", "occurrences", "source_conflicts", "contract_sha256"],
+      "required": [
+        "schema",
+        "version",
+        "building_id",
+        "source_files",
+        "source_bindings",
+        "material_schedule",
+        "records",
+        "occurrences",
+        "source_conflicts",
+        "contract_sha256"
+      ],
       "additionalProperties": false
     },
     "source_findings": {

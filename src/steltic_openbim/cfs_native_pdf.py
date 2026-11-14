@@ -541,6 +541,13 @@ def draw_plan(sh, package, model, number, title, storey, floor=None):
     if floor:
         for j in floor['joists']:
             a, b = j['axis']; sh.line(tr(a[0], a[1]), tr(b[0], b[1]), LIGHT, 0.25)
+        labelled = set()
+        biggest = {}
+        for zn in floor['zones']:                   # one label per distinct joist selection, on its largest zone
+            lb = '%s at %s in. o.c.' % (zn['joist'].get('section') or zn['joist']['designation'], num(zn['joist']['spacing_in'], 0))
+            ar = (zn['x_ft'][1] - zn['x_ft'][0]) * (zn['y_ft'][1] - zn['y_ft'][0])
+            if ar > biggest.get(lb, (0, None))[0]:
+                biggest[lb] = (ar, zn['id'])
         for zn in floor['zones']:
             cx, cy = sum(zn['x_ft']) * 6.0, sum(zn['y_ft']) * 6.0
             p = tr(cx, cy)
@@ -552,6 +559,8 @@ def draw_plan(sh, package, model, number, title, storey, floor=None):
                 ang = math.atan2(o[1] - e[1], o[0] - e[0])
                 for da in (0.45, -0.45):
                     sh.line(e, (e[0] + 9 * math.cos(ang + da), e[1] + 9 * math.sin(ang + da)), BLUE, 1.0)
+            if biggest[lbl][1] != zn['id']:
+                continue
             sh.c.setFillColor('#ffffff'); sh.c.rect(p[0] + 8, p[1] - 6, 6.2 * len(lbl) + 8, 15, stroke=0, fill=1)
             sh.text(p[0] + 12, p[1] - 2, lbl, 10.5, BLUE, 'Helvetica-Bold')
             sh.cells.append(dict(sheet=number, schedule='joist_zone', record=None, cells=[lbl]))

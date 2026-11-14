@@ -34,7 +34,9 @@ def deliver(job_root, output, *, package_path=None, verify=True):
         raise ValueError('The CFS physical package is not ready: ' + json.dumps(validation['findings'][:3])[:600])
     output.mkdir(parents=True, exist_ok=False)
     state = initial_state(package, 1)
-    state.update(source_job=package['building_id'], source_module='CFS', representation='physical_geometry')
+    # A CFS model locates every screw, so the template / joint lists run to tens of MB. The delivery carries them once, in
+    # source.json; the IFC project keeps a count and fingerprint of each list and a part-count summary of every template.
+    state.update(source_job=package['building_id'], source_module='CFS', representation='physical_geometry', compact_project_sources=True)
     with (output / 'source.json').open('w', encoding='utf-8') as stream:
         json.dump(package, stream, ensure_ascii=False, separators=(',', ':'), allow_nan=False)
     write_json(output / 'state.json', state)

@@ -255,7 +255,8 @@ def part_faces(part,profiles):
         return extrude([[0,0],[sx,0],[sx,sy],[0,sy]],a,b,x)  # local z cross x == y
     if kind=='cylinder':
         axis=g['axis']; y=unit(cross([0,0,1],axis)) if abs(axis[2])<.99 else [1,0,0]
-        poly=[[g['radius']*math.cos(i*math.pi/6),g['radius']*math.sin(i*math.pi/6)] for i in range(12)]
+        n=int(g.get('segments',12))  # a source may ask for a coarser prism on small fasteners; 12 sides otherwise
+        poly=[[g['radius']*math.cos(i*2*math.pi/n),g['radius']*math.sin(i*2*math.pi/n)] for i in range(n)]
         return extrude(poly,a,add(a,mul(axis,g['length'])),y)
     if kind=='extruded_profile':
         return [f for poly in strips(profiles[g['profile_id']],profiles) for f in extrude(poly,a,add(a,mul(g['axis'],g['length'])),g['local_y'])]
