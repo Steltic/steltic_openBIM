@@ -111,9 +111,11 @@ def beam_end_fits(physical):
     profiles = {p['id']: p for p in physical['profiles']}
     fits = defaultdict(list)
     gusset_welds = beam_weld_points(physical, members)
+    joints = {j['id']: j for j in physical.get('joints', [])}
     for c, family, mid, host, role, template in end_connections(physical):
         m, receiver = members[mid], members[host]
-        joint = c['point']
+        # The contract locates a connection by its joint; `point` is an optional copy.
+        joint = c.get('point') or joints[c['joint_id']]['point']
         end = min(range(2), key=lambda i: dist(m['axis'][i], joint))
         start, far = ends(m)[end], ends(m)[1-end]
         inward = unit(sub(far, start))

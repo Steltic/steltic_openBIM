@@ -15,6 +15,8 @@ The first command runs in the HR environment. The second runs in the openBIM env
 
 For a newly completed or authorized redesigned HR job, use its own issued report, numerical evidence and sealed physical package. Generate the openBIM pair with `python -m steltic_openbim.saved_delivery --native-revision --handoff NEW_NATIVE --job-root NEW_JOB --output DELIVERY`. For a connection-only revision, pass `--approved-layout ORIGINAL_DRAWING_MODEL --prior-native ORIGINAL_NATIVE` to carry the checked opening and sheet layout forward. A revised brace arrangement requires new framing views and a direct comparison with the captured analysis geometry.
 
+A fresh job is delivered from the physical contract as written. A connection is located by its `joint_id` and its bound receivers; `point` and `member_ids` are optional copies. Connection parts may be `mesh`, `extruded_profile`, `box` or `cylinder`; a box is measured as its eight corners and a cylinder as a prism on the declared circle between its end planes. A member slot may end within 0.0000001 in of the member end. A required new job supplies its brace-end assemblies complete (gusset, slot welds, support welds, receivers, brace end offsets and slots); openBIM fits a gusset itself only for a connection exported without parts.
+
 ## Required comparisons
 
 | Comparison | Evidence that the check must read | Examples that must fail |

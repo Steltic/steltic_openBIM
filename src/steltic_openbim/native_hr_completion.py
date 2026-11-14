@@ -190,6 +190,28 @@ def located_slot(brace,connection_id,end,offsets,new_slot,section_axis):
     return slots
 
 
+SLOT_END_TOLERANCE=1e-7   # the contract allowance for a slot end beyond the member end (member_slots.validated)
+
+
+def slot_end_merges(members):
+    """Slot stations that are within the contract allowance of a physical member end without being equal to it.
+
+    A producer may write a slot end to nine decimals. Left as its own station it bounds a sliver of the
+    member a few 1e-10 in long, whose extrusion direction is rounding noise: the end cap comes out skewed.
+    """
+    merges=[]
+    for m in members:
+        if not m.get('slots') or 'extrusion_end_offsets' in m or not m.get('end_offsets'):continue
+        length=math.dist(*actual_ends(m))
+        for index,slot in enumerate(m['slots']):
+            for key in ('start_in','end_in'):
+                value=slot.get(key)
+                if type(value) not in (int,float):continue
+                for end in (0.,length):
+                    if value!=end and abs(value-end)<=SLOT_END_TOLERANCE:merges.append((m['id'],index,key,end))
+    return merges
+
+
 def complete_native_hr(original):
     """Return a derived physical revision, while keeping all original inputs immutable."""
     if original.get('module')!='HR' or not original.get('source_handoff'):return original
@@ -213,11 +235,17 @@ def complete_native_hr(original):
                      for m in physical['members'])
     from .brb_casing import requirements as casing_requirements,needs_completion as needs_casing,bind_receiver_profiles
     casings=casing_requirements(physical['members'],source,original.get('design_records',[]),physical['materials'])
-    if not pending and not missing_core and not needs_casing(physical,casings) and bindings_match(physical):return original
+    merges=slot_end_merges(physical['members'])
+    if not pending and not missing_core and not needs_casing(physical,casings) and bindings_match(physical) and not merges:return original
     body={k:v for k,v in original.items() if k!='source_handoff'}
     if source['source_bindings'].get('native_content_sha256')!=fingerprint(body):
         raise ValueError('Native body differs from the authenticated HR source before geometry completion')
     package=copy.deepcopy(original);physical=package['physical']
+    if merges:
+        by_id={m['id']:m for m in physical['members']}
+        for mid,number,key,end in merges:
+            slot=by_id[mid]['slots'][number]
+            slot['issued_'+key]=slot[key];slot[key]=end        # the HR number stays beside the station drawn
     prepare_cores(package,physical)
     from .stack_moving_head import configure_selected_heads
     if configure_selected_heads(package,physical):write_cores(package,physical)
