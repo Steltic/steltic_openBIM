@@ -457,6 +457,14 @@ def verify(directory, job_root, *, report_name='report.html'):
         st = line['stories'][min(line['stories'], key=int)]
         for a, b in st.get('segments_ft', []):
             c.expect(norm(feet((b - a) * 12.0)) in npages[i], 'elevation of %s omits the segment length %s' % (key, feet((b - a) * 12.0)))
+    for pl in pd.get('post_lines', []):                       # open post lines of a platform: post set-out on their own elevation
+        i = by_title.get('Post line elevation: line %s' % pl['id'].split(':')[-1])
+        if not c.expect(i is not None, 'no elevation sheet for post line %s' % pl['id']):
+            continue
+        xs_ = [float(v) * 12.0 for v in pl['posts_ft']]
+        for a, b in zip(xs_, xs_[1:]):
+            c.expect(norm(feet(b - a)) in npages[i], 'elevation of post line %s omits the post spacing %s' % (pl['id'], feet(b - a)))
+        c.expect(norm(feet(xs_[-1] - xs_[0])) in npages[i], 'elevation of post line %s omits its length %s' % (pl['id'], feet(xs_[-1] - xs_[0])))
     checks.append(c)
 
     # ---- D. IFC read-back ----
@@ -610,6 +618,22 @@ def verify(directory, job_root, *, report_name='report.html'):
             n = ifc_line.get((v[0], v[1], v[2], v[3]))
             c.expect(n is not None and str(n) == v[4], 'wall %s storey %s %s %s: drawing count %s, IFC count %s' % (v[0], v[1], v[2], v[3], v[4], n))
     c.expect(sum(int(cell['cells'][4]) for cell in dmodel['cells'] if cell['schedule'] == 'members') == sum(ifc_groups.values()), 'member schedule total differs from the IFC member count')
+    if pd.get('post_lines'):                                  # posts and beams of the open post lines: selection against drawings against IFC
+        n_post = sum(n for (role, _s, _m), n in ifc_groups.items() if role == 'platform post'); n_beam = sum(n for (role, _s, _m), n in ifc_groups.items() if role == 'platform beam')
+        want_p = sum(len(pl['posts_ft']) for pl in pd['post_lines']); want_b = sum(len(pl['posts_ft']) - 1 for pl in pd['post_lines'])
+        c.expect(n_post == want_p and n_beam == want_b, 'post lines: %d posts and %d beams selected, IFC has %d and %d' % (want_p, want_b, n_post, n_beam))
+        pc = [cell['cells'] for cell in dmodel['cells'] if cell['schedule'] == 'post_counts']
+        c.expect(bool(pc) and all(v == [str(n_post), str(n_beam), str(len(pd['post_lines']))] for v in pc), 'plans count %s posts / beams / post lines, IFC has %d / %d on %d lines' % (pc[:1], n_post, n_beam, len(pd['post_lines'])))
+        for pl in pd['post_lines']:
+            v = next((cell['cells'] for cell in dmodel['cells'] if cell['schedule'] == 'post_line' and cell['cells'][0] == pl['id']), None)
+            if not c.expect(v is not None, 'no post line elevation data for %s' % pl['id']):
+                continue
+            sec_p = ('%dx%s' % (pl['post']['n'], pl['post']['section'])) + ('/box' if pl['post'].get('arrangement', 'box') == 'box' else '')
+            sec_b = ('%dx%s' % (pl['beam']['n'], pl['beam']['section'])) + ('/box' if pl['beam'].get('arrangement', 'box') == 'box' else '')
+            c.expect(v[1] == str(len(pl['posts_ft'])) and v[2] == str(len(pl['posts_ft']) - 1), 'post line %s: drawing shows %s posts and %s beams, selection has %d and %d' % (pl['id'], v[1], v[2], len(pl['posts_ft']), len(pl['posts_ft']) - 1))
+            c.expect(v[3] == sec_p and v[4] == sec_b, 'post line %s: drawing sections %s / %s, selected %s / %s' % (pl['id'], v[3], v[4], sec_p, sec_b))
+            got = {p_['props'].get('Section') for (cls, sid), p_ in prods.items() if cls in member_cls and sid.startswith(pl['id'] + ':P')}
+            c.expect(got == {sec_p}, 'post line %s: IFC post sections %s, selected %s' % (pl['id'], sorted(got), sec_p))
     delegated = Counter(cn.get('family') for cn in ph['connections'] if cn.get('scope') == 'delegated')
     for det in dmodel['details']:
         c.expect(det['occurrences'] - det['delegated'] == ifc_family.get(det['family'], 0), 'detail %s (%s): drawing lists %d located occurrences, IFC has %d assemblies'

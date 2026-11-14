@@ -164,6 +164,21 @@ def drawing_model(package):
         joists = [m for m in ph['members'] if m['kind'] == 'joist' and m.get('level') == lvl]
         model['floors'].append(dict(level=lvl, kind=fl.get('kind', 'floor'), zones=fl['zones'], sheathing=fl['sheathing'],
                                     joists=[dict(id=m['id'], zone=m.get('zone'), axis=m['axis'], profile=m['profile_id']) for m in joists]))
+    # open post-and-beam lines (platforms): posts and beams grouped by their post line
+    plines = OrderedDict()
+    for m in ph['members']:
+        if m['kind'] in ('post', 'beam') and m.get('post_line'):
+            pl = plines.setdefault(m['post_line'], dict(id=m['post_line'], posts=[], beams=[]))
+            pl['posts' if m['kind'] == 'post' else 'beams'].append(dict(id=m['id'], axis=m['axis'], profile=m['profile_id']))
+    for pl in plines.values():
+        pts = [q['axis'][0] for q in pl['posts']]
+        pl['direction'] = 'X' if (max(p_[0] for p_ in pts) - min(p_[0] for p_ in pts)) >= (max(p_[1] for p_ in pts) - min(p_[1] for p_ in pts)) else 'Y'
+        i = 0 if pl['direction'] == 'X' else 1
+        pl['pos_in'] = pts[0][1 - i]
+        pl['stations'] = sorted(p_[i] for p_ in pts)
+        pl['post_top_in'] = max(q['axis'][1][2] for q in pl['posts'])
+        pl['label'] = pl['id'].split(':')[-1]
+    model['post_lines'] = list(plines.values())
     # member marks: one mark per (kind, role, section, material)
     groups = defaultdict(list)
     for m in ph['members']:
@@ -541,6 +556,8 @@ def plan_bounds(model):
             xs += [wl['start_in'], wl['start_in'] + wl['length_in']]; ys.append(wl['pos_in'])
         else:
             ys += [wl['start_in'], wl['start_in'] + wl['length_in']]; xs.append(wl['pos_in'])
+    for pl in model.get('post_lines', []):
+        (xs if pl['direction'] == 'X' else ys).extend(pl['stations']); (ys if pl['direction'] == 'X' else xs).append(pl['pos_in'])
     return (min(xs), max(xs)), (min(ys), max(ys))
 
 
@@ -602,6 +619,22 @@ def draw_plan(sh, package, model, number, title, storey, floor=None):
             if o['storey'] == storey:
                 a, b = P(o['s0']), P(o['s1'])
                 sh.line(a, b, '#ffffff', 2.4); sh.line(a, b, BLUE, 0.8, [3, 2])
+    # posts and beams of the open post lines
+    plines = model.get('post_lines', [])
+    for pl in plines:
+        at = (lambda s_, pl=pl: tr(s_, pl['pos_in'])) if pl['direction'] == 'X' else (lambda s_, pl=pl: tr(pl['pos_in'], s_))
+        if floor:
+            for bm in pl['beams']:
+                a_, b_ = bm['axis']; sh.line(tr(a_[0], a_[1]), tr(b_[0], b_[1]), BLUE, 2.2)
+        for s_ in pl['stations']:
+            c_ = at(s_); sh.poly([(c_[0] - 4.5, c_[1] - 4.5), (c_[0] + 4.5, c_[1] - 4.5), (c_[0] + 4.5, c_[1] + 4.5), (c_[0] - 4.5, c_[1] + 4.5)], INK, 0.9, fill='#ffffff')
+    if plines:
+        sts = sorted({round(s_, 3) for pl in plines if pl['direction'] == 'X' for s_ in pl['stations']})
+        for a_, b_ in zip(sts, sts[1:]):
+            sh.dim(tr(a_, by[0]), tr(b_, by[0]), b_ - a_, offset=(0, -60), kind='post_spacing')
+        txt = 'Posts: %d on %d post line(s) (%s). Beams: %d (%s).' % (sum(len(pl['posts']) for pl in plines), len(plines), ', '.join(sorted({q['profile'] for pl in plines for q in pl['posts']})),
+                                                              sum(len(pl['beams']) for pl in plines), ', '.join(sorted({q['profile'] for pl in plines for q in pl['beams']})))
+        sh.cells.append(dict(sheet=number, schedule='post_counts', record=None, text=txt, cells=[str(sum(len(pl['posts']) for pl in plines)), str(sum(len(pl['beams']) for pl in plines)), str(len(plines))]))
     # chain dimensions, then grid bubbles on top
     ys = sorted({w['pos_in'] for w in lines_x if w['grid']}); xs = sorted({w['pos_in'] for w in lines_y if w['grid']})
     for a, b in zip(ys, ys[1:]):
@@ -627,6 +660,11 @@ def draw_plan(sh, package, model, number, title, storey, floor=None):
     sh.line((x, y + 4), (x + 60, y + 4), BLUE, 0.8, [3, 2]); sh.text(x + 76, y, 'Wall opening (header over)', 11); y -= 22
     if floor:
         sh.line((x, y + 4), (x + 60, y + 4), LIGHT, 0.6); sh.text(x + 76, y, 'Joist (every joist drawn); arrow = span direction', 11); y -= 22
+    if plines:
+        sh.poly([(x + 25, y), (x + 34, y), (x + 34, y + 9), (x + 25, y + 9)], INK, 0.9, fill='#ffffff'); sh.text(x + 76, y, 'Post on its base plate', 11); y -= 22
+        if floor:
+            sh.line((x, y + 4), (x + 60, y + 4), BLUE, 2.2); sh.text(x + 76, y, 'Beam between post caps', 11); y -= 22
+        y = sh.wrap(x, y - 4, txt, 560, 10.5) - 6
     y -= 14
     sh.text(x, y, 'SHEAR WALL TYPES' if model['wall_types'] else 'BRACED BAY TYPES', 13, font='Helvetica-Bold'); y -= 24
     for t in model['strap_types']:
@@ -645,6 +683,40 @@ def draw_plan(sh, package, model, number, title, storey, floor=None):
                                                                                               frac_in(floor['sheathing']['thickness_in']), _spec(pd, floor['sheathing']['material'])))
     for t in notes:
         y = sh.wrap(x, y, t, 560, 10.5) - 5
+
+
+def draw_post_line(sh, package, model, pl, number):
+    """Elevation of an open post line: posts on their base plates, one beam per bay on the post caps."""
+    i = 0 if pl['direction'] == 'X' else 1
+    st = pl['stations']; zs = [l['elevation_in'] for l in model['levels']]
+    box = (MARGIN + 200, MARGIN + TITLE_H + 190, W - 2 * MARGIN - 420, H - 2 * MARGIN - TITLE_H - 330)
+    tr, den = sh.view(box, ((st[0], st[-1]), (zs[0], zs[-1])))
+    sh.rows[-1]['scale'] = '1:%d' % den
+    k = 72.0 / den
+    profiles = {p_['id']: p_ for p_ in package['physical']['profiles']}
+    for l in model['levels']:
+        a, b = tr(st[0], l['elevation_in']), tr(st[-1], l['elevation_in'])
+        sh.line((a[0] - 150, a[1]), (b[0] + 40, b[1]), GREY, 0.4, [10, 4])
+        sh.text(a[0] - 150, a[1] + 5, '%s  %s' % (l['name'], feet(l['elevation_in'])), 10.5, font='Helvetica-Bold')
+    for q in pl['posts']:
+        w_ = max(portal.profile_extents(profiles[q['profile']], profiles)) / 2.0
+        s_ = q['axis'][0][i]
+        sh.poly([tr(s_ - w_, q['axis'][0][2]), tr(s_ + w_, q['axis'][0][2]), tr(s_ + w_, q['axis'][1][2]), tr(s_ - w_, q['axis'][1][2])], INK, 0.9, fill=FILL)
+    for q in pl['beams']:
+        d_ = portal.profile_extents(profiles[q['profile']], profiles)[1] / 2.0
+        a_, b_ = q['axis']
+        sh.poly([tr(a_[i], a_[2] - d_), tr(b_[i], b_[2] - d_), tr(b_[i], b_[2] + d_), tr(a_[i], a_[2] + d_)], BLUE, 0.9, fill=FILL)
+    for a_, b_ in zip(st, st[1:]):
+        sh.dim(tr(a_, zs[0]), tr(b_, zs[0]), b_ - a_, offset=(0, -40), kind='post_spacing')
+    sh.dim(tr(st[0], zs[0]), tr(st[-1], zs[0]), st[-1] - st[0], offset=(0, -78), kind='overall')
+    sh.dim(tr(st[-1], zs[0]), tr(st[-1], pl['post_top_in']), pl['post_top_in'] - zs[0], offset=(70, 0), kind='post_height')
+    x = MARGIN + 40; y = MARGIN + TITLE_H + 120
+    sh.text(x, y, 'POST LINE %s' % pl['label'], 13, font='Helvetica-Bold'); y -= 20
+    txt = '%d posts %s, top of post at %s; %d beams %s, one per bay between post caps.' % (len(pl['posts']), ', '.join(sorted({q['profile'] for q in pl['posts']})), feet(pl['post_top_in']),
+                                                                                         len(pl['beams']), ', '.join(sorted({q['profile'] for q in pl['beams']})))
+    y = sh.wrap(x, y, txt, 1100, 10.5) - 4
+    sh.cells.append(dict(sheet=number, schedule='post_line', record=None, text=txt, cells=[pl['id'], str(len(pl['posts'])), str(len(pl['beams'])), ', '.join(sorted({q['profile'] for q in pl['posts']})), ', '.join(sorted({q['profile'] for q in pl['beams']}))]))
+    sh.wrap(x, y, 'Strap-braced panels standing under the beams are drawn on their own wall elevations. Post bases, post caps and the member schedules are on the detail and schedule sheets.', 1100, 10, color=GREY)
 
 
 def draw_elevation(sh, package, model, wl, number):
@@ -868,6 +940,8 @@ def generate(package, state, dest):
             plan.append(('S-%d' % (100 + k), nm, ('plan', k, fl)))
         for i, wl in enumerate(model['wall_lines'].values(), 1):
             plan.append(('S-%d' % (200 + i), 'Wall elevation: line %s' % wl['label'], ('elevation', wl)))
+        for j, pl in enumerate(model.get('post_lines', []), 1):
+            plan.append(('S-%d' % (280 + j), 'Post line elevation: line %s' % pl['label'], ('post_line', pl)))
     sched_numbers = []
     n = 300
     for key, sc in model['schedules'].items():
@@ -885,6 +959,8 @@ def generate(package, state, dest):
             sh.start(number, title); draw_plan(sh, package, model, number, title, what[1], what[2])
         elif what[0] == 'elevation':
             sh.start(number, title); draw_elevation(sh, package, model, what[1], number)
+        elif what[0] == 'post_line':
+            sh.start(number, title); draw_post_line(sh, package, model, what[1], number)
         elif what[0] == 'portal_base':
             sh.start(number, title); portal.draw_base_plan(sh, package, model, number, feet)
         elif what[0] == 'portal_roof':
