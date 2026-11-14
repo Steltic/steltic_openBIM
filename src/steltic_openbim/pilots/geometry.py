@@ -39,7 +39,10 @@ def strips(profile,profiles):
             y0,y1=sorted([sign*(h/2-t),sign*h/2])
             result.append(rect(x0,y0,x1,y1))
             if lip:
-                angle=math.radians(profile.get('lip_angle_deg',90)); a=[direction*(b-t/2),sign*(h/2-t/2)]
+                # Legacy placement centres the lip on the flange tip (overall width b + t/2). A profile that
+                # declares lip_inside keeps the lip within the nominal flange width b.
+                inset=t/2 if profile.get('lip_inside') else 0
+                angle=math.radians(profile.get('lip_angle_deg',90)); a=[direction*(b-t/2-inset),sign*(h/2-t/2)]
                 v=[-direction*math.cos(angle)*lip,-sign*math.sin(angle)*lip]; n=unit([-v[1],v[0]])
                 result.append([add(a,mul(n,-t/2)),add(a,mul(n,t/2)),add(add(a,v),mul(n,t/2)),add(add(a,v),mul(n,-t/2))])
         return result

@@ -367,11 +367,13 @@ def _export_source(directory,destination,source):
             frame=c['assembly_instance'];template=templates[frame['template_id']]
             # Member and panel IDs have separate namespaces. Retain receiver
             # types even when a member and its concrete host share an ID.
-            bound_panels=set()
+            bound_panels=set();bound_interfaces=set()
             for receiver in template.get('receivers',[]):
                 ident=frame.get('bindings',{}).get(receiver['id'])
                 if ident is not None:
-                    (bound_panels if receiver.get('kind')=='panel' else connected).add(ident)
+                    # A delegated/existing interface is a declared scope boundary, not a
+                    # modelled member: retain the binding as data instead of a product relation.
+                    (bound_panels if receiver.get('kind')=='panel' else bound_interfaces if receiver.get('kind')=='interface' else connected).add(ident)
             if template['id'] not in assembly_meshes:
                 solids=[part_faces(p,profiles) for p in template['parts']]
                 curves=[part_lines(p) for p in template['parts']]
@@ -397,6 +399,7 @@ def _export_source(directory,destination,source):
             faces,lines,solid_count,curve_count=assembly_meshes[template['id']]
             item=dict(c,level=source_level,connection_id=c['id'],connected_member_ids=sorted(connected),connected_panel_ids=sorted(bound_panels),
                       description='Located connection assembly; individual component identities and selections are retained in its versioned template')
+            if bound_interfaces:item['connected_interface_ids']=sorted(bound_interfaces)
             located=[[bim_assemblies.transformed(p,frame) for p in line] for line in lines]
             if not faces and lines:
                 # A welded joint may contain no additional solid: the actual
