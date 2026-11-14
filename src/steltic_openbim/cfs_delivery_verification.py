@@ -228,12 +228,19 @@ def report_row(rows, rid):
     return None
 
 
+def dc_token(d):
+    """The D/C cell of a record: two decimals, or the scope statement of an existing item that carries no ratio."""
+    if d.get('DC') == 0 and str(d.get('limit_state') or '').startswith('n/a'):
+        return 'existing (not in scope)'
+    return f2(d['DC'])
+
+
 def expected_report_tokens(record):
     """What the design report must print for a calculation record (its own formatting rules)."""
     d = record['data']; t = record['table']
     out = []
     if d.get('DC') is not None and not d.get('waived'):
-        out.append(('D/C', f2(d['DC'])))
+        out.append(('D/C', dc_token(d)))
     if t == 'wall_lines':
         for k in ('sheathing', 'fastener_schedule'):
             if d.get(k):
@@ -319,7 +326,7 @@ def verify(directory, job_root, *, report_name='report.html'):
                 ok = norm(token) in joined
             c.expect(ok, 'report row %s: %s "%s" not printed (row: %s)' % (rid, label, str(token)[:80], ' | '.join(row)[:160]))
         if r['data'].get('DC') is not None:
-            report_dc[rid] = f2(r['data']['DC'])
+            report_dc[rid] = dc_token(r['data'])
     ctx = package['design_context']
     for key, fmt, label in (('W_kip', f1, 'seismic weight'), ('V_kip', f1, 'base shear')):
         v = (ctx.get('elf') or {}).get(key)
@@ -361,6 +368,9 @@ def verify(directory, job_root, *, report_name='report.html'):
             if not c.expect(bool(cells), 'no drawing schedule row names record %s' % rid):
                 continue
             by_row = {cell['cells'][0]: cell['cells'] for cell in cells}
+            if not d.get('rows'):
+                got = by_row.get(str(d.get('id')))
+                c.expect(got is not None and got[-1] == dc_token(d) and (not d.get('selection') or any(norm(d['selection']) == norm(v) for v in got)), 'drawing schedule does not state the scope of %s' % rid)
             for q in d.get('rows') or []:
                 got = by_row.get(str(q.get('id')))
                 if not c.expect(got is not None, 'drawing schedule has no row %s of %s' % (q.get('id'), rid)):
@@ -380,7 +390,7 @@ def verify(directory, job_root, *, report_name='report.html'):
                 continue
             flat = [v for cell in cells for v in cell['cells']]
             if d.get('DC') is not None:
-                c.expect(f2(d['DC']) in flat, 'drawing schedule row for %s does not print D/C %s (prints %s)' % (rid, f2(d['DC']), flat[-3:]))
+                c.expect(dc_token(d) in flat, 'drawing schedule row for %s does not print D/C %s (prints %s)' % (rid, dc_token(d), flat[-3:]))
                 if rid in report_dc:
                     c.expect(report_dc[rid] in flat, 'D/C of %s differs between drawing and report' % rid)
             cap = d.get('capacity')
@@ -565,8 +575,9 @@ def verify(directory, job_root, *, report_name='report.html'):
                 continue
             if rid in report_dc:
                 row = report_row(rows, r_['data'].get('id'))
-                c.expect(row is not None and f2(r_['data']['DC']) in row, 'record %s: D/C in the IFC differs from the report' % rid)
-    linked = {rid for coll in ('members', 'panels', 'connections', 'openings') for e in ph.get(coll, []) for rid in e.get('design_record_ids', [])}
+                c.expect(row is not None and dc_token(r_['data']) in row, 'record %s: D/C in the IFC differs from the report' % rid)
+    # records of entities that have an IFC product (a delegated or existing connection has no located hardware and no product)
+    linked = {rid for coll in ('members', 'panels', 'connections', 'openings') for e in ph.get(coll, []) if coll != 'connections' or e.get('assembly_instance') for rid in e.get('design_record_ids', [])}
     c.expect(linked <= seen | {rid for rid in linked if records[rid]['table'] == 'materials'}, 'design records linked in the model but absent from the IFC: %s' % sorted(linked - seen)[:5])
     checks.append(c)
 
@@ -674,7 +685,12 @@ def verify(directory, job_root, *, report_name='report.html'):
                 row = next((q for q in (rec or {}).get('data', {}).get('rows', []) if q.get('id') == row_id), None)
                 c.expect(row is not None and abs(row['width_in'] - sel_['width_in']) < 1e-9 and row['n_screws'] == sel_['n_screws'], '%s bracing: the modelled strap differs from the scheduled strap row %s' % (where, row_id))
             c.expect(len(ids) == want, '%s bracing: %d straps in the IFC, %d selected' % (where, len(ids), want))
-        for key, kind in (('column', 'column'), ('rafter', 'rafter')):
+        if pd['frame'].get('existing'):
+            # component design on an existing shell: the frame members are context only and must be marked as such in the IFC
+            for k in prods:
+                if k[0] in member_cls and src_of.get(k[1], {}).get('kind') in ('column', 'rafter'):
+                    c.expect(src_of[k[1]].get('scope') == 'existing_context', 'existing frame member %s is not marked as existing context in the IFC' % k[1])
+        for key, kind in (() if pd['frame'].get('existing') else (('column', 'column'), ('rafter', 'rafter'))):
             sel_ = pd['frame'][key]
             want = ('%dx%s' % (sel_['n'], sel_['section'])) if int(sel_['n']) > 1 else sel_['section']
             got = {prods[k]['props'].get('Section') for k in prods if k[0] in member_cls and src_of.get(k[1], {}).get('kind') == kind}

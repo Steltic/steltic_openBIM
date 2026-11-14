@@ -111,25 +111,32 @@ def portal_model(package):
 # schedules
 # ------------------------------------------------------------------------------------------
 
+def dc_cell(d, num):
+    """D/C as the report prints it; a record of existing work outside the design scope has no ratio."""
+    if d.get('DC') == 0 and str(d.get('limit_state') or '').startswith('n/a'):
+        return 'existing (not in scope)'
+    return num(d.get('DC'), 2)
+
+
 def portal_schedules(package, model, records, num):
     out = OrderedDict()
     rows = []
     for r in package.get('design_records', []):
         if r['table'] == 'members':
             d = r['data']
-            rows.append(dict(record=r['id'], cells=[d.get('id'), d.get('section') or '-', d.get('selection') or '-', d.get('bracing_assumption') or '-', d.get('limit_state') or '-', num(d.get('DC'), 2)]))
+            rows.append(dict(record=r['id'], cells=[d.get('id'), d.get('section') or '-', d.get('selection') or '-', d.get('bracing_assumption') or '-', d.get('limit_state') or '-', dc_cell(d, num)]))
     out['frame_members'] = dict(title='Portal frame member schedule', headers=['Record', 'Section', 'Make-up', 'Bracing of the flanges', 'Governing limit state', 'D/C'], widths=[170, 250, 760, 600, 480, 100], rows=rows)
     rows = []
     for r in package.get('design_records', []):
         if r['table'] == 'connections':
             d = r['data']
-            rows.append(dict(record=r['id'], cells=[d.get('id'), d.get('components') or '-', d.get('limit_state') or '-', num(d.get('demand'), 1), num(d.get('capacity'), 2), num(d.get('DC'), 2)]))
+            rows.append(dict(record=r['id'], cells=[d.get('id'), d.get('components') or d.get('selection') or '-', d.get('limit_state') or '-', num(d.get('demand'), 1), num(d.get('capacity'), 2), dc_cell(d, num)]))
     out['connections'] = dict(title='Frame connection schedule', headers=['Record', 'Components', 'Governing limit state', 'Moment (kip-in.)', 'Governing capacity', 'D/C'], widths=[190, 1040, 560, 200, 220, 100], rows=rows)
     rows = []
     for r in package.get('design_records', []):
         if r['table'] == 'anchorage':
             d = r['data']
-            rows.append(dict(record=r['id'], cells=[d.get('id'), d.get('selection') or '-', num(d.get('V_design_kip'), 2), num(d.get('T_design_kip'), 2), num(d.get('C_design_kip'), 2), d.get('limit_state') or '-', num(d.get('DC'), 2)]))
+            rows.append(dict(record=r['id'], cells=[d.get('id'), d.get('selection') or '-', num(d.get('V_design_kip'), 2), num(d.get('T_design_kip'), 2), num(d.get('C_design_kip'), 2), d.get('limit_state') or '-', dc_cell(d, num)]))
     out['anchorage'] = dict(title='Column base and anchorage schedule (reactions per column base)', headers=['Record', 'Base', 'V (kip)', 'T uplift (kip)', 'C (kip)', 'Governing limit state', 'D/C'],
                             widths=[190, 980, 150, 170, 150, 560, 100], rows=rows)
     rows = []
@@ -137,6 +144,8 @@ def portal_schedules(package, model, records, num):
         if r['table'] == 'schedules':
             for q in r['data'].get('rows') or []:
                 rows.append(dict(record=r['id'], cells=[q.get('id'), q.get('member') or '-', q.get('section') or '-', q.get('limit_state') or '-', num(q.get('DC'), 2)]))
+            if not r['data'].get('rows'):                # a schedule with no designed rows (existing work): its scope statement
+                rows.append(dict(record=r['id'], cells=[r['data'].get('id'), str(r['data'].get('schedule') or '-'), r['data'].get('selection') or '-', r['data'].get('limit_state') or '-', dc_cell(r['data'], num)]))
     out['secondary'] = dict(title='Purlin, girt, flange brace and bracing strap schedule', headers=['Row', 'Member', 'Section and connection', 'Governing limit state', 'D/C'], widths=[240, 480, 940, 600, 100], rows=rows)
     rows = []
     for r in package.get('design_records', []):
