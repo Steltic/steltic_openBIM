@@ -633,6 +633,10 @@ def verify(directory, job_root, *, report_name='report.html'):
                        and (':' not in v[0] or line_of(sid) == v[0].split(':')[1])]
                 nlines = len({(src_of[sid].get('host_line'), src_of[sid].get('line')) for sid in ids})
                 c.expect(str(len(ids)) == v[3] and str(nlines) == v[2], '%s %s: drawing lists %s lines / %s members, IFC has %d / %d' % (v[0], v[1], v[2], v[3], nlines, len(ids)))
+            elif cell['schedule'] == 'bridging_counts':
+                ids = [sid for sid, src in src_of.items() if src.get('kind') == 'bridging' and src.get('plane') == v[0] and prods[next(k for k in prods if k[1] == sid and k[0] in member_cls)]['props'].get('Section') == v[2]
+                       and (v[1] == '-' or line_of(sid) == v[1])]
+                c.expect(str(len(ids)) == v[3], '%s brace lines %s: drawing lists %s straps, IFC has %d' % (v[0], v[2], v[3], len(ids)))
             elif cell['schedule'] == 'strut_counts':
                 ids = [sid for sid, src in src_of.items() if src.get('kind') == 'strut' and prods[next(k for k in prods if k[1] == sid and k[0] in member_cls)]['props'].get('Section') == v[1] and line_of(sid) == v[0]]
                 c.expect(str(len(ids)) == v[2], 'struts on line %s: drawing lists %s x %s, IFC has %d' % (v[0], v[2], v[1], len(ids)))
@@ -644,6 +648,8 @@ def verify(directory, job_root, *, report_name='report.html'):
             if any(src.get('kind') == kind for src in src_of.values()):
                 c.expect(kind in seen_kinds, 'the drawings give no line count for the %ss of the model' % kind)
         # scheduled strap size against the strap measured in the IFC, and the selected frame make-up against the IFC section
+        n_bridging = sum(1 for src in src_of.values() if src.get('kind') == 'bridging')
+        c.expect(n_bridging == sum(int(cell['cells'][3]) for cell in dmodel['cells'] if cell['schedule'] == 'bridging_counts'), 'brace-line straps counted on the drawings differ from the %d in the IFC' % n_bridging)
         if any(src.get('kind') == 'strut' for src in src_of.values()):
             c.expect(any(cell['schedule'] == 'strut_counts' for cell in dmodel['cells']), 'the drawings give no count for the struts of the model')
         for where in ('wall', 'roof'):

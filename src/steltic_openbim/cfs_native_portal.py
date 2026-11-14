@@ -97,7 +97,12 @@ def portal_model(package):
         if m['kind'] == 'strut':
             a, b = m['axis']
             struts.append(dict(id=m['id'], a=a, b=b, profile=m['profile_id'], column_line=nearest((a[0] + b[0]) / 2.0), z=a[2]))
-    return dict(frames=rows, types=types, column_x=col_x, exterior_x=ext, lines=list(lines.values()), straps=straps, struts=struts,
+    bridging = []
+    for m in ph['members']:
+        if m['kind'] == 'bridging':
+            a, b = m['axis']
+            bridging.append(dict(id=m['id'], a=a, b=b, profile=m['profile_id'], plane=m.get('plane'), flange=m.get('flange'), column_line=nearest((a[0] + b[0]) / 2.0) if m.get('plane') == 'wall' else None))
+    return dict(frames=rows, types=types, column_x=col_x, exterior_x=ext, lines=list(lines.values()), straps=straps, struts=struts, bridging=bridging,
                 y=[r['y_in'] for r in rows], top=max(q['b'][1] for r in rows for q in r['members']))
 
 
@@ -270,6 +275,14 @@ def draw_roof_plan(sh, package, model, number, feet):
         txt = 'Roof-plane bracing (accent): %d braced bays, %d straps %s (X pattern, tension only).' % (nb, cnt, prof)
         sh.text(x, y, txt, 11); y -= 16
         sh.cells.append(dict(sheet=number, schedule='strap_counts', record=None, text=txt, cells=['roof', '-', prof, str(nb), str(cnt)]))
+    roofb = [b for b in pm['bridging'] if b['plane'] == 'roof']
+    for b in roofb:
+        if b['flange'] == 'outer':
+            sh.line(tr(b['a'][1], b['a'][0]), tr(b['b'][1], b['b'][0]), GREY, 0.5, [4, 3])
+    for prof, cnt in sorted(Counter(b['profile'] for b in roofb).items()):
+        txt = 'Purlin brace lines (grey dashed, one strap on each flange): %d straps %s.' % (cnt, prof)
+        sh.text(x, y, txt, 11); y -= 16
+        sh.cells.append(dict(sheet=number, schedule='bridging_counts', record=None, text=txt, cells=['roof', '-', prof, str(cnt)]))
     pd = package['design_context']['physical_design']
     if pd.get('purlins'):
         lap = float(pd['purlins'].get('lap_ft') or 0.0)
@@ -395,6 +408,14 @@ def draw_side(sh, package, model, number, cl, feet):
         txt = 'Wall bracing (accent): %d straps %s in %d braced bays.' % (cnt, prof, len({s['bay'] for s in st if s['profile'] == prof}))
         sh.text(x, y, txt, 11); y -= 16
         sh.cells.append(dict(sheet=number, schedule='side_counts', record=None, text=txt, cells=[label, 'straps', prof, str(cnt)]))
+    wallb = [b for b in pm['bridging'] if b['plane'] == 'wall' and abs(b['column_line'] - cl) < 0.01]
+    for b in wallb:
+        if b['flange'] == 'outer':
+            sh.line(tr(b['a'][1], b['a'][2]), tr(b['b'][1], b['b'][2]), GREY, 0.5, [4, 3])
+    for prof, cnt in sorted(Counter(b['profile'] for b in wallb).items()):
+        txt = 'Girt brace lines (grey dashed, one strap on each flange): %d straps %s.' % (cnt, prof)
+        sh.text(x, y, txt, 11); y -= 16
+        sh.cells.append(dict(sheet=number, schedule='bridging_counts', record=None, text=txt, cells=['wall', label, prof, str(cnt)]))
     if doors:
         sizes = sorted({(float(d['width_ft']), float(d['height_ft'])) for d in doors})
         txt = 'Door openings (dashed): %d, %s, in bays %s; door framing by the building supplier, girts below the door head stop at the door bays.' % (
