@@ -5,17 +5,31 @@ import numpy as np
 from .joint_mesh_readback import TOL, common_plate_section
 
 
+def located(connection,joints):
+    """Where a connection is and what it joins. The contract locates it by its joint and bindings;
+    `point` and `member_ids` are optional copies of that."""
+    frame=connection.get('assembly_instance',{})
+    point=connection.get('point') or joints.get(connection.get('joint_id'),{}).get('point') or frame.get('origin')
+    members=connection.get('member_ids') or list(frame.get('bindings',{}).values())
+    if point is None:raise ValueError('Connection has no located joint: '+str(connection.get('id')))
+    return tuple(point),members
+
+
 def check(checker):
     near=defaultdict(list)
+    joints={j['id']:j for j in checker.physical.get('joints',[])}
     for item in checker.owned_gussets:
         c=checker.connections[item.connection]
         if c.get('parameters',{}).get('joint')!='base':continue
-        for mid in c['member_ids']:
-            if checker.members[mid]['kind']=='column':
-                near[mid,tuple(c['point'])].append(item)
+        point,members=located(c,joints)
+        for mid in members:
+            if checker.members.get(mid,{}).get('kind')=='column':
+                near[mid,point].append(item)
     checked=0;issues=[]
     for base in checker.connections.values():
-        targets=[g for mid in base['member_ids'] for g in near.get((mid,tuple(base['point'])),[])
+        if not near:break
+        point,members=located(base,joints)
+        targets=[g for mid in members for g in near.get((mid,point),[])
                  if g.connection!=base['id']]
         instance=base.get('assembly_instance')
         if not targets or not instance:continue

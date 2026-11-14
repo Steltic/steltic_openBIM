@@ -320,6 +320,13 @@ class Assessment:
                     rim=diameters[diameters>TOL]
                     if not len(rim) or max(abs(min(u)),abs(max(u)-geometry['length']),np.max(np.abs(rim-diameter)))>TOL:
                         self.issue('formed_profile_length_diameter_or_position_differs',part=part['id'],profile=profile['id'])
+                elif geometry.get('type') in ('box','cylinder'):
+                    from .constituent_solid_readback import matches_box,matches_cylinder
+                    box=geometry['type']=='box'
+                    self.counts['actual_constituent_box_checks' if box else 'actual_constituent_cylinder_checks']+=1
+                    if not (matches_box if box else matches_cylinder)(placed,geometry):
+                        self.issue('box_constituent_size_or_position_differs' if box else
+                                   'cylinder_constituent_length_radius_or_position_differs',part=part['id'])
                 else:
                     self.issue('unverified_constituent_shape_type',part=part['id'],geometry_type=geometry.get('type'))
         if sorted(used) != list(range(len(mesh.faces))):
@@ -1049,7 +1056,11 @@ def verify_assembly_fit(ifc_path, physical, source_handoff, design_records=()):
     check.counts.update(counts)
     check.findings.extend(shared_issues)
     from .base_hardware_clearance import check as check_base_hardware
-    total,hardware_issues=check_base_hardware(check)
+    try:
+        total,hardware_issues=check_base_hardware(check)
+    except (ValueError,RuntimeError,KeyError,IndexError,TypeError) as exc:
+        # One unreadable base must not replace every finding of the connections already measured.
+        total,hardware_issues=0,[dict(code='base_hardware_clearance_unverified',detail=type(exc).__name__+': '+str(exc))]
     check.counts['actual_base_hardware_gusset_pairs']=total
     check.findings.extend(hardware_issues)
     from .gusset_outline_readback import verify_outlines
