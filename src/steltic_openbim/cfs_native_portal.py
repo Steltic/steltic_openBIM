@@ -12,6 +12,7 @@ import math
 INK = '#1d2b33'; GREY = '#6c7a80'; LIGHT = '#c9d1d3'; ACCENT = '#a2461f'; BLUE = '#2f6480'; FILL = '#f3e3d9'
 W, H = 2383.94, 1683.78
 MARGIN = 36.0; TITLE_H = 104.0
+FRAME_KINDS = ('column', 'rafter', 'hanger_post', 'knee_brace', 'beam', 'post')      # members drawn on the frame elevation
 
 
 def profile_extents(profile, profiles):
@@ -57,7 +58,7 @@ def portal_model(package):
     profiles = {p['id']: p for p in ph['profiles']}
     frames = defaultdict(list)
     for m in ph['members']:
-        if m['kind'] in ('column', 'rafter') and m.get('frame') is not None:
+        if m['kind'] in FRAME_KINDS and m.get('frame') is not None:
             frames[int(m['frame'])].append(m)
     rows = []
     for fi in sorted(frames):

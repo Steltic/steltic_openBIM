@@ -408,7 +408,7 @@ def verify(directory, job_root, *, report_name='report.html'):
     plan_pages = [page_of[s['number']] for s in dmodel['sheets'] if 'plan' in s['title'].lower() and s['number'].startswith('S-1')]
     if pd.get('kind') == 'portal':
         # independent set-out from the located frame members: frame lines along the building, column lines across it
-        fy = sorted({round(m['axis'][0][1], 4) for m in ph['members'] if m['kind'] in ('column', 'rafter')})
+        fy = sorted({round(m['axis'][0][1], 4) for m in ph['members'] if m['kind'] in ('column', 'rafter') and m.get('frame') is not None})
         cx = sorted({round(m['axis'][0][0], 4) for m in ph['members'] if m['kind'] == 'column'})
         c.expect(len(plan_pages) >= 2, 'portal drawing set needs a base plan and a roof plan')
         side_pages = [page_of[s['number']] for s in dmodel['sheets'] if s['title'].startswith('Side wall elevation')]
