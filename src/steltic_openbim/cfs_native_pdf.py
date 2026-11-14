@@ -18,6 +18,7 @@ from pathlib import Path
 
 from .drawing_workflow import fingerprint, write_json
 from . import bim_assemblies
+from . import cfs_native_portal as portal
 
 W, H = 2383.94, 1683.78                      # A1 landscape, points
 INK = '#1d2b33'; GREY = '#6c7a80'; LIGHT = '#c9d1d3'; ACCENT = '#a2461f'; BLUE = '#2f6480'; FILL = '#f3e3d9'
@@ -167,7 +168,7 @@ def drawing_model(package):
     groups = defaultdict(list)
     for m in ph['members']:
         groups[(m['kind'], m.get('role') or m['kind'], m['profile_id'], m['material_id'])].append(m)
-    prefix = {'stud': 'S', 'bottom_track': 'T', 'top_track': 'T', 'joist': 'J', 'header': 'H', 'tie_rod': 'R', 'strap': 'B'}
+    prefix = {'stud': 'S', 'bottom_track': 'T', 'top_track': 'T', 'joist': 'J', 'header': 'H', 'tie_rod': 'R', 'strap': 'B', 'column': 'C', 'rafter': 'RF', 'purlin': 'P', 'girt': 'G', 'beam': 'BM', 'post': 'PT'}
     counters = Counter()
     for key in sorted(groups):
         pf = prefix.get(key[0], 'M'); counters[pf] += 1
@@ -197,7 +198,11 @@ def drawing_model(package):
                 parts[p['kind']] += n
         model['details'].append(dict(reference='D%02d' % i, family=f['family'], occurrences=f['connections'], templates=len(f['templates']), representative=f['representative'],
                                      records=sorted(f['records']), part_counts=dict(sorted(parts.items())), delegated=f['delegated']))
-    model['schedules'] = schedules(package, model, records)
+    if pd['kind'] == 'portal':
+        model['portal'] = portal.portal_model(package)
+        model['schedules'] = portal.portal_schedules(package, model, records, num)
+    else:
+        model['schedules'] = schedules(package, model, records)
     return model
 
 
@@ -492,10 +497,16 @@ def draw_cover(sh, package, model, register):
     sh.text(x, y, 'DESIGN BASIS', 14, font='Helvetica-Bold'); y -= 24
     elf = ctx.get('elf') or {}
     wb = ctx.get('wind_basis') or {}
+    seis = ctx.get('seismic') if isinstance(ctx.get('seismic'), dict) else {}
+    gh = ctx.get('governing_hazard') if isinstance(ctx.get('governing_hazard'), dict) else {}
     basis = [('Design standards', ctx.get('code')), ('Seismic force-resisting system', str(ctx.get('system') or '').replace('_', ' ')),
              ('Seismic weight W / base shear V', '%s kip / %s kip (Cs = %s)' % (num(elf.get('W_kip'), 1), num(elf.get('V_kip'), 1), num(elf.get('Cs'), 4)) if elf else None),
              ('Redundancy factor', num(ctx.get('rho'), 2) if ctx.get('rho') is not None else None),
-             ('Basic wind speed / exposure', '%s mph / %s (qh = %s psf)' % (num(wb.get('V_mph'), 0), wb.get('exposure'), num(wb.get('qh_psf'), 2)) if wb else None),
+             ('Basic wind speed / exposure', '%s mph / %s (qh = %s psf)' % (num(wb.get('V_mph'), 0), wb.get('exposure'), num(wb.get('qh_psf'), 2)) if wb.get('V_mph') is not None else None),
+             ('Wind basis', wb.get('basis') if wb.get('V_mph') is None else None),
+             ('Seismic basis', '%s; Seismic Design Category %s' % (seis.get('basis'), seis.get('SDC')) if seis.get('basis') else None),
+             ('Lateral demand, transverse', '%s: wind %s kip, seismic %s kip' % (gh['X'].get('basis'), num(gh['X'].get('wind_kip'), 2), num(gh['X'].get('seismic_kip'), 2)) if isinstance(gh.get('X'), dict) and model['kind'] == 'portal' else None),
+             ('Lateral demand, longitudinal', '%s: wind %s kip, seismic %s kip' % (gh['Y'].get('basis'), num(gh['Y'].get('wind_kip'), 2), num(gh['Y'].get('seismic_kip'), 2)) if isinstance(gh.get('Y'), dict) and model['kind'] == 'portal' else None),
              ('Designed by', '%(model)s (%(provider)s) with %(harness)s, %(date)s' % ctx['design_agent'] if isinstance(ctx.get('design_agent'), dict) else None)]
     for k, v in basis:
         if v:
@@ -510,6 +521,8 @@ def draw_cover(sh, package, model, register):
              'Tie-down rods are continuous from the foundation to the top storey shown, with a coupler, bearing plate and take-up device at each floor.',
              'Foundations, concrete anchorage and items marked as delegated are by others for the demands tabulated in the schedules.',
              'Design coordination issue: not for construction or fabrication. All design output must be independently checked and sealed by a licensed professional engineer.']
+    if model['kind'] == 'portal':
+        notes = portal.NOTES
     for i, t in enumerate(notes, 1):
         sh.text(x, y, '%d.' % i, 11.5); y = sh.wrap(x + 26, y, t, 1060, 11.5) - 5
     x2 = W / 2.0 + 80; y = H - MARGIN - 60
@@ -779,7 +792,10 @@ def draw_detail(sh, package, model, det, number):
         m = members[mid]
         a, b = local(m['axis'][0]), local(m['axis'][1])
         d = profiles[m['profile_id']]['dimensions']
-        half = max(d.get('d', 0.0), d.get('b', 0.0)) / 2.0 if 'b' in d else d.get('d', 1.0) / 2.0
+        if profiles[m['profile_id']]['family'] in ('built_up', 'z'):
+            wy, wz = portal.profile_extents(profiles[m['profile_id']], profiles)
+            d = dict(env_w=wy, env_d=wz)
+        half = max(d['env_w'], d['env_d']) / 2.0 if 'env_w' in d else (max(d.get('d', 0.0), d.get('b', 0.0)) / 2.0 if 'b' in d else d.get('d', 1.0) / 2.0)
         if all(min(a[i], b[i]) - half <= hi[i] + pad3[i] and max(a[i], b[i]) + half >= lo[i] - pad3[i] for i in range(3)):
             context.append((m, a, b, d))
         if len(context) >= 60:
@@ -796,7 +812,9 @@ def draw_detail(sh, package, model, det, number):
             ly = m['local_y']; lyl = [sum(ly[q] * ax[q] for q in range(3)) for ax in (xa, ya, za)]
             ux = [b[q] - a[q] for q in range(3)]; ln = math.sqrt(sum(v * v for v in ux)) or 1.0; ux = [v / ln for v in ux]
             lz = bim_assemblies.cross(ux, lyl)
-            if 'b' in d:
+            if 'env_w' in d:                        # built-up pack or zee: overall envelope about the workline
+                y0, y1, z0, z1 = (-d['env_w'] / 2.0, d['env_w'] / 2.0, -d['env_d'] / 2.0, d['env_d'] / 2.0)
+            elif 'b' in d:
                 y0, y1, z0, z1 = (-d.get('t', 0.0) / 2.0, d['b'] - d.get('t', 0.0) / 2.0, -d['d'] / 2.0, d['d'] / 2.0)
             elif 'width' in d:                      # flat strap (width x thickness) or a truss envelope (width x depth)
                 hz = d.get('thickness', d.get('depth', 0.0)) / 2.0
@@ -838,15 +856,18 @@ def generate(package, state, dest):
     model = drawing_model(package)
     # sheet register first (the cover lists it)
     plan = [('G-001', 'General notes, design basis and drawing list', None)]
-    nst = max(max(w['stories']) for w in model['wall_lines'].values())
-    floors = {f['level']: f for f in model['floors']}
-    plan.append(('S-100', 'Foundation and storey 1 wall plan', ('plan', 1, None)))
-    for k in range(1, nst + 1):
-        fl = floors.get(k)
-        nm = (('Roof' if fl and fl['kind'] == 'roof' else 'Level %d floor' % (k + 1)) + ' framing plan on storey %d walls' % k)
-        plan.append(('S-%d' % (100 + k), nm, ('plan', k, fl)))
-    for i, wl in enumerate(model['wall_lines'].values(), 1):
-        plan.append(('S-%d' % (200 + i), 'Wall elevation: line %s' % wl['label'], ('elevation', wl)))
+    if model['kind'] == 'portal':
+        plan += portal.sheet_plan(model)
+    else:
+        nst = max(max(w['stories']) for w in model['wall_lines'].values())
+        floors = {f['level']: f for f in model['floors']}
+        plan.append(('S-100', 'Foundation and storey 1 wall plan', ('plan', 1, None)))
+        for k in range(1, nst + 1):
+            fl = floors.get(k)
+            nm = (('Roof' if fl and fl['kind'] == 'roof' else 'Level %d floor' % (k + 1)) + ' framing plan on storey %d walls' % k)
+            plan.append(('S-%d' % (100 + k), nm, ('plan', k, fl)))
+        for i, wl in enumerate(model['wall_lines'].values(), 1):
+            plan.append(('S-%d' % (200 + i), 'Wall elevation: line %s' % wl['label'], ('elevation', wl)))
     sched_numbers = []
     n = 300
     for key, sc in model['schedules'].items():
@@ -864,6 +885,14 @@ def generate(package, state, dest):
             sh.start(number, title); draw_plan(sh, package, model, number, title, what[1], what[2])
         elif what[0] == 'elevation':
             sh.start(number, title); draw_elevation(sh, package, model, what[1], number)
+        elif what[0] == 'portal_base':
+            sh.start(number, title); portal.draw_base_plan(sh, package, model, number, feet)
+        elif what[0] == 'portal_roof':
+            sh.start(number, title); portal.draw_roof_plan(sh, package, model, number, feet)
+        elif what[0] == 'portal_frame':
+            sh.start(number, title); portal.draw_frame(sh, package, model, number, what[1], feet, num)
+        elif what[0] == 'portal_side':
+            sh.start(number, title); portal.draw_side(sh, package, model, number, what[1], feet)
         elif what[0] == 'schedule':
             sh.table(number, model['schedules'][what[1]], what[1])
         elif what[0] == 'detail':
@@ -877,6 +906,11 @@ def generate(package, state, dest):
                      levels=model['levels'], wall_types=model['wall_types'], strap_types=model['strap_types'], marks=model['marks'], details=model['details'],
                      wall_lines=[dict(key=w['key'], label=w['label'], direction=w['direction'], pos_in=w['pos_in'], start_in=w['start_in'], length_in=w['length_in'], grid=w['grid']) for w in model['wall_lines'].values()],
                      sheets=sh.rows, cells=sh.cells, dimensions=sh.dimensions)
+    model_out['kind'] = model['kind']
+    if model['kind'] == 'portal':
+        pm = model['portal']
+        model_out['portal'] = dict(frame_types=[dict(mark=t['mark'], frames=t['frames'], label=t['label']) for t in pm['types']], column_x_in=pm['column_x'], frame_y_in=pm['y'],
+                                   lines=[dict(kind=l['kind'], profile=l['profile'], members=l['members']) for l in pm['lines']], straps=len(pm['straps']))
     write_json(dest / 'cfs_drawing_model.json', model_out)
     report = dict(schema='steltic.drawing_set', revision=state['revision'], building_id=package['building_id'], source_model_sha256=fingerprint(package),
                   decision_state_sha256=fingerprint({k: v for k, v in state.items() if k not in ('sheets', 'artifacts')}),

@@ -207,6 +207,20 @@ def cross(a, b):
 # the checks
 # ------------------------------------------------------------------------------------------
 
+def section_envelope(profile, profiles):
+    """(overall width along local_y, depth) of a zee or of a built-up pack of channels, from the declared dimensions and placements."""
+    d = profile.get('dimensions') or {}
+    if profile['family'] == 'z':
+        return 2.0 * d['b'] - d['t'], d['d']
+    lo, hi, depth = [], [], 0.0
+    for comp in profile['components']:
+        q = profiles[comp['profile_id']]['dimensions']
+        turned = abs(float(comp['rotation_deg']) % 360.0 - 180.0) < 1e-6
+        a, b = (-q['b'] + q['t'] / 2.0, q['t'] / 2.0) if turned else (-q['t'] / 2.0, q['b'] - q['t'] / 2.0)
+        lo.append(comp['offset'][0] + a); hi.append(comp['offset'][0] + b); depth = max(depth, q['d'])
+    return max(hi) - min(lo), depth
+
+
 def report_row(rows, rid):
     for r in rows:
         if r and r[0] == rid:
@@ -236,7 +250,7 @@ def expected_report_tokens(record):
     elif t in ('anchorage', 'collectors'):
         if d.get('selection'):
             out.append(('selection', d['selection']))
-    elif t == 'studs':
+    elif t in ('studs', 'members'):
         if d.get('section'):
             out.append(('section', d['section']))
     return out
@@ -283,7 +297,16 @@ def verify(directory, job_root, *, report_name='report.html'):
     c = Check('report_matches_design_records', 'every schedule record: the value printed in report.html against the calculation record carried by the package')
     report_dc = {}
     for rid, r in records.items():
-        if r['table'] not in ('wall_lines', 'holddowns', 'anchorage', 'studs', 'collectors', 'connections') or r.get('waived'):
+        if r['table'] == 'schedules' and not r.get('waived'):
+            # a secondary-framing schedule is printed row by row (purlin zones, girt zones, flange braces, straps)
+            for q in r['data'].get('rows') or []:
+                row = report_row(rows, q.get('id'))
+                if c.expect(row is not None, 'report has no schedule row for %s of %s' % (q.get('id'), rid)) and q.get('DC') is not None:
+                    c.expect(f2(q['DC']) in row, 'report row %s: D/C %s not printed' % (q.get('id'), f2(q['DC'])))
+                    if q.get('section'):
+                        c.expect(norm(q['section']) in norm(' | '.join(row)), 'report row %s does not print its section' % q.get('id'))
+            continue
+        if r['table'] not in ('wall_lines', 'holddowns', 'anchorage', 'studs', 'collectors', 'connections', 'members') or r.get('waived'):
             continue
         row = report_row(rows, r['data'].get('id'))
         if not c.expect(row is not None, 'report has no schedule row for %s' % rid):
@@ -333,9 +356,25 @@ def verify(directory, job_root, *, report_name='report.html'):
         d = r['data']
         if r.get('waived'):
             continue
-        if r['table'] in ('wall_lines', 'holddowns', 'anchorage', 'studs', 'collectors', 'connections', 'diaphragms', 'framing'):
+        if r['table'] == 'schedules':
             cells = printed.get(rid)
-            if r['table'] == 'anchorage' and not cells:
+            if not c.expect(bool(cells), 'no drawing schedule row names record %s' % rid):
+                continue
+            by_row = {cell['cells'][0]: cell['cells'] for cell in cells}
+            for q in d.get('rows') or []:
+                got = by_row.get(str(q.get('id')))
+                if not c.expect(got is not None, 'drawing schedule has no row %s of %s' % (q.get('id'), rid)):
+                    continue
+                if q.get('DC') is not None:
+                    c.expect(f2(q['DC']) == got[-1], 'drawing schedule row %s prints D/C %s, record %s' % (q.get('id'), got[-1], f2(q['DC'])))
+                    row = report_row(rows, q.get('id'))
+                    c.expect(row is not None and got[-1] in row, 'D/C of %s differs between drawing and report' % q.get('id'))
+                if q.get('section'):
+                    c.expect(any(norm(q['section']) == norm(v) for v in got), 'drawing schedule row %s does not print its section' % q.get('id'))
+            continue
+        if r['table'] in ('wall_lines', 'holddowns', 'anchorage', 'studs', 'collectors', 'connections', 'diaphragms', 'framing', 'members'):
+            cells = printed.get(rid)
+            if r['table'] == 'anchorage' and not cells and pd.get('kind') != 'portal':
                 continue                               # anchorage rows are printed once per analysis line, keyed by that record
             if not c.expect(bool(cells), 'no drawing schedule row names record %s' % rid):
                 continue
@@ -349,7 +388,7 @@ def verify(directory, job_root, *, report_name='report.html'):
                 want = f0(cap) if r['table'] in ('wall_lines', 'diaphragms') else f1(cap)
                 c.expect(want in flat, 'drawing schedule row for %s does not print capacity %s' % (rid, want))
             for key in ('section', 'selection', 'components'):
-                if d.get(key) and r['table'] in ('studs', 'collectors', 'connections', 'framing', 'diaphragms'):
+                if d.get(key) and (r['table'] in ('studs', 'collectors', 'connections', 'framing', 'diaphragms', 'members') or (r['table'] == 'anchorage' and pd.get('kind') == 'portal' and key == 'selection')):
                     c.expect(any(norm(d[key]) == norm(v) for v in flat), 'drawing schedule row for %s does not print its %s' % (rid, key))
         elif r['table'] == 'materials':
             cells = printed.get(rid)
@@ -367,14 +406,39 @@ def verify(directory, job_root, *, report_name='report.html'):
         for a, b in zip(levels, levels[1:]):
             c.expect(norm(feet(b['elevation_in'] - a['elevation_in'])) in npages[i], 'elevation page %d omits the storey height %s' % (i + 1, feet(b['elevation_in'] - a['elevation_in'])))
     plan_pages = [page_of[s['number']] for s in dmodel['sheets'] if 'plan' in s['title'].lower() and s['number'].startswith('S-1')]
-    grid_lines = [w for w in pd['wall_lines'].values() if w.get('grid', True)]
+    if pd.get('kind') == 'portal':
+        # independent set-out from the located frame members: frame lines along the building, column lines across it
+        fy = sorted({round(m['axis'][0][1], 4) for m in ph['members'] if m['kind'] in ('column', 'rafter')})
+        cx = sorted({round(m['axis'][0][0], 4) for m in ph['members'] if m['kind'] == 'column'})
+        c.expect(len(plan_pages) >= 2, 'portal drawing set needs a base plan and a roof plan')
+        side_pages = [page_of[s['number']] for s in dmodel['sheets'] if s['title'].startswith('Side wall elevation')]
+        frame_pages = [page_of[s['number']] for s in dmodel['sheets'] if s['title'].startswith('Portal frame elevation')]
+        c.expect(bool(frame_pages), 'portal drawing set has no frame elevation')
+        c.expect(len(side_pages) == 2, 'portal drawing set needs the two side-wall elevations')
+        for i in plan_pages + side_pages:
+            for a, b in zip(fy, fy[1:]):
+                c.expect(norm(feet(b - a)) in npages[i], 'page %d omits the frame spacing %s' % (i + 1, feet(b - a)))
+            c.expect(norm(feet(fy[-1] - fy[0])) in npages[i], 'page %d omits the building length %s' % (i + 1, feet(fy[-1] - fy[0])))
+        for i in plan_pages + frame_pages:
+            for a, b in zip(cx, cx[1:]):
+                c.expect(norm(feet(b - a)) in npages[i], 'page %d omits the span %s between column lines' % (i + 1, feet(b - a)))
+        top = max(p_[2] for m in ph['members'] if m['kind'] in ('column', 'rafter') for p_ in m['axis'])
+        for i in frame_pages:
+            for lv in levels:
+                c.expect(norm(lv['name'] + feet(lv['elevation_in'])) in npages[i], 'frame elevation page %d does not show %s at %s' % (i + 1, lv['name'], feet(lv['elevation_in'])))
+            c.expect(norm(feet(top)) in npages[i], 'frame elevation page %d omits the overall height %s' % (i + 1, feet(top)))
+        types = (dmodel.get('portal') or {}).get('frame_types', [])
+        c.expect(sorted(f for t in types for f in t['frames']) == sorted({int(m['frame']) for m in ph['members'] if m.get('frame') is not None}), 'frame elevations do not cover every frame of the model exactly once')
+        for s_ in dmodel['dimensions']:
+            c.expect(norm(s_['label']) in npages[page_of[s_['sheet']]], 'sheet %s: dimension %s is registered but not readable' % (s_['sheet'], s_['label']))
+    grid_lines = [w for w in pd.get('wall_lines', {}).values() if w.get('grid', True)]
     for direction in ('X', 'Y'):
         pos = sorted({w['pos_ft'] * 12.0 for w in grid_lines if w['direction'] == direction})
         for a, b in zip(pos, pos[1:]):
             for i in plan_pages:
                 c.expect(norm(feet(b - a)) in npages[i], 'plan page %d omits the %s wall-line spacing %s' % (i + 1, direction, feet(b - a)))
     by_title = {s['title']: page_of[s['number']] for s in dmodel['sheets']}
-    for key, line in pd['wall_lines'].items():
+    for key, line in pd.get('wall_lines', {}).items():
         i = by_title.get('Wall elevation: line %s' % key.split(':', 1)[1])
         if not c.expect(i is not None, 'no elevation sheet for wall line %s' % key):
             continue
@@ -410,7 +474,13 @@ def verify(directory, job_root, *, report_name='report.html'):
         length = math.dist(*m['axis'])
         d = profiles[m['profile_id']]['dimensions']
         c.expect(abs(extent(p['points'], ax) - length) <= TOL_IN, 'member %s: IFC length %.3f in., design %.3f in.' % (m['id'], extent(p['points'], ax), length))
-        if 'b' in d:
+        fam = profiles[m['profile_id']]['family']
+        if fam in ('built_up', 'z'):
+            wy, wz = section_envelope(profiles[m['profile_id']], profiles)
+            c.expect(abs(extent(p['points'], lz) - wz) <= TOL_IN, 'member %s: IFC depth %.3f in., design %.3f in.' % (m['id'], extent(p['points'], lz), wz))
+            c.expect(abs(extent(p['points'], ly) - wy) <= TOL_IN, 'member %s: IFC overall width %.3f in., design %.3f in.' % (m['id'], extent(p['points'], ly), wy))
+            d = dict(d=wz, b=wy)
+        elif 'b' in d:
             c.expect(abs(extent(p['points'], lz) - d['d']) <= TOL_IN, 'member %s: IFC depth %.3f in., design %.3f in.' % (m['id'], extent(p['points'], lz), d['d']))
             c.expect(abs(extent(p['points'], ly) - d['b']) <= TOL_IN, 'member %s: IFC flange width %.3f in., design %.3f in.' % (m['id'], extent(p['points'], ly), d['b']))
         elif 'width' in d:                      # flat strap (width x thickness) or truss envelope (width x depth)
@@ -533,12 +603,71 @@ def verify(directory, job_root, *, report_name='report.html'):
     for det in dmodel['details']:
         c.expect(det['occurrences'] - det['delegated'] == ifc_family.get(det['family'], 0), 'detail %s (%s): drawing lists %d located occurrences, IFC has %d assemblies'
                  % (det['reference'], det['family'], det['occurrences'] - det['delegated'], ifc_family.get(det['family'], 0)))
+    if pd.get('kind') == 'portal':
+        src_of = {}
+        for (cls, sid), p in prods.items():
+            if cls in member_cls:
+                try:
+                    src_of[sid] = json.loads(p['props'].get('SourceEntity') or '{}')
+                except ValueError:
+                    src_of[sid] = {}
+        types = {t['mark']: t for t in (dmodel.get('portal') or {}).get('frame_types', [])}
+        cx = sorted({round(m['axis'][0][0], 4) for m in ph['members'] if m['kind'] == 'column'})
+
+        def line_of(sid):
+            pts = prods[next(k for k in prods if k[1] == sid and k[0] in member_cls)]['points']
+            xm = sum(q[0] for q in pts) / len(pts)
+            return chr(65 + cx.index(min(cx, key=lambda v: abs(v - xm))))
+        seen_kinds = set()
+        for cell in dmodel['cells']:
+            v = cell['cells']
+            if cell['schedule'] == 'frame_counts':
+                t = types.get(v[0])
+                if not c.expect(t is not None, 'frame count row names an unknown frame type %s' % v[0]):
+                    continue
+                n = sum(1 for sid, src in src_of.items() if src.get('frame') in t['frames'] and (src.get('role') or src.get('kind')) == v[1] and prods[next(k for k in prods if k[1] == sid and k[0] in member_cls)]['props'].get('Section') == v[2])
+                c.expect(str(n) == v[5] and int(v[3]) * int(v[4]) == n, 'frame type %s: drawing lists %s x %s %s, IFC has %d' % (v[0], v[5], v[1], v[2], n))
+            elif cell['schedule'] == 'line_counts':
+                kind = v[0].split(':')[0]; seen_kinds.add(kind)
+                ids = [sid for sid, src in src_of.items() if src.get('kind') == kind and prods[next(k for k in prods if k[1] == sid and k[0] in member_cls)]['props'].get('Section') == v[1]
+                       and (':' not in v[0] or line_of(sid) == v[0].split(':')[1])]
+                nlines = len({(src_of[sid].get('host_line'), src_of[sid].get('line')) for sid in ids})
+                c.expect(str(len(ids)) == v[3] and str(nlines) == v[2], '%s %s: drawing lists %s lines / %s members, IFC has %d / %d' % (v[0], v[1], v[2], v[3], nlines, len(ids)))
+            elif cell['schedule'] == 'strap_counts':
+                ids = [sid for sid, src in src_of.items() if src.get('kind') == 'strap' and src.get('plane') == v[0] and prods[next(k for k in prods if k[1] == sid and k[0] in member_cls)]['props'].get('Section') == v[2]
+                       and (v[1] == '-' or line_of(sid) == v[1])]
+                c.expect(str(len(ids)) == v[4] and str(len({src_of[sid].get('bay') for sid in ids})) == v[3], '%s bracing %s: drawing lists %s straps in %s bays, IFC has %d in %d' % (v[0], v[2], v[4], v[3], len(ids), len({src_of[sid].get('bay') for sid in ids})))
+        for kind in ('purlin', 'girt'):
+            if any(src.get('kind') == kind for src in src_of.values()):
+                c.expect(kind in seen_kinds, 'the drawings give no line count for the %ss of the model' % kind)
+        # scheduled strap size against the strap measured in the IFC, and the selected frame make-up against the IFC section
+        for where in ('wall', 'roof'):
+            sel_ = (pd.get('bracing') or {}).get(where)
+            if not sel_:
+                continue
+            ids = [sid for sid, src in src_of.items() if src.get('kind') == 'strap' and src.get('plane') == where]
+            c.expect(len(ids) == 2 * len(sel_['bays']) * len({src_of[sid].get('host_line') for sid in ids}) * int(sel_.get('panels', 1)), '%s bracing: strap count in the IFC does not match X-bracing in the selected bays' % where)
+            for sid in ids[:4]:
+                m = next(q for q in ph['members'] if q['id'] == sid)
+                pts = prods[next(k for k in prods if k[1] == sid and k[0] in member_cls)]['points']
+                axm = unit([b_ - a_ for a_, b_ in zip(*m['axis'])]); lym = unit(m['local_y'])
+                c.expect(abs(extent(pts, lym) - sel_['width_in']) <= TOL_IN and abs(extent(pts, cross(axm, lym)) - sel_['t_in']) <= TOL_IN, 'strap %s: selected %g x %.4f in., IFC %.3f x %.4f in.' % (sid, sel_['width_in'], sel_['t_in'], extent(pts, lym), extent(pts, cross(axm, lym))))
+            rec = records.get(sel_['record'])
+            row = next((q for q in (rec or {}).get('data', {}).get('rows', []) if q.get('id') == 'strap-' + where), None)
+            c.expect(row is not None and abs(row['width_in'] - sel_['width_in']) < 1e-9 and row['n_screws'] == sel_['n_screws'], '%s bracing: the modelled strap differs from the scheduled strap row' % where)
+        for key, kind in (('column', 'column'), ('rafter', 'rafter')):
+            sel_ = pd['frame'][key]
+            want = ('%dx%s' % (sel_['n'], sel_['section'])) if int(sel_['n']) > 1 else sel_['section']
+            got = {prods[k]['props'].get('Section') for k in prods if k[0] in member_cls and src_of.get(k[1], {}).get('kind') == kind}
+            c.expect(got == {want}, '%s make-up: selected %s, IFC sections %s' % (key, want, sorted(got)))
+            rec = records.get(sel_['record'])
+            c.expect(rec is not None and rec['data'].get('section') == want, '%s make-up differs from its calculation record' % key)
     # wall types: the type scheduled on the drawings for each wall line and storey against the selection and the IFC products
     tsel = {}
     for t in list(dmodel.get('wall_types', [])) + list(dmodel.get('strap_types', [])):
         for key, k in t['used']:
             tsel[(key, int(k))] = t
-    for key, line in pd['wall_lines'].items():
+    for key, line in pd.get('wall_lines', {}).items():
         normal = [0.0, 1.0, 0.0] if line['direction'] == 'X' else [1.0, 0.0, 0.0]
         for ks, st in line['stories'].items():
             nseg = len(st.get('segments_ft', []))
@@ -565,7 +694,7 @@ def verify(directory, job_root, *, report_name='report.html'):
                 pans = [p for (cls, sid), p in prods.items() if cls != 'IfcElementAssembly' and sid.startswith('P:%s:S%s:G' % (key, ks))]
                 c.expect(len(pans) == sh_['faces'] * nseg, 'wall %s storey %s: %d sheathing panels selected, IFC has %d' % (key, ks, sh_['faces'] * nseg, len(pans)))
     # rod diameters and sheathing thickness: schedule text against measured IFC geometry
-    for key, line in pd['wall_lines'].items():
+    for key, line in pd.get('wall_lines', {}).items():
         for ks, st in line['stories'].items():
             if st.get('rod'):
                 rods = [p for (cls, sid), p in prods.items() if cls == 'IfcMember' and sid.startswith('R:%s:' % key) and sid.endswith(':S%s' % ks)]
