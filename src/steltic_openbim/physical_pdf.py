@@ -81,6 +81,12 @@ class PhysicalSheets(WorklineSheets):
         self.text(self.W - 200, 49, f'Sheet {self.page} / {number}', 12)
 
 
+def section_level_spans(levels, extent):
+    """Level intervals that overlap the elevation extent of a section's members."""
+    low, high = extent
+    return [(a, b) for a, b in zip(levels, levels[1:]) if a < high - 1e-5 and b > low + 1e-5]
+
+
 def plot(sh, number, title, members, axes=(0, 1), features=(), z=None):
     if not members: return
     points = [p for m in members for p in m['axis']]
@@ -135,11 +141,17 @@ def plot(sh, number, title, members, axes=(0, 1), features=(), z=None):
         if any(abs(p[0] - a) < 180 and abs(p[1] - b) < 70 for a, b in occupied): continue
         sh.callout(p, ref + ' (typ)', 22, 26); occupied.append(p); used.add(ref)
     if axes[1] == 2:
-        for a, b in zip(sh.m['levels'], sh.m['levels'][1:]):
+        # The view is scaled and cropped to its own members, so a section of a
+        # lower part (setback, partial-height frame) carries only the level
+        # intervals those members occupy; a full-height section keeps them all.
+        spans = section_level_spans(sh.m['levels'], bounds[1])
+        shown = {v for span in spans for v in span} or set(sh.m['levels'])
+        for a, b in spans:
             p = [0, 0, a]; q = [0, 0, b]; p[axes[0]] = q[axes[0]] = bounds[0][0]
             sh.dim(tr(p), tr(q), 78, value=b-a, ref='Source level interval',
                    source=dict(kind='levels'),model_points=[p,q])
         for elevation in sh.m['levels']:
+            if elevation not in shown: continue
             p = [0, 0, elevation]; p[axes[0]] = bounds[0][1]
             x, y = tr(p); sh.label(x + 40, y + 4, feet(elevation), 10)
     notes = ['Framing follows the source-declared member worklines. Physical offsets, profiles and parts are retained in the return IFC.',
